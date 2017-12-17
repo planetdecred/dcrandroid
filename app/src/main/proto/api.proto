@@ -1,0 +1,840 @@
+syntax = "proto3";
+
+package walletrpc;
+option java_package = "com.decrediton.grpc";
+service VersionService {
+	rpc Version (VersionRequest) returns (VersionResponse);
+}
+
+message VersionRequest {}
+message VersionResponse {
+	string version_string = 1;
+	uint32 major = 2;
+	uint32 minor = 3;
+	uint32 patch = 4;
+	string prerelease = 5;
+	string build_metadata = 6;
+}
+
+service WalletService {
+	// Queries
+	rpc Ping (PingRequest) returns (PingResponse);
+	rpc Network (NetworkRequest) returns (NetworkResponse);
+	rpc AccountNumber (AccountNumberRequest) returns (AccountNumberResponse);
+	rpc Accounts (AccountsRequest) returns (AccountsResponse);
+	rpc Balance (BalanceRequest) returns (BalanceResponse);
+	rpc GetTransaction (GetTransactionRequest) returns (GetTransactionResponse);
+	rpc GetTransactions (GetTransactionsRequest) returns (stream GetTransactionsResponse);
+	rpc GetTickets (GetTicketsRequest) returns (stream GetTicketsResponse);
+	rpc TicketPrice (TicketPriceRequest) returns (TicketPriceResponse);
+	rpc StakeInfo (StakeInfoRequest) returns (StakeInfoResponse);
+	rpc BlockInfo (BlockInfoRequest) returns (BlockInfoResponse);
+
+	// Notifications
+	rpc TransactionNotifications (TransactionNotificationsRequest) returns (stream TransactionNotificationsResponse);
+	rpc AccountNotifications (AccountNotificationsRequest) returns (stream AccountNotificationsResponse);
+	rpc ConfirmationNotifications (stream ConfirmationNotificationsRequest) returns (stream ConfirmationNotificationsResponse);
+
+	// Control
+	rpc ChangePassphrase (ChangePassphraseRequest) returns (ChangePassphraseResponse);
+	rpc RenameAccount (RenameAccountRequest) returns (RenameAccountResponse);
+	rpc Rescan (RescanRequest) returns (stream RescanResponse);
+	rpc NextAccount (NextAccountRequest) returns (NextAccountResponse);
+	rpc NextAddress (NextAddressRequest) returns (NextAddressResponse);
+	rpc ImportPrivateKey (ImportPrivateKeyRequest) returns (ImportPrivateKeyResponse);
+	rpc ImportScript(ImportScriptRequest) returns (ImportScriptResponse);
+	rpc FundTransaction (FundTransactionRequest) returns (FundTransactionResponse);
+	rpc ConstructTransaction (ConstructTransactionRequest) returns (ConstructTransactionResponse);
+	rpc SignTransaction (SignTransactionRequest) returns (SignTransactionResponse);
+	rpc CreateSignature (CreateSignatureRequest) returns (CreateSignatureResponse);
+	rpc PublishTransaction (PublishTransactionRequest) returns (PublishTransactionResponse);
+	rpc PurchaseTickets(PurchaseTicketsRequest) returns (PurchaseTicketsResponse);
+	rpc RevokeTickets(RevokeTicketsRequest) returns (RevokeTicketsResponse);
+	rpc LoadActiveDataFilters(LoadActiveDataFiltersRequest) returns (LoadActiveDataFiltersResponse);
+	rpc SignMessage (SignMessageRequest) returns (SignMessageResponse);
+	rpc ValidateAddress (ValidateAddressRequest) returns (ValidateAddressResponse);
+}
+
+service WalletLoaderService {
+	rpc WalletExists (WalletExistsRequest) returns (WalletExistsResponse);
+	rpc CreateWallet (CreateWalletRequest) returns (CreateWalletResponse);
+	rpc OpenWallet (OpenWalletRequest) returns (OpenWalletResponse);
+	rpc CloseWallet (CloseWalletRequest) returns (CloseWalletResponse);
+	rpc StartConsensusRpc (StartConsensusRpcRequest) returns (StartConsensusRpcResponse);
+	rpc DiscoverAddresses (DiscoverAddressesRequest) returns (DiscoverAddressesResponse);
+	rpc SubscribeToBlockNotifications (SubscribeToBlockNotificationsRequest) returns (SubscribeToBlockNotificationsResponse);
+	rpc FetchHeaders(FetchHeadersRequest) returns (FetchHeadersResponse);
+}
+
+service TicketBuyerService {
+    rpc StartAutoBuyer (StartAutoBuyerRequest) returns (StartAutoBuyerResponse);
+    rpc StopAutoBuyer (StopAutoBuyerRequest) returns (StopAutoBuyerResponse);
+    rpc TicketBuyerConfig (TicketBuyerConfigRequest) returns (TicketBuyerConfigResponse);
+    rpc SetAccount (SetAccountRequest) returns (SetAccountResponse);
+    rpc SetBalanceToMaintain (SetBalanceToMaintainRequest) returns (SetBalanceToMaintainResponse);
+    rpc SetMaxFee (SetMaxFeeRequest) returns (SetMaxFeeResponse);
+    rpc SetMaxPriceRelative (SetMaxPriceRelativeRequest) returns (SetMaxPriceRelativeResponse);
+    rpc SetMaxPriceAbsolute (SetMaxPriceAbsoluteRequest) returns (SetMaxPriceAbsoluteResponse);
+    rpc SetVotingAddress (SetVotingAddressRequest) returns (SetVotingAddressResponse);
+    rpc SetPoolAddress (SetPoolAddressRequest) returns (SetPoolAddressResponse);
+    rpc SetPoolFees (SetPoolFeesRequest) returns (SetPoolFeesResponse);
+    rpc SetMaxPerBlock (SetMaxPerBlockRequest) returns (SetMaxPerBlockResponse);
+}
+
+service SeedService {
+	rpc GenerateRandomSeed (GenerateRandomSeedRequest) returns (GenerateRandomSeedResponse);
+	rpc DecodeSeed (DecodeSeedRequest) returns (DecodeSeedResponse);
+}
+
+service AgendaService {
+	rpc Agendas (AgendasRequest) returns (AgendasResponse);
+}
+
+service VotingService {
+	rpc VoteChoices (VoteChoicesRequest) returns (VoteChoicesResponse);
+	rpc SetVoteChoices (SetVoteChoicesRequest) returns (SetVoteChoicesResponse);
+}
+
+service MessageVerificationService {
+	rpc VerifyMessage (VerifyMessageRequest) returns (VerifyMessageResponse);
+}
+
+message TransactionDetails {
+	message Input {
+		uint32 index = 1;
+		uint32 previous_account = 2;
+		int64 previous_amount = 3;
+	}
+	message Output {
+		uint32 index = 1;
+		uint32 account = 2;
+		bool internal = 3;
+		int64 amount = 4;
+		string address = 5;
+		bytes output_script = 6;
+	}
+	bytes hash = 1;
+	bytes transaction = 2;
+	repeated Input debits = 3;
+	repeated Output credits = 4;
+	int64 fee = 5;
+	int64 timestamp = 6; // May be earlier than a block timestamp, but never later.
+	enum TransactionType {
+		REGULAR = 0;
+		COINBASE = 4;
+		TICKET_PURCHASE = 1;
+		VOTE = 2;
+		REVOCATION = 3;
+	}
+	TransactionType transaction_type = 7;
+}
+
+message BlockDetails {
+	bytes hash = 1;
+	int32 height = 2;
+	int64 timestamp = 3;
+	repeated TransactionDetails transactions = 4;
+}
+
+message AccountBalance {
+	uint32 account = 1;
+	int64 total_balance = 2;
+}
+
+message PingRequest {}
+message PingResponse {}
+
+message NetworkRequest {}
+message NetworkResponse {
+	uint32 active_network = 1;
+}
+
+message AccountNumberRequest {
+	string account_name = 1;
+}
+message AccountNumberResponse {
+	uint32 account_number = 1;
+}
+
+message AccountsRequest {}
+message AccountsResponse {
+	message Account {
+		uint32 account_number = 1;
+		string account_name = 2;
+		int64 total_balance = 3;
+		uint32 external_key_count = 4;
+		uint32 internal_key_count = 5;
+		uint32 imported_key_count = 6;
+	}
+	repeated Account accounts = 1;
+	bytes current_block_hash = 2;
+	int32 current_block_height = 3;
+}
+
+message RenameAccountRequest {
+	uint32 account_number = 1;
+	string new_name = 2;
+}
+message RenameAccountResponse {}
+
+message RescanRequest {
+	int32 begin_height = 1;
+}
+message RescanResponse {
+	int32 rescanned_through = 1;
+}
+
+message NextAccountRequest {
+	bytes passphrase = 1;
+	string account_name = 2;
+}
+message NextAccountResponse {
+	uint32 account_number = 1;
+}
+
+message NextAddressRequest {
+	uint32 account = 1;
+	enum Kind {
+	     BIP0044_EXTERNAL = 0;
+	     BIP0044_INTERNAL = 1;
+	}
+	Kind kind = 2;
+	enum GapPolicy {
+		GAP_POLICY_UNSPECIFIED = 0;
+		GAP_POLICY_ERROR = 1;
+		GAP_POLICY_IGNORE = 2;
+		GAP_POLICY_WRAP = 3;
+	}
+	GapPolicy gap_policy = 3;
+}
+message NextAddressResponse {
+	string address = 1;
+	string public_key = 2;
+}
+
+message ImportPrivateKeyRequest {
+	bytes passphrase = 1;
+	uint32 account = 2;
+	string private_key_wif = 3;
+	bool rescan = 4;
+	int32 scan_from = 5;
+}
+message ImportPrivateKeyResponse {
+}
+
+message ImportScriptRequest {
+	bytes passphrase = 1;
+	bytes script = 2;
+	bool rescan = 3;
+	int32 scan_from = 4;
+	bool require_redeemable = 5;
+}
+message ImportScriptResponse {
+	string p2sh_address = 1;
+	bool redeemable = 2;
+}
+
+message BalanceRequest {
+	uint32 account_number = 1;
+	int32 required_confirmations = 2;
+}
+message BalanceResponse {
+	int64 total = 1;
+	int64 spendable = 2;
+	int64 immature_reward = 3;
+	int64 immature_stake_generation = 4;
+	int64 locked_by_tickets = 5;
+	int64 voting_authority = 6;
+	int64 unconfirmed = 7;
+}
+
+message GetTransactionRequest {
+	bytes transaction_hash = 1;
+}
+message GetTransactionResponse {
+	TransactionDetails transaction = 1;
+}
+
+message GetTransactionsRequest {
+	// Optionally specify the starting block from which to begin including all transactions.
+	// Either the starting block hash or height may be specified, but not both.
+	// If a block height is specified and is negative, the absolute value becomes the number of
+	// last blocks to include.  That is, given a current chain height of 1000 and a starting block
+	// height of -3, transaction notifications will be created for blocks 998, 999, and 1000.
+	// If both options are excluded, transaction results are created for transactions since the
+	// genesis block.
+	bytes starting_block_hash = 1;
+	sint32 starting_block_height = 2;
+
+	// Optionally specify the last block that transaction results may appear in.
+	// Either the ending block hash or height may be specified, but not both.
+	// If both are excluded, transaction results are created for all transactions
+	// through the best block, and include all unmined transactions.
+	bytes ending_block_hash = 3;
+	int32 ending_block_height = 4;
+
+	// Include at least this many of the newest transactions if they exist.
+	// Cannot be used when the ending block hash is specified.
+	//
+	// TODO: remove until spec adds it back in some way.
+	int32 minimum_recent_transactions = 5;
+
+	// Try to include at most this many transactions in the reply
+	int32 target_transaction_count = 6;
+}
+message GetTransactionsResponse {
+	BlockDetails mined_transactions = 1;
+	repeated TransactionDetails unmined_transactions = 2;
+}
+
+message GetTicketsRequest {
+	bytes starting_block_hash = 1;
+	sint32 starting_block_height = 2;
+	bytes ending_block_hash = 3;
+	int32 ending_block_height = 4;
+}
+message GetTicketsResponse {
+	message TicketDetails {
+		TransactionDetails ticket = 1;
+		TransactionDetails spender = 2;
+		enum TicketStatus {
+			UNKNOWN = 0;
+			UNMINED = 1;
+			IMMATURE = 2;
+			LIVE = 3;
+			VOTED = 4;
+			MISSED = 5;
+			EXPIRED = 6;
+			REVOKED = 7;
+		}
+		TicketStatus ticket_status = 3;
+	}
+	TicketDetails ticket = 1;
+}
+
+message TicketPriceRequest {
+}
+message TicketPriceResponse {
+	int64 ticket_price = 1;
+	int32 height = 2;
+}
+
+message StakeInfoRequest {
+}
+message StakeInfoResponse {
+	uint32 pool_size = 1;
+	uint32 all_mempool_tix = 2;
+	uint32 own_mempool_tix = 3;
+	uint32 immature = 4;
+	uint32 live = 5;
+	uint32 voted = 6;
+	uint32 missed = 7;
+	uint32 revoked = 8;
+	uint32 expired = 9;
+	int64 total_subsidy = 10;
+}
+
+message BlockInfoRequest {
+    bytes block_hash = 1;
+    int32 block_height = 2;
+}
+message BlockInfoResponse {
+    bytes block_hash = 1;
+    int32 block_height = 2;
+    int32 confirmations = 3;
+    int64 timestamp = 4;
+    bytes block_header = 5;
+    bool stake_invalidated = 6;
+}
+
+message ChangePassphraseRequest {
+	enum Key {
+	     PRIVATE = 0;
+	     PUBLIC = 1;
+	}
+	Key key = 1;
+	bytes old_passphrase = 2;
+	bytes new_passphrase = 3;
+}
+message ChangePassphraseResponse {}
+
+message FundTransactionRequest {
+	uint32 account = 1;
+	int64 target_amount = 2;
+	int32 required_confirmations = 3;
+	bool include_immature_coinbases = 4;
+	bool include_change_script = 5;
+}
+message FundTransactionResponse {
+	message PreviousOutput {
+		bytes transaction_hash = 1;
+		uint32 output_index = 2;
+		int64 amount = 3;
+		bytes pk_script = 4;
+		int64 receive_time = 5;
+		bool from_coinbase = 6;
+		int32 tree = 7;
+	}
+	repeated PreviousOutput selected_outputs = 1;
+	int64 total_amount = 2;
+	bytes change_pk_script = 3;
+}
+
+message ConstructTransactionRequest {
+	message OutputDestination {
+		string address = 1;
+
+		bytes script = 2;
+		uint32 script_version = 3;
+	}
+	message Output {
+		OutputDestination destination = 1;
+		int64 amount = 2;
+	}
+	enum OutputSelectionAlgorithm {
+		UNSPECIFIED = 0;
+		ALL = 1;
+	}
+	uint32 source_account = 1;
+	int32 required_confirmations = 2;
+	int32 fee_per_kb = 3;
+	OutputSelectionAlgorithm output_selection_algorithm = 4;
+	repeated Output non_change_outputs = 5;
+	OutputDestination change_destination = 6;
+}
+message ConstructTransactionResponse {
+	bytes unsigned_transaction = 1;
+	int64 total_previous_output_amount = 2;
+	int64 total_output_amount = 3;
+	uint32 estimated_signed_size = 4;
+}
+
+message SignTransactionRequest {
+	message AdditionalScript {
+		bytes transaction_hash = 1;
+		uint32 output_index = 2;
+		int32 tree = 3;
+		bytes pk_script = 4;
+	}
+
+	bytes passphrase = 1;
+
+	bytes serialized_transaction = 2;
+
+	// If no indexes are specified, signatures scripts will be added for
+	// every input. If any input indexes are specified, only those inputs
+	// will be signed.  Rather than returning an incompletely signed
+	// transaction if any of the inputs to be signed can not be, the RPC
+	// immediately errors.
+	repeated uint32 input_indexes = 3;
+
+	repeated AdditionalScript additional_scripts = 4;
+}
+message SignTransactionResponse {
+	bytes transaction = 1;
+	repeated uint32 unsigned_input_indexes = 2;
+}
+
+message CreateSignatureRequest {
+	bytes passphrase = 1;
+	string address = 2;
+	bytes serialized_transaction = 3;
+	uint32 input_index = 4;
+	enum SigHashType {
+		SIGHASH_OLD = 0;
+		SIGHASH_ALL = 1;
+		SIGHASH_NONE = 2;
+		SIGHASH_SINGLE = 3;
+		SIGHASH_ALLVALUE = 4;
+		SIGHASH_ANYONECANPAY = 0x80;
+	}
+	SigHashType hash_type = 5;
+	bytes previous_pk_script = 6;
+}
+message CreateSignatureResponse {
+	bytes signature = 1;
+	bytes public_key = 2;
+}
+
+message PublishTransactionRequest {
+	bytes signed_transaction = 1;
+}
+message PublishTransactionResponse {
+	bytes transaction_hash = 1;
+}
+
+message PurchaseTicketsRequest {
+	bytes passphrase = 1;
+	uint32 account = 2;
+	int64 spend_limit = 3;
+	uint32 required_confirmations = 4;
+	string ticket_address = 5;
+	uint32 num_tickets = 6;
+	string pool_address = 7;
+	double pool_fees = 8;
+	uint32 expiry = 9;
+	int64 tx_fee = 10;
+	int64 ticket_fee = 11;
+}
+message PurchaseTicketsResponse {
+	repeated bytes ticket_hashes = 1;
+}
+
+message RevokeTicketsRequest {
+	bytes passphrase = 1;
+}
+message RevokeTicketsResponse {}
+
+message LoadActiveDataFiltersRequest {}
+message LoadActiveDataFiltersResponse {}
+
+message SignMessageRequest{
+	string address = 1;
+	string message = 2;
+	bytes passphrase = 3;
+}
+message SignMessageResponse{
+	bytes signature = 1;
+}
+
+message TransactionNotificationsRequest {}
+message TransactionNotificationsResponse {
+	// Sorted by increasing height.  This is a repeated field so many new blocks
+	// in a new best chain can be notified at once during a reorganize.
+	repeated BlockDetails attached_blocks = 1;
+
+	// If there was a chain reorganize, there may have been blocks with wallet
+	// transactions that are no longer in the best chain.  These are those
+	// block's hashes.
+	repeated bytes detached_blocks = 2;
+
+	// Any new unmined transactions are included here.  These unmined transactions
+	// refer to the current best chain, so transactions from detached blocks may
+	// be moved to mempool and included here if they are not mined or double spent
+	// in the new chain.  Additonally, if no new blocks were attached but a relevant
+	// unmined transaction is seen by the wallet, it will be reported here.
+	repeated TransactionDetails unmined_transactions = 3;
+
+	// Instead of notifying all of the removed unmined transactions,
+	// just send all of the current hashes.
+	repeated bytes unmined_transaction_hashes = 4;
+}
+
+message AccountNotificationsRequest {}
+message AccountNotificationsResponse {
+	uint32 account_number = 1;
+	string account_name = 2;
+	uint32 external_key_count = 3;
+	uint32 internal_key_count = 4;
+	uint32 imported_key_count = 5;
+}
+
+message ConfirmationNotificationsRequest {
+    repeated bytes tx_hashes = 1;
+    int32 stop_after = 2;
+}
+message ConfirmationNotificationsResponse {
+    message TransactionConfirmations {
+        bytes tx_hash = 1;
+        int32 confirmations = 2;
+        bytes block_hash = 3;
+        int32 block_height = 4;
+    }
+    repeated TransactionConfirmations confirmations = 1;
+}
+
+message CreateWalletRequest {
+	bytes public_passphrase = 1;
+	bytes private_passphrase = 2;
+	bytes seed = 3;
+}
+message CreateWalletResponse {}
+
+message OpenWalletRequest {
+	bytes public_passphrase = 1;
+}
+message OpenWalletResponse {}
+
+message CloseWalletRequest {}
+message CloseWalletResponse {}
+
+message WalletExistsRequest {}
+message WalletExistsResponse {
+	bool exists = 1;
+}
+
+message StartConsensusRpcRequest {
+	string network_address = 1;
+	string username = 2;
+	bytes password = 3;
+	bytes certificate = 4;
+}
+message StartConsensusRpcResponse {}
+
+message DiscoverAddressesRequest {
+	bool discover_accounts = 1;
+	bytes private_passphrase = 2;
+}
+message DiscoverAddressesResponse {}
+
+message SubscribeToBlockNotificationsRequest {}
+message SubscribeToBlockNotificationsResponse {}
+
+message FetchHeadersRequest {}
+message FetchHeadersResponse {
+	uint32 fetched_headers_count = 1;
+	bytes first_new_block_hash = 2;
+	int32 first_new_block_height = 3;
+	bytes main_chain_tip_block_hash = 4;
+	int32 main_chain_tip_block_height = 5;
+}
+
+message GenerateRandomSeedRequest {
+	uint32 seed_length = 1;
+}
+message GenerateRandomSeedResponse {
+	bytes seed_bytes = 1;
+	string seed_hex = 2;
+	string seed_mnemonic = 3;
+}
+
+message DecodeSeedRequest {
+	string user_input = 1;
+}
+message DecodeSeedResponse {
+	bytes decoded_seed = 1;
+}
+
+message StartAutoBuyerRequest {
+	bytes passphrase = 1;
+	uint32 account = 2;
+	int64 balance_to_maintain = 3;
+	int64 max_fee_per_kb = 4;
+	double max_price_relative = 5;
+	int64 max_price_absolute = 6;
+	string voting_address = 7;
+	string pool_address = 8;
+	double pool_fees = 9;
+	int64 max_per_block = 10;
+}
+message StartAutoBuyerResponse {}
+
+message StopAutoBuyerRequest {}
+message StopAutoBuyerResponse {}
+message TicketBuyerConfigRequest{
+}
+
+message TicketBuyerConfigResponse{
+    uint32 account = 1;
+    string avg_price_mode = 2;
+    int64 avg_priceVWAP_delta = 3;
+    int64 balance_to_maintain = 4;
+    int64 blocks_to_avg = 5;
+    bool dont_wait_for_tickets = 6;
+    int64 expiry_delta = 7;
+    string fee_source = 8;
+    double fee_target_scaling = 9;
+    int64 min_fee = 10;
+    int64 max_fee = 12;
+    int64 max_per_block = 13;
+    int64 max_price_absolute = 14;
+    double max_price_relative = 15;
+    int64 max_in_mempool = 17;
+    string pool_address = 18;
+    double pool_fees = 19;
+    bool spread_ticket_purchases = 20;
+    string voting_address = 21;
+    int64 tx_fee = 22;
+}
+
+message SetAccountRequest{
+    uint32 account = 1;
+}
+message SetAccountResponse{}
+
+message SetBalanceToMaintainRequest{
+    int64 balance_to_maintain = 1;
+}
+message SetBalanceToMaintainResponse{}
+
+message SetMaxFeeRequest{
+    int64 max_fee_per_kb = 1;
+}
+message SetMaxFeeResponse{}
+
+message SetMaxPriceRelativeRequest{
+    double max_price_relative = 1;
+}
+message SetMaxPriceRelativeResponse{}
+
+message SetMaxPriceAbsoluteRequest{
+    int64 max_price_absolute = 1;
+}
+message SetMaxPriceAbsoluteResponse{}
+
+message SetVotingAddressRequest{
+    string voting_address = 1;
+}
+message SetVotingAddressResponse{}
+
+message SetPoolAddressRequest{
+    string pool_address = 1;
+}
+message SetPoolAddressResponse{}
+
+message SetPoolFeesRequest{
+    double pool_fees = 1;
+}
+message SetPoolFeesResponse{}
+
+message SetMaxPerBlockRequest{
+    int64 max_per_block = 1;
+}
+message SetMaxPerBlockResponse{}
+
+message AgendasRequest {}
+message AgendasResponse {
+	message Agenda {
+		string id = 1;
+		string description = 2;
+		uint32 mask = 3;
+		repeated Choice choices = 4;
+		int64 start_time = 5;
+		int64 expire_time = 6;
+	}
+	message Choice {
+		string id = 1;
+		string description = 2;
+		uint32 bits = 3;
+		bool is_abstain = 4;
+		bool is_no = 5;
+	}
+	uint32 version = 1;
+	repeated Agenda agendas = 2;
+}
+
+message VoteChoicesRequest {}
+message VoteChoicesResponse {
+	message Choice {
+		string agenda_id = 1;
+		string agenda_description = 2;
+		string choice_id = 3;
+		string choice_description = 4;
+	}
+	uint32 version = 1;
+	repeated Choice choices = 2;
+	uint32 votebits = 3;
+}
+
+message SetVoteChoicesRequest {
+	message Choice {
+		string agenda_id = 1;
+		string choice_id = 2;
+	}
+	repeated Choice choices = 1;
+}
+message SetVoteChoicesResponse {
+	uint32 votebits = 1;
+}
+
+message VerifyMessageRequest {
+	string address = 1;
+	string message = 2;
+	bytes signature = 3;
+}
+message VerifyMessageResponse {
+	bool valid = 1;
+}
+
+service DecodeMessageService {
+	rpc DecodeRawTransaction (DecodeRawTransactionRequest) returns (DecodeRawTransactionResponse);
+}
+
+message DecodedTransaction {
+	message Input {
+		bytes previous_transaction_hash = 1;
+		uint32 previous_transaction_index = 2;
+		enum TreeType {
+			REGULAR = 0;
+			UNKNOWN = -1;
+			STAKE = 1;
+		}
+		TreeType tree = 3;
+		uint32 sequence = 4;
+		int64 amount_in = 5;
+		uint32 block_height = 6;
+		uint32 block_index = 7;
+		bytes signature_script = 8;
+		string signature_script_asm = 9;
+	}
+	message Output {
+		int64 value = 1;
+		uint32 index = 2;
+		int32 version = 3;
+		bytes script = 4;
+		string script_asm = 5;
+		int32 required_signatures = 6;
+		enum ScriptClass {
+			NON_STANDARD = 0;
+			PUB_KEY = 1;
+			PUB_KEY_HASH = 2;
+			SCRIPT_HASH = 3;
+			MULTI_SIG = 4;
+			NULL_DATA = 5;
+			STAKE_SUBMISSION = 6;
+			STAKE_GEN = 7;
+			STAKE_REVOCATION = 8;
+			STAKE_SUB_CHANGE = 9;
+			PUB_KEY_ALT = 10;
+			PUB_KEY_HASH_ALT = 11;
+		}
+		ScriptClass script_class = 7;
+		repeated string addresses = 8;
+		int64 commitment_amount = 9;
+	}
+	bytes transaction_hash = 1;
+	int32 version = 2;
+	uint32 lock_time = 3;
+	uint32 expiry = 4;
+	TransactionDetails.TransactionType transaction_type = 5;
+	repeated Input inputs = 6;
+	repeated Output outputs = 7;
+}
+
+message DecodeRawTransactionRequest {
+	bytes serialized_transaction = 1;
+}
+message DecodeRawTransactionResponse {
+	DecodedTransaction transaction = 1;
+}
+
+message ValidateAddressRequest {
+	string address = 1;
+}
+
+message ValidateAddressResponse {
+	bool is_valid = 1;
+	bool is_mine = 2;
+	uint32 account_number = 3;
+	string pub_key_addr = 4;
+	bytes pub_key = 5;
+	bool is_script = 6;
+	repeated string pk_script_addrs = 7;
+	enum ScriptType {
+		NonStandardTy = 0;
+		PubKeyTy  = 1;
+		PubKeyHashTy = 2;
+		ScriptHashTy = 3;
+		MultiSigTy = 4;
+		NullDataTy = 5;
+		StakeSubmissionTy = 6;
+		StakeGenTy = 7;
+		StakeRevocationTy = 8;
+		StakeSubChangeTy = 9;
+		PubkeyAltTy = 10;
+		PubkeyHashAltTy = 11;
+	}
+	ScriptType script_type = 8;
+	bytes pay_to_addr_script = 9;
+	uint32 sigs_required = 10;
+}
