@@ -1,6 +1,6 @@
-apply plugin: 'idea'
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'idea'
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -18,60 +18,30 @@ android {
         }
     }
 }
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'io.grpc:grpc-okhttp:1.8.0'
-    compile 'io.grpc:grpc-protobuf-lite:1.8.0'
-    compile 'io.grpc:grpc-stub:1.8.0'
-    //androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    //androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile project(':dcrwallet')
-}
-
-
-//def grpcVersion = '1.8.0'
-//protobuf {
-//    protoc {
-//        artifact = 'com.google.protobuf:protoc:3.5.0'
-//    }
-//    plugins {
-//        grpc {
-//            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
-//        }
-//    }
-//    generateProtoTasks {
-//        all()*.plugins {
-//            grpc {}
-//        }
-//    }
-//}
-
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.5.0'
+        artifact = 'com.google.protobuf:protoc:3.0.2'
     }
     plugins {
-        lite {
+        javalite {
             artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0"
+        }
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.0.3' // CURRENT_GRPC_VERSION
         }
     }
     generateProtoTasks {
-        /*all().each {
-            task -> task.builtins {
-                remove java
-            }
-                task.plugins {
-                    lite { }
+        all().each { task ->
+            task.plugins {
+                javalite {}
+                grpc {
+                    // Options added to --grpc_out
+                    option 'lite'
                 }
-        }*/
-        all()*.plugins {
-            grpc {}
+            }
         }
     }
 }
-
 sourceSets {
     main {
         java {
@@ -79,4 +49,13 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/java'
         }
     }
+}
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'io.grpc:grpc-okhttp:1.8.0'
+    compile 'io.grpc:grpc-protobuf-lite:1.8.0'
+    compile 'io.grpc:grpc-stub:1.8.0'
+    compile project(':dcrwallet')
 }
