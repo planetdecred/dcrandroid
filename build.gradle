@@ -9,14 +9,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.2'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven { url "https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java"}
         google()
     }
 }
