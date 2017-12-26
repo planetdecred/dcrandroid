@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_overview"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="Overview" />
+        <item
+            android:id="@+id/nav_accounts"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="Accounts" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@android:drawable/ic_menu_upload"
+            android:title="Send" />
+        <item
+            android:id="@+id/nav_receive"
+            android:icon="@android:drawable/stat_sys_download_done"
+            android:title="Receive" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="History" />
+        <item
+            android:id="@+id/nav_tickets"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="Tickets" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="Help" />
+    </group>
+
+</menu>
