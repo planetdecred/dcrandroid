@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="SETTING UP DECREDITION"
+        android:gravity="center"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textAlignment="center"
+
+        android:text="Copy this seed and save it in a secure location or save to file and back it up as required"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/save_seed_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/colorAccent"
+        android:padding="8dp"
+        android:maxLines="7"
+        android:minLines="3"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="hello how are you  i hoep you are feeeling fine this is your wallete seed please keep it you will need to use it for verification you will need to use it for verificationyou will need to use it for verification you will need to u" />
+
+        <Button
+            android:id="@+id/save_seed_btn_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/btn_shape"
+            android:text="Continue"
+            android:layout_gravity="center"
+            android:textColor="@android:color/background_light" />
+
+</LinearLayout>

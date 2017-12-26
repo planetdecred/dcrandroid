@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Decrediton.iml" filepath="$PROJECT_DIR$/Decrediton.iml" />
+      <module fileurl="file://C:\Users\Macsleven\decrediton-android\Decrediton.iml" filepath="C:\Users\Macsleven\decrediton-android\Decrediton.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dcrwallet/dcrwallet.iml" filepath="$PROJECT_DIR$/dcrwallet/dcrwallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/decrediton-android.iml" filepath="$PROJECT_DIR$/decrediton-android.iml" />
     </modules>
   </component>
 </project>
