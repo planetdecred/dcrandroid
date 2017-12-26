@@ -1,4 +1,4 @@
-package com.decrediton;
+package com.decrediton.workers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,27 +8,31 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class BackgroundWorker extends AsyncTask<Method,String, String> {
-    Method callback;
-    ProgressDialog pd;
-    Context context;
-    public BackgroundWorker(Method callback, ProgressDialog pd, Context context){
+    private Method callback;
+    private ProgressDialog pd;
+    private Context context;
+    private boolean showDialog;
+    public BackgroundWorker(Method callback, ProgressDialog pd, Context context, boolean showDialog){
         this.callback = callback;
         this.pd = pd;
         this.context = context;
+        this.showDialog = showDialog;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        pd.show();
+        if(showDialog) {
+            pd.show();
+        }
     }
 
     @Override
     protected String doInBackground(Method... methods) {
         for(Method method : methods){
             try {
-                String seed = (String) method.invoke(this);
-                return seed;
+                String value = (String) method.invoke(this);
+                return value;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

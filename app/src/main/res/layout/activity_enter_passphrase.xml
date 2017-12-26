@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="SETTING UP DECREDITON"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Create a private passphrase to encrypt your wallet"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/colorAccent"
+        />
+
+    <EditText
+        android:id="@+id/passphrase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Passphrase"
+        android:textColor="#fff"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:textColorHint="@android:color/white" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Verify Passphrase"
+        android:layout_margin="8dp"
+        android:inputType="textPassword"
+        android:id="@+id/verifyPassphrase"
+        android:lines="1"
+        android:textColor="#fff"
+        android:maxLines="1"
+        android:textColorHint="@android:color/white"/>
+
+    <Button
+        android:id="@+id/button_encrypt_wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/btn_shape"
+        android:padding="5dp"
+        android:text="Encrypt Wallet"
+        android:layout_gravity="center"
+        android:textColor="@android:color/background_light" />
+    </LinearLayout>
+
+</RelativeLayout>
