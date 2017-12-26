@@ -1,3 +1,38 @@
+
 <resources>
-    <string name="app_name">Decrediton</string>
+    <string name="app_name">Decredition</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_overview">Overview</string>
+    <string name="nav_account">Accounts</string>
+    <string name="nav_send">Send</string>
+    <string name="nav_receive">Receive</string>
+    <string name="nav_tickets">Tickets</string>
+    <string name="nav_history">History</string>
+    <string name="nav_help">Help</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Overview</item>
+        <item>Accounts</item>
+        <item>Send</item>
+        <item>Receive</item>
+        <item>Tickets</item>
+        <item>History</item>
+        <item>Help</item>
+    </string-array>
+
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="save_seed_instruction">Write down this seed and save it in a secure location\nYou will be asked to enter it in the next screen</string>
 </resources>
