@@ -41,6 +41,7 @@ public class EncryptWallet extends AppCompatActivity{
         if(b != null)
         seed = b.getString("seed");
 
+        System.out.println("Encrypt Seed: "+seed);
         encryptWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

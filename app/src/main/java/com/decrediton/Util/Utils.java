@@ -5,8 +5,10 @@ import android.content.Context;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
     public static ProgressDialog getProgressDialog(Context context,boolean cancelable, boolean cancelOnTouchOutside,
@@ -18,17 +20,18 @@ public class Utils {
         return pd;
     }
 
-    public static String[] getWordList(){
+    public static String getWordList(Context context){
         try {
-            FileInputStream fin = new FileInputStream("words.txt");
-            ArrayList<String> wordsList = new ArrayList<>();
+            InputStream fin = context.getAssets().open("wordlist.txt");
+            StringBuilder wordsList = new StringBuilder();
             BufferedReader br = new BufferedReader(new InputStreamReader(fin));
             String line;
             while ((line = br.readLine()) != null) {
-                wordsList.add(line);
+                wordsList.append(" ");
+                wordsList.append(line);
             }
             fin.close();
-            return (String[]) wordsList.toArray();
+            return wordsList.toString().trim();
         }catch (Exception e){
             e.printStackTrace();
             return null;
