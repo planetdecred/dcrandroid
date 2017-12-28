@@ -45,8 +45,9 @@ public class SaveSeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!seed.equals("")) {
-                    Intent i = new Intent(SaveSeedActivity.this, ConfrimSeedActivity.class)
-                            .putExtra("seed", seed);
+                    Intent i = new Intent(SaveSeedActivity.this, ConfirmSeedActivity.class)
+                            .putExtra("seed", seed)
+                            .putExtra("restore", false);
                     startActivity(i);
                 }else{
                     Toast.makeText(SaveSeedActivity.this, "Error occurred, Seed was not generated", Toast.LENGTH_SHORT).show();
