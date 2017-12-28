@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/barcode_address"
         android:textSize="32sp"
-        />
+       />
 
 
 </LinearLayout>
