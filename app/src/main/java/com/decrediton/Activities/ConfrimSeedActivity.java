@@ -28,7 +28,6 @@ import java.util.List;
 public class ConfrimSeedActivity extends AppCompatActivity {
     private List<Seed> seedList = new ArrayList<>();
     private List<Seed> confirmSeedList = new ArrayList<>();;
-
     private SeedAdapter seedAdapter;
     private TextView confirmview;
 
@@ -68,7 +67,7 @@ public class ConfrimSeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 Seed seed = seedList.get(position);
-                Toast.makeText(getApplicationContext(),confirmSeedList.size()+"",Toast.LENGTH_SHORT).show();
+
                 if(confirmSeedList.size()==32){
                     // check for match
                     Intent i = new Intent(ConfrimSeedActivity.this, MainActivity.class);
