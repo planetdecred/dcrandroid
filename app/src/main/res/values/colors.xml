@@ -10,9 +10,11 @@
     <color name="buttonColor">#2a5bf9</color>
     <color name="Amount1Text">#697178</color>
     <color name="Amount2Text">#11161b</color>
-    <color name="backgcolor">#eff3f3</color>
+    <color name="backgcolor">#ebefee</color>
     <color name="backgcolorwhite">#ffffff</color>
     <color name="ButtonColor">#2774ff</color>
     <color name="bacgroundColor">#0d203f</color>
     <color name="bacgroundTxColor">#f2f6f7</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
 </resources>
