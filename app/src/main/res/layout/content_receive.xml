@@ -7,13 +7,27 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_margin="5dp"
         android:id="@+id/bitm"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/barcode_address"
-        android:textSize="32sp"
+        android:gravity="center"
+        android:maxEms="37"
+        android:minEms="26"
+        android:textSize="12sp"
+        android:padding="5dp"
         />
+    <Button
+        android:id="@+id/btn_gen_new_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="generate new Address"
+        android:background="@drawable/btn_shape"
+        android:textColor="@color/buttonText"
+        android:padding="8dp"
+        android:clickable="true"/>
 
 
 </LinearLayout>
