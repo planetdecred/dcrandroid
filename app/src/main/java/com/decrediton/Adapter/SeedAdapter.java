@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.decrediton.Data.Seed;
+import com.decrediton.data.Seed;
 import com.decrediton.R;
 
 import java.util.List;
