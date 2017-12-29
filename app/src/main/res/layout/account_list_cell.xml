@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,38 +10,37 @@
         >
 
         <TextView
-            android:id="@+id/account_row_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.4"
-
+            android:layout_weight="1"
+            android:padding="5dp"
             android:text="default"
+
+
+
             android:textColor="@color/Amount2Text"
+
             android:textSize="20sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-
+            android:layout_weight="1.2"
+            android:padding="5dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/account_row_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="87.9934232 DCR"
                 android:textAllCaps="false"
-                android:gravity="end"
                 android:textColor="@color/colorText"
-                android:textSize="16sp"
+                android:textSize="21sp"
                 />
             <TextView
-                android:id="@+id/account_row_spendable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Spendable: 87.9934232 DCR"
                 android:textAllCaps="false"
-                android:gravity="end"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 />
