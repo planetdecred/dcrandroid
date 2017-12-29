@@ -5,10 +5,10 @@ android {
     //compileSdkVersion 26
     //buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.decrediton"
+       applicationId "com.decrediton"
         minSdkVersion 15
-        //targetSdkVersion 26
         targetSdkVersion 27
+        //targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -31,7 +31,5 @@ dependencies {
     compile 'com.android.support:design:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
     compile project(':dcrwallet')
-    compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
-    compile files('libs/ZxingScanner.jar')
     //compile (project(':walletconnector')){ exclude group: 'go'}
 }
