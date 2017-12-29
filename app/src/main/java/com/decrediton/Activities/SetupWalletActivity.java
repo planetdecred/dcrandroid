@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.decrediton.R;
-import com.decrediton.Util.Utils;
 
 /**
  * Created by Macsleven on 25/12/2017.
@@ -30,10 +29,8 @@ public class SetupWalletActivity extends AppCompatActivity {
         retrieveWalletBtn.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(SetupWalletActivity.this, ConfirmSeedActivity.class)
-                    .putExtra("seed", Utils.getWordList(SetupWalletActivity.this))
-                    .putExtra("restore", true);
-            startActivity(i);
+           /* Intent i = new Intent(SetupWalletActivity.this, SaveSeedActivity.class);
+            startActivity(i);*/
         }
     });
 }

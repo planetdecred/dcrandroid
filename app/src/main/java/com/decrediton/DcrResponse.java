@@ -6,9 +6,9 @@ import org.json.JSONObject;
 
 public class DcrResponse {
     private DcrResponse(){}
-    public boolean errorOccurred;
-    public int errorCode;
-    public String content;
+    boolean errorOccurred;
+    int errorCode;
+    String content;
     public static DcrResponse parse(String jsonResponse) throws JSONException {
         DcrResponse response = new DcrResponse();
         JSONObject object = new JSONObject(jsonResponse);
