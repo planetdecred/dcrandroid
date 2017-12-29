@@ -4,13 +4,16 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".MainApplication"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.SplashScreen"
@@ -27,7 +30,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Activities.ConfirmSeedActivity"
+        <activity android:name=".Activities.ConfrimSeedActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.SetupWalletActivity"
@@ -36,14 +39,29 @@
         <activity android:name=".Activities.SaveSeedActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activities.EncryptWallet"
+        <activity android:name=".Activities.AccountDetailsActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            />
+        <activity
+            android:name=".Activities.ScannerActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.ReaderActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Activities.CaptureActivityAnyOrientation"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
         <activity android:name="android.app.NativeActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden">
             <meta-data android:name="android.app.lib_name" android:value="gojni"/>
         </activity>
+        <activity android:name=".Activities.AddAccountActivity" />
+
     </application>
 
 </manifest>

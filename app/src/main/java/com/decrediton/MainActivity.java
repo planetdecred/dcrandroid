@@ -1,6 +1,7 @@
 package com.decrediton;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +16,10 @@ import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.decrediton.Activities.CaptureActivityAnyOrientation;
 import com.decrediton.fragments.AccountsFragment;
 import com.decrediton.fragments.HelpFragment;
 import com.decrediton.fragments.HistoryFragment;
@@ -25,6 +28,8 @@ import com.decrediton.fragments.ReceiveFragment;
 import com.decrediton.fragments.SendFragment;
 import com.decrediton.fragments.SettingsFragment;
 import com.decrediton.fragments.TicketsFragment;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import java.io.File;
@@ -36,12 +41,16 @@ import java.lang.reflect.Method;
 import dcrwallet.Dcrwallet;
 public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -229,5 +238,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         //make this method blank
         return true;
     }
+    public void startScan(SendFragment v) {
+
+    }
+
 
 }

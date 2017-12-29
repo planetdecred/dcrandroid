@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.5"
-        android:text="PlEASE CONFIRM YOUR SEED BY SELECTING EACH WORD ACCORDINGLY"
+        android:text="PlEASE CONFIRM YOUR SEED"
         android:textColor="@color/colorAccent"
         android:gravity="center"
         />
@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1"
-
+        android:background="@color/colorAccent"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -29,69 +29,34 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:visibility="gone"
 
-            />
-        <android.support.v7.widget.AppCompatAutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your seed..."
-            android:textColor="#fff"
-            android:textColorHint="#eee"
-            android:id="@+id/autoCompleteSeed"
+
+            android:layout_weight="1"
             />
     </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.2">
     <TextView
         android:layout_marginTop="5dp"
         android:id="@+id/seed_display_confirm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/text_view_bg"
+        android:maxLines="7"
+        android:minLines="3"
         android:padding="8dp"
         android:textStyle="bold"
-        android:textSize="15sp"/>
-    </ScrollView>
-    <LinearLayout
+        android:layout_weight="1.2"
+        android:textSize="12sp"/>
+
+
+    <Button
+        android:id="@+id/button_confirm_seed"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1.5"
         android:layout_gravity="end"
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/button_delete_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_shape"
-                android:padding="5dp"
-                android:text="delete"
-                android:layout_margin="5dp"
-                android:textColor="@color/colorAccent" />
-            <Button
-                android:id="@+id/button_clear_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_shape"
-                android:padding="5dp"
-                android:text="clear"
-                android:layout_margin="5dp"
-                android:textColor="@color/colorAccent" />
-            <Button
-                android:id="@+id/button_confirm_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_shape"
-                android:padding="5dp"
-                android:text="confirm"
-                android:layout_margin="5dp"
-                android:textColor="@color/colorAccent" />
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_weight="1.5"
+        android:background="@drawable/btn_shape"
+        android:padding="8dp"
+        android:text="clear"
+        android:layout_margin="5dp"
+        android:textColor="@color/colorAccent" />
 </LinearLayout>

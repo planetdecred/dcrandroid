@@ -9,18 +9,12 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="-60dp"
-            android:orientation="vertical"
-            android:gravity="center"
-            >
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher"/>
+
         <Button
             android:id="@+id/button_create_wallet"
             android:layout_width="match_parent"
@@ -30,15 +24,14 @@
             android:text="Create Wallet"
             android:textColor="@android:color/background_light" />
 
-            <Button
-            android:id="@+id/button_retrieve_wallet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="5dp"
-            android:text="Recover Wallet"
-            android:textColor="@android:color/background_light" />
-        </LinearLayout>
+        <Button
+        android:id="@+id/button_retrieve_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="5dp"
+        android:text="Recover Wallet"
+        android:textColor="@android:color/background_light" />
     </LinearLayout>
 
     </LinearLayout>
