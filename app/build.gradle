@@ -30,6 +30,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:design:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
+    compile files('libs/ZxingScanner.jar')
     compile project(':dcrwallet')
     //compile (project(':walletconnector')){ exclude group: 'go'}
 }
