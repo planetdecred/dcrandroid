@@ -24,7 +24,6 @@ public class AccountsFragment extends Fragment {
         return inflater.inflate(R.layout.content_account, container, false);
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
