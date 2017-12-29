@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,31 +11,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="SETTING UP DECREDITION"
+        android:text="SETTING UP DECREDITON"
         android:gravity="center"
         android:textColor="@color/colorAccent" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textAlignment="center"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textAlignment="center"
+            android:text="@string/save_seed_instruction"
+            android:textColor="@color/colorAccent" />
 
-        android:text="Copy this seed and save it in a secure location or save to file and back it up as required"
-        android:textColor="@color/colorAccent" />
-
-    <TextView
-        android:id="@+id/save_seed_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@color/colorAccent"
-        android:padding="8dp"
-        android:maxLines="7"
-        android:minLines="3"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="hello how are you  i hoep you are feeeling fine this is your wallete seed please keep it you will need to use it for verification you will need to use it for verificationyou will need to use it for verification you will need to u" />
+        <TextView
+            android:id="@+id/save_seed_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@color/colorAccent"
+            android:padding="8dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/save_seed_btn_continue"
@@ -46,5 +49,5 @@
             android:text="Continue"
             android:layout_gravity="center"
             android:textColor="@android:color/background_light" />
-
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
