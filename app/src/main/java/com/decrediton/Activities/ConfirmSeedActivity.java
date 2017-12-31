@@ -3,10 +3,6 @@ package com.decrediton.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,11 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.decrediton.Adapter.SeedAdapter;
-import com.decrediton.DcrResponse;
-import com.decrediton.data.Seed;
+import com.decrediton.Util.DcrResponse;
 import com.decrediton.R;
-import com.decrediton.Util.RecyclerTouchListener;
 import com.decrediton.workers.VerifySeedBackgroundWorker;
 
 import org.json.JSONException;
@@ -66,7 +59,6 @@ public class ConfirmSeedActivity extends AppCompatActivity {
                 }else{
                     System.out.println("Verifying: "+enteredSeed);
                     new VerifySeedBackgroundWorker(ConfirmSeedActivity.this).execute(enteredSeed);
-                    Toast.makeText(ConfirmSeedActivity.this, "Not restoring", Toast.LENGTH_SHORT).show();
                 }
             }
         });

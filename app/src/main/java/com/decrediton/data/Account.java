@@ -8,13 +8,13 @@ public class Account {
     private String accountName;
     private String spendable;
     private String total;
-    private String immatureRewards;
-    private String lockedByTickets;
-    private String votingAuthority;
-    private String immatureStakeGeneration;
-    private String accountNumber;
-    private String hDPath;
-    private String keys;
+    private String immatureRewards = "";
+    private String lockedByTickets = "";
+    private String votingAuthority = "";
+    private String immatureStakeGeneration = "";
+    private String accountNumber = "";
+    private String hDPath = "";
+    private String keys = "";
     public Account(){
     }
     public Account(String accountName,String spendable,String total,String immatureRewards,String lockedByTickets,String votingAuthority,String immatureStakeGeneration,String accountNumber,String hDPath,String keys){
