@@ -3,7 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="#ebefee"
     >
 
     <LinearLayout
@@ -38,7 +37,7 @@
                 android:id="@+id/send_dcr_add"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Destination address:"
+                android:hint="Destination Address:"
                 android:maxLines="1"
                 android:layout_weight="1"
                 android:inputType="text"
@@ -51,21 +50,37 @@
                 android:background="@android:drawable/ic_menu_camera"
                 android:clickable="true"
                 android:focusable="true"
-                />
+                android:gravity="center"
+                android:paddingBottom="3dp" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <EditText
             android:id="@+id/send_dcr_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Amount(DCR) :"
             android:inputType="numberDecimal"
-
+            android:layout_weight="1"
             android:lines="1"
             android:maxLines="1"
-
             />
+        <TextView
+            android:id="@+id/send_dcr_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send All"
+            android:clickable="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:focusable="true"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:paddingBottom="3dp" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,11 +137,12 @@
 
         <Button
             android:id="@+id/send_btn_tx"
-            android:layout_width="150dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_shape"
             android:padding="5dp"
             android:text="Send"
+            android:textSize="21sp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:textColor="@android:color/background_light" />
