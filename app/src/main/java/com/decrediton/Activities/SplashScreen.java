@@ -8,7 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.decrediton.DcrResponse;
+import com.decrediton.Util.DcrResponse;
 import com.decrediton.MainActivity;
 import com.decrediton.R;
 import com.decrediton.Util.Utils;
@@ -17,8 +17,6 @@ import com.decrediton.workers.BackgroundWorker;
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import dcrwallet.Dcrwallet;

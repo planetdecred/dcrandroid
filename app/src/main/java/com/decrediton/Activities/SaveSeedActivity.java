@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.workers.BackgroundWorker;
-import com.decrediton.DcrResponse;
+import com.decrediton.Util.DcrResponse;
 import com.decrediton.R;
 import com.decrediton.Util.Utils;
 

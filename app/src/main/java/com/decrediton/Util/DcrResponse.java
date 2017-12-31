@@ -1,4 +1,4 @@
-package com.decrediton;
+package com.decrediton.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;

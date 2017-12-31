@@ -19,7 +19,6 @@ import java.util.List;
 
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHolder> {
 
-    private Account fragment;
     private List<Account> accountList;
     private LayoutInflater layoutInflater;
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -54,8 +53,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Account account = accountList.get(position);
-        holder.accountName.setText(account.getAccountName());
-        holder.spendable.setText(account.getSpendable());
+        holder.accountName.setText(account.getAccountName()+" DCR");
+        holder.spendable.setText("Spendable "+account.getSpendable()+" DCR");
         holder.total.setText(account.getTotal());
     }
 

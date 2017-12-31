@@ -2,6 +2,8 @@ package com.decrediton.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,13 +19,19 @@ import android.widget.Toast;
 
 import com.decrediton.Activities.AccountDetailsActivity;
 import com.decrediton.Adapter.AccountAdapter;
-import com.decrediton.Data.Account;
-import com.decrediton.MainActivity;
+import com.decrediton.Util.AccountResponse;
+import com.decrediton.Util.BalanceResponse;
+import com.decrediton.data.Account;
 import com.decrediton.R;
 import com.decrediton.Util.RecyclerTouchListener;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import dcrwallet.Accounts;
+import dcrwallet.Dcrwallet;
 
 
 /**
@@ -36,9 +44,7 @@ public class AccountsFragment extends Fragment {
     private AccountAdapter accountAdapter;
     private LayoutInflater layoutInflater;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_account, container, false);
         this.layoutInflater = LayoutInflater.from(rootView.getContext());
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.recycler_view2);
@@ -51,9 +57,6 @@ public class AccountsFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Account account = accountList.get(position);
-
-                Toast.makeText(getContext()," this is working",Toast.LENGTH_LONG).show();
-
                 Intent i = new Intent(getContext(), AccountDetailsActivity.class);
                 i.putExtra("AccountName",account.getAccountName());
                 i.putExtra("AccountNumber",account.getAccountNumber());
@@ -79,17 +82,49 @@ public class AccountsFragment extends Fragment {
         return rootView;
     }
 
+    private void prepareAccountData(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    if(!response.errorOccurred) {
+                        accountList.clear();
+                        for (int i = 0; i < response.items.size(); i++) {
+                            Account account = new Account();
+                            AccountResponse.AccountItem item = response.items.get(i);
+                            account.setAccountName(item.name);
+                            account.setAccountNumber(String.valueOf(item.number));
+                            account.setTotal(String.valueOf(item.balance.total));
+                            account.setSpendable(String.valueOf(item.balance.spendable));
+                            account.setImmatureRewards(String.valueOf(item.balance.immatureReward));
+                            account.setImmatureStakeGeneration(String.valueOf(item.balance.immatureStakeGeneration));
+                            account.setLockedByTickets(String.valueOf(item.balance.lockedByTickets));
+                            account.setVotingAuthority(String.valueOf(item.balance.votingAuthority));
+                            account.setKeys(item.internalKeyCount+" Internal, "+item.externalKeyCount+" External, "+item.importedKeyCount+" Imported");
+                            accountList.add(account);
+                        }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                accountAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Account");
-    }
-    private void prepareAccountData(){
-        Account account = new Account("default"," 89.04838473"+" DCR","89.04838473"+"DCR","0.0 DCR","0.0 DCR","0.0 DCR","0.0 DCR","0","m / 44/","20 internal, 20 external");
-        accountList.add(account);
-        account = new Account("Import"," 89.04838473"+" DCR","89.04838473"+" DCR","0.0 DCR","0.0 DCR","0.0 DCR","0.0 DCR","0","m / 44/","20 internal, 20 external");
-        accountList.add(account);
-
     }
 }
