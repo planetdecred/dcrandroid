@@ -2,26 +2,25 @@ package com.decrediton.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.decrediton.Activities.AccountDetailsActivity;
 import com.decrediton.Adapter.AccountAdapter;
 import com.decrediton.Util.AccountResponse;
-import com.decrediton.Util.BalanceResponse;
 import com.decrediton.data.Account;
+import com.decrediton.MainActivity;
 import com.decrediton.R;
 import com.decrediton.Util.RecyclerTouchListener;
 
@@ -30,7 +29,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dcrwallet.Accounts;
 import dcrwallet.Dcrwallet;
 
 
@@ -41,18 +39,18 @@ import dcrwallet.Dcrwallet;
 public class AccountsFragment extends Fragment {
 
     private List<Account> accountList = new ArrayList<>();
-    private AccountAdapter accountAdapter;
-    private LayoutInflater layoutInflater;
+    AccountAdapter accountAdapter;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_account, container, false);
-        this.layoutInflater = LayoutInflater.from(rootView.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+        MainActivity.menuOpen.setVisible(true);
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.recycler_view2);
-        accountAdapter = new AccountAdapter(accountList,layoutInflater);
+        accountAdapter = new AccountAdapter(accountList, layoutInflater);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -77,8 +75,8 @@ public class AccountsFragment extends Fragment {
             }
         }));
         recyclerView.setAdapter(accountAdapter);
-        prepareAccountData();
         registerForContextMenu(recyclerView);
+        prepareAccountData();
         return rootView;
     }
 
@@ -126,5 +124,21 @@ public class AccountsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Account");
+    }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onDestroyView (){
+        super.onDestroyView();
+        MainActivity.menuOpen.setVisible(false);
     }
 }

@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.decrediton.data.Account;
-import com.decrediton.data.Seed;
 import com.decrediton.R;
-import com.decrediton.Util.RecyclerTouchListener;
 
 import java.util.List;
 
