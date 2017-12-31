@@ -1,4 +1,4 @@
-package com.decrediton.Data;
+package com.decrediton.data;
 
 /**
  * Created by Macsleven on 28/12/2017.

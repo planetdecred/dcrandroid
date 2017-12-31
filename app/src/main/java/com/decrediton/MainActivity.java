@@ -1,6 +1,7 @@
 package com.decrediton;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.decrediton.Activities.AddAccountActivity;
 import com.decrediton.fragments.AccountsFragment;
 import com.decrediton.fragments.HelpFragment;
 import com.decrediton.fragments.HistoryFragment;
@@ -35,6 +37,9 @@ import java.lang.reflect.Method;
 
 import dcrwallet.Dcrwallet;
 public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
+
+    public String menuADD ="0";
+    public static MenuItem menuOpen;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,9 +160,16 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main_page, menu);
+        super.onCreateOptionsMenu(menu);
+        if(!menuADD.equals("1") ) {
+            menuOpen = menu.findItem(R.id.action_add);
+            menuOpen.setVisible(false);
+
+        }
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -167,8 +179,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_add) {
+            Intent intent = new Intent(this, AddAccountActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
