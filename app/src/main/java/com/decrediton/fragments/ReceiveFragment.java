@@ -8,19 +8,26 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.R;
 import com.decrediton.Util.EncodeQrCode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by Macsleven on 28/11/2017.
  */
 
-public class ReceiveFragment extends android.support.v4.app.Fragment {
+public class ReceiveFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
     ImageView imageView;
     private TextView address;
 
@@ -39,6 +46,17 @@ public class ReceiveFragment extends android.support.v4.app.Fragment {
         imageView = view.findViewById(R.id.bitm);
         address = view.findViewById(R.id.barcode_address);
         Button buttonGenerate = view.findViewById(R.id.btn_gen_new_addr);
+        Spinner accountSpinner = view.findViewById(R.id.recieve_dropdown);
+        accountSpinner.setOnItemSelectedListener(this);
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add(0,"default");
+        categories.add(1,"import");
+
+        ArrayAdapter dataAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        accountSpinner.setAdapter(dataAdapter);
+
         address.setText("Tw2wedd3tete3re34rfdrr");
         address.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +91,16 @@ public class ReceiveFragment extends android.support.v4.app.Fragment {
                 "Your address is copied", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.RIGHT, 50, 50);
         toast.show();
-        //displayAlert("Your OTP is copied");
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String item = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

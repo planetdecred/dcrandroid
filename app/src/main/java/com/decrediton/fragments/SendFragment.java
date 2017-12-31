@@ -26,7 +26,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class SendFragment extends android.support.v4.app.Fragment {
     public EditText address,amount;
-    public TextView totalAmountSending,estimateFee,estimateSize,scanAddress;
+    public TextView totalAmountSending,estimateFee,estimateSize,scanAddress,sendAll;
     Button send;
     final IntentIntegrator integrator = new IntentIntegrator(getActivity());
     private static final int SCANNER_ACTIVITY_RESULT_CODE = 0;
@@ -52,12 +52,12 @@ public class SendFragment extends android.support.v4.app.Fragment {
         scanAddress = getActivity().findViewById(R.id.send_dcr_scan);
         estimateSize = getActivity().findViewById(R.id.send_dcr_estimate_size);
         estimateFee = getActivity().findViewById(R.id.send_dcr_estimate_fee);
+        sendAll = getActivity().findViewById(R.id.send_dcr_all);
         send= getActivity().findViewById(R.id.send_btn_tx);
 
         scanAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast();
                 Intent intent = new Intent(getActivity(), ReaderActivity.class);
                 startActivityForResult(intent, SCANNER_ACTIVITY_RESULT_CODE);
 
@@ -67,6 +67,12 @@ public class SendFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view) {
 
+
+            }
+        });
+        sendAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
@@ -97,8 +103,5 @@ public class SendFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    public void showToast(){
-        Toast.makeText(getContext(),"my test",Toast.LENGTH_LONG).show();
-    }
 
 }
