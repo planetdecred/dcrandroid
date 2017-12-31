@@ -43,6 +43,8 @@
         <activity android:name=".Activities.EncryptWallet"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Activities.AddAccountActivity" />
+        <activity android:name=".Activities.ReaderActivity" />
         <activity android:name=".Activities.AccountDetailsActivity"
             android:label="@string/app_name"
             >
@@ -54,12 +56,13 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
-        <activity android:name=".Activities.AddAccountActivity" />
+
         <activity android:name="android.app.NativeActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden">
             <meta-data android:name="android.app.lib_name" android:value="gojni"/>
         </activity>
+
     </application>
 
 </manifest>

@@ -2,22 +2,29 @@ package com.decrediton.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.decrediton.Activities.AccountDetailsActivity;
+import com.decrediton.Activities.AddAccountActivity;
 import com.decrediton.Adapter.AccountAdapter;
-import com.decrediton.Data.Account;
+import com.decrediton.data.Account;
 import com.decrediton.MainActivity;
 import com.decrediton.R;
 import com.decrediton.Util.RecyclerTouchListener;
@@ -33,20 +40,18 @@ import java.util.List;
 public class AccountsFragment extends Fragment {
 
     private List<Account> accountList = new ArrayList<>();
-    private AccountAdapter accountAdapter;
-    private LayoutInflater layoutInflater;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_account, container, false);
-        this.layoutInflater = LayoutInflater.from(rootView.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+        MainActivity.menuOpen.setVisible(true);
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.recycler_view2);
-        accountAdapter = new AccountAdapter(accountList,layoutInflater);
+        AccountAdapter accountAdapter = new AccountAdapter(accountList, layoutInflater);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -86,11 +91,31 @@ public class AccountsFragment extends Fragment {
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Account");
     }
+
     private void prepareAccountData(){
         Account account = new Account("default"," 89.04838473"+" DCR","89.04838473"+"DCR","0.0 DCR","0.0 DCR","0.0 DCR","0.0 DCR","0","m / 44/","20 internal, 20 external");
         accountList.add(account);
         account = new Account("Import"," 89.04838473"+" DCR","89.04838473"+" DCR","0.0 DCR","0.0 DCR","0.0 DCR","0.0 DCR","0","m / 44/","20 internal, 20 external");
         accountList.add(account);
 
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+
+
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onDestroyView (){
+        super.onDestroyView();
+        MainActivity.menuOpen.setVisible(false);
     }
 }
