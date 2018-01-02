@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.decrediton.Activities.HistoryDetailsActivity;
+import com.decrediton.Activities.TransactionDetailsActivity;
 import com.decrediton.Adapter.HistoryAdapter;
 import com.decrediton.R;
 import com.decrediton.Util.RecyclerTouchListener;
@@ -43,7 +43,7 @@ public class HistoryFragment extends Fragment{
             @Override
             public void onClick(View view, int position) {
                 Transaction history = historyList.get(position);
-                Intent i = new Intent(getContext(), HistoryDetailsActivity.class);
+                Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
                 i.putExtra("Amount",history.getAccountName());
                 i.putExtra("Address",history.getAddress());
                 i.putExtra("TxDate",history.getTxDate());

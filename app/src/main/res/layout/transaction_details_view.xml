@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:padding="8dp"
+            android:background="@drawable/background_shadow">
+            <TextView
+                android:id="@+id/label_tx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="Transaction"
+                android:textColor="@color/secondary_text"
+                android:textSize="16sp" />
+            <View
+                android:id="@+id/separator123"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_tx"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/tx_label_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/separator123"
+                android:padding="8dp"
+                android:text="Amount"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/tx_dts_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="end"
+                android:layout_toEndOf="@+id/tx_label_amount"
+                android:layout_toRightOf="@+id/tx_label_amount"
+                android:layout_below="@+id/separator123"
+                android:padding="8dp"
+                android:text="87.9934232 DCR"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separator12"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+
+                android:layout_below="@+id/tx_label_amount"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/label_spendable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator12"
+                android:text="Account"
+                android:padding="8dp"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/tx_dts_acc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator12"
+                android:layout_toRightOf="@+id/label_spendable"
+                android:layout_toEndOf="@+id/label_spendable"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="end"
+                android:padding="8dp"
+                android:text="default"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separator20"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_spendable"
+                android:background="@color/primary_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/status_tx_cont"
+                android:layout_below="@+id/separator20">
+            <TextView
+                android:id="@+id/label_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Status"
+                android:layout_weight="2"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/tx_dts__status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_margin="2dp"
+                android:padding="3dp"
+                android:layout_gravity="center"
+                android:text="confirmed"
+                android:background="@drawable/tx_status_confirmed"
+                android:textColor="@color/color_confirmed_tx"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/separator13"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/status_tx_cont"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_tx_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator13"
+                android:padding="8dp"
+                android:text="Transaction Type"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/tx_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/separator13"
+                android:gravity="end"
+                android:padding="8dp"
+                android:text="Send"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separator21"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_tx_type"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/label_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator21"
+                android:text="Date"
+                android:padding="8dp"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/tx_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator21"
+                android:layout_toEndOf="@+id/label_date"
+                android:layout_toRightOf="@+id/label_date"
+                android:gravity="end"
+                android:text="jan 1 2018,19:12:23"
+                android:padding="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/primary_text" />
+            <View
+                android:id="@+id/separator17"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/tx_date"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_tx_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:padding="8dp"
+                android:textColor="@color/secondary_text"
+                android:layout_below="@+id/separator17"/>
+
+
+
+            <TextView
+                android:id="@+id/tx_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/label_tx_addr"
+                android:layout_below="@+id/separator17"
+                android:gravity="end"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:text="TWQJJDKDUFHFKRUDHDNSBHDJFFHDJDH"
+                android:textColor="@color/primary_text" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>
