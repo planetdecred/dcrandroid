@@ -17,4 +17,6 @@
     <color name="bacgroundTxColor">#f2f6f7</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
+    <color name="color_pendng_tx">#3d659c</color>
+    <color name="color_confirmed_tx">#55bb97</color>
 </resources>

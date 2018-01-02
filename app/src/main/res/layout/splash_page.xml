@@ -5,10 +5,9 @@
     android:background="@color/bacgroundColor"
     android:gravity="center">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOADING..."
-        android:textSize="18sp"
-        android:textColor="@android:color/white"/>
+        android:src="@mipmap/ic_decred"
+       />
 </LinearLayout>
