@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1.5"
         android:text="PlEASE CONFIRM YOUR SEED BY SELECTING EACH WORD ACCORDINGLY"
-        android:textColor="@color/colorAccent"
+        android:textColor="#fff"
         android:gravity="center"
         />
     <LinearLayout

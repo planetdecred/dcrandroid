@@ -5,10 +5,10 @@
     android:background="@color/bacgroundColor"
     android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LOADING..."
-        android:textSize="18sp"
-        android:textColor="@android:color/white"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/decred_logo"
+        android:id="@+id/splashscreen_icon"
+       />
 </LinearLayout>
