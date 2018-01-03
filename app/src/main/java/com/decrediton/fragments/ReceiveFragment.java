@@ -1,6 +1,7 @@
 package com.decrediton.fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,11 +18,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.R;
+import com.decrediton.Util.AccountResponse;
+import com.decrediton.Util.DcrResponse;
 import com.decrediton.Util.EncodeQrCode;
+import com.decrediton.Util.Utils;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -30,7 +38,9 @@ import java.util.List;
 public class ReceiveFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
     ImageView imageView;
     private TextView address;
-
+    ProgressDialog pd;
+    ArrayAdapter dataAdapter;
+    List<String> categories;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,7 +48,6 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         //change R.layout.yourlayoutfilename for each of your fragments
         return inflater.inflate(R.layout.content_receive, container, false);
     }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -49,32 +58,23 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         Spinner accountSpinner = view.findViewById(R.id.recieve_dropdown);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
-        List<String> categories = new ArrayList<>();
-        categories.add(0,"default");
-        categories.add(1,"import");
+        categories = new ArrayList<>();
 
-        ArrayAdapter dataAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         accountSpinner.setAdapter(dataAdapter);
 
-        address.setText("Tw2wedd3tete3re34rfdrr");
         address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 copyToClipboard(address.getText().toString());
             }
         });
-        imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("Tw2wedd3tete3re34rfdrr",200,200));
-        buttonGenerate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("T1234365476894tg46eu44jekd66whsgw5",200,200));
-                address.setText("T1234365476894tg46eu44jekd66whsgw5");
-            }
-        });
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Receive");
+        prepareAccounts();
     }
+
     public void copyToClipboard(String copyText) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -91,6 +91,76 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                 "Your address is copied", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.RIGHT, 50, 50);
         toast.show();
+    }
+
+    private void prepareAccounts(){
+        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,"Getting Accounts...");
+        pd.show();
+        new Thread(){
+            public void run(){
+                try{
+                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    if(response.errorOccurred){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(pd.isShowing()){
+                                    pd.dismiss();
+                                }
+                                Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return;
+                    }
+                    categories.clear();
+                    for(int i = 0; i < response.items.size(); i++){
+                        if(response.items.get(i).name.trim().equals("imported")){
+                            continue;
+                        }
+                        categories.add(i, response.items.get(i).name);
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(pd.isShowing()){
+                                pd.dismiss();
+                            }
+                            dataAdapter.notifyDataSetChanged();
+                            //Default Account
+                            //getAddress(0);
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    private void getAddress(final int accountNumber){
+        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,"Getting Accounts...");
+        pd.show();
+        new Thread(){
+            public void run(){
+                try {
+                    final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) accountNumber));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(response.errorOccurred){
+                                Toast.makeText(ReceiveFragment.this.getContext(),"Error occurred while trying to get address for account: "+accountNumber,Toast.LENGTH_SHORT).show();
+                            }else{
+                                String newAddress = response.content;
+                                address.setText(newAddress);
+                                imageView.setImageBitmap(EncodeQrCode.encodeToQrCode(newAddress,200,200));
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override

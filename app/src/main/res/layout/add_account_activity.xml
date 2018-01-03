@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="Input your seed and private passphrase"
+        android:text="Input your new account name and enter your private passphrase"
         android:gravity="center"
         android:textSize="14sp"
         android:background="@color/backgcolorwhite"
@@ -31,7 +28,6 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:background="@color/backgcolorwhite"
-
         >
         <EditText
             android:id="@+id/add_acc_name"
@@ -39,18 +35,16 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Account Name"
-
             android:maxLines="1"
             android:inputType="textPersonName"
             />
-
 
         <EditText
             android:id="@+id/add_acc_passphrase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="Passphrase"
+            android:hint="Private Passphrase"
             android:maxLines="1"
             android:inputType="textPassword"
             />
@@ -62,7 +56,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/btn_shape"
             android:padding="5dp"
-            android:text="Confirm "
+            android:text="Create Account"
             android:textAllCaps="false"
             android:layout_gravity="center"
             android:textColor="@android:color/background_light" />

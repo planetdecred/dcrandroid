@@ -16,35 +16,39 @@ public class AccountResponse {
     public ArrayList<AccountItem> items = new ArrayList<>();
     private AccountResponse(){}
     public static AccountResponse parse(String json) throws JSONException {
+        System.out.println("Account JSON: "+json);
         AccountResponse response = new AccountResponse();
         JSONObject obj = new JSONObject(json);
         response.errorOccurred = obj.getBoolean("ErrorOccurred");
-        response.count = obj.getInt("Count");
         response.errorMessage = obj.getString("ErrorMessage");
         response.errorCode = obj.getInt("ErrorCode");
-        response.currentBlockHeight = obj.getInt("Current_block_height");
-        response.currentBlockHash = obj.getString("Current_block_hash");
-        JSONArray acc = obj.getJSONArray("Acc");
-        for(int i = 0; i < acc.length(); i++){
-            final JSONObject account = acc.getJSONObject(i);
-            response.items.add(new AccountItem(){
-                {
-                    number = account.getInt("Number");
-                    name = account.getString("Name");System.out.println();
-                    externalKeyCount = account.getInt("External_key_count");
-                    internalKeyCount = account.getInt("Internal_key_count");
-                    importedKeyCount = account.getInt("Imported_key_count");
-                    JSONObject balanceObj = account.getJSONObject("Balance");
-                    balance = new Balance();
-                    balance.total = balanceObj.getInt("Total");
-                    balance.spendable = balanceObj.getInt("Spendable");
-                    balance.immatureReward = balanceObj.getInt("ImmatureReward");
-                    balance.immatureStakeGeneration = balanceObj.getInt("ImmatureStakeGeneration");
-                    balance.lockedByTickets = balanceObj.getInt("LockedByTickets");
-                    balance.votingAuthority = balanceObj.getInt("VotingAuthority");
-                    balance.unConfirmed = balanceObj.getInt("UnConfirmed");
-                }
-            });
+        if(!response.errorOccurred) {
+            response.count = obj.getInt("Count");
+            response.currentBlockHeight = obj.getInt("Current_block_height");
+            response.currentBlockHash = obj.getString("Current_block_hash");
+            JSONArray acc = obj.getJSONArray("Acc");
+            for (int i = 0; i < acc.length(); i++) {
+                final JSONObject account = acc.getJSONObject(i);
+                response.items.add(new AccountItem() {
+                    {
+                        number = account.getInt("Number");
+                        name = account.getString("Name");
+                        System.out.println();
+                        externalKeyCount = account.getInt("External_key_count");
+                        internalKeyCount = account.getInt("Internal_key_count");
+                        importedKeyCount = account.getInt("Imported_key_count");
+                        JSONObject balanceObj = account.getJSONObject("Balance");
+                        balance = new Balance();
+                        balance.total = balanceObj.getInt("Total");
+                        balance.spendable = balanceObj.getInt("Spendable");
+                        balance.immatureReward = balanceObj.getInt("ImmatureReward");
+                        balance.immatureStakeGeneration = balanceObj.getInt("ImmatureStakeGeneration");
+                        balance.lockedByTickets = balanceObj.getInt("LockedByTickets");
+                        balance.votingAuthority = balanceObj.getInt("VotingAuthority");
+                        balance.unConfirmed = balanceObj.getInt("UnConfirmed");
+                    }
+                });
+            }
         }
         return response;
     }

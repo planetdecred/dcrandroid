@@ -72,9 +72,10 @@
         <TextView
             android:id="@+id/send_dcr_all"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Send All"
             android:clickable="true"
+            android:gravity="center"
             android:textColor="@color/colorPrimaryDark"
             android:focusable="true"
             android:textStyle="bold"

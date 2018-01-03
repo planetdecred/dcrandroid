@@ -38,17 +38,20 @@ public class EncryptWallet extends AppCompatActivity{
         Bundle b = i.getExtras();
         if(b != null)
         seed = b.getString("seed");
-
         System.out.println("Encrypt Seed: "+seed);
         encryptWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String pass = passPhrase.getText().toString();
+                if(pass.equals("")){
+                    Toast.makeText(EncryptWallet.this, "Enter a passphrase", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(pass.equals(verifyPassPhrase.getText().toString())){
                     ProgressDialog pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"Creating Wallet...");
                     new EncryptBackgroundWorker(pd,EncryptWallet.this).execute(pass, seed);
                 }else{
-                    Snackbar.make(view,"Passwords do not match", Snackbar.LENGTH_SHORT).show();
+                    Toast.makeText(EncryptWallet.this,"Passphrases do not match",Toast.LENGTH_SHORT).show();
                 }
             }
         });

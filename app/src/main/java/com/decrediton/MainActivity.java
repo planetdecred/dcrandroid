@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
-
+    private Fragment fragment;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
 
         findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            p Year decred!) Aublic void onClick(View v) {
                 try {
                     Method method = Dcrwallet.class.getDeclaredMethod("closeWallet");
                     Method callback = MainActivity.this.getClass().getDeclaredMethod("closeWalletCallback", String.class);
@@ -158,6 +158,17 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == 0){
+            if(fragment instanceof AccountsFragment){
+                AccountsFragment accountsFragment = (AccountsFragment) fragment;
+                accountsFragment.prepareAccountData();
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_page, menu);
@@ -165,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if(!menuADD.equals("1") ) {
             menuOpen = menu.findItem(R.id.action_add);
             menuOpen.setVisible(false);
-
         }
         return true;
     }
@@ -177,20 +187,15 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
             Intent intent = new Intent(this, AddAccountActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent,1);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void displaySelectedScreen(int itemId) {
-
-        //creating fragment object
-        Fragment fragment = null;
 
         //initializing the fragment object which is selected
         switch (itemId) {
@@ -218,29 +223,23 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             case R.id.nav_settings:
                 fragment = new SettingsFragment();
                 break;
-
         }
-
         //replacing the fragment
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.frame, fragment);
             ft.commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         //calling the method displayselectedscreen and passing the id of selected menu
         displaySelectedScreen(item.getItemId());
         //make this method blank
         return true;
     }
-
 }

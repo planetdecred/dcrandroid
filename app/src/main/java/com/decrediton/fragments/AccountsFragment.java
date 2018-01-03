@@ -80,7 +80,7 @@ public class AccountsFragment extends Fragment {
         return rootView;
     }
 
-    private void prepareAccountData(){
+    public void prepareAccountData(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -99,6 +99,7 @@ public class AccountsFragment extends Fragment {
                             account.setImmatureStakeGeneration(String.valueOf(item.balance.immatureStakeGeneration));
                             account.setLockedByTickets(String.valueOf(item.balance.lockedByTickets));
                             account.setVotingAuthority(String.valueOf(item.balance.votingAuthority));
+                            account.sethDPath("m / 44' / 20' / "+item.number);
                             account.setKeys(item.internalKeyCount+" Internal, "+item.externalKeyCount+" External, "+item.importedKeyCount+" Imported");
                             accountList.add(account);
                         }
@@ -108,7 +109,6 @@ public class AccountsFragment extends Fragment {
                                 accountAdapter.notifyDataSetChanged();
                             }
                         });
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

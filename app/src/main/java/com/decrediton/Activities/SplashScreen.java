@@ -17,6 +17,8 @@ import com.decrediton.workers.BackgroundWorker;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import dcrwallet.Dcrwallet;
@@ -28,12 +30,45 @@ import dcrwallet.Dcrwallet;
 public class SplashScreen extends AppCompatActivity {
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 5000;
-
+    private void startServer(){
+        new Thread(){
+            public void run(){
+                try {
+                    this.setPriority(MAX_PRIORITY);
+                    System.out.println("Wallet Home Dir: "+ Dcrwallet.getHomeDir());
+                    File path = new File(Dcrwallet.getHomeDir()+"/");
+                    path.mkdirs();
+                    String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
+                    String[] assetFilesName = {"dcrwallet.conf","rpc.key","rpc.cert"};
+                    for(int i = 0; i < files.length; i++) {
+                        File file = new File(path, files[i]);
+                        if (!file.exists()) {
+                            System.out.println("Writing file "+file.getAbsolutePath());
+                            FileOutputStream fout = new FileOutputStream(file);
+                            InputStream in = getAssets().open(assetFilesName[i]);
+                            int len;
+                            byte[] buff = new byte[8192];
+                            //read file till end
+                            while ((len = in.read(buff)) != -1) {
+                                fout.write(buff, 0, len);
+                            }
+                            fout.flush();
+                            fout.close();
+                            System.out.println("Written file "+file.getAbsolutePath());
+                        }
+                    }
+                    Dcrwallet.main();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startServer();
         setContentView(R.layout.splash_page);
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -47,7 +82,7 @@ public class SplashScreen extends AppCompatActivity {
                     // close this activity
                     finish();
                 }else{
-                    Toast.makeText(SplashScreen.this, "Wallet already exist", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SplashScreen.this, "Wallet already exist", Toast.LENGTH_SHORT).show();
                     try {
                         Method method = Dcrwallet.class.getDeclaredMethod("openWallet");
                         Method callback = SplashScreen.this.getClass().getDeclaredMethod("openWalletCallback", String.class);

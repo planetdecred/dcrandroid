@@ -1,6 +1,7 @@
 package com.decrediton.fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,10 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.Activities.ReaderActivity;
+import com.decrediton.Util.Utils;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import com.decrediton.R;
+
+import dcrwallet.Balance;
+import dcrwallet.Dcrwallet;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -73,7 +78,26 @@ public class SendFragment extends android.support.v4.app.Fragment {
         sendAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                final ProgressDialog pd = Utils.getProgressDialog(SendFragment.this.getContext(),false,false,"Calculating total spendable...");
+                pd.show();
+                new Thread(){
+                    public void run(){
+                        try{
+                            final Balance balance = Dcrwallet.getBalance(0);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    amount.setText(String.valueOf(balance.getSpendable()));
+                                    if(pd.isShowing()){
+                                        pd.dismiss();
+                                    }
+                                }
+                            });
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         });
 
@@ -85,23 +109,25 @@ public class SendFragment extends android.support.v4.app.Fragment {
             if(resultCode== RESULT_OK) {
                 try {
                     String returnString = intent.getStringExtra("keyName");
-                    if (returnString.startsWith("T")  && returnString.length()> 25 && returnString.length() < 36){
+                    if(returnString.startsWith("decred:"))
+                        returnString = returnString.replace("decred:","");
+                    if(returnString.length() < 25){
+                        Toast.makeText(SendFragment.this.getContext(), "Wallet Address Is Too Short", Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(returnString.length() > 36){
+                        Toast.makeText(SendFragment.this.getContext(), "Wallet Address Is to Long", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(returnString.startsWith("D")){
                         address.setText(returnString);
+                    }else{
+                        Toast.makeText(SendFragment.this.getContext(), "Invalid address prefix", Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        Toast.makeText(getContext(), "This is not a valid DCR wallet address", Toast.LENGTH_LONG).show();
-                    }
-
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "This is not a DCR wallet address", Toast.LENGTH_LONG).show();
                     address.setText("");
-
                 }
             }
-
-// Handle successful scan
         }
     }
-
-
 }
