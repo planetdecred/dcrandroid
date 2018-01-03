@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.decrediton.Activities.TransactionDetailsActivity;
-import com.decrediton.Adapter.HistoryAdapter;
+import com.decrediton.Adapter.TransactionAdapter;
 import com.decrediton.R;
 import com.decrediton.Util.RecyclerTouchListener;
 import com.decrediton.data.Transaction;
@@ -26,15 +26,15 @@ import java.util.List;
  */
 
 public class HistoryFragment extends Fragment{
-        private List<Transaction> historyList = new ArrayList<>();
-        HistoryAdapter historyAdapter;
+        private List<Transaction> transactionList = new ArrayList<>();
+        TransactionAdapter transactionAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_history, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
-        historyAdapter = new HistoryAdapter(historyList, layoutInflater);
+        transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -42,7 +42,7 @@ public class HistoryFragment extends Fragment{
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Transaction history = historyList.get(position);
+                Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
                 i.putExtra("Amount",history.getAccountName());
                 i.putExtra("Address",history.getAddress());
@@ -57,7 +57,7 @@ public class HistoryFragment extends Fragment{
 
             }
         }));
-        recyclerView.setAdapter(historyAdapter);
+        recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
         return rootView;
@@ -71,19 +71,19 @@ public class HistoryFragment extends Fragment{
         getActivity().setTitle("History");
     }
     private void prepareHistoryData(){
-        Transaction history= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:45","pending","default","send");
-        historyList.add(history);
-        history= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 11:17:25","pending","default","send");
-        historyList.add(history);
-        history= new Transaction("-100.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 19:19:45","pending","default","send");
-        historyList.add(history);
-        history= new Transaction("+220.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 22:12:32","confirmed","default","receive");
-        historyList.add(history);
-        history= new Transaction("+10.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 13:19:55","confirmed","default","send");
-        historyList.add(history);
-        history= new Transaction("+1200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:51","confirmed","default","send");
-        historyList.add(history);
-        history= new Transaction("+200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 14:32:39","confirmed","default","receive");
-        historyList.add(history);
+        Transaction transaction= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:45","pending","default","send");
+        transactionList.add(transaction);
+        transaction= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 11:17:25","pending","default","send");
+        transactionList.add(transaction);
+        transaction= new Transaction("-100.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 19:19:45","pending","default","send");
+        transactionList.add(transaction);
+        transaction= new Transaction("+220.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 22:12:32","confirmed","default","receive");
+        transactionList.add(transaction);
+        transaction= new Transaction("+10.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 13:19:55","confirmed","default","send");
+        transactionList.add(transaction);
+        transaction= new Transaction("+1200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:51","confirmed","default","send");
+        transactionList.add(transaction);
+        transaction= new Transaction("+200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 14:32:39","confirmed","default","receive");
+        transactionList.add(transaction);
     }
 }
