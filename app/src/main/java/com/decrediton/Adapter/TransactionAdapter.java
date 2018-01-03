@@ -1,9 +1,6 @@
 package com.decrediton.Adapter;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.decrediton.R;
-import com.decrediton.data.Account;
 import com.decrediton.data.Transaction;
 
 import java.util.List;
@@ -20,7 +16,7 @@ import java.util.List;
  * Created by Macsleven on 01/01/2018.
  */
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
     private List<Transaction> historyList;
     private LayoutInflater layoutInflater;
 
@@ -44,7 +40,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
         }
     }
 
-    public HistoryAdapter(List<Transaction> historyListList , LayoutInflater inflater) {
+    public TransactionAdapter(List<Transaction> historyListList , LayoutInflater inflater) {
         this.historyList = historyListList;
         this.layoutInflater = inflater;
 
@@ -52,7 +48,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView =layoutInflater.inflate(R.layout.history_list_row, parent, false);
-        return new HistoryAdapter.MyViewHolder(itemView);
+        return new TransactionAdapter.MyViewHolder(itemView);
     }
 
     @Override
