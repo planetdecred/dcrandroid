@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class SendFragment extends android.support.v4.app.Fragment {
     public EditText address,amount;
-    public TextView totalAmountSending,estimateFee,estimateSize,scanAddress,sendAll;
+    public TextView totalAmountSending,estimateFee,estimateSize,sendAll;
+    public ImageView scanAddress;
     Button send;
     final IntentIntegrator integrator = new IntentIntegrator(getActivity());
     private static final int SCANNER_ACTIVITY_RESULT_CODE = 0;
