@@ -1,5 +1,6 @@
 package com.decrediton.Activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -31,6 +32,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         status.setText(getIntent().getStringExtra("TxStatus"));
         txType.setText(getIntent().getStringExtra("TxType"));
         address.setText(getIntent().getStringExtra("Address"));
+        if(status.getText().toString().equals("pending")){
+            status.setBackgroundResource(R.drawable.tx_status_pending);
+            status.setTextColor(Color.parseColor("#3d659c"));
+        }
+        else if(status.getText().toString().equals("confirmed")) {
+            status.setBackgroundResource(R.drawable.tx_status_confirmed);
+            status.setTextColor(Color.parseColor("#55bb97"));
+        }
     }
 
     @Override
