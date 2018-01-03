@@ -50,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:id="@+id/overview_av_ballance"
                     android:text="50000000.00 DCR"
 
                     android:textColor="@color/Amount2Text"
@@ -57,13 +58,13 @@
                     android:textSize="20sp" />
 
                 <Button
+                    android:id="@+id/overview_rescan_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.8"
                     android:background="@drawable/btn_shape"
                     android:text="Rescan Block"
-
                     android:textAllCaps="false"
                     android:textColor="@android:color/background_light" />
             </LinearLayout>
@@ -83,10 +84,13 @@
                 android:layout_height="wrap_content"
                 android:text="Recent Transactions"/>
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/history_recycler_view2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/recent_listView"
+                android:scrollbars="vertical"
+                android:layout_marginBottom="5dp"
+
                 />
         </LinearLayout>
     </LinearLayout>

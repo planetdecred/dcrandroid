@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/overview_snd_rcv_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="2dp"
+            android:background="@drawable/ic_menu_send"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="171dp" />
+
+        <TextView
+            android:id="@+id/overview_amount_trf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_toEndOf="@+id/overview_snd_rcv_img"
+            android:layout_toRightOf="@id/history_snd_rcv"
+            android:gravity="center"
+            android:text="+100.0000000 DCR"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/overview_addr_transfered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/overview_amount_trf"
+            android:layout_toEndOf="@+id/overview_snd_rcv_img"
+            android:layout_toRightOf="@id/history_snd_rcv"
+            android:gravity="center"
+            android:text="Twsmksdjhehdsmskdmskyhjhhjg"
+            android:textSize="12sp"
+            android:visibility="gone"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/overview_tx_status_cont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/overview_acc_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="default"
+                android:layout_gravity="right"/>
+
+            <TextView
+                android:id="@+id/overview_tx_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/tx_status_pending"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="2dp"
+                android:text="pending"
+                android:textColor="@color/color_pendng_tx" />
+            <TextView
+                android:id="@+id/overview_tx_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sep 13 2017,13:32:19"
+                android:layout_gravity="center"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
