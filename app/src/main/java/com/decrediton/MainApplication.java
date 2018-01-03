@@ -1,46 +1,39 @@
 package com.decrediton;
 
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import dcrwallet.Dcrwallet;
-
+import org.acra.ACRA;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.config.ACRAConfiguration;
+import org.acra.config.ConfigurationBuilder;
 /**
  * Created by collins on 12/26/17.
  */
-
+@ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Decrediton",
+        mode = ReportingInteractionMode.DIALOG,
+        resDialogText = R.string.crash_dialog_text,
+        resDialogTheme = R.style.AppTheme_Dialog
+)
 public class MainApplication extends Application {
+
     @Override
-    public void onCreate() {
-        super.onCreate();
-        new Thread(){
-            public void run(){
-                try {
-                    this.setPriority(MAX_PRIORITY);
-                    System.out.println("Wallet Home Dir: "+ Dcrwallet.getHomeDir());
-                    File path = new File(Dcrwallet.getHomeDir()+"/");
-                    path.mkdirs();
-                    File file = new File(path,"dcrwallet.conf");
-                    if(!file.exists()) {
-                        FileOutputStream fout = new FileOutputStream(file);
-                        InputStream in = getAssets().open("sample-dcrwallet.conf");
-                        int len;
-                        byte[] buff = new byte[8192];
-                        //read file till end
-                        while ((len = in.read(buff)) != -1) {
-                            fout.write(buff, 0, len);
-                        }
-                        fout.flush();
-                        fout.close();
-                    }
-                    Dcrwallet.main();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        try {
+            ACRA.init(this);
+            Log.d("ACRA","ACRA INIT SUCCESS");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
+
 }

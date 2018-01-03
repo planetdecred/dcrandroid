@@ -33,5 +33,6 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
     compile files('libs/ZxingScanner.jar')
     compile project(':dcrwallet')
+    compile 'ch.acra:acra:4.9.2'
     //compile (project(':walletconnector')){ exclude group: 'go'}
 }

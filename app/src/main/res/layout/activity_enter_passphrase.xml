@@ -62,7 +62,7 @@
         android:padding="5dp"
         android:text="Encrypt Wallet"
         android:layout_gravity="center"
-        android:textColor="@android:color/background_light" />
+        android:textColor="#fff" />
     </LinearLayout>
 
 </RelativeLayout>

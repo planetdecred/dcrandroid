@@ -51,9 +51,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Account account = accountList.get(position);
-        holder.accountName.setText(account.getAccountName()+" DCR");
+        holder.accountName.setText(account.getAccountName());
         holder.spendable.setText("Spendable "+account.getSpendable()+" DCR");
-        holder.total.setText(account.getTotal());
+        holder.total.setText(account.getTotal()+" DCR");
     }
 
     @Override

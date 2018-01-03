@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Each time you request a payment, create a new address to protect your privacy"
+        android:text="Each time you request a payment,a new address is created to protect your privacy"
         android:textSize="12sp"
         android:gravity="center"
         />
@@ -53,8 +53,6 @@
         android:id="@+id/recieve_dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/nav_item_activity_titles"
-
         >
     </Spinner>
     </LinearLayout>
@@ -71,24 +69,24 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/bitm"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-       android:background="@color/backgcolor"
+        android:background="@color/backgcolor"
         />
         <TextView
             android:id="@+id/barcode_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/buttonText"
             android:gravity="center"
             android:maxEms="37"
             android:minEms="26"
+            android:layout_marginTop="10dp"
             android:lines="1"
             android:padding="5dp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="this is my codedssddsdaadssdsdsddssddd"
+            android:text="[WALLET ADDRESS]"
             android:textSize="18sp" />
-
         <Button
             android:id="@+id/btn_gen_new_addr"
             android:layout_width="wrap_content"
@@ -97,13 +95,9 @@
             android:background="@drawable/btn_shape"
             android:textColor="@color/buttonText"
             android:padding="8dp"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:textAllCaps="false"
             android:clickable="true"/>
     </LinearLayout>
-
-
-
-
-
 </LinearLayout>
