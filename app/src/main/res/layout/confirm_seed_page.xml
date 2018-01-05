@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.5"
-        android:text="PlEASE CONFIRM YOUR SEED BY SELECTING EACH WORD ACCORDINGLY"
+        android:text="PLEASE CONFIRM YOUR SEED BY TYPING AND TAPPING EACH WORD ACCORDINGLY"
         android:textColor="#fff"
         android:gravity="center"
         />
@@ -39,7 +39,10 @@
             android:hint="Enter your seed..."
             android:textColor="#fff"
             android:textColorHint="#eee"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            android:inputType="textFilter"
             android:id="@+id/autoCompleteSeed"
+
             />
     </LinearLayout>
     <ScrollView
