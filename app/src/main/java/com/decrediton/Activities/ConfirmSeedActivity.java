@@ -3,6 +3,8 @@ package com.decrediton.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Macsleven on 25/12/2017.
@@ -29,6 +33,7 @@ import java.util.List;
 
 public class ConfirmSeedActivity extends AppCompatActivity {
     private List<String> seeds;
+    private Set<String> tempSeeds;
     private TextView confirmview;
     private AutoCompleteTextView seedTv;
     private String seed = "";
@@ -42,6 +47,8 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         Button btnConfirmSeed = (Button) findViewById(R.id.button_confirm_seed);
         Button btnDeleteSeed = (Button) findViewById(R.id.button_delete_seed);
         seedTv = (AutoCompleteTextView) findViewById(R.id.autoCompleteSeed);
+        seedTv.setSingleLine(true);
+        seedTv.setCompletionHint("Tap to select Word");
         btnConfirmSeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,6 +104,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
                 seedTv.setText("");
             }
         });
+
         prepareData();
     }
 
@@ -127,6 +135,8 @@ public class ConfirmSeedActivity extends AppCompatActivity {
             restore = b.getBoolean("restore");
             seeds = new ArrayList<>();
             String[] seedsArray = seed.split(" ");
+            tempSeeds = new HashSet<>(Arrays.asList(seedsArray));
+            List<String> list=  new ArrayList(tempSeeds);
             seeds.addAll(Arrays.asList(seedsArray));
             if(restore){
                 Collections.sort(seeds, new SortIgnoreCase());
@@ -134,7 +144,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
                 Collections.shuffle(seeds);
             }
             adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_dropdown_item_1line, seeds);
+                    android.R.layout.simple_dropdown_item_1line, list);
             seedTv.setAdapter(adapter);
         }else{
             Toast.makeText(this, "Error occurred, Bundle is null", Toast.LENGTH_SHORT).show();
@@ -153,4 +163,9 @@ public class ConfirmSeedActivity extends AppCompatActivity {
             return s.toLowerCase().compareTo(t1.toLowerCase());
         }
     }
+    public void showToast(){
+        Toast.makeText(this,"Tap",Toast.LENGTH_SHORT).show();
+    }
 }
+
+
