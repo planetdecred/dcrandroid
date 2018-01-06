@@ -41,6 +41,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     ProgressDialog pd;
     ArrayAdapter dataAdapter;
     List<String> categories;
+    List<Integer> accountNumbers = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,12 +113,14 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         });
                         return;
                     }
+                    accountNumbers.clear();
                     categories.clear();
                     for(int i = 0; i < response.items.size(); i++){
                         if(response.items.get(i).name.trim().equals("imported")){
                             continue;
                         }
                         categories.add(i, response.items.get(i).name);
+                        accountNumbers.add(response.items.get(i).number);
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -138,7 +141,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void getAddress(final int accountNumber){
-        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,"Getting Accounts...");
+        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,"Getting Address...");
         pd.show();
         new Thread(){
             public void run(){
@@ -152,7 +155,10 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                             }else{
                                 String newAddress = response.content;
                                 address.setText(newAddress);
-                                imageView.setImageBitmap(EncodeQrCode.encodeToQrCode(newAddress,200,200));
+                                imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
+                            }
+                            if(pd.isShowing()){
+                                pd.dismiss();
                             }
                         }
                     });
@@ -165,8 +171,8 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        String item = parent.getItemAtPosition(position).toString();
+        //String item = parent.getItemAtPosition(position).toString();
+        getAddress(accountNumbers.get(position));
     }
 
     @Override

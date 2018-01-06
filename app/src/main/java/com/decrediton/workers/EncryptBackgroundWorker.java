@@ -8,7 +8,7 @@ import com.decrediton.Activities.EncryptWallet;
 
 import dcrwallet.Dcrwallet;
 
-public class EncryptBackgroundWorker extends AsyncTask<String,String, String> {
+public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> {
     private ProgressDialog pd;
     private EncryptWallet context;
 
@@ -24,9 +24,23 @@ public class EncryptBackgroundWorker extends AsyncTask<String,String, String> {
     }
 
     @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        if(values[0] == 0){
+            pd.setMessage("Creating Wallet");
+        }else if(values[0] == 1){
+            pd.setMessage("Discovering Addresses");
+        }
+    }
+
+    @Override
     protected String doInBackground(String... params) {
         try {
-            return Dcrwallet.createWallet(params[0], params[1]);
+            publishProgress(0);
+            String createResponse =  Dcrwallet.createWallet(params[0], params[1]);
+            publishProgress(1);
+            Dcrwallet.discoverAddresses(params[0]);
+            return createResponse;
         }catch (Exception e){
             e.printStackTrace();
         }

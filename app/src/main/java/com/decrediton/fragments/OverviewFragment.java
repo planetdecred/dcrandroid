@@ -3,6 +3,7 @@ package com.decrediton.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.decrediton.R;
 import com.decrediton.Util.DcrResponse;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,7 +68,24 @@ public class OverviewFragment extends Fragment {
         reScanBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new Thread(){
+                    public void run(){
+                        try {
+                            final String result = Dcrwallet.runUtil();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialog.Builder(getContext())
+                                            .setMessage(result)
+                                            .setPositiveButton("OK", null)
+                                            .show();
+                                }
+                            });
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         });
 
