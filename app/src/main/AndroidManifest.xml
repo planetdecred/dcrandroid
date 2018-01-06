@@ -62,6 +62,9 @@
             android:configChanges="orientation|keyboardHidden">
             <meta-data android:name="android.app.lib_name" android:value="gojni"/>
         </activity>
+        <activity android:name=".Activities.ConnectionActivity" />
+        <activity android:name=".Activities.GetPeersActivity" />
+        <activity android:name=".Activities.PeersDetailsActivity" />
 
     </application>
 
