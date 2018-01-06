@@ -38,28 +38,8 @@ public class SplashScreen extends AppCompatActivity {
             public void run(){
                 try {
                     this.setPriority(MAX_PRIORITY);
-                    System.out.println("Wallet Home Dir: "+ Dcrwallet.getHomeDir());
-                    File path = new File(Dcrwallet.getHomeDir()+"/");
-                    path.mkdirs();
-                    String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
-                    String[] assetFilesName = {"dcrwallet.conf","rpc.key","rpc.cert"};
-                    for(int i = 0; i < files.length; i++) {
-                        File file = new File(path, files[i]);
-                        if (!file.exists()) {
-                            System.out.println("Writing file "+file.getAbsolutePath());
-                            FileOutputStream fout = new FileOutputStream(file);
-                            InputStream in = getAssets().open(assetFilesName[i]);
-                            int len;
-                            byte[] buff = new byte[8192];
-                            //read file till end
-                            while ((len = in.read(buff)) != -1) {
-                                fout.write(buff, 0, len);
-                            }
-                            fout.flush();
-                            fout.close();
-                            System.out.println("Written file "+file.getAbsolutePath());
-                        }
-                    }
+                    writeDcrwalletFiles();
+                    writeDcrdFiles();
                     Dcrwallet.main();
                 }catch (Exception e){
                     e.printStackTrace();
@@ -67,6 +47,56 @@ public class SplashScreen extends AppCompatActivity {
             }
         }.start();
     }
+
+    public void writeDcrwalletFiles() throws Exception{
+        System.out.println("Wallet Home Dir: "+ Dcrwallet.getHomeDir());
+        File path = new File(Dcrwallet.getHomeDir()+"/");
+        path.mkdirs();
+        String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
+        String[] assetFilesName = {"sample-dcrwallet.conf","rpc.key","rpc.cert"};
+        for(int i = 0; i < files.length; i++) {
+            File file = new File(path, files[i]);
+            if (!file.exists() || true) {
+                System.out.println("Writing file "+file.getAbsolutePath());
+                FileOutputStream fout = new FileOutputStream(file);
+                InputStream in = getAssets().open(assetFilesName[i]);
+                int len;
+                byte[] buff = new byte[8192];
+                //read file till end
+                while ((len = in.read(buff)) != -1) {
+                    fout.write(buff, 0, len);
+                }
+                fout.flush();
+                fout.close();
+                System.out.println("Written file "+file.getAbsolutePath());
+            }
+        }
+    }
+
+    public void writeDcrdFiles() throws Exception{
+        File path = new File(getFilesDir().getPath(),"/dcrd");
+        path.mkdirs();
+        String[] files = {"rpc.key","rpc.cert","dcrd.conf"};
+        String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
+        for(int i = 0; i < files.length; i++) {
+            File file = new File(path, files[i]);
+            if (!file.exists()) {
+                System.out.println("Writing file "+file.getAbsolutePath());
+                FileOutputStream fout = new FileOutputStream(file);
+                InputStream in = getAssets().open(assetFilesName[i]);
+                int len;
+                byte[] buff = new byte[8192];
+                //read file till end
+                while ((len = in.read(buff)) != -1) {
+                    fout.write(buff, 0, len);
+                }
+                fout.flush();
+                fout.close();
+                System.out.println("Written file "+file.getAbsolutePath());
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
