@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ebefee"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:padding="3dp"
+            android:background="@drawable/background_shadow">
+            <TextView
+                android:id="@+id/peer_view_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:padding="3dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/secondary_text"
+                android:textSize="16sp" />
+            <View
+                android:id="@+id/separator123"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/peer_view_addr"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/label_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator123"
+                android:padding="5dp"
+                android:text="Id"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/peer_view_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="end"
+                android:layout_toEndOf="@+id/label_id"
+                android:layout_toRightOf="@+id/label_id"
+                android:layout_below="@+id/separator123"
+                android:padding="5dp"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separator12"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+
+                android:layout_below="@+id/label_id"
+                android:background="@color/primary_text" />
+
+
+            <TextView
+                android:id="@+id/label_addrlocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator12"
+                android:text="Addrlocal"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/peer_view_addrlocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/separator12"
+                android:layout_toEndOf="@+id/label_addrlocal"
+                android:layout_toRightOf="@+id/label_addrlocal"
+                android:textColor="@color/primary_text" />
+
+
+            <View
+                android:id="@+id/separator13"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_addrlocal"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/label_services"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator13"
+                android:padding="5dp"
+                android:text="Services"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/peer_view_services"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator13"
+                android:layout_toEndOf="@+id/label_services"
+                android:layout_toRightOf="@+id/label_services"
+                android:padding="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="end"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separator21"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_services"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/label_relaytxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator21"
+                android:text="Relaytxes"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/peer_view_relaytxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator21"
+                android:layout_toEndOf="@+id/label_relaytxes"
+                android:layout_toRightOf="@+id/label_relaytxes"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/primary_text" />
+            <View
+                android:id="@+id/separator17"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/peer_view_relaytxes"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_lastsend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last send"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text"
+                android:layout_below="@+id/separator17"/>
+
+
+
+            <TextView
+                android:id="@+id/peer_view_lastsend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/label_lastsend"
+                android:layout_below="@+id/separator17"
+                android:gravity="end"
+                android:padding="5dp"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separastor1277"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/peer_view_lastsend"
+                android:background="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/label_lastrecv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separastor1277"
+                android:padding="5dp"
+                android:text="Last receive"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_lastrecv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/label_lastrecv"
+                android:layout_toEndOf="@+id/label_lastrecv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/separastor1277"
+                android:padding="5dp"
+                android:gravity="end"
+                android:textColor="@color/primary_text" />
+
+            <View
+                android:id="@+id/separastor12"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_lastrecv"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_bytessent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separastor12"
+                android:text="Bytes sent"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_bytessent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separastor12"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/label_bytessent"
+                android:layout_toRightOf="@+id/label_bytessent"
+                android:gravity="end"
+                android:padding="5dp"
+                android:textColor="@color/primary_text" />
+            <View
+                android:id="@+id/separators12s2"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_bytessent"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_bytesrecv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12s2"
+                android:text="Bytes receive"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_bytesrecv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12s2"
+                android:layout_toRightOf="@+id/label_bytesrecv"
+                android:layout_toEndOf="@+id/label_bytesrecv"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sd"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/peer_view_bytesrecv"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_conntime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sd"
+                android:text="Conntime"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_conntime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sd"
+                android:layout_toRightOf="@+id/label_conntime"
+                android:layout_toEndOf="@+id/label_conntime"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sr"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_conntime"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_timeoffset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sr"
+                android:text="Timeoffset"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_timeoffset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sr"
+                android:layout_toRightOf="@+id/label_timeoffset"
+                android:layout_toEndOf="@+id/label_timeoffset"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12ss"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_timeoffset"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_pingtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12ss"
+                android:text="Pingtime"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_pingtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12ss"
+                android:layout_toRightOf="@+id/label_pingtime"
+                android:layout_toEndOf="@+id/label_pingtime"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sa"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_pingtime"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sa"
+                android:text="Version"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sa"
+                android:layout_toRightOf="@+id/label_version"
+                android:layout_toEndOf="@+id/label_version"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sh"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_version"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_subver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sh"
+                android:text="Sub version"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_subver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sh"
+                android:layout_toRightOf="@+id/label_subver"
+                android:layout_toEndOf="@+id/label_subver"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12st"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_subver"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_inbound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12st"
+                android:text="Inbound"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_inbound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12st"
+                android:layout_toRightOf="@+id/label_inbound"
+                android:layout_toEndOf="@+id/label_inbound"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12shh"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_inbound"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_startingheight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12shh"
+                android:text="starting height"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_startingheight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12shh"
+                android:layout_toRightOf="@+id/label_startingheight"
+                android:layout_toEndOf="@+id/label_startingheight"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sc"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_startingheight"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_currentheight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sc"
+                android:text="Current height"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_currentheight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sc"
+                android:layout_toRightOf="@+id/label_currentheight"
+                android:layout_toEndOf="@+id/label_currentheight"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sdd"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_currentheight"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_banscore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sdd"
+                android:text="Banscore"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_banscore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sdd"
+                android:layout_toRightOf="@+id/label_banscore"
+                android:layout_toEndOf="@+id/label_banscore"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+            <View
+                android:id="@+id/separators12sddd"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_banscore"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_syncnode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sddd"
+                android:text="Syncode"
+                android:padding="5dp"
+                android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/peer_view_syncnode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12sddd"
+                android:layout_toRightOf="@+id/label_syncnode"
+                android:layout_toEndOf="@+id/label_syncnode"
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/primary_text"/>
+        </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>
