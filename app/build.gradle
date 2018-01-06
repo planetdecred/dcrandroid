@@ -34,5 +34,6 @@ dependencies {
     compile files('libs/ZxingScanner.jar')
     compile project(':dcrwallet')
     compile 'ch.acra:acra:4.9.2'
+    compile "com.android.support:support-compat:27.0.2"
     //compile (project(':walletconnector')){ exclude group: 'go'}
 }

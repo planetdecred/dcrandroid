@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="SETTING UP DECREDITON"
+        android:text="Setting up Decred Wallet"
         android:gravity="center"
+        android:textSize="18sp"
         android:textColor="#fff" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,21 +25,34 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:textAlignment="center"
             android:text="@string/save_seed_instruction"
-            android:textColor="#fff" />
-
+            android:textColor="#fff"
+            />
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Warning: Failure to keep this seed can result to theft of your entire wallet and  unable to recover wallet"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:background="#fff"/>
+        <View
+            android:id="@+id/separator21"
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@color/primary_text" />
+
+        <com.decrediton.Util.MyCustomTextView
             android:id="@+id/save_seed_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:background="#fff"
-            android:padding="8dp"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:padding="5dp"
+            android:text="parargon  tritor school major"
+            android:textColor="#000"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/save_seed_btn_continue"
