@@ -210,6 +210,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_toRightOf="@+id/label_tx_addr"
+                android:layout_toEndOf="@id/label_tx_addr"
                 android:layout_below="@+id/separator17"
                 android:gravity="end"
                 android:padding="8dp"
@@ -218,5 +219,4 @@
                 android:textColor="@color/primary_text" />
         </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>

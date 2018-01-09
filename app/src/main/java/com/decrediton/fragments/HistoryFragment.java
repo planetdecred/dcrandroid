@@ -50,6 +50,7 @@ public class HistoryFragment extends Fragment{
                 i.putExtra("TxType",history.getTxType());
                 i.putExtra("AccountName",history.getAccountName());
                 i.putExtra("TxStatus",history.getTxStatus());
+                startActivity(i);
             }
 
             @Override
