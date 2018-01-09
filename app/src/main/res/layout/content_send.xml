@@ -27,6 +27,39 @@
             android:text="Input or scan the destination address and the amount in DCR to send fund "
             android:textSize="12sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From:"
+                android:gravity="bottom"
+                android:padding="5dp"
+                android:background="@color/backgcolorwhite"
+                android:textSize="16sp"
+
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/background_shadow">
+
+                <Spinner
+                    android:id="@+id/recieve_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     >
+                </Spinner>
+            </LinearLayout>
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
