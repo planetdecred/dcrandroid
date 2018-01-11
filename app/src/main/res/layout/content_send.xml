@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Input or scan the destination address and the amount in DCR to send fund "
+            android:text="Input or scan the destination transactionFee and the amount in DCR to send fund "
             android:textSize="12sp" />
 
         <LinearLayout
@@ -51,9 +51,10 @@
                 android:background="@drawable/background_shadow">
 
                 <Spinner
-                    android:id="@+id/recieve_dropdown"
+                    android:id="@+id/send_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
                      >
                 </Spinner>
             </LinearLayout>

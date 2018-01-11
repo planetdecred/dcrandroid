@@ -12,11 +12,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:padding="8dp"
-            android:background="@drawable/background_shadow">
+            android:padding="8dp">
             <TextView
                 android:id="@+id/label_tx"
                 android:layout_width="match_parent"
@@ -154,7 +152,6 @@
                 android:layout_below="@+id/separator13"
                 android:gravity="end"
                 android:padding="8dp"
-                android:text="Send"
                 android:textColor="@color/primary_text" />
 
             <View
@@ -193,30 +190,46 @@
                 android:layout_below="@+id/tx_date"
                 android:background="@color/primary_text" />
             <TextView
-                android:id="@+id/label_tx_addr"
+                android:id="@+id/label_tx_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Address"
+                android:text="Transaction fee"
                 android:padding="8dp"
                 android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
 
-
-
             <TextView
-                android:id="@+id/tx_addr"
+                android:id="@+id/tx_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/label_tx_addr"
-                android:layout_toEndOf="@id/label_tx_addr"
-                android:layout_below="@+id/separator17"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tx_date"
                 android:gravity="end"
                 android:padding="8dp"
-                android:textSize="12sp"
-                android:text="TWQJJDKDUFHFKRUDHDNSBHDJFFHDJDH"
-                android:textColor="@color/primary_text" />
+                android:text="0.3450000 DCR"
+                android:textColor="@color/primary_text"
+                 />
+            <View
+                android:id="@+id/separator1235"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/tx_fee"
+                android:background="@color/primary_text"/>
         </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+        <ExpandableListView
+            android:id="@+id/in_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="0.5dp"
+            android:divider="@color/primary_text"
+
+           />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
