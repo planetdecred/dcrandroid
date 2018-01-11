@@ -28,6 +28,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import dcrwallet.Dcrwallet;
 
@@ -93,7 +94,9 @@ public class AccountsFragment extends Fragment {
                             AccountResponse.AccountItem item = response.items.get(i);
                             account.setAccountName(item.name);
                             account.setAccountNumber(String.valueOf(item.number));
-                            account.setTotal(String.valueOf(item.balance.total));
+                            System.out.printf("\n%f\n", 2.03432).println();
+                            //account.setTotal(String.format("%f",item.balance.total+""));
+                            account.setTotal(String.format(Locale.ENGLISH,"%f", item.balance.total));
                             account.setSpendable(String.valueOf(item.balance.spendable));
                             account.setImmatureRewards(String.valueOf(item.balance.immatureReward));
                             account.setImmatureStakeGeneration(String.valueOf(item.balance.immatureStakeGeneration));

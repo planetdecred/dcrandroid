@@ -15,11 +15,18 @@ import android.view.ViewGroup;
 import com.decrediton.Activities.TransactionDetailsActivity;
 import com.decrediton.Adapter.TransactionAdapter;
 import com.decrediton.R;
+import com.decrediton.Util.AccountResponse;
+import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.Util.RecyclerTouchListener;
+import com.decrediton.Util.TransactionsResponse;
 import com.decrediton.data.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import dcrwallet.Balance;
+import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -50,6 +57,7 @@ public class HistoryFragment extends Fragment{
                 i.putExtra("TxType",history.getTxType());
                 i.putExtra("AccountName",history.getAccountName());
                 i.putExtra("TxStatus",history.getTxStatus());
+                startActivity(i);
             }
 
             @Override
@@ -63,27 +71,39 @@ public class HistoryFragment extends Fragment{
         return rootView;
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("History");
     }
+
     private void prepareHistoryData(){
-        Transaction transaction= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:45","pending","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 11:17:25","pending","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("-100.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 19:19:45","pending","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("+220.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 22:12:32","confirmed","default","receive");
-        transactionList.add(transaction);
-        transaction= new Transaction("+10.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 13:19:55","confirmed","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("+1200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:51","confirmed","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("+200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 14:32:39","confirmed","default","receive");
-        transactionList.add(transaction);
+        new Thread(){
+            public void run(){
+                PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
+                int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT));
+                System.out.println("Block Height: "+blockHeight);
+                String result = Dcrwallet.getTransactions(blockHeight);
+                System.out.println(result);
+                TransactionsResponse response = TransactionsResponse.parse(result);
+                for(int i = 0; i < response.transactions.size(); i++){
+                    Transaction transaction = new Transaction();
+                    TransactionsResponse.TransactionItem item = response.transactions.get(i);
+                    transaction.setAccountName("NULL");
+                    transaction.setTxDate(String.valueOf(item.timestamp));
+                    transaction.setAmount(String.format(Locale.getDefault(),"%f",item.fee/ AccountResponse.SATOSHI));
+                    transaction.setTxType(item.type);
+                    transaction.setTxStatus("confirmed");
+                    transactionList.add(transaction);
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        transactionAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }.start();
     }
 }

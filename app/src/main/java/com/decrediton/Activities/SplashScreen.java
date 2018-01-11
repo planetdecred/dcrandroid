@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.Util.DcrResponse;
 import com.decrediton.MainActivity;
 import com.decrediton.R;
+import com.decrediton.Util.MyCustomTextView;
+import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.Util.Utils;
 import com.decrediton.workers.BackgroundWorker;
 
@@ -23,6 +26,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 import dcrwallet.Dcrwallet;
 
@@ -40,7 +45,9 @@ public class SplashScreen extends AppCompatActivity {
                     this.setPriority(MAX_PRIORITY);
                     writeDcrwalletFiles();
                     writeDcrdFiles();
+                    System.out.println("Dcrwallet starting");
                     Dcrwallet.main();
+                    System.out.println("Dcrwallet started");
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -57,6 +64,8 @@ public class SplashScreen extends AppCompatActivity {
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             if (!file.exists() || true) {
+                System.out.println("File: "+file.getAbsolutePath());
+                file.createNewFile();
                 System.out.println("Writing file "+file.getAbsolutePath());
                 FileOutputStream fout = new FileOutputStream(file);
                 InputStream in = getAssets().open(assetFilesName[i]);
@@ -74,13 +83,15 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void writeDcrdFiles() throws Exception{
-        File path = new File(getFilesDir().getPath(),"/dcrd");
+        //File path = new File(getFilesDir().getPath(),"/dcrd");
+        File path = new File("./sdcard/.dcrd");
         path.mkdirs();
         String[] files = {"rpc.key","rpc.cert","dcrd.conf"};
         String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             if (!file.exists()) {
+                file.createNewFile();
                 System.out.println("Writing file "+file.getAbsolutePath());
                 FileOutputStream fout = new FileOutputStream(file);
                 InputStream in = getAssets().open(assetFilesName[i]);
@@ -96,37 +107,115 @@ public class SplashScreen extends AppCompatActivity {
             }
         }
     }
-
+    MyCustomTextView tvLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startServer();
         setContentView(R.layout.splash_page);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                //Check if wallet db exists or not
-                File f = new File(Dcrwallet.getHomeDir()+"/mainnet/wallet.db");
-                if(!f.exists()) {
-                    // Start your app main activity
+        tvLoading = (MyCustomTextView) findViewById(R.id.loading_status);
+        String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
+        if(Dcrwallet.isTestNet()){
+            walletPath = Dcrwallet.getHomeDir()+"/testnet2/wallet.db";
+        }
+        File f = new File(walletPath);
+        if(!f.exists()){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Start wallet setup activity
                     Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
                     startActivity(i);
                     // close this activity
                     finish();
-                }else{
-                    //Toast.makeText(SplashScreen.this, "Wallet already exist", Toast.LENGTH_SHORT).show();
+                }
+            }, 4000);
+        }else{
+            openWallet();
+        }
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // This method will be executed once the timer is over
+//                //Check if wallet db exists or not
+//                String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
+//                if(Dcrwallet.isTestNet()){
+//                    walletPath = Dcrwallet.getHomeDir()+"/testnet2/wallet.db";
+//                }
+//                File f = new File(walletPath);
+//                if(!f.exists()) {
+//                    // Start your app main activity
+//                    Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
+//                    startActivity(i);
+//                    // close this activity
+//                    finish();
+//                }else{
+//                    openWallet();
+//                }
+//            }
+//        }, SPLASH_TIME_OUT);
+    }
+
+    private void setText(final String str){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvLoading.setText(str);
+            }
+        });
+    }
+
+    private void openWallet(){
+        new Thread(){
+            public void run(){
+                System.out.println("Dcrwallet");
+                setText("Waiting for dcrwallet to come online");
+                for(;;) {
+                    if(Dcrwallet.testConnect()){
+                        break;
+                    }
                     try {
-                        Method method = Dcrwallet.class.getDeclaredMethod("openWallet");
-                        Method callback = SplashScreen.this.getClass().getDeclaredMethod("openWalletCallback", String.class);
-                        ProgressDialog pd = Utils.getProgressDialog(SplashScreen.this, false, false,"Loading Wallet...");
-                        new BackgroundWorker(callback, pd, SplashScreen.this, false).execute(method);
-                    } catch (NoSuchMethodException e) {
+                        sleep(1500);
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                setText("Waiting for dcrd to come online");
+                for(;;) {
+                    if(Dcrwallet.connectToDcrd("127.0.0.1:9109")){
+                        break;
+                    }
+                    try {
+                        sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("Opening");
+                setText("Opening wallet...");
+                final String json = Dcrwallet.openWallet();
+                System.out.println("Blocks");
+                setText("Subscribing to block notifications...");
+                Dcrwallet.subscibeToBlockNotifications();
+                PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
+                if(!util.get("discover_address").equals("true")) {
+                    setText("Discovering addresses...");
+                    Dcrwallet.discoverAddresses("collins");
+                    util.set("discover_address","true");
+                }
+                setText("Fetching Headers...");
+                int blockHeight = Dcrwallet.fetchHeaders();
+                if(blockHeight != -1){
+                    util.set(PreferenceUtil.BLOCK_HEIGHT,String.valueOf(blockHeight));
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        openWalletCallback(json);
+                    }
+                });
             }
-        }, SPLASH_TIME_OUT);
+        }.start();
     }
 
     public void openWalletCallback(String responseJson){

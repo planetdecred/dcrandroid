@@ -11,4 +11,12 @@
         android:src="@drawable/decred_logo"
         android:id="@+id/splashscreen_icon"
        />
+    <com.decrediton.Util.MyCustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOADING"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:id="@+id/loading_status"
+        />
 </LinearLayout>

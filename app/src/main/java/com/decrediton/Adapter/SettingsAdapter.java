@@ -22,7 +22,6 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView setting;
 
-
         public MyViewHolder(View view) {
             super(view);
             setting = view.findViewById(R.id.settings_connection);
@@ -31,7 +30,6 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.MyView
     public SettingsAdapter(List<Settings> settingsListList , LayoutInflater inflater) {
         this.settingsList = settingsListList;
         this.layoutInflater = inflater;
-
     }
 
     @Override
