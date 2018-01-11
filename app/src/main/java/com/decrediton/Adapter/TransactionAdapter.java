@@ -22,7 +22,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView Amount;
-        private TextView txAddress;
         private TextView txDate;
         private TextView txType;
         private TextView status;
@@ -31,7 +30,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transfered);
-            txAddress = view.findViewById(R.id.history_addr_transfered);
             txDate = view.findViewById(R.id.history_tx_date);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
@@ -53,10 +51,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Transaction history = historyList.get(position);
-        holder.txAddress.setText(history.getAddress());
         holder.txType.setText(history.getTxType());
         holder.status.setText(history.getTxStatus());
-        holder.Amount.setText(history.getAmount());
+
+        if(Double.parseDouble(history.getTransactionFee())>0){
+           String temp ="-"+history.getTransactionFee() + " DCR";
+            holder.Amount.setText(temp);
+        }
+        else {
+            String temp =history.getAmount() + "DCR";
+            holder.Amount.setText(temp);
+        }
+
         holder.txDate.setText(history.getTxDate());
         if(holder.status.getText().toString().equals("pending")){
             holder.status.setBackgroundResource(R.drawable.tx_status_pending);

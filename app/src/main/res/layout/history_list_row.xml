@@ -33,19 +33,30 @@
             android:text="+100.0000000 DCR"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/history_addr_transfered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/history_amount_transfered"
-            android:layout_toEndOf="@+id/history_snd_rcv"
-            android:layout_toRightOf="@id/history_snd_rcv"
-            android:text="Twsmksdjhehdsmskdmskyhjhhjg"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textSize="12sp"
-            android:visibility="gone"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/history_tx_status"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="center"
+                android:background="@drawable/tx_status_confirmed"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:layout_marginTop="5dp"
+                android:text="confirmed"
+                android:textColor="@color/color_confirmed_tx" />
+            <TextView
+                android:id="@+id/history_tx_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="sep 13 2017,13:32:19"
+                android:layout_margin="1dp"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textSize="12sp"/>
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/history_tx_status_cont"

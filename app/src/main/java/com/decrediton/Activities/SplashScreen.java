@@ -233,5 +233,8 @@ public class SplashScreen extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    @Override
+    public void onBackPressed() {
+    }
 
 }

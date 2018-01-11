@@ -72,10 +72,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@drawable/tx_status_pending"
-                android:paddingBottom="2dp"
+                android:paddingBottom="3dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingTop="2dp"
+                android:paddingTop="3dp"
                 android:text="pending"
                 android:textColor="@color/color_pendng_tx" />
             <TextView
