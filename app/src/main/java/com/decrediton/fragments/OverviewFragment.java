@@ -1,6 +1,8 @@
 package com.decrediton.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.decrediton.Adapter.TransactionAdapter;
 import com.decrediton.R;
@@ -26,8 +29,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
+
+import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.Util.RecyclerTouchListener;
+import com.decrediton.Util.Utils;
 import com.decrediton.data.Transaction;
 
 import java.util.ArrayList;
@@ -36,11 +43,13 @@ import java.util.List;
  * Created by Macsleven on 28/11/2017.
  */
 
-public class OverviewFragment extends Fragment {
+public class OverviewFragment extends Fragment implements BlockScanResponse{
     private List<Transaction> transactionList = new ArrayList<>();
     private Button reScanBlock;
     private TextView balance;
     TransactionAdapter transactionAdapter;
+    //Buy sticky notes
+    ProgressDialog pd;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +63,7 @@ public class OverviewFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
+        pd = Utils.getProgressDialog(getContext(),false,false,"Scanning Blocks...");
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -68,19 +78,13 @@ public class OverviewFragment extends Fragment {
         reScanBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pd.show();
                 new Thread(){
                     public void run(){
                         try {
-                            final String result = Dcrwallet.runUtil();
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new AlertDialog.Builder(getContext())
-                                            .setMessage(result)
-                                            .setPositiveButton("OK", null)
-                                            .show();
-                                }
-                            });
+                            //final String result = Dcrwallet.runUtil();
+                            Looper.prepare();
+                            Dcrwallet.reScanBlocks(OverviewFragment.this);
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -88,7 +92,6 @@ public class OverviewFragment extends Fragment {
                 }.start();
             }
         });
-
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
@@ -117,5 +120,33 @@ public class OverviewFragment extends Fragment {
         transactionList.add(transaction);
         transaction= new Transaction("+200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 14:32:39","confirmed","default","receive");
         transactionList.add(transaction);
+    }
+
+    @Override
+    public void onEnd(final long height) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(pd.isShowing()){
+                    pd.dismiss();
+                }
+                Toast.makeText(getContext(), height+" blocks scanned", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onScan(final long rescanned_through) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pd.show();
+                PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
+                System.out.println("Rescanned: "+rescanned_through+" Height: "+util.get(PreferenceUtil.BLOCK_HEIGHT)
+                +" Division: "+rescanned_through/Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT))+" Percentage: "+(rescanned_through/Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT)))*100);
+                long percentage = (rescanned_through/Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT)))*100;
+                pd.setMessage("Scanning Blocks "+percentage+"%");
+            }
+        });
     }
 }

@@ -35,8 +35,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             txDate = view.findViewById(R.id.history_tx_date);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
-
-
         }
     }
 

@@ -32,6 +32,8 @@ public class Peers {
         this.syncode = syncode;
     }
 
+    public Peers(){}
+
     public String getTimeoffset() {
         return timeoffset;
     }

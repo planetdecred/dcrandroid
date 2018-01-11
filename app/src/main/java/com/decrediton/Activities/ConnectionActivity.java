@@ -52,7 +52,7 @@ public class ConnectionActivity extends AppCompatActivity{
     }
 
    public void prepareConnectionData(){
-       Connection connection= new Connection("Get peer");
+       Connection connection= new Connection("Get Peers Info");
        connectionList.add(connection);
     }
 
@@ -66,7 +66,7 @@ public class ConnectionActivity extends AppCompatActivity{
        void onLongClick(View view, int position);
    }
     private void ConnectionFunction(String connection){
-        if(connection.equals("Get peer")){
+        if(connection.equals("Get Peers Info")){
             Intent intent = new Intent(ConnectionActivity.this,GetPeersActivity.class);
             startActivity(intent);
         }

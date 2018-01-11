@@ -14,6 +14,7 @@ public class AccountResponse {
     public String errorMessage, currentBlockHash;
     public int count, errorCode, currentBlockHeight;
     public ArrayList<AccountItem> items = new ArrayList<>();
+    public final static float SATOSHI = (float) 100000000.0;
     private AccountResponse(){}
     public static AccountResponse parse(String json) throws JSONException {
         System.out.println("Account JSON: "+json);
@@ -39,13 +40,14 @@ public class AccountResponse {
                         importedKeyCount = account.getInt("Imported_key_count");
                         JSONObject balanceObj = account.getJSONObject("Balance");
                         balance = new Balance();
-                        balance.total = balanceObj.getInt("Total");
-                        balance.spendable = balanceObj.getInt("Spendable");
-                        balance.immatureReward = balanceObj.getInt("ImmatureReward");
-                        balance.immatureStakeGeneration = balanceObj.getInt("ImmatureStakeGeneration");
-                        balance.lockedByTickets = balanceObj.getInt("LockedByTickets");
-                        balance.votingAuthority = balanceObj.getInt("VotingAuthority");
-                        balance.unConfirmed = balanceObj.getInt("UnConfirmed");
+                        System.out.println("Total: "+balanceObj.getLong("Total")+" Satoshi "+balanceObj.getLong("Total")/100000000.0);
+                        balance.total = balanceObj.getLong("Total")/SATOSHI;
+                        balance.spendable = balanceObj.getLong("Spendable")/SATOSHI;
+                        balance.immatureReward = balanceObj.getLong("ImmatureReward")/SATOSHI;
+                        balance.immatureStakeGeneration = balanceObj.getLong("ImmatureStakeGeneration")/SATOSHI;
+                        balance.lockedByTickets = balanceObj.getLong("LockedByTickets")/SATOSHI;
+                        balance.votingAuthority = balanceObj.getLong("VotingAuthority")/SATOSHI;
+                        balance.unConfirmed = balanceObj.getLong("UnConfirmed")/SATOSHI;
                     }
                 });
             }
@@ -58,6 +60,6 @@ public class AccountResponse {
         public Balance balance;
     }
     public static class Balance{
-        public int spendable, total,immatureReward, immatureStakeGeneration,lockedByTickets, votingAuthority, unConfirmed;
+        public float spendable, total,immatureReward, immatureStakeGeneration,lockedByTickets, votingAuthority, unConfirmed;
     }
 }
