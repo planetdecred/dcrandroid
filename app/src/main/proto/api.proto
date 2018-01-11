@@ -113,7 +113,7 @@ message TransactionDetails {
 		uint32 account = 2;
 		bool internal = 3;
 		int64 amount = 4;
-		string address = 5;
+		string transactionFee = 5;
 		bytes output_script = 6;
 	}
 	bytes hash = 1;
@@ -211,7 +211,7 @@ message NextAddressRequest {
 	GapPolicy gap_policy = 3;
 }
 message NextAddressResponse {
-	string address = 1;
+	string transactionFee = 1;
 	string public_key = 2;
 }
 
@@ -385,7 +385,7 @@ message FundTransactionResponse {
 
 message ConstructTransactionRequest {
 	message OutputDestination {
-		string address = 1;
+		string transactionFee = 1;
 
 		bytes script = 2;
 		uint32 script_version = 3;
@@ -440,7 +440,7 @@ message SignTransactionResponse {
 
 message CreateSignatureRequest {
 	bytes passphrase = 1;
-	string address = 2;
+	string transactionFee = 2;
 	bytes serialized_transaction = 3;
 	uint32 input_index = 4;
 	enum SigHashType {
@@ -492,7 +492,7 @@ message LoadActiveDataFiltersRequest {}
 message LoadActiveDataFiltersResponse {}
 
 message SignMessageRequest{
-	string address = 1;
+	string transactionFee = 1;
 	string message = 2;
 	bytes passphrase = 3;
 }
@@ -741,7 +741,7 @@ message SetVoteChoicesResponse {
 }
 
 message VerifyMessageRequest {
-	string address = 1;
+	string transactionFee = 1;
 	string message = 2;
 	bytes signature = 3;
 }
@@ -812,7 +812,7 @@ message DecodeRawTransactionResponse {
 }
 
 message ValidateAddressRequest {
-	string address = 1;
+	string transactionFee = 1;
 }
 
 message ValidateAddressResponse {
