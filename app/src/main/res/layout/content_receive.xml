@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Each time you request a payment,a new address is created to protect your privacy"
+        android:text="Each time you request a payment,a new transactionFee is created to protect your privacy"
         android:textSize="12sp"
         android:gravity="center"
         />
