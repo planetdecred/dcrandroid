@@ -48,7 +48,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         Button btnDeleteSeed = (Button) findViewById(R.id.button_delete_seed);
         seedTv = (AutoCompleteTextView) findViewById(R.id.autoCompleteSeed);
         seedTv.setSingleLine(true);
-        seedTv.setCompletionHint("Tap to select Word");
+        seedTv.setCompletionHint("        Tap to select Word");
         btnConfirmSeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

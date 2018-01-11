@@ -1,27 +1,32 @@
 package com.decrediton.data;
 
+import java.util.ArrayList;
+
 /**
  * Created by Macsleven on 01/01/2018.
  */
 
 public class Transaction {
     private String amount;
-    private String address;
+    private String TransactionFee;
     private String txDate;
     private String txStatus;
     private String accountName;
     private String txType;
+    private ArrayList<String> usedIput;
+    private ArrayList<String>  walletOutput;
 
     public Transaction(){
     }
-    public Transaction(String amount, String address, String txDate, String txStatus, String accountName, String txType){
+    public Transaction(String amount, String TransactionFee, String txDate, String txStatus, String accountName, String txType, ArrayList<String> usedIput, ArrayList<String> walletOutput){
         this.accountName = accountName;
-        this.address = address;
+        this.TransactionFee = TransactionFee;
         this.txDate = txDate;
         this. txStatus =txStatus;
         this.txType =txType;
         this. amount = amount;
-
+        this.usedIput = usedIput;
+        this.walletOutput = walletOutput;
     }
 
     public String getTxDate() {
@@ -40,12 +45,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getAddress() {
-        return address;
+    public String getTransactionFee() {
+        return TransactionFee;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setTransactionFee(String transactionFee) {
+        this.TransactionFee = transactionFee;
     }
 
     public String getTxStatus() {
@@ -70,5 +75,21 @@ public class Transaction {
 
     public void setTxType(String txType) {
         this.txType = txType;
+    }
+
+    public ArrayList<String> getUsedIput() {
+        return usedIput;
+    }
+
+    public void setUsedIput(ArrayList<String> usedIput) {
+        this.usedIput = usedIput;
+    }
+
+    public ArrayList<String> getWalletOutput() {
+        return walletOutput;
+    }
+
+    public void setWalletOutput(ArrayList<String> walletOutput) {
+        this.walletOutput = walletOutput;
     }
 }
