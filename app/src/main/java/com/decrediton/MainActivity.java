@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             drawer.closeDrawer(GravityCompat.START);
         } else {
             //super.onBackPressed();
-        }
+        } 
     }
 
     @Override

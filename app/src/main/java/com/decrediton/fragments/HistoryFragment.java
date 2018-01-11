@@ -51,12 +51,14 @@ public class HistoryFragment extends Fragment{
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra("Amount",history.getAccountName());
-                i.putExtra("Address",history.getAddress());
+                i.putExtra("Amount",history.getAmount());
+                i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
                 i.putExtra("TxType",history.getTxType());
                 i.putExtra("AccountName",history.getAccountName());
                 i.putExtra("TxStatus",history.getTxStatus());
+                i.putStringArrayListExtra("UsedIput",history.getUsedIput());
+                i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
                 startActivity(i);
             }
 
@@ -105,5 +107,19 @@ public class HistoryFragment extends Fragment{
                 });
             }
         }.start();
+        ArrayList<String> usedInput = new ArrayList<>();
+        usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS:  1.00 DCR");
+        ArrayList<String> output = new ArrayList<>();
+        output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH:     3.22 DCR");
+        output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE:   3.54 DCR");
+        Transaction transaction= new Transaction("0.0000000","0.02","jan 1 2018, 20:19:45","pending","default","send", usedInput, output);
+        transactionList.add(transaction);
+         usedInput = new ArrayList<>();
+        usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS:  5.00 DCR");
+        output = new ArrayList<>();
+        output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH:     6.22 DCR");
+        output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE:   3.54 DCR");
+        transaction= new Transaction("120.0000000","0.00","jan 1 2018, 11:17:25","pending","default","receive", usedInput, output);
+        transactionList.add(transaction);
     }
 }

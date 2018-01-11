@@ -130,7 +130,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                             }
                             dataAdapter.notifyDataSetChanged();
                             //Default Account
-                            //getAddress(0);
+                            //getTransactionFee(0);
                         }
                     });
                 }catch (Exception e){

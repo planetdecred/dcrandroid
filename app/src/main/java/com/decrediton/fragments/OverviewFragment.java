@@ -1,6 +1,7 @@
 package com.decrediton.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.decrediton.Activities.TransactionDetailsActivity;
 import com.decrediton.Adapter.TransactionAdapter;
 import com.decrediton.R;
 
@@ -67,7 +69,17 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Transaction transaction = transactionList.get(position);
+                Transaction history = transactionList.get(position);
+                Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
+                i.putExtra("Amount",history.getAmount());
+                i.putExtra("Fee",history.getTransactionFee());
+                i.putExtra("TxDate",history.getTxDate());
+                i.putExtra("TxType",history.getTxType());
+                i.putExtra("AccountName",history.getAccountName());
+                i.putExtra("TxStatus",history.getTxStatus());
+                i.putStringArrayListExtra("UsedIput",history.getUsedIput());
+                i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
+                startActivity(i);
             }
 
             @Override
@@ -106,19 +118,19 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
     }
 
     private void prepareHistoryData(){
-        Transaction transaction= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:45","pending","default","send");
+        ArrayList<String> usedInput = new ArrayList<>();
+        usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS:  1.00 DCR");
+        ArrayList<String> output = new ArrayList<>();
+        output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH:     3.22 DCR");
+        output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE:   3.54 DCR");
+        Transaction transaction= new Transaction("0.0000000","0.02","jan 1 2018, 20:19:45","pending","default","send", usedInput, output);
         transactionList.add(transaction);
-        transaction= new Transaction("-120.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 11:17:25","pending","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("-100.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 19:19:45","pending","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("+220.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 22:12:32","confirmed","default","receive");
-        transactionList.add(transaction);
-        transaction= new Transaction("+10.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 13:19:55","confirmed","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("+1200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 20:19:51","confirmed","default","send");
-        transactionList.add(transaction);
-        transaction= new Transaction("+200.0000000 DCR","Txsjdhfueyxhdgrthdjfhsverutif","jan 1 2018, 14:32:39","confirmed","default","receive");
+        usedInput = new ArrayList<>();
+        usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS:  5.00 DCR");
+        output = new ArrayList<>();
+        output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH:     6.22 DCR");
+        output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE:   3.54 DCR");
+        transaction= new Transaction("120.0000000","0.00","jan 1 2018, 11:17:25","pending","default","receive", usedInput, output);
         transactionList.add(transaction);
     }
 

@@ -8,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import com.google.zxing.integration.android.IntentResult;
 
 import com.decrediton.R;
 
+import java.util.ArrayList;
+
 import dcrwallet.Balance;
 import dcrwallet.Dcrwallet;
 
@@ -31,13 +35,14 @@ import static android.app.Activity.RESULT_OK;
  * Created by Macsleven on 28/11/2017.
  */
 
-public class SendFragment extends android.support.v4.app.Fragment {
+public class SendFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
     public EditText address,amount;
     public TextView totalAmountSending,estimateFee,estimateSize,sendAll;
     public ImageView scanAddress;
     Button send;
     final IntentIntegrator integrator = new IntentIntegrator(getActivity());
     private static final int SCANNER_ACTIVITY_RESULT_CODE = 0;
+    ArrayList<String>  categories;
 
     @Nullable
     @Override
@@ -62,6 +67,10 @@ public class SendFragment extends android.support.v4.app.Fragment {
         estimateFee = getActivity().findViewById(R.id.send_dcr_estimate_fee);
         sendAll = getActivity().findViewById(R.id.send_dcr_all);
         send= getActivity().findViewById(R.id.send_btn_tx);
+        Spinner accountSpinner = view.findViewById(R.id.send_dropdown);
+        accountSpinner.setOnItemSelectedListener(this);
+        // Spinner Drop down elements
+        categories = new ArrayList<>();
 
         scanAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,5 +141,15 @@ public class SendFragment extends android.support.v4.app.Fragment {
                 }
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String item = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
