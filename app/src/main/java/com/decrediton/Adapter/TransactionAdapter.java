@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.decrediton.R;
+import com.decrediton.Util.AccountResponse;
 import com.decrediton.data.Transaction;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Macsleven on 01/01/2018.
@@ -26,10 +28,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         private TextView txType;
         private TextView status;
 
-
         public MyViewHolder(View view) {
             super(view);
-            Amount = view.findViewById(R.id.history_amount_transfered);
+            Amount = view.findViewById(R.id.history_amount_transferred);
             txDate = view.findViewById(R.id.history_tx_date);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
@@ -39,8 +40,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public TransactionAdapter(List<Transaction> historyListList , LayoutInflater inflater) {
         this.historyList = historyListList;
         this.layoutInflater = inflater;
-
     }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView =layoutInflater.inflate(R.layout.history_list_row, parent, false);
@@ -49,18 +50,23 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
         Transaction history = historyList.get(position);
         holder.txType.setText(history.getTxType());
         holder.status.setText(history.getTxStatus());
 
         if(Double.parseDouble(history.getTransactionFee())>0){
-           String temp ="-"+history.getTransactionFee() + " DCR";
+           String temp ="- "+history.getTransactionFee() + " DCR";
             holder.Amount.setText(temp);
+
+            holder.txType.setBackgroundResource(R.drawable.ic_send);
+            holder.txType.setText("");
         }
         else {
-            String temp =history.getAmount() + "DCR";
+            String temp =history.getAmount() + " DCR";
             holder.Amount.setText(temp);
+
+            holder.txType.setBackgroundResource(R.drawable.ic_receive);
+            holder.txType.setText("");
         }
 
         holder.txDate.setText(history.getTxDate());
@@ -71,16 +77,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         else if(holder.status.getText().toString().equals("confirmed")) {
             holder.status.setBackgroundResource(R.drawable.tx_status_confirmed);
             holder.status.setTextColor(Color.parseColor("#55bb97"));
-        }
-        if(holder.txType.getText().equals("send")){
-            holder.txType.setBackgroundResource(R.drawable.ic_menu_send);
-            holder.txType.setText("");
-
-        }
-        else {
-            holder.txType.setBackgroundResource(R.drawable.ic_menu_send);
-            holder.txType.setText("");
-
         }
     }
 

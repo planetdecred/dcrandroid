@@ -63,7 +63,7 @@ public class SplashScreen extends AppCompatActivity {
         String[] assetFilesName = {"sample-dcrwallet.conf","rpc.key","rpc.cert"};
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
-            if (!file.exists() || true) {
+            if (!file.exists()) {
                 System.out.println("File: "+file.getAbsolutePath());
                 file.createNewFile();
                 System.out.println("Writing file "+file.getAbsolutePath());
@@ -83,14 +83,15 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void writeDcrdFiles() throws Exception{
-        //File path = new File(getFilesDir().getPath(),"/dcrd");
-        File path = new File("./sdcard/.dcrd");
+        File path = new File(getFilesDir().getPath(),"/dcrd");
+        //File path = new File("./sdcard/.dcrd");
         path.mkdirs();
         String[] files = {"rpc.key","rpc.cert","dcrd.conf"};
-        String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
+        //String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
+        String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
-            if (!file.exists()) {
+            if (!file.exists() || true) {
                 file.createNewFile();
                 System.out.println("Writing file "+file.getAbsolutePath());
                 FileOutputStream fout = new FileOutputStream(file);
@@ -123,37 +124,12 @@ public class SplashScreen extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // Start wallet setup activity
-                    Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
-                    startActivity(i);
-                    // close this activity
-                    finish();
+                    createWallet();
                 }
-            }, 4000);
+            }, 3000);
         }else{
             openWallet();
         }
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                // This method will be executed once the timer is over
-//                //Check if wallet db exists or not
-//                String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
-//                if(Dcrwallet.isTestNet()){
-//                    walletPath = Dcrwallet.getHomeDir()+"/testnet2/wallet.db";
-//                }
-//                File f = new File(walletPath);
-//                if(!f.exists()) {
-//                    // Start your app main activity
-//                    Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
-//                    startActivity(i);
-//                    // close this activity
-//                    finish();
-//                }else{
-//                    openWallet();
-//                }
-//            }
-//        }, SPLASH_TIME_OUT);
     }
 
     private void setText(final String str){
@@ -163,6 +139,42 @@ public class SplashScreen extends AppCompatActivity {
                 tvLoading.setText(str);
             }
         });
+    }
+
+    private void createWallet(){
+        new Thread(){
+            public void run(){
+                setText("Waiting for dcrwallet to come online");
+                for(;;) {
+                    if(Dcrwallet.testConnect()){
+                        break;
+                    }
+                    try {
+                        sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                setText("Waiting for dcrd to come online");
+//                String dcrdAddress = "127.0.0.1:9109";
+//                if(Dcrwallet.isTestNet()){
+//                    dcrdAddress = "127.0.0.1:19109";
+//                }
+//                for(;;) {
+//                    if(Dcrwallet.connectToDcrd(dcrdAddress)){
+//                        break;
+//                    }
+//                    try {
+//                        sleep(1500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
+                startActivity(i);
+                finish();
+            }
+        }.start();
     }
 
     private void openWallet(){
@@ -181,8 +193,12 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 }
                 setText("Waiting for dcrd to come online");
+                String dcrdAddress = "127.0.0.1:9109";
+                if(Dcrwallet.isTestNet()){
+                    dcrdAddress = "127.0.0.1:19109";
+                }
                 for(;;) {
-                    if(Dcrwallet.connectToDcrd("127.0.0.1:9109")){
+                    if(Dcrwallet.connectToDcrd(dcrdAddress)){
                         break;
                     }
                     try {
@@ -200,7 +216,7 @@ public class SplashScreen extends AppCompatActivity {
                 PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
                 if(!util.get("discover_address").equals("true")) {
                     setText("Discovering addresses...");
-                    Dcrwallet.discoverAddresses("collins");
+                    Dcrwallet.discoverAddresses(util.get("key"));
                     util.set("discover_address","true");
                 }
                 setText("Fetching Headers...");

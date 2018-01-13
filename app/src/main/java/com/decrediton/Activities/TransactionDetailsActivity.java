@@ -8,10 +8,12 @@ import android.widget.TextView;
 
 import com.decrediton.Adapter.ExpandableListViewAdapter;
 import com.decrediton.R;
+import com.decrediton.Util.AccountResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Macsleven on 02/01/2018.
@@ -29,11 +31,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         setTitle("Transaction details ");
         setContentView(R.layout.transaction_details_view);
 
-        parentHeaderInformation = new ArrayList<String>();
+        parentHeaderInformation = new ArrayList<>();
 
         parentHeaderInformation.add("Used Inputs");
         parentHeaderInformation.add("New Wallet Output");
-        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(getIntent().getStringArrayListExtra("UsedIput"),getIntent().getStringArrayListExtra("newWalletOutPut"));
+        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(getIntent().getStringArrayListExtra("UsedInput"),getIntent().getStringArrayListExtra("newWalletOutPut"));
 
         expandableListView = (ExpandableListView)findViewById(R.id.in_out);
 
@@ -41,27 +43,28 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         expandableListView.setAdapter(expandableListViewAdapter);
 
-        TextView amount = findViewById(R.id.tx_dts_amount);
-        TextView account = findViewById(R.id.tx_dts_acc);
+        TextView amount = findViewById(R.id.label_tx);
         TextView date = findViewById(R.id.tx_date);
         TextView status = findViewById(R.id.tx_dts__status);
-        TextView txType = findViewById(R.id.label_tx);
+        TextView txType = findViewById(R.id.tx_type);
         TextView transactionFee = findViewById(R.id.tx_fee);
 
-        if(Double.parseDouble(getIntent().getStringExtra("Fee"))>0){
-            String temp = "-"+getIntent().getStringExtra("Fee") +" DCR";
+        if(Double.parseDouble(getIntent().getStringExtra("Fee")) > 0){
+            String temp = "- "+getIntent().getStringExtra("Fee") +" DCR";
             amount.setText(temp);
+            transactionFee.setText(temp);
         }
         else{
-            String temp= getIntent().getStringExtra("Amount")+ " DCR";
+            String temp = getIntent().getStringExtra("Amount")+ " DCR";
             amount.setText(temp);
-        }
 
-        account.setText(getIntent().getStringExtra("AccountName"));
+            temp = String.format(Locale.getDefault(),"%f DCR", 0/ AccountResponse.SATOSHI);
+            transactionFee.setText(temp);
+        }
         date.setText(getIntent().getStringExtra("TxDate"));
         status.setText(getIntent().getStringExtra("TxStatus"));
         txType.setText(getIntent().getStringExtra("TxType"));
-        transactionFee.setText(getIntent().getStringExtra("Fee"));
+        //transactionFee.setText(getIntent().getStringExtra("Fee"));
         if(status.getText().toString().equals("pending")){
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
