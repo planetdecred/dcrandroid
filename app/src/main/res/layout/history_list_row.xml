@@ -1,91 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        >
-        <TextView
-            android:id="@+id/history_snd_rcv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    android:layout_height="52.0dip"
+    >
+    <RelativeLayout 
+        android:layout_width="match_parent" 
+        android:layout_height="52dp"
+        android:layout_weight="1.0">
+        
+        <TextView android:id="@+id/history_snd_rcv"
+            android:background="@drawable/ic_send" 
+            android:layout_width="40.0dip"
+            android:layout_height="40.0dip"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/ic_menu_share"
-            android:gravity="center"
-            />
-        <TextView
-            android:id="@+id/history_amount_transfered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_toEndOf="@+id/history_snd_rcv"
-            android:layout_toRightOf="@id/history_snd_rcv"
-            android:gravity="center"
-            android:paddingTop="2dp"
-            android:textColor="@color/colorText"
-            android:text="+100.0000000 DCR"
-            android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/history_tx_status"
-                android:layout_width="75dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:gravity="center"
-                android:background="@drawable/tx_status_confirmed"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:layout_marginTop="5dp"
-                android:text="confirmed"
-                android:textColor="@color/color_confirmed_tx" />
-            <TextView
-                android:id="@+id/history_tx_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="sep 13 2017,13:32:19"
-                android:layout_margin="1dp"
-                android:layout_gravity="end"
-                android:gravity="end"
-                android:textSize="12sp"/>
-        </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/history_tx_status_cont"
-        android:layout_width="match_parent"
+            android:layout_centerVertical="true" />
+        <TextView 
+            android:textSize="18.0sp" 
+            android:textColor="@color/colorText" 
+            android:id="@+id/history_amount_transferred"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_marginLeft="45.0dip" 
+            android:text="+100.0000000 DCR" 
+            android:layout_centerVertical="true" />
+        <TextView android:textSize="12.0sp"
+            android:id="@+id/history_addr_transferred" 
+            android:paddingLeft="5.0dip"
+            android:paddingRight="5.0dip" 
+            android:visibility="gone" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:text="Twsmksdjhehdsmskdmskyhjhhjg" 
+            android:layout_toRightOf="@+id/history_snd_rcv"
+            android:layout_below="@+id/history_amount_transferred" />
+    </RelativeLayout>
+    <LinearLayout 
+        android:orientation="vertical" 
+        android:id="@+id/history_tx_status_cont" 
+        android:layout_width="match_parent" 
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
-        android:layout_margin="2dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/history_tx_status"
-            android:layout_width="75dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
+        android:layout_margin="2.0dip"
+        android:layout_weight="1.5">
+        
+        <TextView 
+            android:textColor="@color/color_confirmed_tx"
             android:gravity="center"
+            android:layout_gravity="end" 
+            android:id="@+id/history_tx_status" 
             android:background="@drawable/tx_status_confirmed"
-            android:padding="2dp"
-            android:text="confirmed"
-            android:textColor="@color/color_confirmed_tx" />
-        <TextView
-            android:id="@+id/history_tx_date"
+            android:paddingLeft="5.0dip"
+            android:paddingTop="3.0dip"
+            android:paddingRight="5.0dip"
+            android:paddingBottom="3.0dip"
+            android:layout_width="75.0dip" 
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5.0dip" 
+            android:text="confirmed" />
+        <TextView 
+            android:textSize="12.0sp" 
+            android:gravity="end" 
+            android:layout_gravity="end" 
+            android:id="@+id/history_tx_date" 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="sep 13 2017,13:32:19"
-            android:layout_margin="1dp"
-            android:layout_gravity="end"
-            android:gravity="end"
-            android:textSize="12sp"/>
+            android:layout_margin="1.0dip"
+            android:text="sep 13 2017,13:32:19" />
     </LinearLayout>
-
-
 </LinearLayout>

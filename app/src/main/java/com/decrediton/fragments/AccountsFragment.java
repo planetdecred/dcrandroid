@@ -94,8 +94,6 @@ public class AccountsFragment extends Fragment {
                             AccountResponse.AccountItem item = response.items.get(i);
                             account.setAccountName(item.name);
                             account.setAccountNumber(String.valueOf(item.number));
-                            System.out.printf("\n%f\n", 2.03432).println();
-                            //account.setTotal(String.format("%f",item.balance.total+""));
                             account.setTotal(String.format(Locale.ENGLISH,"%f", item.balance.total));
                             account.setSpendable(String.valueOf(item.balance.spendable));
                             account.setImmatureRewards(String.valueOf(item.balance.immatureReward));

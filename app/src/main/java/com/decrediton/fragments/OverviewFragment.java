@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,15 +20,6 @@ import android.widget.Toast;
 import com.decrediton.Activities.TransactionDetailsActivity;
 import com.decrediton.Adapter.TransactionAdapter;
 import com.decrediton.R;
-
-import com.decrediton.Util.DcrResponse;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
@@ -75,9 +65,9 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
                 i.putExtra("TxType",history.getTxType());
-                i.putExtra("AccountName",history.getAccountName());
+                //i.putExtra("AccountName",history.getAccountName());
                 i.putExtra("TxStatus",history.getTxStatus());
-                i.putStringArrayListExtra("UsedIput",history.getUsedIput());
+                i.putStringArrayListExtra("UsedInput",history.getUsedInput());
                 i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
                 startActivity(i);
             }
@@ -154,9 +144,9 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
             public void run() {
                 pd.show();
                 PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
+                int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
                 System.out.println("Rescanned: "+rescanned_through+" Height: "+util.get(PreferenceUtil.BLOCK_HEIGHT)
-                +" Division: "+rescanned_through/Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT))+" Percentage: "+(rescanned_through/Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT)))*100);
-                long percentage = (rescanned_through/Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT)))*100;
+                        +" Division: "+rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))+" Percentage: "+percentage);
                 pd.setMessage("Scanning Blocks "+percentage+"%");
             }
         });

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 
 public class PreferenceUtil {
     public static final String BLOCK_HEIGHT = "block_height";
+    public static final String TRANSACTION_HEIGHT = "tx_height";
     Context ctx;
     public PreferenceUtil(Context ctx){
         this.ctx = ctx;
@@ -17,6 +18,11 @@ public class PreferenceUtil {
     public String get(String key){
         SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
         return sp.getString(key,"");
+    }
+
+    public String get(String key, String d){
+        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        return sp.getString(key,d);
     }
 
     public void set(String key,String value){

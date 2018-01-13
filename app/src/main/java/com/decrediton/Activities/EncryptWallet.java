@@ -51,7 +51,7 @@ public class EncryptWallet extends AppCompatActivity{
                     ProgressDialog pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"Creating Wallet...");
                     new EncryptBackgroundWorker(pd,EncryptWallet.this).execute(pass, seed);
                 }else{
-                    Toast.makeText(EncryptWallet.this,"Passphrases do not match",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EncryptWallet.this,"Passwords do not match",Toast.LENGTH_SHORT).show();
                 }
             }
         });
