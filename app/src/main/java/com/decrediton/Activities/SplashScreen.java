@@ -35,7 +35,9 @@ import dcrwallet.Dcrwallet;
  * Created by Macsleven on 24/12/2017.
  */
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
+    Animation animRotate;
+    ImageView imgAnim;
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 5000;
     private void startServer(){
@@ -114,6 +116,10 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         startServer();
         setContentView(R.layout.splash_page);
+        imgAnim=(ImageView)findViewById(R.id.splashscreen_icon);
+        animRotate= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
+        animRotate.setAnimationListener(this);
+        imgAnim.startAnimation(animRotate);
         tvLoading = (MyCustomTextView) findViewById(R.id.loading_status);
         String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
         if(Dcrwallet.isTestNet()){
@@ -253,4 +259,19 @@ public class SplashScreen extends AppCompatActivity {
     public void onBackPressed() {
     }
 
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+        imgAnim.startAnimation(animRotate);
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 }
