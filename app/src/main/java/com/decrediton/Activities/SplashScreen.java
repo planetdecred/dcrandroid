@@ -87,8 +87,8 @@ public class SplashScreen extends AppCompatActivity {
         //File path = new File("./sdcard/.dcrd");
         path.mkdirs();
         String[] files = {"rpc.key","rpc.cert","dcrd.conf"};
-        //String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
-        String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
+        String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
+        //String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             if (!file.exists() || true) {
