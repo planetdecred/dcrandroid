@@ -9,6 +9,7 @@ import com.decrediton.fragments.OverviewFragment;
 
 
 import dcrwallet.BlockScanResponse;
+import dcrwallet.ConstructTxResponse;
 import dcrwallet.Dcrwallet;
 
 public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> implements BlockScanResponse{
