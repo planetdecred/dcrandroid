@@ -14,35 +14,13 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:padding="8dp">
-            <TextView
-                android:id="@+id/label_tx"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-
-                android:gravity="center"
-                android:padding="5dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/transaction"
-                android:textColor="@color/secondary_text"
-                android:textSize="16sp" />
-            <View
-                android:id="@+id/separator123"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_tx"
-                android:background="@color/primary_text" />
 
             <TextView
                 android:id="@+id/tx_dts_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_centerInParent="true"
-                android:layout_below="@+id/separator123"
+                android:layout_centerHorizontal="true"
                 android:padding="8dp"
                 android:text="@string/_0_00_dcr"
                 android:textColor="@color/primary_text" />
@@ -51,11 +29,8 @@
                 android:id="@+id/separator12"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-
                 android:layout_below="@+id/tx_dts_value"
                 android:background="@color/primary_text" />
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -176,23 +151,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/separator1235"
-                android:text="@string/txhash"
+                android:text="@string/hash"
                 android:padding="8dp"
-
                 />
             <TextView
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:id="@+id/tx_hash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/label_tx_hash"
-                android:layout_toRightOf="@+id/label_tx_hash"
-                android:maxEms="37"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:gravity="end"
                 android:padding="8dp"
-                android:textSize="12sp"
-                android:layout_below="@id/separator1235"
+                android:textColor="@color/primary_text"
+                android:layout_below="@id/label_tx_hash"
                 />
+            <View
+                android:id="@+id/separator12355"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@id/tx_hash"
+                android:background="@color/primary_text"/>
             <TextView
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -202,14 +180,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/view_on_dcrdata"
                 android:textColor="@color/buttonColor"
-                android:layout_below="@id/tx_hash"
+                android:layout_below="@id/separator12355"
                 />
-            <View
-                android:id="@+id/separator12355"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/tx_view_on_dcrdata"
-                android:background="@color/primary_text"/>
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -222,7 +194,6 @@
             android:layout_height="wrap_content"
             android:dividerHeight="0.5dp"
             android:divider="@color/primary_text"
-
            />
         </LinearLayout>
     </LinearLayout>

@@ -67,7 +67,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 i.putExtra("Amount",history.getAmount());
                 i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
-                i.putExtra("TxType",history.getTxType());
+                i.putExtra("TxType",history.getType());
                 //i.putExtra("AccountName",history.getAccountName());
                 i.putExtra("TxStatus",history.getTxStatus());
                 i.putStringArrayListExtra("UsedInput",history.getUsedInput());
@@ -160,7 +160,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 if(pd.isShowing()){
                     pd.dismiss();
                 }
-                Toast.makeText(getContext(), height+getString(R.string.blocek_scanned), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), height+" "+getString(R.string.blocek_scanned), Toast.LENGTH_SHORT).show();
                 getBalance();
             }
         });
@@ -176,7 +176,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
                 System.out.println("Rescanned: "+rescanned_through+" Height: "+util.get(PreferenceUtil.BLOCK_HEIGHT)
                         +" Division: "+rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))+" Percentage: "+percentage);
-                pd.setMessage(getString(R.string.scanning_block)+percentage+"%");
+                pd.setMessage(getString(R.string.scanning_block)+" "+percentage+"%");
             }
         });
     }

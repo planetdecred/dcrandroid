@@ -131,7 +131,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 hashList.add(aSerializedTx);
                             }
                             Collections.reverse(hashList);
-                            System.out.println("Hash: "+Arrays.toString(serializedTx));
                             StringBuilder sb = new StringBuilder();
                             for(byte b : hashList){
                                 sb.append(String.format(Locale.getDefault(),"%02x", b));

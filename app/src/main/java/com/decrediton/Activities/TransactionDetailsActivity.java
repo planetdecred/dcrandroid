@@ -54,6 +54,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.confirmations);
         TextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
+        txHash.setText(getIntent().getStringExtra("Hash"));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +79,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         else{
             String temp = getIntent().getStringExtra("Amount")+ getString(R.string.dcr);
             value.setText(temp);
-
             temp = String.format(Locale.getDefault(),"%f DCR", 0/ AccountResponse.SATOSHI);
             transactionFee.setText(temp);
         }

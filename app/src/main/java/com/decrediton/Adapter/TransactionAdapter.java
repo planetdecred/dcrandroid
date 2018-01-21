@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.decrediton.R;
-import com.decrediton.Util.AccountResponse;
 import com.decrediton.data.Transaction;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Macsleven on 01/01/2018.
@@ -51,7 +49,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Transaction history = historyList.get(position);
-        holder.txType.setText(history.getTxType());
+        //System.out.println("Hash: "+history.get);
+        holder.txType.setText(history.getType());
         holder.status.setText(history.getTxStatus());
 
         if(Double.parseDouble(history.getTransactionFee())>0){
@@ -62,7 +61,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.txType.setText("");
         }
         else {
-            String temp =history.getAmount() + " DCR";
+            String temp = history.getAmount() + " DCR";
             holder.Amount.setText(temp);
 
             holder.txType.setBackgroundResource(R.drawable.ic_receive);

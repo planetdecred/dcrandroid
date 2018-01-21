@@ -12,20 +12,29 @@ public class Transaction implements Serializable{
     private String TransactionFee;
     private String txDate;
     private String txStatus;
-    private String txType;
+    private String type;
+    private String hash;
     private ArrayList<String> usedInput;
-    private ArrayList<String>  walletOutput;
+    private ArrayList<String> walletOutput;
 
     public Transaction(){
     }
     public Transaction(String amount, String TransactionFee, String txDate, String txStatus, String accountName, String txType, ArrayList<String> usedInput, ArrayList<String> walletOutput){
         this.TransactionFee = TransactionFee;
         this.txDate = txDate;
-        this. txStatus =txStatus;
-        this.txType =txType;
-        this. amount = amount;
+        this.txStatus =txStatus;
+        this.type =txType;
+        this.amount = amount;
         this.usedInput = usedInput;
         this.walletOutput = walletOutput;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public String getTxDate() {
@@ -59,12 +68,12 @@ public class Transaction implements Serializable{
     public void setTxStatus(String txStatus) {
         this.txStatus = txStatus;
     }
-    public String getTxType() {
-        return txType;
+    public String getType() {
+        return type;
     }
 
-    public void setTxType(String txType) {
-        this.txType = txType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ArrayList<String> getUsedInput() {

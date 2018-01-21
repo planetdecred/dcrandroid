@@ -1,5 +1,6 @@
 package com.decrediton.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,27 +20,24 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
 
     private List<Account> accountList;
     private LayoutInflater layoutInflater;
+    private Context context;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView accountName;
         public TextView total;
         public TextView spendable;
-
 
         public MyViewHolder(View view) {
             super(view);
             accountName = view.findViewById(R.id.account_row_name);
             total = view.findViewById(R.id.account_row_total);
             spendable = view.findViewById(R.id.account_row_spendable);
-
         }
     }
-    public AccountAdapter(List<Account> accountListList ,LayoutInflater inflater) {
+    public AccountAdapter(List<Account> accountListList ,LayoutInflater inflater, Context context) {
         this.accountList = accountListList;
-       this.layoutInflater = inflater;
-
+        this.layoutInflater = inflater;
+        this.context = context;
     }
-
-
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,11 +47,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
-
         Account account = accountList.get(position);
-        String temp=R.string.label_spendable+account.getSpendable()+R.string.dcr;
-        String temp2= account.getTotal()+R.string.dcr;
+        String temp =context.getString(R.string.label_spendable)+" "+account.getSpendable()+" "+context.getString(R.string.dcr);
+        String temp2 = account.getTotal()+" "+context.getString(R.string.dcr);
         holder.accountName.setText(account.getAccountName());
         holder.spendable.setText(temp);
         holder.total.setText(temp2);
