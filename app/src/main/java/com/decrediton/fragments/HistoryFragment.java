@@ -60,7 +60,7 @@ public class HistoryFragment extends Fragment{
                 i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
                 System.out.println("TxType: "+history.getTxType());
-                i.putExtra("TxType",history.getTxType());
+                i.putExtra("TxConfirmation",history.getTxType());
                 i.putExtra("TxStatus",history.getTxStatus());
                 i.putStringArrayListExtra("UsedInput",history.getUsedInput());
                 i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
@@ -82,7 +82,7 @@ public class HistoryFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("History");
+        getActivity().setTitle(getString(R.string.history));
     }
 
     private void prepareHistoryData(){

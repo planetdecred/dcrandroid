@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:padding="5dp"
-            android:text="Create Wallet"
+            android:text="@string/create_wallet"
             android:textColor="@android:color/background_light" />
 
             <Button
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:padding="5dp"
-            android:text="Recover Wallet"
+            android:text="@string/recover_wallet"
             android:textColor="@android:color/background_light" />
         </LinearLayout>
     </LinearLayout>

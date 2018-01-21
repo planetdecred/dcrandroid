@@ -28,7 +28,7 @@ public class ConnectionActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection_page);
-        setTitle("Connection");
+        setTitle(getString(R.string.connection));
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.connection_recycler_view);
         connectionAdapter = new ConnectionAdapter(connectionList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -52,7 +52,7 @@ public class ConnectionActivity extends AppCompatActivity{
     }
 
    public void prepareConnectionData(){
-       Connection connection= new Connection("Get Peers Info");
+       Connection connection= new Connection(getString(R.string.get_peer_info));
        connectionList.add(connection);
     }
 

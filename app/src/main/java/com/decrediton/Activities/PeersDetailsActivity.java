@@ -15,7 +15,7 @@ public class PeersDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Peer Details");
+        setTitle(getString(R.string.peer_details));
         setContentView(R.layout.peers_details_view);
         TextView id = findViewById(R.id.peer_view_id);
         TextView addr= findViewById(R.id.peer_view_addr);

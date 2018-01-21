@@ -27,6 +27,6 @@ public class TicketsFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Tickets");
+        getActivity().setTitle(getString(R.string.tickets));
     }
 }

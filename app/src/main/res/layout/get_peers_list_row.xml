@@ -10,14 +10,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Id"
             android:textSize="18sp"
             android:id="@+id/get_peers_id"
             android:textColor="@color/colorText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="192.168.0.1:3852"
             android:textSize="18sp"
             android:id="@+id/get_peers_addr"
             android:textColor="@color/colorText"/>

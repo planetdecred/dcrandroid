@@ -2,9 +2,12 @@ package com.decrediton.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,10 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.Activities.ReaderActivity;
+import com.decrediton.Activities.WebviewActivity;
 import com.decrediton.Util.AccountResponse;
 import com.decrediton.Util.Utils;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import com.decrediton.R;
 
@@ -68,7 +71,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Send");
+        getActivity().setTitle(getString(R.string.send));
 
         address = getActivity().findViewById(R.id.send_dcr_add);
         amount = getActivity().findViewById(R.id.send_dcr_amount);
@@ -99,6 +102,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showInputPassPhraseDialog();
                 String amnt = amount.getText().toString();
                 if(amnt.equals("")){
                     amnt = "0";
@@ -257,19 +261,19 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     if(returnString.startsWith("decred:"))
                         returnString = returnString.replace("decred:","");
                     if(returnString.length() < 25){
-                        Toast.makeText(SendFragment.this.getContext(), "Wallet Address Is Too Short", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SendFragment.this.getContext(), R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }else if(returnString.length() > 36){
-                        Toast.makeText(SendFragment.this.getContext(), "Wallet Address Is Too Long", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SendFragment.this.getContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(returnString.startsWith("D")){
                         address.setText(returnString);
                     }else{
-                        Toast.makeText(SendFragment.this.getContext(), "Invalid address prefix", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "This is not a DCR wallet address", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show();
                     address.setText("");
                 }
             }
@@ -330,5 +334,32 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+    public void showInputPassPhraseDialog() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.input_passphrase_box, null);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setView(dialogView);
+
+        final EditText passphrase = (EditText) dialogView.findViewById(R.id.passphrase_input);
+
+        dialogBuilder.setMessage(R.string.transaction_confirmation);
+        dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                passphrase.getText().toString();
+
+                //do something with edt.getText().toString();
+            }
+        });
+
+        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialogBuilder.setCancelable(true);
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+        b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
     }
 }

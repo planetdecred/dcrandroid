@@ -5,18 +5,31 @@ package com.decrediton.data;
  */
 
 public class Settings {
-    private String setting;
+    private String settingName;
+    private String rightValue;
     public Settings(){
     }
     public Settings(String setting){
-        this.setting = setting;
+        this.settingName = setting;
+    }
+    public Settings(String setting,String rightValue){
+        this.settingName = setting;
+        this.rightValue = rightValue;
     }
 
-    public String getSetting(){
-        return  setting;
+    public String getSettingName(){
+        return settingName;
     }
 
-    public void setSetting(String seed){
-        this.setting = setting;
+    public void setSettingName(String settingName){
+        this.settingName = settingName;
+    }
+
+    public String getRightValue() {
+        return rightValue;
+    }
+
+    public void setRightValue(String rightValue) {
+        this.rightValue = rightValue;
     }
 }

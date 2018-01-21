@@ -58,7 +58,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
-        pd = Utils.getProgressDialog(getContext(),false,false,"Scanning Blocks...");
+        pd = Utils.getProgressDialog(getContext(),false,false,getString(R.string.scanning_blocks));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -108,7 +108,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Overview");
+        getActivity().setTitle(getString(R.string.overview));
     }
 
     private void getBalance(){
@@ -160,7 +160,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 if(pd.isShowing()){
                     pd.dismiss();
                 }
-                Toast.makeText(getContext(), height+" blocks scanned", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), height+getString(R.string.blocek_scanned), Toast.LENGTH_SHORT).show();
                 getBalance();
             }
         });
@@ -176,7 +176,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
                 System.out.println("Rescanned: "+rescanned_through+" Height: "+util.get(PreferenceUtil.BLOCK_HEIGHT)
                         +" Division: "+rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))+" Percentage: "+percentage);
-                pd.setMessage("Scanning Blocks "+percentage+"%");
+                pd.setMessage(getString(R.string.scanning_block)+percentage+"%");
             }
         });
     }

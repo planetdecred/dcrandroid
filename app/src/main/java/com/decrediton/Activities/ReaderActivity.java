@@ -102,8 +102,8 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
             int allowed = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
             if (allowed == PackageManager.PERMISSION_DENIED
                     || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-                new AlertDialog.Builder(this).setTitle("Permission")
-                        .setMessage("This application needs camera permission to scan QRCode for a wallet address , Please allow the permissions in the next dialog.")
+                new AlertDialog.Builder(this).setTitle(R.string.permission)
+                        .setMessage(R.string.camera_permission_scan)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -127,7 +127,7 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
                 //permission granted
                 startCamera();
             }else{
-                Toast.makeText(this, "You denied the permission!!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.denied_permission, Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -139,7 +139,7 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
         integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         integrator.setOrientationLocked(false);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("Scan a QRCode to retrieve a decred wallet address");
+        integrator.setPrompt(getString(R.string.scan_info));
         integrator.setCameraId(0);  // Use a specific camera of the device
         integrator.setBeepEnabled(false);
         integrator.setBarcodeImageEnabled(false);
