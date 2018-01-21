@@ -71,7 +71,7 @@
                 android:id="@+id/send_dcr_add"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Destination Address:"
+                android:hint="Destination Address"
                 android:maxLines="1"
                 android:layout_weight="1"
                 android:inputType="text"
@@ -99,11 +99,12 @@
             android:id="@+id/send_dcr_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Amount(DCR) :"
+            android:hint="Amount(DCR)"
             android:inputType="numberDecimal"
             android:layout_weight="1"
             android:lines="1"
             android:maxLines="1"
+            android:text="0"
             />
         <TextView
             android:id="@+id/send_dcr_all"
@@ -132,7 +133,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0.00 DCR"
+                android:text="0.000000 DCR"
                 android:id="@+id/send_dcr_total_amt_sndng"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -144,7 +145,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estimat Fee:"
+                android:text="Estimated Fee:"
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="match_parent"
@@ -161,7 +162,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estimate Size:"
+                android:text="Estimated Size:"
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="match_parent"
@@ -170,7 +171,6 @@
                 android:id="@+id/send_dcr_estimate_size"
                 android:layout_weight="1"/>
         </LinearLayout>
-
 
         <Button
             android:id="@+id/send_btn_tx"

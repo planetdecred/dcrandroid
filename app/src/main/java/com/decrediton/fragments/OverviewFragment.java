@@ -24,6 +24,7 @@ import com.decrediton.R;
 import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
+import com.decrediton.Util.AccountResponse;
 import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.Util.RecyclerTouchListener;
 import com.decrediton.Util.Utils;
@@ -31,6 +32,8 @@ import com.decrediton.data.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 /**
  * Created by Macsleven on 28/11/2017.
  */
@@ -38,7 +41,7 @@ import java.util.List;
 public class OverviewFragment extends Fragment implements BlockScanResponse{
     private List<Transaction> transactionList = new ArrayList<>();
     private Button reScanBlock;
-    private TextView balance;
+    private TextView tvBalance;
     TransactionAdapter transactionAdapter;
     //Buy sticky notes
     ProgressDialog pd;
@@ -50,7 +53,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         reScanBlock =  rootView.getRootView().findViewById(R.id.overview_rescan_btn);
-        balance = rootView.getRootView().findViewById(R.id.overview_av_ballance);
+        tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -97,6 +100,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
+        getBalance();
         return rootView;
     }
 
@@ -107,6 +111,30 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         getActivity().setTitle("Overview");
     }
 
+    private void getBalance(){
+        new Thread(){
+            public void run(){
+                try {
+                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    float totalBalance = 0;
+                    for(int i = 0; i < response.items.size(); i++){
+                        AccountResponse.Balance balance = response.items.get(i).balance;
+                        totalBalance += balance.total;
+                    }
+                    final float finalTotalBalance = totalBalance;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvBalance.setText(String.format(Locale.getDefault(),"%f DCR",finalTotalBalance));
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
     private void prepareHistoryData(){
         ArrayList<String> usedInput = new ArrayList<>();
         usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS:  1.00 DCR");
@@ -114,14 +142,14 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH:     3.22 DCR");
         output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE:   3.54 DCR");
         Transaction transaction= new Transaction("0.0000000","0.02","jan 1 2018, 20:19:45","pending","default","send", usedInput, output);
-        transactionList.add(transaction);
+        //transactionList.add(transaction);
         usedInput = new ArrayList<>();
         usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS:  5.00 DCR");
         output = new ArrayList<>();
         output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH:     6.22 DCR");
         output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE:   3.54 DCR");
         transaction= new Transaction("120.0000000","0.00","jan 1 2018, 11:17:25","pending","default","receive", usedInput, output);
-        transactionList.add(transaction);
+        //transactionList.add(transaction);
     }
 
     @Override
@@ -133,6 +161,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                     pd.dismiss();
                 }
                 Toast.makeText(getContext(), height+" blocks scanned", Toast.LENGTH_SHORT).show();
+                getBalance();
             }
         });
     }

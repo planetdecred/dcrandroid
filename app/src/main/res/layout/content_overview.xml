@@ -45,8 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:id="@+id/overview_av_ballance"
-                    android:text="50000000.00 DCR"
+                    android:id="@+id/overview_av_balance"
                     android:textColor="@color/Amount2Text"
                     android:textSize="20sp" />
 
