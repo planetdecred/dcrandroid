@@ -47,7 +47,7 @@ public class AccountsFragment extends Fragment {
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         MainActivity.menuOpen.setVisible(true);
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.recycler_view2);
-        accountAdapter = new AccountAdapter(accountList, layoutInflater);
+        accountAdapter = new AccountAdapter(accountList, layoutInflater, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

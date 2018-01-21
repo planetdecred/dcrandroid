@@ -198,21 +198,21 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         e.printStackTrace();
                     }
                 }
-                setText(getString(R.string.waiting_for_dcrwallet));
+                setText(getString(R.string.waiting_for_dcrd));
                 String dcrdAddress = "127.0.0.1:9109";
                 if(Dcrwallet.isTestNet()){
                     dcrdAddress = "127.0.0.1:19109";
                 }
-//                for(;;) {
-//                    if(Dcrwallet.connectToDcrd(dcrdAddress)){
-//                        break;
-//                    }
-//                    try {
-//                        sleep(1500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                for(;;) {
+                    if(Dcrwallet.connectToDcrd(dcrdAddress)){
+                        break;
+                    }
+                    try {
+                        sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 System.out.println("Opening");
                 setText(getString(R.string.opening_wallet));
                 final String json = Dcrwallet.openWallet();

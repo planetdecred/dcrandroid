@@ -59,9 +59,10 @@ public class HistoryFragment extends Fragment{
                 i.putExtra("Amount",history.getAmount());
                 i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
-                System.out.println("TxType: "+history.getTxType());
-                i.putExtra("TxConfirmation",history.getTxType());
+                System.out.println("TxType: "+history.getType());
+                i.putExtra("TxConfirmation",history.getType());
                 i.putExtra("TxStatus",history.getTxStatus());
+                i.putExtra("Hash", history.getHash());
                 i.putStringArrayListExtra("UsedInput",history.getUsedInput());
                 i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
                 startActivity(i);
@@ -86,13 +87,13 @@ public class HistoryFragment extends Fragment{
     }
 
     private void prepareHistoryData(){
-        loadTransactions();
+        //loadTransactions();
         new Thread(){
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
                 int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
-                int startingHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
-                String result = Dcrwallet.getTransactions(blockHeight, startingHeight);
+                int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
+                String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
 
@@ -106,7 +107,8 @@ public class HistoryFragment extends Fragment{
                         calendar.setTimeInMillis(item.timestamp * 1000);
                         transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.YEAR) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
                         transaction.setTransactionFee(String.format(Locale.getDefault(), "%f", item.fee));
-                        transaction.setTxType(item.type);
+                        transaction.setType(item.type);
+                        transaction.setHash(item.hash);
                         transaction.setAmount(String.format(Locale.getDefault(), "%f", item.amount));
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
