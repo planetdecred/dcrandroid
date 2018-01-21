@@ -150,7 +150,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private void createWallet(){
         new Thread(){
             public void run(){
-                setText("Waiting for dcrwallet to come online");
+                setText(getString(R.string.waiting_for_dcrwallet));
                 for(;;) {
                     if(Dcrwallet.testConnect()){
                         break;
@@ -187,7 +187,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         new Thread(){
             public void run(){
                 System.out.println("Dcrwallet");
-                setText("Waiting for dcrwallet to come online");
+                setText(getString(R.string.waiting_for_dcrwallet));
                 for(;;) {
                     if(Dcrwallet.testConnect()){
                         break;
@@ -198,7 +198,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         e.printStackTrace();
                     }
                 }
-                setText("Waiting for dcrd to come online");
+                setText(getString(R.string.waiting_for_dcrwallet));
                 String dcrdAddress = "127.0.0.1:9109";
                 if(Dcrwallet.isTestNet()){
                     dcrdAddress = "127.0.0.1:19109";
@@ -214,18 +214,18 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 //                    }
 //                }
                 System.out.println("Opening");
-                setText("Opening wallet...");
+                setText(getString(R.string.opening_wallet));
                 final String json = Dcrwallet.openWallet();
                 System.out.println("Blocks");
-                setText("Subscribing to block notifications...");
+                setText(getString(R.string.subscribe_to_block_notification));
                 Dcrwallet.subscibeToBlockNotifications();
                 PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
                 if(!util.get("discover_address").equals("true")) {
-                    setText("Discovering addresses...");
+                    setText(getString(R.string.discovering_address));
                     Dcrwallet.discoverAddresses(util.get("key"));
                     util.set("discover_address","true");
                 }
-                setText("Fetching Headers...");
+                setText(getString(R.string.fetching_headers));
                 int blockHeight = Dcrwallet.fetchHeaders();
                 if(blockHeight != -1){
                     util.set(PreferenceUtil.BLOCK_HEIGHT,String.valueOf(blockHeight));
@@ -245,7 +245,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         try {
             DcrResponse response = DcrResponse.parse(responseJson);
             if(response.errorOccurred){
-                Toast.makeText(this, "Could not open wallet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.could_not_open_wallet, Toast.LENGTH_SHORT).show();
             }else{
                 Intent i = new Intent(this, MainActivity.class);
                 startActivity(i);

@@ -72,7 +72,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             }
         });
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Receive");
+        getActivity().setTitle(getString(R.string.receive));
         prepareAccounts();
     }
 
@@ -85,17 +85,17 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
                     getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData
-                    .newPlainText("Your address", copyText);
+                    .newPlainText(getString(R.string.your_address), copyText);
             clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(getContext(),
-                "Your address is copied", Toast.LENGTH_SHORT);
+                R.string.your_address_is_copied, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.RIGHT, 50, 50);
         toast.show();
     }
 
     private void prepareAccounts(){
-        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,"Getting Accounts...");
+        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
         pd.show();
         new Thread(){
             public void run(){
@@ -141,7 +141,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void getAddress(final int accountNumber){
-        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,"Getting Address...");
+        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_address));
         pd.show();
         new Thread(){
             public void run(){
@@ -151,7 +151,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         @Override
                         public void run() {
                             if(response.errorOccurred){
-                                Toast.makeText(ReceiveFragment.this.getContext(),"Error occurred while trying to get address for account: "+accountNumber,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
                             }else{
                                 String newAddress = response.content;
                                 address.setText(newAddress);

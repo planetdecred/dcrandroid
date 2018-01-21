@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SEND FUNDS"
+            android:text="@string/send_funds"
             android:gravity="center"
             android:padding="5dp"
             />
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Input or scan the destination transactionFee and the amount in DCR to send fund "
+            android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
             android:textSize="12sp" />
 
         <LinearLayout
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From:"
+                android:text="@string/from"
                 android:gravity="bottom"
                 android:padding="5dp"
                 android:background="@color/backgcolorwhite"
@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:layout_weight="1"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/background_shadow">
 
@@ -58,7 +59,14 @@
                      >
                 </Spinner>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_weight="4"
+                android:background="@color/backgcolorwhite"
 
+                />
         </LinearLayout>
 
 
@@ -71,7 +79,7 @@
                 android:id="@+id/send_dcr_add"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Destination Address"
+                android:hint="@string/destination_address"
                 android:maxLines="1"
                 android:layout_weight="1"
                 android:inputType="text"
@@ -86,6 +94,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="bottom"
+                android:contentDescription="@string/scan"
                 android:layout_marginTop="5dp"
                  />
 
@@ -97,9 +106,9 @@
             android:orientation="horizontal">
         <EditText
             android:id="@+id/send_dcr_amount"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Amount(DCR)"
+            android:hint="@string/amount_dcr"
             android:inputType="numberDecimal"
             android:layout_weight="1"
             android:lines="1"
@@ -110,7 +119,7 @@
             android:id="@+id/send_dcr_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Max"
+            android:text="@string/max"
             android:clickable="true"
             android:gravity="center"
             android:textColor="@color/colorPrimaryDark"
@@ -128,12 +137,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total amount sending:"
+                android:text="@string/total_amount_sending"
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0.000000 DCR"
+                android:text="@string/_0_00_dcr"
                 android:id="@+id/send_dcr_total_amt_sndng"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -145,12 +154,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estimated Fee:"
+                android:text="@string/estimat_fee"
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0.00 DCR"
+                android:text="@string/_0_00_dcr"
                 android:id="@+id/send_dcr_estimate_fee"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -162,12 +171,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estimated Size:"
+                android:text="@string/estimate_size"
                 android:layout_weight="1"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0 bytes"
+                android:text="@string/_0_bytes"
                 android:id="@+id/send_dcr_estimate_size"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -178,8 +187,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_shape"
             android:padding="5dp"
-            android:text="Send"
-            android:textSize="21sp"
+            android:text="@string/send"
+            android:textSize="20sp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:textColor="@android:color/background_light" />

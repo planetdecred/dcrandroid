@@ -12,14 +12,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Receive Funds"
+        android:text="@string/receive_funds"
         android:textSize="21sp"
         android:gravity="center"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Each time you request a payment,a new transactionFee is created to protect your privacy"
+        android:text="@string/receive_fund_privacy_info"
         android:textSize="12sp"
         android:gravity="center"
         />
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="Account:"
+        android:text="@string/account"
         android:gravity="bottom"
         android:padding="5dp"
         android:background="@color/backgcolorwhite"
@@ -45,6 +45,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
+        android:layout_weight="2"
         android:layout_marginTop="1dp"
         android:background="@drawable/background_shadow">
 
@@ -52,9 +53,20 @@
         android:id="@+id/recieve_dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:tag="@string/account"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16sp"
         >
     </Spinner>
     </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:padding="5dp"
+            android:layout_weight="3.5"
+            android:background="@color/backgcolorwhite"
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -84,19 +96,20 @@
             android:padding="5dp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="[WALLET ADDRESS]"
+            android:text="@string/wallet_address"
             android:textSize="18sp" />
         <Button
             android:id="@+id/btn_gen_new_addr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Generate New Address"
+            android:text="@string/generate_new_address"
             android:background="@drawable/btn_shape"
             android:textColor="@color/buttonText"
             android:padding="8dp"
             android:visibility="gone"
             android:layout_gravity="center"
             android:textAllCaps="false"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
 </LinearLayout>

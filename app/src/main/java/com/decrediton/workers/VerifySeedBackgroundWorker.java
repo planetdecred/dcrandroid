@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.decrediton.Activities.ConfirmSeedActivity;
+import com.decrediton.R;
 import com.decrediton.Util.Utils;
 
 import dcrwallet.Dcrwallet;
@@ -13,7 +14,7 @@ public class VerifySeedBackgroundWorker extends AsyncTask<String,String, String>
     private ProgressDialog pd;
     public VerifySeedBackgroundWorker(ConfirmSeedActivity context){
         this.context = context;
-        this.pd = Utils.getProgressDialog(context,false,false,"Verifying Seed...");
+        this.pd = Utils.getProgressDialog(context,false,false,context.getString(R.string.verifying_seed));
     }
 
     @Override

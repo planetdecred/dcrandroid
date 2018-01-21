@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.decrediton.Activities.EncryptWallet;
+import com.decrediton.R;
 import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.fragments.OverviewFragment;
 
@@ -30,20 +31,20 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
+        PreferenceUtil util = new PreferenceUtil(context);
         if(values[0] == 0){
-            pd.setMessage("Creating Wallet");
+            pd.setMessage(context.getString(R.string.creating_wallet));
         }else if(values[0] == 1){
-            pd.setMessage("Discovering Addresses");
+            pd.setMessage(context.getString(R.string.discovering_address));
         }else if(values[0] == 2){
-            pd.setMessage("Fetching Headers");
+            pd.setMessage(context.getString(R.string.fetching_headers));
         }else if(values[0] == 3){
-            pd.setMessage("Connecting to dcrd");
+            pd.setMessage(context.getString(R.string.conecting_to_dcrd));
         }else if(values[0] == 4){
-            PreferenceUtil util = new PreferenceUtil(context);
             int percentage = (int) ((values[1]/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
-            pd.setMessage("Scanning Blocks "+percentage+"%");
+            pd.setMessage(context.getString(R.string.scanning_blocks)+percentage+"%");
         }else if(values[0] == 5){
-            pd.setMessage("Subscribing to block notifications");
+            pd.setMessage(context.getString(R.string.subscribing_to_block_notification));
         }
     }
 

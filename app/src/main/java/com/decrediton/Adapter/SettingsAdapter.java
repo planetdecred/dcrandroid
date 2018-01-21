@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.decrediton.MainActivity;
 import com.decrediton.R;
 import com.decrediton.data.Settings;
 
@@ -19,12 +20,15 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.MyView
 
     private List<Settings> settingsList;
     private LayoutInflater layoutInflater;
+    MainActivity mainActivity;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView setting;
+        public TextView rightValue;
 
         public MyViewHolder(View view) {
             super(view);
             setting = view.findViewById(R.id.settings_connection);
+            rightValue = view.findViewById(R.id.settings_right_value);
         }
     }
     public SettingsAdapter(List<Settings> settingsListList , LayoutInflater inflater) {
@@ -41,8 +45,17 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
+
         Settings settings = settingsList.get(position);
-        holder.setting.setText(settings.getSetting());
+        if(position==1){
+            holder.setting.setText(settings.getSettingName());
+            holder.rightValue.setText(settings.getRightValue());
+        }
+        else {
+            holder.setting.setText(settings.getSettingName());
+        }
+
+
     }
 
     @Override

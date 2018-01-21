@@ -48,7 +48,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         Button btnDeleteSeed = (Button) findViewById(R.id.button_delete_seed);
         seedTv = (AutoCompleteTextView) findViewById(R.id.autoCompleteSeed);
         seedTv.setSingleLine(true);
-        seedTv.setCompletionHint("\tTap to select Word");
+        seedTv.setCompletionHint(getString(R.string.tap_to_select));
         btnConfirmSeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +61,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
                                 .putExtra("seed",seed);
                         startActivity(i);
                     }else{
-                        Toast.makeText(ConfirmSeedActivity.this, "You entered an incorrect seed, Please confirm your seed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ConfirmSeedActivity.this, R.string.incorrect_seed_input, Toast.LENGTH_LONG).show();
                     }
                 }else{
                     System.out.println("Verifying: "+enteredSeed);
@@ -147,7 +147,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
                     android.R.layout.simple_dropdown_item_1line, list);
             seedTv.setAdapter(adapter);
         }else{
-            Toast.makeText(this, "Error occurred, Bundle is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_bundle_null, Toast.LENGTH_SHORT).show();
         }
     }
 

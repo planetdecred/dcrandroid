@@ -50,7 +50,7 @@ public class SaveSeedActivity extends AppCompatActivity {
                             .putExtra("restore", false);
                     startActivity(i);
                 }else{
-                    Toast.makeText(SaveSeedActivity.this, "Error occurred, Seed was not generated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SaveSeedActivity.this, R.string.error_seed_not_generated, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -60,7 +60,7 @@ public class SaveSeedActivity extends AppCompatActivity {
         try {
             DcrResponse response = DcrResponse.parse(responseJson);
             if(response.errorOccurred){
-                Toast.makeText(this, "Error Occurred: "+response.content, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.error_occurred)+response.content, Toast.LENGTH_LONG).show();
             }else{
                 seed = response.content.trim();
                 saveSeedTextView.setText(seed);

@@ -44,14 +44,14 @@ public class EncryptWallet extends AppCompatActivity{
             public void onClick(View view) {
                 String pass = passPhrase.getText().toString();
                 if(pass.equals("")){
-                    Toast.makeText(EncryptWallet.this, "Enter a passphrase", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EncryptWallet.this, R.string.enter_a_passphrase, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(pass.equals(verifyPassPhrase.getText().toString())){
                     ProgressDialog pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"Creating Wallet...");
                     new EncryptBackgroundWorker(pd,EncryptWallet.this).execute(pass, seed);
                 }else{
-                    Toast.makeText(EncryptWallet.this,"Passwords do not match",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EncryptWallet.this, R.string.password_not_match,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -66,7 +66,7 @@ public class EncryptWallet extends AppCompatActivity{
                 //Finish all the activities before this
                 ActivityCompat.finishAffinity(this);
             }else{
-                Toast.makeText(this,"Error occurred while creating wallet",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_occured_creating_wallet,Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

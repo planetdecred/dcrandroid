@@ -38,7 +38,7 @@ public class GetPeersActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_peers_page);
-        setTitle("Peers");
+        setTitle(getString(R.string.peers));
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.get_peers_recycler_view);
         peerAdapter = new PeerAdapter(peerList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -93,7 +93,7 @@ public class GetPeersActivity extends AppCompatActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(GetPeersActivity.this,"No Peer Found",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GetPeersActivity.this, R.string.no_peer_found,Toast.LENGTH_SHORT).show();
                                 if(pd.isShowing()){
                                     pd.dismiss();
                                 }
@@ -144,7 +144,7 @@ public class GetPeersActivity extends AppCompatActivity{
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(GetPeersActivity.this,"Error: "+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetPeersActivity.this,getString(R.string.error)+e.getMessage(),Toast.LENGTH_SHORT).show();
                             if(pd.isShowing()){
                                 pd.dismiss();
                             }

@@ -66,6 +66,7 @@
         <activity android:name=".Activities.GetPeersActivity" />
         <activity android:name=".Activities.PeersDetailsActivity" />
         <activity android:name=".Activities.TransactionDetailsActivity" />
+        <activity android:name=".Activities.WebviewActivity" />
 
     </application>
 

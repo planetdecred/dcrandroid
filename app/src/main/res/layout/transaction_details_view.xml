@@ -26,7 +26,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="Transaction"
+                android:text="@string/transaction"
                 android:textColor="@color/secondary_text"
                 android:textSize="16sp" />
             <View
@@ -37,28 +37,14 @@
                 android:background="@color/primary_text" />
 
             <TextView
-                android:id="@+id/tx_label_amount"
+                android:id="@+id/tx_dts_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:layout_centerInParent="true"
                 android:layout_below="@+id/separator123"
                 android:padding="8dp"
-                android:text="Amount"
-                android:textColor="@color/secondary_text" />
-
-            <TextView
-                android:id="@+id/tx_dts_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:layout_toEndOf="@+id/tx_label_amount"
-                android:layout_toRightOf="@+id/tx_label_amount"
-                android:layout_below="@+id/separator123"
-                android:padding="8dp"
-                android:text="87.9934232 DCR"
+                android:text="@string/_0_00_dcr"
                 android:textColor="@color/primary_text" />
 
             <View
@@ -66,51 +52,23 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
 
-                android:layout_below="@+id/tx_label_amount"
+                android:layout_below="@+id/tx_dts_value"
                 android:background="@color/primary_text" />
 
-            <TextView
-                android:id="@+id/label_spendable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator12"
-                android:text="Account"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
 
-            <TextView
-                android:id="@+id/tx_dts_acc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator12"
-                android:layout_toRightOf="@+id/label_spendable"
-                android:layout_toEndOf="@+id/label_spendable"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:padding="8dp"
-                android:text="default"
-                android:textColor="@color/primary_text" />
-
-            <View
-                android:id="@+id/separator20"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_spendable"
-                android:background="@color/primary_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/status_tx_cont"
-                android:layout_below="@+id/separator20">
+                android:layout_below="@+id/separator12">
             <TextView
                 android:id="@+id/label_status"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Status"
+                android:text="@string/status"
                 android:layout_weight="2"
                 android:textColor="@color/secondary_text" />
 
@@ -121,7 +79,7 @@
                 android:gravity="center"
                 android:padding="2dp"
                 android:layout_gravity="center"
-                android:text="confirmed"
+                android:text="@string/confirmed"
                 android:background="@drawable/tx_status_confirmed"
                 android:textColor="@color/color_confirmed_tx"/>
             </LinearLayout>
@@ -133,16 +91,16 @@
                 android:layout_below="@+id/status_tx_cont"
                 android:background="@color/primary_text" />
             <TextView
-                android:id="@+id/label_tx_type"
+                android:id="@+id/label_confirmation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator13"
                 android:padding="8dp"
-                android:text="Transaction Type"
+                android:text="@string/confirmations"
                 android:textColor="@color/secondary_text" />
 
             <TextView
-                android:id="@+id/tx_type"
+                android:id="@+id/confirmations"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -156,7 +114,7 @@
                 android:id="@+id/separator21"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:layout_below="@+id/label_tx_type"
+                android:layout_below="@+id/label_confirmation"
                 android:background="@color/primary_text" />
 
             <TextView
@@ -164,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator21"
-                android:text="Date"
+                android:text="@string/date"
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
@@ -176,7 +134,6 @@
                 android:layout_toEndOf="@+id/label_date"
                 android:layout_toRightOf="@+id/label_date"
                 android:gravity="end"
-                android:text="jan 1 2018,19:12:23"
                 android:padding="8dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -191,7 +148,7 @@
                 android:id="@+id/label_tx_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transaction fee"
+                android:text="@string/transaction_fee"
                 android:padding="8dp"
                 android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
@@ -205,7 +162,7 @@
                 android:layout_below="@+id/tx_date"
                 android:gravity="end"
                 android:padding="8dp"
-                android:text="0.3450000 DCR"
+                android:text="@string/_0_00_dcr"
                 android:textColor="@color/primary_text"
                  />
             <View
@@ -213,6 +170,45 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/tx_fee"
+                android:background="@color/primary_text"/>
+            <TextView
+                android:id="@+id/label_tx_hash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/separator1235"
+                android:text="@string/txhash"
+                android:padding="8dp"
+
+                />
+            <TextView
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/tx_hash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/label_tx_hash"
+                android:layout_toRightOf="@+id/label_tx_hash"
+                android:maxEms="37"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:layout_below="@id/separator1235"
+                />
+            <TextView
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/tx_view_on_dcrdata"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view_on_dcrdata"
+                android:textColor="@color/buttonColor"
+                android:layout_below="@id/tx_hash"
+                />
+            <View
+                android:id="@+id/separator12355"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/tx_view_on_dcrdata"
                 android:background="@color/primary_text"/>
         </RelativeLayout>
         <LinearLayout

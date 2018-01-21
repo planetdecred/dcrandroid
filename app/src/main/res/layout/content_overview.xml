@@ -29,7 +29,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:gravity="bottom"
-                    android:text="AVAILABLE BALANCE"
+                    android:text="@string/available_balance"
                     android:textColor="@color/Amount1Text" />
             </LinearLayout>
 
@@ -56,7 +56,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.8"
                     android:background="@drawable/btn_shape"
-                    android:text="Rescan Block"
+                    android:text="@string/rescan_block"
                     android:textAllCaps="false"
                     android:textColor="#fff" />
             </LinearLayout>
@@ -74,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recent Transactions"/>
+                android:text="@string/recent_transactions"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/history_recycler_view2"
