@@ -107,7 +107,7 @@
     <string name="syncode">Syncode</string>
     <string name="loading">LOADING</string>
     <string name="transaction">Transaction</string>
-    <string name="confirmations">Confirmations</string>
+    <string name="TxType">TxType</string>
     <string name="status">Status</string>
     <string name="date">Date</string>
     <string name="transaction_fee">Transaction fee</string>
@@ -179,4 +179,5 @@
     <string name="invalid_amount">Invalid amount</string>
     <string name="view_on_dcrdata">view on dcrdata</string>
     <string name="tx_hash_copy">Hash copied</string>
+    <string name="confirmations">Confirmation</string>
 </resources>
