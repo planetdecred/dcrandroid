@@ -23,24 +23,39 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/account_row_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAllCaps="false"
                 android:gravity="end"
-                android:textColor="@color/colorText"
+                android:textColor="@color/Amount1Text"
                 android:textSize="16sp"
+                android:text="33.33"
                 />
-            <TextView
-                android:id="@+id/account_row_spendable"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
                 android:gravity="end"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="12sp"
+                    android:textColor="#333333"
+                    android:textAllCaps="false"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_spendable"
+                    />
+                <com.decrediton.view.CurrencyTextView
+                    android:id="@+id/account_row_spendable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="22.33"
+                    android:textColor="@color/Amount1Text"
+                    android:textSize="12sp"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 

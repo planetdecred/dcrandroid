@@ -217,8 +217,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 setText(getString(R.string.opening_wallet));
                 final String json = Dcrwallet.openWallet();
                 System.out.println("Blocks");
-                setText(getString(R.string.subscribe_to_block_notification));
-                Dcrwallet.subscibeToBlockNotifications();
+                //setText(getString(R.string.subscribe_to_block_notification));
+                //Dcrwallet.subscibeToBlockNotifications();
                 PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
                 if(!util.get("discover_address").equals("true")) {
                     setText(getString(R.string.discovering_address));
