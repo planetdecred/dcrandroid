@@ -60,7 +60,8 @@ public class HistoryFragment extends Fragment{
                 i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
                 System.out.println("TxType: "+history.getType());
-                i.putExtra("TxConfirmation",history.getType());
+                i.putExtra("TxType",history.getType());
+                i.putExtra("TXConfirmation",history.getConfirmations());
                 i.putExtra("TxStatus",history.getTxStatus());
                 i.putExtra("Hash", history.getHash());
                 i.putStringArrayListExtra("UsedInput",history.getUsedInput());
@@ -109,6 +110,7 @@ public class HistoryFragment extends Fragment{
                         transaction.setTransactionFee(String.format(Locale.getDefault(), "%.8f", item.fee));
                         transaction.setType(item.type);
                         transaction.setHash(item.hash);
+                      //  transaction.setConfirmations(item.confirmations);
                         transaction.setAmount(String.format(Locale.getDefault(), "%.8f", item.amount));
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();

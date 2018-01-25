@@ -60,7 +60,7 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/separator13"
+                android:id="@+id/separator1399"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/status_tx_cont"
@@ -69,17 +69,46 @@
                 android:id="@+id/label_confirmation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separator13"
+                android:layout_below="@+id/separator1399"
                 android:padding="8dp"
                 android:text="@string/confirmations"
                 android:textColor="@color/secondary_text" />
 
             <TextView
-                android:id="@+id/confirmations"
+                android:id="@+id/tx_dts_confirmation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_below="@+id/separator1399"
+                android:layout_toRightOf="@id/label_confirmation"
+                android:layout_toEndOf="@id/label_confirmation"
+                android:gravity="end"
+                android:padding="8dp"
+                android:textColor="@color/primary_text" />
+            <View
+                android:id="@+id/separator13"
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/label_confirmation"
+                android:background="@color/primary_text" />
+            <TextView
+                android:id="@+id/label_txtype"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator13"
+                android:padding="8dp"
+                android:text="@string/TxType"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/txtype"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_toEndOf="@+id/label_txtype"
+                android:layout_toRightOf="@+id/label_txtype"
                 android:layout_below="@+id/separator13"
                 android:gravity="end"
                 android:padding="8dp"
@@ -89,7 +118,7 @@
                 android:id="@+id/separator21"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:layout_below="@+id/label_confirmation"
+                android:layout_below="@+id/label_txtype"
                 android:background="@color/primary_text" />
 
             <TextView
