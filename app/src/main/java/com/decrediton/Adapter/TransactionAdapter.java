@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.decrediton.R;
 import com.decrediton.data.Transaction;
+import com.decrediton.view.CurrencyTextView;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private LayoutInflater layoutInflater;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView Amount;
+        private CurrencyTextView Amount;
         private TextView txDate;
         private TextView txType;
         private TextView status;
@@ -55,14 +56,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         if(Double.parseDouble(history.getTransactionFee())>0){
            String temp ="- "+history.getTransactionFee() + " DCR";
-            holder.Amount.setText(temp);
+            holder.Amount.formatAndSetText(temp);
 
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
         }
         else {
             String temp = history.getAmount() + " DCR";
-            holder.Amount.setText(temp);
+            holder.Amount.formatAndSetText(temp);
 
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");

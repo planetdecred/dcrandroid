@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.decrediton.data.Account;
 import com.decrediton.R;
+import com.decrediton.view.CurrencyTextView;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     private Context context;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView accountName;
-        public TextView total;
-        public TextView spendable;
+        public CurrencyTextView total;
+        public CurrencyTextView spendable;
 
         public MyViewHolder(View view) {
             super(view);
@@ -48,11 +49,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Account account = accountList.get(position);
-        String temp =context.getString(R.string.label_spendable)+" "+account.getSpendable()+" "+context.getString(R.string.dcr);
+        String temp = account.getSpendable()+" "+context.getString(R.string.dcr);
         String temp2 = account.getTotal()+" "+context.getString(R.string.dcr);
         holder.accountName.setText(account.getAccountName());
-        holder.spendable.setText(temp);
-        holder.total.setText(temp2);
+        holder.spendable.formatAndSetText(temp);
+        holder.total.formatAndSetText(temp2);
     }
 
     @Override

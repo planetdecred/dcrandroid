@@ -15,7 +15,7 @@
             android:layout_marginRight="5dp"
             android:padding="8dp">
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/tx_dts_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                 android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/tx_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:gravity="end"
+                android:gravity="start|left"
                 android:padding="8dp"
                 android:textColor="@color/primary_text"
                 android:layout_below="@id/label_tx_hash"

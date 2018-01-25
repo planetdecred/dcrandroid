@@ -14,7 +14,7 @@ public class AccountResponse {
     public String errorMessage, currentBlockHash;
     public int count, errorCode, currentBlockHeight;
     public ArrayList<AccountItem> items = new ArrayList<>();
-    public final static float SATOSHI = (float) 100000000.0;
+    public final static float SATOSHI = 100000000;
     private AccountResponse(){}
     public static AccountResponse parse(String json) throws JSONException {
         System.out.println("Account JSON: "+json);

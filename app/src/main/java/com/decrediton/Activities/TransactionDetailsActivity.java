@@ -3,6 +3,7 @@ package com.decrediton.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -14,11 +15,15 @@ import android.widget.Toast;
 import com.decrediton.Adapter.ExpandableListViewAdapter;
 import com.decrediton.R;
 import com.decrediton.Util.AccountResponse;
+import com.decrediton.data.Account;
+import com.decrediton.view.CurrencyTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
@@ -48,20 +53,23 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         expandableListView.setAdapter(expandableListViewAdapter);
 
-        TextView value = findViewById(R.id.tx_dts_value);
+        CurrencyTextView value = findViewById(R.id.tx_dts_value);
         TextView date = findViewById(R.id.tx_date);
         TextView status = findViewById(R.id.tx_dts__status);
         TextView confirmation = findViewById(R.id.confirmations);
-        TextView transactionFee = findViewById(R.id.tx_fee);
+        CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
         txHash.setText(getIntent().getStringExtra("Hash"));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), WebviewActivity.class);
-                i.putExtra("TxHash","http://www.google.com");
-                startActivity(i);
+                String url = "https://explorer.dcrdata.org/tx/"+txHash.getText().toString();
+                if(Dcrwallet.isTestNet()){
+                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
+                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
             }
         });
         txHash.setOnClickListener(new View.OnClickListener() {
@@ -72,15 +80,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
         if(Double.parseDouble(getIntent().getStringExtra("Fee")) > 0){
-            String temp = "- "+getIntent().getStringExtra("Fee") +getString(R.string.dcr);
-            value.setText(temp);
-            transactionFee.setText(temp);
+            String temp = "- "+getIntent().getStringExtra("Fee") +" "+getString(R.string.dcr);
+            value.formatAndSetText(temp);
+            transactionFee.formatAndSetText(temp);
         }
         else{
-            String temp = getIntent().getStringExtra("Amount")+ getString(R.string.dcr);
-            value.setText(temp);
-            temp = String.format(Locale.getDefault(),"%f DCR", 0/ AccountResponse.SATOSHI);
-            transactionFee.setText(temp);
+            String temp = getIntent().getStringExtra("Amount")+" "+ getString(R.string.dcr);
+            value.formatAndSetText(temp);
+            temp = String.format(Locale.getDefault(),"%.8f DCR", 0.0);
+            transactionFee.formatAndSetText(temp);
         }
         date.setText(getIntent().getStringExtra("TxDate"));
         status.setText(getIntent().getStringExtra("TxStatus"));
@@ -106,8 +114,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         childContent.put(parentHeaderInformation.get(0), usedInput);
         childContent.put(parentHeaderInformation.get(1), output);
         return childContent;
-
     }
+
     public void copyToClipboard(String copyText) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {

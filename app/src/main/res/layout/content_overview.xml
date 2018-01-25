@@ -40,13 +40,13 @@
                 android:layout_weight="1"
                 >
 
-                <TextView
+                <com.decrediton.view.CurrencyTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:id="@+id/overview_av_balance"
-                    android:textColor="@color/Amount2Text"
+                    android:textColor="@color/Amount1Text"
                     android:textSize="20sp" />
 
                 <Button
