@@ -200,18 +200,6 @@
                 android:gravity="end"
                 android:padding="8dp"
                 android:textColor="@color/primary_text" />
-
-            <TextView
-                android:id="@+id/acc_dts_keys"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/acc_dts_locked_bt_tcks"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@+id/acc_dts_locked_bt_tcks"
-                android:layout_marginTop="119dp"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -305,5 +293,17 @@
                 android:text="@string/labelkeys"
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
+            <TextView
+                android:id="@+id/acc_dts_keys"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separators12s"
+                android:layout_toRightOf="@+id/label_key"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_toEndOf="@+id/label_key"
+                android:gravity="end"
+                android:padding="8dp"
+                android:textColor="@color/primary_text" />
         </RelativeLayout>
 </LinearLayout>
