@@ -2,6 +2,7 @@ package com.decrediton.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -352,11 +354,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
         dialogBuilder.setMessage(getString(R.string.transaction_confirmation)+String.format(Locale.getDefault()," %.8f DCR", amt/1e8));
         dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+            public void onClick(DialogInterface dialog, int whichButton) 
                 String pass = passphrase.getText().toString();
                 if(pass.length() > 0){
                     startTransaction(pass, destAddress, amt);
                 }
+                //showTxConfirmDialog();
             }
         });
 
@@ -368,5 +371,58 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         AlertDialog b = dialogBuilder.create();
         b.show();
         b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+    }
+    public void showTxConfirmDialog() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.tx_confrimation_display, null);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setView(dialogView);
+
+        final TextView txHash = (TextView) dialogView.findViewById(R.id.tx_hash_confirm_view);
+        final TextView viewDredata = (TextView) dialogView.findViewById(R.id.view_n_dcrdata);
+        viewDredata.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), WebviewActivity.class);
+                i.putExtra("TxHash","http://www.google.com");
+                startActivity(i);
+            }
+        });
+        txHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyToClipboard(txHash.getText().toString());
+            }
+        });
+
+        dialogBuilder.setMessage(R.string.transaction_confirmation);
+        dialogBuilder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialogBuilder.setCancelable(true);
+                //do something with edt.getText().toString();
+            }
+        });
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+        b.getButton(b.BUTTON_NEUTRAL).setTextColor(Color.BLUE);
+    }
+    public void copyToClipboard(String copyText) {
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(copyText);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
+                    getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData
+                    .newPlainText(getString(R.string.your_address), copyText);
+            clipboard.setPrimaryClip(clip);
+        }
+        Toast toast = Toast.makeText(getContext(),
+                R.string.tx_hash_copy, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM | Gravity.RIGHT, 50, 50);
+        toast.show();
     }
 }
