@@ -1,13 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgcolor">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="2.1"
+        android:background="#fff"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@color/backgcolorwhite">
     <TextView
         android:layout_width="match_parent"
@@ -28,8 +32,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="2.5">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -49,14 +53,14 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/background_shadow">
 
-    <Spinner
-        android:id="@+id/recieve_dropdown"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:tag="@string/account"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16sp"
-        >
+        <Spinner
+            android:id="@+id/recieve_dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="@string/account"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16sp"
+            >
     </Spinner>
     </LinearLayout>
         <TextView
@@ -71,9 +75,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="2dp"
-        android:layout_weight="0.8"
+
         android:background="@color/backgcolorwhite"
         android:orientation="vertical">
     <ImageView
@@ -105,11 +109,16 @@
             android:text="@string/generate_new_address"
             android:background="@drawable/btn_shape"
             android:textColor="@color/buttonText"
-            android:padding="8dp"
-            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:paddingEnd="8dp"
+            android:paddingRight="8dp"
+            android:visibility="visible"
             android:layout_gravity="center"
             android:textAllCaps="false"
             android:clickable="true"
             android:focusable="true" />
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

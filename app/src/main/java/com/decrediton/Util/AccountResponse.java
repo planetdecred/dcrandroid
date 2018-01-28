@@ -17,7 +17,7 @@ public class AccountResponse {
     public final static float SATOSHI = 100000000;
     private AccountResponse(){}
     public static AccountResponse parse(String json) throws JSONException {
-        System.out.println("Account JSON: "+json);
+        //System.out.println("Account JSON: "+json);
         AccountResponse response = new AccountResponse();
         JSONObject obj = new JSONObject(json);
         response.errorOccurred = obj.getBoolean("ErrorOccurred");
@@ -40,7 +40,7 @@ public class AccountResponse {
                         importedKeyCount = account.getInt("Imported_key_count");
                         JSONObject balanceObj = account.getJSONObject("Balance");
                         balance = new Balance();
-                        System.out.println("Total: "+balanceObj.getLong("Total")+" Satoshi "+balanceObj.getLong("Total")/100000000.0);
+          //              System.out.println("Total: "+balanceObj.getLong("Total")+" Satoshi "+balanceObj.getLong("Total")/100000000.0);
                         balance.total = balanceObj.getLong("Total")/SATOSHI;
                         balance.spendable = balanceObj.getLong("Spendable")/SATOSHI;
                         balance.immatureReward = balanceObj.getLong("ImmatureReward")/SATOSHI;

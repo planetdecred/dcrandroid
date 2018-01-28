@@ -48,8 +48,6 @@ public class TransactionsResponse {
                 TransactionItem transaction = new TransactionItem();
                 transaction.fee = (float) tx.getDouble("Fee") / AccountResponse.SATOSHI;
                 transaction.hash = tx.getString("Hash");
-                System.out.println("Response Hash: "+tx.getString("Hash"));
-                //System.out.println("Hash: "+tx.getString("Hash"));
                 transaction.timestamp = tx.getLong("Timestamp");
                 transaction.tx = null;
                 transaction.status = tx.getString("Status");

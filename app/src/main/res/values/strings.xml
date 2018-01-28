@@ -66,7 +66,7 @@
     <string name="available_balance">AVAILABLE BALANCE</string>
     <string name="rescan_block">Rescan Block</string>
     <string name="recent_transactions">Recent Transactions</string>
-    <string name="receive_fund_privacy_info">Each time you request a payment,a new transactionFee is created to protect your privacy</string>
+    <string name="receive_fund_privacy_info">Each time you request a payment,a new address is created to protect your privacy</string>
     <string name="account">Account</string>
     <string name="receive_funds">Receive Funds</string>
     <string name="generate_new_address">Generate New Address</string>

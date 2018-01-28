@@ -107,7 +107,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     amnt = "0";
                 }
                 final String destAddress = address.getText().toString();
-                final long amt = (Long.parseLong(amnt) * (long) 1e8);
+                final long amt = Math.round(Double.parseDouble(amnt) * 1e8);
                 if(destAddress.equals("")){
                     Toast.makeText(getContext(), "Destination Address cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -118,40 +118,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     Toast.makeText(getContext(), "Amount is not valid", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                send.setEnabled(false);
-                showInputPassPhraseDialog(amt);
-                new Thread(){
-                    public void run(){
-                        try {
-                            System.out.println("Amount: "+amt);
-                            final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                            byte[] tx = Dcrwallet.signTransaction(response.getUnsignedTransaction(),"c");
-                            byte[] serializedTx = Dcrwallet.publishTransaction(tx);
-                            List<Byte> hashList = new ArrayList<>();
-                            for (byte aSerializedTx : serializedTx) {
-                                hashList.add(aSerializedTx);
-                            }
-                            Collections.reverse(hashList);
-                            StringBuilder sb = new StringBuilder();
-                            for(byte b : hashList){
-                                sb.append(String.format(Locale.getDefault(),"%02x", b));
-                            }
-                            System.out.println("Hash: "+sb.toString());
-                            String string = Dcrwallet.runDcrCommands("gettransaction "+sb.toString());
-                            System.out.println("Transaction: "+string);
-                            //String hash = Dcrwallet.decodeRawTransaction(serializedTx);
-                            //System.out.println("Hash: "+hash);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    send.setEnabled(true);
-                                }
-                            });
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
+                showInputPassPhraseDialog(destAddress, amt);
             }
         });
         sendAll.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +133,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
+                                    amount.setText(String.format(Locale.getDefault(),"%.8f",balance.getSpendable()/ AccountResponse.SATOSHI));
                                     if(pd.isShowing()){
                                         pd.dismiss();
                                     }
@@ -205,7 +172,13 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             amnt = "0";
         }
         final String destAddress = address.getText().toString();
-        final long amt = (Long.parseLong(amnt) * (long) 1e8);
+        final double amt;
+        try {
+            amt = (Double.parseDouble(amnt) * 1e8);
+        }catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
         if(destAddress.equals("")){
             return;
         }else if(!validateAddress(destAddress)){
@@ -219,13 +192,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try{
-                    System.out.println("Amount: "+amt);
-                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
-                            System.out.println("Fee: "+(response.getEstimatedSignedSize() / 0.001));
                             double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
                             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
                             totalAmountSending.setText(String.format(Locale.getDefault(),"%.8f DCR", totalAmount));
@@ -288,8 +259,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     }
 
     private void prepareAccounts(){
-        pd = Utils.getProgressDialog(SendFragment.this.getContext(), false,false,"Getting Accounts...");
-        pd.show();
+//        pd = Utils.getProgressDialog(SendFragment.this.getContext(), false,false,"Getting Accounts...");
+//        pd.show();
         new Thread(){
             public void run(){
                 try{
@@ -298,9 +269,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(pd.isShowing()){
-                                    pd.dismiss();
-                                }
+//                                if(pd.isShowing()){
+//                                    pd.dismiss();
+//                                }
                                 Toast.makeText(SendFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -312,15 +283,15 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         if(response.items.get(i).name.trim().equals("imported")){
                             continue;
                         }
-                        categories.add(i, response.items.get(i).name);
+                        categories.add(i, response.items.get(i).name + String.format(Locale.getDefault(), " [%.8f]",response.items.get(i).balance.spendable));
                         accountNumbers.add(response.items.get(i).number);
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(pd.isShowing()){
-                                pd.dismiss();
-                            }
+//                            if(pd.isShowing()){
+//                                pd.dismiss();
+//                            }
                             dataAdapter.notifyDataSetChanged();
                             //Default Account
                             //getTransactionFee(0);
@@ -338,7 +309,39 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
     }
 
-    public void showInputPassPhraseDialog(float amt) {
+    public void startTransaction(final String passphrase, final String destAddress,final long amt){
+        new Thread(){
+            public void run(){
+                try {
+                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    byte[] tx = Dcrwallet.signTransaction(response.getUnsignedTransaction(),passphrase);
+                    byte[] serializedTx = Dcrwallet.publishTransaction(tx);
+                    List<Byte> hashList = new ArrayList<>();
+                    for (byte aSerializedTx : serializedTx) {
+                        hashList.add(aSerializedTx);
+                    }
+                    Collections.reverse(hashList);
+                    StringBuilder sb = new StringBuilder();
+                    for(byte b : hashList){
+                        sb.append(String.format(Locale.getDefault(),"%02x", b));
+                    }
+                    System.out.println("Hash: "+sb.toString());
+//                            String string = Dcrwallet.runDcrCommands("gettransaction "+sb.toString());
+//                            System.out.println("Transaction: "+string);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            send.setEnabled(true);
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    public void showInputPassPhraseDialog(final String destAddress, final long amt) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.input_passphrase_box, null);
@@ -347,12 +350,13 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
         final EditText passphrase = (EditText) dialogView.findViewById(R.id.passphrase_input);
 
-        dialogBuilder.setMessage(getString(R.string.transaction_confirmation)+String.format(Locale.getDefault(),"%.8f DCR", amt/1e8));
+        dialogBuilder.setMessage(getString(R.string.transaction_confirmation)+String.format(Locale.getDefault()," %.8f DCR", amt/1e8));
         dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                passphrase.getText().toString();
-
-                //do something with edt.getText().toString();
+                String pass = passphrase.getText().toString();
+                if(pass.length() > 0){
+                    startTransaction(pass, destAddress, amt);
+                }
             }
         });
 
