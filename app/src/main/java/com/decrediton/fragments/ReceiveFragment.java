@@ -21,6 +21,7 @@ import com.decrediton.R;
 import com.decrediton.Util.AccountResponse;
 import com.decrediton.Util.DcrResponse;
 import com.decrediton.Util.EncodeQrCode;
+import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.Util.Utils;
 
 import org.json.JSONException;
@@ -41,11 +42,13 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     ProgressDialog pd;
     ArrayAdapter dataAdapter;
     List<String> categories;
+    PreferenceUtil preferenceUtil;
     List<Integer> accountNumbers = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
+        preferenceUtil = new PreferenceUtil(getContext());
         //change R.layout.yourlayoutfilename for each of your fragments
         return inflater.inflate(R.layout.content_receive, container, false);
     }
@@ -56,7 +59,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         imageView = view.findViewById(R.id.bitm);
         address = view.findViewById(R.id.barcode_address);
         Button buttonGenerate = view.findViewById(R.id.btn_gen_new_addr);
-        Spinner accountSpinner = view.findViewById(R.id.recieve_dropdown);
+        final Spinner accountSpinner = view.findViewById(R.id.recieve_dropdown);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         categories = new ArrayList<>();
@@ -69,6 +72,12 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             @Override
             public void onClick(View view) {
                 copyToClipboard(address.getText().toString());
+            }
+        });
+        buttonGenerate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getAddress(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
             }
         });
         //you can set the title for your toolbar here for different fragments different titles
@@ -95,8 +104,8 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void prepareAccounts(){
-        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
-        pd.show();
+        //pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
+        //pd.show();
         new Thread(){
             public void run(){
                 try{
@@ -105,9 +114,9 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(pd.isShowing()){
-                                    pd.dismiss();
-                                }
+//                                if(pd.isShowing()){
+//                                    pd.dismiss();
+//                                }
                                 Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -125,9 +134,9 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(pd.isShowing()){
-                                pd.dismiss();
-                            }
+//                            if(pd.isShowing()){
+//                                pd.dismiss();
+//                            }
                             dataAdapter.notifyDataSetChanged();
                             //Default Account
                             //getTransactionFee(0);
@@ -141,8 +150,8 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void getAddress(final int accountNumber){
-        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_address));
-        pd.show();
+//        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_address));
+//        pd.show();
         new Thread(){
             public void run(){
                 try {
@@ -157,9 +166,9 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                                 address.setText(newAddress);
                                 imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
                             }
-                            if(pd.isShowing()){
-                                pd.dismiss();
-                            }
+//                            if(pd.isShowing()){
+//                                pd.dismiss();
+//                            }
                         }
                     });
                 } catch (Exception e) {

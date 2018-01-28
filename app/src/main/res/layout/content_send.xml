@@ -2,14 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     >
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/background_shadow">
+        android:background="#fff">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +53,6 @@
                     android:id="@+id/send_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                      >
                 </Spinner>
             </LinearLayout>
@@ -65,7 +62,6 @@
                 android:padding="5dp"
                 android:layout_weight="4"
                 android:background="@color/backgcolorwhite"
-
                 />
         </LinearLayout>
 

@@ -38,8 +38,6 @@ import dcrwallet.Dcrwallet;
 public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
     Animation animRotate;
     ImageView imgAnim;
-    // Splash screen timer
-    private static int SPLASH_TIME_OUT = 5000;
     private void startServer(){
         new Thread(){
             public void run(){
@@ -47,9 +45,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     this.setPriority(MAX_PRIORITY);
                     writeDcrwalletFiles();
                     writeDcrdFiles();
-                    System.out.println("Dcrwallet starting");
                     Dcrwallet.main();
-                    System.out.println("Dcrwallet started");
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -58,7 +54,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     public void writeDcrwalletFiles() throws Exception{
-        System.out.println("Wallet Home Dir: "+ Dcrwallet.getHomeDir());
         File path = new File(Dcrwallet.getHomeDir()+"/");
         path.mkdirs();
         String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
@@ -66,9 +61,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             if (!file.exists()) {
-                System.out.println("File: "+file.getAbsolutePath());
                 file.createNewFile();
-                System.out.println("Writing file "+file.getAbsolutePath());
                 FileOutputStream fout = new FileOutputStream(file);
                 InputStream in = getAssets().open(assetFilesName[i]);
                 int len;
@@ -79,7 +72,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 }
                 fout.flush();
                 fout.close();
-                System.out.println("Written file "+file.getAbsolutePath());
             }
         }
     }
@@ -95,7 +87,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             File file = new File(path, files[i]);
             if (!file.exists() || true) {
                 file.createNewFile();
-                System.out.println("Writing file "+file.getAbsolutePath());
                 FileOutputStream fout = new FileOutputStream(file);
                 InputStream in = getAssets().open(assetFilesName[i]);
                 int len;
@@ -106,7 +97,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 }
                 fout.flush();
                 fout.close();
-                System.out.println("Written file "+file.getAbsolutePath());
             }
         }
     }
@@ -217,8 +207,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 setText(getString(R.string.opening_wallet));
                 final String json = Dcrwallet.openWallet();
                 System.out.println("Blocks");
-                //setText(getString(R.string.subscribe_to_block_notification));
-                //Dcrwallet.subscibeToBlockNotifications();
+                setText(getString(R.string.subscribe_to_block_notification));
+                Dcrwallet.subscibeToBlockNotifications();
                 PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
                 if(!util.get("discover_address").equals("true")) {
                     setText(getString(R.string.discovering_address));
@@ -231,6 +221,12 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     util.set(PreferenceUtil.BLOCK_HEIGHT,String.valueOf(blockHeight));
                 }
                 System.out.println("Finished fetching headers");
+                setText("Publish Unmined Transactions");
+                try {
+                    Dcrwallet.publishUnminedTransactions();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

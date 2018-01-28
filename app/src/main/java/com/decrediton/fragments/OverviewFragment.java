@@ -149,13 +149,13 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
     }
 
     private void prepareHistoryData(){
-        //loadTransactions();
+        loadTransactions();
         new Thread(){
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
                 int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
                 int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
-                String result = Dcrwallet.getTransactions(blockHeight, 1);
+                String result = Dcrwallet.getTransactions(blockHeight, startHeight);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
 
@@ -180,7 +180,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                         ArrayList<String> output = new ArrayList<>();
                         for (int j = 0; j < item.credits.size(); j++) {
                             output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
-                            //System.out.println(credit.address+"\n"+String.format(Locale.getDefault(),"%f",credit.amount));
                         }
                         transaction.setUsedInput(usedInput);
                         transaction.setWalletOutput(output);
@@ -230,7 +229,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 tempTxList = (List<Transaction>) objectInputStream.readObject();
                 transactionList.addAll(tempTxList.subList(0, 7));
                 transactionAdapter.notifyDataSetChanged();
-                System.out.println("Done: "+transactionList.size());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -259,8 +257,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 pd.show();
                 PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
                 int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
-                System.out.println("Rescanned: "+rescanned_through+" Height: "+util.get(PreferenceUtil.BLOCK_HEIGHT)
-                        +" Division: "+rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))+" Percentage: "+percentage);
                 pd.setMessage(getString(R.string.scanning_block)+" "+percentage+"%");
             }
         });
