@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.decrediton.Activities.AddAccountActivity;
+import com.decrediton.Activities.SettingsActivity;
 import com.decrediton.fragments.AccountsFragment;
 import com.decrediton.fragments.HelpFragment;
 import com.decrediton.fragments.HistoryFragment;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
 
         //add this line to display menu1 when the activity is loaded
-        displaySelectedScreen(R.id.nav_overview);
+        displaySelectedScreen(R.id.nav_settings);
     }
 
     @Override
@@ -105,6 +106,11 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if (id == R.id.action_add) {
             Intent intent = new Intent(this, AddAccountActivity.class);
             startActivityForResult(intent,1);
+        }
+        else if(id == R.id.action_settings){
+           Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

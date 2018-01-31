@@ -76,7 +76,6 @@ public class SettingsFragment extends Fragment{
         settingsList.add(settings);
         settings = new Settings(getString(R.string.transaction_confirmations),"0");
         settingsList.add(settings);
-
     }
 
     private void SettingsFunction(Settings settings, int position){
@@ -87,6 +86,8 @@ public class SettingsFragment extends Fragment{
         else if(settings.getSettingName().equals(getString(R.string.transaction_confirmations))){
            showTXConfirmDialog(settings.getRightValue(),position);
         }
+
+
     }
 
     public void showTXConfirmDialog(String righV,final int pos) {

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="General">
+        <EditTextPreference
+            android:defaultValue="@string/default_transaction_confirmation"
+            android:key="@string/key_transaction_confirmation"
+            android:summary="@string/default_transaction_confirmation"
+            android:title="@string/title_transaction_confirmation" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_connection">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/key_connection_local_dcrd"
+            android:title="@string/title_enable_local_dcrd" />
+
+        <EditTextPreference
+            android:key="@string/key_connection_certificate"
+            android:summary="@string/summary_paste_certificate"
+            android:title="@string/pref_title_certificate" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/key_testnet"
+            android:summary="@string/summary_testnet"
+            android:title="@string/title_testnet"
+            android:enabled="false"/>
+        <Preference
+            android:summary="@string/summary_peers"
+            android:title="@string/title_peers"
+            android:key="@string/key_get_peers"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_about">
+
+        <Preference
+            android:summary="@string/app_version"
+            android:title="@string/title_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1.8"
+                    android:layout_weight="1.7"
                     android:background="@drawable/btn_shape"
                     android:text="@string/rescan_block"
                     android:textAllCaps="false"
