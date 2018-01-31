@@ -16,7 +16,21 @@ import dcrwallet.Dcrwallet;
 public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> implements BlockScanResponse{
     private ProgressDialog pd;
     private EncryptWallet context;
-
+    String cert = "-----BEGIN CERTIFICATE-----\n" +
+            "MIICaDCCAcmgAwIBAgIRAN4bL47kMs4/Z6jaHXJV0AgwCgYIKoZIzj0EAwQwNjEg\n" +
+            "MB4GA1UEChMXZGNyZCBhdXRvZ2VuZXJhdGVkIGNlcnQxEjAQBgNVBAMTCWxvY2Fs\n" +
+            "aG9zdDAeFw0xODAxMDMwODExMjNaFw0yODAxMDIwODExMjNaMDYxIDAeBgNVBAoT\n" +
+            "F2RjcmQgYXV0b2dlbmVyYXRlZCBjZXJ0MRIwEAYDVQQDEwlsb2NhbGhvc3QwgZsw\n" +
+            "EAYHKoZIzj0CAQYFK4EEACMDgYYABABDkKzGKGPaTc3JG/TSkYPZsYiTl0qgK323\n" +
+            "YWqs/UqimHPEN96u7ZG8HF7Mrx3YUNtOIS+4ewNwwQvha9/EaoWYcQEpzs6okd0O\n" +
+            "A6kdbaVPyeLBzjcCvIY9wuLOAxBnYi9DoSl6cyJwXPeu2pbYzAYL3d0GFjUOSGlG\n" +
+            "yPXBzskA0HwCC6N1MHMwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8w\n" +
+            "UAYDVR0RBEkwR4IJbG9jYWxob3N0hwR/AAABhxAAAAAAAAAAAAAAAAAAAAABhxD+\n" +
+            "gAAAAAAAAKjZe//+gAW3hxD+gAAAAAAAAFjFg//+fas3MAoGCCqGSM49BAMEA4GM\n" +
+            "ADCBiAJCAROEPRrzAVumn9zRoX+lHQrv1CCrbeJaCHVzxr7g2TqgHdn2UwmC0Jxz\n" +
+            "j+WtcOAQwabqFb5kwZc6+uOfxsINfdC+AkIBcfvF8y8fYDkFCXHTxxnMaxkvJki8\n" +
+            "Y2OFjX9Uxgzn9isY4TeLWo0lfThwU93VtSPC0QLGEjXCG6JU2xpwgxvqGUU=\n" +
+            "-----END CERTIFICATE-----\n";
     public EncryptBackgroundWorker(ProgressDialog pd, EncryptWallet context){
         this.pd = pd;
         this.context = context;
@@ -53,13 +67,10 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
         try {
             publishProgress(0);
             String createResponse =  Dcrwallet.createWallet(params[0], params[1]);
-            String dcrdAddress = "127.0.0.1:9109";
-            if(Dcrwallet.isTestNet()){
-                dcrdAddress = "127.0.0.1:19109";
-            }
+            String dcrdAddress = Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
             publishProgress(3);
             for(;;) {
-                if(Dcrwallet.connectToDcrd(dcrdAddress)){
+                if(Dcrwallet.connectToDcrd(dcrdAddress, cert.getBytes())){
                     break;
                 }
             }

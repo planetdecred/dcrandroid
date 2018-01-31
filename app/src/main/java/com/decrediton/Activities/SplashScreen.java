@@ -1,6 +1,5 @@
 package com.decrediton.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,33 +8,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.decrediton.Util.DcrResponse;
 import com.decrediton.MainActivity;
 import com.decrediton.R;
+import com.decrediton.Util.DcrResponse;
 import com.decrediton.Util.MyCustomTextView;
 import com.decrediton.Util.PreferenceUtil;
-import com.decrediton.Util.Utils;
-import com.decrediton.workers.BackgroundWorker;
 
 import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 
 import dcrwallet.Dcrwallet;
 
 /**
- * Created by Macsleven on 24/12/2017.
+ * Created by Macslevenn on 24/12/2017.
  */
 
 public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
+    String cert = "-----BEGIN CERTIFICATE-----\n" +
+            "MIICaDCCAcmgAwIBAgIRAN4bL47kMs4/Z6jaHXJV0AgwCgYIKoZIzj0EAwQwNjEg\n" +
+            "MB4GA1UEChMXZGNyZCBhdXRvZ2VuZXJhdGVkIGNlcnQxEjAQBgNVBAMTCWxvY2Fs\n" +
+            "aG9zdDAeFw0xODAxMDMwODExMjNaFw0yODAxMDIwODExMjNaMDYxIDAeBgNVBAoT\n" +
+            "F2RjcmQgYXV0b2dlbmVyYXRlZCBjZXJ0MRIwEAYDVQQDEwlsb2NhbGhvc3QwgZsw\n" +
+            "EAYHKoZIzj0CAQYFK4EEACMDgYYABABDkKzGKGPaTc3JG/TSkYPZsYiTl0qgK323\n" +
+            "YWqs/UqimHPEN96u7ZG8HF7Mrx3YUNtOIS+4ewNwwQvha9/EaoWYcQEpzs6okd0O\n" +
+            "A6kdbaVPyeLBzjcCvIY9wuLOAxBnYi9DoSl6cyJwXPeu2pbYzAYL3d0GFjUOSGlG\n" +
+            "yPXBzskA0HwCC6N1MHMwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8w\n" +
+            "UAYDVR0RBEkwR4IJbG9jYWxob3N0hwR/AAABhxAAAAAAAAAAAAAAAAAAAAABhxD+\n" +
+            "gAAAAAAAAKjZe//+gAW3hxD+gAAAAAAAAFjFg//+fas3MAoGCCqGSM49BAMEA4GM\n" +
+            "ADCBiAJCAROEPRrzAVumn9zRoX+lHQrv1CCrbeJaCHVzxr7g2TqgHdn2UwmC0Jxz\n" +
+            "j+WtcOAQwabqFb5kwZc6+uOfxsINfdC+AkIBcfvF8y8fYDkFCXHTxxnMaxkvJki8\n" +
+            "Y2OFjX9Uxgzn9isY4TeLWo0lfThwU93VtSPC0QLGEjXCG6JU2xpwgxvqGUU=\n" +
+            "-----END CERTIFICATE-----\n";
     Animation animRotate;
     ImageView imgAnim;
     private void startServer(){
@@ -81,8 +89,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         //File path = new File("./sdcard/.dcrd");
         path.mkdirs();
         String[] files = {"rpc.key","rpc.cert","dcrd.conf"};
-        //String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
-        String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
+        String[] assetFilesName = {"dcrdrpc.key","dcrdrpc.cert","dcrd.conf"};
+        //String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             if (!file.exists() || true) {
@@ -106,11 +114,11 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         super.onCreate(savedInstanceState);
         startServer();
         setContentView(R.layout.splash_page);
-        imgAnim=(ImageView)findViewById(R.id.splashscreen_icon);
+        imgAnim= findViewById(R.id.splashscreen_icon);
         animRotate= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
         animRotate.setAnimationListener(this);
         imgAnim.startAnimation(animRotate);
-        tvLoading = (MyCustomTextView) findViewById(R.id.loading_status);
+        tvLoading = findViewById(R.id.loading_status);
         String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
         if(Dcrwallet.isTestNet()){
             walletPath = Dcrwallet.getHomeDir()+"/testnet2/wallet.db";
@@ -151,21 +159,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         e.printStackTrace();
                     }
                 }
-//                setText("Waiting for dcrd to come online");
-//                String dcrdAddress = "127.0.0.1:9109";
-//                if(Dcrwallet.isTestNet()){
-//                    dcrdAddress = "127.0.0.1:19109";
-//                }
-//                for(;;) {
-//                    if(Dcrwallet.connectToDcrd(dcrdAddress)){
-//                        break;
-//                    }
-//                    try {
-//                        sleep(1500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
                 Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
                 startActivity(i);
                 finish();
@@ -189,12 +182,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     }
                 }
                 setText(getString(R.string.waiting_for_dcrd));
-                String dcrdAddress = "127.0.0.1:9109";
-                if(Dcrwallet.isTestNet()){
-                    dcrdAddress = "127.0.0.1:19109";
-                }
+                String dcrdAddress = Dcrwallet.isTestNet() ? getString(R.string.dcrd_address_testnet) : getString(R.string.dcrd_address);
                 for(;;) {
-                    if(Dcrwallet.connectToDcrd(dcrdAddress)){
+                    if(Dcrwallet.connectToDcrd(dcrdAddress, cert.getBytes())){
                         break;
                     }
                     try {

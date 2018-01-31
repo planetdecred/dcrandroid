@@ -154,8 +154,8 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
                 int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
-                int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
-                String result = Dcrwallet.getTransactions(blockHeight, startHeight);
+                //int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
+                String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
 
@@ -192,9 +192,16 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                         @Override
                         public void run() {
                             Collections.reverse(temp);
+                            tempTxList.clear();
                             tempTxList.addAll(0, temp);
                             transactionList.clear();
-                            transactionList.addAll(tempTxList.subList(0, 7));
+                            if(tempTxList.size() > 0) {
+                                if (tempTxList.size() > 7) {
+                                    transactionList.addAll(tempTxList.subList(0, 7));
+                                } else {
+                                    transactionList.addAll(tempTxList.subList(0, tempTxList.size() - 1));
+                                }
+                            }
                             transactionAdapter.notifyDataSetChanged();
                             saveTransactions();
                         }
@@ -227,7 +234,14 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
             if(file.exists()){
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 tempTxList = (List<Transaction>) objectInputStream.readObject();
-                transactionList.addAll(tempTxList.subList(0, 7));
+                System.out.println("Temp List size: "+tempTxList.size());
+                if(tempTxList.size() > 0) {
+                    if (tempTxList.size() > 7) {
+                        transactionList.addAll(tempTxList.subList(0, 7));
+                    } else {
+                        transactionList.addAll(tempTxList.subList(0, tempTxList.size() - 1));
+                    }
+                }
                 transactionAdapter.notifyDataSetChanged();
             }
         }catch (Exception e){
@@ -245,6 +259,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 }
                 Toast.makeText(getContext(), height+" "+getString(R.string.blocek_scanned), Toast.LENGTH_SHORT).show();
                 getBalance();
+                prepareHistoryData();
             }
         });
     }
