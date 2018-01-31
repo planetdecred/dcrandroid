@@ -39,7 +39,7 @@ public class GetPeersActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_peers_page);
         setTitle(getString(R.string.peers));
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.get_peers_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.get_peers_recycler_view);
         peerAdapter = new PeerAdapter(peerList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -153,14 +153,6 @@ public class GetPeersActivity extends AppCompatActivity{
                 }
             }
         }.start();
-//        Peers peers= new Peers("1","176.9.89.217:19108","192.108","","","","","","",
-//                "","","","","","","","","",
-//                "");
-//        peerList.add(peers);
-//        peers= new Peers("2","176.9.89.217:19408","192.108","","","","","","",
-//                "","","","","","","","","",
-//                "");
-//        peerList.add(peers);
     }
 
     @Override

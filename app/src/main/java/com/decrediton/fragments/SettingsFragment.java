@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -20,11 +21,14 @@ import android.widget.Toast;
 import com.decrediton.Activities.ConnectionActivity;
 import com.decrediton.Adapter.SettingsAdapter;
 import com.decrediton.R;
+import com.decrediton.Util.PreferenceUtil;
 import com.decrediton.Util.RecyclerTouchListener;
 import com.decrediton.data.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 29/11/2017.
@@ -34,9 +38,15 @@ public class SettingsFragment extends Fragment{
     private List<Settings> settingsList = new ArrayList<>();
     SettingsAdapter settingsAdapter;
     RecyclerView recyclerView;
+    PreferenceUtil util;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(getContext() == null){
+            System.out.println("Context is null");
+            return null;
+        }
+        util = new PreferenceUtil(getContext());
         View rootView = inflater.inflate(R.layout.content_settings, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         recyclerView = rootView.getRootView().findViewById(R.id.settings_recycler_view);
@@ -49,8 +59,7 @@ public class SettingsFragment extends Fragment{
             @Override
             public void onClick(View view, int position) {
                 Settings settings = settingsList.get(position);
-                SettingsFunction(settings,position);
-
+                handleClick(settings,position);
             }
 
             @Override
@@ -66,7 +75,7 @@ public class SettingsFragment extends Fragment{
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle(getString(R.string.settings));
@@ -74,12 +83,12 @@ public class SettingsFragment extends Fragment{
     private void prepareSettingsData(){
         Settings settings= new Settings(getString(R.string.connection));
         settingsList.add(settings);
-        settings = new Settings(getString(R.string.transaction_confirmations),"0");
+        settings = new Settings(getString(R.string.transaction_confirmations),String.valueOf(util.getInt(PreferenceUtil.NO_OF_CONFIRMATIONS)));
         settingsList.add(settings);
 
     }
 
-    private void SettingsFunction(Settings settings, int position){
+    private void handleClick(Settings settings, int position){
         if(settings.getSettingName().equals(getString(R.string.connection))){
             Intent intent = new Intent(getContext(),ConnectionActivity.class);
             startActivity(intent);
@@ -95,19 +104,23 @@ public class SettingsFragment extends Fragment{
         final View dialogView = inflater.inflate(R.layout.input_tx_confirmation, null);
         dialogBuilder.setCancelable(false);
         dialogBuilder.setView(dialogView);
-        final EditText confirm = (EditText) dialogView.findViewById(R.id.tx_confirmation_input);
+        final EditText confirm = dialogView.findViewById(R.id.tx_confirmation_input);
         confirm.setText(righV);
         dialogBuilder.setMessage(R.string.confirmation_set_info);
-        dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                if(confirm.getText().toString().trim().equals("")){
+                    Toast.makeText(getContext(), R.string.invalid_number,Toast.LENGTH_LONG).show();
+                    return;
+                }
                 try{
                    settingsList.get(pos).setRightValue(confirm.getText().toString().trim());
+                   util.setInt(PreferenceUtil.NO_OF_CONFIRMATIONS,Integer.parseInt(confirm.getText().toString().trim()));
                    settingsAdapter.notifyDataSetChanged();
                 }
                 catch (Exception e){
-                    Toast.makeText(getContext(), R.string.invalid_amount,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.invalid_number,Toast.LENGTH_LONG).show();
                 }
-                //do something with edt.getText().toString();
             }
         });
         dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

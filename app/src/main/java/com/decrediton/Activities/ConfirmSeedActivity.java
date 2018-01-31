@@ -3,8 +3,6 @@ package com.decrediton.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,8 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.decrediton.Util.DcrResponse;
 import com.decrediton.R;
+import com.decrediton.Util.DcrResponse;
 import com.decrediton.workers.VerifySeedBackgroundWorker;
 
 import org.json.JSONException;
@@ -43,10 +41,10 @@ public class ConfirmSeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_seed_page);
-        Button buttonSeedClear =(Button)findViewById(R.id.button_clear_seed);
-        Button btnConfirmSeed = (Button) findViewById(R.id.button_confirm_seed);
-        Button btnDeleteSeed = (Button) findViewById(R.id.button_delete_seed);
-        seedTv = (AutoCompleteTextView) findViewById(R.id.autoCompleteSeed);
+        Button buttonSeedClear = findViewById(R.id.button_clear_seed);
+        Button btnConfirmSeed = findViewById(R.id.button_confirm_seed);
+        Button btnDeleteSeed = findViewById(R.id.button_delete_seed);
+        seedTv = findViewById(R.id.autoCompleteSeed);
         seedTv.setSingleLine(true);
         seedTv.setCompletionHint(getString(R.string.tap_to_select));
         btnConfirmSeed.setOnClickListener(new View.OnClickListener() {
@@ -95,12 +93,12 @@ public class ConfirmSeedActivity extends AppCompatActivity {
                 }
             }
         });
-        confirmview =(TextView)findViewById(R.id.seed_display_confirm);
+        confirmview = findViewById(R.id.seed_display_confirm);
         seedTv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String s = (String)adapterView.getItemAtPosition(i);
-                confirmview.append(" "+s);
+                confirmview.setText(String.format("%s %s", confirmview.getText().toString().trim(), s));
                 seedTv.setText("");
             }
         });
@@ -136,14 +134,14 @@ public class ConfirmSeedActivity extends AppCompatActivity {
             seeds = new ArrayList<>();
             String[] seedsArray = seed.split(" ");
             tempSeeds = new HashSet<>(Arrays.asList(seedsArray));
-            List<String> list=  new ArrayList(tempSeeds);
+            List<String> list=  new ArrayList<>(tempSeeds);
             seeds.addAll(Arrays.asList(seedsArray));
             if(restore){
                 Collections.sort(seeds, new SortIgnoreCase());
             }else{
                 Collections.shuffle(seeds);
             }
-            adapter = new ArrayAdapter<String>(this,
+            adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_dropdown_item_1line, list);
             seedTv.setAdapter(adapter);
         }else{

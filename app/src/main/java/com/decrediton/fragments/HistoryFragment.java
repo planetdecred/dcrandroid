@@ -94,7 +94,7 @@ public class HistoryFragment extends Fragment{
                 PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
                 int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
                 int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
-                String result = Dcrwallet.getTransactions(blockHeight, startHeight);
+                String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
 
@@ -133,6 +133,7 @@ public class HistoryFragment extends Fragment{
                         @Override
                         public void run() {
                             Collections.reverse(temp);
+                            transactionList.clear();
                             transactionList.addAll(0,temp);
                             transactionAdapter.notifyDataSetChanged();
                             saveTransactions();

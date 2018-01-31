@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.decrediton.Adapter.ExpandableListViewAdapter;
 import com.decrediton.R;
 import com.decrediton.Util.AccountResponse;
+import com.decrediton.Util.Utils;
 import com.decrediton.data.Account;
 import com.decrediton.view.CurrencyTextView;
 
@@ -74,6 +75,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 startActivity(browserIntent);
             }
         });
+        try {
+            String res = Dcrwallet.decodeRawTransaction(
+                    Utils.getHash(getIntent().getStringExtra("Hash"))
+            );
+//            System.out.println("Decoded Tx: "+res);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         txHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
