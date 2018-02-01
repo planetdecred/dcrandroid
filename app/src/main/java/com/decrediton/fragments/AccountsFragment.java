@@ -16,13 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.decrediton.Activities.AccountDetailsActivity;
-import com.decrediton.Adapter.AccountAdapter;
-import com.decrediton.Util.AccountResponse;
+import com.decrediton.activities.AccountDetailsActivity;
+import com.decrediton.adapter.AccountAdapter;
+import com.decrediton.util.AccountResponse;
 import com.decrediton.data.Account;
 import com.decrediton.MainActivity;
 import com.decrediton.R;
-import com.decrediton.Util.RecyclerTouchListener;
+import com.decrediton.util.RecyclerTouchListener;
 
 import org.json.JSONException;
 

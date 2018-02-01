@@ -18,16 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.R;
-import com.decrediton.Util.AccountResponse;
-import com.decrediton.Util.DcrResponse;
-import com.decrediton.Util.EncodeQrCode;
-import com.decrediton.Util.PreferenceUtil;
-import com.decrediton.Util.Utils;
-
-import org.json.JSONException;
+import com.decrediton.util.AccountResponse;
+import com.decrediton.util.DcrResponse;
+import com.decrediton.util.EncodeQrCode;
+import com.decrediton.util.PreferenceUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import dcrwallet.Dcrwallet;

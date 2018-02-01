@@ -11,7 +11,7 @@
         android:src="@drawable/decred_logo"
         android:id="@+id/splashscreen_icon"
        />
-    <com.decrediton.Util.MyCustomTextView
+    <com.decrediton.util.MyCustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/loading"

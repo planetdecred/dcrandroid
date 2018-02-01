@@ -14,21 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.decrediton.Activities.TransactionDetailsActivity;
-import com.decrediton.Adapter.TransactionAdapter;
+import com.decrediton.activities.TransactionDetailsActivity;
+import com.decrediton.adapter.TransactionAdapter;
 import com.decrediton.R;
 
 import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
-import com.decrediton.Util.AccountResponse;
-import com.decrediton.Util.PreferenceUtil;
-import com.decrediton.Util.RecyclerTouchListener;
-import com.decrediton.Util.TransactionsResponse;
-import com.decrediton.Util.Utils;
+import com.decrediton.util.AccountResponse;
+import com.decrediton.util.PreferenceUtil;
+import com.decrediton.util.RecyclerTouchListener;
+import com.decrediton.util.TransactionsResponse;
+import com.decrediton.util.Utils;
 import com.decrediton.data.Transaction;
 import com.decrediton.view.CurrencyTextView;
 
