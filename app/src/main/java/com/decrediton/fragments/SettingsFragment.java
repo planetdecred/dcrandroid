@@ -18,17 +18,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.decrediton.Activities.ConnectionActivity;
-import com.decrediton.Adapter.SettingsAdapter;
+import com.decrediton.activities.ConnectionActivity;
+import com.decrediton.adapter.SettingsAdapter;
 import com.decrediton.R;
-import com.decrediton.Util.PreferenceUtil;
-import com.decrediton.Util.RecyclerTouchListener;
+import com.decrediton.util.PreferenceUtil;
+import com.decrediton.util.RecyclerTouchListener;
 import com.decrediton.data.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 29/11/2017.
@@ -85,7 +83,6 @@ public class SettingsFragment extends Fragment{
         settingsList.add(settings);
         settings = new Settings(getString(R.string.transaction_confirmations),String.valueOf(util.getInt(PreferenceUtil.NO_OF_CONFIRMATIONS)));
         settingsList.add(settings);
-
     }
 
     private void handleClick(Settings settings, int position){
@@ -96,6 +93,8 @@ public class SettingsFragment extends Fragment{
         else if(settings.getSettingName().equals(getString(R.string.transaction_confirmations))){
            showTXConfirmDialog(settings.getRightValue(),position);
         }
+
+
     }
 
     public void showTXConfirmDialog(String righV,final int pos) {

@@ -12,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.decrediton.Activities.TransactionDetailsActivity;
-import com.decrediton.Adapter.TransactionAdapter;
+import com.decrediton.activities.TransactionDetailsActivity;
+import com.decrediton.adapter.TransactionAdapter;
 import com.decrediton.R;
-import com.decrediton.Util.PreferenceUtil;
-import com.decrediton.Util.RecyclerTouchListener;
-import com.decrediton.Util.TransactionsResponse;
+import com.decrediton.util.PreferenceUtil;
+import com.decrediton.util.RecyclerTouchListener;
+import com.decrediton.util.TransactionsResponse;
 import com.decrediton.data.Transaction;
 
 import java.io.File;

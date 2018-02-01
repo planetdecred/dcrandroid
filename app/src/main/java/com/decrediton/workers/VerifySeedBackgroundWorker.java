@@ -3,9 +3,9 @@ package com.decrediton.workers;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
-import com.decrediton.Activities.ConfirmSeedActivity;
+import com.decrediton.activities.ConfirmSeedActivity;
 import com.decrediton.R;
-import com.decrediton.Util.Utils;
+import com.decrediton.util.Utils;
 
 import dcrwallet.Dcrwallet;
 

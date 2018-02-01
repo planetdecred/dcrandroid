@@ -26,10 +26,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.decrediton.Activities.ReaderActivity;
+import com.decrediton.activities.ReaderActivity;
 import com.decrediton.R;
-import com.decrediton.Util.AccountResponse;
-import com.decrediton.Util.Utils;
+import com.decrediton.util.AccountResponse;
+import com.decrediton.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +47,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class SendFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
+
     public EditText address,amount;
     public TextView totalAmountSending,estimateFee,estimateSize,sendAll;
     public ImageView scanAddress;
@@ -64,7 +65,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         //change R.layout.yourlayoutfilename for each of your fragments
         return inflater.inflate(R.layout.content_send, container, false);
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             System.out.println("Context is null");
             return;
         }
-        dataAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         accountSpinner.setAdapter(dataAdapter);
 
