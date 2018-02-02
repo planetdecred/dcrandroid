@@ -26,13 +26,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         private TextView txDate;
         private TextView txType;
         private TextView status;
-
+        private CurrencyTextView minus;
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transferred);
             txDate = view.findViewById(R.id.history_tx_date);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
+            minus = view.findViewById(R.id.history_minus);
         }
     }
 
@@ -55,16 +56,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.status.setText(history.getTxStatus());
 
         if(Double.parseDouble(history.getTransactionFee())>0){
-           String temp ="- "+history.getTransactionFee() + " DCR";
+           String temp =history.getTransactionFee() + " DCR";
             holder.Amount.formatAndSetText(temp);
-
+            holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
         }
         else {
             String temp = history.getAmount() + " DCR";
             holder.Amount.formatAndSetText(temp);
-
+            holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");
         }

@@ -1,28 +1,28 @@
 package com.decrediton.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.decrediton.R;
+import com.decrediton.data.BestBlock;
 import com.decrediton.util.PreferenceUtil;
+import com.decrediton.util.Utils;
+
+import dcrwallet.Dcrwallet;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
-    private static final String TAG = SettingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // load settings fragment
+        // load main preference fragment
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
@@ -35,7 +35,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_main);
             final SwitchPreference localDcrd = (SwitchPreference) findPreference(getString(R.string.key_connection_local_dcrd));
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
-            EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
+            final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
+            final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
+
+            /*
+            * If local chain server is disabled, enable dcrdCertificate.
+            * It is disabled by default
+            * */
+            if (!util.getBoolean(getString(R.string.key_connection_local_dcrd), true)) {
+                dcrdCertificate.setEnabled(true);
+            }
+            /*
+            * Get the current block height from the chain server, parse it and display it
+            * */
+            new Thread(){
+                public void run(){
+                    try{
+                        final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
+                        //System.out.println("Block Hash: "+bestBlock.getHash()+", Block Height: "+bestBlock.getHeight());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                currentBlockHeight.setSummary(String.valueOf(bestBlock.getHeight()));
+                            }
+                        });
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
             localDcrd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
@@ -43,18 +71,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if(!b){
                         String address = util.get(getString(R.string.remote_dcrd));
                         if(address.equals("")){
-                            System.out.println("Starting local dcrd 1");
                             util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
+                            dcrdCertificate.setEnabled(false);
                             Toast.makeText(getActivity(), "Set remote address first", Toast.LENGTH_SHORT).show();
                             return false;
                         }else{
-                            System.out.println("Not Starting local dcrd");
                             util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
+                            dcrdCertificate.setEnabled(true);
                             return true;
                         }
                     }else{
-                        System.out.println("Starting local dcrd 2");
                         util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
+                        dcrdCertificate.setEnabled(false);
                         return true;
                     }
                 }
@@ -63,6 +91,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String address = o.toString();
+                    /*
+                    * Check if the address entered by the user matches
+                    * an ip address or an ip address with a port
+                    * e.g 127.0.0.1 or 127.0.0.1:19109
+                    * */
                     if(address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")
                             || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) {
                         util.set(getActivity().getString(R.string.remote_dcrd), o.toString());
@@ -77,7 +110,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String certificate = o.toString();
-                    System.out.println("Certificate: "+certificate);
                     util.set(getActivity().getString(R.string.remote_certificate), certificate);
                     return true;
                 }
@@ -90,17 +122,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
-            // transaction confirmation EditText change listener
-            //bindPreferenceSummaryToValue(findPreference(getString(R.string.key_transaction_confirmation)));
-
-            // local dcrd preference change listener
-            //bindPreferenceSummaryToValue(findPreference(getString(R.string.key_connection_local_dcrd)));
 
             // peers preference click listener
-            Preference myPref = findPreference(getString(R.string.key_get_peers));
-            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            Preference peers = findPreference(getString(R.string.key_get_peers));
+            peers.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                    getPeers(getActivity());
+                    Intent intent = new Intent(getActivity(),GetPeersActivity.class);
+                    startActivity(intent);
                     return true;
                 }
             });
@@ -113,46 +141,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String stringValue;
-
-            stringValue = newValue.toString();
-
-            if (preference instanceof EditTextPreference) {
-                if (preference.getKey().equals("key_transaction_confirmation")) {
-                    // update the changed gallery name to summary filed
-                      preference.setSummary(stringValue);
-                }
-                else if(preference.getKey().equals("key_connection_certificate")){
-                      preference.setSummary(stringValue);
-                }
-            } else {
-                preference.setSummary(stringValue);
-            }
-            return true;
-        }
-    };
-
-    public static void getPeers(Context context) {
-        Intent intent = new Intent(context.getApplicationContext(),GetPeersActivity.class);
-        context.startActivity(intent);
     }
 
     @Override

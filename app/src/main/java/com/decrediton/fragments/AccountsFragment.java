@@ -96,10 +96,10 @@ public class AccountsFragment extends Fragment {
                             account.setAccountNumber(String.valueOf(item.number));
                             account.setTotal(String.format(Locale.getDefault(),"%.8f", item.balance.total));
                             account.setSpendable(String.format(Locale.getDefault(),"%.8f",item.balance.spendable));
-                            account.setImmatureRewards(String.valueOf(item.balance.immatureReward));
-                            account.setImmatureStakeGeneration(String.valueOf(item.balance.immatureStakeGeneration));
-                            account.setLockedByTickets(String.valueOf(item.balance.lockedByTickets));
-                            account.setVotingAuthority(String.valueOf(item.balance.votingAuthority));
+                            account.setImmatureRewards(String.format(Locale.getDefault(),"%.8f",item.balance.immatureReward));
+                            account.setImmatureStakeGeneration(String.format(Locale.getDefault(),"%.8f",item.balance.immatureStakeGeneration));
+                            account.setLockedByTickets(String.format(Locale.getDefault(),"%.8f",item.balance.lockedByTickets));
+                            account.setVotingAuthority(String.format(Locale.getDefault(),"%.8f",item.balance.votingAuthority));
                             account.sethDPath("m / 44' / 20' / "+item.number);
                             account.setKeys(item.internalKeyCount+" Internal, "+item.externalKeyCount+" External, "+item.importedKeyCount+" Imported");
                             accountList.add(account);

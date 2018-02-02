@@ -1,6 +1,5 @@
 package com.decrediton.fragments;
 
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -22,6 +21,8 @@ import com.decrediton.util.AccountResponse;
 import com.decrediton.util.DcrResponse;
 import com.decrediton.util.EncodeQrCode;
 import com.decrediton.util.PreferenceUtil;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,8 +157,10 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         @Override
                         public void run() {
                             if(response.errorOccurred){
-                                Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber+"\n"+response.content,Toast.LENGTH_SHORT).show();
+                                float a = 0/0;
                             }else{
+                                float a = 0/0;
                                 String newAddress = response.content;
                                 address.setText(newAddress);
                                 imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
@@ -167,7 +170,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
 //                            }
                         }
                     });
-                } catch (Exception e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }

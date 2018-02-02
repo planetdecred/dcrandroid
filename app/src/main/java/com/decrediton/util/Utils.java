@@ -4,8 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.decrediton.R;
+import com.decrediton.data.BestBlock;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -127,5 +134,69 @@ public class Utils {
             System.out.println("Util is using remote server: "+addr);
             return addr;
         }
+    }
+
+    public static void writeDcrwalletFiles(Context context) throws IOException {
+        File path = new File(Dcrwallet.getHomeDir()+"/");
+        path.mkdirs();
+        String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
+        String[] assetFilesName = {"sample-dcrwallet.conf","rpc.key","rpc.cert"};
+        for(int i = 0; i < files.length; i++) {
+            File file = new File(path, files[i]);
+            if (!file.exists()) {
+                file.createNewFile();
+                FileOutputStream fout = new FileOutputStream(file);
+                InputStream in = context.getAssets().open(assetFilesName[i]);
+                int len;
+                byte[] buff = new byte[8192];
+                //read file till end
+                while ((len = in.read(buff)) != -1) {
+                    fout.write(buff, 0, len);
+                }
+                fout.flush();
+                fout.close();
+            }
+        }
+    }
+
+    public static void writeDcrdFiles(Context context) throws IOException {
+        File path = new File(context.getFilesDir().getPath(),"/dcrd");
+        path.mkdirs();
+        String[] files = {"rpc.key","dcrd.conf"};
+        String[] assetFilesName = {"dcrdrpc.key","dcrd.conf"};
+        //String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
+        for(int i = 0; i < files.length; i++) {
+            File file = new File(path, files[i]);
+            //[Debug] Write the file to the storage if it exists or not
+            if (!file.exists() || true) {
+                file.createNewFile();
+                FileOutputStream fout = new FileOutputStream(file);
+                InputStream in = context.getAssets().open(assetFilesName[i]);
+                int len;
+                byte[] buff = new byte[8192];
+                //read file till end
+                while ((len = in.read(buff)) != -1) {
+                    fout.write(buff, 0, len);
+                }
+                fout.flush();
+                fout.close();
+            }
+        }
+    }
+
+    public static void writeDcrdCertificate(Context context) throws Exception{
+        File path = new File(context.getFilesDir().getPath(),"/dcrd");
+        path.mkdirs();
+        File file = new File(path, "rpc.cert");
+        FileOutputStream fout = new FileOutputStream(file);
+        byte[] buffer = getConnectionCertificate(context).getBytes();
+        fout.write(buffer, 0, buffer.length);
+        fout.flush();
+        fout.close();
+    }
+
+    public static BestBlock parseBestBlock(String json) throws JSONException{
+        JSONObject obj = new JSONObject(json);
+        return new BestBlock(obj.getString("hash"), obj.getInt("height"));
     }
 }
