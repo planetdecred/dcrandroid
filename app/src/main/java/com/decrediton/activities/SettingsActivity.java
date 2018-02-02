@@ -45,7 +45,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         if(address.equals("")){
                             System.out.println("Starting local dcrd 1");
                             util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
-                            Toast.makeText(getActivity(), "Set remote address first", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.info_set_remote_addr, Toast.LENGTH_SHORT).show();
                             return false;
                         }else{
                             System.out.println("Not Starting local dcrd");
@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         util.set(getActivity().getString(R.string.remote_dcrd), o.toString());
                         return true;
                     }else{
-                        Toast.makeText(getActivity(), "Remote address is invalid", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.remote_address_invalid, Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 }

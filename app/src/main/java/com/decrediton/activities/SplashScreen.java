@@ -76,6 +76,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }else{
             openWallet();
         }
+
+
     }
 
     private void setText(final String str){
@@ -101,7 +103,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         e.printStackTrace();
                     }
                 }
-                Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
+                Intent i = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -147,20 +149,20 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                             @Override
                             public void run() {
                                 new AlertDialog.Builder(SplashScreen.this)
-                                        .setTitle("Error")
-                                        .setMessage("Could not connect to dcrd after 10 attempts")
-                                        .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                                        .setTitle(R.string.error_camel)
+                                        .setMessage(R.string.error_msg_could_not_connect_dcrd_10_secs)
+                                        .setPositiveButton(R.string.retry_caps, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 load();
                                             }
-                                        }).setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                                        }).setNegativeButton(R.string.exit_cap, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         Dcrwallet.exit();
                                         finish();
                                     }
-                                }).setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
+                                }).setNeutralButton(R.string.settings_cap, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         Intent intent = new Intent(SplashScreen.this,SettingsActivity.class);
@@ -190,7 +192,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     util.set(PreferenceUtil.BLOCK_HEIGHT, String.valueOf(blockHeight));
                 }
                 System.out.println("Finished fetching headers");
-                setText("Publish Unmined Transactions");
+                setText(getString(R.string.publish_unmined_transaction));
                 try {
                     Dcrwallet.publishUnminedTransactions();
                 } catch (Exception e) {
