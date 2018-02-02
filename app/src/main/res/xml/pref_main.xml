@@ -5,29 +5,41 @@
             android:defaultValue="@string/default_transaction_confirmation"
             android:key="@string/key_transaction_confirmation"
             android:summary="@string/default_transaction_confirmation"
+
             android:title="@string/title_transaction_confirmation" />
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_connection">
-        <EditTextPreference
-            android:key="@string/remote_dcrd_address"
-            android:title="@string/remote_dcrd_address" />
         <SwitchPreference
             android:defaultValue="true"
-            android:summary="Changes will reflect on next launch"
+            android:summary="@string/summary_enable_local_dcrd"
             android:key="@string/key_connection_local_dcrd"
             android:title="@string/title_enable_local_dcrd" />
         <EditTextPreference
+            android:key="@string/remote_dcrd_address"
+            android:title="@string/remote_dcrd_address"
+            android:dependency="@string/key_connection_local_dcrd"/>
+        <EditTextPreference
+            android:dependency="@string/key_connection_local_dcrd"
             android:key="@string/key_connection_certificate"
             android:inputType="textMultiLine"
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/information">
         <Preference
             android:summary="@string/summary_peers"
             android:title="@string/title_peers"
             android:key="@string/key_get_peers"
             />
+        <Preference
+            android:summary="@string/summary_block_height"
+            android:title="@string/title_block_height"
+            android:key="@string/key_get_peers"
+            />
+
     </PreferenceCategory>
 
     <CheckBoxPreference
@@ -37,8 +49,13 @@
         android:summary="@string/summary_testnet"
         android:title="@string/title_testnet" />
     <Preference
-        android:title="Discover Address"
-        android:key="discover"
+        android:summary="@string/summary_rescan_blockchain"
+        android:title="@string/title_rescan_blockchain"
+        android:key="@string/key_get_peers"
+        />
+    <Preference
+        android:title="@string/title_discover_address"
+        android:key="@string/discover"
         />
     <PreferenceCategory android:title="@string/pref_header_about">
         <Preference
