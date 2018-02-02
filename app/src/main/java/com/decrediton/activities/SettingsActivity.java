@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         if(address.equals("")){
                             util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
                             dcrdCertificate.setEnabled(false);
-                            Toast.makeText(getActivity(), "Set remote address first", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.info_set_remote_addr, Toast.LENGTH_SHORT).show();
                             return false;
                         }else{
                             util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
@@ -101,7 +101,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         util.set(getActivity().getString(R.string.remote_dcrd), o.toString());
                         return true;
                     }else{
-                        Toast.makeText(getActivity(), "Remote address is invalid", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.remote_address_invalid, Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 }
