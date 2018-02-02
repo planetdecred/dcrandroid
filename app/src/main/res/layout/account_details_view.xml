@@ -41,7 +41,7 @@
                 android:text="@string/labeltotal"
                 android:textColor="@color/secondary_text" />
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/acc_dts_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/acc_dts_spendable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/acc_dts_immature_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,7 +112,6 @@
                 android:layout_toEndOf="@+id/label_immature_reward"
                 android:layout_toRightOf="@+id/label_immature_reward"
                 android:textColor="@color/primary_text" />
-
 
             <View
                 android:id="@+id/separator13"
@@ -130,7 +129,7 @@
                 android:text="@string/label_locked_by_tickets"
                 android:textColor="@color/secondary_text" />
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/acc_dts_locked_bt_tcks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -159,7 +158,7 @@
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/acc_dts_voting_auth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -186,9 +185,7 @@
                 android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
 
-
-
-            <TextView
+            <com.decrediton.view.CurrencyTextView
                 android:id="@+id/acc_dts_immature_stake_gen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

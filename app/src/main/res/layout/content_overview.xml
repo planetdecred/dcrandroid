@@ -19,17 +19,16 @@
             android:padding="8sp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:layout_weight="0.9"
                 >
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:gravity="bottom"
-                    android:text="@string/available_balance"
+                    android:text="@string/current_total_balance"
                     android:textColor="@color/Amount1Text" />
             </LinearLayout>
 
@@ -51,10 +50,10 @@
 
                 <Button
                     android:id="@+id/overview_rescan_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:padding="7dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1.7"
                     android:background="@drawable/btn_shape"
                     android:text="@string/rescan_block"
                     android:textAllCaps="false"
@@ -67,13 +66,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="8sp"
-
             android:orientation="vertical"
             >
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="15sp"
                 android:text="@string/recent_transactions"/>
 
             <android.support.v7.widget.RecyclerView
@@ -82,7 +80,6 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 android:layout_marginBottom="5dp"
-
                 />
         </LinearLayout>
     </LinearLayout>

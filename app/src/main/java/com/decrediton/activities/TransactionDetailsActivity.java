@@ -74,10 +74,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
         try {
-            String res = Dcrwallet.decodeRawTransaction(
-                    Utils.getHash(getIntent().getStringExtra("Hash"))
-            );
-//            System.out.println("Decoded Tx: "+res);
+//            String res = Dcrwallet.decodeRawTransaction(
+//                    Utils.getHash(getIntent().getStringExtra("Hash"))
+//            );
+            Utils.getHash(getIntent().getStringExtra("Hash"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,11 +1,14 @@
 package com.decrediton.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -94,18 +98,26 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         reScanBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pd.show();
-                new Thread(){
-                    public void run(){
-                        try {
-                            //final String result = Dcrwallet.runUtil();
-                            Looper.prepare();
-                            Dcrwallet.reScanBlocks(OverviewFragment.this);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle("Rescan blocks")
+                        .setMessage("Are you sure? This could take some time.")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                pd.show();
+                                new Thread(){
+                                    public void run(){
+                                        try {
+                                            Looper.prepare();
+                                            Dcrwallet.reScanBlocks(OverviewFragment.this);
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }.start();
+                            }
+                        }).setNegativeButton("NO", null)
+                        .show();
             }
         });
         recyclerView.setAdapter(transactionAdapter);
@@ -166,7 +178,9 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                         TransactionsResponse.TransactionItem item = response.transactions.get(i);
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(item.timestamp * 1000);
-                        transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.YEAR) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+                        SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
+                        //transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.YEAR) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+                        transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
                         transaction.setTransactionFee(String.format(Locale.getDefault(), "%.8f", item.fee));
                         transaction.setType(item.type);
                         transaction.setHash(item.hash);
