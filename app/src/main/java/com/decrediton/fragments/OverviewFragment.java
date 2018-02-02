@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.decrediton.activities.TransactionDetailsActivity;
@@ -50,12 +52,15 @@ import java.util.Locale;
  * Created by Macsleven on 28/11/2017.
  */
 
-public class OverviewFragment extends Fragment implements BlockScanResponse{
+public class OverviewFragment extends Fragment implements BlockScanResponse,SwipeRefreshLayout.OnRefreshListener{
     private List<Transaction> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
     private Button reScanBlock;
     private CurrencyTextView tvBalance;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private View progressContainer;
     TransactionAdapter transactionAdapter;
     ProgressDialog pd;
+    TextView refresh;
     PreferenceUtil util;
     @Nullable
     @Override
@@ -63,7 +68,15 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         util = new PreferenceUtil(getContext());
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+        progressContainer = rootView.findViewById(R.id.progressContainers);
+        swipeRefreshLayout=rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
+        refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         reScanBlock =  rootView.getRootView().findViewById(R.id.overview_rescan_btn);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
@@ -98,7 +111,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
         reScanBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog = new AlertDialog.Builder(getContext())
+               new AlertDialog.Builder(getContext())
                         .setTitle("Rescan blocks")
                         .setMessage("Are you sure? This could take some time.")
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -118,6 +131,15 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                             }
                         }).setNegativeButton("NO", null)
                         .show();
+            }
+        });
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(refresh.isShown()){
+                    refresh.setVisibility(View.INVISIBLE);
+                }
+                prepareHistoryData();
             }
         });
         recyclerView.setAdapter(transactionAdapter);
@@ -160,6 +182,10 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
     }
 
     private void prepareHistoryData(){
+        if(!progressContainer.isShown()){
+            // progress.show();
+            progressContainer.setVisibility(View.VISIBLE);
+        }
         loadTransactions();
         new Thread(){
             public void run(){
@@ -168,8 +194,42 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 //int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
                 String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
+                if(getActivity() == null){
+                    return;
+                }
                 if(response.errorOccurred){
-
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!refresh.isShown()){
+                                refresh.setVisibility(View.VISIBLE);
+                            }
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                            if(progressContainer.isShown()){
+                                // progress.show();
+                                progressContainer.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
+                }
+                else if(response.transactions.size() == 0){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!refresh.isShown()){
+                                refresh.setVisibility(View.VISIBLE);
+                            }
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                            if(progressContainer.isShown()){
+                                // progress.show();
+                                progressContainer.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
                 }else {
                     util.set(PreferenceUtil.TRANSACTION_HEIGHT, String.valueOf(blockHeight));
                     final List<Transaction> temp = new ArrayList<>();
@@ -198,9 +258,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                         transaction.setWalletOutput(output);
                         temp.add(transaction);
                     }
-                    if(getActivity() == null){
-                        return;
-                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -214,6 +271,16 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                                 } else {
                                     transactionList.addAll(tempTxList.subList(0, tempTxList.size() - 1));
                                 }
+                            }
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                            if(refresh.isShown()){
+                                refresh.setVisibility(View.INVISIBLE);
+                            }
+                            if(progressContainer.isShown()){
+                                // progress.show();
+                                progressContainer.setVisibility(View.INVISIBLE);
                             }
                             transactionAdapter.notifyDataSetChanged();
                             saveTransactions();
@@ -288,5 +355,11 @@ public class OverviewFragment extends Fragment implements BlockScanResponse{
                 pd.setMessage(getString(R.string.scanning_block)+" "+percentage+"%");
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        prepareHistoryData();
     }
 }

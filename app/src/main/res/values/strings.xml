@@ -106,7 +106,7 @@
     <string name="current_height">Current height</string>
     <string name="banscore">Banscore</string>
     <string name="syncode">Syncode</string>
-    <string name="loading">LOADING</string>
+    <string name="loading">Loading</string>
     <string name="transaction">Transaction</string>
     <string name="TxType">TxType</string>
     <string name="status">Status</string>
@@ -212,6 +212,24 @@
     <string name="key_current_block_height">current_block_height</string>
     <string name="current_block_height">Current block height</string>
     <string name="getbestblock">getbestblock</string>
+    <string name="information">Information</string>
+    <string name="refresh">refresh</string>
+    <string name="no_transactions_n_tap_to_refresh">No transactions   tap to refresh</string>
+    <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
+    <string name="settings_cap">SETTINGS</string>
+    <string name="exit_cap">EXIT</string>
+    <string name="retry_caps">RETRY</string>
+    <string name="error_msg_could_not_connect_dcrd_10_secs">Could not connect to dcrd after 10 attempts</string>
+    <string name="error_camel">Error</string>
+    <string name="summary_block_height">Current block height</string>
+    <string name="title_block_height">Block height</string>
+    <string name="summary_rescan_blockchain">This will Rescan the Blockchain</string>
+    <string name="title_rescan_blockchain">Rescan Blockchain</string>
+    <string name="title_discover_address">Discover Address</string>
+    <string name="discover">discover</string>
+    <string name="summary_enable_local_dcrd">Changes will reflect on next launch</string>
+    <string name="remote_address_invalid">Remote address is invalid</string>
+    <string name="info_set_remote_addr">Set remote address first</string>
 
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>

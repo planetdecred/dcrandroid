@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/history_recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/history_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+         />
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <ProgressBar style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Inverse"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressContainers"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/no_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:text="@string/no_transactions_n_tap_to_refresh"
+        android:textSize="21sp"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
         />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
