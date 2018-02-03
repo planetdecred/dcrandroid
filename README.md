@@ -35,7 +35,7 @@ dcrandroid is an open source project.
 
 Contributions to dcrandroid are appreciated.
 ### Filing issues
-When [filing an issue](https://github.com/C-ollins/dcrandroid/issues), make sure state the following:
+When [filing an issue](https://github.com/C-ollins/dcrandroid/issues/new), make sure state the following:
 1. What error occurred.
 2. How to recreate the error
 3. What device and Android version you're using.
@@ -45,5 +45,5 @@ Setting up for a pull request
 * Visit and fork the [dcrandroid repository](https://github.com/C-ollins/dcrandroid)
 * Clone your fork
 * Modify the code and add whatever you want.
-* Create a [pull request](https://github.com/C-ollins/dcrandroid/pull/new) and explain properly the changes you made.
+* Create a pull request and explain properly the changes you made.
 * It is recommended that you squash your commits, tested your build and make sure you do not have CI errors before opening a pull request.
