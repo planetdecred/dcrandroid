@@ -44,20 +44,20 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private List<Transaction> transactionList = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
     private  TextView refresh;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private View progressContainer;
+//    private SwipeRefreshLayout swipeRefreshLayout;
+//    private View progressContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_history, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
-        swipeRefreshLayout=rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        progressContainer = rootView.findViewById(R.id.progressContainers);
+//        swipeRefreshLayout=rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+//                R.color.colorPrimary,
+//                R.color.colorPrimary,
+//                R.color.colorPrimary);
+//        swipeRefreshLayout.setOnRefreshListener(this);
+//        progressContainer = rootView.findViewById(R.id.progressContainers);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
@@ -88,15 +88,15 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             }
         }));
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(refresh.isShown()){
-                    refresh.setVisibility(View.INVISIBLE);
-                }
-                prepareHistoryData();
-            }
-        });
+//        refresh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(refresh.isShown()){
+//                    refresh.setVisibility(View.INVISIBLE);
+//                }
+//                prepareHistoryData();
+//            }
+//        });
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
@@ -111,10 +111,10 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void prepareHistoryData(){
-        if(!progressContainer.isShown()){
-            // progress.show();
-            progressContainer.setVisibility(View.VISIBLE);
-        }
+//        if(!progressContainer.isShown()){
+//            // progress.show();
+//            progressContainer.setVisibility(View.VISIBLE);
+//        }
         loadTransactions();
         new Thread(){
             public void run(){
@@ -124,28 +124,38 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
-                    if(!refresh.isShown()){
-                        refresh.setVisibility(View.VISIBLE);
-                    }
-                    if(swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                    if(progressContainer.isShown()){
-                        // progress.show();
-                        progressContainer.setVisibility(View.INVISIBLE);
-                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!refresh.isShown()){
+                                refresh.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+//                    if(swipeRefreshLayout.isRefreshing()){
+//                        swipeRefreshLayout.setRefreshing(false);
+//                    }
+//                    if(progressContainer.isShown()){
+//                        // progress.show();
+//                        progressContainer.setVisibility(View.INVISIBLE);
+//                    }
                 }
                 else if(response.transactions.size() == 0){
-                    if(!refresh.isShown()){
-                        refresh.setVisibility(View.VISIBLE);
-                    }
-                    if(swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                    if(progressContainer.isShown()){
-                        // progress.show();
-                        progressContainer.setVisibility(View.INVISIBLE);
-                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!refresh.isShown()){
+                                refresh.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+//                    if(swipeRefreshLayout.isRefreshing()){
+//                        swipeRefreshLayout.setRefreshing(false);
+//                    }
+//                    if(progressContainer.isShown()){
+//                        // progress.show();
+//                        progressContainer.setVisibility(View.INVISIBLE);
+//                    }
                 }
                 else {
                     util.set(PreferenceUtil.TRANSACTION_HEIGHT, String.valueOf(blockHeight));
@@ -189,13 +199,15 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             if(refresh.isShown()){
                                 refresh.setVisibility(View.INVISIBLE);
                             }
+                            /*
+
                             if(swipeRefreshLayout.isRefreshing()){
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                             if(progressContainer.isShown()){
                                 // progress.show();
                                 progressContainer.setVisibility(View.INVISIBLE);
-                            }
+                            }*/
                              transactionAdapter.notifyDataSetChanged();
                             saveTransactions();
                         }
@@ -253,7 +265,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
+        //swipeRefreshLayout.setRefreshing(true);
         prepareHistoryData();
     }
 }

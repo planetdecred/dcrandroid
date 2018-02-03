@@ -25,6 +25,8 @@ import com.decrediton.fragments.SendFragment;
 import com.decrediton.fragments.SettingsFragment;
 import com.decrediton.fragments.TicketsFragment;
 
+import dcrwallet.Dcrwallet;
+
 public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
     public String menuADD ="0";
@@ -58,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         } else {
             //super.onBackPressed();
         } 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Dcrwallet.exit();
     }
 
     @Override

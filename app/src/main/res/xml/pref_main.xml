@@ -18,10 +18,10 @@
             android:title="@string/title_enable_local_dcrd" />
         <EditTextPreference
             android:key="@string/remote_dcrd_address"
+            android:enabled="false"
             android:title="@string/remote_dcrd_address"
-            android:dependency="@string/key_connection_local_dcrd"/>
+            />
         <EditTextPreference
-            android:dependency="@string/key_connection_local_dcrd"
             android:key="@string/key_connection_certificate"
             android:inputType="textMultiLine"
             android:enabled="false"
@@ -35,9 +35,8 @@
             android:key="@string/key_get_peers"
             />
         <Preference
-            android:summary="@string/summary_block_height"
             android:title="@string/title_block_height"
-            android:key="@string/key_get_peers"
+            android:key="@string/key_current_block_height"
             />
     </PreferenceCategory>
 
@@ -50,22 +49,12 @@
     <Preference
         android:summary="@string/summary_rescan_blockchain"
         android:title="@string/title_rescan_blockchain"
-        android:key="@string/key_get_peers"
+        android:key="@string/key_rescan_block"
         />
     <Preference
         android:title="@string/title_discover_address"
         android:key="@string/discover"
         />
-    <PreferenceCategory android:title="Information">
-        <Preference
-            android:summary="@string/summary_peers"
-            android:title="@string/title_peers"
-            android:key="@string/key_get_peers"
-            />
-        <Preference
-            android:key="@string/key_current_block_height"
-            android:title="@string/current_block_height" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_about">
         <Preference
             android:summary="@string/app_version"
