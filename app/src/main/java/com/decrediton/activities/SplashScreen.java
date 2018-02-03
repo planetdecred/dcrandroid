@@ -29,7 +29,7 @@ import java.io.InputStream;
 import dcrwallet.Dcrwallet;
 
 /**
- * Created by Macslevenn on 24/12/2017.
+ * Created by Macsleven on 24/12/2017.
  */
 
 public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
@@ -76,8 +76,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }else{
             openWallet();
         }
-
-
     }
 
     private void setText(final String str){
@@ -103,7 +101,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         e.printStackTrace();
                     }
                 }
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
                 startActivity(i);
                 finish();
             }

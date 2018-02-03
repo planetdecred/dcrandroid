@@ -1,19 +1,25 @@
 package com.decrediton.activities;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.decrediton.R;
 import com.decrediton.data.BestBlock;
+import com.decrediton.fragments.OverviewFragment;
 import com.decrediton.util.PreferenceUtil;
 import com.decrediton.util.Utils;
 
+import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -26,24 +32,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragment {
+    public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse {
         protected PreferenceUtil util;
+        ProgressDialog pd;
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             util = new PreferenceUtil(getActivity());
+            pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             addPreferencesFromResource(R.xml.pref_main);
             final SwitchPreference localDcrd = (SwitchPreference) findPreference(getString(R.string.key_connection_local_dcrd));
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
-
+            Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             /*
-            * If local chain server is disabled, enable dcrdCertificate.
-            * It is disabled by default
+            * If local chain server is disabled, enable dcrdCertificate and remoteDcrdAddress.
+            *  They disabled by default
             * */
             if (!util.getBoolean(getString(R.string.key_connection_local_dcrd), true)) {
+                System.out.println("Local dcrd server is disabled");
                 dcrdCertificate.setEnabled(true);
+                remoteDcrdAddress.setEnabled(true);
+            }else{
+                System.out.println("Local dcrd server is enabled");
             }
             /*
             * Get the current block height from the chain server, parse it and display it
@@ -67,22 +79,32 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             localDcrd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                    Boolean b = (boolean) o;
-                    if(!b){
-                        String address = util.get(getString(R.string.remote_dcrd));
-                        if(address.equals("")){
-                            util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
-                            dcrdCertificate.setEnabled(false);
-                            Toast.makeText(getActivity(), R.string.info_set_remote_addr, Toast.LENGTH_SHORT).show();
-                            return false;
-                        }else{
-                            util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
-                            dcrdCertificate.setEnabled(true);
-                            return true;
-                        }
+                    boolean b = (boolean) o;
+                    System.out.println("Boolean: "+b);
+                    if(b == false){
+                        System.out.println("Enabling preferences");
+                        dcrdCertificate.setEnabled(true);
+                        remoteDcrdAddress.setEnabled(true);
+                        util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
+                        //String address = util.get(getString(R.string.remote_dcrd));
+//                        if(address.equals("")){
+//                            util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
+//                            dcrdCertificate.setEnabled(false);
+//                            remoteDcrdAddress.setEnabled(false);
+//                            Toast.makeText(getActivity(), R.string.info_set_remote_addr, Toast.LENGTH_SHORT).show();
+//                            return false;
+//                        }else{
+//                            util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
+//                            dcrdCertificate.setEnabled(true);
+//                            remoteDcrdAddress.setEnabled(true);
+//                            return true;
+//                        }
+                        return true;
                     }else{
+                        System.out.println("disabling preferences");
                         util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
                         dcrdCertificate.setEnabled(false);
+                        remoteDcrdAddress.setEnabled(false);
                         return true;
                     }
                 }
@@ -130,6 +152,59 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     Intent intent = new Intent(getActivity(),GetPeersActivity.class);
                     startActivity(intent);
                     return true;
+                }
+            });
+
+            rescanBlocks.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Rescan blocks")
+                            .setMessage("Are you sure? This could take some time.")
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    pd.show();
+                                    new Thread(){
+                                        public void run(){
+                                            try {
+                                                Looper.prepare();
+                                                Dcrwallet.reScanBlocks(MainPreferenceFragment.this);
+                                            }catch (Exception e){
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
+                                }
+                            }).setNegativeButton("NO", null)
+                            .show();
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public void onEnd(final long height) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(pd.isShowing()){
+                        pd.dismiss();
+                    }
+                    Toast.makeText(getActivity(), height+" "+getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @Override
+        public void onScan(final long rescanned_through) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pd.show();
+                    PreferenceUtil util = new PreferenceUtil(MainPreferenceFragment.this.getActivity());
+                    int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
+                    pd.setMessage(getString(R.string.scanning_block)+" "+percentage+"%");
                 }
             });
         }
