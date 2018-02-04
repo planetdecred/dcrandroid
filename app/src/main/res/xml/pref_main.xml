@@ -27,6 +27,10 @@
             android:enabled="false"
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
+        <EditTextPreference
+            android:key="60"
+            android:summary="@string/summary_connection_timeout"
+            android:title="@string/pref_title_timout" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/information">
         <Preference
