@@ -232,6 +232,7 @@
     <string name="key_rescan_block">rescan_block</string>
     <string name="summary_connection_timeout">Connection timeout in seconds</string>
     <string name="pref_title_timout">Timeout</string>
+    <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and start managing your decred.</string>
 
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>
