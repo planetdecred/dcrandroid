@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="General">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="@string/key_testnet"
+            android:summary="@string/summary_testnet"
+            android:title="@string/title_testnet" />
+        <Preference
+            android:summary="@string/summary_rescan_blockchain"
+            android:title="@string/title_rescan_blockchain"
+            android:key="@string/key_rescan_block"
+            />
+        <Preference
+            android:title="@string/title_discover_address"
+            android:key="@string/discover"
+            />
         <EditTextPreference
             android:defaultValue="@string/default_transaction_confirmation"
             android:key="@string/key_transaction_confirmation"
@@ -29,6 +44,10 @@
             android:gravity="top|left"
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
+        <EditTextPreference
+            android:key="60"
+            android:summary="@string/summary_connection_timeout"
+            android:title="@string/pref_title_timout" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/information">
         <Preference
@@ -42,21 +61,7 @@
             />
     </PreferenceCategory>
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:enabled="false"
-        android:key="@string/key_testnet"
-        android:summary="@string/summary_testnet"
-        android:title="@string/title_testnet" />
-    <Preference
-        android:summary="@string/summary_rescan_blockchain"
-        android:title="@string/title_rescan_blockchain"
-        android:key="@string/key_rescan_block"
-        />
-    <Preference
-        android:title="@string/title_discover_address"
-        android:key="@string/discover"
-        />
+
     <PreferenceCategory android:title="@string/pref_header_about">
         <Preference
             android:summary="@string/app_version"

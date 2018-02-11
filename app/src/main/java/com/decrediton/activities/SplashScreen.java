@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -57,6 +58,20 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         startServer();
         setContentView(R.layout.splash_page);
         imgAnim= findViewById(R.id.splashscreen_icon);
+        imgAnim.setOnClickListener(new DoubleClickListener() {
+
+            @Override
+            public void onSingleClick(View v) {
+
+            }
+
+            @Override
+            public void onDoubleClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+                startActivityForResult(intent,2);
+            }
+        });
         animRotate= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
         animRotate.setAnimationListener(this);
         imgAnim.startAnimation(animRotate);
@@ -247,5 +262,27 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    public abstract class DoubleClickListener implements View.OnClickListener {
+
+        private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
+
+        long lastClickTime = 0;
+
+        @Override
+        public void onClick(View v) {
+            long clickTime = System.currentTimeMillis();
+            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
+                onDoubleClick(v);
+                lastClickTime = 0;
+            } else {
+                onSingleClick(v);
+            }
+            lastClickTime = clickTime;
+        }
+
+        public abstract void onSingleClick(View v);
+        public abstract void onDoubleClick(View v);
     }
 }
