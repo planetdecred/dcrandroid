@@ -142,7 +142,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (i == 4){
+                    if (i == 9){
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

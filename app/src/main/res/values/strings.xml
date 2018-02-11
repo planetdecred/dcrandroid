@@ -214,7 +214,7 @@
     <string name="getbestblock">getbestblock</string>
     <string name="information">Information</string>
     <string name="refresh">refresh</string>
-    <string name="no_transactions_n_tap_to_refresh">No transactions</string>
+    <string name="no_transactions_n_swipe_to_refresh">No transactions\nSwipe down to refresh</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
     <string name="settings_cap">SETTINGS</string>
     <string name="exit_cap">EXIT</string>

@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.decrediton.R;
 import com.decrediton.util.Utils;
 
+import dcrwallet.Dcrwallet;
+
 /**
  * Created by Macsleven on 25/12/2017.
  */
@@ -24,7 +26,7 @@ public class SetupWalletActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                  Intent i = new Intent(SetupWalletActivity.this, SaveSeedActivity.class);
-                startActivity(i);
+                 startActivity(i);
             }
         });
         retrieveWalletBtn.setOnClickListener(new View.OnClickListener() {

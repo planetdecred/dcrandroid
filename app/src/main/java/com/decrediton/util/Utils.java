@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -102,7 +103,49 @@ public class Utils {
         if(util.getBoolean(context.getString(R.string.key_connection_local_dcrd), true)){
             return Utils.getDefaultCertificate(context);
         }else{
-            return util.get(context.getString(R.string.remote_certificate));
+            return Utils.getRemoteCertificate(context);
+        }
+    }
+
+    public static String getRemoteCertificate(Context context){
+        try {
+            File file = new File(context.getFilesDir()+"/savedata/remote rpc.cert");
+            if(file.exists()){
+                FileInputStream fin = new FileInputStream(file);
+                StringBuilder sb = new StringBuilder();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
+                String s;
+                while ((s = reader.readLine()) != null){
+                    sb.append(s);
+                    sb.append("\n");
+                }
+                fin.close();
+                System.out.println("Cert: "+sb.toString());
+                return sb.toString();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static void setRemoteCetificate(Context context, String certificate){
+        try {
+            File file = new File(context.getFilesDir()+"/savedata/remote rpc.cert");
+            if(file.exists()){
+                file.delete();
+            }
+            FileOutputStream fout  = new FileOutputStream(file);
+            byte[] buff = certificate.getBytes();
+            fout.write(buff, 0, buff.length);
+            fout.flush();
+            fout.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -164,7 +207,6 @@ public class Utils {
         path.mkdirs();
         String[] files = {"rpc.key","dcrd.conf"};
         String[] assetFilesName = {"dcrdrpc.key","dcrd.conf"};
-        //String[] assetFilesName = {"dcrdrpc.key","devrpc.cert","dcrd.conf"};
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             //[Debug] Write the file to the storage if it exists or not
@@ -189,6 +231,7 @@ public class Utils {
         path.mkdirs();
         File file = new File(path, "rpc.cert");
         FileOutputStream fout = new FileOutputStream(file);
+        System.out.println("Cert: "+getConnectionCertificate(context));
         byte[] buffer = getConnectionCertificate(context).getBytes();
         fout.write(buffer, 0, buffer.length);
         fout.flush();
