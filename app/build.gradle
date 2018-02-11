@@ -36,4 +36,11 @@ dependencies {
     compile 'ch.acra:acra:4.9.2'
     compile "com.android.support:support-compat:27.0.2"
     //compile (project(':walletconnector')){ exclude group: 'go'}
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'

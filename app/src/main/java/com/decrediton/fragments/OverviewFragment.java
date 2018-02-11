@@ -55,12 +55,13 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
     private List<Transaction> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
     private Button reScanBlock;
     private CurrencyTextView tvBalance;
-    //private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     //private View progressContainer;
     TransactionAdapter transactionAdapter;
     ProgressDialog pd;
     TextView refresh;
     PreferenceUtil util;
+    RecyclerView recyclerView;
     @Nullable
     @Override
      public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,13 +69,13 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         //progressContainer = rootView.findViewById(R.id.progressContainers);
-//        swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
-//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-//                R.color.colorPrimary,
-//                R.color.colorPrimary,
-//                R.color.colorPrimary);
-//        swipeRefreshLayout.setOnRefreshListener(this);
-        RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
+        swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         reScanBlock =  rootView.getRootView().findViewById(R.id.overview_rescan_btn);
@@ -159,6 +160,9 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         new Thread(){
             public void run(){
                 try {
+                    if(getContext() == null){
+                        return;
+                    }
                     final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
                     float totalBalance = 0;
                     for(int i = 0; i < response.items.size(); i++){
@@ -185,6 +189,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
 //            // progress.show();
 //            progressContainer.setVisibility(View.VISIBLE);
 //        }
+        swipeRefreshLayout.setRefreshing(true);
         tempTxList.clear();
         transactionList.clear();
         loadTransactions();
@@ -204,9 +209,10 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                         public void run() {
                             System.out.println("Displaying refresh");
                             refresh.setVisibility(View.VISIBLE);
-//                            if(swipeRefreshLayout.isRefreshing()){
-//                                swipeRefreshLayout.setRefreshing(false);
-//                            }
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                            recyclerView.setVisibility(View.GONE);
 //                            if(progressContainer.isShown()){
 //                                // progress.show();
 //                                progressContainer.setVisibility(View.INVISIBLE);
@@ -223,9 +229,10 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
 //                            if(!refresh.isShown()){
 //                                refresh.setVisibility(View.VISIBLE);
 //                            }
-//                            if(swipeRefreshLayout.isRefreshing()){
-//                                swipeRefreshLayout.setRefreshing(false);
-//                            }
+                            recyclerView.setVisibility(View.GONE);
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
 //                            if(progressContainer.isShown()){
 //                                // progress.show();
 //                                progressContainer.setVisibility(View.INVISIBLE);
@@ -277,9 +284,10 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                                     refresh.setVisibility(View.INVISIBLE);
                                 }
                             }
-//                            if(swipeRefreshLayout.isRefreshing()){
-//                                swipeRefreshLayout.setRefreshing(false);
-//                            }
+                            recyclerView.setVisibility(View.VISIBLE);
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
 
 //                            if(progressContainer.isShown()){
 //                                // progress.show();

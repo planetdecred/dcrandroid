@@ -44,23 +44,24 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private List<Transaction> transactionList = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
     private  TextView refresh;
-//    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView recyclerView;
 //    private View progressContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_history, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
-//        swipeRefreshLayout=rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
-//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-//                R.color.colorPrimary,
-//                R.color.colorPrimary,
-//                R.color.colorPrimary);
-//        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary,
+                R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(this);
 //        progressContainer = rootView.findViewById(R.id.progressContainers);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
-        RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
+        recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -115,7 +116,9 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 //            // progress.show();
 //            progressContainer.setVisibility(View.VISIBLE);
 //        }
+        swipeRefreshLayout.setRefreshing(true);
         loadTransactions();
+        transactionList.clear();
         new Thread(){
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
@@ -130,11 +133,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             if(!refresh.isShown()){
                                 refresh.setVisibility(View.VISIBLE);
                             }
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
                         }
                     });
-//                    if(swipeRefreshLayout.isRefreshing()){
-//                        swipeRefreshLayout.setRefreshing(false);
-//                    }
 //                    if(progressContainer.isShown()){
 //                        // progress.show();
 //                        progressContainer.setVisibility(View.INVISIBLE);
@@ -147,11 +150,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             if(!refresh.isShown()){
                                 refresh.setVisibility(View.VISIBLE);
                             }
+                            recyclerView.setVisibility(View.GONE);
+                            if(swipeRefreshLayout.isRefreshing()){
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
                         }
                     });
-//                    if(swipeRefreshLayout.isRefreshing()){
-//                        swipeRefreshLayout.setRefreshing(false);
-//                    }
 //                    if(progressContainer.isShown()){
 //                        // progress.show();
 //                        progressContainer.setVisibility(View.INVISIBLE);
@@ -199,11 +203,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             if(refresh.isShown()){
                                 refresh.setVisibility(View.INVISIBLE);
                             }
-                            /*
-
+                            recyclerView.setVisibility(View.VISIBLE);
                             if(swipeRefreshLayout.isRefreshing()){
                                 swipeRefreshLayout.setRefreshing(false);
                             }
+                            /*
                             if(progressContainer.isShown()){
                                 // progress.show();
                                 progressContainer.setVisibility(View.INVISIBLE);
@@ -215,20 +219,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             }
         }.start();
-//        ArrayList<String> usedInput = new ArrayList<>();
-//        usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS\n1.00 DCR");
-//        ArrayList<String> output = new ArrayList<>();
-//        output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH\n3.22 DCR");
-//        output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE\n3.54 DCR");
-        //Transaction transaction= new Transaction("0.0000000","0.02","jan 1 2018, 20:19:45","pending","default","send", usedInput, output);
-//        transactionList.add(transaction);
-//         usedInput = new ArrayList<>();
-//        usedInput.add("TXFHUEKFHDUWKDLFHEJWIDFLDJFJSHERHDAS\n5.00 DCR");
-//        output = new ArrayList<>();
-//        output.add("TXFJFHEJDUFHWQIMCNVHFKRHFUCIFNDHFJH\n6.22 DCR");
-//        output.add("TXJKFJFUVNDJFKVNFJEJFKFJVCXJFKGJNFKJE\n3.54 DCR");
-//        transaction= new Transaction("120.0000000","0.00","jan 1 2018, 11:17:25","pending","default","receive", usedInput, output);
-//        transactionList.add(transaction);
     }
 
     public void saveTransactions(){
@@ -257,6 +247,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 transactionList.addAll(temp);
                 transactionAdapter.notifyDataSetChanged();
                 System.out.println("Done: "+transactionList.size());
+                if(transactionList.size() == 0){
+                    if(refresh.isShown()){
+                        refresh.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
         }catch (Exception e){
             e.printStackTrace();

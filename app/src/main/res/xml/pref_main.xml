@@ -25,6 +25,8 @@
             android:key="@string/key_connection_certificate"
             android:inputType="textMultiLine"
             android:enabled="false"
+            android:scrollbars="vertical"
+            android:gravity="top|left"
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
     </PreferenceCategory>

@@ -62,17 +62,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             * */
             new Thread(){
                 public void run(){
-                    try{
-                        final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
-                        //System.out.println("Block Hash: "+bestBlock.getHash()+", Block Height: "+bestBlock.getHeight());
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                currentBlockHeight.setSummary(String.valueOf(bestBlock.getHeight()));
-                            }
-                        });
-                    }catch (Exception e){
-                        e.printStackTrace();
+                    for(;;) {
+                        try {
+                            final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
+                            //System.out.println("Block Hash: "+bestBlock.getHash()+", Block Height: "+bestBlock.getHeight());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    currentBlockHeight.setSummary(String.valueOf(bestBlock.getHeight()));
+                                }
+                            });
+                            sleep(3000);
+                        } catch (Exception e) {
+                            //e.printStackTrace();
+                        }
                     }
                 }
             }.start();
@@ -132,7 +135,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String certificate = o.toString();
-                    util.set(getActivity().getString(R.string.remote_certificate), certificate);
+                    System.out.println("Cert: "+certificate);
+                    Utils.setRemoteCetificate(getActivity(),certificate);
+                    //util.set(getActivity().getString(R.string.remote_certificate), certificate);
                     return true;
                 }
             });

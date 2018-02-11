@@ -2,9 +2,11 @@ package com.decrediton;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.decrediton.data.BestBlock;
+import com.decrediton.service.DcrdService;
 import com.decrediton.util.PreferenceUtil;
 import com.decrediton.util.Utils;
 
@@ -55,7 +57,9 @@ public class MainApplication extends Application {
         util = new PreferenceUtil(this);
         if(util.getBoolean(getString(R.string.key_connection_local_dcrd), true)){
             System.out.println("Starting local server");
-            Dcrwallet.runDrcd();
+            Intent i = new Intent(this, DcrdService.class);
+            startService(i);
+            //Dcrwallet.runDrcd();
         }else{
             System.out.println("Not starting local server");
         }

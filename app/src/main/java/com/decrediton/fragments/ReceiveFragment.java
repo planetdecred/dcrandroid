@@ -160,7 +160,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                                 Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber+"\n"+response.content,Toast.LENGTH_SHORT).show();
                                 float a = 0/0;
                             }else{
-                                float a = 0/0;
+                                //float a = 0/0;
                                 String newAddress = response.content;
                                 address.setText(newAddress);
                                 imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
