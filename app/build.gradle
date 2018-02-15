@@ -2,15 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    //compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "com.decrediton"
+        applicationId "com.dcrandroid"
         minSdkVersion 15
         targetSdkVersion 27
         //targetSdkVersion 26
         versionCode 1
-        versionName "0.1 alpha"
+        versionName "0.1 alpha build 1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -23,10 +22,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    // compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    // compile 'com.android.support:design:26.+'
-    // compile 'com.android.support:recyclerview-v7:26.0.+'
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:design:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
@@ -35,7 +31,6 @@ dependencies {
     compile project(':dcrwallet')
     compile 'ch.acra:acra:4.9.2'
     compile "com.android.support:support-compat:27.0.2"
-    //compile (project(':walletconnector')){ exclude group: 'go'}
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     }

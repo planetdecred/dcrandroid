@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.2">
-        <com.decrediton.util.MyCustomTextView
+        <com.dcrandroid.util.MyCustomTextView
             android:layout_marginTop="5dp"
             android:id="@+id/seed_display_confirm"
             android:layout_width="match_parent"
