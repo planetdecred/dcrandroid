@@ -96,7 +96,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         }
         Toast toast = Toast.makeText(getContext(),
                 R.string.your_address_is_copied, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM | Gravity.RIGHT, 50, 50);
+        toast.setGravity(Gravity.CENTER | Gravity.END, 50, 50);
         toast.show();
     }
 
