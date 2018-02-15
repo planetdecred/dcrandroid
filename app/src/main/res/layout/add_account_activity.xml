@@ -11,7 +11,6 @@
         android:text="@string/add_an_account"
         android:gravity="center"
         android:background="@color/backgcolorwhite"
-
         />
     <TextView
         android:layout_width="match_parent"
