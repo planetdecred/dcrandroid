@@ -80,7 +80,6 @@
         <service
             android:name=".service.DcrdService"
             android:enabled="true"
-            android:process=":dcrd"
             android:exported="false" />
 
     </application>
