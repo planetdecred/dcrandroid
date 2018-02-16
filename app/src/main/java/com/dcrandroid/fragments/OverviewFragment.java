@@ -329,8 +329,8 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
             public void run() {
                 pd.show();
                 PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
-                int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
-                pd.setMessage(getString(R.string.scanning_block)+" "+percentage+"%");
+                //int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
+                pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
             }
         });
     }

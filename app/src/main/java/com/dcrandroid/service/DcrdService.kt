@@ -27,9 +27,11 @@ class DcrdService : Service() {
             channel.enableLights(false)
             channel.enableVibration(false)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            //channel.importance = NotificationManager.IMPORTANCE_DEFAULT
             manager.createNotificationChannel(channel)
         }
         showNotification()
+
         val filter = IntentFilter("SHUTDOWN")
         registerReceiver(receiver,filter)
         return super.onStartCommand(intent, flags, startId)
@@ -47,11 +49,12 @@ class DcrdService : Service() {
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(true)
                     .setAutoCancel(true)
+                    //.setOnlyAlertOnce(true)
                     .addAction(action)
                     .build()
         }else{
             val action = NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"SHUTDOWN", pi).build()
-            notification = NotificationCompat.Builder(this,"chain server").setContentTitle("Decred Wallet")
+            notification = NotificationCompat.Builder(this).setContentTitle("Decred Wallet")
                     .setContentText(serverStatus)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(true)
@@ -73,8 +76,8 @@ class DcrdService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Dcrwallet.exit()
         unregisterReceiver(receiver)
+        Dcrwallet.shutdown()
     }
 
     override fun onCreate() {
