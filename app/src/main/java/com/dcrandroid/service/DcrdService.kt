@@ -48,7 +48,9 @@ class DcrdService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val icon = Icon.createWithResource(this, R.drawable.ic_menu_share)
             val action = Notification.Action.Builder(icon,"SHUTDOWN", pi).build()
-            notification = Notification.Builder(this, "chain server").setContentTitle("Decred Wallet")
+            notification = Notification.Builder(this, "chain server")
+                    .setContentTitle("Decred Chain Server")
+                    .setSubText("Chain Server")
                     .setContentText(serverStatus)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(true)
@@ -58,7 +60,9 @@ class DcrdService : Service() {
                     .build()
         }else{
             val action = NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"SHUTDOWN", pi).build()
-            notification = NotificationCompat.Builder(this).setContentTitle("Decred Wallet")
+            notification = NotificationCompat.Builder(this)
+                    .setContentTitle("Decred Chain Server")
+                    .setSubText("Chain Server")
                     .setContentText(serverStatus)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(true)
