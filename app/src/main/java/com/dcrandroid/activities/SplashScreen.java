@@ -144,43 +144,15 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void run() {
                 setText(getString(R.string.waiting_for_dcrd));
                 String dcrdAddress = Utils.getDcrdNetworkAddress(SplashScreen.this);
-                for (int i = 0; i < 10 ; i++ ) {
+                for (;;) {
                     try {
                         if (Dcrwallet.connectToDcrd(dcrdAddress, Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
+
                             break;
                         }
                         sleep(2500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
-                    if (i == 9){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new AlertDialog.Builder(SplashScreen.this)
-                                        .setTitle(R.string.error_camel)
-                                        .setMessage(R.string.error_msg_could_not_connect_dcrd_10_secs)
-                                        .setPositiveButton(R.string.retry_caps, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                load();
-                                            }
-                                        }).setNegativeButton(R.string.exit_cap, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        //Dcrwallet.exit();
-                                        finish();
-                                    }
-                                }).setNeutralButton(R.string.settings_cap, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(SplashScreen.this,SettingsActivity.class);
-                                        startActivityForResult(intent,2);
-                                    }
-                                }).show();
-                            }
-                        });
-                        return;
                     }
                 }
                 System.out.println("Opening");

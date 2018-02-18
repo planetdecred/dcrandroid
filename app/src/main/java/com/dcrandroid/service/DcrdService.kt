@@ -80,7 +80,6 @@ class DcrdService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         unregisterReceiver(receiver)
         val i = Intent("kill")
         sendBroadcast(i)
