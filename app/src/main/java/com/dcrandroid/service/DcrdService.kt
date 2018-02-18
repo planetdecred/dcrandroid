@@ -19,6 +19,10 @@ class DcrdService : Service() {
         return null
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+    }
+
     var serverStatus = "Chain server is loading"
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -76,7 +80,10 @@ class DcrdService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         unregisterReceiver(receiver)
+        val i = Intent("kill")
+        sendBroadcast(i)
         Dcrwallet.shutdown()
     }
 

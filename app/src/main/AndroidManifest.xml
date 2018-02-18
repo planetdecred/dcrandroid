@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
 
     <uses-feature android:name="android.hardware.CAMERA" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -79,10 +80,11 @@
 
         <service
             android:name=".service.DcrdService"
+            android:process=":dcrd"
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".activities.LogViewer"></activity>
+        <activity android:name=".activities.LogViewer" />
     </application>
 
 </manifest>
