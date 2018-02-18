@@ -192,7 +192,7 @@
     <string name="pref_title_connection">Connections</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="pref_header_about">About</string>
-    <string name="app_version">0.1 alpha build 1</string>
+    <string name="app_version">0.1 alpha build 2</string>
     <string name="title_version">Version</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
     <string name="title_enable_local_dcrd">Enable local dcrd</string>
