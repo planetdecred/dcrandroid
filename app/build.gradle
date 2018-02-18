@@ -9,7 +9,7 @@ android {
         targetSdkVersion 27
         //targetSdkVersion 26
         versionCode 1
-        versionName "0.1 alpha build 1"
+        versionName "0.1 alpha build 2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

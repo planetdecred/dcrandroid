@@ -192,6 +192,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+            findPreference("dcrd_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO: Make this available for both testnet and mainnet
+                    Intent i = new Intent(getActivity(), LogViewer.class);
+                    i.putExtra("log_path","/data/data/com.dcrandroid/files/dcrd/logs/testnet2/dcrd.log");
+                    startActivity(i);
+                    return true;
+                }
+            });
+            findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO: Make this available for both testnet and mainnet
+                    Intent i = new Intent(getActivity(), LogViewer.class);
+                    i.putExtra("log_path","/data/data/com.dcrandroid/files/dcrwallet/logs/testnet2/dcrwallet.log");
+                    startActivity(i);
+                    return true;
+                }
+            });
+
+            findPreference("crash").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    float a = 0/0;
+                    return true;
+                }
+            });
+
         }
 
         @Override
