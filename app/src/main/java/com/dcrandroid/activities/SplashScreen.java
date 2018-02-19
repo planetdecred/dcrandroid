@@ -24,38 +24,25 @@ import org.json.JSONException;
 
 import java.io.File;
 
+import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 24/12/2017.
  */
 
-public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
+public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener, BlockScanResponse {
     Animation animRotate;
     ImageView imgAnim;
     PreferenceUtil util;
     MyCustomTextView tvLoading;
-    private void startServer(){
-        new Thread(){
-            public void run(){
-                try {
-                    this.setPriority(MAX_PRIORITY);
-                    System.out.println("Is Running: "+Dcrwallet.isRunning());
-                    if(!Dcrwallet.isRunning()){
-                        Dcrwallet.main();
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
-
+    private String json;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         util = new PreferenceUtil(this);
-        startServer();
+        System.out.println("Is Running: "+Dcrwallet.isRunning());
+        Dcrwallet.runDcrwallet();
         setContentView(R.layout.splash_page);
         imgAnim= findViewById(R.id.splashscreen_icon);
         imgAnim.setOnClickListener(new DoubleClickListener() {
@@ -124,9 +111,16 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void run(){
                 System.out.println("Dcrwallet");
                 setText(getString(R.string.waiting_for_dcrwallet));
+                int i = 0;
                 for(;;) {
                     if(Dcrwallet.testConnect()){
                         break;
+                    }
+                    i++;
+                    System.out.println("I: "+i);
+                    if(i == 6){
+                        System.out.println("I is six");
+                        Dcrwallet.runDcrwallet();
                     }
                     try {
                         sleep(1500);
@@ -157,7 +151,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 }
                 System.out.println("Opening");
                 setText(getString(R.string.opening_wallet));
-                final String json = Dcrwallet.openWallet();
+                json = Dcrwallet.openWallet();
                 System.out.println("Blocks");
                 setText(getString(R.string.subscribe_to_block_notification));
                 Dcrwallet.subscibeToBlockNotifications();
@@ -180,12 +174,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        openWalletCallback(json);
-                    }
-                });
+                setText("Scanning blocks");
+                Dcrwallet.reScanBlocks(SplashScreen.this, util.getInt("block_checkpoint"));
             }}.start();
     }
 
@@ -229,6 +219,21 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
     @Override
     public void onAnimationRepeat(Animation animation) {
+    }
+
+    @Override
+    public void onEnd(long height) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                openWalletCallback(json);
+            }
+        });
+    }
+
+    @Override
+    public void onScan(long rescanned_through) {
+        setText("Scanning blocks "+rescanned_through);
     }
 
     public abstract class DoubleClickListener implements View.OnClickListener {

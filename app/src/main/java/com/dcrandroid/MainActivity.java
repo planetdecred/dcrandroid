@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -77,13 +85,15 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     protected void onDestroy() {
         super.onDestroy();
         Dcrwallet.shutdown();
-        //Dcrwallet.exit();
+        System.exit(0);
+        ActivityCompat.finishAffinity(MainActivity.this);
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             System.exit(0);
+            ActivityCompat.finishAffinity(MainActivity.this);
         }
     };
 

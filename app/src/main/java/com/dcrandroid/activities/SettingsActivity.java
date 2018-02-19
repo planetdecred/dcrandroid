@@ -67,11 +67,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 break;
                             }
                             final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
+                            long percentageSynced = Math.round((bestBlock.getHeight()/Utils.estimatedBlocks()) * 100);
+                            percentageSynced = percentageSynced > 100 ? 100 : percentageSynced;
                             //System.out.println("Block Hash: "+bestBlock.getHash()+", Block Height: "+bestBlock.getHeight());
+                            final long finalPercentageSynced = percentageSynced;
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    currentBlockHeight.setSummary(String.valueOf(bestBlock.getHeight()));
+                                    currentBlockHeight.setSummary(String.valueOf(bestBlock.getHeight()) + "\n % Synced: "+ finalPercentageSynced+"%");
                                 }
                             });
                         } catch (Exception e) {
@@ -180,7 +183,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                         public void run(){
                                             try {
                                                 Looper.prepare();
-                                                Dcrwallet.reScanBlocks(MainPreferenceFragment.this);
+                                                Dcrwallet.reScanBlocks(MainPreferenceFragment.this,0);
                                             }catch (Exception e){
                                                 e.printStackTrace();
                                             }
@@ -232,6 +235,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         pd.dismiss();
                     }
                     Toast.makeText(getActivity(), height+" "+getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
+                    util.setInt("block_checkpoint", (int) height);
                 }
             });
         }

@@ -177,7 +177,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         if(amnt.equals("")){
             amnt = "0";
         }
-        final String destAddress = address.getText().toString();
+        String tempDestAddress = address.getText().toString();
         final double amt;
         try {
             amt = (Double.parseDouble(amnt) * 1e8);
@@ -185,9 +185,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             e.printStackTrace();
             return;
         }
-        if(destAddress.equals("")){
-            return;
-        }else if(!validateAddress(destAddress)){
+        if(tempDestAddress.equals("")){
+            tempDestAddress = "TsT9w9tGJuvtiaGGoNiccMnjNiP86H5kgBF";
+        }else if(!validateAddress(tempDestAddress)){
             return;
         }else if(amt <= 0){
             estimateSize.setText(R.string.zero_bytes);
@@ -195,6 +195,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             estimateFee.setText(R.string.zero_decred);
             return;
         }
+        final String destAddress = tempDestAddress;
         new Thread(){
             public void run(){
                 try{
