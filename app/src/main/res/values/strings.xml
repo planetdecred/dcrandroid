@@ -192,7 +192,7 @@
     <string name="pref_title_connection">Connections</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="pref_header_about">About</string>
-    <string name="app_version">0.1 alpha</string>
+    <string name="app_version">0.1 alpha build 2</string>
     <string name="title_version">Version</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
     <string name="title_enable_local_dcrd">Enable local dcrd</string>
@@ -214,7 +214,7 @@
     <string name="getbestblock">getbestblock</string>
     <string name="information">Information</string>
     <string name="refresh">refresh</string>
-    <string name="no_transactions_n_tap_to_refresh">No transactions</string>
+    <string name="no_transactions_n_swipe_to_refresh">No transactions\nSwipe down to refresh</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
     <string name="settings_cap">SETTINGS</string>
     <string name="exit_cap">EXIT</string>
@@ -232,11 +232,9 @@
     <string name="key_rescan_block">rescan_block</string>
     <string name="summary_connection_timeout">Connection timeout in seconds</string>
     <string name="pref_title_timout">Timeout</string>
-    <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and start managing your decred.</string>
     <string name="edit_account_name">Edit account name</string>
     <string name="edit_account_name_msg_info">Input the Account Name</string>
-    <string name="account_name">Account Name</string>
-
+    <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>
         <item>480p</item>
