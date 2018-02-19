@@ -1,11 +1,9 @@
 package com.dcrandroid.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -48,7 +46,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         imgAnim.setOnClickListener(new DoubleClickListener() {
             @Override
             public void onSingleClick(View v) {
+
             }
+
             @Override
             public void onDoubleClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);

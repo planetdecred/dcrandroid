@@ -73,7 +73,7 @@
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
     <string name="send_funds">SEND FUNDS</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination transactionFee and the amount in DCR to send fund</string>
+    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address and the amount in DCR to send fund</string>
     <string name="destination_address">Destination Address:</string>
     <string name="amount_dcr">Amount(DCR) :</string>
     <string name="max">Max</string>
@@ -232,8 +232,9 @@
     <string name="key_rescan_block">rescan_block</string>
     <string name="summary_connection_timeout">Connection timeout in seconds</string>
     <string name="pref_title_timout">Timeout</string>
+    <string name="edit_account_name">Edit account name</string>
+    <string name="edit_account_name_msg_info">Input the Account Name</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
-
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>
         <item>480p</item>
