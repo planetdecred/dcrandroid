@@ -19,7 +19,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -241,5 +244,15 @@ public class Utils {
     public static BestBlock parseBestBlock(String json) throws JSONException{
         JSONObject obj = new JSONObject(json);
         return new BestBlock(obj.getString("hash"), obj.getInt("height"));
+    }
+
+    //TODO: Make available for both testnet and mainnet
+    public static double estimatedBlocks(){
+        Calendar startDate = new GregorianCalendar(2017,3,15);
+        Calendar today = new GregorianCalendar();
+        today.setTimeInMillis(System.currentTimeMillis());
+        long totalDays = (today.getTimeInMillis() - startDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
+        int blocksPerDay = 720;
+        return Math.round(totalDays * blocksPerDay * (0.95));
     }
 }

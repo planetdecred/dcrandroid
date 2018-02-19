@@ -29,9 +29,10 @@ class DcrdService : Service() {
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel("chain server", "Dcrandroid Chain Server", NotificationManager.IMPORTANCE_DEFAULT)
             channel.enableLights(false)
+            channel.setSound(null, null)
             channel.enableVibration(false)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            //channel.importance = NotificationManager.IMPORTANCE_DEFAULT
+            channel.importance = NotificationManager.IMPORTANCE_LOW
             manager.createNotificationChannel(channel)
         }
         showNotification()
@@ -55,7 +56,7 @@ class DcrdService : Service() {
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(true)
                     .setAutoCancel(true)
-                    //.setOnlyAlertOnce(true)
+                    .setSound(null)
                     .addAction(action)
                     .build()
         }else{
@@ -68,6 +69,7 @@ class DcrdService : Service() {
                     .setOngoing(true)
                     .setAutoCancel(true)
                     .addAction(action)
+                    .setSound(null)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .build()
         }
@@ -99,8 +101,11 @@ class DcrdService : Service() {
                     try {
                         val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
                         val bestBlock = Utils.parseBestBlock(result)
+
                         //println("BestBock: ${bestBlock.height} Hash: ${bestBlock.hash}")
-                        serverStatus = "Chain server is running, Block Height: ${bestBlock.height}"
+                        var percentageSynced = Math.round((bestBlock.height/Utils.estimatedBlocks()) * 100)
+                        percentageSynced = if (percentageSynced > 100) 100 else percentageSynced
+                        serverStatus = "Block Height: ${bestBlock.height}, % Synced: $percentageSynced%"
                         showNotification()
                     } catch (e: Exception) {
                         e.printStackTrace()

@@ -71,7 +71,7 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
             if(blockHeight != -1){
                 util.set(PreferenceUtil.BLOCK_HEIGHT,String.valueOf(blockHeight));
             }
-            Dcrwallet.reScanBlocks(EncryptBackgroundWorker.this);
+            Dcrwallet.reScanBlocks(EncryptBackgroundWorker.this,0);
             return createResponse;
         }catch (Exception e){
             e.printStackTrace();

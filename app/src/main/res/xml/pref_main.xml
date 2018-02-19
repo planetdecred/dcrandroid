@@ -59,6 +59,13 @@
             android:title="@string/title_block_height"
             android:key="@string/key_current_block_height"
             />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Debug">
+        <Preference
+            android:title="Crash"
+            android:key="crash"
+            />
         <Preference
             android:title="Dcrd Log"
             android:key="dcrd_log"
@@ -66,13 +73,6 @@
         <Preference
             android:title="Dcrwallet Log"
             android:key="dcrwallet_log"
-            />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Debug">
-        <Preference
-            android:title="Crash"
-            android:key="crash"
             />
     </PreferenceCategory>
 

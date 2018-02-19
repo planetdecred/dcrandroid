@@ -122,7 +122,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                                     public void run(){
                                         try {
                                             Looper.prepare();
-                                            Dcrwallet.reScanBlocks(OverviewFragment.this);
+                                            Dcrwallet.reScanBlocks(OverviewFragment.this, util.getInt("block_checkpoint"));
                                         }catch (Exception e){
                                             e.printStackTrace();
                                         }
@@ -316,6 +316,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                     pd.dismiss();
                 }
                 Toast.makeText(getContext(), height+" "+getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
+                util.setInt("block_checkpoint", (int) height);
                 getBalance();
                 prepareHistoryData();
             }

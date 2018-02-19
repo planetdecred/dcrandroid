@@ -7,11 +7,7 @@ import android.widget.TextView;
 
 import com.dcrandroid.R;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
 
 /**
  * Created by collins on 2/17/18.
@@ -25,20 +21,43 @@ public class LogViewer extends AppCompatActivity {
         TextView logTextView = findViewById(R.id.log_text);
         String logPath = getIntent().getExtras().getString("log_path");
         if(logPath != null){
-            try {
-                StringBuilder sb = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logPath)));
-                String s;
-                while((s = reader.readLine()) != null){
-                    sb.append(s);
-                    sb.append("\n");
-                }
-                logTextView.setText(sb.toString());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            File f = new File(logPath);
+
+            logTextView.setText(getLastNLogLine(f));
+//            System.out.println("Lines 1000");
+//            try {
+//                StringBuilder sb = new StringBuilder();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logPath)));
+//                String s;
+//                while((s = reader.readLine()) != null){
+//                    sb.append(s);
+//                    sb.append("\n");
+//                }
+//                logTextView.setText(sb.toString());
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
+    }
+
+    public String getLastNLogLine(File file) {
+        StringBuilder s = new StringBuilder();
+        try {
+            Process p = Runtime.getRuntime().exec("tail -n500 "+file);
+            java.io.BufferedReader input = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream()));
+            String line;
+            int i = 0;
+            while((line = input.readLine()) != null){
+                s.append(line);
+                s.append("\n");
+                i++;
+                System.out.println("++i"+i);
+            }
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+        return s.toString();
     }
 }
