@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgcolor">
+    android:background="#fff">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,6 +99,7 @@
             android:lines="1"
             android:padding="5dp"
             android:textStyle="bold"
+            android:background="?attr/selectableItemBackground"
             android:textColor="@color/colorPrimaryDark"
             android:text="@string/wallet_address"
             android:textSize="18sp" />
