@@ -1,44 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="@color/colorPrimary">
-
-    <LinearLayout
-        android:orientation="vertical"
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/decred_logo"
+        />
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:background="@drawable/decred_logo"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="#ffff"
-            android:gravity="center"
-            android:textSize="24sp"
-           android:textStyle="normal"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
-            android:textColor="#ffff"
-            android:gravity="center"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:background="@color/backgcolorwhite"
-
-            >
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="#ffff"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textStyle="normal"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
+        android:textColor="#ffff"
+        android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="@color/backgcolorwhite"
+        >
         <Button
             android:id="@+id/button_create_wallet"
             android:layout_width="match_parent"
@@ -49,16 +44,14 @@
             android:text="@string/create_wallet"
             android:textColor="@android:color/background_light" />
 
-            <Button
+        <Button
             android:id="@+id/button_retrieve_wallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:padding="16dp"
-                android:layout_margin="1px"
+            android:layout_margin="1px"
             android:text="@string/recover_wallet"
             android:textColor="@android:color/background_light" />
-        </LinearLayout>
     </LinearLayout>
-
-    </LinearLayout>
+</LinearLayout>

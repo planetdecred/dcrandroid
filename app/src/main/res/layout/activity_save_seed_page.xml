@@ -44,7 +44,7 @@
             android:layout_height="1px"
             android:background="@color/primary_text" />
 
-        <com.decrediton.util.MyCustomTextView
+        <com.dcrandroid.util.MyCustomTextView
             android:id="@+id/save_seed_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

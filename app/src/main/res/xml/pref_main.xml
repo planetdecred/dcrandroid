@@ -40,6 +40,8 @@
             android:key="@string/key_connection_certificate"
             android:inputType="textMultiLine"
             android:enabled="false"
+            android:scrollbars="vertical"
+            android:gravity="top|left"
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
         <EditTextPreference
@@ -59,6 +61,20 @@
             />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Debug">
+        <Preference
+            android:title="Crash"
+            android:key="crash"
+            />
+        <Preference
+            android:title="Dcrd Log"
+            android:key="dcrd_log"
+            />
+        <Preference
+            android:title="Dcrwallet Log"
+            android:key="dcrwallet_log"
+            />
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_header_about">
         <Preference
