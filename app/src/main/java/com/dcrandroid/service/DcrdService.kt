@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat
 import com.dcrandroid.R
 import com.dcrandroid.util.Utils
 import dcrwallet.Dcrwallet
+import java.text.DecimalFormat
 
 class DcrdService : Service() {
 
@@ -105,7 +106,8 @@ class DcrdService : Service() {
                         //println("BestBock: ${bestBlock.height} Hash: ${bestBlock.hash}")
                         var percentageSynced = Math.round((bestBlock.height/Utils.estimatedBlocks()) * 100)
                         percentageSynced = if (percentageSynced > 100) 100 else percentageSynced
-                        serverStatus = "Block Height: ${bestBlock.height}, % Synced: $percentageSynced%"
+                        val formatter = DecimalFormat("#,###")
+                        serverStatus = "${formatter.format(bestBlock.height)} blocks ($percentageSynced% synced)"
                         showNotification()
                     } catch (e: Exception) {
                         e.printStackTrace()

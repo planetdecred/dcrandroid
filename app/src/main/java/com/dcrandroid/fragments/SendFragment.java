@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.AccountResponse;
+import com.dcrandroid.util.DcrResponse;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     List<Integer> accountNumbers = new ArrayList<>();
     ArrayAdapter dataAdapter;
     ProgressDialog pd;
+    PreferenceUtil util;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             System.out.println("Activity is null");
             return;
         }
+        util = new PreferenceUtil(getActivity());
         getActivity().setTitle(getString(R.string.send));
 
         address = getActivity().findViewById(R.id.send_dcr_add);
@@ -173,37 +177,50 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     };
 
     private void constructTransaction(){
-        String amnt = amount.getText().toString();
-        if(amnt.equals("")){
-            amnt = "0";
-        }
-        String tempDestAddress = address.getText().toString();
-        final double amt;
-        try {
-            amt = (Double.parseDouble(amnt) * 1e8);
-        }catch (Exception e){
-            e.printStackTrace();
-            return;
-        }
-        if(tempDestAddress.equals("")){
-            tempDestAddress = "TsT9w9tGJuvtiaGGoNiccMnjNiP86H5kgBF";
-        }else if(!validateAddress(tempDestAddress)){
-            return;
-        }else if(amt <= 0){
-            estimateSize.setText(R.string.zero_bytes);
-            totalAmountSending.setText(R.string.zero_decred);
-            estimateFee.setText(R.string.zero_decred);
-            return;
-        }
-        final String destAddress = tempDestAddress;
         new Thread(){
             public void run(){
-                try{
-                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                    if(getActivity() == null){
-                        System.out.println("Activity is null");
+                if(getActivity() == null){
+                    System.out.println("Activity is null");
+                    return;
+                }
+                try {
+                    String amnt = amount.getText().toString();
+                    if (amnt.equals("")) {
+                        amnt = "0";
+                    }
+                    String destAddress = address.getText().toString();
+                    final double amt;
+                    try {
+                        amt = (Double.parseDouble(amnt) * 1e8);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         return;
                     }
+                    if (destAddress.equals("")){
+                        destAddress = util.get("recent_address");
+                        if(destAddress.equals("")){
+                            //Generate a temporary address for default account
+                            final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) 0));
+                            if(!response.errorOccurred){
+                                destAddress = response.content;
+                                util.set("recent_address", destAddress);
+                            }
+                        }
+                    }else if(!validateAddress(destAddress)){
+                        return;
+                    }else if(amt <= 0){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                estimateSize.setText(R.string.zero_bytes);
+                                totalAmountSending.setText(R.string.zero_decred);
+                                estimateFee.setText(R.string.zero_decred);
+                            }
+                        });
+                        return;
+                    }
+                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

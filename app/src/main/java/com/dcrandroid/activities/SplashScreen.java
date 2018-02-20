@@ -29,7 +29,7 @@ import dcrwallet.Dcrwallet;
  * Created by Macsleven on 24/12/2017.
  */
 
-public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener, BlockScanResponse {
+public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
     Animation animRotate;
     ImageView imgAnim;
     PreferenceUtil util;
@@ -174,8 +174,12 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                setText("Scanning blocks");
-                Dcrwallet.reScanBlocks(SplashScreen.this, util.getInt("block_checkpoint"));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        openWalletCallback(json);
+                    }
+                });
             }}.start();
     }
 
@@ -195,6 +199,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 Toast.makeText(this, R.string.could_not_open_wallet, Toast.LENGTH_SHORT).show();
             }else{
                 Intent i = new Intent(this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 //Finish all the activities before this
                 ActivityCompat.finishAffinity(this);
@@ -219,21 +224,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
     @Override
     public void onAnimationRepeat(Animation animation) {
-    }
-
-    @Override
-    public void onEnd(long height) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                openWalletCallback(json);
-            }
-        });
-    }
-
-    @Override
-    public void onScan(long rescanned_through) {
-        setText("Scanning blocks "+rescanned_through);
     }
 
     public abstract class DoubleClickListener implements View.OnClickListener {
