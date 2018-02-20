@@ -86,7 +86,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 catch (Exception e){
                     Toast.makeText(getApplicationContext(), "invalid Name",Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 

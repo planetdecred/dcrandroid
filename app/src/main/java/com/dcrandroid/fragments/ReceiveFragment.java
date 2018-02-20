@@ -153,6 +153,9 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             public void run(){
                 try {
                     final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) accountNumber));
+                    if(getActivity() == null){
+                        return;
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -162,6 +165,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                             }else{
                                 //float a = 0/0;
                                 String newAddress = response.content;
+                                preferenceUtil.set("recent_address",newAddress);
                                 address.setText(newAddress);
                                 imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
                             }
