@@ -106,8 +106,7 @@ class DcrdService : Service() {
                         //println("BestBock: ${bestBlock.height} Hash: ${bestBlock.hash}")
                         var percentageSynced = Math.round((bestBlock.height/Utils.estimatedBlocks()) * 100)
                         percentageSynced = if (percentageSynced > 100) 100 else percentageSynced
-                        val formatter = DecimalFormat("#,###")
-                        serverStatus = "${formatter.format(bestBlock.height)} blocks ($percentageSynced% synced)"
+                        serverStatus = "${bestBlock.height} blocks ($percentageSynced% synced)"
                         showNotification()
                     } catch (e: Exception) {
                         e.printStackTrace()

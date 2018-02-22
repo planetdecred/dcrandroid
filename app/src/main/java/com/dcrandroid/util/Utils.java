@@ -123,7 +123,7 @@ public class Utils {
                     sb.append("\n");
                 }
                 fin.close();
-                System.out.println("Cert: "+sb.toString());
+                //System.out.println("Cert: "+sb.toString());
                 return sb.toString();
             }
         } catch (FileNotFoundException e) {
