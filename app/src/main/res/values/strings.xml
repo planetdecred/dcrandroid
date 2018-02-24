@@ -72,9 +72,9 @@
     <string name="receive_funds">Receive Funds</string>
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
-    <string name="send_funds">SEND FUNDS</string>
+    <string name="send_funds">Send Funds</string>
     <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address and the amount in DCR to send fund</string>
-    <string name="destination_address">Destination Address:</string>
+    <string name="destination_address">Destination Address</string>
     <string name="amount_dcr">Amount(DCR) :</string>
     <string name="max">Max</string>
     <string name="send">Send</string>

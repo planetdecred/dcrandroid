@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:text="@string/send_funds"
             android:gravity="center"
+            android:textSize="21sp"
             android:padding="5dp"
             />
 
@@ -109,6 +110,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/amount_dcr"
             android:inputType="numberDecimal"
+            android:maxLength="9"
             android:layout_weight="1"
             android:lines="1"
             android:maxLines="1"

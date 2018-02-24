@@ -47,16 +47,12 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         //returning our layout file
         preferenceUtil = new PreferenceUtil(getContext());
         //change R.layout.yourlayoutfilename for each of your fragments
-        return inflater.inflate(R.layout.content_receive, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        imageView = view.findViewById(R.id.bitm);
-        address = view.findViewById(R.id.barcode_address);
-        Button buttonGenerate = view.findViewById(R.id.btn_gen_new_addr);
-        final Spinner accountSpinner = view.findViewById(R.id.recieve_dropdown);
+        View rootView = inflater.inflate(R.layout.content_overview, container, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+        imageView = rootView.findViewById(R.id.bitm);
+        address = rootView.findViewById(R.id.barcode_address);
+        Button buttonGenerate = rootView.findViewById(R.id.btn_gen_new_addr);
+        final Spinner accountSpinner = rootView.findViewById(R.id.recieve_dropdown);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         categories = new ArrayList<>();
@@ -87,6 +83,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle(getString(R.string.receive));
         prepareAccounts();
+        return rootView;
     }
 
     public void copyToClipboard(String copyText) {
