@@ -112,6 +112,7 @@
                 android:layout_below="@+id/separator13"
                 android:gravity="end"
                 android:padding="8dp"
+                android:textAllCaps="false"
                 android:textColor="@color/primary_text" />
 
             <View

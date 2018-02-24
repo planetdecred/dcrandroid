@@ -143,7 +143,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    amount.setText(String.format(Locale.getDefault(),"%.8f",balance.getSpendable()/ AccountResponse.SATOSHI));
+                                    amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
                                     if(pd.isShowing()){
                                         pd.dismiss();
                                     }
@@ -227,8 +227,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
                             double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
                             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            totalAmountSending.setText(String.format(Locale.getDefault(),"%.8f DCR", totalAmount));
-                            estimateFee.setText(String.format(Locale.getDefault(),"%.8f DCR", estFee));
+                            totalAmountSending.setText(String.format(Locale.getDefault(),"%f DCR", totalAmount));
+                            estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
                         }
                     });
                 }catch (Exception e){
@@ -313,7 +313,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         if(response.items.get(i).name.trim().equals("imported")){
                             continue;
                         }
-                        categories.add(i, response.items.get(i).name + String.format(Locale.getDefault(), " [%.8f]",response.items.get(i).balance.spendable));
+                        categories.add(i, response.items.get(i).name + String.format(Locale.getDefault(), " [%f]",response.items.get(i).balance.spendable));
                         accountNumbers.add(response.items.get(i).number);
                     }
                     if(getActivity() == null){
@@ -390,7 +390,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
         final EditText passphrase = (EditText) dialogView.findViewById(R.id.passphrase_input);
 
-        dialogBuilder.setMessage(getString(R.string.transaction_confirmation)+String.format(Locale.getDefault()," %.8f DCR", amt/1e8));
+        dialogBuilder.setMessage(getString(R.string.transaction_confirmation)+String.format(Locale.getDefault()," %f DCR", amt/1e8));
         dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String pass = passphrase.getText().toString();

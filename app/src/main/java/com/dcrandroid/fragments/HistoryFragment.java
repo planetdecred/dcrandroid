@@ -89,15 +89,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             }
         }));
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(refresh.isShown()){
-//                    refresh.setVisibility(View.INVISIBLE);
-//                }
-//                prepareHistoryData();
-//            }
-//        });
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
@@ -170,13 +161,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(item.timestamp * 1000);
                         SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
-                        //transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.YEAR) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
                         transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%.8f", item.fee));
+                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%f", item.fee));
                         transaction.setType(item.type);
                         transaction.setHash(item.hash);
                       //  transaction.setConfirmations(item.confirmations);
-                        transaction.setAmount(String.format(Locale.getDefault(), "%.8f", item.amount));
+                        transaction.setAmount(String.format(Locale.getDefault(), "%f", item.amount));
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
                         for (int j = 0; j < item.debits.size(); j++) {

@@ -80,7 +80,7 @@
     <string name="send">Send</string>
     <string name="_0_bytes">0 bytes</string>
     <string name="estimate_size">Estimate Size:</string>
-    <string name="_0_00_dcr">0.00000000 DCR</string>
+    <string name="_0_00_dcr">0.00 DCR</string>
     <string name="estimated_fee">Estimated Fee:</string>
     <string name="total_amount_sending">Total amount sending:</string>
     <string name="scan">scan</string>
@@ -184,7 +184,7 @@
     <string name="tx_hash_copy">Hash copied</string>
     <string name="confirmations">Confirmation</string>
     <string name="zero_bytes">0 bytes</string>
-    <string name="zero_decred">0.000000000 DCR</string>
+    <string name="zero_decred">0.00 DCR</string>
     <string name="dcrd_settings">Dcrd Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="pref_title_certificate">Certificate</string>

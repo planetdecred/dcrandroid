@@ -96,7 +96,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         else{
             String temp = getIntent().getStringExtra("Amount")+" "+ getString(R.string.dcr);
             value.formatAndSetText(temp);
-            temp = String.format(Locale.getDefault(),"%.8f DCR", 0.0);
+            temp = String.format(Locale.getDefault(),"%.2f DCR", 0.0);
             transactionFee.formatAndSetText(temp);
         }
         date.setText(getIntent().getStringExtra("TxDate"));
