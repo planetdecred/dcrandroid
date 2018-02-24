@@ -75,10 +75,11 @@
         <TextView 
             android:textSize="12.0sp" 
             android:gravity="end"
-            android:layout_gravity="end" 
+            android:layout_gravity="end"
             android:id="@+id/history_tx_date" 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             />
     </LinearLayout>
 </LinearLayout>

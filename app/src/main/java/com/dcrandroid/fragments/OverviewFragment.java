@@ -56,7 +56,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
     private Button reScanBlock;
     private CurrencyTextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
-    //private View progressContainer;
     TransactionAdapter transactionAdapter;
     ProgressDialog pd;
     TextView refresh;
@@ -80,7 +79,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         reScanBlock =  rootView.getRootView().findViewById(R.id.overview_rescan_btn);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
-        tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%.8f DCR", util.getFloat(PreferenceUtil.TOTAL_BALANCE)));
+        tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR", util.getFloat(PreferenceUtil.TOTAL_BALANCE)));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -163,10 +162,13 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                     }
                     util.setFloat(PreferenceUtil.TOTAL_BALANCE,totalBalance);
                     final float finalTotalBalance = totalBalance;
+                    if(getActivity() == null){
+                        return;
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%.8f DCR",finalTotalBalance));
+                            tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR",finalTotalBalance));
                         }
                     });
                 }catch (Exception e){
@@ -224,10 +226,10 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                         SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
                         //transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.YEAR) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
                         transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%.8f", item.fee));
+                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%f", item.fee));
                         transaction.setType(item.type);
                         transaction.setHash(item.hash);
-                        transaction.setAmount(String.format(Locale.getDefault(), "%.8f", item.amount));
+                        transaction.setAmount(String.format(Locale.getDefault(), "%f", item.amount));
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
                         for (int j = 0; j < item.debits.size(); j++) {
