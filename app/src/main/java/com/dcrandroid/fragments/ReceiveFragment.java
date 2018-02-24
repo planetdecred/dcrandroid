@@ -47,7 +47,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         //returning our layout file
         preferenceUtil = new PreferenceUtil(getContext());
         //change R.layout.yourlayoutfilename for each of your fragments
-        View rootView = inflater.inflate(R.layout.content_overview, container, false);
+        View rootView = inflater.inflate(R.layout.content_receive, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
