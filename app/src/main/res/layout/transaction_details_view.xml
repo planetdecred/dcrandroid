@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:gravity="start|left"
+                android:gravity="start"
                 android:padding="8dp"
                 android:textColor="@color/primary_text"
                 android:layout_below="@id/label_tx_hash"
