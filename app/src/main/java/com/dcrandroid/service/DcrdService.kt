@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat
 import com.dcrandroid.R
 import com.dcrandroid.util.Utils
 import dcrwallet.Dcrwallet
+import org.json.JSONObject
 import java.text.DecimalFormat
 
 class DcrdService : Service() {
@@ -95,6 +96,7 @@ class DcrdService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+
         Dcrwallet.runDcrd()
         object : Thread() {
             override fun run() {
@@ -103,10 +105,16 @@ class DcrdService : Service() {
                         val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
                         val bestBlock = Utils.parseBestBlock(result)
 
-                        //println("BestBock: ${bestBlock.height} Hash: ${bestBlock.hash}")
-                        var percentageSynced = Math.round((bestBlock.height/Utils.estimatedBlocks()) * 100)
-                        percentageSynced = if (percentageSynced > 100) 100 else percentageSynced
-                        serverStatus = "${bestBlock.height} blocks ($percentageSynced% synced)"
+                        val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
+                        val lastBlockTime = rawBlock.getLong("time")
+                        val currentTime = System.currentTimeMillis() / 1000
+                        //TODO: Make available for both testnet and mainnet
+                        val estimatedBlocks = (currentTime - lastBlockTime) / 120
+                        serverStatus = if(estimatedBlocks > bestBlock.height){
+                            "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
+                        }else{
+                            "${bestBlock.height} blocks (Last block $lastBlockTime seconds ago)"
+                        }
                         showNotification()
                     } catch (e: Exception) {
                         e.printStackTrace()

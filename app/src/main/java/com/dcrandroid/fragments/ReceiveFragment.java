@@ -161,7 +161,6 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         public void run() {
                             if(response.errorOccurred){
                                 Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber+"\n"+response.content,Toast.LENGTH_SHORT).show();
-                                float a = 0/0;
                             }else{
                                 //float a = 0/0;
                                 String newAddress = response.content;

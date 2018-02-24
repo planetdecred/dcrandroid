@@ -79,7 +79,6 @@
 
         <service
             android:name=".service.DcrdService"
-            android:process=":dcrd"
             android:label="Decred Chain Server"
             android:enabled="true"
             android:exported="false" />

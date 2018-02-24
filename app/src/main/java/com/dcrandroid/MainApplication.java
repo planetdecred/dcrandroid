@@ -64,6 +64,7 @@ public class MainApplication extends Application {
             }else{
                 startService(i);
             }
+            //Dcrwallet.runDcrd();
         }else{
             System.out.println("Not starting local server");
         }
