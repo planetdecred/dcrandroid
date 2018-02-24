@@ -71,6 +71,13 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                 copyToClipboard(address.getText().toString());
             }
         });
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                copyToClipboard(address.getText().toString());
+                return true;
+            }
+        });
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
