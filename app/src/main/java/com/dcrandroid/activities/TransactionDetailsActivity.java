@@ -73,6 +73,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 startActivity(browserIntent);
             }
         });
+        txHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://explorer.dcrdata.org/tx/"+txHash.getText().toString();
+                if(Dcrwallet.isTestNet()){
+                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
+                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+            }
+        });
         try {
 //            String res = Dcrwallet.decodeRawTransaction(
 //                    Utils.getHash(getIntent().getStringExtra("Hash"))
@@ -96,7 +107,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         else{
             String temp = getIntent().getStringExtra("Amount")+" "+ getString(R.string.dcr);
             value.formatAndSetText(temp);
-            temp = String.format(Locale.getDefault(),"%.8f DCR", 0.0);
+            temp = String.format(Locale.getDefault(),"%.2f DCR", 0.0);
             transactionFee.formatAndSetText(temp);
         }
         date.setText(getIntent().getStringExtra("TxDate"));

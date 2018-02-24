@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,10 +25,10 @@ import java.util.Locale;
 
 public class AccountDetailsActivity extends AppCompatActivity {
 
+    String accountNameTemp = getIntent().getStringExtra("AccountName");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       final String accountNameTemp =getIntent().getStringExtra("AccountName");
         setTitle(getIntent().getStringExtra("AccountName"));
         setContentView(R.layout.account_details_view);
 
@@ -39,7 +41,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
         TextView accountNumber = findViewById(R.id.acc_dts_acc_number);
         TextView hDPath = findViewById(R.id.acc_dts_hd_path);
         TextView keys = findViewById(R.id.acc_dts_keys);
-        Button editName= findViewById(R.id.edit_acc_name_btn);
 
         spendable.formatAndSetText(getIntent().getStringExtra("Spendable"));
         total.formatAndSetText(getIntent().getStringExtra("total"));
@@ -50,12 +51,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
         accountNumber.setText(getIntent().getStringExtra("AccountNumber"));
         hDPath.setText(getIntent().getStringExtra("HDPath"));
         keys.setText(getIntent().getStringExtra("Keys"));
-        editName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showInputAccountNameDialog(accountNameTemp,getString(R.string.edit_account_name_msg_info),getString(R.string.account_name));
-            }
-        });
     }
 
     @Override
@@ -97,5 +92,29 @@ public class AccountDetailsActivity extends AppCompatActivity {
         AlertDialog b = dialogBuilder.create();
         b.show();
         b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu);
+        MenuItem menuOpen = menu.findItem(R.id.action_edit_name);
+        menuOpen.setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_edit_name) {
+            showInputAccountNameDialog(accountNameTemp,getString(R.string.edit_account_name_msg_info),getString(R.string.account_name));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

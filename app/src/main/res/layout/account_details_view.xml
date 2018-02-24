@@ -302,24 +302,5 @@
                 android:gravity="end"
                 android:padding="8dp"
                 android:textColor="@color/primary_text" />
-            <View
-                android:id="@+id/separators152s"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/acc_dts_keys"
-                android:background="@color/primary_text" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_acc_name_btn"
-                android:layout_below="@+id/separators152s"
-                android:text="@string/edit_account_name"
-                android:layout_centerInParent="true"
-                android:background="@color/ButtonColor"
-                android:textColor="#ffff"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_marginTop="8dp"
-                android:textAllCaps="false"/>
         </RelativeLayout>
 </LinearLayout>

@@ -72,15 +72,15 @@
     <string name="receive_funds">Receive Funds</string>
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
-    <string name="send_funds">SEND FUNDS</string>
+    <string name="send_funds">Send Funds</string>
     <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address and the amount in DCR to send fund</string>
-    <string name="destination_address">Destination Address:</string>
+    <string name="destination_address">Destination Address</string>
     <string name="amount_dcr">Amount(DCR) :</string>
     <string name="max">Max</string>
     <string name="send">Send</string>
     <string name="_0_bytes">0 bytes</string>
     <string name="estimate_size">Estimate Size:</string>
-    <string name="_0_00_dcr">0.00000000 DCR</string>
+    <string name="_0_00_dcr">0.00 DCR</string>
     <string name="estimated_fee">Estimated Fee:</string>
     <string name="total_amount_sending">Total amount sending:</string>
     <string name="scan">scan</string>
@@ -184,7 +184,7 @@
     <string name="tx_hash_copy">Hash copied</string>
     <string name="confirmations">Confirmation</string>
     <string name="zero_bytes">0 bytes</string>
-    <string name="zero_decred">0.000000000 DCR</string>
+    <string name="zero_decred">0.00 DCR</string>
     <string name="dcrd_settings">Dcrd Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="pref_title_certificate">Certificate</string>
@@ -235,6 +235,8 @@
     <string name="edit_account_name">Edit account name</string>
     <string name="edit_account_name_msg_info">Input the Account Name</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
+    <string name="label_version">Version:</string>
+    <string name="spinner_account">Account:</string>
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>
         <item>480p</item>

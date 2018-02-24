@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:text="@string/send_funds"
             android:gravity="center"
+            android:textSize="21sp"
             android:padding="5dp"
             />
 
@@ -23,7 +24,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,14 +35,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
-                android:gravity="bottom"
+                android:gravity="right"
                 android:padding="5dp"
                 android:background="@color/backgcolorwhite"
                 android:textSize="16sp"
 
                 />
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -51,8 +52,11 @@
 
                 <Spinner
                     android:id="@+id/send_dropdown"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:entries="@array/nav_item_activity_titles"
+                    android:layout_marginRight="-10dp"
+                    android:layout_marginEnd="-10dp"
                      >
                 </Spinner>
             </LinearLayout>
@@ -106,6 +110,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/amount_dcr"
             android:inputType="numberDecimal"
+            android:maxLength="9"
             android:layout_weight="1"
             android:lines="1"
             android:maxLines="1"
