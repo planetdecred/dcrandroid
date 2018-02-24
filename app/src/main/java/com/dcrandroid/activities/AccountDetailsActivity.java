@@ -25,11 +25,12 @@ import java.util.Locale;
 
 public class AccountDetailsActivity extends AppCompatActivity {
 
-    String accountNameTemp = getIntent().getStringExtra("AccountName");
+    String accountNameTemp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getIntent().getStringExtra("AccountName"));
+        accountNameTemp = getIntent().getStringExtra("AccountName");
         setContentView(R.layout.account_details_view);
 
         CurrencyTextView spendable = findViewById(R.id.acc_dts_spendable);
@@ -59,8 +60,8 @@ public class AccountDetailsActivity extends AppCompatActivity {
     }
 
     public void showInputAccountNameDialog(final String accountNam,final String messageInfo,final String messagehint) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getApplicationContext());
-        LayoutInflater inflater = getParent().getLayoutInflater();
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.input_passphrase_box, null);
         dialogBuilder.setCancelable(false);
         dialogBuilder.setView(dialogView);
@@ -96,11 +97,11 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu);
-        MenuItem menuOpen = menu.findItem(R.id.action_edit_name);
-        menuOpen.setVisible(true);
-        return true;
+//        MenuItem menuOpen = menu.findItem(R.id.action_edit_name);
+//        menuOpen.setVisible(true);
+        return false;
     }
 
     @Override
