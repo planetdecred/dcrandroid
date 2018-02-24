@@ -18,6 +18,10 @@ import com.dcrandroid.data.BestBlock;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import org.json.JSONObject;
+
+import java.util.Locale;
+
 import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
@@ -67,14 +71,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 break;
                             }
                             final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
-                            long percentageSynced = Math.round((bestBlock.getHeight()/Utils.estimatedBlocks()) * 100);
-                            percentageSynced = percentageSynced > 100 ? 100 : percentageSynced;
-                            //System.out.println("Block Hash: "+bestBlock.getHash()+", Block Height: "+bestBlock.getHeight());
-                            final long finalPercentageSynced = percentageSynced;
+                            JSONObject rawBlock = new JSONObject(Dcrwallet.runDcrCommands("getblockheader "+bestBlock.getHash()));
+                            final long lastBlockTime = rawBlock.getLong("time");
+                            long currentTime = System.currentTimeMillis() / 1000;
+                            //TODO: Make available for both testnet and mainnet
+                            final long estimatedBlocks = (currentTime - lastBlockTime) / 120;
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    currentBlockHeight.setSummary(String.valueOf(bestBlock.getHeight()) + "\n % Synced: "+ finalPercentageSynced+"%");
+                                    if(estimatedBlocks > bestBlock.getHeight()) {
+                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (%d blocks behind)", bestBlock.getHeight(), estimatedBlocks-bestBlock.getHeight()));
+                                    }else{
+                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (Last block %d seconds ago)", bestBlock.getHeight(), lastBlockTime));
+                                    }
                                 }
                             });
                         } catch (Exception e) {
