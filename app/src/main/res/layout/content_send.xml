@@ -34,14 +34,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
-                android:gravity="bottom"
+                android:gravity="right"
                 android:padding="5dp"
                 android:background="@color/backgcolorwhite"
                 android:textSize="16sp"
 
                 />
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -51,8 +51,11 @@
 
                 <Spinner
                     android:id="@+id/send_dropdown"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:entries="@array/nav_item_activity_titles"
+                    android:layout_marginRight="-10dp"
+                    android:layout_marginEnd="-10dp"
                      >
                 </Spinner>
             </LinearLayout>

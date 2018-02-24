@@ -236,6 +236,7 @@
     <string name="edit_account_name_msg_info">Input the Account Name</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="label_version">Version:</string>
+    <string name="spinner_account">Account:</string>
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>
         <item>480p</item>
