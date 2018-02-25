@@ -82,7 +82,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     if(estimatedBlocks > bestBlock.getHeight()) {
                                         currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (%d blocks behind)", bestBlock.getHeight(), estimatedBlocks-bestBlock.getHeight()));
                                     }else{
-                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (Last block %d seconds ago)", bestBlock.getHeight(), lastBlockTime));
+                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (Last block %d seconds ago)", bestBlock.getHeight(), (System.currentTimeMillis()/1000) - lastBlockTime));
                                     }
                                 }
                             });
