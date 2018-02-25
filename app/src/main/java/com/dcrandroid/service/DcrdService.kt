@@ -14,6 +14,7 @@ import com.dcrandroid.util.Utils
 import dcrwallet.Dcrwallet
 import org.json.JSONObject
 import java.text.DecimalFormat
+import java.util.*
 
 class DcrdService : Service() {
 
@@ -48,6 +49,8 @@ class DcrdService : Service() {
         val notification : Notification
         val intent = Intent("SHUTDOWN")
         val pi = PendingIntent.getBroadcast(this, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val launchIntent = packageManager.getLaunchIntentForPackage("com.dcrandroid")
+        val launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val icon = Icon.createWithResource(this, R.drawable.ic_menu_share)
             val action = Notification.Action.Builder(icon,"SHUTDOWN", pi).build()
@@ -60,6 +63,7 @@ class DcrdService : Service() {
                     .setAutoCancel(true)
                     .setSound(null)
                     .addAction(action)
+                    .setContentIntent(launchPendingIntent)
                     .build()
         }else{
             val action = NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"SHUTDOWN", pi).build()
@@ -73,6 +77,7 @@ class DcrdService : Service() {
                     .addAction(action)
                     .setSound(null)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(launchPendingIntent)
                     .build()
         }
         startForeground(1, notification)
@@ -107,13 +112,14 @@ class DcrdService : Service() {
 
                         val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
                         val lastBlockTime = rawBlock.getLong("time")
+                        //println("Current: ${(System.currentTimeMillis()/1000) - lastBlockTime}")
                         val currentTime = System.currentTimeMillis() / 1000
                         //TODO: Make available for both testnet and mainnet
                         val estimatedBlocks = (currentTime - lastBlockTime) / 120
                         serverStatus = if(estimatedBlocks > bestBlock.height){
                             "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
                         }else{
-                            "${bestBlock.height} blocks (Last block $lastBlockTime seconds ago)"
+                            "${bestBlock.height} blocks (Last block ${(System.currentTimeMillis()/1000) - lastBlockTime} seconds ago)"
                         }
                         showNotification()
                     } catch (e: Exception) {

@@ -20,6 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:launchMode="singleTop"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.SplashScreen"
@@ -81,6 +82,7 @@
             android:name=".service.DcrdService"
             android:label="Decred Chain Server"
             android:enabled="true"
+            android:process=":dcrd"
             android:exported="false" />
 
         <activity android:name=".activities.LogViewer" />
