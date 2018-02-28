@@ -6,7 +6,28 @@ An decred wallet for android that runs ontop of [dcrwallet](https://github.com/d
 ## Requirements:
 Android 3.0 or above.
 
-## Building
+## Building dcrwallet
+Dcrwallet is required for this app to run, you can optionally build it or use library file found in [dcrwallet dir](https://github.com/C-ollins/dcrandroid/tree/master/dcrwallet)
+
+### Prerequisites
+1. Go(1.8 or 1.9) which can be found [here](http://golang.org/doc/install)
+2. Dep [latest release](https://github.com/golang/dep/releases)
+3. Gomobile [Installation Instructions](https://github.com/golang/go/wiki/Mobile#tools)
+
+To compile, run the following commands
+
+    go get -v github.com/decred/dcrwallet
+    cd $GOPATH/src/github.com/decred/dcrwallet
+    git fetch https://github.com/C-ollins/dcrwallet mobile
+    git branch mobile FETCH_HEAD
+    git checkout mobile
+    dep ensure -v
+    gomobile bind -target=android/arm
+Or navigate to dcrandroid clone directory and run
+
+    ./build.sh
+
+## Building Android Application
 Android Studio(or gradle) and Android SDK is required if you wish to compile it yourself.
 
 ### Prerequisites
