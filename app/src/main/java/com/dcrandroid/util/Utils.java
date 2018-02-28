@@ -6,6 +6,8 @@ import android.content.Context;
 import com.dcrandroid.R;
 import com.dcrandroid.data.BestBlock;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +23,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -213,7 +214,7 @@ public class Utils {
         for(int i = 0; i < files.length; i++) {
             File file = new File(path, files[i]);
             //[Debug] Write the file to the storage if it exists or not
-            if (!file.exists() || true) {
+            if (!file.exists()) {
                 file.createNewFile();
                 FileOutputStream fout = new FileOutputStream(file);
                 InputStream in = context.getAssets().open(assetFilesName[i]);
@@ -254,5 +255,45 @@ public class Utils {
         long totalDays = (today.getTimeInMillis() - startDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
         int blocksPerDay = 720;
         return Math.round(totalDays * blocksPerDay * (0.95));
+    }
+
+    public static void setDcrwalletConfig(String key, String value){
+        try {
+            PropertiesConfiguration properties = new PropertiesConfiguration(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
+            properties.setProperty(key,value);
+            properties.save(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
+        }catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeDcrwalletConfig(String key){
+        try {
+            PropertiesConfiguration properties = new PropertiesConfiguration(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
+            properties.clearProperty(key);
+            properties.save(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
+        }catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setDcrdConfiguration(String key, String value){
+        try {
+            PropertiesConfiguration properties = new PropertiesConfiguration(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+            properties.setProperty(key,value);
+            properties.save(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeDcrdConfig(String key){
+        try {
+            PropertiesConfiguration properties = new PropertiesConfiguration(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+            properties.clearProperty(key);
+            properties.save(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+        }catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 }

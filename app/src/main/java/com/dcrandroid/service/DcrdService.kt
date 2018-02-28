@@ -109,7 +109,6 @@ class DcrdService : Service() {
                     try {
                         val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
                         val bestBlock = Utils.parseBestBlock(result)
-
                         val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
                         val lastBlockTime = rawBlock.getLong("time")
                         //println("Current: ${(System.currentTimeMillis()/1000) - lastBlockTime}")
