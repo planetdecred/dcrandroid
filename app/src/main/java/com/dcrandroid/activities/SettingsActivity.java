@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -44,11 +44,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             addPreferencesFromResource(R.xml.pref_main);
-            final SwitchPreference localDcrd = (SwitchPreference) findPreference(getString(R.string.key_connection_local_dcrd));
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
+            final EditTextPreference connectToPeer = (EditTextPreference) findPreference("peer_ip");
+            final ListPreference networkModes = (ListPreference) findPreference("network_modes");
+            if(util.getBoolean("connect_to_peer")){
+                connectToPeer.setEnabled(true);
+            }else{
+                connectToPeer.setEnabled(false);
+            }
+            if(util.getBoolean("remote_dcrd")){
+                dcrdCertificate.setEnabled(true);
+                remoteDcrdAddress.setEnabled(true);
+            }else {
+                dcrdCertificate.setEnabled(false);
+                remoteDcrdAddress.setEnabled(false);
+            }
+            networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[util.getInt("network_mode")]);
             /*
             * If local chain server is disabled, enable dcrdCertificate and remoteDcrdAddress.
             *  They disabled by default
@@ -97,39 +111,59 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     }
                 }
             }.start();
-            localDcrd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+            networkModes.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceChange(Preference preference, Object o) {
-                    boolean b = (boolean) o;
-                    System.out.println("Boolean: "+b);
-                    if(b == false){
-                        System.out.println("Enabling preferences");
-                        dcrdCertificate.setEnabled(true);
-                        remoteDcrdAddress.setEnabled(true);
-                        util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
-                        //String address = util.get(getString(R.string.remote_dcrd));
-//                        if(address.equals("")){
-//                            util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
-//                            dcrdCertificate.setEnabled(false);
-//                            remoteDcrdAddress.setEnabled(false);
-//                            Toast.makeText(getActivity(), R.string.info_set_remote_addr, Toast.LENGTH_SHORT).show();
-//                            return false;
-//                        }else{
-//                            util.setBoolean(getString(R.string.key_connection_local_dcrd),false);
-//                            dcrdCertificate.setEnabled(true);
-//                            remoteDcrdAddress.setEnabled(true);
-//                            return true;
-//                        }
-                        return true;
-                    }else{
-                        System.out.println("disabling preferences");
-                        util.setBoolean(getString(R.string.key_connection_local_dcrd),true);
-                        dcrdCertificate.setEnabled(false);
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int i = Integer.valueOf((String)newValue);
+                    preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
+                    util.setInt("network_mode", i);
+                    if(i == 0 || i == 1){
+                        connectToPeer.setEnabled(true);
                         remoteDcrdAddress.setEnabled(false);
-                        return true;
+                        dcrdCertificate.setEnabled(false);
+                        util.setBoolean("connect_to_peer",true);
+                        util.setBoolean("remote_dcrd", false);
+                    }else{
+                        connectToPeer.setEnabled(false);
+                        remoteDcrdAddress.setEnabled(true);
+                        dcrdCertificate.setEnabled(true);
+                        util.setBoolean("connect_to_peer",false);
+                        util.setBoolean("remote_dcrd", true);
+                        Utils.removeDcrwalletConfig("spvconnect");
+                        Utils.removeDcrdConfig("connect");
                     }
+                    if(i == 0){
+                        Utils.setDcrwalletConfig("spv","true");
+                    }else{
+                        Utils.removeDcrwalletConfig("spv");
+                    }
+                    return true;
                 }
             });
+
+            connectToPeer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String address = newValue.toString();
+                    /*
+                    * Check if the address entered by the user matches
+                    * an ip address or an ip address with a port
+                    * e.g 127.0.0.1 or 127.0.0.1:19109
+                    * */
+                    if(address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")
+                            || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) {
+                        util.set("peer_address", address);
+                        Utils.setDcrwalletConfig("spvconnect",address);
+                        Utils.setDcrdConfiguration("connect",address);
+                        return true;
+                    }else{
+                        Toast.makeText(getActivity(), R.string.remote_address_invalid, Toast.LENGTH_SHORT).show();
+                    }
+                    return false;
+                }
+            });
+
             remoteDcrdAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
