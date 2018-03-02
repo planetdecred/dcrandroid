@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if(item.getItemId() == R.id.nav_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return false;
+            return true;
         }else {
             displaySelectedScreen(item.getItemId());
         }
