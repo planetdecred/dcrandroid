@@ -153,9 +153,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             case R.id.nav_history:
                 fragment = new HistoryFragment();
                 break;
-            case R.id.nav_tickets:
+           /* case R.id.nav_tickets:
                 fragment = new TicketsFragment();
-                break;
+                break;*/
             case R.id.nav_help:
                 fragment = new HelpFragment();
                 break;
