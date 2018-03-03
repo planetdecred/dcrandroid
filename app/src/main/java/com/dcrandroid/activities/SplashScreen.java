@@ -62,6 +62,10 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
         animRotate.setAnimationListener(this);
         imgAnim.startAnimation(animRotate);
+        startup();
+    }
+
+    private void startup(){
         tvLoading = findViewById(R.id.loading_status);
         String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
         if(Dcrwallet.isTestNet()){
