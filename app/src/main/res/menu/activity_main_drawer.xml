@@ -24,10 +24,10 @@
             android:id="@+id/nav_history"
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="History" />
-        <item
+      <!--  <item
             android:id="@+id/nav_tickets"
             android:icon="@android:drawable/ic_menu_today"
-            android:title="Tickets" />
+            android:title="Tickets" />-->
         <item
             android:id="@+id/nav_settings"
             android:icon="@android:drawable/ic_menu_manage"

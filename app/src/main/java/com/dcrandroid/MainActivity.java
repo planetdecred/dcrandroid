@@ -153,9 +153,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             case R.id.nav_history:
                 fragment = new HistoryFragment();
                 break;
-            case R.id.nav_tickets:
+           /* case R.id.nav_tickets:
                 fragment = new TicketsFragment();
-                break;
+                break;*/
             case R.id.nav_help:
                 fragment = new HelpFragment();
                 break;
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if(item.getItemId() == R.id.nav_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return false;
+            return true;
         }else {
             displaySelectedScreen(item.getItemId());
         }
