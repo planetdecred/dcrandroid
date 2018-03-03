@@ -26,11 +26,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_connection">
-        <!--<SwitchPreference-->
-            <!--android:defaultValue="true"-->
-            <!--android:summary="@string/summary_enable_local_dcrd"-->
-            <!--android:key="@string/key_connection_local_dcrd"-->
-            <!--android:title="@string/title_enable_local_dcrd" />-->
         <ListPreference
             android:title="Network mode"
             android:summary="Simplified Payment Verification (SPV)"
@@ -40,7 +35,6 @@
             android:entries="@array/network_modes"
             />
         <EditTextPreference
-            android:enabled="false"
             android:title="Connect to peer"
             android:key="peer_ip"
             />

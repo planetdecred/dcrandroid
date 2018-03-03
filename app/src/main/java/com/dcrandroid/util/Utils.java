@@ -104,10 +104,10 @@ public class Utils {
 
     public static String getConnectionCertificate(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(util.getBoolean(context.getString(R.string.key_connection_local_dcrd), true)){
-            return Utils.getDefaultCertificate(context);
-        }else{
+        if(util.getInt("network_mode") == 2){
             return Utils.getRemoteCertificate(context);
+        }else{
+            return Utils.getDefaultCertificate(context);
         }
     }
 
@@ -173,7 +173,7 @@ public class Utils {
 
     public static String getDcrdNetworkAddress(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(util.getBoolean(context.getString(R.string.key_connection_local_dcrd), true)){
+        if(util.getInt("network_mode") == 1 || util.getInt("network_mode") == 0){
             System.out.println("Util is using local server");
             return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
         }else{

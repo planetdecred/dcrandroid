@@ -50,30 +50,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference connectToPeer = (EditTextPreference) findPreference("peer_ip");
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
-            if(util.getBoolean("connect_to_peer")){
-                connectToPeer.setEnabled(true);
-            }else{
-                connectToPeer.setEnabled(false);
-            }
-            if(util.getBoolean("remote_dcrd")){
+            if(util.getInt("network_mode") == 2){
+                System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
                 remoteDcrdAddress.setEnabled(true);
+                connectToPeer.setEnabled(false);
             }else {
+                System.out.println("Mode : 1 || 0");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
+                connectToPeer.setEnabled(true);
             }
+            connectToPeer.setText(util.get("peer_address"));
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[util.getInt("network_mode")]);
-            /*
-            * If local chain server is disabled, enable dcrdCertificate and remoteDcrdAddress.
-            *  They disabled by default
-            * */
-            if (!util.getBoolean(getString(R.string.key_connection_local_dcrd), true)) {
-                System.out.println("Local dcrd server is disabled");
-                dcrdCertificate.setEnabled(true);
-                remoteDcrdAddress.setEnabled(true);
-            }else{
-                System.out.println("Local dcrd server is enabled");
-            }
+            networkModes.setValueIndex(util.getInt("network_mode"));
             /*
             * Get the current block height from the chain server, parse it and display it
             * */
@@ -123,13 +113,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         remoteDcrdAddress.setEnabled(false);
                         dcrdCertificate.setEnabled(false);
                         util.setBoolean("connect_to_peer",true);
-                        util.setBoolean("remote_dcrd", false);
+                        //util.setBoolean(getString(R.string.key_connection_local_dcrd), false);
                     }else{
                         connectToPeer.setEnabled(false);
                         remoteDcrdAddress.setEnabled(true);
                         dcrdCertificate.setEnabled(true);
                         util.setBoolean("connect_to_peer",false);
-                        util.setBoolean("remote_dcrd", true);
+                        ///util.setBoolean(getString(R.string.key_connection_local_dcrd), true);
                         Utils.removeDcrwalletConfig("spvconnect");
                         Utils.removeDcrdConfig("connect");
                     }
@@ -152,13 +142,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     * e.g 127.0.0.1 or 127.0.0.1:19109
                     * */
                     if(address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")
-                            || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) {
+                            || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
+                            || address.equals("")) {
                         util.set("peer_address", address);
                         Utils.setDcrwalletConfig("spvconnect",address);
                         Utils.setDcrdConfiguration("connect",address);
                         return true;
                     }else{
-                        Toast.makeText(getActivity(), R.string.remote_address_invalid, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Peer address is invalid", Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 }
