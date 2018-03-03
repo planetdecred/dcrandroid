@@ -45,22 +45,10 @@ public class MainApplication extends Application {
         }
     }
 
-    public void deleteTemp(){
-        if(!util.getBoolean("temp")){
-            System.out.println("Deleting config");
-            new File(Dcrwallet.getHomeDir()+"/dcrwallet.conf").delete();
-            new File(getFilesDir().getPath()+"/dcrd/dcrd.conf").delete();
-            util.setBoolean("temp", true);
-        }else{
-            System.out.println("Not Deleting config");
-        }
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
         util = new PreferenceUtil(this);
-        deleteTemp();
         try {
             Utils.writeDcrdFiles(this);
             Utils.writeDcrwalletFiles(this);
@@ -68,7 +56,9 @@ public class MainApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Utils.removeDcrwalletConfig("spv");
         if(util.getInt("network_mode") == 1){
+            //local full-node
             System.out.println("Starting local server");
             Intent i = new Intent(this, DcrdService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -76,9 +66,9 @@ public class MainApplication extends Application {
             }else{
                 startService(i);
             }
-            //Dcrwallet.runDcrd();
-        }else{
-            System.out.println("Not starting local server");
+        }else if(util.getInt("network_mode") == 0){
+            //spv
+            Utils.setDcrwalletConfig("spv","true");
         }
     }
 }

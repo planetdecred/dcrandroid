@@ -16,9 +16,11 @@ import dcrwallet.Dcrwallet;
 public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> implements BlockScanResponse{
     private ProgressDialog pd;
     private EncryptWallet context;
+    PreferenceUtil util;
     public EncryptBackgroundWorker(ProgressDialog pd, EncryptWallet context){
         this.pd = pd;
         this.context = context;
+        this.util = new PreferenceUtil(context);
     }
 
     @Override
@@ -30,7 +32,6 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
-        PreferenceUtil util = new PreferenceUtil(context);
         if(values[0] == 0){
             pd.setMessage(context.getString(R.string.creating_wallet));
         }else if(values[0] == 1){
@@ -40,8 +41,12 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
         }else if(values[0] == 3){
             pd.setMessage(context.getString(R.string.conecting_to_dcrd));
         }else if(values[0] == 4){
-            int percentage = (int) ((values[1]/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
-            pd.setMessage(context.getString(R.string.scanning_blocks)+percentage+"%");
+            try {
+                //int percentage = (int) ((values[1] / Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
+                pd.setMessage(context.getString(R.string.scanning_blocks) + " "+ values[1]);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }else if(values[0] == 5){
             pd.setMessage(context.getString(R.string.subscribing_to_block_notification));
         }
@@ -50,20 +55,27 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
     @Override
     protected String doInBackground(String... params) {
         try {
+            PreferenceUtil util = new PreferenceUtil(context);
             publishProgress(0);
             String createResponse =  Dcrwallet.createWallet(params[0], params[1]);
-            String dcrdAddress = Utils.getDcrdNetworkAddress(context);
-            publishProgress(3);
-            for(;;) {
-                if(Dcrwallet.connectToDcrd(dcrdAddress, Utils.getConnectionCertificate(context).getBytes())){
-                    break;
-                }
+            //Utils.setDcrwalletConfig("noinitialload","false");
+//            String dcrdAddress = Utils.getDcrdNetworkAddress(context);
+//            if(util.getInt("network_mode") != 0) {
+//                publishProgress(3);
+//                for (; ; ) {
+//                    if (Dcrwallet.connectToDcrd(dcrdAddress, Utils.getConnectionCertificate(context).getBytes())) {
+//                        break;
+//                    }
+//                }
+//            }
+            if(util.getInt("network_mode") == 0){
+                System.out.println("Connecting to peer");
+                Dcrwallet.connectToPeer(util.get("peer_address"));
             }
             publishProgress(5);
             Dcrwallet.subscibeToBlockNotifications();
             publishProgress(1);
             Dcrwallet.discoverAddresses(params[0]);
-            PreferenceUtil util = new PreferenceUtil(context);
             util.set("key", params[0]);
             util.set("discover_address","true");
             publishProgress(2);
