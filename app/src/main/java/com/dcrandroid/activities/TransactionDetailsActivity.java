@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import com.dcrandroid.adapter.ExpandableListViewAdapter;
 import com.dcrandroid.R;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,7 @@ import dcrwallet.Dcrwallet;
 public class TransactionDetailsActivity extends AppCompatActivity {
 
     private ExpandableListView expandableListView;
-
+    private PreferenceUtil util;
     private List<String> parentHeaderInformation;
 
     @Override
@@ -39,7 +41,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
-
+        util = new PreferenceUtil(this);
         parentHeaderInformation = new ArrayList<>();
 
         parentHeaderInformation.add(getString(R.string.used_inputs));
@@ -59,7 +61,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
-        confirmation.setText(getIntent().getStringExtra("TXConfirmation"));
+        confirmation.setText(String.format(Locale.getDefault(),"%d",util.getInt(PreferenceUtil.BLOCK_HEIGHT) - getIntent().getIntExtra("Height",0)));
         txHash.setText(getIntent().getStringExtra("Hash"));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
@@ -99,21 +101,22 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if(Double.parseDouble(getIntent().getStringExtra("Fee")) > 0){
-            String temp = "- "+getIntent().getStringExtra("Fee") +" "+getString(R.string.dcr);
-            value.formatAndSetText(temp);
-            transactionFee.formatAndSetText(temp);
+        DecimalFormat df = new DecimalFormat("#.#");
+        if(getIntent().getFloatExtra("Fee",0) > 0){
+            //String temp = "- "+getIntent().getStringExtra("Fee") +" "+getString(R.string.dcr);
+            transactionFee.formatAndSetText(df.format(getIntent().getFloatExtra("Fee",0)));
         }
         else{
-            String temp = getIntent().getStringExtra("Amount")+" "+ getString(R.string.dcr);
-            value.formatAndSetText(temp);
-            temp = String.format(Locale.getDefault(),"%.2f DCR", 0.0);
-            transactionFee.formatAndSetText(temp);
+            value.formatAndSetText(df.format(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
+            System.out.println(".2 F is on");
+            String temp = String.format(Locale.getDefault(),"%.2f DCR", 0.0);
+            transactionFee.formatAndSetText(df.format(0)+" DCR");
         }
         date.setText(getIntent().getStringExtra("TxDate"));
         status.setText(getIntent().getStringExtra("TxStatus"));
-        txType.setText(getIntent().getStringExtra("TxType"));
-        //transactionFee.setText(getIntent().getStringExtra("Fee"));
+        String type = getIntent().getStringExtra("TxType");
+        type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
+        txType.setText(type);
         if(status.getText().toString().equals("pending")){
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));

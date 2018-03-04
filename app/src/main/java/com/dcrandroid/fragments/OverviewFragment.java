@@ -94,7 +94,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                 i.putExtra("Fee",history.getTransactionFee());
                 i.putExtra("TxDate",history.getTxDate());
                 i.putExtra("TxType",history.getType());
-                //i.putExtra("AccountName",history.getAccountName());
+                i.putExtra("Height", history.getHeight());
                 i.putExtra("TxStatus",history.getTxStatus());
                 i.putExtra("Hash", history.getHash());
                 i.putStringArrayListExtra("UsedInput",history.getUsedInput());
@@ -185,8 +185,11 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         loadTransactions();
         new Thread(){
             public void run(){
+                if(OverviewFragment.this.getContext() == null){
+                    return;
+                }
                 PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
-                int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
+                int blockHeight = util.getInt(PreferenceUtil.BLOCK_HEIGHT);
                 String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(getActivity() == null){
@@ -224,12 +227,12 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(item.timestamp * 1000);
                         SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
-                        //transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.YEAR) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
                         transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%f", item.fee));
+                        transaction.setTransactionFee(item.fee);
                         transaction.setType(item.type);
                         transaction.setHash(item.hash);
-                        transaction.setAmount(String.format(Locale.getDefault(), "%f", item.amount));
+                        transaction.setHeight(item.height);
+                        transaction.setAmount(item.amount);
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
                         for (int j = 0; j < item.debits.size(); j++) {

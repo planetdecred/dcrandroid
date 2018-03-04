@@ -76,7 +76,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra("TxDate",history.getTxDate());
                 System.out.println("TxType: "+history.getType());
                 i.putExtra("TxType",history.getType());
-                i.putExtra("TXConfirmation",history.getConfirmations());
+                i.putExtra("Height", history.getHeight());
                 i.putExtra("TxStatus",history.getTxStatus());
                 i.putExtra("Hash", history.getHash());
                 i.putStringArrayListExtra("UsedInput",history.getUsedInput());
@@ -103,17 +103,13 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void prepareHistoryData(){
-//        if(!progressContainer.isShown()){
-//            // progress.show();
-//            progressContainer.setVisibility(View.VISIBLE);
-//        }
         swipeRefreshLayout.setRefreshing(true);
         loadTransactions();
         transactionList.clear();
         new Thread(){
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
-                int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
+                int blockHeight = util.getInt(PreferenceUtil.BLOCK_HEIGHT);
                 int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
                 String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
@@ -129,10 +125,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             }
                         }
                     });
-//                    if(progressContainer.isShown()){
-//                        // progress.show();
-//                        progressContainer.setVisibility(View.INVISIBLE);
-//                    }
                 }
                 else if(response.transactions.size() == 0){
                     getActivity().runOnUiThread(new Runnable() {
@@ -147,10 +139,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             }
                         }
                     });
-//                    if(progressContainer.isShown()){
-//                        // progress.show();
-//                        progressContainer.setVisibility(View.INVISIBLE);
-//                    }
                 }
                 else {
                     util.set(PreferenceUtil.TRANSACTION_HEIGHT, String.valueOf(blockHeight));
@@ -162,11 +150,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         calendar.setTimeInMillis(item.timestamp * 1000);
                         SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
                         transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%f", item.fee));
+                        transaction.setTransactionFee(item.fee);
                         transaction.setType(item.type);
                         transaction.setHash(item.hash);
-                      //  transaction.setConfirmations(item.confirmations);
-                        transaction.setAmount(String.format(Locale.getDefault(), "%f", item.amount));
+                        transaction.setHeight(item.height);
+                        transaction.setAmount(item.amount);
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
                         for (int j = 0; j < item.debits.size(); j++) {
@@ -175,7 +163,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         ArrayList<String> output = new ArrayList<>();
                         for (int j = 0; j < item.credits.size(); j++) {
                             output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
-                            //System.out.println(credit.address+"\n"+String.format(Locale.getDefault(),"%f",credit.amount));
                         }
                         transaction.setUsedInput(usedInput);
                         transaction.setWalletOutput(output);
@@ -197,11 +184,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             if(swipeRefreshLayout.isRefreshing()){
                                 swipeRefreshLayout.setRefreshing(false);
                             }
-                            /*
-                            if(progressContainer.isShown()){
-                                // progress.show();
-                                progressContainer.setVisibility(View.INVISIBLE);
-                            }*/
                              transactionAdapter.notifyDataSetChanged();
                             saveTransactions();
                         }
@@ -250,7 +232,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(true);
         prepareHistoryData();
     }
 }

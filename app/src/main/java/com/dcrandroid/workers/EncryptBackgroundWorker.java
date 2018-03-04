@@ -65,7 +65,7 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
             Dcrwallet.discoverAddresses(params[0]);
             PreferenceUtil util = new PreferenceUtil(context);
             util.set("key", params[0]);
-            util.set("discover_address","true");
+            util.setBoolean("discover_address",true);
             publishProgress(2);
             int blockHeight = Dcrwallet.fetchHeaders();
             if(blockHeight != -1){
