@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.dcrandroid.adapter.ExpandableListViewAdapter;
 import com.dcrandroid.R;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
@@ -28,6 +29,7 @@ import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
+ *
  */
 
 public class TransactionDetailsActivity extends AppCompatActivity {
@@ -63,6 +65,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         final TextView txHash = findViewById(R.id.tx_hash);
         confirmation.setText(String.format(Locale.getDefault(),"%d",util.getInt(PreferenceUtil.BLOCK_HEIGHT) - getIntent().getIntExtra("Height",0)));
         txHash.setText(getIntent().getStringExtra("Hash"));
+        txHash.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +93,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 //            String res = Dcrwallet.decodeRawTransaction(
 //                    Utils.getHash(getIntent().getStringExtra("Hash"))
 //            );
-            Utils.getHash(getIntent().getStringExtra("Hash"));
+            Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         } catch (Exception e) {
             e.printStackTrace();
         }

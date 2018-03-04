@@ -27,6 +27,7 @@ import com.dcrandroid.R;
 import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
@@ -90,15 +91,16 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra("Amount",history.getAmount());
-                i.putExtra("Fee",history.getTransactionFee());
-                i.putExtra("TxDate",history.getTxDate());
-                i.putExtra("TxType",history.getType());
                 i.putExtra("Height", history.getHeight());
-                i.putExtra("TxStatus",history.getTxStatus());
-                i.putExtra("Hash", history.getHash());
-                i.putStringArrayListExtra("UsedInput",history.getUsedInput());
-                i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
+                i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
+                i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
+                i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
+                i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
+                //i.putExtra("AccountName",history.getAccountName());
+                i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
+                i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
+                i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
+                i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
                 startActivity(i);
             }
 
