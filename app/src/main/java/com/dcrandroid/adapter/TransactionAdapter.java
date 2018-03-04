@@ -55,8 +55,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.txType.setText(history.getType());
         holder.status.setText(history.getTxStatus());
 
-        if(Double.parseDouble(history.getTransactionFee())>0){
-           String temp =history.getTransactionFee() + " DCR";
+        if(history.getTransactionFee() > 0){
+           String temp = history.getTransactionFee() + " DCR";
             holder.Amount.formatAndSetText(temp);
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);

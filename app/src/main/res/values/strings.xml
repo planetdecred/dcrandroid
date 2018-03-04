@@ -108,7 +108,7 @@
     <string name="syncode">Syncode</string>
     <string name="loading">Loading</string>
     <string name="transaction">Transaction</string>
-    <string name="TxType">TxType</string>
+    <string name="TxType">Type</string>
     <string name="status">Status</string>
     <string name="date">Date</string>
     <string name="transaction_fee">Transaction fee</string>
