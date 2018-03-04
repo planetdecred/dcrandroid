@@ -128,6 +128,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     }else{
                         Utils.removeDcrwalletConfig("spv");
                     }
+                    Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });

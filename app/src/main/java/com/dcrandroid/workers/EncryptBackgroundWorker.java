@@ -71,6 +71,16 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
             if(util.getInt("network_mode") == 0){
                 System.out.println("Connecting to peer");
                 Dcrwallet.connectToPeer(util.get("peer_address"));
+            }else{
+                String dcrdAddress = Utils.getDcrdNetworkAddress(context);
+                if(util.getInt("network_mode") != 0) {
+                    publishProgress(3);
+                    for (; ; ) {
+                        if (Dcrwallet.connectToDcrd(dcrdAddress, Utils.getConnectionCertificate(context).getBytes())) {
+                            break;
+                        }
+                    }
+                }
             }
             publishProgress(5);
             Dcrwallet.subscibeToBlockNotifications();
