@@ -20,6 +20,7 @@ import com.dcrandroid.util.Utils;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import dcrwallet.BlockScanResponse;
@@ -162,7 +163,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     String address = o.toString();
                     /*
                     * Check if the address entered by the user matches
-                    * an ip address or an ip address with a port
+                    * an ip address or an ip address with
+                    * a port
                     * e.g 127.0.0.1 or 127.0.0.1:19109
                     * */
                     if(address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")
@@ -281,8 +283,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public void run() {
                     pd.show();
-                    PreferenceUtil util = new PreferenceUtil(MainPreferenceFragment.this.getActivity());
-                    //int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
                     pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
                 }
             });

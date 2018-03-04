@@ -89,6 +89,7 @@ class DcrdService : Service() {
             println("BROADCAST RECEIVED")
             stopForeground(true)
             stopSelf()
+
         }
     }
 
@@ -112,14 +113,13 @@ class DcrdService : Service() {
                         val bestBlock = Utils.parseBestBlock(result)
                         val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
                         val lastBlockTime = rawBlock.getLong("time")
-                        //println("Current: ${(System.currentTimeMillis()/1000) - lastBlockTime}")
                         val currentTime = System.currentTimeMillis() / 1000
                         //TODO: Make available for both testnet and mainnet
                         val estimatedBlocks = (currentTime - lastBlockTime) / 120
                         serverStatus = if(estimatedBlocks > bestBlock.height){
                             "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
                         }else{
-                            "${bestBlock.height} blocks (Last block ${(System.currentTimeMillis()/1000) - lastBlockTime} seconds ago)"
+                            "${bestBlock.height} blocks (Last block ${calculateTime((System.currentTimeMillis()/1000) - lastBlockTime)})"
                         }
                         showNotification()
                     } catch (e: Exception) {
@@ -129,5 +129,26 @@ class DcrdService : Service() {
                 }
             }
         }.start()
+    }
+
+    fun calculateTime(millis : Long) : String{
+        var time = millis
+        if(time > 59){
+            time /= 60
+            if(time > 59){
+                time /= 60
+                if(time > 23){
+                    time /= 24
+                    //days
+                    return "$time day${if(time > 1) "s" else ""} ago"
+                }
+                //hour
+                return "$time hour${if(time > 1) "s" else ""} ago"
+            }
+            //minute
+            return "$time minute${if(time > 1) "s" else ""} ago"
+        }
+        //seconds
+        return "$time second${if(time > 1) "s" else ""} ago"
     }
 }
