@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.adapter.ExpandableListViewAdapter;
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
@@ -26,6 +27,7 @@ import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
+ *
  */
 
 public class TransactionDetailsActivity extends AppCompatActivity {
@@ -59,8 +61,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
-        confirmation.setText(getIntent().getStringExtra("TXConfirmation"));
-        txHash.setText(getIntent().getStringExtra("Hash"));
+        confirmation.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_CONFIRMATION));
+        txHash.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +90,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 //            String res = Dcrwallet.decodeRawTransaction(
 //                    Utils.getHash(getIntent().getStringExtra("Hash"))
 //            );
-            Utils.getHash(getIntent().getStringExtra("Hash"));
+            Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,21 +100,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 copyToClipboard(txHash.getText().toString());
             }
         });
-
-        if(Double.parseDouble(getIntent().getStringExtra("Fee")) > 0){
-            String temp = "- "+getIntent().getStringExtra("Fee") +" "+getString(R.string.dcr);
+        String fee=getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_FEE);
+        if(Double.parseDouble(fee) > 0){
+            String temp = "- "+fee +" "+getString(R.string.dcr);
             value.formatAndSetText(temp);
             transactionFee.formatAndSetText(temp);
         }
         else{
-            String temp = getIntent().getStringExtra("Amount")+" "+ getString(R.string.dcr);
+            String temp = fee+" "+ getString(R.string.dcr);
             value.formatAndSetText(temp);
             temp = String.format(Locale.getDefault(),"%.2f DCR", 0.0);
             transactionFee.formatAndSetText(temp);
         }
-        date.setText(getIntent().getStringExtra("TxDate"));
-        status.setText(getIntent().getStringExtra("TxStatus"));
-        txType.setText(getIntent().getStringExtra("TxType"));
+        date.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
+        status.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_STATUS));
+        txType.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_TYPE));
         //transactionFee.setText(getIntent().getStringExtra("Fee"));
         if(status.getText().toString().equals("pending")){
             status.setBackgroundResource(R.drawable.tx_status_pending);
