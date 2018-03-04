@@ -75,6 +75,7 @@ public class PreferenceUtil {
         SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
         return sp.getInt(key,0);
     }
+
     public void setBoolean(String key, boolean n){
         if(ctx == null){
             return;
