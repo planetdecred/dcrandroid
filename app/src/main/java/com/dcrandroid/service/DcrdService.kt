@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import com.dcrandroid.R
+import com.dcrandroid.receiver.ShutdownReceiver
 import com.dcrandroid.util.Utils
 import dcrwallet.Dcrwallet
 import org.json.JSONObject
@@ -94,7 +95,7 @@ class DcrdService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(receiver)
-        val i = Intent("kill")
+        val i = Intent(this, ShutdownReceiver::class.java)
         sendBroadcast(i)
         Dcrwallet.shutdown()
     }
