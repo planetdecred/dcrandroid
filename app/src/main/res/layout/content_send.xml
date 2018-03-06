@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:text="@string/send_funds"
             android:gravity="center"
-            android:textSize="21sp"
+            android:textSize="22sp"
             android:padding="5dp"
             />
 
@@ -24,7 +24,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="0.001"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/background_shadow">
 
@@ -57,6 +57,9 @@
                     android:entries="@array/nav_item_activity_titles"
                     android:layout_marginRight="-10dp"
                     android:layout_marginEnd="-10dp"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+
                      >
                 </Spinner>
             </LinearLayout>
@@ -64,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:layout_weight="7"
+                android:layout_weight="1"
                 android:background="@color/backgcolorwhite"
                 />
         </LinearLayout>
@@ -83,7 +86,8 @@
                 android:maxLines="1"
                 android:layout_weight="1"
                 android:inputType="text"
-                />
+                android:textSize="14sp"
+                 />
 
             <ImageView
                 android:id="@+id/send_dcr_scan"
@@ -114,7 +118,7 @@
             android:layout_weight="1"
             android:lines="1"
             android:maxLines="1"
-            android:text="0"
+
             />
         <TextView
             android:id="@+id/send_dcr_all"
@@ -139,13 +143,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/total_amount_sending"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="15sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/_0_00_dcr"
                 android:id="@+id/send_dcr_total_amt_sndng"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="15sp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -156,7 +162,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/estimated_fee"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="15sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -173,13 +180,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/estimate_size"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="15sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/_0_bytes"
                 android:id="@+id/send_dcr_estimate_size"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="15sp"/>
         </LinearLayout>
 
         <Button
