@@ -1,20 +1,23 @@
 # dcrandroid - Decred Mobile Wallet
 [![Build Status](https://travis-ci.org/raedahgroup/dcrandroid.svg?branch=master)](https://travis-ci.org/raedahgroup/dcrandroid)
 
-An decred wallet for android that runs on top of [dcrwallet](https://github.com/decred/dcrwallet).
+A Decred Mobile Wallet for android that runs on top of [dcrwallet](https://github.com/decred/dcrwallet).
 
 ## Requirements:
 Android 3.0 or above.
 
 ## Building dcrwallet
-Dcrwallet is required for this app to run, you can optionally build it or use library file found in [dcrwallet dir](https://github.com/C-ollins/dcrandroid/tree/master/dcrwallet)
+Dcrwallet is required for this app to run. You can use the provided script or build it manually.
 
 ### Prerequisites
 1. Go(1.8 or 1.9) which can be found [here](http://golang.org/doc/install)
 2. Dep [latest release](https://github.com/golang/dep/releases)
 3. Gomobile [Installation Instructions](https://github.com/golang/go/wiki/Mobile#tools)
 
-To compile, run the following commands
+To compile, navigate to the dcrandroid clone directory and run
+    
+    ./build.sh
+Or run the following commands
 
     go get -v github.com/decred/dcrwallet
     cd $GOPATH/src/github.com/decred/dcrwallet
@@ -23,30 +26,30 @@ To compile, run the following commands
     git checkout p2p-mobile
     dep ensure -v
     gomobile bind -target=android/arm
-Or navigate to dcrandroid clone directory and run
 
-    ./build.sh
-Note: [dcrwallet](https://github.com/raedahgroup/dcrwallet) and [dcrd](https://github.com/raedahgroup/dcrd) used in this project are gotten from [raedahgroup](https://github.com/raedahgroup)
-## Building Android Application
-Android Studio(or gradle) and Android SDK is required if you wish to compile it yourself.
+Note: Currently using dcrd cf-mobile[https://github.com/raedahgroup/dcrd/tree/cf-mobile] branch that is based on the dcrd cf branch[https://github.com/jrick/btcd/tree/cf] , comparison[https://github.com/raedahgroup/dcrd/compare/cf...cf-mobile]
+Currently using dcwallet p2p-mobile[https://github.com/raedahgroup/dcrwallet/tree/p2p-mobile] branch that is based on the dcrwallet p2p branch[https://github.com/jrick/btcwallet/tree/p2p]  , comparison[https://github.com/raedahgroup/dcrwallet/compare/p2p...p2p-mobile]
+
+## Building the android app
+Android Studio(or gradle) and Android SDK is required to compile.
 
 ### Prerequisites
-1. Gradle wrapper 4.1 and Gralde build tools 3.0.1
-2. Android SDK with build tools 26.0.2, SDK Platform 27 and Android support repository installed
+1. [Android Studio](https://developer.android.com/studio/index.html)
+1. [Gradle](https://docs.gradle.org/current/userguide/installation.html)
+2. [Android SDK](https://developer.android.com/sdk/download.html) with build tools 26.0.2, SDK Platform 27 and Android support repository installed
 
 Clone dcrandroid (or fork it):
 
     git clone https://github.com/raedahgroup/dcrandroid.git
-### Building with Gradle Command Line
-On a Windows PC, open command prompt and navigate to the dcrandroid clone directory, then run:
-    
-    gradlew.bat
-
-On Mac OS or Linux, open terminal and navigate to dcrandroid clone directory, then run:
-
-    ./gradlew
 
 ### Building with Android Studio (Recommended)
 * Open Android Studio
 * Select `import project`
-* Navigate to dcrandroid clone directory and click `OK
+* Navigate to dcrandroid clone directory and click `OK`
+### Building with Gradle Command Line
+On Mac OS or Linux, open terminal and navigate to dcrandroid clone directory, then run:
+
+    ./gradlew
+On a Windows PC, open command prompt and navigate to the dcrandroid clone directory, then run:
+    
+    gradlew.bat
