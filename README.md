@@ -7,7 +7,7 @@ A Decred Mobile Wallet for android that runs on top of [dcrwallet](https://githu
 Android 3.0 or above.
 
 ## Building dcrwallet
-You can use the provided script or build it manually. Dcrwallet is required for this app to run, and has been modified to run as its own process. Dcrd is built to run as its own process for use with local full node mode. We use the [p2p-mobile](https://github.com/raedahgroup/dcrwallet/tree/p2p-mobile) branch of dcwallet that is based on the dcrwallet [p2p](https://github.com/jrick/btcwallet/tree/p2p) branch [comparison](https://github.com/raedahgroup/dcrwallet/compare/p2p...p2p-mobile). We use the [cf-mobile](https://github.com/raedahgroup/dcrd/tree/cf-mobile) branch of dcrd that is based on the [cf](https://github.com/jrick/btcd/tree/cf) branch [comparison](https://github.com/raedahgroup/dcrd/compare/cf...cf-mobile).
+You can use the provided script or build it manually. Dcrwallet is required for this app to run, and has been modified to run as its own process. Dcrd is built to run as its own process for use with local full node mode. We use the [p2p-mobile](https://github.com/raedahgroup/dcrwallet/tree/p2p-mobile) branch of dcwallet that is based on the dcrwallet [p2p](https://github.com/jrick/btcwallet/tree/p2p) branch ([comparison](https://github.com/raedahgroup/dcrwallet/compare/p2p...p2p-mobile)). We use the [cf-mobile](https://github.com/raedahgroup/dcrd/tree/cf-mobile) branch of dcrd that is based on the [cf](https://github.com/jrick/btcd/tree/cf) branch ([comparison](https://github.com/raedahgroup/dcrd/compare/cf...cf-mobile)).
 
 ### Prerequisites
 1. [Go(1.8 or 1.9)](http://golang.org/doc/install)
