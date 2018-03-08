@@ -10,9 +10,9 @@ Android 3.0 or above.
 Dcrwallet is required for this app to run. You can use the provided script or build it manually.
 
 ### Prerequisites
-1. Go(1.8 or 1.9) which can be found [here](http://golang.org/doc/install)
-2. Dep [latest release](https://github.com/golang/dep/releases)
-3. Gomobile [Installation Instructions](https://github.com/golang/go/wiki/Mobile#tools)
+1. Go(1.8 or 1.9), [found here](http://golang.org/doc/install)
+2. Dep, [found here](https://github.com/golang/dep/releases)
+3. Gomobile, [found here](https://github.com/golang/go/wiki/Mobile#tools)
 
 To compile, navigate to the dcrandroid clone directory and run
     
