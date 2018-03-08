@@ -9,10 +9,14 @@ Android 3.0 or above.
 ## Building dcrwallet
 Dcrwallet is required for this app to run. You can use the provided script or build it manually.
 
+Currently using dcrd [cf-mobile](https://github.com/raedahgroup/dcrd/tree/cf-mobile) branch that is based on the dcrd [cf](https://github.com/jrick/btcd/tree/cf) branch, [comparison](https://github.com/raedahgroup/dcrd/compare/cf...cf-mobile)
+
+Currently using dcwallet [p2p-mobile](https://github.com/raedahgroup/dcrwallet/tree/p2p-mobile) branch that is based on the dcrwallet [p2p](https://github.com/jrick/btcwallet/tree/p2p) branch, [comparison](https://github.com/raedahgroup/dcrwallet/compare/p2p...p2p-mobile)
+
 ### Prerequisites
-1. Go(1.8 or 1.9), [found here](http://golang.org/doc/install)
-2. Dep, [found here](https://github.com/golang/dep/releases)
-3. Gomobile, [found here](https://github.com/golang/go/wiki/Mobile#tools)
+1. [Go(1.8 or 1.9)](http://golang.org/doc/install)
+2. [Dep](https://github.com/golang/dep/releases)
+3. [Gomobile](https://github.com/golang/go/wiki/Mobile#tools)
 
 To compile, navigate to the dcrandroid clone directory and run
     
@@ -26,10 +30,6 @@ Or run the following commands
     git checkout p2p-mobile
     dep ensure -v
     gomobile bind -target=android/arm
-
-Note: Currently using [dcrd cf-mobile](https://github.com/raedahgroup/dcrd/tree/cf-mobile) branch that is based on the [dcrd cf branch](https://github.com/jrick/btcd/tree/cf) , [comparison](https://github.com/raedahgroup/dcrd/compare/cf...cf-mobile)
-
-Currently using [dcwallet p2p-mobile](https://github.com/raedahgroup/dcrwallet/tree/p2p-mobile) branch that is based on the [dcrwallet p2p branch](https://github.com/jrick/btcwallet/tree/p2p)  , [comparison](https://github.com/raedahgroup/dcrwallet/compare/p2p...p2p-mobile)
 
 ## Building the android app
 Android Studio(or gradle) and Android SDK is required to compile.
