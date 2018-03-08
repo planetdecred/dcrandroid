@@ -18,15 +18,15 @@ To compile, run the following commands
 
     go get -v github.com/decred/dcrwallet
     cd $GOPATH/src/github.com/decred/dcrwallet
-    git fetch https://github.com/C-ollins/dcrwallet mobile
-    git branch mobile FETCH_HEAD
-    git checkout mobile
+    git fetch https://github.com/raedahgroup/dcrwallet p2p-mobile
+    git branch p2p-mobile FETCH_HEAD
+    git checkout p2p-mobile
     dep ensure -v
     gomobile bind -target=android/arm
 Or navigate to dcrandroid clone directory and run
 
     ./build.sh
-
+Note: [dcrwallet](https://github.com/raedahgroup/dcrwallet) and [dcrd](https://github.com/raedahgroup/dcrd) used in this project are gotten from [raedahgroup](https://github.com/raedahgroup)
 ## Building Android Application
 Android Studio(or gradle) and Android SDK is required if you wish to compile it yourself.
 
