@@ -58,6 +58,8 @@ public class TransactionsResponse {
                 transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
                 response.transactions.add(transaction);
             }
+            JSONArray unMined = object.getJSONArray("UnMined");
+            System.out.println("Un mined transaction: "+unMined.toString());
         }catch (Exception e){
             e.printStackTrace();
         }

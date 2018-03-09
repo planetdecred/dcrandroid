@@ -374,8 +374,18 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 }
                             });
                     }
-                }catch (Exception e){
+                }catch (final Exception e){
                     e.printStackTrace();
+                    if(getActivity() == null){
+                        return;
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SendFragment.this.getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            pd.dismiss();
+                        }
+                    });
                 }
             }
         }.start();

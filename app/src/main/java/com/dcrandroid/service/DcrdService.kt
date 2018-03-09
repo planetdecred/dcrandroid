@@ -103,31 +103,31 @@ class DcrdService : Service() {
         super.onCreate()
 
         Dcrwallet.runDcrd()
-        object : Thread() {
-            override fun run() {
-                while (true) {
-                    try {
-                        val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
-                        val bestBlock = Utils.parseBestBlock(result)
+       object : Thread() {
+           override fun run() {
+               while (true) {
+                   try {
+                       val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
+                       val bestBlock = Utils.parseBestBlock(result)
 
-                        val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
-                        val lastBlockTime = rawBlock.getLong("time")
-                        //println("Current: ${(System.currentTimeMillis()/1000) - lastBlockTime}")
-                        val currentTime = System.currentTimeMillis() / 1000
-                        //TODO: Make available for both testnet and mainnet
-                        val estimatedBlocks = (currentTime - lastBlockTime) / 120
-                        serverStatus = if(estimatedBlocks > bestBlock.height){
-                            "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
-                        }else{
-                            "${bestBlock.height} blocks (Last block ${(System.currentTimeMillis()/1000) - lastBlockTime} seconds ago)"
-                        }
-                        showNotification()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                    Thread.sleep(3000)
-                }
-            }
-        }.start()
+                       val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
+                       val lastBlockTime = rawBlock.getLong("time")
+                       //println("Current: ${(System.currentTimeMillis()/1000) - lastBlockTime}")
+                       val currentTime = System.currentTimeMillis() / 1000
+                       //TODO: Make available for both testnet and mainnet
+                       val estimatedBlocks = (currentTime - lastBlockTime) / 120
+                       serverStatus = if(estimatedBlocks > bestBlock.height){
+                           "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
+                       }else{
+                           "${bestBlock.height} blocks (Last block ${(System.currentTimeMillis()/1000) - lastBlockTime} seconds ago)"
+                       }
+                       showNotification()
+                   } catch (e: Exception) {
+                       e.printStackTrace()
+                   }
+                   Thread.sleep(3000)
+               }
+           }
+       }.start()
     }
 }
