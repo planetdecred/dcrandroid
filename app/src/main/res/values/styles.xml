@@ -14,6 +14,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="darkTheme" parent="Theme.AppCompat">
+        <item name="android:windowBackground">@color/colorBlack</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/darkThemePrimaryColor</item>
+        <item name="colorPrimaryDark">@color/darkThemePrimaryColorDark</item>
+        <item name="colorAccent">@color/colorWhite</item>
+    </style>
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

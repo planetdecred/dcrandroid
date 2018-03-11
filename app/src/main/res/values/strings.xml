@@ -201,6 +201,8 @@
     <string name="key_transaction_confirmation">key_transaction_confirmation</string>
     <string name="key_connection_certificate">key_connection_certificate</string>
     <string name="key_connection_local_dcrd">key_connection_local_dcrd</string>
+    <string name="key_dark_theme">dark_theme</string>
+    <string name="title_dark_theme">Dark Theme</string>
     <string name="key_testnet">key_testnet</string>
     <string name="key_get_peers">key_get_peers</string>
     <string name="summary_peers">View available peers and details</string>

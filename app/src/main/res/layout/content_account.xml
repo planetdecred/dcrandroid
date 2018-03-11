@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view2"
@@ -10,7 +9,6 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:layout_marginBottom="5dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1"/>
 
 </android.support.constraint.ConstraintLayout>

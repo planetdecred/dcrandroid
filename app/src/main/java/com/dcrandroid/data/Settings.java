@@ -2,6 +2,7 @@ package com.dcrandroid.data;
 
 /**
  * Created by Macsleven on 05/01/2018.
+ *
  */
 
 public class Settings {

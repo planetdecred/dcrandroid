@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dcrandroid.activities.AddAccountActivity;
+import com.dcrandroid.activities.BaseActivity;
 import com.dcrandroid.activities.SettingsActivity;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
@@ -32,7 +34,10 @@ import com.dcrandroid.fragments.TicketsFragment;
 
 import dcrwallet.Dcrwallet;
 
-public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+
+public class MainActivity extends BaseActivity implements  NavigationView.OnNavigationItemSelectedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
@@ -63,12 +68,16 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         super.onResume();
         IntentFilter filter = new IntentFilter("kill");
         registerReceiver(receiver,filter);
+        getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
+        getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -84,16 +93,16 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Dcrwallet.shutdown();
-        System.exit(0);
-        ActivityCompat.finishAffinity(MainActivity.this);
+//        Dcrwallet.shutdown();
+//        System.exit(0);
+//        ActivityCompat.finishAffinity(MainActivity.this);
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.exit(0);
-            ActivityCompat.finishAffinity(MainActivity.this);
+//            System.exit(0);
+//            ActivityCompat.finishAffinity(MainActivity.this);
         }
     };
 
@@ -186,5 +195,11 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         }
         //make this method blank
         return true;
+    }
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.key_dark_theme))) {
+            recreate();
+        }
     }
 }

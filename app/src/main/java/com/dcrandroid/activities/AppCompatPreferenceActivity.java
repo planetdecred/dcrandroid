@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by Macsleven on 31/01/2018.
+ *
  */
 
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
@@ -99,7 +100,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().invalidateOptionsMenu();
     }
 
-    private AppCompatDelegate getDelegate() {
+    public AppCompatDelegate getDelegate() {
         if (mDelegate == null) {
             mDelegate = AppCompatDelegate.create(this, null);
         }

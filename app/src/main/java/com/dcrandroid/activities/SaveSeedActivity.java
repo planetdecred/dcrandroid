@@ -22,6 +22,7 @@ import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 25/12/2017.
+ *
  */
 
 public class SaveSeedActivity extends AppCompatActivity {

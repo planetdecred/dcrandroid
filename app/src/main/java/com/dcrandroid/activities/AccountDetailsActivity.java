@@ -21,9 +21,10 @@ import java.util.Locale;
 
 /**
  * Created by Macsleven on 28/12/2017.
+ *
  */
 
-public class AccountDetailsActivity extends AppCompatActivity {
+public class AccountDetailsActivity extends BaseActivity {
 
     String accountNameTemp;
     @Override

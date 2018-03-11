@@ -30,7 +30,7 @@ import dcrwallet.Dcrwallet;
  *
  */
 
-public class TransactionDetailsActivity extends AppCompatActivity {
+public class TransactionDetailsActivity extends BaseActivity {
 
     private ExpandableListView expandableListView;
 

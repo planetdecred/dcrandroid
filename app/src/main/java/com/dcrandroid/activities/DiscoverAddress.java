@@ -1,6 +1,5 @@
 package com.dcrandroid.activities;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,13 +17,13 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.Utils;
 
-import java.util.Locale;
+
 
 import dcrwallet.Dcrwallet;
 
 /**
+ *
  * Created by collins on 2/1/18.
  */
 

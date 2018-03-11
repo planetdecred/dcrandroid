@@ -19,4 +19,11 @@
     <color name="secondary_text">#727272</color>
     <color name="color_pendng_tx">#3d659c</color>
     <color name="color_confirmed_tx">#55bb97</color>
+    <color name="darkThemePrimaryColor">#191919</color>
+    <color name="darkThemeNavigationBarColor">#60605f</color>
+    <color name="darkThemePrimaryColorDark">#0f0f0f</color>
+    <color name="darkThemeSentChatMessageBackground">#0a6cd9</color>
+    <color name="darkThemeReceivedChatMessageBackground">#0d1620</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorBlack">#FF000000</color>
 </resources>

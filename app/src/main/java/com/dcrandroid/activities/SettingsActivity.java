@@ -10,6 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -26,13 +27,21 @@ import dcrwallet.BlockScanResponse;
 import dcrwallet.Dcrwallet;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        PreferenceUtil preferenceUtil=new PreferenceUtil(this);
+        boolean darkTheme = preferenceUtil.getBoolean(getString(R.string.key_dark_theme),false);
+        setTheme(darkTheme?R.style.darkTheme: R.style.AppTheme_NoActionBar);
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+        mToolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // load main preference fragment
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.setting_container, new MainPreferenceFragment()).commit();
     }
 
     public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse {
@@ -45,6 +54,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             addPreferencesFromResource(R.xml.pref_main);
             final SwitchPreference localDcrd = (SwitchPreference) findPreference(getString(R.string.key_connection_local_dcrd));
+            final SwitchPreference darkTheme = (SwitchPreference) findPreference(getString(R.string.key_dark_theme));
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
@@ -128,6 +138,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         remoteDcrdAddress.setEnabled(false);
                         return true;
                     }
+                }
+            });
+            darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Boolean isDarkTheme=(Boolean) newValue;
+                    util.setBoolean(getString(R.string.key_dark_theme),isDarkTheme);
+                    getActivity().recreate();
+                    return true;
                 }
             });
             remoteDcrdAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

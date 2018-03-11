@@ -5,30 +5,21 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#fff"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/backgcolorwhite">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/receive_funds"
-        android:textSize="21sp"
-        android:gravity="center"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/receive_fund_privacy_info"
-        android:textSize="14sp"
-        android:gravity="center"
-        />
-
-    </LinearLayout>
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/receive_funds"
+            android:textSize="21sp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/receive_fund_privacy_info"
+            android:textSize="14sp"
+            android:gravity="center"
+            />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +29,6 @@
         <TextView
             android:layout_width="93dp"
             android:layout_height="match_parent"
-            android:background="@color/backgcolorwhite"
             android:gravity="right"
             android:padding="5dp"
             android:layout_weight="3.5"
@@ -69,11 +59,9 @@
             android:layout_width="91dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:background="@color/backgcolorwhite"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
             android:gravity="bottom"
-            android:padding="5dp"
-            android:textSize="16sp" />
+            android:padding="5dp"/>
 
     </LinearLayout>
 
@@ -81,8 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp"
-
-        android:background="@color/backgcolorwhite"
         android:orientation="vertical">
     <ImageView
         android:layout_width="200dp"

@@ -27,9 +27,10 @@ import java.util.Set;
 
 /**
  * Created by Macsleven on 25/12/2017.
+ *
  */
 
-public class ConfirmSeedActivity extends AppCompatActivity {
+public class ConfirmSeedActivity extends BaseActivity {
     private List<String> seeds;
     private Set<String> tempSeeds;
     private TextView confirmview;

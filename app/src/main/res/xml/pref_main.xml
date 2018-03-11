@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="General">
         <SwitchPreference
+            android:defaultValue="false"
+            android:summary="Turn on dark theme"
+            android:key="@string/key_dark_theme"
+            android:title="@string/title_dark_theme" />
+        <SwitchPreference
             android:defaultValue="true"
             android:enabled="false"
             android:key="@string/key_testnet"

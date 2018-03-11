@@ -9,8 +9,7 @@
         android:text="For more information please visit"
         android:textColor="@color/colorText"
         android:textSize="18sp"
-        android:layout_centerInParent="true"
-        />
+        android:layout_centerInParent="true"/>
     <TextView
         android:id="@+id/website_link"
         android:layout_width="wrap_content"

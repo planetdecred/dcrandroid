@@ -25,6 +25,7 @@ import org.json.JSONException;
 
 /**
  * Created by collins on 12/26/17.
+ *
  */
 @ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Decrediton",
         mode = ReportingInteractionMode.DIALOG,
@@ -64,7 +65,7 @@ public class MainApplication extends Application {
             }else{
                 startService(i);
             }
-            //Dcrwallet.runDcrd();
+            Dcrwallet.runDcrd();
         }else{
             System.out.println("Not starting local server");
         }

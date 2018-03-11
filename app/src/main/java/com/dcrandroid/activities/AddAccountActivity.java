@@ -17,7 +17,7 @@ import dcrwallet.Dcrwallet;
  * Created by Macsleven on 28/12/2017.
  */
 
-public class AddAccountActivity extends AppCompatActivity {
+public class AddAccountActivity extends BaseActivity {
     ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
