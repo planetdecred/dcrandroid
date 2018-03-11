@@ -5,19 +5,12 @@ package com.dcrandroid.data;
  */
 
 public class Account {
-    private String accountName;
-    private String spendable;
-    private String total;
-    private String immatureRewards = "";
-    private String lockedByTickets = "";
-    private String votingAuthority = "";
-    private String immatureStakeGeneration = "";
-    private String accountNumber = "";
-    private String hDPath = "";
-    private String keys = "";
+    private String accountName, hdPath, keys;
+    private float spendable, total, immatureRewards, lockedByTickets, votingAuthority, immatureStakeGeneration;
+    private int accountNumber;
     public Account(){
     }
-    public Account(String accountName,String spendable,String total,String immatureRewards,String lockedByTickets,String votingAuthority,String immatureStakeGeneration,String accountNumber,String hDPath,String keys){
+    public Account(String accountName, float spendable, float total, float immatureRewards, float lockedByTickets, float votingAuthority, float immatureStakeGeneration, int accountNumber, String hdPath, String keys){
         this.accountName = accountName;
         this.accountNumber = accountNumber;
         this.spendable = spendable;
@@ -26,7 +19,7 @@ public class Account {
         this.lockedByTickets = lockedByTickets;
         this.votingAuthority =votingAuthority;
         this.immatureStakeGeneration = immatureStakeGeneration;
-        this.hDPath = hDPath;
+        this.hdPath = hdPath;
         this.keys =keys;
 
     }
@@ -39,68 +32,68 @@ public class Account {
         this.accountName = accountName;
     }
 
-    public String getSpendable() {
+    public float getSpendable() {
         return spendable;
     }
 
-    public void setSpendable(String spendable) {
+    public void setSpendable(float spendable) {
         this.spendable = spendable;
     }
 
-    public String getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(float total) {
         this.total = total;
     }
 
-    public String getImmatureRewards() {
+    public float getImmatureRewards() {
         return immatureRewards;
     }
 
-    public void setImmatureRewards(String immatureRewards) {
+    public void setImmatureRewards(float immatureRewards) {
         this.immatureRewards = immatureRewards;
     }
 
-    public String getLockedByTickets() {
+    public float getLockedByTickets() {
         return lockedByTickets;
     }
 
-    public void setLockedByTickets(String lockedByTickets) {
+    public void setLockedByTickets(float lockedByTickets) {
         this.lockedByTickets = lockedByTickets;
     }
 
-    public String getVotingAuthority() {
+    public float getVotingAuthority() {
         return votingAuthority;
     }
 
-    public void setVotingAuthority(String votingAuthority) {
+    public void setVotingAuthority(float votingAuthority) {
         this.votingAuthority = votingAuthority;
     }
 
-    public String getImmatureStakeGeneration() {
+    public float getImmatureStakeGeneration() {
         return immatureStakeGeneration;
     }
 
-    public void setImmatureStakeGeneration(String immatureStakeGeneration) {
+    public void setImmatureStakeGeneration(float immatureStakeGeneration) {
         this.immatureStakeGeneration = immatureStakeGeneration;
     }
 
-    public String getAccountNumber() {
+    public int getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
     }
 
-    public String gethDPath() {
-        return hDPath;
+    public String getHDPath() {
+        return hdPath;
     }
 
-    public void sethDPath(String hDPath) {
-        this.hDPath = hDPath;
+    public void setHDPath(String HDPath) {
+        this.hdPath = HDPath;
     }
 
     public String getKeys() {

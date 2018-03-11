@@ -101,18 +101,15 @@ class DcrdService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-
-        Dcrwallet.runDcrd()
+       //Dcrwallet.runDcrd()
        object : Thread() {
            override fun run() {
                while (true) {
                    try {
                        val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
                        val bestBlock = Utils.parseBestBlock(result)
-
                        val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
                        val lastBlockTime = rawBlock.getLong("time")
-                       //println("Current: ${(System.currentTimeMillis()/1000) - lastBlockTime}")
                        val currentTime = System.currentTimeMillis() / 1000
                        //TODO: Make available for both testnet and mainnet
                        val estimatedBlocks = (currentTime - lastBlockTime) / 120
