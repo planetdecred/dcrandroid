@@ -20,6 +20,7 @@ import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         parentHeaderInformation.add(getString(R.string.new_wallet_output));
         HashMap<String, List<String>> allChildItems = returnGroupedChildItems(getIntent().getStringArrayListExtra("UsedInput"),getIntent().getStringArrayListExtra("newWalletOutPut"));
 
-        expandableListView = (ExpandableListView)findViewById(R.id.in_out);
+        expandableListView = findViewById(R.id.in_out);
 
         ExpandableListViewAdapter expandableListViewAdapter = new ExpandableListViewAdapter(getApplicationContext(), parentHeaderInformation, allChildItems);
 
@@ -63,8 +64,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
-        confirmation.setText(String.format(Locale.getDefault(),"%d",util.getInt(PreferenceUtil.BLOCK_HEIGHT) - getIntent().getIntExtra("Height",0)));
-        txHash.setText(getIntent().getStringExtra("Hash"));
         txHash.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
@@ -90,9 +89,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
         try {
-//            String res = Dcrwallet.decodeRawTransaction(
-//                    Utils.getHash(getIntent().getStringExtra("Hash"))
-//            );
             Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,29 +100,30 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        DecimalFormat df = new DecimalFormat("#.#");
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(8);
         if(getIntent().getFloatExtra("Fee",0) > 0){
-            //String temp = "- "+getIntent().getStringExtra("Fee") +" "+getString(R.string.dcr);
-            transactionFee.formatAndSetText(df.format(getIntent().getFloatExtra("Fee",0)));
+            value.formatAndSetText("- "+nf.format(getIntent().getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
+            transactionFee.formatAndSetText(nf.format(getIntent().getFloatExtra("Fee",0)));
         }
         else{
-            value.formatAndSetText(df.format(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
-            System.out.println(".2 F is on");
-            String temp = String.format(Locale.getDefault(),"%.2f DCR", 0.0);
-            transactionFee.formatAndSetText(df.format(0)+" DCR");
+            value.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
+            transactionFee.formatAndSetText(nf.format(0)+" DCR");
         }
-        date.setText(getIntent().getStringExtra("TxDate"));
-        status.setText(getIntent().getStringExtra("TxStatus"));
-        String type = getIntent().getStringExtra("TxType");
+        date.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
+        status.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_STATUS));
+        String type = getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_TYPE);
         type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
         txType.setText(type);
-        if(status.getText().toString().equals("pending")){
+        if(status.getText().toString().equals(Constants.EXTRA_TRANSACTION_PENDING)){
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
-        }
-        else if(status.getText().toString().equals("confirmed")) {
+            confirmation.setText("0");
+        }else if(status.getText().toString().equals(Constants.EXTRA_TRANSACTION_CONFIRMED)) {
             status.setBackgroundResource(R.drawable.tx_status_confirmed);
             status.setTextColor(Color.parseColor("#55bb97"));
+            confirmation.setText(String.format(Locale.getDefault(),"%d",util.getInt(PreferenceUtil.BLOCK_HEIGHT) - getIntent().getIntExtra("Height",0)));
         }
     }
 

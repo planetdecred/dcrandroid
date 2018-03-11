@@ -75,8 +75,9 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
-                System.out.println("TxType: "+history.getType());
-                i.putExtra("Height", history.getHeight());
+                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
+                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
+                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
                 i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
@@ -111,7 +112,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
                 int blockHeight = util.getInt(PreferenceUtil.BLOCK_HEIGHT);
-                int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
                 String result = Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
@@ -142,7 +142,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     });
                 }
                 else {
-                    util.set(PreferenceUtil.TRANSACTION_HEIGHT, String.valueOf(blockHeight));
+                    util.setInt(PreferenceUtil.TRANSACTION_HEIGHT, blockHeight);
                     final List<Transaction> temp = new ArrayList<>();
                     for (int i = 0; i < response.transactions.size(); i++) {
                         Transaction transaction = new Transaction();
@@ -159,10 +159,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
                         for (int j = 0; j < item.debits.size(); j++) {
+                            transaction.totalInput += item.debits.get(j).previous_amount;
                             usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
                         }
                         ArrayList<String> output = new ArrayList<>();
                         for (int j = 0; j < item.credits.size(); j++) {
+                            transaction.totalOutput += item.credits.get(j).amount;
                             output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
                         }
                         transaction.setUsedInput(usedInput);
@@ -203,7 +205,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
             objectOutputStream.writeObject(transactionList);
             objectOutputStream.close();
-            System.out.println("Transaction Written");
         }catch (Exception e){
             e.printStackTrace();
         }
