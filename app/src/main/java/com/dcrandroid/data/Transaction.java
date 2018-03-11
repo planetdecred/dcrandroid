@@ -8,15 +8,11 @@ import java.util.ArrayList;
  */
 
 public class Transaction implements Serializable{
-    private float amount;
-    private float TransactionFee;
-    private String txDate;
-    private String txStatus;
-    private String type;
+    private float amount, TransactionFee;
+    public float totalInput, totalOutput;
+    private String type, hash, txStatus, txDate;
     private int height;
-    private String hash;
-    private ArrayList<String> usedInput;
-    private ArrayList<String> walletOutput;
+    private ArrayList<String> usedInput,walletOutput;
 
     public Transaction(){
     }
