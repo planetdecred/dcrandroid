@@ -276,7 +276,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         Toast.makeText(SendFragment.this.getContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if(returnString.startsWith("D")){
+                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
+                        address.setText(returnString);
+                    }else if(returnString.startsWith("T")){
                         address.setText(returnString);
                     }else{
                         Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
@@ -382,8 +384,18 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 }
                             });
                     }
-                }catch (Exception e){
+                }catch (final Exception e){
                     e.printStackTrace();
+                    if(getActivity() == null){
+                        return;
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SendFragment.this.getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            pd.dismiss();
+                        }
+                    });
                 }
             }
         }.start();

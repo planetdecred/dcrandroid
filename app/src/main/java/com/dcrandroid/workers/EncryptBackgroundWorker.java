@@ -40,8 +40,7 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
         }else if(values[0] == 3){
             pd.setMessage(context.getString(R.string.conecting_to_dcrd));
         }else if(values[0] == 4){
-            int percentage = (int) ((values[1]/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
-            pd.setMessage(context.getString(R.string.scanning_blocks)+percentage+"%");
+            pd.setMessage(context.getString(R.string.scanning_blocks)+ " "+values[1]);
         }else if(values[0] == 5){
             pd.setMessage(context.getString(R.string.subscribing_to_block_notification));
         }
@@ -65,11 +64,11 @@ public class EncryptBackgroundWorker extends AsyncTask<String,Integer, String> i
             Dcrwallet.discoverAddresses(params[0]);
             PreferenceUtil util = new PreferenceUtil(context);
             util.set("key", params[0]);
-            util.set("discover_address","true");
+            util.setBoolean("discover_address",true);
             publishProgress(2);
             int blockHeight = Dcrwallet.fetchHeaders();
             if(blockHeight != -1){
-                util.set(PreferenceUtil.BLOCK_HEIGHT,String.valueOf(blockHeight));
+                util.setInt(PreferenceUtil.BLOCK_HEIGHT,blockHeight);
             }
             Dcrwallet.reScanBlocks(EncryptBackgroundWorker.this,0);
             return createResponse;

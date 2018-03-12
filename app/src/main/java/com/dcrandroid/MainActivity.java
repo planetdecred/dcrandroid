@@ -85,8 +85,8 @@ public class MainActivity extends BaseActivity implements
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
-        }
+            displaySelectedScreen(R.id.nav_overview);
+        } 
     }
 
     @Override
@@ -189,6 +189,7 @@ public class MainActivity extends BaseActivity implements
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             finish();
+
             return true;
         }else {
             displaySelectedScreen(item.getItemId());

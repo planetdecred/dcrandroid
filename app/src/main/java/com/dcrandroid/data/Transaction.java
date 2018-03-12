@@ -8,19 +8,15 @@ import java.util.ArrayList;
  */
 
 public class Transaction implements Serializable{
-    private String amount;
-    private String TransactionFee;
-    private String txDate;
-    private String txStatus;
-    private String type;
-    private String confirmations;
-    private String hash;
-    private ArrayList<String> usedInput;
-    private ArrayList<String> walletOutput;
+    private float amount, TransactionFee;
+    public float totalInput, totalOutput;
+    private String type, hash, txStatus, txDate;
+    private int height;
+    private ArrayList<String> usedInput,walletOutput;
 
     public Transaction(){
     }
-    public Transaction(String amount, String TransactionFee, String txDate, String txStatus, String confirmations, String txType, ArrayList<String> usedInput, ArrayList<String> walletOutput){
+    public Transaction(int amount, int TransactionFee, String txDate, String txStatus, int height, String txType, ArrayList<String> usedInput, ArrayList<String> walletOutput){
         this.TransactionFee = TransactionFee;
         this.txDate = txDate;
         this.txStatus =txStatus;
@@ -28,7 +24,7 @@ public class Transaction implements Serializable{
         this.amount = amount;
         this.usedInput = usedInput;
         this.walletOutput = walletOutput;
-        this.confirmations = confirmations;
+        this.height = height;
     }
 
     public String getHash() {
@@ -47,19 +43,19 @@ public class Transaction implements Serializable{
         this.txDate = txDate;
     }
 
-    public String getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 
-    public String getTransactionFee() {
+    public float getTransactionFee() {
         return TransactionFee;
     }
 
-    public void setTransactionFee(String transactionFee) {
+    public void setTransactionFee(float transactionFee) {
         this.TransactionFee = transactionFee;
     }
 
@@ -94,11 +90,11 @@ public class Transaction implements Serializable{
         this.walletOutput = walletOutput;
     }
 
-    public String getConfirmations() {
-        return confirmations;
+    public int getHeight() {
+        return height;
     }
 
-    public void setConfirmations(String confirmations) {
-        this.confirmations = confirmations;
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

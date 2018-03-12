@@ -11,6 +11,7 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.view.CurrencyTextView;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -55,27 +56,25 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.txType.setText(history.getType());
         holder.status.setText(history.getTxStatus());
 
-        if(Double.parseDouble(history.getTransactionFee())>0){
-           String temp =history.getTransactionFee() + " DCR";
-            holder.Amount.formatAndSetText(temp);
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(8);
+        if(history.getTransactionFee() > 0){
+            holder.Amount.formatAndSetText(nf.format(history.totalInput));
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
-        }
-        else {
-            String temp = history.getAmount() + " DCR";
-            holder.Amount.formatAndSetText(temp);
+        }else {
+            holder.Amount.formatAndSetText(nf.format(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");
         }
-
         holder.txDate.setText(history.getTxDate());
-        if(holder.status.getText().toString().equals("pending")){
+        if(holder.status.getText().toString().equalsIgnoreCase("pending")){
             holder.status.setBackgroundResource(R.drawable.tx_status_pending);
             holder.status.setTextColor(Color.parseColor("#3d659c"));
-        }
-        else if(holder.status.getText().toString().equals("confirmed")) {
+        }else if(holder.status.getText().toString().equalsIgnoreCase("confirmed")) {
             holder.status.setBackgroundResource(R.drawable.tx_status_confirmed);
             holder.status.setTextColor(Color.parseColor("#55bb97"));
         }

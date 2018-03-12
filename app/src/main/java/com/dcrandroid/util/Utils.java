@@ -112,7 +112,11 @@ public class Utils {
 
     public static String getRemoteCertificate(Context context){
         try {
-            File file = new File(context.getFilesDir()+"/savedata/remote rpc.cert");
+            File path = new File(context.getFilesDir()+"/savedata");
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            File file = new File(path,"remote rpc.cert");
             if(file.exists()){
                 FileInputStream fin = new FileInputStream(file);
                 StringBuilder sb = new StringBuilder();
@@ -136,7 +140,11 @@ public class Utils {
 
     public static void setRemoteCetificate(Context context, String certificate){
         try {
-            File file = new File(context.getFilesDir()+"/savedata/remote rpc.cert");
+            File path = new File(context.getFilesDir()+"/savedata");
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            File file = new File(path,"remote rpc.cert");
             if(file.exists()){
                 file.delete();
             }

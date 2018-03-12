@@ -98,7 +98,7 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
                     PreferenceUtil util = new PreferenceUtil(DiscoverAddress.this);
                     setText("Discovering Addresses");
                     Dcrwallet.discoverAddresses(pass);
-                    util.set("discover_address", "true");
+                    util.setBoolean("discover_address", true);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
