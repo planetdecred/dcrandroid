@@ -17,27 +17,30 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.activities.BaseActivity;
 import com.dcrandroid.activities.SettingsActivity;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
-import com.dcrandroid.fragments.SettingsFragment;
-import com.dcrandroid.fragments.TicketsFragment;
+
+
 
 import dcrwallet.Dcrwallet;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
-public class MainActivity extends BaseActivity implements  NavigationView.OnNavigationItemSelectedListener,
-        SharedPreferences.OnSharedPreferenceChangeListener{
+
+public class MainActivity extends BaseActivity implements
+        NavigationView.OnNavigationItemSelectedListener{
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
@@ -68,16 +71,12 @@ public class MainActivity extends BaseActivity implements  NavigationView.OnNavi
         super.onResume();
         IntentFilter filter = new IntentFilter("kill");
         registerReceiver(receiver,filter);
-        getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
-        getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class MainActivity extends BaseActivity implements  NavigationView.OnNavi
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        } 
+        }
     }
 
     @Override
@@ -101,8 +100,8 @@ public class MainActivity extends BaseActivity implements  NavigationView.OnNavi
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            System.exit(0);
-//            ActivityCompat.finishAffinity(MainActivity.this);
+            System.exit(0);
+            ActivityCompat.finishAffinity(MainActivity.this);
         }
     };
 
@@ -162,9 +161,9 @@ public class MainActivity extends BaseActivity implements  NavigationView.OnNavi
             case R.id.nav_history:
                 fragment = new HistoryFragment();
                 break;
-            case R.id.nav_tickets:
+           /* case R.id.nav_tickets:
                 fragment = new TicketsFragment();
-                break;
+                break;*/
             case R.id.nav_help:
                 fragment = new HelpFragment();
                 break;
@@ -189,17 +188,13 @@ public class MainActivity extends BaseActivity implements  NavigationView.OnNavi
         if(item.getItemId() == R.id.nav_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return false;
+            finish();
+            return true;
         }else {
             displaySelectedScreen(item.getItemId());
         }
         //make this method blank
         return true;
     }
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.key_dark_theme))) {
-            recreate();
-        }
-    }
+
 }

@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.BestBlock;
 import com.dcrandroid.util.PreferenceUtil;
@@ -40,6 +41,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         mToolbar=findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         // load main preference fragment
         getFragmentManager().beginTransaction().replace(R.id.setting_container, new MainPreferenceFragment()).commit();
     }
@@ -293,7 +295,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setResult(0);
-        finishActivity(2);
+        Intent intent=new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

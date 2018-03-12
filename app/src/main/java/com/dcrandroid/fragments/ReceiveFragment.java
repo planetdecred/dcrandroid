@@ -50,7 +50,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
         boolean darkTheme=preferenceUtil.getBoolean(getString(R.string.key_dark_theme));
         if(darkTheme){
-            rootView.setBackgroundColor(getResources().getColor(R.color.darkThemeNavigationBarColor));
+            rootView.setBackgroundColor(getResources().getColor(R.color.darkThemePrimaryColor));
         }
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);

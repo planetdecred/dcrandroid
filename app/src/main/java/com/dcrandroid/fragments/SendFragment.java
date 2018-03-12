@@ -83,7 +83,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         util = new PreferenceUtil(getActivity());
         boolean darkTheme=util.getBoolean(getString(R.string.key_dark_theme));
         if(darkTheme){
-            view.setBackgroundColor(getResources().getColor(R.color.darkThemeNavigationBarColor));
+            view.setBackgroundColor(getResources().getColor(R.color.darkThemePrimaryColor));
         }
 
         getActivity().setTitle(getString(R.string.send));

@@ -33,7 +33,6 @@
             android:text="@string/from"
             android:gravity="right"
             android:padding="5dp"
-            android:background="@color/backgcolorwhite"
             android:textSize="16sp"
 
             />
@@ -43,8 +42,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:layout_weight="1"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/background_shadow">
+            android:layout_marginTop="1dp">
 
             <Spinner
                 android:id="@+id/send_dropdown"
@@ -61,7 +59,6 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:layout_weight="4"
-            android:background="@color/backgcolorwhite"
             />
     </LinearLayout>
 

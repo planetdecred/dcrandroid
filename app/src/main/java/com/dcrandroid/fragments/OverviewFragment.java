@@ -3,6 +3,7 @@ package com.dcrandroid.fragments;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -81,7 +82,9 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         currentBalanceContainer=rootView.findViewById(R.id.current_balance_container);
         boolean darkTheme=util.getBoolean(getString(R.string.key_dark_theme));
         if(darkTheme){
-            rootView.setBackgroundColor(getResources().getColor(R.color.darkThemeNavigationBarColor));
+            rootView.setBackgroundColor(getResources().getColor(R.color.darkThemePrimaryColor));
+            currentBalanceContainer.setBackgroundColor(Color.GRAY);
+
         }
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
