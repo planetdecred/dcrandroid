@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,8 @@ public class AccountDetailsActivity extends BaseActivity {
         accountNameTemp = getIntent().getStringExtra(Constants.EXTRA_ACCOUNT_NAME);
         setContentView(R.layout.account_details_view);
 
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         CurrencyTextView spendable = findViewById(R.id.acc_dts_spendable);
         CurrencyTextView total = findViewById(R.id.acc_dts_total);
         CurrencyTextView immatureRewards = findViewById(R.id.acc_dts_immature_reward);

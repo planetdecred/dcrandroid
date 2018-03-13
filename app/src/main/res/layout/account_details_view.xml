@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_shadow">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:titleTextColor="@color/colorWhite"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"/>
+    </android.support.design.widget.AppBarLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_margin="4dp"
         android:padding="8dp"
         android:background="@drawable/background_shadow">
         <TextView
@@ -23,7 +32,6 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:text="@string/labelbalance"
-            android:textColor="@color/secondary_text"
             android:textSize="16sp" />
         <View
             android:id="@+id/separator123"
@@ -38,8 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator123"
                 android:padding="8dp"
-                android:text="@string/labeltotal"
-                android:textColor="@color/secondary_text" />
+                android:text="@string/labeltotal"/>
 
             <com.dcrandroid.view.CurrencyTextView
                 android:id="@+id/acc_dts_total"
@@ -69,7 +76,7 @@
                 android:layout_below="@+id/separator12"
                 android:text="@string/label_spendable"
                 android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+                />
 
             <com.dcrandroid.view.CurrencyTextView
                 android:id="@+id/acc_dts_spendable"
@@ -81,8 +88,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
+                android:padding="8dp"/>
 
             <View
                 android:id="@+id/separator20"
@@ -97,8 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator20"
                 android:text="@string/label_immature_rewards"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+                android:padding="8dp"/>
 
             <com.dcrandroid.view.CurrencyTextView
                 android:id="@+id/acc_dts_immature_reward"
@@ -126,8 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator13"
                 android:padding="8dp"
-                android:text="@string/label_locked_by_tickets"
-                android:textColor="@color/secondary_text" />
+                android:text="@string/label_locked_by_tickets"/>
 
             <com.dcrandroid.view.CurrencyTextView
                 android:id="@+id/acc_dts_locked_bt_tcks"
@@ -139,8 +143,7 @@
                 android:padding="8dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:textColor="@color/primary_text" />
+                android:gravity="end"/>
 
             <View
                 android:id="@+id/separator21"
@@ -155,8 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator21"
                 android:text="@string/label_voting_authority"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+                android:padding="8dp"/>
 
             <com.dcrandroid.view.CurrencyTextView
                 android:id="@+id/acc_dts_voting_auth"
@@ -168,21 +170,18 @@
                 android:gravity="end"
                 android:padding="8dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/primary_text" />
+                android:layout_alignParentRight="true"/>
             <View
                 android:id="@+id/separator17"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:layout_below="@+id/acc_dts_voting_auth"
-                android:background="@color/primary_text" />
+                android:layout_below="@+id/acc_dts_voting_auth"/>
             <TextView
                 android:id="@+id/label_stake_gen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/immature_stake_generation"
                 android:padding="8dp"
-                android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
 
             <com.dcrandroid.view.CurrencyTextView
@@ -195,8 +194,7 @@
                 android:layout_toEndOf="@+id/label_stake_gen"
                 android:layout_below="@+id/separator17"
                 android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
+                android:padding="8dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -220,7 +218,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:text="@string/label_property"
-                android:textColor="@color/secondary_text"
                 android:textSize="16sp" />
             <View
                 android:id="@+id/separastor1277"
@@ -235,8 +232,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separastor1277"
                 android:padding="8dp"
-                android:text="@string/account_number"
-                android:textColor="@color/secondary_text" />
+                android:text="@string/account_number"/>
             <TextView
                 android:id="@+id/acc_dts_acc_number"
                 android:layout_width="wrap_content"
@@ -247,8 +243,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/separastor1277"
                 android:padding="8dp"
-                android:gravity="end"
-                android:textColor="@color/primary_text" />
+                android:gravity="end"/>
 
             <View
                 android:id="@+id/separastor12"
@@ -263,7 +258,7 @@
                 android:layout_below="@+id/separastor12"
                 android:text="@string/hd_path"
                 android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+                />
             <TextView
                 android:id="@+id/acc_dts_hd_path"
                 android:layout_width="wrap_content"
@@ -274,22 +269,19 @@
                 android:layout_toEndOf="@+id/label_hd_path"
                 android:layout_toRightOf="@+id/label_hd_path"
                 android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
+                android:padding="8dp"/>
             <View
                 android:id="@+id/separators12s"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-                android:layout_below="@+id/label_hd_path"
-                android:background="@color/primary_text" />
+                android:layout_below="@+id/label_hd_path"/>
             <TextView
                 android:id="@+id/label_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separators12s"
                 android:text="@string/labelkeys"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+                android:padding="8dp"/>
             <TextView
                 android:id="@+id/acc_dts_keys"
                 android:layout_width="wrap_content"
@@ -300,7 +292,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_toEndOf="@+id/label_key"
                 android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
+                android:padding="8dp"/>
         </RelativeLayout>
 </LinearLayout>

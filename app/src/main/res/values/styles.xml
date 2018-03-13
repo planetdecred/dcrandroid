@@ -11,6 +11,7 @@
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog"></style>
 
     <style name="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@color/colorWhite</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
