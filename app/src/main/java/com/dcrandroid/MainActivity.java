@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -17,14 +15,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.NavigationView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dcrandroid.activities.AddAccountActivity;
-import com.dcrandroid.activities.BaseActivity;
 import com.dcrandroid.activities.SettingsActivity;
-import com.dcrandroid.data.Constants;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
@@ -32,15 +27,9 @@ import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
 
-
-
 import dcrwallet.Dcrwallet;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
-
-public class MainActivity extends BaseActivity implements
-        NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
@@ -86,15 +75,15 @@ public class MainActivity extends BaseActivity implements
             drawer.closeDrawer(GravityCompat.START);
         } else {
             displaySelectedScreen(R.id.nav_overview);
-        } 
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        Dcrwallet.shutdown();
-//        System.exit(0);
-//        ActivityCompat.finishAffinity(MainActivity.this);
+        Dcrwallet.shutdown();
+        System.exit(0);
+        ActivityCompat.finishAffinity(MainActivity.this);
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -188,8 +177,6 @@ public class MainActivity extends BaseActivity implements
         if(item.getItemId() == R.id.nav_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            finish();
-
             return true;
         }else {
             displaySelectedScreen(item.getItemId());
@@ -197,5 +184,4 @@ public class MainActivity extends BaseActivity implements
         //make this method blank
         return true;
     }
-
 }

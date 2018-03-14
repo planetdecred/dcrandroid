@@ -6,18 +6,25 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import com.dcrandroid.data.BestBlock;
 import com.dcrandroid.service.DcrdService;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
+import dcrwallet.Dcrwallet;
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.config.ACRAConfiguration;
+import org.acra.config.ConfigurationBuilder;
+import org.json.JSONException;
 
 /**
  * Created by collins on 12/26/17.
- *
  */
 @ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Decrediton",
         mode = ReportingInteractionMode.DIALOG,

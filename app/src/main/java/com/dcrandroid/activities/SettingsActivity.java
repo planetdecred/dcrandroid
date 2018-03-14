@@ -9,6 +9,7 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import dcrwallet.Dcrwallet;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
     Toolbar mToolbar;
+    private static boolean themeHasChanged=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +147,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    themeHasChanged=true;
                     Boolean isDarkTheme=(Boolean) newValue;
                     util.setBoolean(getString(R.string.key_dark_theme),isDarkTheme);
                     getActivity().recreate();
@@ -295,7 +298,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent=new Intent(this, MainActivity.class);
-        startActivity(intent);
+        if(themeHasChanged){
+            Intent intent=new Intent(this, MainActivity.class);
+            startActivity(intent);
+            ActivityCompat.finishAffinity(SettingsActivity.this);
+        }else {
+            setResult(0);
+            finishActivity(2);
+        }
+
     }
 }
