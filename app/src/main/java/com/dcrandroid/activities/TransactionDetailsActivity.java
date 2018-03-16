@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,6 +97,25 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 copyToClipboard(txHash.getText().toString());
+            }
+        });
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id) {
+
+                long packedPosition = expandableListView.getExpandableListPosition(position);
+
+                int itemType = ExpandableListView.getPackedPositionType(packedPosition);
+                int groupPosition = ExpandableListView.getPackedPositionGroup(packedPosition);
+                int childPosition = ExpandableListView.getPackedPositionChild(packedPosition);
+                if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    if(groupPosition == 1){
+                        String[] temp =  expandableListView.getExpandableListAdapter().getChild(1,childPosition).toString().split("\\n");
+                        String hash = temp[0];
+                        copyToClipboard(hash);
+                    }
+                }
+                return true;
             }
         });
 
