@@ -55,7 +55,8 @@
         <activity android:name=".activities.ReaderActivity" />
         <activity
             android:name=".activities.AccountDetailsActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.CaptureActivityAnyOrientation"
             android:screenOrientation="portrait"

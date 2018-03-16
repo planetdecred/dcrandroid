@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by Macsleven on 29/11/2017.
  */
 
@@ -79,10 +80,9 @@ public class SettingsFragment extends Fragment{
         getActivity().setTitle(getString(R.string.settings));
     }
     private void prepareSettingsData(){
-        Settings settings= new Settings(getString(R.string.connection));
-        settingsList.add(settings);
-        settings = new Settings(getString(R.string.transaction_confirmations),String.valueOf(util.getInt(PreferenceUtil.NO_OF_CONFIRMATIONS)));
-        settingsList.add(settings);
+        settingsList.add(new Settings(getString(R.string.connection)));
+        settingsList.add(new Settings(getString(R.string.transaction_confirmations),
+                String.valueOf(util.getInt(PreferenceUtil.NO_OF_CONFIRMATIONS))));
     }
 
     private void handleClick(Settings settings, int position){

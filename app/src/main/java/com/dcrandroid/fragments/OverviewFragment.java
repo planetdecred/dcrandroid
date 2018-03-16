@@ -3,6 +3,7 @@ package com.dcrandroid.fragments;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,23 +64,31 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
     TextView refresh;
     PreferenceUtil util;
     RecyclerView recyclerView;
+    LinearLayout currentBalanceContainer;
     @Nullable
     @Override
      public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         util = new PreferenceUtil(getContext());
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
-        swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
+        swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout2);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimary,
                 R.color.colorPrimary,
                 R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
+        recyclerView = rootView.findViewById(R.id.history_recycler_view2);
+        currentBalanceContainer=rootView.findViewById(R.id.current_balance_container);
+        boolean darkTheme=util.getBoolean(getString(R.string.key_dark_theme));
+        if(darkTheme){
+            rootView.setBackgroundColor(getResources().getColor(R.color.darkThemePrimaryColor));
+            currentBalanceContainer.setBackgroundColor(Color.GRAY);
+
+        }
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
-        reScanBlock =  rootView.getRootView().findViewById(R.id.overview_rescan_btn);
-        tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
+        reScanBlock =  rootView.findViewById(R.id.overview_rescan_btn);
+        tvBalance = rootView.findViewById(R.id.overview_av_balance);
         tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR", util.getFloat(PreferenceUtil.TOTAL_BALANCE)));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);

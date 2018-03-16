@@ -27,6 +27,7 @@ import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 24/12/2017.
+ *
  */
 
 public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {

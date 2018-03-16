@@ -3,6 +3,7 @@ package com.dcrandroid.activities;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,9 +16,10 @@ import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/12/2017.
+ *
  */
 
-public class AddAccountActivity extends AppCompatActivity {
+public class AddAccountActivity extends BaseActivity {
     ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class AddAccountActivity extends AppCompatActivity {
         setTitle(getString(R.string.add_account));
         setContentView(R.layout.add_account_activity);
 
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         final EditText passphrase =findViewById(R.id.add_acc_passphrase);
         final EditText accountName =findViewById(R.id.add_acc_name);
 

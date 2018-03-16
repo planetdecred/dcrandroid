@@ -1,6 +1,7 @@
 package com.dcrandroid.fragments;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -67,17 +68,24 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
         return inflater.inflate(R.layout.content_send, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
+
         if(getActivity() == null){
             System.out.println("Activity is null");
             return;
         }
         util = new PreferenceUtil(getActivity());
+        boolean darkTheme=util.getBoolean(getString(R.string.key_dark_theme));
+        if(darkTheme){
+            view.setBackgroundColor(getResources().getColor(R.color.darkThemePrimaryColor));
+        }
+
         getActivity().setTitle(getString(R.string.send));
 
         address = getActivity().findViewById(R.id.send_dcr_add);

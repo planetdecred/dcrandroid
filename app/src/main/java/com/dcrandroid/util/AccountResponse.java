@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
+ *
  * Created by collins on 12/30/17.
  */
 public class AccountResponse {

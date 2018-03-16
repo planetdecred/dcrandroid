@@ -13,6 +13,7 @@ public class PreferenceUtil {
     public static final String TRANSACTION_HEIGHT = "tx_height";
     public static final String TOTAL_BALANCE = "total_balance";
     public static final String NO_OF_CONFIRMATIONS = "no_of_confirmations";
+    public static final String PREF_DARK_THEME = "dark_theme";
     Context ctx;
 
     public PreferenceUtil(@NonNull Context ctx){

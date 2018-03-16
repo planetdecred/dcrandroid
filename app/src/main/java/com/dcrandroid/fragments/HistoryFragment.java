@@ -75,6 +75,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
+
                 i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
