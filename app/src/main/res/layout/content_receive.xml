@@ -90,7 +90,7 @@
         android:id="@+id/bitm"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:background="@color/backgcolor"
+
         />
         <TextView
             android:id="@+id/barcode_address"
@@ -105,7 +105,6 @@
             android:textStyle="bold"
             android:background="?attr/selectableItemBackground"
             android:textColor="@color/colorPrimaryDark"
-            android:text="@string/wallet_address"
             android:textSize="18sp" />
         <Button
             android:id="@+id/btn_gen_new_addr"
