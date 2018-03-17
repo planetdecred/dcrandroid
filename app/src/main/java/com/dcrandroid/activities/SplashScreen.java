@@ -104,6 +104,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 if(isInterrupted()){
                     return;
                 }
+                if(isInterrupted()){
+                    return;
+                }
                 Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
                 startActivity(i);
                 finish();
