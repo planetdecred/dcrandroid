@@ -38,9 +38,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Balance;
-import dcrwallet.ConstructTxResponse;
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Balance;
+//import dcrwallet.ConstructTxResponse;
+//import dcrwallet.Dcrwallet;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -139,11 +139,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 new Thread(){
                     public void run(){
                         try{
-                            final Balance balance = Dcrwallet.getBalance(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                            //final Balance balance = Dcrwallet.getBalance(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
+                                    //amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
                                     if(pd.isShowing()){
                                         pd.dismiss();
                                     }
@@ -200,11 +200,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         destAddress = util.get("recent_address");
                         if(destAddress.equals("")){
                             //Generate a temporary address for default account
-                            final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) 0));
-                            if(!response.errorOccurred){
-                                destAddress = response.content;
-                                util.set("recent_address", destAddress);
-                            }
+//                            final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) 0));
+//                            if(!response.errorOccurred){
+//                                destAddress = response.content;
+//                                util.set("recent_address", destAddress);
+//                            }
                         }
                     }else if(!validateAddress(destAddress)){
                         return;
@@ -219,16 +219,16 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    //final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
                     System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
-                            double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
-                            estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            totalAmountSending.setText(String.format(Locale.getDefault(),"%f DCR", totalAmount));
-                            estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
+                            //double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
+                            //double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
+                            //estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
+                            //totalAmountSending.setText(String.format(Locale.getDefault(),"%f DCR", totalAmount));
+                            //estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
                         }
                     });
                 }catch (Exception e){
@@ -259,6 +259,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             if(resultCode== RESULT_OK) {
                 try {
                     String returnString = intent.getStringExtra("keyName");
+                    System.out.println("Code: "+returnString);
                     if(returnString.startsWith("decred:"))
                         returnString = returnString.replace("decred:","");
                     if(returnString.length() < 25){
@@ -268,13 +269,13 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         Toast.makeText(SendFragment.this.getContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
-                        address.setText(returnString);
-                    }else if(returnString.startsWith("T")){
-                        address.setText(returnString);
-                    }else{
-                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
-                    }
+//                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
+//                        address.setText(returnString);
+//                    }else if(returnString.startsWith("T")){
+//                        address.setText(returnString);
+//                    }else{
+//                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
+//                    }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show();
                     address.setText("");
@@ -292,7 +293,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try{
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse("");//AccountResponse.parse(Dcrwallet.getAccounts());
                     if(response.errorOccurred){
                         if(getActivity() == null){
                             System.out.println("Activity is null");
@@ -351,13 +352,13 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try {
-                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                    byte[] tx = Dcrwallet.signTransaction(response.getUnsignedTransaction(),passphrase);
-                    byte[] serializedTx = Dcrwallet.publishTransaction(tx);
+                    //final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    //byte[] tx = Dcrwallet.signTransaction(response.getUnsignedTransaction(),passphrase);
+                    //byte[] serializedTx = Dcrwallet.publishTransaction(tx);
                     List<Byte> hashList = new ArrayList<>();
-                    for (byte aSerializedTx : serializedTx) {
-                        hashList.add(aSerializedTx);
-                    }
+//                    for (byte aSerializedTx : serializedTx) {
+//                        hashList.add(aSerializedTx);
+//                    }
                     Collections.reverse(hashList);
                     final StringBuilder sb = new StringBuilder();
                     for(byte b : hashList){
@@ -373,21 +374,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 }
                                 showTxConfirmDialog(sb.toString());
                                 send.setEnabled(true);
-                                }
-                            });
+                            }
+                        });
                     }
-                }catch (final Exception e){
+                }catch (Exception e){
                     e.printStackTrace();
-                    if(getActivity() == null){
-                        return;
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(SendFragment.this.getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            pd.dismiss();
-                        }
-                    });
                 }
             }
         }.start();
@@ -458,9 +449,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String url = "https://explorer.dcrdata.org/tx/"+txHash;
-                if(Dcrwallet.isTestNet()){
-                    url = "https://testnet.dcrdata.org/tx/"+txHash;
-                }
+//                if(Dcrwallet.isTestNet()){
+//                    url = "https://testnet.dcrdata.org/tx/"+txHash;
+//                }
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
@@ -489,7 +480,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             android.content.ClipData clip = android.content.ClipData
                     .newPlainText(getString(R.string.your_address), copyText);
             if(clipboard != null)
-            clipboard.setPrimaryClip(clip);
+                clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(getContext(),
                 R.string.tx_hash_copy, Toast.LENGTH_SHORT);

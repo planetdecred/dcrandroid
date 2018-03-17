@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
@@ -64,15 +64,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
+        txHash.setText(getIntent().getStringExtra("Hash"));
         txHash.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "https://explorer.dcrdata.org/tx/"+txHash.getText().toString();
-                if(Dcrwallet.isTestNet()){
-                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-                }
+//                if(Dcrwallet.isTestNet()){
+//                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
+//                }
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
@@ -81,9 +82,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String url = "https://explorer.dcrdata.org/tx/"+txHash.getText().toString();
-                if(Dcrwallet.isTestNet()){
-                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-                }
+//                if(Dcrwallet.isTestNet()){
+//                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
+//                }
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
@@ -105,22 +106,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         nf.setMaximumFractionDigits(8);
         if(getIntent().getFloatExtra("Fee",0) > 0){
             value.formatAndSetText("- "+nf.format(getIntent().getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
+            System.out.println("Formatter: "+nf.format(getIntent().getFloatExtra("Fee",0)));
             transactionFee.formatAndSetText(nf.format(getIntent().getFloatExtra("Fee",0)));
         }
         else{
-            value.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
+            value.formatAndSetText(nf.format(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
+            System.out.println(".2 F is on");
             transactionFee.formatAndSetText(nf.format(0)+" DCR");
         }
-        date.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
-        status.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_STATUS));
-        String type = getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_TYPE);
+        date.setText(getIntent().getStringExtra("TxDate"));
+        status.setText(getIntent().getStringExtra("TxStatus"));
+        String type = getIntent().getStringExtra("TxType");
         type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
         txType.setText(type);
-        if(status.getText().toString().equals(Constants.EXTRA_TRANSACTION_PENDING)){
+        if(status.getText().toString().equals("pending")){
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
             confirmation.setText("0");
-        }else if(status.getText().toString().equals(Constants.EXTRA_TRANSACTION_CONFIRMED)) {
+        }else if(status.getText().toString().equals("confirmed")) {
             status.setBackgroundResource(R.drawable.tx_status_confirmed);
             status.setTextColor(Color.parseColor("#55bb97"));
             confirmation.setText(String.format(Locale.getDefault(),"%d",util.getInt(PreferenceUtil.BLOCK_HEIGHT) - getIntent().getIntExtra("Height",0)));

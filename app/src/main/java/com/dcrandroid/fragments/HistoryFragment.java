@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -47,7 +47,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private  TextView refresh;
     private SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
-//    private View progressContainer;
+    //    private View progressContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
-                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
+                i.putExtra("Height", history.getHeight());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
@@ -112,7 +112,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void run(){
                 PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
                 int blockHeight = util.getInt(PreferenceUtil.BLOCK_HEIGHT);
-                String result = Dcrwallet.getTransactions(blockHeight, 0);
+                String result = "";// Dcrwallet.getTransactions(blockHeight, 0);
                 TransactionsResponse response = TransactionsResponse.parse(result);
                 if(response.errorOccurred){
                     getActivity().runOnUiThread(new Runnable() {
@@ -169,7 +169,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         }
                         transaction.setUsedInput(usedInput);
                         transaction.setWalletOutput(output);
-                        temp.add(transaction);
+                        if(item.status.equalsIgnoreCase("pending")){
+                            System.out.println("Adding pending to top");
+                            temp.add(transaction);
+                        }else{
+                            temp.add(transaction);
+                        }
                     }
                     if(getActivity() == null){
                         return;
@@ -187,7 +192,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             if(swipeRefreshLayout.isRefreshing()){
                                 swipeRefreshLayout.setRefreshing(false);
                             }
-                             transactionAdapter.notifyDataSetChanged();
+                            transactionAdapter.notifyDataSetChanged();
                             saveTransactions();
                         }
                     });

@@ -11,7 +11,6 @@ import com.dcrandroid.R;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.Utils;
 
-import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -43,8 +42,8 @@ public class AddAccountActivity extends AppCompatActivity {
                     new Thread(){
                         public void run(){
                             try{
-                                DcrResponse response = DcrResponse.parse(Dcrwallet.createAccount(name, privatePhrase));
-                                addAccountCallback(response.errorOccurred);
+//                                DcrResponse response = DcrResponse.parse(Dcrwallet.createAccount(name, privatePhrase));
+//                                addAccountCallback(response.errorOccurred);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }

@@ -18,11 +18,11 @@ import android.view.ViewGroup;
 
 import com.dcrandroid.activities.AccountDetailsActivity;
 import com.dcrandroid.adapter.AccountAdapter;
-import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 
 import org.json.JSONException;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 
 /**
@@ -58,16 +58,16 @@ public class AccountsFragment extends Fragment {
             public void onClick(View view, int position) {
                 Account account = accountList.get(position);
                 Intent i = new Intent(getContext(), AccountDetailsActivity.class);
-                i.putExtra(Constants.EXTRA_ACCOUNT_NAME,account.getAccountName());
-                i.putExtra(Constants.EXTRA_ACCOUNT_NUMBER,account.getAccountNumber());
-                i.putExtra(Constants.EXTRA_BALANCE_SPENDABLE,account.getSpendable());
-                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS,account.getImmatureRewards());
-                i.putExtra(Constants.EXTRA_HD_PATH,account.getHDPath());
-                i.putExtra(Constants.EXTRA_KEYS,account.getKeys());
-                i.putExtra(Constants.EXTRA_BALANCE_TOTAL,account.getTotal());
-                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN,account.getImmatureStakeGeneration());
-                i.putExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY,account.getVotingAuthority());
-                i.putExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS,account.getLockedByTickets());
+                i.putExtra("AccountName",account.getAccountName());
+                i.putExtra("AccountNumber",account.getAccountNumber());
+                i.putExtra("Spendable",account.getSpendable());
+                i.putExtra("ImmatureReward",account.getImmatureRewards());
+                i.putExtra("HDPath",account.getHDPath());
+                i.putExtra("Keys",account.getKeys());
+                i.putExtra("total",account.getTotal());
+                i.putExtra("ImmatureStakeGen",account.getImmatureStakeGeneration());
+                i.putExtra("VotingAuthority",account.getVotingAuthority());
+                i.putExtra("LockedByTickets",account.getLockedByTickets());
                 startActivity(i);
             }
 
@@ -87,7 +87,7 @@ public class AccountsFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(DcrConstants.getInstance().wallet.getAccounts());
                     if(!response.errorOccurred) {
                         accountList.clear();
                         for (int i = 0; i < response.items.size(); i++) {
@@ -101,11 +101,12 @@ public class AccountsFragment extends Fragment {
                             account.setImmatureStakeGeneration(item.balance.immatureStakeGeneration);
                             account.setLockedByTickets(item.balance.lockedByTickets);
                             account.setVotingAuthority(item.balance.votingAuthority);
-                            if(Dcrwallet.isTestNet()){
-                                account.setHDPath("m / 44' / 11' / "+item.number);
-                            }else{
-                                account.setHDPath("m / 44' / 20' / "+item.number);
-                            }
+                            account.setHDPath("m / 44' / 11' / "+item.number);
+//                            if(Dcrwallet.isTestNet()){
+//                                account.setHDPath("m / 44' / 11' / "+item.number);
+//                            }else{
+//                                account.setHDPath("m / 44' / 20' / "+item.number);
+//                            }
                             account.setKeys(item.internalKeyCount+" Internal, "+item.externalKeyCount+" External, "+item.importedKeyCount+" Imported");
                             accountList.add(account);
                         }
