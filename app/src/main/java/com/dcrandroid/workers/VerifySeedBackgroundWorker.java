@@ -7,7 +7,7 @@ import com.dcrandroid.activities.ConfirmSeedActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.Utils;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 public class VerifySeedBackgroundWorker extends AsyncTask<String,String, String> {
     private ConfirmSeedActivity context;
@@ -26,7 +26,8 @@ public class VerifySeedBackgroundWorker extends AsyncTask<String,String, String>
     @Override
     protected String doInBackground(String... params) {
         try {
-            return Dcrwallet.verifySeed(params[0]);
+            //return Dcrwallet.verifySeed(params[0]);
+            return "";
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -39,6 +40,6 @@ public class VerifySeedBackgroundWorker extends AsyncTask<String,String, String>
         if(pd.isShowing()){
             pd.dismiss();
         }
-        context.verifySeedCallback(s);
+        //context.verifySeedCallback(s);
     }
 }

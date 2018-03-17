@@ -3,6 +3,7 @@ package com.dcrandroid.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.util.AccountResponse;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.EncodeQrCode;
 import com.dcrandroid.util.PreferenceUtil;
@@ -27,7 +29,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -41,10 +43,15 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     List<String> categories;
     PreferenceUtil preferenceUtil;
     List<Integer> accountNumbers = new ArrayList<>();
+    private DcrConstants constants;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
+        if(getContext() == null){
+            return null;
+        }
+        constants = DcrConstants.getInstance();
         preferenceUtil = new PreferenceUtil(getContext());
         //change R.layout.yourlayoutfilename for each of your fragments
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
@@ -110,7 +117,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         new Thread(){
             public void run(){
                 try{
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response  = AccountResponse.parse(constants.wallet.getAccounts());// = AccountResponse.parse(Dcrwallet.getAccounts());
                     if(response.errorOccurred){
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -156,29 +163,23 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         new Thread(){
             public void run(){
                 try {
-                    final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) accountNumber));
+                    final String receiveAddress = constants.wallet.addressForAccount(accountNumber);
                     if(getActivity() == null){
                         return;
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(response.errorOccurred){
-                                Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber+"\n"+response.content,Toast.LENGTH_SHORT).show();
-                            }else{
-                                //float a = 0/0;
-                                String newAddress = response.content;
-                                preferenceUtil.set("recent_address",newAddress);
-                                address.setText(newAddress);
-                                imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
-                            }
-//                            if(pd.isShowing()){
-//                                pd.dismiss();
-//                            }
+                            //float a = 0/0;
+                            preferenceUtil.set("recent_address",receiveAddress);
+                            address.setText(receiveAddress);
+                            imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+receiveAddress,200,200));
                         }
                     });
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    Looper.prepare();
+                    Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
                 }
             }
         }.start();

@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 public class BackgroundWorker extends AsyncTask<Method,String, String> {
     private Method callback;
