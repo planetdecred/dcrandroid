@@ -237,6 +237,16 @@
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="label_version">Version:</string>
     <string name="spinner_account">Account:</string>
+    <string-array name="network_modes">
+        <item>Simplified Payment Verification (SPV)</item>
+        <item>Local Full full-node</item>
+        <item>Remote Full full-node</item>
+    </string-array>
+    <string-array name="network_modes_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="pref_upload_quality_entries">
         <item>360p</item>
         <item>480p</item>
