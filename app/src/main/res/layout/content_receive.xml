@@ -1,5 +1,5 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="#fff">
     <LinearLayout
@@ -33,7 +33,7 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
@@ -72,27 +72,28 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/backgcolorwhite"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
             android:gravity="bottom"
-            android:padding="5dp"
-            android:textSize="16sp" />
+            android:padding="5dp"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="2dp"
-
         android:background="@color/backgcolorwhite"
         android:orientation="vertical">
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/bitm"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
         android:layout_gravity="center"
-
+        android:background="@android:color/transparent"
         />
         <TextView
             android:id="@+id/barcode_address"
@@ -126,5 +127,4 @@
             android:clickable="true"
             android:focusable="true" />
     </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

@@ -48,6 +48,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        util = new PreferenceUtil(this);
         try {
             Utils.writeDcrdFiles(this);
             Utils.writeDcrwalletFiles(this);
@@ -55,8 +56,9 @@ public class MainApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        util = new PreferenceUtil(this);
-        if(util.getBoolean(getString(R.string.key_connection_local_dcrd), true)){
+        Utils.removeDcrwalletConfig("spv");
+        if(util.getInt("network_mode") == 1){
+            //local full-node
             System.out.println("Starting local server");
             Intent i = new Intent(this, DcrdService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -64,9 +66,9 @@ public class MainApplication extends Application {
             }else{
                 startService(i);
             }
-            //Dcrwallet.runDcrd();
-        }else{
-            System.out.println("Not starting local server");
+        }else if(util.getInt("network_mode") == 0){
+            //spv
+            Utils.setDcrwalletConfig("spv","true");
         }
     }
 }
