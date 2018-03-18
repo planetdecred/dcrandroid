@@ -70,10 +70,9 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/backgcolorwhite"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
             android:gravity="bottom"
-            android:padding="5dp"
-            android:textSize="16sp" />
+            android:padding="5dp"/>
 
     </LinearLayout>
 
