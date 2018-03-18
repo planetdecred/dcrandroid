@@ -68,7 +68,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         util = new PreferenceUtil(getContext());
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
-        //progressContainer = rootView.findViewById(R.id.progressContainers);
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimary,
@@ -91,12 +90,13 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra("Height", history.getHeight());
+                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
-                //i.putExtra("AccountName",history.getAccountName());
+                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
+                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
                 i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
@@ -144,7 +144,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        System.out.println("Is Running 4: "+Dcrwallet.isRunning());
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle(getString(R.string.overview));
     }
@@ -221,7 +220,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                         }
                     });
                 }else {
-                    util.set(PreferenceUtil.TRANSACTION_HEIGHT, String.valueOf(blockHeight));
+                    util.setInt(PreferenceUtil.TRANSACTION_HEIGHT, blockHeight);
                     final List<Transaction> temp = new ArrayList<>();
                     for (int i = 0; i < response.transactions.size(); i++) {
                         Transaction transaction = new Transaction();
@@ -238,10 +237,12 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                         transaction.setTxStatus(item.status);
                         ArrayList<String> usedInput = new ArrayList<>();
                         for (int j = 0; j < item.debits.size(); j++) {
+                            transaction.totalInput += item.debits.get(j).previous_amount;
                             usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
                         }
                         ArrayList<String> output = new ArrayList<>();
                         for (int j = 0; j < item.credits.size(); j++) {
+                            transaction.totalOutput += item.credits.get(j).amount;
                             output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
                         }
                         transaction.setUsedInput(usedInput);
@@ -336,8 +337,6 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
             @Override
             public void run() {
                 pd.show();
-                PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
-                //int percentage = (int) ((rescanned_through/Float.parseFloat(util.get(PreferenceUtil.BLOCK_HEIGHT))) * 100);
                 pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
             }
         });
