@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.EncodeQrCode;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.Utils;
 
 import org.json.JSONException;
 
@@ -35,6 +37,7 @@ import dcrwallet.Dcrwallet;
 
 public class ReceiveFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
     ImageView imageView;
+    LinearLayout ReceiveContainer;
     private TextView address;
     ProgressDialog pd;
     ArrayAdapter dataAdapter;
@@ -49,6 +52,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         //change R.layout.yourlayoutfilename for each of your fragments
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+        ReceiveContainer = rootView.findViewById(R.id.receive_container);
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
         Button buttonGenerate = rootView.findViewById(R.id.btn_gen_new_addr);
@@ -105,8 +109,8 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void prepareAccounts(){
-        //pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
-        //pd.show();
+        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
+        pd.show();
         new Thread(){
             public void run(){
                 try{
@@ -115,9 +119,9 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                if(pd.isShowing()){
-//                                    pd.dismiss();
-//                                }
+                                if(pd.isShowing()){
+                                    pd.dismiss();
+                                }
                                 Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -165,6 +169,10 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                         public void run() {
                             if(response.errorOccurred){
                                 Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber+"\n"+response.content,Toast.LENGTH_SHORT).show();
+                                if(pd.isShowing()){
+                                    pd.dismiss();
+                                    ReceiveContainer.setVisibility(View.VISIBLE);
+                                }
                             }else{
                                 //float a = 0/0;
                                 String newAddress = response.content;
@@ -172,9 +180,11 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                                 address.setText(newAddress);
                                 imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
                             }
-//                            if(pd.isShowing()){
-//                                pd.dismiss();
-//                            }
+                            if(pd.isShowing()){
+                                pd.dismiss();
+                                ReceiveContainer.setVisibility(View.VISIBLE);
+                           }
+
                         }
                     });
                 } catch (JSONException e) {
