@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import com.dcrandroid.R
+import com.dcrandroid.receiver.ShutdownReceiver
 import com.dcrandroid.util.Utils
 import dcrwallet.Dcrwallet
 import org.json.JSONObject
@@ -88,43 +89,66 @@ class DcrdService : Service() {
             println("BROADCAST RECEIVED")
             stopForeground(true)
             stopSelf()
+
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(receiver)
-        val i = Intent("kill")
+        val i = Intent(this, ShutdownReceiver::class.java)
         sendBroadcast(i)
         Dcrwallet.shutdown()
     }
 
     override fun onCreate() {
         super.onCreate()
-       //Dcrwallet.runDcrd()
-       object : Thread() {
-           override fun run() {
-               while (true) {
-                   try {
-                       val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
-                       val bestBlock = Utils.parseBestBlock(result)
-                       val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
-                       val lastBlockTime = rawBlock.getLong("time")
-                       val currentTime = System.currentTimeMillis() / 1000
-                       //TODO: Make available for both testnet and mainnet
-                       val estimatedBlocks = (currentTime - lastBlockTime) / 120
-                       serverStatus = if(estimatedBlocks > bestBlock.height){
-                           "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
-                       }else{
-                           "${bestBlock.height} blocks (Last block ${(System.currentTimeMillis()/1000) - lastBlockTime} seconds ago)"
-                       }
-                       showNotification()
-                   } catch (e: Exception) {
-                       e.printStackTrace()
-                   }
-                   Thread.sleep(3000)
-               }
-           }
-       }.start()
+
+        Dcrwallet.runDcrd()
+        object : Thread() {
+            override fun run() {
+                while (true) {
+                    try {
+                        val result = Dcrwallet.runDcrCommands(getString(R.string.getbestblock))
+                        val bestBlock = Utils.parseBestBlock(result)
+                        val rawBlock = JSONObject(Dcrwallet.runDcrCommands("getblockheader ${bestBlock.hash}"))
+                        val lastBlockTime = rawBlock.getLong("time")
+                        val currentTime = System.currentTimeMillis() / 1000
+                        //TODO: Make available for both testnet and mainnet
+                        val estimatedBlocks = (currentTime - lastBlockTime) / 120
+                        serverStatus = if(estimatedBlocks > bestBlock.height){
+                            "${bestBlock.height} blocks (${estimatedBlocks - bestBlock.height} blocks behind)"
+                        }else{
+                            "${bestBlock.height} blocks (Last block ${calculateTime((System.currentTimeMillis()/1000) - lastBlockTime)})"
+                        }
+                        showNotification()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    Thread.sleep(3000)
+                }
+            }
+        }.start()
+    }
+
+    fun calculateTime(millis : Long) : String{
+        var time = millis
+        if(time > 59){
+            time /= 60
+            if(time > 59){
+                time /= 60
+                if(time > 23){
+                    time /= 24
+                    //days
+                    return "$time day${if(time > 1) "s" else ""} ago"
+                }
+                //hour
+                return "$time hour${if(time > 1) "s" else ""} ago"
+            }
+            //minute
+            return "$time minute${if(time > 1) "s" else ""} ago"
+        }
+        //seconds
+        return "$time second${if(time > 1) "s" else ""} ago"
     }
 }

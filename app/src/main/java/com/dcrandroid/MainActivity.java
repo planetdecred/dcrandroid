@@ -61,14 +61,14 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter("kill");
-        registerReceiver(receiver,filter);
+//        IntentFilter filter = new IntentFilter("kill");
+//        registerReceiver(receiver,filter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+        //unregisterReceiver(receiver);
     }
 
     @Override
@@ -89,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         ActivityCompat.finishAffinity(MainActivity.this);
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            System.exit(0);
-            ActivityCompat.finishAffinity(MainActivity.this);
-        }
-    };
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            System.exit(0);
+//            ActivityCompat.finishAffinity(MainActivity.this);
+//        }
+//    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
