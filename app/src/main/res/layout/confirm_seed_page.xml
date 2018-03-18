@@ -65,15 +65,16 @@
                 android:text="@string/delete"
                 android:layout_margin="5dp"
                 android:textColor="#fff" />
-            <Button
-                android:id="@+id/button_clear_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/btn_shape"
-                android:padding="5dp"
-                android:text="clear"
-                android:layout_margin="5dp"
-                android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/button_clear_seed"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/btn_shape"
+            android:padding="5dp"
+            android:text="clear"
+            android:textColor="#fff" />
             <Button
                 android:id="@+id/button_confirm_seed"
                 android:layout_width="wrap_content"
