@@ -41,7 +41,7 @@
             android:layout_width="93dp"
             android:layout_height="match_parent"
             android:background="@color/backgcolorwhite"
-            android:gravity="right"
+            android:gravity="end"
             android:padding="5dp"
             android:layout_weight="3.5"
             android:textSize="16sp"
@@ -72,10 +72,10 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/backgcolorwhite"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
             android:gravity="bottom"
             android:padding="5dp"
-            android:textSize="16sp" />
+            />
 
     </LinearLayout>
 
@@ -92,7 +92,6 @@
         android:id="@+id/bitm"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-
         />
         <TextView
             android:id="@+id/barcode_address"
