@@ -131,7 +131,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 pd.show();
                                 constants.wallet.rescan(0, OverviewFragment.this);
-                                //Dcrwallet.reScanBlocks(OverviewFragment.this, util.getInt("block_checkpoint"));
                             }
                         }).setNegativeButton("NO", null)
                         .show();
@@ -189,12 +188,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         loadTransactions();
         new Thread(){
             public void run(){
-                if(OverviewFragment.this.getContext() == null){
-                    return;
-                }
-                PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
-                int blockHeight = util.getInt(PreferenceUtil.BLOCK_HEIGHT);
-                String result = null;
                 try {
                     constants.wallet.getTransactions(OverviewFragment.this);
                 } catch (Exception e) {
