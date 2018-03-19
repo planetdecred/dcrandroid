@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.Utils;
 
@@ -24,8 +25,8 @@ public class AddAccountActivity extends AppCompatActivity {
         setTitle(getString(R.string.add_account));
         setContentView(R.layout.add_account_activity);
 
-        final EditText passphrase =findViewById(R.id.add_acc_passphrase);
-        final EditText accountName =findViewById(R.id.add_acc_name);
+        final EditText passphrase = findViewById(R.id.add_acc_passphrase);
+        final EditText accountName = findViewById(R.id.add_acc_name);
 
         pd = Utils.getProgressDialog(this, false, false,getString(R.string.creating_account));
         findViewById(R.id.add_acc_button).setOnClickListener(new View.OnClickListener() {
@@ -41,12 +42,20 @@ public class AddAccountActivity extends AppCompatActivity {
                     pd.show();
                     new Thread(){
                         public void run(){
-                            try{
-//                                DcrResponse response = DcrResponse.parse(Dcrwallet.createAccount(name, privatePhrase));
-//                                addAccountCallback(response.errorOccurred);
-                            }catch (Exception e){
-                                e.printStackTrace();
+                            if(DcrConstants.getInstance().wallet.nextAccount(name, privatePhrase.getBytes())){
+                                setResult(0);
+                            }else{
+                                setResult(1);
                             }
+                            if(pd.isShowing()){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                    }
+                                });
+                            }
+                            finish();
                         }
                     }.start();
                 }

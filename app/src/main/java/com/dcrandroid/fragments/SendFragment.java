@@ -29,10 +29,12 @@ import android.widget.Toast;
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.AccountResponse;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,11 +63,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     ArrayAdapter dataAdapter;
     ProgressDialog pd;
     PreferenceUtil util;
+    private DcrConstants constants;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+        constants = DcrConstants.getInstance();
         return inflater.inflate(R.layout.content_send, container, false);
     }
 
@@ -134,26 +136,34 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         sendAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog pd = Utils.getProgressDialog(SendFragment.this.getContext(),false,false,"Calculating total spendable...");
-                pd.show();
-                new Thread(){
-                    public void run(){
-                        try{
-                            //final Balance balance = Dcrwallet.getBalance(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
-                                    if(pd.isShowing()){
-                                        pd.dismiss();
-                                    }
-                                }
-                            });
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
+                try {
+                    NumberFormat nf = NumberFormat.getNumberInstance();
+                    nf.setMinimumFractionDigits(2);
+                    nf.setMaximumFractionDigits(8);
+                    amount.setText(nf.format(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()),0)/ AccountResponse.SATOSHI));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+//                final ProgressDialog pd = Utils.getProgressDialog(SendFragment.this.getContext(),false,false,"Calculating total spendable...");
+//                pd.show();
+//                new Thread(){
+//                    public void run(){
+//                        try{
+//                            //final Balance balance = Dcrwallet.getBalance(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    //amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
+//                                    if(pd.isShowing()){
+//                                        pd.dismiss();
+//                                    }
+//                                }
+//                            });
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }.start();
             }
         });
         prepareAccounts();
@@ -293,7 +303,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try{
-                    final AccountResponse response = AccountResponse.parse("");//AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts());
                     if(response.errorOccurred){
                         if(getActivity() == null){
                             System.out.println("Activity is null");
