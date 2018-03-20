@@ -24,21 +24,6 @@ public class LogViewer extends AppCompatActivity {
             File f = new File(logPath);
 
             logTextView.setText(getLastNLogLine(f));
-//            System.out.println("Lines 1000");
-//            try {
-//                StringBuilder sb = new StringBuilder();
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logPath)));
-//                String s;
-//                while((s = reader.readLine()) != null){
-//                    sb.append(s);
-//                    sb.append("\n");
-//                }
-//                logTextView.setText(sb.toString());
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 
