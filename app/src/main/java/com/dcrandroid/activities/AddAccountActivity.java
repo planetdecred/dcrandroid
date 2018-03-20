@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.Utils;
 
 
@@ -58,25 +57,6 @@ public class AddAccountActivity extends AppCompatActivity {
                             finish();
                         }
                     }.start();
-                }
-            }
-        });
-    }
-
-    private void addAccountCallback(final boolean error){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(pd.isShowing()){
-                    pd.dismiss();
-                }
-                if(error){
-                    Toast.makeText(AddAccountActivity.this, R.string.error_occured_creating_account, Toast.LENGTH_SHORT).show();
-                    setResult(1);
-                    finish();
-                }else{
-                    setResult(0);
-                    finish();
                 }
             }
         });

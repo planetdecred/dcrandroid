@@ -12,7 +12,6 @@ import android.support.v4.app.NotificationCompat
 import com.dcrandroid.R
 import com.dcrandroid.receiver.ShutdownReceiver
 import com.dcrandroid.util.Utils
-//import dcrwallet.Dcrwallet
 import org.json.JSONObject
 import java.text.DecimalFormat
 import java.util.*
@@ -98,7 +97,6 @@ class DcrdService : Service() {
         unregisterReceiver(receiver)
         val i = Intent(this, ShutdownReceiver::class.java)
         sendBroadcast(i)
-        //Dcrwallet.shutdown()
     }
 
 //    override fun onCreate() {

@@ -87,14 +87,13 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
         b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
     }
 
-
     public void discover(final String pass){
         imgAnim.startAnimation(animRotate);
         new Thread(){
             public void run(){
                 try {
                     PreferenceUtil util = new PreferenceUtil(DiscoverAddress.this);
-                    setText("Discovering Addresses");
+                    setText();
                     DcrConstants.getInstance().wallet.discoverActiveAddresses(true, pass.getBytes());
                     util.setBoolean("discover_address", true);
                     runOnUiThread(new Runnable() {
@@ -114,11 +113,11 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
         }.start();
     }
 
-    private void setText(final String str){
+    private void setText(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvLoading.setText(str);
+                tvLoading.setText("Discovering Addresses");
             }
         });
     }

@@ -14,9 +14,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import mobilewallet.BlockScanResponse;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -28,13 +30,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    //public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse {
-    public static class MainPreferenceFragment extends PreferenceFragment{
+    public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse{
         protected PreferenceUtil util;
         ProgressDialog pd;
+        private DcrConstants constants;
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             addPreferencesFromResource(R.xml.pref_main);
@@ -114,13 +117,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         dcrdCertificate.setEnabled(true);
                         util.setBoolean("connect_to_peer",false);
                         ///util.setBoolean(getString(R.string.key_connection_local_dcrd), true);
-                        Utils.removeDcrwalletConfig("spvconnect");
                         Utils.removeDcrdConfig("connect");
-                    }
-                    if(i == 0){
-                        //Utils.setDcrwalletConfig("spv","true");
-                    }else{
-                        Utils.removeDcrwalletConfig("spv");
                     }
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
                     return true;
@@ -212,8 +209,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     new Thread(){
                                         public void run(){
                                             try {
-                                                Looper.prepare();
-                                                //Dcrwallet.reScanBlocks(MainPreferenceFragment.this,0);
+                                                System.out.println("Rescanning");
+                                                constants.wallet.rescan(0, MainPreferenceFragment.this);
                                             }catch (Exception e){
                                                 e.printStackTrace();
                                             }
@@ -256,22 +253,36 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         }
 
-        //@Override
-        public void onEnd(final long height) {
+        @Override
+        public void onEnd(final int height, final boolean cancelled) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if(pd.isShowing()){
                         pd.dismiss();
                     }
-                    Toast.makeText(getActivity(), height+" "+getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
-                    util.setInt("block_checkpoint", (int) height);
+                    if(cancelled){
+                        Toast.makeText(getActivity(), "Rescan cancelled", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getActivity(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
+                        util.setInt("block_checkpoint", (int) height);
+                    }
                 }
             });
         }
 
-        //@Override
-        public void onScan(final long rescanned_through) {
+        @Override
+        public void onError(int code, final String message) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onScan(final int rescanned_through) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -279,6 +290,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
                 }
             });
+
         }
     }
 

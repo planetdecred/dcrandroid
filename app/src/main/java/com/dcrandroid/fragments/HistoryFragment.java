@@ -19,7 +19,6 @@ import com.dcrandroid.adapter.TransactionAdapter;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;

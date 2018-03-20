@@ -30,7 +30,6 @@ import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -40,9 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-//import dcrwallet.Balance;
-//import dcrwallet.ConstructTxResponse;
-//import dcrwallet.Dcrwallet;
+import mobilewallet.ConstructTxResponse;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -144,26 +141,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                final ProgressDialog pd = Utils.getProgressDialog(SendFragment.this.getContext(),false,false,"Calculating total spendable...");
-//                pd.show();
-//                new Thread(){
-//                    public void run(){
-//                        try{
-//                            //final Balance balance = Dcrwallet.getBalance(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-//                            getActivity().runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    //amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
-//                                    if(pd.isShowing()){
-//                                        pd.dismiss();
-//                                    }
-//                                }
-//                            });
-//                        }catch (Exception e){
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }.start();
             }
         });
         prepareAccounts();
@@ -209,12 +186,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     if (destAddress.equals("")){
                         destAddress = util.get("recent_address");
                         if(destAddress.equals("")){
-                            //Generate a temporary address for default account
-//                            final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) 0));
-//                            if(!response.errorOccurred){
-//                                destAddress = response.content;
-//                                util.set("recent_address", destAddress);
-//                            }
+                            try {
+                                destAddress = constants.wallet.addressForAccount(0);
+                                util.set("recent_address", destAddress);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     }else if(!validateAddress(destAddress)){
                         return;
@@ -229,20 +206,26 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    //final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0);
                     System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
-                            //double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
-                            //estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            //totalAmountSending.setText(String.format(Locale.getDefault(),"%f DCR", totalAmount));
-                            //estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
+                            double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
+                            double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
+                            estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
+                            totalAmountSending.setText(String.format(Locale.getDefault(),"%f DCR", totalAmount));
+                            estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
                         }
                     });
-                }catch (Exception e){
+                }catch (final Exception e){
                     e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SendFragment.this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         }.start();
@@ -362,13 +345,13 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try {
-                    //final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                    //byte[] tx = Dcrwallet.signTransaction(response.getUnsignedTransaction(),passphrase);
-                    //byte[] serializedTx = Dcrwallet.publishTransaction(tx);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0);
+                    byte[] tx = constants.wallet.signTransaction(response.getUnsignedTransaction(),passphrase.getBytes());
+                    byte[] serializedTx = constants.wallet.publishTransaction(tx);
                     List<Byte> hashList = new ArrayList<>();
-//                    for (byte aSerializedTx : serializedTx) {
-//                        hashList.add(aSerializedTx);
-//                    }
+                    for (byte aSerializedTx : serializedTx) {
+                        hashList.add(aSerializedTx);
+                    }
                     Collections.reverse(hashList);
                     final StringBuilder sb = new StringBuilder();
                     for(byte b : hashList){

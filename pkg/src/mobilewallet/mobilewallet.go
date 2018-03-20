@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"path/filepath"
 	//"fmt"
-	"sync"
 	"encoding/json"
 	"net"
+	"sync"
 	"time"
 
 	"github.com/decred/dcrd/chaincfg"
@@ -73,14 +73,20 @@ func decodeAddress(a string, params *chaincfg.Params) (dcrutil.Address, error) {
 	return addr, nil
 }
 
-func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error {
-	fmt.Println("Creating wallet")
+func (lw *LibWallet) InitLoader() {
 	stakeOptions := &loader.StakeOptions{
 		VotingEnabled: false,
 		AddressReuse:  false,
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
+	loader := loader.NewLoader(netparams.TestNet2Params.Params, lw.dbDir, stakeOptions,
+		20, false, 10e5)
+	lw.loader = loader
+}
+
+func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error {
+	fmt.Println("Creating wallet")
 
 	pubPass := []byte(wallet.InsecurePubPassphrase)
 	privPass := []byte(passphrase)
@@ -89,19 +95,17 @@ func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error 
 		return err
 	}
 
-	loader := loader.NewLoader(netparams.TestNet2Params.Params, lw.dbDir, stakeOptions,
-		20, false, 10e5)
-
-	w, err := loader.CreateNewWallet(pubPass, privPass, seed)
+	w, err := lw.loader.CreateNewWallet(pubPass, privPass, seed)
 	if err != nil {
 		return err
 	}
-	err = w.UpgradeToSLIP0044CoinType()
-	if err != nil {
-		return err
-	}
+	lw.wallet = w
+	// err = w.UpgradeToSLIP0044CoinType()
+	// if err != nil {
+	// 	return err
+	// }
 	fmt.Println("Created Wallet")
-	return loader.UnloadWallet()
+	return nil
 }
 
 func (lw *LibWallet) GenerateSeed() (string, error) {
@@ -242,15 +246,6 @@ func (lw *LibWallet) SubscribeToBlockNotifications() error {
 }
 
 func (lw *LibWallet) OpenWallet() error {
-	stakeOptions := &loader.StakeOptions{
-		VotingEnabled: false,
-		AddressReuse:  false,
-		VotingAddress: nil,
-		TicketFee:     10e8,
-	}
-
-	lw.loader = loader.NewLoader(netparams.TestNet2Params.Params, lw.dbDir, stakeOptions,
-		20, false, 10e5)
 
 	pubPass := []byte(wallet.InsecurePubPassphrase)
 	w, err := lw.loader.OpenExistingWallet(pubPass)
@@ -346,12 +341,11 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	minedTransactions := make([]Transaction, 0)
 	unMinedTransactions := make([]Transaction, 0)
 	rangeFn := func(block *wallet.Block) (bool, error) {
-		fmt.Println("Range is going")
 		if block.Height != -1 {
-			for index, transaction := range block.Transactions {
+			for _, transaction := range block.Transactions {
 				var amount int64
 				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for _, credit := range transaction.MyOutputs {
+				for index, credit := range transaction.MyOutputs {
 					if lw.IsAddressMine(credit.Address.String()) {
 						amount += int64(credit.Amount)
 					}
@@ -372,7 +366,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				}
 				tempTransaction := Transaction{
 					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", transaction.Hash),
+					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
 					Timestamp: transaction.Timestamp,
 					Type:      transactionType(transaction.Type),
 					Credits:   &tempCredits,
@@ -383,10 +377,10 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				minedTransactions = append(minedTransactions, tempTransaction)
 			}
 		} else {
-			for index, transaction := range block.Transactions {
+			for _, transaction := range block.Transactions {
 				var amount int64
 				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for _, credit := range transaction.MyOutputs {
+				for index, credit := range transaction.MyOutputs {
 					if lw.IsAddressMine(credit.Address.String()) {
 						amount += int64(credit.Amount)
 					}
@@ -407,7 +401,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				}
 				tempTransaction := Transaction{
 					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", transaction.Hash),
+					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
 					Timestamp: transaction.Timestamp,
 					Type:      transactionType(transaction.Type),
 					Credits:   &tempCredits,
@@ -420,10 +414,8 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 		}
 		select {
 		case <-ctx.Done():
-			fmt.Println("Return true")
 			return true, ctx.Err()
 		default:
-			fmt.Println("Return false")
 			return false, nil
 		}
 	}
@@ -440,6 +432,14 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 
 }
 
+func reverse(hash []byte) []byte {
+	for i := 0; i < len(hash)/2; i++ {
+		j := len(hash) - i - 1
+		hash[i], hash[j] = hash[j], hash[i]
+	}
+	return hash
+}
+
 func transactionType(txType wallet.TransactionType) string {
 	switch txType {
 	case wallet.TransactionTypeCoinbase:
@@ -453,6 +453,19 @@ func transactionType(txType wallet.TransactionType) string {
 	default:
 		return "REGULAR"
 	}
+}
+
+func (lw *LibWallet) GetBestBlock() int32{
+	_, height := lw.wallet.MainChainTip()
+	return height
+}
+
+func (lw *LibWallet) PublishUnminedTransactions() error {
+	if lw.netBackend == nil{
+		return errors.New("wallet is not associated with a consensus server RPC client")
+	}
+	err := lw.wallet.PublishUnminedTransactions(context.Background(), lw.netBackend)
+	return err
 }
 
 func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations int32) (int64, error) {
@@ -628,4 +641,26 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 	}
 	result, _ := json.Marshal(accountsResponse)
 	return string(result), nil
+}
+
+func (lw *LibWallet) NextAccount(accountName string, privPass []byte) bool {
+	lock := make(chan time.Time, 1)
+	defer func() {
+		for i := range privPass {
+			privPass[i] = 0
+		}
+		lock <- time.Time{} // send matters, not the value
+	}()
+	err := lw.wallet.Unlock(privPass, lock)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	_, err = lw.wallet.NextAccount(accountName)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	return true
 }

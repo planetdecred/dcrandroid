@@ -13,10 +13,6 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
-import com.dcrandroid.workers.VerifySeedBackgroundWorker;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,24 +109,6 @@ public class ConfirmSeedActivity extends AppCompatActivity {
 
         prepareData();
     }
-
-//    public void verifySeedCallback(String responseJson){
-//        try {
-//            DcrResponse response = DcrResponse.parse(responseJson);
-//            if(response.errorOccurred){
-//                Toast.makeText(this, response.content, Toast.LENGTH_LONG).show();
-//            }else{
-//                String enteredSeed = confirmView.getText().toString().trim();
-//                System.out.println("Seed: "+seed);
-//                System.out.println("Confirm Seed: "+enteredSeed);
-//                Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
-//                        .putExtra("seed",enteredSeed);
-//                startActivity(i);
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void prepareData() {
         Intent i = getIntent();

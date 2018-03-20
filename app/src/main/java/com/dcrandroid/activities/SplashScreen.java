@@ -2,24 +2,19 @@ package com.dcrandroid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
-
-import org.json.JSONException;
 
 import java.io.File;
 
@@ -34,14 +29,12 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     ImageView imgAnim;
     PreferenceUtil util;
     MyCustomTextView tvLoading;
-    private String json;
     Thread loadThread;
     private DcrConstants constants;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         util = new PreferenceUtil(this);
-        //Dcrwallet.runDcrwallet();
         setContentView(R.layout.splash_page);
         imgAnim = findViewById(R.id.splashscreen_icon);
         imgAnim.setOnClickListener(new DoubleClickListener() {
@@ -86,7 +79,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             };
             loadThread.start();
         }else{
-            openWallet();
+            load();
         }
     }
 
@@ -111,16 +104,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
                 startActivity(i);
                 finish();
-            }
-        };
-        loadThread.start();
-    }
-
-    private void openWallet(){
-        loadThread = new Thread(){
-            public void run(){
-                setText(getString(R.string.waiting_for_dcrwallet));
-                load();
             }
         };
         loadThread.start();
@@ -158,7 +141,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     }
                     if (util.getInt("network_mode") == 0) {
                         System.out.println("Connecting to peer");
-                        //Dcrwallet.connectToPeer(util.get("peer_address"));
                     }
                     if (isInterrupted()) {
                         return;
@@ -175,12 +157,12 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     if (isInterrupted()) {
                         return;
                     }
-                    //setText(getString(R.string.publish_unmined_transaction));
-//                try {
-//                    Dcrwallet.publishUnminedTransactions();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                    setText(getString(R.string.publish_unmined_transaction));
+                    try {
+                        constants.wallet.publishUnminedTransactions();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (isInterrupted()) {
                         return;
                     }
@@ -204,22 +186,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
     }
 
-    public void openWalletCallback(String responseJson){
-        try {
-            DcrResponse response = DcrResponse.parse(responseJson);
-            if(response.errorOccurred){
-                Toast.makeText(this, R.string.could_not_open_wallet, Toast.LENGTH_SHORT).show();
-            }else{
-                Intent i = new Intent(this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(this);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onBackPressed() {

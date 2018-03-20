@@ -192,54 +192,6 @@ public class Utils {
         }
     }
 
-    public static void writeDcrwalletFiles(Context context) throws IOException {
-        //File path = new File(Dcrwallet.getHomeDir()+"/");
-        File path = new File("/");
-        path.mkdirs();
-        String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
-        String[] assetFilesName = {"sample-dcrwallet.conf","rpc.key","rpc.cert"};
-        for(int i = 0; i < files.length; i++) {
-            File file = new File(path, files[i]);
-            if (!file.exists()) {
-                file.createNewFile();
-                FileOutputStream fout = new FileOutputStream(file);
-                InputStream in = context.getAssets().open(assetFilesName[i]);
-                int len;
-                byte[] buff = new byte[8192];
-                //read file till end
-                while ((len = in.read(buff)) != -1) {
-                    fout.write(buff, 0, len);
-                }
-                fout.flush();
-                fout.close();
-            }
-        }
-    }
-
-    public static void writeDcrdFiles(Context context) throws IOException {
-        File path = new File(context.getFilesDir().getPath(),"/dcrd");
-        path.mkdirs();
-        String[] files = {"rpc.key","dcrd.conf"};
-        String[] assetFilesName = {"dcrdrpc.key","dcrd.conf"};
-        for(int i = 0; i < files.length; i++) {
-            File file = new File(path, files[i]);
-            //[Debug] Write the file to the storage if it exists or not
-            if (!file.exists()) {
-                file.createNewFile();
-                FileOutputStream fout = new FileOutputStream(file);
-                InputStream in = context.getAssets().open(assetFilesName[i]);
-                int len;
-                byte[] buff = new byte[8192];
-                //read file till end
-                while ((len = in.read(buff)) != -1) {
-                    fout.write(buff, 0, len);
-                }
-                fout.flush();
-                fout.close();
-            }
-        }
-    }
-
     public static void writeDcrdCertificate(Context context) throws Exception{
         File path = new File(context.getFilesDir().getPath(),"/dcrd");
         path.mkdirs();
@@ -265,26 +217,6 @@ public class Utils {
         long totalDays = (today.getTimeInMillis() - startDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
         int blocksPerDay = 720;
         return Math.round(totalDays * blocksPerDay * (0.95));
-    }
-
-    public static void setDcrwalletConfig(String key, String value){
-//        try {
-////            PropertiesConfiguration properties = new PropertiesConfiguration(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
-////            properties.setProperty(key,value);
-//            //properties.save(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
-//        }catch (ConfigurationException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    public static void removeDcrwalletConfig(String key){
-//        try {
-//            PropertiesConfiguration properties = new PropertiesConfiguration(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
-//            properties.clearProperty(key);
-//            //properties.save(new File(Dcrwallet.getHomeDir()+"dcrwallet.conf"));
-//        }catch (ConfigurationException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public static void setDcrdConfiguration(String key, String value){
