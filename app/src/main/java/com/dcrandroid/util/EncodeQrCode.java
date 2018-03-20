@@ -16,14 +16,14 @@ public class EncodeQrCode {
         QRCodeWriter writer = new QRCodeWriter();
         BitMatrix matrix = null;
         try {
-            matrix = writer.encode(text, BarcodeFormat.QR_CODE, 200, 200);
+            matrix = writer.encode(text, BarcodeFormat.QR_CODE, width, height);
         } catch (WriterException ex) {
             ex.printStackTrace();
         }
         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
-                if(matrix !=null)
+                if(matrix != null)
                 bmp.setPixel(x, y, matrix.get(x,y) ? Color.BLACK : Color.WHITE);
             }
         }

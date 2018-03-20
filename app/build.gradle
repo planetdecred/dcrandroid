@@ -7,7 +7,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
-        versionName "0.1 alpha build 2"
+        versionName "0.1 alpha build 3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -22,13 +22,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:design:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
     compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
-    compile project(':dcrwallet')
+    compile files('libs/javax.annotation-3.2-b06.jar')
+    compile 'com.github.kenglxn.QRGen:android:2.4.0'
+    compile project(':mobilewallet')
     compile 'ch.acra:acra:4.9.2'
     compile "com.android.support:support-compat:27.0.2"
     implementation 'commons-configuration:commons-configuration:1.9'
