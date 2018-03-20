@@ -74,8 +74,8 @@
             android:key="crash"
             />
         <Preference
-            android:title="Dcrd Log"
-            android:key="dcrd_log"
+            android:title="@string/dcr_log_title"
+            android:key="@string/dcrd_log_key"
             />
         <Preference
             android:title="Dcrwallet Log"

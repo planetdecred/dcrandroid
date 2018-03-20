@@ -48,19 +48,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
+            final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference connectToPeer = (EditTextPreference) findPreference("peer_ip");
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
-            if(util.getInt("network_mode") == 2){
+            if(util.getInt("network_mode") == 2) {
                 System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
                 remoteDcrdAddress.setEnabled(true);
                 connectToPeer.setEnabled(false);
-            }else {
+                dcrLog.setEnabled(false);
+            }
+            else if(util.getInt("network_mode") == 1) {
                 System.out.println("Mode : 1 || 0");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
+                dcrLog.setEnabled(true);
+            }
+            else {
+                System.out.println("Mode : 0");
+                dcrdCertificate.setEnabled(false);
+                remoteDcrdAddress.setEnabled(false);
+                connectToPeer.setEnabled(true);
+                dcrLog.setEnabled(false);
             }
             connectToPeer.setText(util.get("peer_address"));
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[util.getInt("network_mode")]);
@@ -232,7 +243,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
-            findPreference("dcrd_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            dcrLog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     //TODO: Make this available for both testnet and mainnet

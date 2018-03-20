@@ -237,6 +237,8 @@
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="label_version">Version:</string>
     <string name="spinner_account">Account:</string>
+    <string name="dcr_log_title">Dcrd Log</string>
+    <string name="dcrd_log_key">dcrd_log</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>
