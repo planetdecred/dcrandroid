@@ -1,10 +1,10 @@
 package com.dcrandroid.activities;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -16,13 +16,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.Utils;
 
-import java.util.Locale;
-
-import dcrwallet.Dcrwallet;
 
 /**
  * Created by collins on 2/1/18.
@@ -90,15 +87,14 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
         b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
     }
 
-
     public void discover(final String pass){
         imgAnim.startAnimation(animRotate);
         new Thread(){
             public void run(){
                 try {
                     PreferenceUtil util = new PreferenceUtil(DiscoverAddress.this);
-                    setText("Discovering Addresses");
-                    Dcrwallet.discoverAddresses(pass);
+                    setText();
+                    DcrConstants.getInstance().wallet.discoverActiveAddresses(true, pass.getBytes());
                     util.setBoolean("discover_address", true);
                     runOnUiThread(new Runnable() {
                         @Override
@@ -109,6 +105,7 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
                     });
                 }catch (Exception e){
                     e.printStackTrace();
+                    Looper.prepare();
                     Toast.makeText(DiscoverAddress.this, "ERROR: "+e.getMessage(), Toast.LENGTH_LONG).show();
                     finish();
                 }
@@ -116,11 +113,11 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
         }.start();
     }
 
-    private void setText(final String str){
+    private void setText(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvLoading.setText(str);
+                tvLoading.setText("Discovering Addresses");
             }
         });
     }

@@ -1,0 +1,83 @@
+package mobilewallet
+
+type ConstructTxResponse struct {
+	EstimatedSignedSize       int32
+	TotalOutputAmount         int64
+	TotalPreviousOutputAmount int64
+	UnsignedTransaction       []byte
+}
+
+type Balance struct {
+	Total                   int64
+	Spendable               int64
+	ImmatureReward          int64
+	ImmatureStakeGeneration int64
+	LockedByTickets         int64
+	VotingAuthority         int64
+	UnConfirmed             int64
+}
+
+type Account struct {
+	Number             int32
+	Name               string
+	Balance            *Balance
+	TotalBalance       int64
+	External_key_count int32
+	Internal_key_count int32
+	Imported_key_count int32
+}
+
+type Accounts struct {
+	Count                int
+	ErrorMessage         string
+	ErrorCode            int
+	ErrorOccurred        bool
+	Acc                  *[]Account
+	Current_block_hash   []byte
+	Current_block_height int32
+}
+
+type BlockScanResponse interface {
+	OnScan(rescanned_through int32)
+	OnEnd(height int32, cancelled bool)
+	OnError(code int32, message string)
+}
+
+type Transaction struct {
+	Hash        string
+	Transaction []byte
+	Fee         int64
+	Timestamp   int64
+	Type        string
+	Amount      int64
+	Status      string
+	Height      int32
+	Debits      *[]TransactionDebit
+	Credits     *[]TransactionCredit
+}
+
+type TransactionDebit struct {
+	Index           int32
+	PreviousAccount int32
+	PreviousAmount  int64
+	AccountName     string
+}
+
+type TransactionCredit struct {
+	Index    int32
+	Account  int32
+	Internal bool
+	Amount   int64
+	Address  string
+}
+
+type getTransactionsResponse struct {
+	Mined         []Transaction
+	UnMined       []Transaction
+	ErrorOccurred bool
+	ErrorMessage  string
+}
+
+type GetTransactionsResponse interface{
+	OnResult(json string)
+}

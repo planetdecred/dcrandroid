@@ -14,17 +14,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
-import com.dcrandroid.data.BestBlock;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.Locale;
-
-import dcrwallet.BlockScanResponse;
-import dcrwallet.Dcrwallet;
+import mobilewallet.BlockScanResponse;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -36,12 +30,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse {
+    public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse{
         protected PreferenceUtil util;
         ProgressDialog pd;
+        private DcrConstants constants;
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             addPreferencesFromResource(R.xml.pref_main);
@@ -75,22 +71,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             if(getActivity() == null){
                                 break;
                             }
-                            final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
-                            JSONObject rawBlock = new JSONObject(Dcrwallet.runDcrCommands("getblockheader "+bestBlock.getHash()));
-                            final long lastBlockTime = rawBlock.getLong("time");
-                            long currentTime = System.currentTimeMillis() / 1000;
-                            //TODO: Make available for both testnet and mainnet
-                            final long estimatedBlocks = (currentTime - lastBlockTime) / 120;
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(estimatedBlocks > bestBlock.getHeight()) {
-                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (%d blocks behind)", bestBlock.getHeight(), estimatedBlocks-bestBlock.getHeight()));
-                                    }else{
-                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (Last block %d seconds ago)", bestBlock.getHeight(), (System.currentTimeMillis()/1000) - lastBlockTime));
-                                    }
-                                }
-                            });
+//                            final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
+//                            JSONObject rawBlock = new JSONObject(Dcrwallet.runDcrCommands("getblockheader "+bestBlock.getHash()));
+//                            final long lastBlockTime = rawBlock.getLong("time");
+//                            long currentTime = System.currentTimeMillis() / 1000;
+//                            //TODO: Make available for both testnet and mainnet
+//                            final long estimatedBlocks = (currentTime - lastBlockTime) / 120;
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    if(estimatedBlocks > bestBlock.getHeight()) {
+//                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (%d blocks behind)", bestBlock.getHeight(), estimatedBlocks-bestBlock.getHeight()));
+//                                    }else{
+//                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (Last block %d seconds ago)", bestBlock.getHeight(), (System.currentTimeMillis()/1000) - lastBlockTime));
+//                                    }
+//                                }
+                            //});
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -121,13 +117,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         dcrdCertificate.setEnabled(true);
                         util.setBoolean("connect_to_peer",false);
                         ///util.setBoolean(getString(R.string.key_connection_local_dcrd), true);
-                        Utils.removeDcrwalletConfig("spvconnect");
                         Utils.removeDcrdConfig("connect");
-                    }
-                    if(i == 0){
-                        Utils.setDcrwalletConfig("spv","true");
-                    }else{
-                        Utils.removeDcrwalletConfig("spv");
                     }
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
                     return true;
@@ -147,7 +137,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
                             || address.equals("")) {
                         util.set("peer_address", address);
-                        Utils.setDcrwalletConfig("spvconnect",address);
+                        //Utils.setDcrwalletConfig("spvconnect",address);
                         Utils.setDcrdConfiguration("connect",address);
                         return true;
                     }else{
@@ -219,8 +209,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     new Thread(){
                                         public void run(){
                                             try {
-                                                Looper.prepare();
-                                                Dcrwallet.reScanBlocks(MainPreferenceFragment.this,0);
+                                                System.out.println("Rescanning");
+                                                constants.wallet.rescan(0, MainPreferenceFragment.this);
                                             }catch (Exception e){
                                                 e.printStackTrace();
                                             }
@@ -264,21 +254,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         @Override
-        public void onEnd(final long height) {
+        public void onEnd(final int height, final boolean cancelled) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if(pd.isShowing()){
                         pd.dismiss();
                     }
-                    Toast.makeText(getActivity(), height+" "+getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
-                    util.setInt("block_checkpoint", (int) height);
+                    if(cancelled){
+                        Toast.makeText(getActivity(), "Rescan cancelled", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getActivity(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
+                        util.setInt("block_checkpoint", (int) height);
+                    }
                 }
             });
         }
 
         @Override
-        public void onScan(final long rescanned_through) {
+        public void onError(int code, final String message) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onScan(final int rescanned_through) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -286,6 +290,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
                 }
             });
+
         }
     }
 

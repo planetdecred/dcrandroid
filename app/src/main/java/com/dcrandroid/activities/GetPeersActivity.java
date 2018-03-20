@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 05/01/2018.
@@ -87,7 +86,7 @@ public class GetPeersActivity extends AppCompatActivity{
         new Thread(){
             public void run(){
                 try{
-                    String result = Dcrwallet.runUtil();
+                    String result = "[]";
                     JSONArray array = new JSONArray(result);
                     if(array.length() == 0){
                         runOnUiThread(new Runnable() {

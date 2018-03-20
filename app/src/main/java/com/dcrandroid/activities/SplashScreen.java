@@ -2,28 +2,23 @@ package com.dcrandroid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
-import com.dcrandroid.util.DcrResponse;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
-import org.json.JSONException;
-
 import java.io.File;
 
-import dcrwallet.BlockScanResponse;
-import dcrwallet.Dcrwallet;
+import mobilewallet.LibWallet;
 
 /**
  * Created by Macsleven on 24/12/2017.
@@ -34,16 +29,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     ImageView imgAnim;
     PreferenceUtil util;
     MyCustomTextView tvLoading;
-    private String json;
     Thread loadThread;
+    private DcrConstants constants;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         util = new PreferenceUtil(this);
-        System.out.println("Is Running: "+Dcrwallet.isRunning());
-        Dcrwallet.runDcrwallet();
         setContentView(R.layout.splash_page);
-        imgAnim= findViewById(R.id.splashscreen_icon);
+        imgAnim = findViewById(R.id.splashscreen_icon);
         imgAnim.setOnClickListener(new DoubleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -67,11 +60,12 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
     private void startup(){
         tvLoading = findViewById(R.id.loading_status);
-        String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
-        if(Dcrwallet.isTestNet()){
-            walletPath = Dcrwallet.getHomeDir()+"/testnet2/wallet.db";
-        }
-        File f = new File(walletPath);
+        constants = DcrConstants.getInstance();
+        String homeDir = getFilesDir()+"/dcrwallet/testnet2";
+        constants.wallet = new LibWallet(homeDir);
+        constants.wallet.initLoader();
+        //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
+        File f = new File(homeDir, "wallet.db");
         if(!f.exists()){
             loadThread = new Thread(){
                 public void run(){
@@ -85,7 +79,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             };
             loadThread.start();
         }else{
-            openWallet();
+            load();
         }
     }
 
@@ -101,18 +95,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private void createWallet(){
         loadThread = new Thread(){
             public void run(){
-                if(util.getInt("network_mode") != 0){
-                    setText(getString(R.string.waiting_for_dcrwallet));
-                    for(;;) {
-                        if(Dcrwallet.testConnect()){
-                            break;
-                        }
-                        try {
-                            sleep(1500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                if(isInterrupted()){
+                    return;
                 }
                 if(isInterrupted()){
                     return;
@@ -125,116 +109,71 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         loadThread.start();
     }
 
-    private void openWallet(){
-       loadThread = new Thread(){
-            public void run(){
-                setText(getString(R.string.waiting_for_dcrwallet));
-                int i = 0;
-                for(;;) {
-                    try {
-                        sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if(Dcrwallet.testConnect()){
-                        System.out.println("Connected Successfully");
-                        break;
-                    }
-                    i++;
-                    if(isInterrupted()){
-                        return;
-                    }
-                    if(i == 6){
-                        Dcrwallet.runDcrwallet();
-                    }
-                    if(isInterrupted()){
-                        return;
-                    }
-                }
-                load();
-            }
-        };
-       loadThread.start();
-    }
-
     public void load(){
         loadThread = new Thread(){
             public void run() {
-                setText(getString(R.string.waiting_for_dcrd));
-                String dcrdAddress = Utils.getDcrdNetworkAddress(SplashScreen.this);
-                if(util.getInt("network_mode") != 0) {
-                    for (; ; ) {
-                        try {
+                try {
+                    System.out.println("Opening");
+                    setText(getString(R.string.opening_wallet));
+                    constants.wallet.openWallet();
+                    setText(getString(R.string.waiting_for_dcrd));
+                    String dcrdAddress = Utils.getDcrdNetworkAddress(SplashScreen.this);
+                    if (util.getInt("network_mode") != 0) {
+                        for (; ; ) {
+                            try {
+                                if (isInterrupted()) {
+                                    return;
+                                }
+                                if (constants.wallet.startRpcClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
+                                    break;
+                                }
+                                sleep(2500);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             if (isInterrupted()) {
                                 return;
                             }
-                            if (Dcrwallet.connectToDcrd(dcrdAddress, Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
-                                break;
-                            }
-
-                            sleep(2500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (isInterrupted()) {
-                            return;
                         }
                     }
-                }
-                if(isInterrupted()){
-                    return;
-                }
-                System.out.println("Opening");
-                setText(getString(R.string.opening_wallet));
-                json = Dcrwallet.openWallet();
-                System.out.println("Opened Wallet : "+json);
-                if(util.getInt("network_mode") == 0){
-                    System.out.println("Connecting to peer");
-                    //Dcrwallet.connectToPeer(util.get("peer_address"));
-                }
-                if(isInterrupted()){
-                    return;
-                }
-                System.out.println("Blocks");
-                setText(getString(R.string.subscribe_to_block_notification));
-                Dcrwallet.subscibeToBlockNotifications();
-                if(isInterrupted()){
-                    return;
-                }
-                PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
-                if (!util.getBoolean("discover_address")) {
-                    setText(getString(R.string.discovering_address));
-                    Dcrwallet.discoverAddresses(util.get("key"));
-                    util.setBoolean("discover_address", true);
-                }
-                System.out.println("Is Running 3: "+Dcrwallet.isRunning());
-                if(isInterrupted()){
-                    return;
-                }
-                setText(getString(R.string.fetching_headers));
-                int blockHeight = Dcrwallet.fetchHeaders();
-                if (blockHeight != -1) {
-                    util.setInt(PreferenceUtil.BLOCK_HEIGHT, blockHeight);
-                }
-                System.out.println("Finished fetching headers");
-                if(isInterrupted()){
-                    return;
-                }
-                setText(getString(R.string.publish_unmined_transaction));
-                try {
-                    Dcrwallet.publishUnminedTransactions();
-                } catch (Exception e) {
+                    if (isInterrupted()) {
+                        return;
+                    }
+                    if (util.getInt("network_mode") == 0) {
+                        System.out.println("Connecting to peer");
+                    }
+                    if (isInterrupted()) {
+                        return;
+                    }
+                    constants.wallet.subscribeToBlockNotifications();
+                    constants.wallet.loadActiveDataFilters();
+                    PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
+                    setText(getString(R.string.fetching_headers));
+                    long blockHeight = constants.wallet.fetchHeaders();
+                    if (blockHeight != -1) {
+                        util.setInt(PreferenceUtil.BLOCK_HEIGHT, (int) blockHeight);
+                    }
+                    System.out.println("Finished fetching headers");
+                    if (isInterrupted()) {
+                        return;
+                    }
+                    setText(getString(R.string.publish_unmined_transaction));
+                    try {
+                        constants.wallet.publishUnminedTransactions();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (isInterrupted()) {
+                        return;
+                    }
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    //Finish all the activities before this
+                    ActivityCompat.finishAffinity(SplashScreen.this);
+                }catch (Exception e){
                     e.printStackTrace();
                 }
-                if(isInterrupted()){
-                    return;
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        openWalletCallback(json);
-                    }
-                });
             }};
         loadThread.start();
     }
@@ -247,22 +186,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
     }
 
-    public void openWalletCallback(String responseJson){
-        try {
-            DcrResponse response = DcrResponse.parse(responseJson);
-            if(response.errorOccurred){
-                Toast.makeText(this, R.string.could_not_open_wallet, Toast.LENGTH_SHORT).show();
-            }else{
-                Intent i = new Intent(this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(this);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onBackPressed() {
