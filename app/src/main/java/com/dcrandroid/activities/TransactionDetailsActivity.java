@@ -169,7 +169,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(getApplicationContext(),
-                R.string.tx_hash_copy, Toast.LENGTH_SHORT);
+                R.string.copied, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.RIGHT, 50, 50);
         toast.show();
     }
