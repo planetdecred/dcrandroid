@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,10 +26,6 @@ import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
-import com.dcrandroid.fragments.SettingsFragment;
-import com.dcrandroid.fragments.TicketsFragment;
-
-import dcrwallet.Dcrwallet;
 
 public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
@@ -84,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Dcrwallet.shutdown();
         System.exit(0);
         ActivityCompat.finishAffinity(MainActivity.this);
     }

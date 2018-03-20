@@ -29,18 +29,17 @@ import android.widget.Toast;
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.AccountResponse;
-import com.dcrandroid.util.DcrResponse;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Balance;
-import dcrwallet.ConstructTxResponse;
-import dcrwallet.Dcrwallet;
+import mobilewallet.ConstructTxResponse;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -61,11 +60,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     ArrayAdapter dataAdapter;
     ProgressDialog pd;
     PreferenceUtil util;
+    private DcrConstants constants;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+        constants = DcrConstants.getInstance();
         return inflater.inflate(R.layout.content_send, container, false);
     }
 
@@ -134,26 +133,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         sendAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog pd = Utils.getProgressDialog(SendFragment.this.getContext(),false,false,"Calculating total spendable...");
-                pd.show();
-                new Thread(){
-                    public void run(){
-                        try{
-                            final Balance balance = Dcrwallet.getBalance(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    amount.setText(String.format(Locale.getDefault(),"%f",balance.getSpendable()/ AccountResponse.SATOSHI));
-                                    if(pd.isShowing()){
-                                        pd.dismiss();
-                                    }
-                                }
-                            });
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
+                try {
+                    NumberFormat nf = NumberFormat.getNumberInstance();
+                    nf.setMinimumFractionDigits(2);
+                    nf.setMaximumFractionDigits(8);
+                    amount.setText(nf.format(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()),0)/ AccountResponse.SATOSHI));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         prepareAccounts();
@@ -199,11 +186,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     if (destAddress.equals("")){
                         destAddress = util.get("recent_address");
                         if(destAddress.equals("")){
-                            //Generate a temporary address for default account
-                            final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) 0));
-                            if(!response.errorOccurred){
-                                destAddress = response.content;
+                            try {
+                                destAddress = constants.wallet.addressForAccount(0);
                                 util.set("recent_address", destAddress);
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
                         }
                     }else if(!validateAddress(destAddress)){
@@ -219,7 +206,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0);
                     System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -231,8 +218,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
                         }
                     });
-                }catch (Exception e){
+                }catch (final Exception e){
                     e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SendFragment.this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         }.start();
@@ -259,6 +252,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             if(resultCode== RESULT_OK) {
                 try {
                     String returnString = intent.getStringExtra("keyName");
+                    System.out.println("Code: "+returnString);
                     if(returnString.startsWith("decred:"))
                         returnString = returnString.replace("decred:","");
                     if(returnString.length() < 25){
@@ -268,13 +262,13 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         Toast.makeText(SendFragment.this.getContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
-                        address.setText(returnString);
-                    }else if(returnString.startsWith("T")){
-                        address.setText(returnString);
-                    }else{
-                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
-                    }
+//                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
+//                        address.setText(returnString);
+//                    }else if(returnString.startsWith("T")){
+//                        address.setText(returnString);
+//                    }else{
+//                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
+//                    }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show();
                     address.setText("");
@@ -292,7 +286,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try{
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts());
                     if(response.errorOccurred){
                         if(getActivity() == null){
                             System.out.println("Activity is null");
@@ -351,9 +345,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try {
-                    final ConstructTxResponse response = Dcrwallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()));
-                    byte[] tx = Dcrwallet.signTransaction(response.getUnsignedTransaction(),passphrase);
-                    byte[] serializedTx = Dcrwallet.publishTransaction(tx);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0);
+                    byte[] tx = constants.wallet.signTransaction(response.getUnsignedTransaction(),passphrase.getBytes());
+                    byte[] serializedTx = constants.wallet.publishTransaction(tx);
                     List<Byte> hashList = new ArrayList<>();
                     for (byte aSerializedTx : serializedTx) {
                         hashList.add(aSerializedTx);
@@ -373,21 +367,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 }
                                 showTxConfirmDialog(sb.toString());
                                 send.setEnabled(true);
-                                }
-                            });
+                            }
+                        });
                     }
-                }catch (final Exception e){
+                }catch (Exception e){
                     e.printStackTrace();
-                    if(getActivity() == null){
-                        return;
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(SendFragment.this.getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            pd.dismiss();
-                        }
-                    });
                 }
             }
         }.start();
@@ -458,9 +442,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String url = "https://explorer.dcrdata.org/tx/"+txHash;
-                if(Dcrwallet.isTestNet()){
-                    url = "https://testnet.dcrdata.org/tx/"+txHash;
-                }
+//                if(Dcrwallet.isTestNet()){
+//                    url = "https://testnet.dcrdata.org/tx/"+txHash;
+//                }
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
@@ -489,7 +473,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             android.content.ClipData clip = android.content.ClipData
                     .newPlainText(getString(R.string.your_address), copyText);
             if(clipboard != null)
-            clipboard.setPrimaryClip(clip);
+                clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(getContext(),
                 R.string.tx_hash_copy, Toast.LENGTH_SHORT);

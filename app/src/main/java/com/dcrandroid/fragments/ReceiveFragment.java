@@ -3,6 +3,7 @@ package com.dcrandroid.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,17 +20,18 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.util.AccountResponse;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.EncodeQrCode;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import net.glxn.qrgen.android.QRCode;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -44,10 +46,17 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     List<String> categories;
     PreferenceUtil preferenceUtil;
     List<Integer> accountNumbers = new ArrayList<>();
+    private DcrConstants constants;
+    private boolean firstTrial = true;
+    long startTime = 0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
+        if(getContext() == null){
+            return null;
+        }
+        constants = DcrConstants.getInstance();
         preferenceUtil = new PreferenceUtil(getContext());
         //change R.layout.yourlayoutfilename for each of your fragments
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
@@ -86,6 +95,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         });
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle(getString(R.string.receive));
+        startTime = System.currentTimeMillis();
         prepareAccounts();
         return rootView;
     }
@@ -109,95 +119,55 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void prepareAccounts(){
-        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
-        pd.show();
-        new Thread(){
-            public void run(){
-                try{
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
-                    if(response.errorOccurred){
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(pd.isShowing()){
-                                    pd.dismiss();
-                                }
-                                Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        return;
-                    }
-                    accountNumbers.clear();
-                    categories.clear();
-                    for(int i = 0; i < response.items.size(); i++){
-                        if(response.items.get(i).name.trim().equals("imported")){
-                            continue;
-                        }
-                        categories.add(i, response.items.get(i).name);
-                        accountNumbers.add(response.items.get(i).number);
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            if(pd.isShowing()){
-//                                pd.dismiss();
-//                            }
-                            dataAdapter.notifyDataSetChanged();
-                            //Default Account
-                            //getTransactionFee(0);
-                        }
-                    });
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+        //pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
+        //pd.show();
+        try{
+            final AccountResponse response  = AccountResponse.parse(constants.wallet.getAccounts());// = AccountResponse.parse(Dcrwallet.getAccounts());
+            if(response.errorOccurred){
+                Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
+                return;
             }
-        }.start();
+            accountNumbers.clear();
+            categories.clear();
+            for(int i = 0; i < response.items.size(); i++){
+                if(response.items.get(i).name.trim().equals("imported")){
+                    continue;
+                }
+                categories.add(i, response.items.get(i).name);
+                accountNumbers.add(response.items.get(i).number);
+            }
+            System.out.println("Got Accounts in "+(System.currentTimeMillis() - startTime)+"ms");
+            getAddress(0);
+            dataAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void getAddress(final int accountNumber){
 //        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_address));
 //        pd.show();
-        new Thread(){
-            public void run(){
-                try {
-                    final DcrResponse response = DcrResponse.parse(Dcrwallet.nextAddress((long) accountNumber));
-                    if(getActivity() == null){
-                        return;
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(response.errorOccurred){
-                                Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber+"\n"+response.content,Toast.LENGTH_SHORT).show();
-                                if(pd.isShowing()){
-                                    pd.dismiss();
-                                    ReceiveContainer.setVisibility(View.VISIBLE);
-                                }
-                            }else{
-                                //float a = 0/0;
-                                String newAddress = response.content;
-                                preferenceUtil.set("recent_address",newAddress);
-                                address.setText(newAddress);
-                                imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+newAddress,200,200));
-                            }
-                            if(pd.isShowing()){
-                                pd.dismiss();
-                                ReceiveContainer.setVisibility(View.VISIBLE);
-                           }
-
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        try {
+            final String receiveAddress = constants.wallet.addressForAccount(accountNumber);
+            System.out.println("Got Address in "+(System.currentTimeMillis() - startTime)+"ms");
+            preferenceUtil.set("recent_address",receiveAddress);
+            address.setText(receiveAddress);
+            //imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+receiveAddress,200,200));
+            imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).bitmap());
+            System.out.println("Generated QR in "+(System.currentTimeMillis() - startTime)+"ms");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Looper.prepare();
+            Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //String item = parent.getItemAtPosition(position).toString();
-        getAddress(accountNumbers.get(position));
+        if(!firstTrial){
+            getAddress(accountNumbers.get(position));
+        }
+        firstTrial = false;
     }
 
     @Override

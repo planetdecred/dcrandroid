@@ -1,1 +1,1 @@
-include ':app', ':dcrwallet'
+include ':app', ':mobilewallet'

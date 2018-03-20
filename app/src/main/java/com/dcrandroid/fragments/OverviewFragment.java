@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -24,11 +24,9 @@ import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
 import com.dcrandroid.R;
 
-import dcrwallet.BlockScanResponse;
-import dcrwallet.Dcrwallet;
-
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionsResponse;
@@ -48,11 +46,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import mobilewallet.BlockScanResponse;
+import mobilewallet.GetTransactionsResponse;
+
 /**
  * Created by Macsleven on 28/11/2017.
  */
 
-public class OverviewFragment extends Fragment implements BlockScanResponse,SwipeRefreshLayout.OnRefreshListener{
+public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, BlockScanResponse, GetTransactionsResponse {
     private List<Transaction> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
     private Button reScanBlock;
     private CurrencyTextView tvBalance;
@@ -62,10 +63,15 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
     TextView refresh;
     PreferenceUtil util;
     RecyclerView recyclerView;
+    DcrConstants constants;
     @Nullable
     @Override
-     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(getContext() == null){
+            return null;
+        }
         util = new PreferenceUtil(getContext());
+        constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
@@ -90,7 +96,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
+                i.putExtra("Height", history.getHeight());
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
@@ -112,23 +118,14 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         reScanBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(getContext())
                         .setTitle("Rescan blocks")
                         .setMessage("Are you sure? This could take some time.")
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 pd.show();
-                                new Thread(){
-                                    public void run(){
-                                        try {
-                                            Looper.prepare();
-                                            Dcrwallet.reScanBlocks(OverviewFragment.this, util.getInt("block_checkpoint"));
-                                        }catch (Exception e){
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }.start();
+                                constants.wallet.rescan(0, OverviewFragment.this);
                             }
                         }).setNegativeButton("NO", null)
                         .show();
@@ -155,7 +152,7 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                     if(getContext() == null){
                         return;
                     }
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts());
                     float totalBalance = 0;
                     for(int i = 0; i < response.items.size(); i++){
                         AccountResponse.Balance balance = response.items.get(i).balance;
@@ -186,94 +183,10 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
         loadTransactions();
         new Thread(){
             public void run(){
-                if(OverviewFragment.this.getContext() == null){
-                    return;
-                }
-                PreferenceUtil util = new PreferenceUtil(OverviewFragment.this.getContext());
-                int blockHeight = util.getInt(PreferenceUtil.BLOCK_HEIGHT);
-                String result = Dcrwallet.getTransactions(blockHeight, 0);
-                TransactionsResponse response = TransactionsResponse.parse(result);
-                if(getActivity() == null){
-                    return;
-                }
-                if(response.errorOccurred){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refresh.setVisibility(View.VISIBLE);
-                            if(swipeRefreshLayout.isRefreshing()){
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                            recyclerView.setVisibility(View.GONE);
-                        }
-                    });
-                }
-                else if(response.transactions.size() == 0){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refresh.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.GONE);
-                            if(swipeRefreshLayout.isRefreshing()){
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
-                    });
-                }else {
-                    util.setInt(PreferenceUtil.TRANSACTION_HEIGHT, blockHeight);
-                    final List<Transaction> temp = new ArrayList<>();
-                    for (int i = 0; i < response.transactions.size(); i++) {
-                        Transaction transaction = new Transaction();
-                        TransactionsResponse.TransactionItem item = response.transactions.get(i);
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(item.timestamp * 1000);
-                        SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
-                        transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                        transaction.setTransactionFee(item.fee);
-                        transaction.setType(item.type);
-                        transaction.setHash(item.hash);
-                        transaction.setHeight(item.height);
-                        transaction.setAmount(item.amount);
-                        transaction.setTxStatus(item.status);
-                        ArrayList<String> usedInput = new ArrayList<>();
-                        for (int j = 0; j < item.debits.size(); j++) {
-                            transaction.totalInput += item.debits.get(j).previous_amount;
-                            usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
-                        }
-                        ArrayList<String> output = new ArrayList<>();
-                        for (int j = 0; j < item.credits.size(); j++) {
-                            transaction.totalOutput += item.credits.get(j).amount;
-                            output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
-                        }
-                        transaction.setUsedInput(usedInput);
-                        transaction.setWalletOutput(output);
-                        temp.add(transaction);
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Collections.reverse(temp);
-                            tempTxList.clear();
-                            tempTxList.addAll(0, temp);
-                            transactionList.clear();
-                            if(tempTxList.size() > 0) {
-                                if (tempTxList.size() > 7) {
-                                    transactionList.addAll(tempTxList.subList(0, 7));
-                                } else {
-                                    transactionList.addAll(tempTxList.subList(0, tempTxList.size() - 1));
-                                }
-                                if(refresh.isShown()){
-                                    refresh.setVisibility(View.INVISIBLE);
-                                }
-                            }
-                            recyclerView.setVisibility(View.VISIBLE);
-                            if(swipeRefreshLayout.isRefreshing()){
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                            transactionAdapter.notifyDataSetChanged();
-                            saveTransactions();
-                        }
-                    });
+                try {
+                    constants.wallet.getTransactions(OverviewFragment.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }.start();
@@ -316,23 +229,51 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
     }
 
     @Override
-    public void onEnd(final long height) {
+    public void onRefresh() {
+        prepareHistoryData();
+    }
+
+    @Override
+    public void onEnd(final int height, final boolean cancelled) {
+        if(getActivity() == null){
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(pd.isShowing()){
+                if (pd.isShowing()) {
                     pd.dismiss();
                 }
-                Toast.makeText(getContext(), height+" "+getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
-                util.setInt("block_checkpoint", (int) height);
-                getBalance();
-                prepareHistoryData();
+                if(!cancelled) {
+                    Toast.makeText(getContext(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
+                    util.setInt("block_checkpoint", height);
+                    getBalance();
+                    prepareHistoryData();
+                }else{
+                    Toast.makeText(getContext(), "Rescan cancelled", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     @Override
-    public void onScan(final long rescanned_through) {
+    public void onError(int code, final String message) {
+        if(getActivity() == null){
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onScan(final int rescanned_through) {
+        if(getActivity() == null){
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -340,10 +281,97 @@ public class OverviewFragment extends Fragment implements BlockScanResponse,Swip
                 pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
             }
         });
+
     }
 
     @Override
-    public void onRefresh() {
-        prepareHistoryData();
+    public void onResult(String json) {
+        TransactionsResponse response = TransactionsResponse.parse(json);
+        if(getActivity() == null){
+            return;
+        }
+        if(response.errorOccurred){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refresh.setVisibility(View.VISIBLE);
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    recyclerView.setVisibility(View.GONE);
+                }
+            });
+        }
+        else if(response.transactions.size() == 0){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refresh.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            });
+        }else {
+            final List<Transaction> temp = new ArrayList<>();
+            for (int i = 0; i < response.transactions.size(); i++) {
+                Transaction transaction = new Transaction();
+                TransactionsResponse.TransactionItem item = response.transactions.get(i);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(item.timestamp * 1000);
+                SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
+                transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTransactionFee(item.fee);
+                transaction.setType(item.type);
+                transaction.setHash(item.hash);
+                transaction.setHeight(item.height);
+                transaction.setAmount(item.amount);
+                transaction.setTxStatus(item.status);
+                ArrayList<String> usedInput = new ArrayList<>();
+                for (int j = 0; j < item.debits.size(); j++) {
+                    transaction.totalInput += item.debits.get(j).previous_amount;
+                    usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
+                }
+                ArrayList<String> output = new ArrayList<>();
+                for (int j = 0; j < item.credits.size(); j++) {
+                    transaction.totalOutput += item.credits.get(j).amount;
+                    output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
+                }
+                transaction.setUsedInput(usedInput);
+                transaction.setWalletOutput(output);
+                if (item.status.equalsIgnoreCase("pending")) {
+                    System.out.println("Adding pending to top");
+                    temp.add(transaction);
+                } else {
+                    temp.add(transaction);
+                }
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Collections.reverse(temp);
+                    tempTxList.clear();
+                    tempTxList.addAll(0, temp);
+                    transactionList.clear();
+                    if (tempTxList.size() > 0) {
+                        if (tempTxList.size() > 7) {
+                            transactionList.addAll(tempTxList.subList(0, 7));
+                        } else {
+                            transactionList.addAll(tempTxList.subList(0, tempTxList.size() - 1));
+                        }
+                        if (refresh.isShown()) {
+                            refresh.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    recyclerView.setVisibility(View.VISIBLE);
+                    if (swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    transactionAdapter.notifyDataSetChanged();
+                    saveTransactions();
+                }
+            });
+        }
     }
 }

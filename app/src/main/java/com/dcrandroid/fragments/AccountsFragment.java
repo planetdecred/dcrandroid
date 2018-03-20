@@ -23,6 +23,7 @@ import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 
 import org.json.JSONException;
@@ -30,8 +31,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import dcrwallet.Dcrwallet;
 
 
 /**
@@ -87,7 +86,7 @@ public class AccountsFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    final AccountResponse response = AccountResponse.parse(Dcrwallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(DcrConstants.getInstance().wallet.getAccounts());
                     if(!response.errorOccurred) {
                         accountList.clear();
                         for (int i = 0; i < response.items.size(); i++) {
@@ -101,11 +100,12 @@ public class AccountsFragment extends Fragment {
                             account.setImmatureStakeGeneration(item.balance.immatureStakeGeneration);
                             account.setLockedByTickets(item.balance.lockedByTickets);
                             account.setVotingAuthority(item.balance.votingAuthority);
-                            if(Dcrwallet.isTestNet()){
-                                account.setHDPath("m / 44' / 11' / "+item.number);
-                            }else{
-                                account.setHDPath("m / 44' / 20' / "+item.number);
-                            }
+                            account.setHDPath("m / 44' / 11' / "+item.number);
+//                            if(Dcrwallet.isTestNet()){
+//                                account.setHDPath("m / 44' / 11' / "+item.number);
+//                            }else{
+//                                account.setHDPath("m / 44' / 20' / "+item.number);
+//                            }
                             account.setKeys(item.internalKeyCount+" Internal, "+item.externalKeyCount+" External, "+item.importedKeyCount+" Imported");
                             accountList.add(account);
                         }
