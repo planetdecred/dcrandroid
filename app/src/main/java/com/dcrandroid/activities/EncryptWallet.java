@@ -16,7 +16,6 @@ import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.workers.EncryptBackgroundWorker;
 
 import org.json.JSONException;
 
@@ -59,8 +58,6 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                 LibWallet wallet = constants.wallet;
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
-//                                show("Opening wallet...");
-//                                wallet.openWallet();
                                 show("Connecting to dcrd...");
                                 for(;;){
                                     if(wallet.startRpcClient(Utils.getDcrdNetworkAddress(EncryptWallet.this),"dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes())){

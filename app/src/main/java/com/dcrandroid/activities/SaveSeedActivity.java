@@ -1,6 +1,5 @@
 package com.dcrandroid.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,16 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.workers.BackgroundWorker;
-import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.R;
-import com.dcrandroid.util.Utils;
-
-import org.json.JSONException;
-
-import java.lang.reflect.Method;
-
-import mobilewallet.LibWallet;
 
 
 /**

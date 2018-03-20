@@ -41,13 +41,10 @@ public class MainApplication extends Application {
         super.onCreate();
         util = new PreferenceUtil(this);
         try {
-            //Utils.writeDcrdFiles(this);
-            //Utils.writeDcrwalletFiles(this);
             Utils.writeDcrdCertificate(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Utils.removeDcrwalletConfig("spv");
         if(util.getInt("network_mode") == 1){
             //local full-node
             System.out.println("Starting local server");
@@ -57,9 +54,6 @@ public class MainApplication extends Application {
             }else{
                 startService(i);
             }
-        }else if(util.getInt("network_mode") == 0){
-            //spv
-            Utils.setDcrwalletConfig("spv","true");
         }
     }
 }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.adapter.ExpandableListViewAdapter;
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
@@ -25,8 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-//import dcrwallet.Dcrwallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
@@ -70,7 +69,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://explorer.dcrdata.org/tx/"+txHash.getText().toString();
+                String url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
 //                if(Dcrwallet.isTestNet()){
 //                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
 //                }
@@ -81,7 +80,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         txHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://explorer.dcrdata.org/tx/"+txHash.getText().toString();
+                String url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
 //                if(Dcrwallet.isTestNet()){
 //                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
 //                }
@@ -126,7 +125,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }else if(status.getText().toString().equals("confirmed")) {
             status.setBackgroundResource(R.drawable.tx_status_confirmed);
             status.setTextColor(Color.parseColor("#55bb97"));
-            confirmation.setText(String.format(Locale.getDefault(),"%d",util.getInt(PreferenceUtil.BLOCK_HEIGHT) - getIntent().getIntExtra("Height",0)));
+            confirmation.setText(String.format(Locale.getDefault(),"%d", DcrConstants.getInstance().wallet.getBestBlock() - getIntent().getIntExtra("Height",0)));
         }
     }
 

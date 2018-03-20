@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,9 +23,6 @@ import android.widget.Toast;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
 import com.dcrandroid.R;
-
-//import dcrwallet.BlockScanResponse;
-//import dcrwallet.Dcrwallet;
 
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
@@ -57,7 +53,6 @@ import mobilewallet.GetTransactionsResponse;
  * Created by Macsleven on 28/11/2017.
  */
 
-//public class OverviewFragment extends Fragment implements BlockScanResponse,SwipeRefreshLayout.OnRefreshListener{
 public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, BlockScanResponse, GetTransactionsResponse {
     private List<Transaction> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
     private Button reScanBlock;
@@ -246,10 +241,10 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (pd.isShowing()) {
+                    pd.dismiss();
+                }
                 if(!cancelled) {
-                    if (pd.isShowing()) {
-                        pd.dismiss();
-                    }
                     Toast.makeText(getContext(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
                     util.setInt("block_checkpoint", height);
                     getBalance();
@@ -319,7 +314,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
             });
         }else {
-            ///util.setInt(PreferenceUtil.TRANSACTION_HEIGHT, blockHeight);
             final List<Transaction> temp = new ArrayList<>();
             for (int i = 0; i < response.transactions.size(); i++) {
                 Transaction transaction = new Transaction();
