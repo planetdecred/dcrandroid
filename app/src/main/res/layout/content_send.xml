@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,6 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -48,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_weight="0.001"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/background_shadow">
 
@@ -62,14 +65,14 @@
                     android:layout_gravity="center"
                     android:gravity="start"
 
-                     >
+
+                    >
                 </Spinner>
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:layout_weight="1"
                 android:background="@color/backgcolorwhite"
                 />
         </LinearLayout>
@@ -78,7 +81,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp">
 
             <EditText
                 android:id="@+id/send_dcr_add"
@@ -89,52 +96,61 @@
                 android:layout_weight="1"
                 android:inputType="text"
                 android:textSize="15sp"
-                 />
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                />
 
             <ImageView
                 android:id="@+id/send_dcr_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tx_status_pending"
-                android:src="@drawable/ic_menu_camera"
+                android:src="@android:drawable/ic_menu_camera"
+
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="bottom"
                 android:contentDescription="@string/scan"
                 android:layout_marginTop="5dp"
-                 />
+                />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <EditText
-            android:id="@+id/send_dcr_amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/amount_dcr"
-            android:inputType="numberDecimal"
-            android:maxLength="9"
-            android:layout_weight="1"
-            android:lines="1"
-            android:maxLines="1"
-            android:textSize="15sp"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:paddingStart="5dp">
+            <EditText
+                android:id="@+id/send_dcr_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/amount_dcr"
+                android:inputType="numberDecimal"
+                android:maxLength="9"
+                android:layout_weight="1"
+                android:lines="1"
+                android:maxLines="1"
+                android:textSize="15sp"
 
-            />
-        <TextView
-            android:id="@+id/send_dcr_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/max"
-            android:clickable="true"
-            android:gravity="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:focusable="true"
-            android:textStyle="bold"
-            android:padding="5dp"
-            android:paddingBottom="3dp" />
+                />
+            <TextView
+                android:id="@+id/send_dcr_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/max"
+                android:clickable="true"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:focusable="true"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:paddingBottom="3dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,68 +159,68 @@
             android:padding="5dp"
             >
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            >
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/total_amount_sending"
-                android:layout_weight="1"
-                android:textSize="15sp"
-                android:gravity="center"/>
-            <TextView
+                android:orientation="horizontal"
+                android:padding="8dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_amount_sending"
+                    android:layout_weight="1"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0_dcr"
+                    android:id="@+id/send_dcr_total_amt_sndng"
+                    android:layout_weight="2"
+                    android:textSize="15sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/_0_dcr"
-                android:id="@+id/send_dcr_total_amt_sndng"
-                android:layout_weight="2"
-                android:textSize="15sp"
-               />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-            <TextView
+                android:orientation="horizontal"
+                android:padding="8dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/estimated_fee"
+                    android:layout_weight="1"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0_dcr"
+                    android:id="@+id/send_dcr_estimate_fee"
+                    android:layout_weight="2"
+                    />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/estimated_fee"
-                android:layout_weight="1"
-                android:textSize="15sp"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/_0_dcr"
-                android:id="@+id/send_dcr_estimate_fee"
-                android:layout_weight="2"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/estimate_size"
-                android:layout_weight="1"
-                android:textSize="15sp"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/_0_bytes"
-                android:id="@+id/send_dcr_estimate_size"
-                android:layout_weight="2"
-                android:textSize="15sp"
-                />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:padding="8dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/estimate_size"
+                    android:layout_weight="1"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0_bytes"
+                    android:id="@+id/send_dcr_estimate_size"
+                    android:layout_weight="2"
+                    android:textSize="15sp"
+                    />
+            </LinearLayout>
         </LinearLayout>
         <Button
             android:id="@+id/send_btn_tx"
