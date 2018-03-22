@@ -21,4 +21,4 @@
 
 [[constraint]]
   name = "github.com/decred/dcrwallet"
-  branch = "master"
+  revision = "87b1f9a230dfa916a4501c2360e741081ca035a0"
