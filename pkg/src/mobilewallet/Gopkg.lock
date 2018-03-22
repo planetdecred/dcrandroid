@@ -4,7 +4,10 @@
 [[projects]]
   branch = "master"
   name = "github.com/agl/ed25519"
-  packages = [".","edwards25519"]
+  packages = [
+    ".",
+    "edwards25519"
+  ]
   revision = "5312a61534124124185d41f09206b9fef1d88403"
 
 [[projects]]
@@ -41,19 +44,60 @@
   branch = "master"
   name = "github.com/decred/base58"
   packages = ["."]
-  revision = "b3520e187fa8ebe65eb74245408cf4b83e6a65d3"
+  revision = "56c501706f00d9e1cfacee19a27117e12da24734"
 
 [[projects]]
   branch = "master"
   name = "github.com/decred/dcrd"
-  packages = ["blockchain","blockchain/indexers","blockchain/internal/dbnamespace","blockchain/internal/progresslog","blockchain/stake","blockchain/stake/internal/dbnamespace","blockchain/stake/internal/ticketdb","blockchain/stake/internal/tickettreap","chaincfg","chaincfg/chainec","chaincfg/chainhash","database","dcrec/edwards","dcrec/secp256k1","dcrec/secp256k1/schnorr","dcrjson","dcrutil","hdkeychain","mempool","mining","rpcclient","txscript","wire"]
-  revision = "008e80bf8668544de4200a08927e95e5926439a0"
+  packages = [
+    "blockchain",
+    "blockchain/indexers",
+    "blockchain/internal/dbnamespace",
+    "blockchain/internal/progresslog",
+    "blockchain/stake",
+    "blockchain/stake/internal/dbnamespace",
+    "blockchain/stake/internal/ticketdb",
+    "blockchain/stake/internal/tickettreap",
+    "chaincfg",
+    "chaincfg/chainec",
+    "chaincfg/chainhash",
+    "database",
+    "dcrec/edwards",
+    "dcrec/secp256k1",
+    "dcrec/secp256k1/schnorr",
+    "dcrjson",
+    "dcrutil",
+    "hdkeychain",
+    "mempool",
+    "mining",
+    "rpcclient",
+    "txscript",
+    "wire"
+  ]
+  revision = "4e01f768cb28a138b1b51dc17f0de284703b5f7a"
 
 [[projects]]
-  branch = "master"
   name = "github.com/decred/dcrwallet"
-  packages = ["apperrors","chain","internal/helpers","internal/zero","loader","netparams","snacl","ticketbuyer","wallet","wallet/internal/txsizes","wallet/txauthor","wallet/txrules","wallet/udb","walletdb","walletdb/bdb"]
-  revision = "0027db2f7a9fcce036af661938ff5a35727547a9"
+  packages = [
+    "apperrors",
+    "chain",
+    "internal/helpers",
+    "internal/zero",
+    "loader",
+    "netparams",
+    "pgpwordlist",
+    "snacl",
+    "ticketbuyer",
+    "wallet",
+    "wallet/internal/txsizes",
+    "wallet/txauthor",
+    "wallet/txrules",
+    "wallet/udb",
+    "walletdb",
+    "walletdb/bdb",
+    "walletseed"
+  ]
+  revision = "87b1f9a230dfa916a4501c2360e741081ca035a0"
 
 [[projects]]
   branch = "master"
@@ -63,31 +107,44 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/jrick/logrotate"
+  packages = ["rotator"]
+  revision = "a93b200c26cbae3bb09dd0dc2c7c7fe1468a034a"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["nacl/secretbox","pbkdf2","poly1305","ripemd160","salsa20/salsa","scrypt"]
-  revision = "94eea52f7b742c7cbe0b03b22f0c4c8631ece122"
+  packages = [
+    "nacl/secretbox",
+    "pbkdf2",
+    "poly1305",
+    "ripemd160",
+    "salsa20/salsa",
+    "scrypt"
+  ]
+  revision = "80db560fac1fb3e6ac81dbc7f8ae4c061f5257bd"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "d866cfc389cec985d6fda2859936a575a55a3ab6"
+  revision = "6078986fec03a1dcc236c34816c71b0e05018fda"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sync"
   packages = ["errgroup"]
-  revision = "fd80eb99c8f653c847d294a001bdf2a3a6f768f5"
+  revision = "1d60e4601c6fd243af51cc01ddf169918a5407ca"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "1d2aa6dbdea45adaaebb9905d0666e4537563829"
+  revision = "7ceb54c8418b8f9cdf0177b511d5cbb06e9fae39"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "96e9516d9714e4d1986d331e86029a69f03ed7a92d74b7fb1af5eac01ddfdb03"
+  inputs-digest = "a32b024b09d45b47a2349a33a5ef764ca3096412e2ed76ab80b0f2a168ef3fdf"
   solver-name = "gps-cdcl"
-  solver-version = 1
+solver-version = 1
