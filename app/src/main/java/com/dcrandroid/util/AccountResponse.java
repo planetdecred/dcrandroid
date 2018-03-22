@@ -40,7 +40,6 @@ public class AccountResponse {
                         importedKeyCount = account.getInt("Imported_key_count");
                         JSONObject balanceObj = account.getJSONObject("Balance");
                         balance = new Balance();
-          //              System.out.println("Total: "+balanceObj.getLong("Total")+" Satoshi "+balanceObj.getLong("Total")/100000000.0);
                         balance.total = balanceObj.getLong("Total")/SATOSHI;
                         balance.spendable = balanceObj.getLong("Spendable")/SATOSHI;
                         balance.immatureReward = balanceObj.getLong("ImmatureReward")/SATOSHI;

@@ -6,6 +6,8 @@ import android.content.Context;
 import com.dcrandroid.R;
 import com.dcrandroid.data.BestBlock;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,12 +23,11 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Dcrwallet;
+//import dcrwallet.Dcrwallet;
 
 public class Utils {
     public static ProgressDialog getProgressDialog(Context context,boolean cancelable, boolean cancelOnTouchOutside,
@@ -103,16 +104,20 @@ public class Utils {
 
     public static String getConnectionCertificate(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(util.getBoolean(context.getString(R.string.key_connection_local_dcrd), true)){
-            return Utils.getDefaultCertificate(context);
-        }else{
+        if(util.getInt("network_mode") == 2){
             return Utils.getRemoteCertificate(context);
+        }else{
+            return Utils.getDefaultCertificate(context);
         }
     }
 
     public static String getRemoteCertificate(Context context){
         try {
-            File file = new File(context.getFilesDir()+"/savedata/remote rpc.cert");
+            File path = new File(context.getFilesDir()+"/savedata");
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            File file = new File(path,"remote rpc.cert");
             if(file.exists()){
                 FileInputStream fin = new FileInputStream(file);
                 StringBuilder sb = new StringBuilder();
@@ -136,7 +141,11 @@ public class Utils {
 
     public static void setRemoteCetificate(Context context, String certificate){
         try {
-            File file = new File(context.getFilesDir()+"/savedata/remote rpc.cert");
+            File path = new File(context.getFilesDir()+"/savedata");
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            File file = new File(path,"remote rpc.cert");
             if(file.exists()){
                 file.delete();
             }
@@ -172,60 +181,14 @@ public class Utils {
 
     public static String getDcrdNetworkAddress(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(util.getBoolean(context.getString(R.string.key_connection_local_dcrd), true)){
+        if(util.getInt("network_mode") == 1 || util.getInt("network_mode") == 0){
             System.out.println("Util is using local server");
-            return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
+            //return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
+            return "";
         }else{
             String addr = util.get(context.getString(R.string.remote_dcrd));
             System.out.println("Util is using remote server: "+addr);
             return addr;
-        }
-    }
-
-    public static void writeDcrwalletFiles(Context context) throws IOException {
-        File path = new File(Dcrwallet.getHomeDir()+"/");
-        path.mkdirs();
-        String[] files = {"dcrwallet.conf","rpc.key","rpc.cert"};
-        String[] assetFilesName = {"sample-dcrwallet.conf","rpc.key","rpc.cert"};
-        for(int i = 0; i < files.length; i++) {
-            File file = new File(path, files[i]);
-            if (!file.exists()) {
-                file.createNewFile();
-                FileOutputStream fout = new FileOutputStream(file);
-                InputStream in = context.getAssets().open(assetFilesName[i]);
-                int len;
-                byte[] buff = new byte[8192];
-                //read file till end
-                while ((len = in.read(buff)) != -1) {
-                    fout.write(buff, 0, len);
-                }
-                fout.flush();
-                fout.close();
-            }
-        }
-    }
-
-    public static void writeDcrdFiles(Context context) throws IOException {
-        File path = new File(context.getFilesDir().getPath(),"/dcrd");
-        path.mkdirs();
-        String[] files = {"rpc.key","dcrd.conf"};
-        String[] assetFilesName = {"dcrdrpc.key","dcrd.conf"};
-        for(int i = 0; i < files.length; i++) {
-            File file = new File(path, files[i]);
-            //[Debug] Write the file to the storage if it exists or not
-            if (!file.exists() || true) {
-                file.createNewFile();
-                FileOutputStream fout = new FileOutputStream(file);
-                InputStream in = context.getAssets().open(assetFilesName[i]);
-                int len;
-                byte[] buff = new byte[8192];
-                //read file till end
-                while ((len = in.read(buff)) != -1) {
-                    fout.write(buff, 0, len);
-                }
-                fout.flush();
-                fout.close();
-            }
         }
     }
 
@@ -254,5 +217,25 @@ public class Utils {
         long totalDays = (today.getTimeInMillis() - startDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
         int blocksPerDay = 720;
         return Math.round(totalDays * blocksPerDay * (0.95));
+    }
+
+    public static void setDcrdConfiguration(String key, String value){
+        try {
+            PropertiesConfiguration properties = new PropertiesConfiguration(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+            properties.setProperty(key,value);
+            properties.save(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeDcrdConfig(String key){
+        try {
+            PropertiesConfiguration properties = new PropertiesConfiguration(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+            properties.clearProperty(key);
+            properties.save(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
+        }catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 }

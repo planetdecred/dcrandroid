@@ -52,19 +52,61 @@ public class TransactionsResponse {
                 transaction.tx = null;
                 transaction.status = tx.getString("Status");
                 transaction.type = tx.getString("Type");
+                transaction.height = tx.getInt("Height");
                 transaction.credits = credit;
                 transaction.debits = debit;
                 transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
                 response.transactions.add(transaction);
             }
+            System.out.println("FIFF: "+object.getJSONArray("UnMined"));
+            JSONArray unMined = object.getJSONArray("UnMined");
+            for(int i = 0; i < unMined.length(); i++){
+                JSONObject tx = unMined.getJSONObject(i);
+                ArrayList<TransactionCredit> credit = new ArrayList<>();
+                JSONArray cdt = tx.getJSONArray("Credits");
+                for(int j = 0; j < cdt.length(); j++){
+                    TransactionCredit item = new TransactionCredit();
+                    item.account = cdt.getJSONObject(j).getInt("Account");
+                    item.internal = cdt.getJSONObject(j).getBoolean("Internal");
+                    item.address = cdt.getJSONObject(j).getString("Address");
+                    item.index = cdt.getJSONObject(j).getInt("Index");
+                    item.amount = (float) cdt.getJSONObject(j).getDouble("Amount")  / AccountResponse.SATOSHI;
+                    credit.add(item);
+                }
+                ArrayList<TransactionDebit> debit = new ArrayList<>();
+                JSONArray dbt = tx.getJSONArray("Debits");
+                for(int j = 0; j < dbt.length(); j++){
+                    TransactionDebit item = new TransactionDebit();
+                    item.index = dbt.getJSONObject(j).getInt("Index");
+                    item.previous_account = dbt.getJSONObject(j).getLong("PreviousAccount");
+                    item.previous_amount = (float) dbt.getJSONObject(j).getLong("PreviousAmount") / AccountResponse.SATOSHI;
+                    item.accountName = dbt.getJSONObject(j).getString("AccountName");
+                    debit.add(item);
+                }
+                TransactionItem transaction = new TransactionItem();
+                transaction.fee = (float) tx.getDouble("Fee") / AccountResponse.SATOSHI;
+                transaction.hash = tx.getString("Hash");
+                transaction.timestamp = tx.getLong("Timestamp");
+                transaction.tx = null;
+                transaction.status = tx.getString("Status");
+                transaction.type = tx.getString("Type");
+                transaction.height = tx.getInt("Height");
+                transaction.credits = credit;
+                transaction.debits = debit;
+                transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
+                response.transactions.add(transaction);
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }
         return response;
     }
+
     public static class TransactionItem{
         public byte[] tx;
         public String hash, type, status;
+        public int height;
         public float fee,amount;
         public long timestamp;
         public ArrayList<TransactionCredit> credits;

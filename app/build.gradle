@@ -2,15 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.dcrandroid"
         minSdkVersion 15
         targetSdkVersion 27
-        //targetSdkVersion 26
         versionCode 1
-        versionName "0.1 alpha build 2"
+        versionName "0.1 alpha build 3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -21,20 +22,26 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:design:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
     compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
-    compile files('libs/ZxingScanner.jar')
-    compile project(':dcrwallet')
+    compile 'com.github.kenglxn.QRGen:android:2.4.0'
     compile 'ch.acra:acra:4.9.2'
     compile "com.android.support:support-compat:27.0.2"
+    implementation 'commons-configuration:commons-configuration:1.9'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+
+configurations{
+    all{
+        exclude module: 'commons-logging'
+    }
 }
 
 apply plugin: 'kotlin-android'

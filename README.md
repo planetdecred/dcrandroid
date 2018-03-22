@@ -1,48 +1,31 @@
 # dcrandroid - Decred Mobile Wallet
+
 [![Build Status](https://travis-ci.org/raedahgroup/dcrandroid.svg?branch=master)](https://travis-ci.org/raedahgroup/dcrandroid)
 
-An decred wallet for android that runs ontop of [dcrwallet](https://github.com/decred/dcrwallet).
+A Decred Mobile Wallet for android that runs on top of [dcrwallet](https://github.com/decred/dcrwallet).
 
-## Requirements:
+## Requirements
+
 Android 3.0 or above.
 
-## Building
-Android Studio(or gradle) and Android SDK is required if you wish to compile it yourself.
-
 ### Prerequisites
-1. Gradle wrapper 4.1 and Gralde build tools 3.0.1
-2. Android SDK with build tools 26.0.2, SDK Platform 27 and Android support repository installed
 
-Clone dcrandroid (or fork it):
+1. [Android SDK](https://developer.android.com/sdk/download.html) and [NDK](https://developer.android.com/ndk/downloads/index.html)
+2. [Android Studio](https://developer.android.com/studio/index.html)
+3. [Go(1.8 or 1.9)](http://golang.org/doc/install)
+4. [Dep](https://github.com/golang/dep/releases)
+5. [Gomobile](https://github.com/golang/go/wiki/Mobile#tools) (correctly init'd with gomobile init)
+
+Run the following commands
 
     git clone https://github.com/raedahgroup/dcrandroid.git
-### Building with Gradle Command Line
-On a Windows PC, open command prompt and navigate to the dcrandroid clone directory, then run:
-    
-    gradlew.bat
-
-On Mac OS or Linux, open terminal and navigate to dcrandroid clone directory, then run:
-
+    cd dcrandroid/pkg
+    mkdir bin
+    export GOPATH=$(pwd)
+    export PATH=$PATH:$GOPATH/bin
+    cd src/mobilewallet
+    dep ensure -v
+    gomobile bind -target=android/arm
+    cp mobilewallet.aar ../../../app/libs/mobilewallet.aar
+    cd ../../../
     ./gradlew
-
-### Building with Android Studio (Recommended)
-* Open Android Studio
-* Select `import project`
-* Navigate to dcrandroid clone directory and click `OK`
-## Contributing
-dcrandroid is an open source project.
-
-Contributions to dcrandroid are appreciated.
-### Filing issues
-When [filing an issue](https://github.com/raedahgroup/dcrandroid/issues/new), make sure state the following:
-1. What error occurred.
-2. How to recreate the error
-3. What device and Android version you're using.
-### Contributing code (Pull Request)
-Setting up for a pull request
-* [Register on GitHub](http://github.com)
-* Visit and fork the [dcrandroid repository](https://github.com/raedahgroup/dcrandroid)
-* Clone your fork
-* Modify the code and add whatever you want.
-* Create a pull request and explain properly the changes you made.
-* It is recommended that you squash your commits, tested your build and make sure you do not have CI errors before opening a pull request.

@@ -17,7 +17,8 @@ import android.widget.TextView;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
 import com.dcrandroid.R;
-import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;
@@ -34,22 +35,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import dcrwallet.Dcrwallet;
+import mobilewallet.GetTransactionsResponse;
 
 /**
  * Created by Macsleven on 28/11/2017.
  */
 
-public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
     private List<Transaction> transactionList = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
     private  TextView refresh;
     private SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
-//    private View progressContainer;
+    private DcrConstants constants;
+    //    private View progressContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_history, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
@@ -71,16 +74,17 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra("Amount",history.getAmount());
-                i.putExtra("Fee",history.getTransactionFee());
-                i.putExtra("TxDate",history.getTxDate());
-                System.out.println("TxType: "+history.getType());
-                i.putExtra("TxType",history.getType());
-                i.putExtra("TXConfirmation",history.getConfirmations());
-                i.putExtra("TxStatus",history.getTxStatus());
-                i.putExtra("Hash", history.getHash());
-                i.putStringArrayListExtra("UsedInput",history.getUsedInput());
-                i.putStringArrayListExtra("newWalletOutPut",history.getWalletOutput());
+                i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
+                i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
+                i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
+                i.putExtra("Height", history.getHeight());
+                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
+                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
+                i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
+                i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
+                i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
+                i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
+                i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
                 startActivity(i);
             }
 
@@ -103,109 +107,15 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void prepareHistoryData(){
-//        if(!progressContainer.isShown()){
-//            // progress.show();
-//            progressContainer.setVisibility(View.VISIBLE);
-//        }
         swipeRefreshLayout.setRefreshing(true);
         loadTransactions();
         transactionList.clear();
         new Thread(){
             public void run(){
-                PreferenceUtil util = new PreferenceUtil(HistoryFragment.this.getContext());
-                int blockHeight = Integer.parseInt(util.get(PreferenceUtil.BLOCK_HEIGHT,"0"));
-                int startHeight = Integer.parseInt(util.get(PreferenceUtil.TRANSACTION_HEIGHT,"1"));
-                String result = Dcrwallet.getTransactions(blockHeight, 0);
-                TransactionsResponse response = TransactionsResponse.parse(result);
-                if(response.errorOccurred){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(!refresh.isShown()){
-                                refresh.setVisibility(View.VISIBLE);
-                            }
-                            if(swipeRefreshLayout.isRefreshing()){
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
-                    });
-//                    if(progressContainer.isShown()){
-//                        // progress.show();
-//                        progressContainer.setVisibility(View.INVISIBLE);
-//                    }
-                }
-                else if(response.transactions.size() == 0){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(!refresh.isShown()){
-                                refresh.setVisibility(View.VISIBLE);
-                            }
-                            recyclerView.setVisibility(View.GONE);
-                            if(swipeRefreshLayout.isRefreshing()){
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
-                    });
-//                    if(progressContainer.isShown()){
-//                        // progress.show();
-//                        progressContainer.setVisibility(View.INVISIBLE);
-//                    }
-                }
-                else {
-                    util.set(PreferenceUtil.TRANSACTION_HEIGHT, String.valueOf(blockHeight));
-                    final List<Transaction> temp = new ArrayList<>();
-                    for (int i = 0; i < response.transactions.size(); i++) {
-                        Transaction transaction = new Transaction();
-                        TransactionsResponse.TransactionItem item = response.transactions.get(i);
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(item.timestamp * 1000);
-                        SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
-                        transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                        transaction.setTransactionFee(String.format(Locale.getDefault(), "%f", item.fee));
-                        transaction.setType(item.type);
-                        transaction.setHash(item.hash);
-                      //  transaction.setConfirmations(item.confirmations);
-                        transaction.setAmount(String.format(Locale.getDefault(), "%f", item.amount));
-                        transaction.setTxStatus(item.status);
-                        ArrayList<String> usedInput = new ArrayList<>();
-                        for (int j = 0; j < item.debits.size(); j++) {
-                            usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
-                        }
-                        ArrayList<String> output = new ArrayList<>();
-                        for (int j = 0; j < item.credits.size(); j++) {
-                            output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
-                            //System.out.println(credit.address+"\n"+String.format(Locale.getDefault(),"%f",credit.amount));
-                        }
-                        transaction.setUsedInput(usedInput);
-                        transaction.setWalletOutput(output);
-                        temp.add(transaction);
-                    }
-                    if(getActivity() == null){
-                        return;
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Collections.reverse(temp);
-                            transactionList.clear();
-                            transactionList.addAll(0,temp);
-                            if(refresh.isShown()){
-                                refresh.setVisibility(View.INVISIBLE);
-                            }
-                            recyclerView.setVisibility(View.VISIBLE);
-                            if(swipeRefreshLayout.isRefreshing()){
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                            /*
-                            if(progressContainer.isShown()){
-                                // progress.show();
-                                progressContainer.setVisibility(View.INVISIBLE);
-                            }*/
-                             transactionAdapter.notifyDataSetChanged();
-                            saveTransactions();
-                        }
-                    });
+                try {
+                    constants.wallet.getTransactions(HistoryFragment.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }.start();
@@ -220,7 +130,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
             objectOutputStream.writeObject(transactionList);
             objectOutputStream.close();
-            System.out.println("Transaction Written");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -250,7 +159,94 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(true);
         prepareHistoryData();
+    }
+
+    @Override
+    public void onResult(String s) {
+        if(getActivity() == null){
+            return;
+        }
+        TransactionsResponse response = TransactionsResponse.parse(s);
+        if(response.errorOccurred){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(!refresh.isShown()){
+                        refresh.setVisibility(View.VISIBLE);
+                    }
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            });
+        }else if(response.transactions.size() == 0){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(!refresh.isShown()){
+                        refresh.setVisibility(View.VISIBLE);
+                    }
+                    recyclerView.setVisibility(View.GONE);
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            });
+        }else {
+            final List<Transaction> temp = new ArrayList<>();
+            for (int i = 0; i < response.transactions.size(); i++) {
+                Transaction transaction = new Transaction();
+                TransactionsResponse.TransactionItem item = response.transactions.get(i);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(item.timestamp * 1000);
+                SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
+                transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTransactionFee(item.fee);
+                transaction.setType(item.type);
+                transaction.setHash(item.hash);
+                transaction.setHeight(item.height);
+                transaction.setAmount(item.amount);
+                transaction.setTxStatus(item.status);
+                ArrayList<String> usedInput = new ArrayList<>();
+                for (int j = 0; j < item.debits.size(); j++) {
+                    transaction.totalInput += item.debits.get(j).previous_amount;
+                    usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
+                }
+                ArrayList<String> output = new ArrayList<>();
+                for (int j = 0; j < item.credits.size(); j++) {
+                    transaction.totalOutput += item.credits.get(j).amount;
+                    output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
+                }
+                transaction.setUsedInput(usedInput);
+                transaction.setWalletOutput(output);
+                if(item.status.equalsIgnoreCase("pending")){
+                    System.out.println("Adding pending to top");
+                    temp.add(transaction);
+                }else{
+                    temp.add(transaction);
+                }
+            }
+            if(getActivity() == null){
+                return;
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Collections.reverse(temp);
+                    transactionList.clear();
+                    transactionList.addAll(0,temp);
+                    if(refresh.isShown()){
+                        refresh.setVisibility(View.INVISIBLE);
+                    }
+                    recyclerView.setVisibility(View.VISIBLE);
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    transactionAdapter.notifyDataSetChanged();
+                    saveTransactions();
+                }
+            });
+        }
     }
 }

@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,10 +26,6 @@ import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
-import com.dcrandroid.fragments.SettingsFragment;
-import com.dcrandroid.fragments.TicketsFragment;
-
-import dcrwallet.Dcrwallet;
 
 public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
@@ -61,14 +56,14 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter("kill");
-        registerReceiver(receiver,filter);
+//        IntentFilter filter = new IntentFilter("kill");
+//        registerReceiver(receiver,filter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+        //unregisterReceiver(receiver);
     }
 
     @Override
@@ -77,25 +72,24 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            displaySelectedScreen(R.id.nav_overview);
         } 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Dcrwallet.shutdown();
         System.exit(0);
         ActivityCompat.finishAffinity(MainActivity.this);
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            System.exit(0);
-            ActivityCompat.finishAffinity(MainActivity.this);
-        }
-    };
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            System.exit(0);
+//            ActivityCompat.finishAffinity(MainActivity.this);
+//        }
+//    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             case R.id.nav_history:
                 fragment = new HistoryFragment();
                 break;
-            case R.id.nav_tickets:
+           /* case R.id.nav_tickets:
                 fragment = new TicketsFragment();
-                break;
+                break;*/
             case R.id.nav_help:
                 fragment = new HelpFragment();
                 break;
@@ -180,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if(item.getItemId() == R.id.nav_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return false;
+            return true;
         }else {
             displaySelectedScreen(item.getItemId());
         }
