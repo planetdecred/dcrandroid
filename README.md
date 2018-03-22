@@ -1,6 +1,6 @@
 # dcrandroid - Decred Mobile Wallet
 
-[![Build Status](https://travis-ci.org/raedahgroup/dcrandroid.svg?branch=master)](https://travis-ci.org/raedahgroup/dcrandroid)
+[![Build Status](https://travis-ci.org/decred/dcrandroid.svg?branch=master)](https://travis-ci.org/decred/dcrandroid)
 
 A Decred Mobile Wallet for android that runs on top of [dcrwallet](https://github.com/decred/dcrwallet).
 
@@ -18,7 +18,7 @@ Android 3.0 or above.
 
 Run the following commands
 
-    git clone https://github.com/raedahgroup/dcrandroid.git
+    git clone https://github.com/decred/dcrandroid.git
     cd dcrandroid/pkg
     mkdir bin
     export GOPATH=$(pwd)
