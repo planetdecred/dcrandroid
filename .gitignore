@@ -1,5 +1,7 @@
 *.iml
 .gradle
+.settings
+.project
 /local.properties
 /.idea/misc.xml
 /.idea/modules.xml
@@ -8,4 +10,6 @@
 /build
 /captures
 .externalNativeBuild
-vendor
++pkg/pkg
++pkg/bin
++pkg/src/mobilewallet/vendor
