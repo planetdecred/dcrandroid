@@ -3,12 +3,11 @@ package mobilewallet
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"path/filepath"
-	//"fmt"
-	"encoding/json"
 	"net"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -30,7 +29,6 @@ type LibWallet struct {
 	wallet     *wallet.Wallet
 	rpcClient  *chain.RPCClient
 	loader     *loader.Loader
-	syncer     *chain.RPCSyncer
 	netBackend wallet.NetworkBackend
 	mu         sync.Mutex
 }
@@ -43,7 +41,6 @@ func NewLibWallet(dbDir string) *LibWallet {
 	return lw
 }
 
-//cfgutil/normalization.go
 func NormalizeAddress(addr string, defaultPort string) (hostport string, err error) {
 	// If the first SplitHostPort errors because of a missing port and not
 	// for an invalid host, add the port.  If the second SplitHostPort
@@ -61,14 +58,14 @@ func NormalizeAddress(addr string, defaultPort string) (hostport string, err err
 	return addr, nil
 }
 
-//rpc/rpcserver
 func decodeAddress(a string, params *chaincfg.Params) (dcrutil.Address, error) {
 	addr, err := dcrutil.DecodeAddress(a)
 	if err != nil {
 		return nil, err
 	}
 	if !addr.IsForNet(params) {
-		return nil, errors.New(fmt.Sprintf("address %v is not intended for use on %v", a, params.Name))
+		return nil, fmt.Errorf("address %v is not intended for use on %v",
+			a, params.Name)
 	}
 	return addr, nil
 }
@@ -80,9 +77,9 @@ func (lw *LibWallet) InitLoader() {
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
-	loader := loader.NewLoader(netparams.TestNet2Params.Params, lw.dbDir, stakeOptions,
+	l := loader.NewLoader(netparams.TestNet2Params.Params, lw.dbDir, stakeOptions,
 		20, false, 10e5)
-	lw.loader = loader
+	lw.loader = l
 }
 
 func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error {
@@ -119,13 +116,10 @@ func (lw *LibWallet) GenerateSeed() (string, error) {
 
 func (lw *LibWallet) VerifySeed(seedMnemonic string) bool {
 	_, err := walletseed.DecodeUserInput(seedMnemonic)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
-func (lw *LibWallet) StartRpcClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) bool {
+func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) bool {
 	fmt.Println("Connecting to rpc client")
 	ctx := context.Background()
 	networkAddress, err := NormalizeAddress(rpcHost, "19109")
@@ -168,7 +162,7 @@ func (lw *LibWallet) StartRpcClient(rpcHost string, rpcUser string, rpcPass stri
 func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []byte) error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
-		return errors.New("Wallet has not been loaded")
+		return fmt.Errorf("Wallet has not been loaded")
 	}
 
 	lw.mu.Lock()
@@ -293,7 +287,7 @@ func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
 		progress := make(chan wallet.RescanProgress, 1)
 		ctx := context.Background()
 		n, _ := lw.wallet.NetworkBackend()
-		var totalHeight int32 = 0
+		var totalHeight int32
 		go lw.wallet.RescanProgressFromHeight(ctx, n, startHeight, progress)
 		for p := range progress {
 			if p.Err != nil {
@@ -319,10 +313,7 @@ func (lw *LibWallet) IsAddressMine(address string) bool {
 		return false
 	}
 	_, err = lw.wallet.AddressInfo(addr)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func (lw *LibWallet) GetAccountName(account int32) string {
@@ -424,12 +415,8 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	fmt.Println("Got transactions")
 	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Mined: minedTransactions, UnMined: unMinedTransactions})
 	response.OnResult(string(result))
-	if err != nil {
-		return err
-	}
 
-	return nil
-
+	return err
 }
 
 func reverse(hash []byte) []byte {
@@ -455,13 +442,13 @@ func transactionType(txType wallet.TransactionType) string {
 	}
 }
 
-func (lw *LibWallet) GetBestBlock() int32{
+func (lw *LibWallet) GetBestBlock() int32 {
 	_, height := lw.wallet.MainChainTip()
 	return height
 }
 
 func (lw *LibWallet) PublishUnminedTransactions() error {
-	if lw.netBackend == nil{
+	if lw.netBackend == nil {
 		return errors.New("wallet is not associated with a consensus server RPC client")
 	}
 	err := lw.wallet.PublishUnminedTransactions(context.Background(), lw.netBackend)
@@ -610,7 +597,8 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 		a := &resp.Accounts[i]
 		bals, err := lw.wallet.CalculateAccountBalance(a.AccountNumber, 0)
 		if err != nil {
-			return "", errors.New(fmt.Sprintf("Unable to calculate balance for account %v", a.AccountNumber))
+			return "", fmt.Errorf("Unable to calculate balance for account %v",
+				a.AccountNumber)
 		}
 		balance := Balance{
 			Total:                   int64(bals.Total),
@@ -623,21 +611,21 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 		}
 		fmt.Println("Total Balance: " + bals.Total.String() + " For account: " + string(a.AccountNumber))
 		accounts[i] = Account{
-			Number:             int32(a.AccountNumber),
-			Name:               a.AccountName,
-			TotalBalance:       int64(a.TotalBalance),
-			Balance:            &balance,
-			External_key_count: int32(a.LastUsedExternalIndex + 20),
-			Internal_key_count: int32(a.LastUsedInternalIndex + 20),
-			Imported_key_count: int32(a.ImportedKeyCount),
+			Number:           int32(a.AccountNumber),
+			Name:             a.AccountName,
+			TotalBalance:     int64(a.TotalBalance),
+			Balance:          &balance,
+			ExternalKeyCount: int32(a.LastUsedExternalIndex + 20),
+			InternalKeyCount: int32(a.LastUsedInternalIndex + 20),
+			ImportedKeyCount: int32(a.ImportedKeyCount),
 		}
 	}
 	accountsResponse := &Accounts{
-		Count:                len(resp.Accounts),
-		Current_block_hash:   resp.CurrentBlockHash[:],
-		Current_block_height: resp.CurrentBlockHeight,
-		Acc:                  &accounts,
-		ErrorOccurred:        false,
+		Count:              len(resp.Accounts),
+		CurrentBlockHash:   resp.CurrentBlockHash[:],
+		CurrentBlockHeight: resp.CurrentBlockHeight,
+		Acc:                &accounts,
+		ErrorOccurred:      false,
 	}
 	result, _ := json.Marshal(accountsResponse)
 	return string(result), nil

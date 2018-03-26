@@ -18,27 +18,27 @@ type Balance struct {
 }
 
 type Account struct {
-	Number             int32
-	Name               string
-	Balance            *Balance
-	TotalBalance       int64
-	External_key_count int32
-	Internal_key_count int32
-	Imported_key_count int32
+	Number           int32
+	Name             string
+	Balance          *Balance
+	TotalBalance     int64
+	ExternalKeyCount int32
+	InternalKeyCount int32
+	ImportedKeyCount int32
 }
 
 type Accounts struct {
-	Count                int
-	ErrorMessage         string
-	ErrorCode            int
-	ErrorOccurred        bool
-	Acc                  *[]Account
-	Current_block_hash   []byte
-	Current_block_height int32
+	Count              int
+	ErrorMessage       string
+	ErrorCode          int
+	ErrorOccurred      bool
+	Acc                *[]Account
+	CurrentBlockHash   []byte
+	CurrentBlockHeight int32
 }
 
 type BlockScanResponse interface {
-	OnScan(rescanned_through int32)
+	OnScan(rescannedThrough int32)
 	OnEnd(height int32, cancelled bool)
 	OnError(code int32, message string)
 }
@@ -78,6 +78,6 @@ type getTransactionsResponse struct {
 	ErrorMessage  string
 }
 
-type GetTransactionsResponse interface{
+type GetTransactionsResponse interface {
 	OnResult(json string)
 }

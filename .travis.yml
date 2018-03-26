@@ -14,25 +14,28 @@ before_install:
   - curl -sL -o ~/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
   - chmod +x ~/bin/gimme
   - gimme -h
-  - gimme --force 1.9.2
-  - export GOROOT='/home/travis/.gimme/versions/go1.9.2.linux.amd64';
+  - gimme --force 1.9.4
+  - export GOROOT='/home/travis/.gimme/versions/go1.9.4.linux.amd64';
   - echo $GOROOT
   - sudo ln -s $GOROOT/bin/go /usr/bin/go
   - cd pkg
-  - sudo mkdir bin
+  - mkdir bin
   - export GOPATH=$(pwd)
   - export PATH=$PATH:$GOPATH/bin
   - cd src/mobilewallet
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sudo sh
-  - sudo go get -u golang.org/x/mobile/cmd/gomobile
-  - sudo go get -u golang.org/x/mobile/cmd/gobind
-  - sudo chmod +x $GOPATH/bin/gomobile
-  - sudo chmod +x $GOPATH/bin/gobind
+  - go get -u golang.org/x/mobile/cmd/gomobile
+  - go get -u golang.org/x/mobile/cmd/gobind
+  - chmod +x $GOPATH/bin/gomobile
+  - chmod +x $GOPATH/bin/gobind
   - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind
   - sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile
-  - sudo gomobile init -ndk $ANDROID_NDK_HOME
+  - gomobile init -ndk $ANDROID_NDK_HOME
   - sudo ln -s $GOPATH/bin/dep /usr/bin/dep
-  - sudo dep ensure -v
-  - sudo gomobile bind -target=android/386
+  - dep ensure -v
+  - go get -u github.com/alecthomas/gometalinter
+  - gometalinter --install
+  - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
+  - gomobile bind -target=android/386
   - cp mobilewallet.aar ../../../app/libs/mobilewallet.aar
   - cd ../../../
