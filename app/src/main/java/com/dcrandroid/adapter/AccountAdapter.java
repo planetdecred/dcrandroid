@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dcrandroid.data.Account;
 import com.dcrandroid.R;
+import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
 import java.util.List;
@@ -49,11 +50,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Account account = accountList.get(position);
-        String temp = account.getSpendable()+" "+context.getString(R.string.dcr);
-        String temp2 = account.getTotal()+" "+context.getString(R.string.dcr);
         holder.accountName.setText(account.getAccountName());
-        holder.spendable.formatAndSetText(temp);
-        holder.total.formatAndSetText(temp2);
+        holder.spendable.formatAndSetText(Utils.formatDecred(account.getSpendable()) +" "+ context.getString(R.string.dcr));
+        holder.total.formatAndSetText(Utils.formatDecred(account.getTotal()) +" "+ context.getString(R.string.dcr));
     }
 
     @Override

@@ -120,18 +120,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMinimumFractionDigits(2);
-        nf.setMaximumFractionDigits(8);
         if(getIntent().getFloatExtra("Fee",0) > 0){
-            value.formatAndSetText("- "+nf.format(getIntent().getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
-            System.out.println("Formatter: "+nf.format(getIntent().getFloatExtra("Fee",0)));
-            transactionFee.formatAndSetText(nf.format(getIntent().getFloatExtra("Fee",0)));
+            value.formatAndSetText("- "+Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
+            System.out.println("Formatter: "+Utils.formatDecred(getIntent().getFloatExtra("Fee",0)));
+            transactionFee.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra("Fee",0)));
         }
         else{
-            value.formatAndSetText(nf.format(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
+            value.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
             System.out.println(".2 F is on");
-            transactionFee.formatAndSetText(nf.format(0)+" DCR");
+            transactionFee.formatAndSetText(Utils.formatDecred(0)+" DCR");
         }
         date.setText(getIntent().getStringExtra("TxDate"));
         status.setText(getIntent().getStringExtra("TxStatus"));
