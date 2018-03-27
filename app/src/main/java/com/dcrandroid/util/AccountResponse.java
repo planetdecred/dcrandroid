@@ -25,8 +25,8 @@ public class AccountResponse {
         response.errorCode = obj.getInt("ErrorCode");
         if(!response.errorOccurred) {
             response.count = obj.getInt("Count");
-            response.currentBlockHeight = obj.getInt("Current_block_height");
-            response.currentBlockHash = obj.getString("Current_block_hash");
+            response.currentBlockHeight = obj.getInt("CurrentBlockHeight");
+            response.currentBlockHash = obj.getString("CurrentBlockHash");
             JSONArray acc = obj.getJSONArray("Acc");
             for (int i = 0; i < acc.length(); i++) {
                 final JSONObject account = acc.getJSONObject(i);
@@ -35,9 +35,9 @@ public class AccountResponse {
                         number = account.getInt("Number");
                         name = account.getString("Name");
                         System.out.println();
-                        externalKeyCount = account.getInt("External_key_count");
-                        internalKeyCount = account.getInt("Internal_key_count");
-                        importedKeyCount = account.getInt("Imported_key_count");
+                        externalKeyCount = account.getInt("ExternalKeyCount");
+                        internalKeyCount = account.getInt("InternalKeyCount");
+                        importedKeyCount = account.getInt("ImportedKeyCount");
                         JSONObject balanceObj = account.getJSONObject("Balance");
                         balance = new Balance();
                         balance.total = balanceObj.getLong("Total")/SATOSHI;
