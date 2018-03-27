@@ -71,7 +71,9 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
                 if(pass.length() > 0){
                     discover(pass);
                 }else{
+                    
                     Toast.makeText(DiscoverAddress.this, "Invalid Passphrase", Toast.LENGTH_SHORT).show();
+                    Toast.setTextColor(Color.RED);
                     finish();
                 }
             }
@@ -107,6 +109,7 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
                     e.printStackTrace();
                     Looper.prepare();
                     Toast.makeText(DiscoverAddress.this, "ERROR: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.setTextColor(Color.RED);
                     finish();
                 }
             }
