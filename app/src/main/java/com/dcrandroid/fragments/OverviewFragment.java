@@ -166,7 +166,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR",finalTotalBalance));
+                            tvBalance.formatAndSetText(Utils.formatDecred(finalTotalBalance));
                         }
                     });
                 }catch (Exception e){
@@ -331,12 +331,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {
                     transaction.totalInput += item.debits.get(j).previous_amount;
-                    usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
+                    usedInput.add(item.debits.get(j).accountName + "\n" + Utils.formatDecred(item.debits.get(j).previous_amount));
                 }
                 ArrayList<String> output = new ArrayList<>();
                 for (int j = 0; j < item.credits.size(); j++) {
                     transaction.totalOutput += item.credits.get(j).amount;
-                    output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
+                    output.add(item.credits.get(j).address + "\n" + Utils.formatDecred(item.credits.get(j).amount));
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
 import java.text.NumberFormat;
@@ -43,15 +44,12 @@ public class AccountDetailsActivity extends AppCompatActivity {
         TextView hDPath = findViewById(R.id.acc_dts_hd_path);
         TextView keys = findViewById(R.id.acc_dts_keys);
 
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMinimumFractionDigits(2);
-        nf.setMaximumFractionDigits(8);
-        spendable.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0F)));
-        total.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_TOTAL, 0F)));
-        immatureRewards.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0F)));
-        lockedByTickets.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0F)));
-        votingAuthority.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0F)));
-        immatureStakeGeneration.formatAndSetText(nf.format(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0F)));
+        spendable.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0F)));
+        total.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_TOTAL, 0F)));
+        immatureRewards.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0F)));
+        lockedByTickets.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0F)));
+        votingAuthority.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0F)));
+        immatureStakeGeneration.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0F)));
         accountNumber.setText(String.valueOf(getIntent().getIntExtra(Constants.EXTRA_ACCOUNT_NUMBER, 0)));
         hDPath.setText(getIntent().getStringExtra(Constants.EXTRA_HD_PATH));
         keys.setText(getIntent().getStringExtra(Constants.EXTRA_KEYS));

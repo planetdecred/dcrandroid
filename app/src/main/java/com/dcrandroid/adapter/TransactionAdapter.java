@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Transaction;
+import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
 import java.text.NumberFormat;
@@ -56,16 +57,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.txType.setText(history.getType());
         holder.status.setText(history.getTxStatus());
 
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMinimumFractionDigits(2);
-        nf.setMaximumFractionDigits(8);
         if(history.getTransactionFee() > 0){
-            holder.Amount.formatAndSetText(nf.format(history.totalInput));
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.totalInput));
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
         }else {
-            holder.Amount.formatAndSetText(nf.format(history.getAmount()));
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");

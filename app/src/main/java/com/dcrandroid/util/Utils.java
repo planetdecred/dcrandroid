@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -237,5 +238,11 @@ public class Utils {
         }catch (ConfigurationException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String formatDecred(float dcr){
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.00######");
+        return format.format(dcr);
     }
 }
