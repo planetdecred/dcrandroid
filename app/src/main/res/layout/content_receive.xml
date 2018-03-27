@@ -19,8 +19,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/receive_funds"
-                android:textSize="21sp"
+                android:textSize="22sp"
                 android:gravity="center"
+                android:padding="5dp"
                 />
             <TextView
                 android:layout_width="match_parent"

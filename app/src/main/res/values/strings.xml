@@ -74,8 +74,8 @@
     <string name="wallet_address">[WALLET ADDRESS]</string>
     <string name="send_funds">Send Funds</string>
     <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\n and the amount in DCR to send funds.</string>
-    <string name="destination_address">Destination Address</string>
-    <string name="amount_dcr">Amount</string>
+    <string name="destination_address">" "Destination Address</string>
+    <string name="amount_dcr">" "Amount</string>
     <string name="max">Max</string>
     <string name="send">Send</string>
     <string name="_0_bytes">0 bytes</string>
@@ -153,7 +153,7 @@
     <string name="blocks_scanned">blocks scanned</string>
     <string name="scanning_block">Scanning Blocks</string>
     <string name="receive">Receive</string>
-    <string name="your_address_is_copied">Your address is copied</string>
+    <string name="your_address_is_copied">Address copied</string>
     <string name="your_address">Your address</string>
     <string name="getting_accounts">Getting Accounts...</string>
     <string name="getting_address">Getting Address...</string>
