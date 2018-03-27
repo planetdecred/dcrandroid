@@ -115,23 +115,3 @@ func setLogLevel(subsystemID string, logLevel string) {
 	level, _ := btclog.LevelFromString(logLevel)
 	logger.SetLevel(level)
 }
-
-// setLogLevels sets the log level for all subsystem loggers to the passed
-// level.  It also dynamically creates the subsystem loggers as needed, so it
-// can be used to initialize the logging system.
-func setLogLevels(logLevel string) {
-	// Configure all sub-systems with the new logging level.  Dynamically
-	// create loggers as needed.
-	for subsystemID := range subsystemLoggers {
-		setLogLevel(subsystemID, logLevel)
-	}
-}
-
-// fatalf logs a message, flushes the logger, and finally exit the process with
-// a non-zero return code.
-func fatalf(format string, args ...interface{}) {
-	log.Errorf(format, args...)
-	os.Stdout.Sync()
-	logRotator.Close()
-	os.Exit(1)
-}
