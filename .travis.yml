@@ -15,9 +15,15 @@ before_install:
   - chmod +x ~/bin/gimme
   - gimme -h
   - gimme --force 1.9.4
+  - echo $GOROOT
+  - rm $GOROOT -R
   - export GOROOT='/home/travis/.gimme/versions/go1.9.4.linux.amd64';
   - echo $GOROOT
+  - export PATH=$PATH:$GOROOT/bin
   - sudo ln -s $GOROOT/bin/go /usr/bin/go
+  - echo $PATH
+  - which go
+  - go version
   - cd pkg
   - mkdir bin
   - export GOPATH=$(pwd)

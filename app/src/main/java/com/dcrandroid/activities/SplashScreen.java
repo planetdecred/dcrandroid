@@ -124,7 +124,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                                 if (isInterrupted()) {
                                     return;
                                 }
-                                if (constants.wallet.startRpcClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
+                                if (constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
                                     break;
                                 }
                                 sleep(2500);

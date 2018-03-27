@@ -60,7 +60,7 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                 wallet.createWallet(pass, seed);
                                 show("Connecting to dcrd...");
                                 for(;;){
-                                    if(wallet.startRpcClient(Utils.getDcrdNetworkAddress(EncryptWallet.this),"dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes())){
+                                    if(wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this),"dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes())){
                                         break;
                                     }
                                     try{
