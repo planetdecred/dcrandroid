@@ -235,15 +235,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         if(address.startsWith("decred:"))
             address = address.replace("decred:","");
         if(address.length() < 25){
-            return true;
+            return false;
         }else if(address.length() > 36){
-            return true;
+            return false;
         }
-        if(address.startsWith("D")){
-            return true;
-        }else{
-            return true;
-        }
+        return !address.startsWith("D");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
