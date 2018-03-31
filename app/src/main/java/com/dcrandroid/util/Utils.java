@@ -238,4 +238,24 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
+    public static String calculateTime(long millis){
+        if(millis > 59){
+            millis /= 60;
+            if(millis > 59){
+                millis /= 60;
+                if(millis > 23){
+                    millis /= 24;
+                    //days
+                    return millis+"d ago";
+                }
+                //hour
+                return millis+"h ago";
+            }
+            //minute
+            return millis+"m ago";
+        }
+        //seconds
+        return millis+"s ago";
+    }
 }

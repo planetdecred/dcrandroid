@@ -1,14 +1,22 @@
 package com.dcrandroid;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,29 +25,67 @@ import android.support.v7.widget.Toolbar;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.activities.SettingsActivity;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.Utils;
 
-public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.Locale;
+import java.util.Random;
+
+import mobilewallet.BlockScanResponse;
+import mobilewallet.TransactionListener;
+
+public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener {
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
     private Fragment fragment;
     private NavigationView navigationView;
+    private DcrConstants constants;
+    private PreferenceUtil util;
+    private NotificationManager notificationManager;
+    private TextView rescanHeight, chainStatus;
+    private Animation animRotate;
+    private ImageView rescanImage, stopScan;
+    private boolean scanning = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("new transaction", "Dcrandroid", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            channel.setImportance(NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(channel);
+        }
+        util = new PreferenceUtil(this);
+        constants = DcrConstants.getInstance();
+        constants.wallet.transactionNotification(this);
+        rescanHeight = findViewById(R.id.rescan_height);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -51,19 +97,72 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
 
         //add this line to display menu1 when the activity is loaded
         displaySelectedScreen(R.id.nav_overview);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        IntentFilter filter = new IntentFilter("kill");
-//        registerReceiver(receiver,filter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //unregisterReceiver(receiver);
+        final TextView bestBlockHeight = findViewById(R.id.best_block_height);
+        chainStatus = findViewById(R.id.chain_status);
+        rescanImage = findViewById(R.id.iv_rescan_blocks);
+        stopScan = findViewById(R.id.iv_stop_rescan);
+        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
+        animRotate.setRepeatCount(-1);
+        animRotate.setAnimationListener(this);
+        new Thread(){
+            public void run(){
+                while(true){
+                    try {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int bestBlock = constants.wallet.getBestBlock();
+                                bestBlockHeight.setText(String.valueOf(bestBlock));
+                                long lastBlockTime = constants.wallet.getBestBlockTimeStamp();
+                                long currentTime = System.currentTimeMillis() / 1000;
+                                long estimatedBlocks = (currentTime - lastBlockTime) / 120;
+                                if(estimatedBlocks > bestBlock){
+                                    chainStatus.setText((estimatedBlocks - bestBlock)+ " blocks behind");
+                                }else{
+                                    chainStatus.setText(Utils.calculateTime((System.currentTimeMillis()/1000) - lastBlockTime));
+                                }
+                            }
+                        });
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+        int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT);
+        int blockHeight = constants.wallet.getBestBlock();
+        if(rescanHeight < blockHeight){
+            System.out.println("Scanning blocks in background");
+            constants.wallet.rescan(rescanHeight, this);
+            rescanImage.startAnimation(animRotate);
+            rescanImage.setEnabled(false);
+            chainStatus.setVisibility(View.GONE);
+            stopScan.setVisibility(View.VISIBLE);
+            scanning = true;
+        }
+        rescanImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                constants.wallet.rescan(0, MainActivity.this);
+                rescanImage.startAnimation(animRotate);
+                rescanImage.setEnabled(false);
+                chainStatus.setVisibility(View.GONE);
+                stopScan.setVisibility(View.VISIBLE);
+                scanning = true;
+            }
+        });
+        stopScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanning = false;
+            }
+        });
     }
 
     @Override
@@ -82,14 +181,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         System.exit(0);
         ActivityCompat.finishAffinity(MainActivity.this);
     }
-
-//    BroadcastReceiver receiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            System.exit(0);
-//            ActivityCompat.finishAffinity(MainActivity.this);
-//        }
-//    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -180,5 +271,124 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         }
         //make this method blank
         return true;
+    }
+
+    @Override
+    public void onTransaction(String s) {
+        System.out.println("Notification Received");
+        System.out.println(s);
+        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+        if(util.getBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, true)) {
+            try {
+                JSONObject obj = new JSONObject(s);
+                double fee = obj.getDouble("Fee");
+                if (fee == 0) {
+                    float amount = obj.getLong("Amount") / 100000000;
+                    String hash = obj.getString("Hash");
+                    DecimalFormat format = new DecimalFormat("#.########");
+                    sendNotification(format.format(amount), hash);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void sendNotification(String amount, String hash){
+        Intent launchIntent = new Intent(this,MainActivity.class);
+        PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://testnet.dcrdata.org/tx/"+hash));
+        PendingIntent pi = PendingIntent.getActivity(this, 2, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Notification notification;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Icon icon = Icon.createWithResource(this, R.drawable.ic_menu_share);
+            Notification.Action action = new Notification.Action.Builder(icon,"VIEW ON DCRDATA", pi).build();
+            notification = new Notification.Builder(this, "new transaction")
+                    .setContentTitle("New Transaction")
+                    .setContentText("You received "+amount+" dcr")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setOngoing(false)
+                    .setAutoCancel(true)
+                    .addAction(action)
+                    .setContentIntent(launchPendingIntent)
+                    .build();
+        }else{
+            NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"VIEW ON DCRDATA", pi).build();
+            notification = new NotificationCompat.Builder(this)
+                    .setContentTitle("New Transaction")
+                    .setContentText("You received "+amount+" dcr")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setOngoing(false)
+                    .setAutoCancel(true)
+                    .addAction(action)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(launchPendingIntent)
+                    .build();
+        }
+        notificationManager.notify(new Random().nextInt(), notification);
+    }
+
+    @Override
+    public void onEnd(int i, boolean b) {
+        System.out.println("Done: "+i+"/"+constants.wallet.getBestBlock());
+        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rescanHeight.setText("");
+                animRotate.cancel();
+                animRotate.reset();
+                rescanImage.setEnabled(true);
+                chainStatus.setVisibility(View.VISIBLE);
+                stopScan.setVisibility(View.GONE);
+                scanning = false;
+            }
+        });
+    }
+
+    @Override
+    public void onError(int i, String s) {
+        System.out.println("Block scan error: "+s);
+        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rescanHeight.setText("");
+                animRotate.cancel();
+                animRotate.reset();
+                rescanImage.setEnabled(true);
+                chainStatus.setVisibility(View.VISIBLE);
+                stopScan.setVisibility(View.GONE);
+                scanning = false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onScan(final int i) {
+        util.setInt(PreferenceUtil.RESCAN_HEIGHT, i);
+        System.out.println("Scanning: "+i+"/"+constants.wallet.getBestBlock());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rescanHeight.setText(i+"/");
+            }
+        });
+        return scanning;
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }

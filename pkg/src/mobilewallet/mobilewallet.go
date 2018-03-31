@@ -219,6 +219,60 @@ func (lw *LibWallet) LoadActiveDataFilters() error {
 	return err
 }
 
+func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
+	go func() {
+		n := lw.wallet.NtfnServer.TransactionNotifications()
+		defer n.Done()
+		for {
+			select {
+			case v := <-n.C:
+				for _, block := range v.AttachedBlocks {
+					for _, transaction := range block.Transactions {
+						var amount int64
+						tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
+						for index, credit := range transaction.MyOutputs {
+							if lw.IsAddressMine(credit.Address.String()) {
+								amount += int64(credit.Amount)
+							}
+							tempCredits[index] = TransactionCredit{
+								Index:    int32(credit.Index),
+								Account:  int32(credit.Account),
+								Internal: credit.Internal,
+								Amount:   int64(credit.Amount),
+								Address:  credit.Address.String()}
+						}
+						tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
+						for index, debit := range transaction.MyInputs {
+							tempDebits[index] = TransactionDebit{
+								Index:           int32(debit.Index),
+								PreviousAccount: int32(debit.PreviousAccount),
+								PreviousAmount:  int64(debit.PreviousAmount),
+								AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+						}
+						tempTransaction := Transaction{
+							Fee:       int64(transaction.Fee),
+							Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+							Timestamp: transaction.Timestamp,
+							Type:      transactionType(transaction.Type),
+							Credits:   &tempCredits,
+							Amount:    amount,
+							Height:    block.Height,
+							Status:    "confirmed",
+							Debits:    &tempDebits}
+						fmt.Println("New Transaction")
+						result, err := json.Marshal(tempTransaction)
+						if err != nil {
+							fmt.Println(err)
+						} else {
+							listener.OnTransaction(string(result))
+						}
+					}
+				}
+			}
+		}
+	}()
+}
+
 func (lw *LibWallet) SubscribeToBlockNotifications() error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
@@ -296,7 +350,9 @@ func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
 				return
 			}
 			totalHeight += p.ScannedThrough
-			response.OnScan(p.ScannedThrough)
+			if !response.OnScan(p.ScannedThrough) {
+				break
+			}
 		}
 		select {
 		case <-ctx.Done():
@@ -445,6 +501,17 @@ func transactionType(txType wallet.TransactionType) string {
 func (lw *LibWallet) GetBestBlock() int32 {
 	_, height := lw.wallet.MainChainTip()
 	return height
+}
+
+func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
+	_, height := lw.wallet.MainChainTip()
+	identifier := wallet.NewBlockIdentifierFromHeight(height)
+	info, err := lw.wallet.BlockInfo(identifier)
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	return info.Timestamp
 }
 
 func (lw *LibWallet) PublishUnminedTransactions() error {

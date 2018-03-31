@@ -1,6 +1,9 @@
 package com.dcrandroid.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -247,6 +250,34 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     saveTransactions();
                 }
             });
+        }
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
+                prepareHistoryData();
+            }
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("History OnPause");
+        if(getActivity() != null){
+            getActivity().unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("History OnResume");
+        if(getActivity() != null) {
+            IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
+            getActivity().registerReceiver(receiver, filter);
         }
     }
 }

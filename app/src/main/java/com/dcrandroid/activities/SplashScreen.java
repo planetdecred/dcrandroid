@@ -146,12 +146,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         return;
                     }
                     constants.wallet.subscribeToBlockNotifications();
+                    setText(getString(R.string.discovering_address));
+                    constants.wallet.discoverActiveAddresses(false,null);
                     constants.wallet.loadActiveDataFilters();
                     PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
                     setText(getString(R.string.fetching_headers));
-                    long blockHeight = constants.wallet.fetchHeaders();
-                    if (blockHeight != -1) {
-                        util.setInt(PreferenceUtil.BLOCK_HEIGHT, (int) blockHeight);
+                    long rescanHeight = constants.wallet.fetchHeaders();
+                    if (rescanHeight != -1) {
+                        util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
                     }
                     System.out.println("Finished fetching headers");
                     if (isInterrupted()) {

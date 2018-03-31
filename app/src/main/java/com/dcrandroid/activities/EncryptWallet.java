@@ -15,6 +15,7 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
 import org.json.JSONException;
@@ -29,6 +30,7 @@ import mobilewallet.LibWallet;
 public class EncryptWallet extends AppCompatActivity implements BlockScanResponse {
     private String seed;
     ProgressDialog pd;
+    private PreferenceUtil util;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +76,14 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                 wallet.discoverActiveAddresses(true, pass.getBytes());
                                 show("Fetching Headers...");
                                 wallet.fetchHeaders();
+                                long rescanHeight = constants.wallet.fetchHeaders();
+                                util = new PreferenceUtil(EncryptWallet.this);
+                                if (rescanHeight != -1) {
+                                    util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
+                                }
+                                System.out.println("Rescan Height: "+rescanHeight);
                                 wallet.loadActiveDataFilters();
-                                wallet.rescan(0, EncryptWallet.this);
+                                wallet.rescan((int) rescanHeight, EncryptWallet.this);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -116,6 +124,7 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
 
     @Override
     public void onEnd(final int height, boolean cancelled) {
+        util.setInt(PreferenceUtil.RESCAN_HEIGHT, height);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -144,7 +153,9 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
     }
 
     @Override
-    public void onScan(int rescanned_through) {
+    public boolean onScan(int rescanned_through) {
+        util.setInt(PreferenceUtil.RESCAN_HEIGHT, rescanned_through);
         show("Scanning blocks "+rescanned_through);
+        return true;
     }
 }

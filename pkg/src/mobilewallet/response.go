@@ -38,7 +38,7 @@ type Accounts struct {
 }
 
 type BlockScanResponse interface {
-	OnScan(rescannedThrough int32)
+	OnScan(rescannedThrough int32) bool
 	OnEnd(height int32, cancelled bool)
 	OnError(code int32, message string)
 }
@@ -80,4 +80,8 @@ type getTransactionsResponse struct {
 
 type GetTransactionsResponse interface {
 	OnResult(json string)
+}
+
+type TransactionListener interface {
+	OnTransaction(transaction string)
 }

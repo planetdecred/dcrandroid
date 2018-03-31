@@ -1,13 +1,13 @@
 package com.dcrandroid.fragments;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,9 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
@@ -30,7 +28,6 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionsResponse;
-import com.dcrandroid.util.Utils;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.view.CurrencyTextView;
 
@@ -46,20 +43,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import mobilewallet.BlockScanResponse;
 import mobilewallet.GetTransactionsResponse;
 
 /**
  * Created by Macsleven on 28/11/2017.
  */
 
-public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, BlockScanResponse, GetTransactionsResponse {
+public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
     private List<Transaction> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
-    private Button reScanBlock;
     private CurrencyTextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
     TransactionAdapter transactionAdapter;
-    ProgressDialog pd;
     TextView refresh;
     PreferenceUtil util;
     RecyclerView recyclerView;
@@ -83,14 +77,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
-        reScanBlock =  rootView.getRootView().findViewById(R.id.overview_rescan_btn);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
         tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR", util.getFloat(PreferenceUtil.TOTAL_BALANCE)));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
-        pd = Utils.getProgressDialog(getContext(),false,false,getString(R.string.scanning_blocks));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -115,22 +107,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         }));
-        reScanBlock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Rescan blocks")
-                        .setMessage("Are you sure? This could take some time.")
-                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                pd.show();
-                                constants.wallet.rescan(0, OverviewFragment.this);
-                            }
-                        }).setNegativeButton("NO", null)
-                        .show();
-            }
-        });
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
@@ -234,57 +210,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onEnd(final int height, final boolean cancelled) {
-        if(getActivity() == null){
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (pd.isShowing()) {
-                    pd.dismiss();
-                }
-                if(!cancelled) {
-                    Toast.makeText(getContext(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
-                    util.setInt("block_checkpoint", height);
-                    getBalance();
-                    prepareHistoryData();
-                }else{
-                    Toast.makeText(getContext(), "Rescan cancelled", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onError(int code, final String message) {
-        if(getActivity() == null){
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    @Override
-    public void onScan(final int rescanned_through) {
-        if(getActivity() == null){
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pd.show();
-                pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
-            }
-        });
-
-    }
-
-    @Override
     public void onResult(String json) {
         TransactionsResponse response = TransactionsResponse.parse(json);
         if(getActivity() == null){
@@ -350,6 +275,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    getBalance();
                     Collections.reverse(temp);
                     tempTxList.clear();
                     tempTxList.addAll(0, temp);
@@ -372,6 +298,34 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     saveTransactions();
                 }
             });
+        }
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
+                prepareHistoryData();
+            }
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("Overview OnPause");
+        if(getActivity() != null){
+            getActivity().unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Overview OnResume");
+        if(getActivity() != null) {
+            IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
+            getActivity().registerReceiver(receiver, filter);
         }
     }
 }

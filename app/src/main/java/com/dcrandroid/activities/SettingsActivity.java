@@ -9,11 +9,13 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
@@ -44,6 +46,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
+            final SwitchPreference transactionNotification = (SwitchPreference) findPreference("transactionNotification");
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference connectToPeer = (EditTextPreference) findPreference("peer_ip");
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
@@ -251,6 +254,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            transactionNotification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    util.setBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, (boolean) newValue);
+                    return true;
+                }
+            });
+
         }
 
         @Override
@@ -282,7 +293,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         @Override
-        public void onScan(final int rescanned_through) {
+        public boolean onScan(final int rescanned_through) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -290,7 +301,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
                 }
             });
-
+            return true;
         }
     }
 

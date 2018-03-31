@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
  */
 
 public class PreferenceUtil {
-    public static final String BLOCK_HEIGHT = "block_height";
+    public static final String RESCAN_HEIGHT = "rescan_height";
     public static final String TRANSACTION_HEIGHT = "tx_height";
     public static final String TOTAL_BALANCE = "total_balance";
     public static final String NO_OF_CONFIRMATIONS = "no_of_confirmations";

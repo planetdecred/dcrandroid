@@ -20,8 +20,12 @@
             android:defaultValue="@string/default_transaction_confirmation"
             android:key="@string/key_transaction_confirmation"
             android:summary="@string/default_transaction_confirmation"
-
             android:title="@string/title_transaction_confirmation" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:title="New transaction notification"
+            android:key="transactionNotification"
+            />
 
     </PreferenceCategory>
 
