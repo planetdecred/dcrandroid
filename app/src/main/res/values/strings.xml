@@ -85,9 +85,9 @@
     <string name="total_amount_sending">Total amount sending:</string>
     <string name="scan">scan</string>
     <string name="from">From:</string>
-    <string name="confirmed">confirmed</string>
+    <string name="confirmed">Confirmed</string>
     <string name="private_passphrase">Private Passphrase</string>
-    <string name="pending">pending</string>
+    <string name="pending">Pending</string>
     <string name="id">Id</string>
     <string name="address_local">Address local</string>
     <string name="services">Services</string>
@@ -238,6 +238,7 @@
     <string name="label_version">Version:</string>
     <string name="spinner_account">Account:</string>
     <string name="label_hash">HASH:</string>
+    <string name="show_history">Show History</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>

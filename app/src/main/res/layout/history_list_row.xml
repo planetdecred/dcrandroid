@@ -49,22 +49,23 @@
             android:layout_toEndOf="@id/history_snd_rcv"
             android:layout_below="@+id/history_amount_transferred" />
     </RelativeLayout>
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
+        android:orientation="horizontal"
         android:id="@+id/history_tx_status_cont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2.0dip"
+        android:layout_gravity="center"
         android:layout_weight="1.5">
 
         <TextView
             android:id="@+id/history_tx_status"
-            android:layout_width="75.0dip"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/tx_status_confirmed"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:paddingBottom="3dp"
             android:paddingLeft="5dp"
@@ -73,13 +74,17 @@
             android:text="@string/confirmed"
             android:textColor="@color/color_confirmed_tx" />
         <TextView
-            android:textSize="12.0sp"
-            android:gravity="end"
-            android:layout_gravity="end"
-            android:id="@+id/history_tx_date"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            />
-    </LinearLayout>
+            android:text=">"
+           android:layout_toRightOf="@id/history_tx_status"
+            android:layout_toEndOf="@id/history_tx_status"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="right"/>
+    </RelativeLayout>
 </LinearLayout>
