@@ -85,3 +85,7 @@ type GetTransactionsResponse interface {
 type TransactionListener interface {
 	OnTransaction(transaction string)
 }
+
+type BlockNotificationError interface {
+	OnBlockNotificationError(err error)
+}

@@ -27,7 +27,7 @@ import mobilewallet.LibWallet;
  * Created by collins on 12/26/17.
  */
 
-public class EncryptWallet extends AppCompatActivity implements BlockScanResponse {
+public class EncryptWallet extends AppCompatActivity{
     private String seed;
     ProgressDialog pd;
     private PreferenceUtil util;
@@ -71,7 +71,7 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                         e.printStackTrace();
                                     }
                                 }
-                                wallet.subscribeToBlockNotifications();
+                                wallet.subscribeToBlockNotifications(constants.notificationError);
                                 show("Discovering addresses...");
                                 wallet.discoverActiveAddresses(true, pass.getBytes());
                                 show("Fetching Headers...");
@@ -83,7 +83,16 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                 }
                                 System.out.println("Rescan Height: "+rescanHeight);
                                 wallet.loadActiveDataFilters();
-                                wallet.rescan((int) rescanHeight, EncryptWallet.this);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                        Intent i = new Intent(EncryptWallet.this, MainActivity.class);
+                                        startActivity(i);
+                                        //Finish all the activities before this
+                                        ActivityCompat.finishAffinity(EncryptWallet.this);
+                                    }
+                                });
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -104,58 +113,5 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                 pd.show();
             }
         });
-    }
-
-    public void encryptWalletCallback(String responseJson){
-        try {
-            DcrResponse response = DcrResponse.parse(responseJson);
-            if(!response.errorOccurred){
-                Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(this);
-            }else{
-                Toast.makeText(this, R.string.error_occured_creating_wallet,Toast.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onEnd(final int height, boolean cancelled) {
-        util.setInt(PreferenceUtil.RESCAN_HEIGHT, height);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pd.dismiss();
-                Toast.makeText(EncryptWallet.this, height + " blocks scanned", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(EncryptWallet.this);
-            }
-        });
-    }
-
-    @Override
-    public void onError(int code, String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pd.dismiss();
-                Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(EncryptWallet.this);
-            }
-        });
-    }
-
-    @Override
-    public boolean onScan(int rescanned_through) {
-        util.setInt(PreferenceUtil.RESCAN_HEIGHT, rescanned_through);
-        show("Scanning blocks "+rescanned_through);
-        return true;
     }
 }

@@ -116,58 +116,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     System.out.println("Opening");
                     setText(getString(R.string.opening_wallet));
                     constants.wallet.openWallet();
-                    setText(getString(R.string.waiting_for_dcrd));
-                    String dcrdAddress = Utils.getDcrdNetworkAddress(SplashScreen.this);
-                    if (util.getInt("network_mode") != 0) {
-                        for (; ; ) {
-                            try {
-                                if (isInterrupted()) {
-                                    return;
-                                }
-                                if (constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
-                                    break;
-                                }
-                                sleep(2500);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            if (isInterrupted()) {
-                                return;
-                            }
-                        }
-                    }
-                    if (isInterrupted()) {
-                        return;
-                    }
-                    if (util.getInt("network_mode") == 0) {
-                        System.out.println("Connecting to peer");
-                    }
-                    if (isInterrupted()) {
-                        return;
-                    }
-                    constants.wallet.subscribeToBlockNotifications();
-                    setText(getString(R.string.discovering_address));
-                    constants.wallet.discoverActiveAddresses(false,null);
-                    constants.wallet.loadActiveDataFilters();
-                    PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
-                    setText(getString(R.string.fetching_headers));
-                    long rescanHeight = constants.wallet.fetchHeaders();
-                    if (rescanHeight != -1) {
-                        util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
-                    }
-                    System.out.println("Finished fetching headers");
-                    if (isInterrupted()) {
-                        return;
-                    }
-                    setText(getString(R.string.publish_unmined_transaction));
-                    try {
-                        constants.wallet.publishUnminedTransactions();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (isInterrupted()) {
-                        return;
-                    }
                     Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
@@ -184,7 +132,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 2){
-            load();
+            startup();
         }
     }
 

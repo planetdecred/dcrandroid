@@ -30,6 +30,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.activities.SettingsActivity;
@@ -40,6 +41,7 @@ import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.util.BlockNotificationProxy;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
@@ -54,7 +56,7 @@ import java.util.Random;
 import mobilewallet.BlockScanResponse;
 import mobilewallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener {
+public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy {
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     private DcrConstants constants;
     private PreferenceUtil util;
     private NotificationManager notificationManager;
-    private TextView rescanHeight, chainStatus;
+    private TextView rescanHeight, chainStatus, connectionStatus;
     private Animation animRotate;
     private ImageView rescanImage, stopScan;
     private boolean scanning = false;
@@ -85,7 +87,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         util = new PreferenceUtil(this);
         constants = DcrConstants.getInstance();
         constants.wallet.transactionNotification(this);
+        constants.notificationProxy = this;
         rescanHeight = findViewById(R.id.rescan_height);
+        connectionStatus = findViewById(R.id.tv_connection_status);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -105,6 +109,12 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
         animRotate.setRepeatCount(-1);
         animRotate.setAnimationListener(this);
+        if(!constants.wallet.isNetBackendNil()){
+            setConnectionStatus("Connected");
+            rescanBlocks();
+        }else{
+            connectToRPCServer();
+        }
         new Thread(){
             public void run(){
                 while(true){
@@ -135,17 +145,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                 }
             }
         }.start();
-        int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT);
-        int blockHeight = constants.wallet.getBestBlock();
-        if(rescanHeight < blockHeight){
-            System.out.println("Scanning blocks in background");
-            constants.wallet.rescan(rescanHeight, this);
-            rescanImage.startAnimation(animRotate);
-            rescanImage.setEnabled(false);
-            chainStatus.setVisibility(View.GONE);
-            stopScan.setVisibility(View.VISIBLE);
-            scanning = true;
-        }
         rescanImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +160,42 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             @Override
             public void onClick(View v) {
                 scanning = false;
+            }
+        });
+    }
+
+    private void rescanBlocks(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT);
+                int blockHeight = constants.wallet.getBestBlock();
+                if(rescanHeight < blockHeight){
+                    constants.wallet.rescan(rescanHeight, MainActivity.this);
+                    rescanImage.startAnimation(animRotate);
+                    rescanImage.setEnabled(false);
+                    chainStatus.setVisibility(View.GONE);
+                    stopScan.setVisibility(View.VISIBLE);
+                    scanning = true;
+                }
+            }
+        });
+    }
+
+    private void setConnectionStatus(final String str){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectionStatus.setText(str);
+            }
+        });
+    }
+
+    private void showText(final String str){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -366,7 +401,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
 
     @Override
     public boolean onScan(final int i) {
-        util.setInt(PreferenceUtil.RESCAN_HEIGHT, i);
+        if(util.getInt(PreferenceUtil.RESCAN_HEIGHT) < i){
+            util.setInt(PreferenceUtil.RESCAN_HEIGHT, i);
+        }
         System.out.println("Scanning: "+i+"/"+constants.wallet.getBestBlock());
         runOnUiThread(new Runnable() {
             @Override
@@ -390,5 +427,56 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    @Override
+    public void onBlockNotificationError(Exception e) {
+        System.out.println("Error received: "+e.getMessage());
+        showText(e.getMessage());
+        setConnectionStatus("Disconnected");
+        connectToRPCServer();
+    }
+
+    private void connectToRPCServer(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    setConnectionStatus("Connecting to RPC Server");
+                    String dcrdAddress = Utils.getDcrdNetworkAddress(MainActivity.this);
+                    if (util.getInt("network_mode") != 0) {
+                        for (; ; ) {
+                            try {
+                                if (constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(MainActivity.this).getBytes())) {
+                                    break;
+                                }
+                                Thread.sleep(2500);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else {
+                        //Spv connection will be handled here
+                        setConnectionStatus("SPV not yet implemented");
+                        return;
+                    }
+                    constants.wallet.subscribeToBlockNotifications(constants.notificationError);
+                    setConnectionStatus(getString(R.string.discovering_address));
+                    constants.wallet.discoverActiveAddresses(false,null);
+                    constants.wallet.loadActiveDataFilters();
+                    setConnectionStatus(getString(R.string.fetching_headers));
+                    long rescanHeight = constants.wallet.fetchHeaders();
+                    if (rescanHeight != -1) {
+                        util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
+                    }
+                    setConnectionStatus(getString(R.string.publish_unmined_transaction));
+                    constants.wallet.publishUnminedTransactions();
+                    setConnectionStatus("Connected");
+                    rescanBlocks();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
