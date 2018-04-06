@@ -6,23 +6,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_overview"
-            android:icon="@android:drawable/ic_menu_compass"
+            android:icon="@mipmap/overview"
             android:title="Overview" />
         <item
             android:id="@+id/nav_accounts"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:icon="@mipmap/accounts"
             android:title="Accounts" />
         <item
             android:id="@+id/nav_send"
-            android:icon="@android:drawable/ic_menu_upload"
+            android:icon="@mipmap/send"
             android:title="Send" />
         <item
             android:id="@+id/nav_receive"
-            android:icon="@android:drawable/stat_sys_download_done"
+            android:icon="@mipmap/receive"
             android:title="Receive" />
         <item
             android:id="@+id/nav_history"
-            android:icon="@android:drawable/ic_menu_recent_history"
+            android:icon="@mipmap/history"
             android:title="History" />
       <!--  <item
             android:id="@+id/nav_tickets"
@@ -30,11 +30,11 @@
             android:title="Tickets" />-->
         <item
             android:id="@+id/nav_settings"
-            android:icon="@android:drawable/ic_menu_manage"
+            android:icon="@mipmap/settings"
             android:title="Settings" />
         <item
             android:id="@+id/nav_help"
-            android:icon="@android:drawable/ic_menu_help"
+            android:icon="@mipmap/help"
             android:title="Help" />
     </group>
 

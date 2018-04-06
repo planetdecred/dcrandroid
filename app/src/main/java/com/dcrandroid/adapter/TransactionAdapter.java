@@ -67,10 +67,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.txType.setText("");
         }
         if(holder.status.getText().toString().equalsIgnoreCase("pending")){
-            holder.status.setBackgroundResource(R.drawable.tx_status_pending);
             holder.status.setTextColor(Color.parseColor("#3d659c"));
         }else if(holder.status.getText().toString().equalsIgnoreCase("confirmed")) {
-            holder.status.setBackgroundResource(R.drawable.tx_status_confirmed);
             holder.status.setTextColor(Color.parseColor("#55bb97"));
         }
     }
