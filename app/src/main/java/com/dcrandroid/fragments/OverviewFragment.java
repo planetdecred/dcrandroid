@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
 import com.dcrandroid.R;
@@ -129,6 +130,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                             }
                         }).setNegativeButton("NO", null)
                         .show();
+            }
+        });
+        TextView showHistory= rootView.findViewById(R.id.show_history);
+        showHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_history();
             }
         });
         recyclerView.setAdapter(transactionAdapter);
@@ -373,5 +381,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
             });
         }
+    }
+    public void show_history(){
+        MainActivity mainActivity2= new MainActivity();
+        mainActivity2.displayhistory();
     }
 }

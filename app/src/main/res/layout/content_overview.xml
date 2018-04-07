@@ -94,6 +94,7 @@
             android:layout_gravity="center"
             android:padding="2dp"
             android:id="@+id/show_history"
+            android:onClick="displayhistory"
             android:textColor="@color/ButtonColor"/>
     </LinearLayout>
     <TextView

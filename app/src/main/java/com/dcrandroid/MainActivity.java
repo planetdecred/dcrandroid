@@ -181,4 +181,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         //make this method blank
         return true;
     }
+    public  void displayhistory(){
+        displaySelectedScreen(R.id.nav_history);
+    }
 }
