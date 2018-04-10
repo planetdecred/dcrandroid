@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.BestBlock;
+import com.dcrandroid.data.Constants;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -104,7 +105,7 @@ public class Utils {
 
     public static String getConnectionCertificate(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(util.getInt("network_mode") == 2){
+        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
             return Utils.getRemoteCertificate(context);
         }else{
             return Utils.getDefaultCertificate(context);
@@ -181,12 +182,12 @@ public class Utils {
 
     public static String getDcrdNetworkAddress(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(util.getInt("network_mode") == 1 || util.getInt("network_mode") == 0){
+        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 1 || Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 0){
             System.out.println("Util is using local server");
             //return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
             return "";
         }else{
-            String addr = util.get(context.getString(R.string.remote_dcrd));
+            String addr = util.get(Constants.KEY_REMOTE_DCRD_ADDRESS);
             System.out.println("Util is using remote server: "+addr);
             return addr;
         }

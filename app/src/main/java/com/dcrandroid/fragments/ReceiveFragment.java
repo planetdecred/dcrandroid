@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
@@ -150,7 +151,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         try {
             final String receiveAddress = constants.wallet.addressForAccount(accountNumber);
             System.out.println("Got Address in "+(System.currentTimeMillis() - startTime)+"ms");
-            preferenceUtil.set("recent_address",receiveAddress);
+            preferenceUtil.set(Constants.KEY_RECENT_ADDRESS,receiveAddress);
             address.setText(receiveAddress);
             //imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+receiveAddress,200,200));
             imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).bitmap());

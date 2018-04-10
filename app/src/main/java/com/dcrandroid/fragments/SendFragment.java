@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -184,11 +185,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         return;
                     }
                     if (destAddress.equals("")){
-                        destAddress = util.get("recent_address");
+                        destAddress = util.get(Constants.KEY_RECENT_ADDRESS);
                         if(destAddress.equals("")){
                             try {
                                 destAddress = constants.wallet.addressForAccount(0);
-                                util.set("recent_address", destAddress);
+                                util.set(Constants.KEY_RECENT_ADDRESS, destAddress);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }

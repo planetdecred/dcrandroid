@@ -110,9 +110,15 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         animRotate.setRepeatCount(-1);
         animRotate.setAnimationListener(this);
         if(!constants.wallet.isNetBackendNil()){
+            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                showText("Already connected to RPC server");
+            }
             setConnectionStatus("Connected");
             rescanBlocks();
         }else{
+            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                showText("Connecting to RPC server");
+            }
             connectToRPCServer();
         }
         new Thread(){
@@ -123,13 +129,18 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                             @Override
                             public void run() {
                                 int bestBlock = constants.wallet.getBestBlock();
-                                bestBlockHeight.setText(String.valueOf(bestBlock));
+                                if(scanning){
+                                    bestBlockHeight.setText(String.valueOf(bestBlock));
+                                    return;
+                                }
                                 long lastBlockTime = constants.wallet.getBestBlockTimeStamp();
                                 long currentTime = System.currentTimeMillis() / 1000;
-                                long estimatedBlocks = (currentTime - lastBlockTime) / 120;
+                                long estimatedBlocks = ((currentTime - lastBlockTime) / 120) + bestBlock;
                                 if(estimatedBlocks > bestBlock){
-                                    chainStatus.setText((estimatedBlocks - bestBlock)+ " blocks behind");
+                                    bestBlockHeight.setText(bestBlock +" of "+estimatedBlocks);
+                                    chainStatus.setText("");
                                 }else{
+                                    bestBlockHeight.setText(String.valueOf(bestBlock));
                                     chainStatus.setText(Utils.calculateTime((System.currentTimeMillis()/1000) - lastBlockTime));
                                 }
                             }
@@ -325,6 +336,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                    showText(e.getMessage());
+                }
             }
         }
     }
@@ -385,6 +399,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public void onError(int i, String s) {
         System.out.println("Block scan error: "+s);
         sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+            showText(s);
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -444,27 +461,40 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                 try {
                     setConnectionStatus("Connecting to RPC Server");
                     String dcrdAddress = Utils.getDcrdNetworkAddress(MainActivity.this);
-                    if (util.getInt("network_mode") != 0) {
+                    if (Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) != 0) {
+                        int i = 0;
                         for (; ; ) {
                             try {
-                                if (constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(MainActivity.this).getBytes())) {
-                                    break;
+                                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                                    showText("Connecting attempt " + (++i));
                                 }
-                                Thread.sleep(2500);
+                                constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(MainActivity.this).getBytes());
+                                    break;
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                showText(e.getMessage());
                             }
+                            Thread.sleep(2500);
                         }
                     } else {
                         //Spv connection will be handled here
                         setConnectionStatus("SPV not yet implemented");
                         return;
                     }
+                    if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                        showText("Subscribe to block notification");
+                    }
                     constants.wallet.subscribeToBlockNotifications(constants.notificationError);
                     setConnectionStatus(getString(R.string.discovering_address));
+                    if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                        showText("Discover addresses");
+                    }
                     constants.wallet.discoverActiveAddresses(false,null);
                     constants.wallet.loadActiveDataFilters();
                     setConnectionStatus(getString(R.string.fetching_headers));
+                    if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                        showText("Fetch Headers");
+                    }
                     long rescanHeight = constants.wallet.fetchHeaders();
                     if (rescanHeight != -1) {
                         util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);

@@ -69,16 +69,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_version"
+        android:text="Built on"
         android:layout_marginEnd="3dp"
         android:layout_marginRight="3dp"
         android:textColor="@android:color/background_light"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_version"
         android:textColor="@android:color/background_light"
         android:layout_gravity="bottom"
+        android:text="@string/build_date"
         android:gravity="bottom"
         />
     </LinearLayout>

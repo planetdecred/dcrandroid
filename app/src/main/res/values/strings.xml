@@ -193,7 +193,7 @@
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="pref_header_about">About</string>
     <string name="app_version">0.1 alpha build 3</string>
-    <string name="title_version">Version</string>
+    <string name="build">Build Date</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
     <string name="title_enable_local_dcrd">Enable local dcrd</string>
     <string name="title_testnet">Testnet</string>
@@ -205,7 +205,7 @@
     <string name="key_get_peers">key_get_peers</string>
     <string name="summary_peers">View available peers and details</string>
     <string name="title_peers">Peers</string>
-    <string name="remote_dcrd_address">Remote dcrd address</string>
+    <string name="remote_dcrd_address">remote_dcrd_address</string>
     <string name="remote_dcrd">remote_dcrd</string>
     <string name="remote_certificate">remote_certificate</string>
     <string name="current_total_balance">Current Total Balance</string>
@@ -237,6 +237,7 @@
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="label_version">Version:</string>
     <string name="spinner_account">Account:</string>
+    <string name="build_date">09 Apr 2018</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>

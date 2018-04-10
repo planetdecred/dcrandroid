@@ -61,11 +61,11 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private void startup(){
         tvLoading = findViewById(R.id.loading_status);
         constants = DcrConstants.getInstance();
-        String homeDir = getFilesDir()+"/dcrwallet/testnet2";
+        String homeDir = getFilesDir()+"/dcrwallet/";
         constants.wallet = new LibWallet(homeDir);
         constants.wallet.initLoader();
         //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
-        File f = new File(homeDir, "wallet.db");
+        File f = new File(homeDir, "/testnet2/wallet.db");
         if(!f.exists()){
             loadThread = new Thread(){
                 public void run(){
@@ -136,14 +136,11 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
     }
 
+    @Override
+    public void onBackPressed() {}
 
     @Override
-    public void onBackPressed() {
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-    }
+    public void onAnimationStart(Animation animation) {}
 
     @Override
     public void onAnimationEnd(Animation animation) {
@@ -151,8 +148,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     @Override
-    public void onAnimationRepeat(Animation animation) {
-    }
+    public void onAnimationRepeat(Animation animation) {}
 
     public abstract class DoubleClickListener implements View.OnClickListener {
 

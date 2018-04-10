@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.service.DcrdService;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
@@ -45,7 +46,7 @@ public class MainApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(util.getInt("network_mode") == 1){
+        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 1){
             //local full-node
             System.out.println("Starting local server");
             Intent i = new Intent(this, DcrdService.class);

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.MainActivity;
@@ -35,6 +36,7 @@ public class EncryptWallet extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_passphrase);
+        util = new PreferenceUtil(EncryptWallet.this);
         pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"");
         final EditText passPhrase = (EditText) findViewById(R.id.passphrase);
         final EditText verifyPassPhrase = (EditText) findViewById(R.id.verifyPassphrase);
@@ -62,8 +64,22 @@ public class EncryptWallet extends AppCompatActivity{
                                 wallet.createWallet(pass, seed);
                                 show("Connecting to dcrd...");
                                 for(;;){
-                                    if(wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this),"dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes())){
+                                    try {
+                                        wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this), "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes());
                                         break;
+                                    }catch (final Exception e){
+                                        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                                            System.out.println("Showing debug messages");
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(EncryptWallet.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }else{
+                                            System.out.println("Not showing debug messages");
+                                        }
+                                        e.printStackTrace();
                                     }
                                     try{
                                         sleep(1500);
@@ -77,7 +93,6 @@ public class EncryptWallet extends AppCompatActivity{
                                 show("Fetching Headers...");
                                 wallet.fetchHeaders();
                                 long rescanHeight = constants.wallet.fetchHeaders();
-                                util = new PreferenceUtil(EncryptWallet.this);
                                 if (rescanHeight != -1) {
                                     util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
                                 }

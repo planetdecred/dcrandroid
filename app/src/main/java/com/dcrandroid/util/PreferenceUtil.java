@@ -2,6 +2,7 @@ package com.dcrandroid.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 /**
@@ -23,7 +24,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return "";
         }
-        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getString(key,"");
     }
 
@@ -31,7 +32,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return d;
         }
-        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getString(key,d);
     }
 
@@ -39,7 +40,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return;
         }
-        SharedPreferences.Editor editor = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
         editor.putString(key, value);
         editor.commit();
     }
@@ -48,7 +49,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return 0;
         }
-        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getFloat(key,0);
     }
 
@@ -56,7 +57,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return;
         }
-        SharedPreferences.Editor editor = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
         editor.putFloat(key, n);
         editor.commit();
     }
@@ -64,7 +65,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return;
         }
-        SharedPreferences.Editor editor = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
         editor.putInt(key, n);
         editor.commit();
     }
@@ -72,7 +73,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return 0;
         }
-        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getInt(key,0);
     }
 
@@ -80,7 +81,7 @@ public class PreferenceUtil {
         if(ctx == null){
             return;
         }
-        SharedPreferences.Editor editor = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
         editor.putBoolean(key, n);
         editor.commit();
     }
@@ -89,14 +90,15 @@ public class PreferenceUtil {
         if(ctx == null){
             return false;
         }
-        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getBoolean(key, false);
     }
+
     public boolean getBoolean(String key, boolean d){
         if(ctx == null){
             return d;
         }
-        SharedPreferences sp = ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getBoolean(key, d);
     }
 }
