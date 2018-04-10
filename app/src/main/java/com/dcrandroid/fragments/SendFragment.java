@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,9 +32,12 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.DecredInputFilter;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.journeyapps.barcodescanner.Util;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,6 +106,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         accountSpinner.setAdapter(dataAdapter);
 
+        amount.setFilters(new InputFilter[]{new DecredInputFilter()});
         scanAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,10 +140,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             @Override
             public void onClick(View v) {
                 try {
-                    NumberFormat nf = NumberFormat.getNumberInstance();
-                    nf.setMinimumFractionDigits(2);
-                    nf.setMaximumFractionDigits(8);
-                    amount.setText(nf.format(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()),0)/ AccountResponse.SATOSHI));
+                    amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()),0)/ AccountResponse.SATOSHI));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -167,14 +169,15 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     private void constructTransaction(){
         new Thread(){
             public void run(){
+                System.out.println("Selection: "+amount.getSelectionStart());
                 if(getActivity() == null){
                     System.out.println("Activity is null");
                     return;
                 }
                 try {
-                    String amnt = amount.getText().toString();
+                    final String amnt = amount.getText().toString();
                     if (amnt.equals("")) {
-                        amnt = "0";
+                        return;
                     }
                     String destAddress = address.getText().toString();
                     final double amt;
@@ -215,8 +218,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
                             double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
                             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            totalAmountSending.setText(String.format(Locale.getDefault(),"%f DCR", totalAmount));
-                            estimateFee.setText(String.format(Locale.getDefault(),"%f DCR", estFee));
+                            totalAmountSending.setText(Utils.formatDecred((float) totalAmount).concat(" DCR"));
+                            estimateFee.setText(Utils.formatDecred((float) estFee).concat(" DCR"));
                         }
                     });
                 }catch (final Exception e){
@@ -236,15 +239,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         if(address.startsWith("decred:"))
             address = address.replace("decred:","");
         if(address.length() < 25){
-            return true;
+            return false;
         }else if(address.length() > 36){
-            return true;
+            return false;
         }
-        if(address.startsWith("D")){
-            return true;
-        }else{
-            return true;
-        }
+        return !address.startsWith("D");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {

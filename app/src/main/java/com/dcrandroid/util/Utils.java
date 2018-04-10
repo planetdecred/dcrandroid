@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -240,23 +241,29 @@ public class Utils {
         }
     }
 
-    public static String calculateTime(long millis){
-        if(millis > 59){
+    public static String calculateTime(long millis) {
+        if (millis > 59) {
             millis /= 60;
-            if(millis > 59){
+            if (millis > 59) {
                 millis /= 60;
-                if(millis > 23){
+                if (millis > 23) {
                     millis /= 24;
                     //days
-                    return millis+"d ago";
+                    return millis + "d ago";
                 }
                 //hour
-                return millis+"h ago";
+                return millis + "h ago";
             }
             //minute
-            return millis+"m ago";
+            return millis + "m ago";
         }
         //seconds
-        return millis+"s ago";
+        return millis + "s ago";
+    }
+    
+    public static String formatDecred(float dcr){
+            DecimalFormat format = new DecimalFormat();
+            format.applyPattern("#,###,###,##0.00######");
+            return format.format(dcr);
     }
 }
