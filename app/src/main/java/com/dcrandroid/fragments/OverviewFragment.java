@@ -29,6 +29,7 @@ import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;
+import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
 import java.io.File;
