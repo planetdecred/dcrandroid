@@ -33,11 +33,11 @@ type LibWallet struct {
 	mu         sync.Mutex
 }
 
-func NewLibWallet(dbDir string) *LibWallet {
+func NewLibWallet(homeDir string) *LibWallet {
 	lw := &LibWallet{
-		dbDir: dbDir,
+		dbDir: filepath.Join(homeDir, "testnet2/"),
 	}
-	initLogRotator(filepath.Join("/data/data/com.dcrandroid/files/dcrwallet", "dcrwallet.log"))
+	initLogRotator(filepath.Join(homeDir, "/logs/testnet2/dcrwallet.log"))
 	return lw
 }
 
@@ -89,11 +89,13 @@ func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error 
 	privPass := []byte(passphrase)
 	seed, err := walletseed.DecodeUserInput(seedMnemonic)
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 
 	w, err := lw.loader.CreateNewWallet(pubPass, privPass, seed)
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 	lw.wallet = w
@@ -108,6 +110,7 @@ func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error 
 func (lw *LibWallet) GenerateSeed() (string, error) {
 	seed, err := hdkeychain.GenerateSeed(hdkeychain.RecommendedSeedLen)
 	if err != nil {
+		log.Error(err)
 		return "", err
 	}
 
@@ -119,25 +122,34 @@ func (lw *LibWallet) VerifySeed(seedMnemonic string) bool {
 	return err == nil
 }
 
-func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) bool {
+func (lw *LibWallet) IsNetBackendNil() bool {
+	_, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		log.Error(err)
+		return true
+	}
+	return false
+}
+
+func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) error {
 	fmt.Println("Connecting to rpc client")
 	ctx := context.Background()
 	networkAddress, err := NormalizeAddress(rpcHost, "19109")
 	if err != nil {
-		fmt.Println(err)
-		return false
+		log.Error(err)
+		return errors.New(err.Error() + ", Error while normalizing address")
 	}
 	c, err := chain.NewRPCClient(netparams.TestNet2Params.Params, networkAddress,
 		rpcUser, rpcPass, certs, false)
 	if err != nil {
-		fmt.Println(err)
-		return false
+		log.Error(err)
+		return errors.New(err.Error() + ", New RPC Client")
 	}
 
 	err = c.Start(ctx, false)
 	if err != nil {
-		fmt.Println(err)
-		return false
+		log.Error(err)
+		return errors.New(err.Error() + ", Start Failed")
 	}
 
 	fmt.Println("Connected to rpc client")
@@ -156,7 +168,7 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 	// 	fmt.Println(err)
 	// 	return false
 	// }
-	return true
+	return nil
 }
 
 func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []byte) error {
@@ -169,10 +181,12 @@ func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []b
 	chainClient := lw.rpcClient
 	lw.mu.Unlock()
 	if chainClient == nil {
+		log.Error("Consensus server RPC client has not been loaded")
 		return errors.New("Consensus server RPC client has not been loaded")
 	}
 
 	if discoverAccounts && len(privPass) == 0 {
+		log.Error("private passphrase is required for discovering accounts")
 		return errors.New("private passphrase is required for discovering accounts")
 	}
 
@@ -188,6 +202,7 @@ func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []b
 		}()
 		err := wallet.Unlock(privPass, lock)
 		if err != nil {
+			log.Error(err)
 			return err
 		}
 	}
@@ -201,6 +216,7 @@ func (lw *LibWallet) FetchHeaders() (int32, error) {
 	fmt.Println("Fetching Headers")
 	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(lw.netBackend)
 	if err != nil {
+		log.Error(err)
 		return 0, err
 	}
 	fmt.Printf("Fetched %v New Headers", count)
@@ -214,28 +230,92 @@ func (lw *LibWallet) LoadActiveDataFilters() error {
 	fmt.Println("Loading Active Data Filters")
 	err := lw.wallet.LoadActiveDataFilters(lw.netBackend)
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 	return err
 }
 
-func (lw *LibWallet) SubscribeToBlockNotifications() error {
+func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
+	go func() {
+		n := lw.wallet.NtfnServer.TransactionNotifications()
+		defer n.Done()
+		for {
+			v := <-n.C
+			for _, transaction := range v.UnminedTransactions {
+				var amount int64
+				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
+				for index, credit := range transaction.MyOutputs {
+					if lw.IsAddressMine(credit.Address.String()) {
+						amount += int64(credit.Amount)
+					}
+					tempCredits[index] = TransactionCredit{
+						Index:    int32(credit.Index),
+						Account:  int32(credit.Account),
+						Internal: credit.Internal,
+						Amount:   int64(credit.Amount),
+						Address:  credit.Address.String()}
+				}
+				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
+				for index, debit := range transaction.MyInputs {
+					tempDebits[index] = TransactionDebit{
+						Index:           int32(debit.Index),
+						PreviousAccount: int32(debit.PreviousAccount),
+						PreviousAmount:  int64(debit.PreviousAmount),
+						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+				}
+				tempTransaction := Transaction{
+					Fee:       int64(transaction.Fee),
+					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+					Timestamp: transaction.Timestamp,
+					Type:      transactionType(transaction.Type),
+					Credits:   &tempCredits,
+					Amount:    amount,
+					Height:    0,
+					Status:    "confirmed",
+					Debits:    &tempDebits}
+				fmt.Println("New Transaction")
+				result, err := json.Marshal(tempTransaction)
+				if err != nil {
+					log.Error(err)
+				} else {
+					listener.OnTransaction(string(result))
+				}
+			}
+		}
+	}()
+}
+
+func (lw *LibWallet) SubscribeToBlockNotifications(listener BlockNotificationError) error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
+		log.Error("Wallet has not been loaded")
 		return errors.New("Wallet has not been loaded")
 	}
 	if lw.rpcClient == nil {
+		log.Error("Consensus server RPC client has not been loaded")
 		return errors.New("Consensus server RPC client has not been loaded")
 	}
 
 	err := lw.rpcClient.NotifyBlocks()
 	if err != nil {
+		log.Error(err)
 		return err
 	}
-
-	syncer := chain.NewRPCSyncer(lw.wallet, lw.rpcClient)
-	go syncer.Run(context.Background(), false)
 	wallet.SetNetworkBackend(chain.BackendFromRPCClient(lw.rpcClient.Client))
+	go func() {
+		syncer := chain.NewRPCSyncer(lw.wallet, lw.rpcClient)
+		err = syncer.Run(context.Background(), false)
+		fmt.Println("Syncer returned")
+		if err == context.Canceled {
+			fmt.Println("Context was cancelled")
+			return
+		}
+		lw.netBackend = nil
+		wallet.SetNetworkBackend(nil)
+		fmt.Println("Sending notification")
+		listener.OnBlockNotificationError(err)
+		log.Error(err)
+	}()
 	return nil
 }
 
@@ -244,6 +324,7 @@ func (lw *LibWallet) OpenWallet() error {
 	pubPass := []byte(wallet.InsecurePubPassphrase)
 	w, err := lw.loader.OpenExistingWallet(pubPass)
 	if err != nil {
+		log.Error(err)
 		return err
 	}
 	lw.wallet = w
@@ -291,12 +372,14 @@ func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
 		go lw.wallet.RescanProgressFromHeight(ctx, n, startHeight, progress)
 		for p := range progress {
 			if p.Err != nil {
-				fmt.Println(p.Err)
+				log.Error(p.Err)
 				response.OnError(-1, p.Err.Error())
 				return
 			}
 			totalHeight += p.ScannedThrough
-			response.OnScan(p.ScannedThrough)
+			if !response.OnScan(p.ScannedThrough) {
+				break
+			}
 		}
 		select {
 		case <-ctx.Done():
@@ -310,6 +393,7 @@ func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
 func (lw *LibWallet) IsAddressMine(address string) bool {
 	addr, err := decodeAddress(address, lw.wallet.ChainParams())
 	if err != nil {
+		log.Error(err)
 		return false
 	}
 	_, err = lw.wallet.AddressInfo(addr)
@@ -319,10 +403,9 @@ func (lw *LibWallet) IsAddressMine(address string) bool {
 func (lw *LibWallet) GetAccountName(account int32) string {
 	name, err := lw.wallet.AccountName(uint32(account))
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return "Account not found"
 	}
-
 	return name
 }
 
@@ -447,6 +530,17 @@ func (lw *LibWallet) GetBestBlock() int32 {
 	return height
 }
 
+func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
+	_, height := lw.wallet.MainChainTip()
+	identifier := wallet.NewBlockIdentifierFromHeight(height)
+	info, err := lw.wallet.BlockInfo(identifier)
+	if err != nil {
+		log.Error(err)
+		return 0
+	}
+	return info.Timestamp
+}
+
 func (lw *LibWallet) PublishUnminedTransactions() error {
 	if lw.netBackend == nil {
 		return errors.New("wallet is not associated with a consensus server RPC client")
@@ -458,9 +552,9 @@ func (lw *LibWallet) PublishUnminedTransactions() error {
 func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations int32) (int64, error) {
 	bals, err := lw.wallet.CalculateAccountBalance(uint32(account), requiredConfirmations)
 	if err != nil {
+		log.Error(err)
 		return 0, err
 	}
-
 	return int64(bals.Spendable), nil
 }
 
@@ -470,7 +564,7 @@ func (lw *LibWallet) AddressForAccount(account int32) (string, error) {
 
 	addr, err := lw.wallet.NewExternalAddress(uint32(account), callOpts...)
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return "", err
 	}
 	return addr.EncodeAddress(), nil
@@ -480,10 +574,12 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 	// output destination
 	addr, err := dcrutil.DecodeAddress(destAddr)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 	pkScript, err := txscript.PayToAddrScript(addr)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 	version := txscript.DefaultScriptVersion
@@ -502,6 +598,7 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 	tx, err := lw.wallet.NewUnsignedTransaction(outputs, feePerKb, uint32(srcAccount),
 		requiredConfirmations, algo, nil)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 
@@ -509,6 +606,7 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 	txBuf.Grow(tx.Tx.SerializeSize())
 	err = tx.Tx.Serialize(&txBuf)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 	var totalOutput dcrutil.Amount
@@ -531,6 +629,7 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 	var tx wire.MsgTx
 	err := tx.Deserialize(bytes.NewReader(rawTransaction))
 	if err != nil {
+		log.Error(err)
 		//Bytes do not represent a valid raw transaction
 		return nil, err
 	}
@@ -542,6 +641,7 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 
 	err = lw.wallet.Unlock(privPass, lock)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 
@@ -549,6 +649,7 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 
 	invalidSigs, err := lw.wallet.SignTransaction(&tx, txscript.SigHashAll, additionalPkScripts, nil, nil)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 
@@ -561,6 +662,7 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 	serializedTransaction.Grow(tx.SerializeSize())
 	err = tx.Serialize(&serializedTransaction)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 	return serializedTransaction.Bytes(), nil
@@ -569,6 +671,7 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 func (lw *LibWallet) PublishTransaction(signedTransaction []byte) ([]byte, error) {
 	n, err := lw.wallet.NetworkBackend()
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 
@@ -576,11 +679,13 @@ func (lw *LibWallet) PublishTransaction(signedTransaction []byte) ([]byte, error
 	err = msgTx.Deserialize(bytes.NewReader(signedTransaction))
 	if err != nil {
 		//Invalid tx
+		log.Error(err)
 		return nil, err
 	}
 
 	txHash, err := lw.wallet.PublishTransaction(&msgTx, signedTransaction, n)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 
@@ -590,6 +695,7 @@ func (lw *LibWallet) PublishTransaction(signedTransaction []byte) ([]byte, error
 func (lw *LibWallet) GetAccounts() (string, error) {
 	resp, err := lw.wallet.Accounts()
 	if err != nil {
+		log.Error("Unable to get accounts from wallet")
 		return "", errors.New("Unable to get accounts from wallet")
 	}
 	accounts := make([]Account, len(resp.Accounts))
@@ -597,6 +703,8 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 		a := &resp.Accounts[i]
 		bals, err := lw.wallet.CalculateAccountBalance(a.AccountNumber, 0)
 		if err != nil {
+			log.Errorf("Unable to calculate balance for account %v",
+				a.AccountNumber)
 			return "", fmt.Errorf("Unable to calculate balance for account %v",
 				a.AccountNumber)
 		}
@@ -641,13 +749,13 @@ func (lw *LibWallet) NextAccount(accountName string, privPass []byte) bool {
 	}()
 	err := lw.wallet.Unlock(privPass, lock)
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return false
 	}
 
 	_, err = lw.wallet.NextAccount(accountName)
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return false
 	}
 	return true
