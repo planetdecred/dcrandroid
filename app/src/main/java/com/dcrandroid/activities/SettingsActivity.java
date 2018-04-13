@@ -46,6 +46,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
+            final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
@@ -54,11 +55,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 dcrdCertificate.setEnabled(true);
                 remoteDcrdAddress.setEnabled(true);
                 connectToPeer.setEnabled(false);
-            }else {
-                System.out.println("Mode : 1 || 0");
+                dcrLog.setEnabled(false);
+            }
+            else if(util.getInt("network_mode") == 1) {
+                System.out.println("Mode : 1");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
+                dcrLog.setEnabled(true);
+            }
+            else {
+                System.out.println("Mode : 0");
+                dcrdCertificate.setEnabled(false);
+                remoteDcrdAddress.setEnabled(false);
+                connectToPeer.setEnabled(true);
+                dcrLog.setEnabled(false);
             }
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0"))]);
             //networkModes.setValueIndex(util.getInt(Constants.KEY_NETWORK_MODES));
@@ -106,14 +117,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     int i = Integer.valueOf((String)newValue);
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.KEY_NETWORK_MODES, String.valueOf(i));
-                    if(i == 0 || i == 1){
+                    if(i == 0){
                         connectToPeer.setEnabled(true);
                         remoteDcrdAddress.setEnabled(false);
                         dcrdCertificate.setEnabled(false);
+                        dcrLog.setEnabled(false);
+                    }else if(i == 1){
+                        connectToPeer.setEnabled(true);
+                        remoteDcrdAddress.setEnabled(false);
+                        dcrdCertificate.setEnabled(false);
+                        dcrLog.setEnabled(true);
                     }else{
                         connectToPeer.setEnabled(false);
                         remoteDcrdAddress.setEnabled(true);
                         dcrdCertificate.setEnabled(true);
+                        dcrLog.setEnabled(false);
                         Utils.removeDcrdConfig("connect");
                     }
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();

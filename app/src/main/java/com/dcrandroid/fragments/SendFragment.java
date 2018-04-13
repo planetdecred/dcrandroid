@@ -262,13 +262,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         Toast.makeText(SendFragment.this.getContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show();
                         return;
                     }
-//                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
-//                        address.setText(returnString);
-//                    }else if(returnString.startsWith("T")){
-//                        address.setText(returnString);
-//                    }else{
-//                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
-//                    }
+                    //TODO: Make available for mainnet
+                    if(returnString.startsWith("T")){
+                        address.setText(returnString);
+                    }else{
+                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show();
                     address.setText("");

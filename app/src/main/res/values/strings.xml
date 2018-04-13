@@ -239,6 +239,8 @@
     <string name="spinner_account">Account:</string>
     <string name="build_date">09 Apr 2018</string>
     <string name="label_hash">HASH:</string>
+    <string name="dcrd_log_title">Dcrd Log</string>
+    <string name="dcrd_log_key">dcrd_log</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>
