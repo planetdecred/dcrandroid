@@ -241,46 +241,44 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 		defer n.Done()
 		for {
 			v := <-n.C
-			for _, block := range v.AttachedBlocks {
-				for _, transaction := range block.Transactions {
-					var amount int64
-					tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-					for index, credit := range transaction.MyOutputs {
-						if lw.IsAddressMine(credit.Address.String()) {
-							amount += int64(credit.Amount)
-						}
-						tempCredits[index] = TransactionCredit{
-							Index:    int32(credit.Index),
-							Account:  int32(credit.Account),
-							Internal: credit.Internal,
-							Amount:   int64(credit.Amount),
-							Address:  credit.Address.String()}
+			for _, transaction := range v.UnminedTransactions {
+				var amount int64
+				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
+				for index, credit := range transaction.MyOutputs {
+					if lw.IsAddressMine(credit.Address.String()) {
+						amount += int64(credit.Amount)
 					}
-					tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-					for index, debit := range transaction.MyInputs {
-						tempDebits[index] = TransactionDebit{
-							Index:           int32(debit.Index),
-							PreviousAccount: int32(debit.PreviousAccount),
-							PreviousAmount:  int64(debit.PreviousAmount),
-							AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-					}
-					tempTransaction := Transaction{
-						Fee:       int64(transaction.Fee),
-						Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-						Timestamp: transaction.Timestamp,
-						Type:      transactionType(transaction.Type),
-						Credits:   &tempCredits,
-						Amount:    amount,
-						Height:    block.Height,
-						Status:    "confirmed",
-						Debits:    &tempDebits}
-					fmt.Println("New Transaction")
-					result, err := json.Marshal(tempTransaction)
-					if err != nil {
-						log.Error(err)
-					} else {
-						listener.OnTransaction(string(result))
-					}
+					tempCredits[index] = TransactionCredit{
+						Index:    int32(credit.Index),
+						Account:  int32(credit.Account),
+						Internal: credit.Internal,
+						Amount:   int64(credit.Amount),
+						Address:  credit.Address.String()}
+				}
+				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
+				for index, debit := range transaction.MyInputs {
+					tempDebits[index] = TransactionDebit{
+						Index:           int32(debit.Index),
+						PreviousAccount: int32(debit.PreviousAccount),
+						PreviousAmount:  int64(debit.PreviousAmount),
+						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+				}
+				tempTransaction := Transaction{
+					Fee:       int64(transaction.Fee),
+					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+					Timestamp: transaction.Timestamp,
+					Type:      transactionType(transaction.Type),
+					Credits:   &tempCredits,
+					Amount:    amount,
+					Height:    0,
+					Status:    "confirmed",
+					Debits:    &tempDebits}
+				fmt.Println("New Transaction")
+				result, err := json.Marshal(tempTransaction)
+				if err != nil {
+					log.Error(err)
+				} else {
+					listener.OnTransaction(string(result))
 				}
 			}
 		}
