@@ -76,15 +76,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=">"
-           android:layout_toRightOf="@id/history_tx_status"
+            android:background="@mipmap/arrow_drop_down"
+            android:layout_toRightOf="@id/history_tx_status"
             android:layout_toEndOf="@id/history_tx_status"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="7dp"
             android:layout_gravity="center"
-            android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="right"/>
+            android:gravity="center"
+            />
     </RelativeLayout>
 </LinearLayout>
