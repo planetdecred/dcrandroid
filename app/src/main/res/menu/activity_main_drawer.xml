@@ -6,7 +6,9 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_overview"
+
             android:icon="@mipmap/overview"
+            android:checked="true"
             android:title="Overview" />
         <item
             android:id="@+id/nav_accounts"
@@ -36,6 +38,18 @@
             android:id="@+id/nav_help"
             android:icon="@mipmap/help"
             android:title="Help" />
+        <item
+            android:id="@+id/footer_spacer_1"
+            android:checkable="false"
+            android:enabled="false"
+            android:orderInCategory="200"
+            android:title="" />
+        <item
+            android:id="@+id/footer_spacer_2"
+            android:checkable="false"
+            android:enabled="false"
+            android:orderInCategory="200"
+            android:title="" />
     </group>
 
 </menu>

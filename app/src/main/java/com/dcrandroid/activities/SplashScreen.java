@@ -61,11 +61,11 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private void startup(){
         tvLoading = findViewById(R.id.loading_status);
         constants = DcrConstants.getInstance();
-        String homeDir = getFilesDir()+"/dcrwallet/testnet2";
+        String homeDir = getFilesDir()+"/dcrwallet/";
         constants.wallet = new LibWallet(homeDir);
         constants.wallet.initLoader();
         //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
-        File f = new File(homeDir, "wallet.db");
+        File f = new File(homeDir, "/testnet2/wallet.db");
         if(!f.exists()){
             loadThread = new Thread(){
                 public void run(){
@@ -116,56 +116,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     System.out.println("Opening");
                     setText(getString(R.string.opening_wallet));
                     constants.wallet.openWallet();
-                    setText(getString(R.string.waiting_for_dcrd));
-                    String dcrdAddress = Utils.getDcrdNetworkAddress(SplashScreen.this);
-                    if (util.getInt("network_mode") != 0) {
-                        for (; ; ) {
-                            try {
-                                if (isInterrupted()) {
-                                    return;
-                                }
-                                if (constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(SplashScreen.this).getBytes())) {
-                                    break;
-                                }
-                                sleep(2500);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            if (isInterrupted()) {
-                                return;
-                            }
-                        }
-                    }
-                    if (isInterrupted()) {
-                        return;
-                    }
-                    if (util.getInt("network_mode") == 0) {
-                        System.out.println("Connecting to peer");
-                    }
-                    if (isInterrupted()) {
-                        return;
-                    }
-                    constants.wallet.subscribeToBlockNotifications();
-                    constants.wallet.loadActiveDataFilters();
-                    PreferenceUtil util = new PreferenceUtil(SplashScreen.this);
-                    setText(getString(R.string.fetching_headers));
-                    long blockHeight = constants.wallet.fetchHeaders();
-                    if (blockHeight != -1) {
-                        util.setInt(PreferenceUtil.BLOCK_HEIGHT, (int) blockHeight);
-                    }
-                    System.out.println("Finished fetching headers");
-                    if (isInterrupted()) {
-                        return;
-                    }
-                    setText(getString(R.string.publish_unmined_transaction));
-                    try {
-                        constants.wallet.publishUnminedTransactions();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (isInterrupted()) {
-                        return;
-                    }
                     Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
@@ -182,18 +132,15 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 2){
-            load();
+            startup();
         }
     }
 
+    @Override
+    public void onBackPressed() {}
 
     @Override
-    public void onBackPressed() {
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-    }
+    public void onAnimationStart(Animation animation) {}
 
     @Override
     public void onAnimationEnd(Animation animation) {
@@ -201,8 +148,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     @Override
-    public void onAnimationRepeat(Animation animation) {
-    }
+    public void onAnimationRepeat(Animation animation) {}
 
     public abstract class DoubleClickListener implements View.OnClickListener {
 

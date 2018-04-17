@@ -16,13 +16,22 @@
             android:title="@string/title_discover_address"
             android:key="@string/discover"
             />
-        <EditTextPreference
+        <com.dcrandroid.view.IntegerEditTextPreference
             android:defaultValue="@string/default_transaction_confirmation"
+            android:numeric="integer"
             android:key="@string/key_transaction_confirmation"
             android:summary="@string/default_transaction_confirmation"
-
             android:title="@string/title_transaction_confirmation" />
-
+        <SwitchPreference
+            android:defaultValue="true"
+            android:title="New transaction notification"
+            android:key="transaction_notification"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="Show debug messages"
+            android:key="debug_messages"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_connection">
@@ -41,7 +50,7 @@
         <EditTextPreference
             android:key="@string/remote_dcrd_address"
             android:enabled="false"
-            android:title="@string/remote_dcrd_address"
+            android:title="Remote dcrd address"
             />
         <EditTextPreference
             android:key="@string/key_connection_certificate"
@@ -74,8 +83,8 @@
             android:key="crash"
             />
         <Preference
-            android:title="Dcrd Log"
-            android:key="dcrd_log"
+            android:title="@string/dcrd_log_title"
+            android:key="@string/dcrd_log_key"
             />
         <Preference
             android:title="Dcrwallet Log"
@@ -85,7 +94,7 @@
 
     <PreferenceCategory android:title="@string/pref_header_about">
         <Preference
-            android:summary="@string/app_version"
-            android:title="@string/title_version" />
+            android:summary="@string/build_date"
+            android:title="@string/build" />
     </PreferenceCategory>
 </PreferenceScreen>

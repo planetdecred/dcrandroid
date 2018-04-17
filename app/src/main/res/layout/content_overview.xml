@@ -47,17 +47,6 @@
                     android:id="@+id/overview_av_balance"
                     android:textColor="@color/Amount1Text"
                     android:textSize="20sp" />
-
-                <Button
-                    android:id="@+id/overview_rescan_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:padding="7dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/btn_shape"
-                    android:text="@string/rescan_block"
-                    android:textAllCaps="false"
-                    android:textColor="#fff" />
             </LinearLayout>
         </LinearLayout>
 
@@ -94,7 +83,6 @@
             android:layout_gravity="center"
             android:padding="2dp"
             android:id="@+id/show_history"
-            android:onClick="displayhistory"
             android:textColor="@color/ButtonColor"/>
     </LinearLayout>
     <TextView

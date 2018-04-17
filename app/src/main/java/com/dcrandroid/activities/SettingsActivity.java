@@ -9,11 +9,13 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
@@ -44,23 +46,33 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
+            final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
-            final EditTextPreference connectToPeer = (EditTextPreference) findPreference("peer_ip");
+            final EditTextPreference connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
-            if(util.getInt("network_mode") == 2){
+            if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
                 System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
                 remoteDcrdAddress.setEnabled(true);
                 connectToPeer.setEnabled(false);
-            }else {
-                System.out.println("Mode : 1 || 0");
+                dcrLog.setEnabled(false);
+            }
+            else if(util.getInt("network_mode") == 1) {
+                System.out.println("Mode : 1");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
+                dcrLog.setEnabled(true);
             }
-            connectToPeer.setText(util.get("peer_address"));
-            networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[util.getInt("network_mode")]);
-            networkModes.setValueIndex(util.getInt("network_mode"));
+            else {
+                System.out.println("Mode : 0");
+                dcrdCertificate.setEnabled(false);
+                remoteDcrdAddress.setEnabled(false);
+                connectToPeer.setEnabled(true);
+                dcrLog.setEnabled(false);
+            }
+            networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0"))]);
+            //networkModes.setValueIndex(util.getInt(Constants.KEY_NETWORK_MODES));
             /*
             * Get the current block height from the chain server, parse it and display it
             * */
@@ -104,19 +116,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int i = Integer.valueOf((String)newValue);
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
-                    util.setInt("network_mode", i);
-                    if(i == 0 || i == 1){
+                    util.set(Constants.KEY_NETWORK_MODES, String.valueOf(i));
+                    if(i == 0){
                         connectToPeer.setEnabled(true);
                         remoteDcrdAddress.setEnabled(false);
                         dcrdCertificate.setEnabled(false);
-                        util.setBoolean("connect_to_peer",true);
-                        //util.setBoolean(getString(R.string.key_connection_local_dcrd), false);
+                        dcrLog.setEnabled(false);
+                    }else if(i == 1){
+                        connectToPeer.setEnabled(true);
+                        remoteDcrdAddress.setEnabled(false);
+                        dcrdCertificate.setEnabled(false);
+                        dcrLog.setEnabled(true);
                     }else{
                         connectToPeer.setEnabled(false);
                         remoteDcrdAddress.setEnabled(true);
                         dcrdCertificate.setEnabled(true);
-                        util.setBoolean("connect_to_peer",false);
-                        ///util.setBoolean(getString(R.string.key_connection_local_dcrd), true);
+                        dcrLog.setEnabled(false);
                         Utils.removeDcrdConfig("connect");
                     }
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
@@ -136,7 +151,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if(address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")
                             || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
                             || address.equals("")) {
-                        util.set("peer_address", address);
                         //Utils.setDcrwalletConfig("spvconnect",address);
                         Utils.setDcrdConfiguration("connect",address);
                         return true;
@@ -171,9 +185,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String certificate = o.toString();
-                    System.out.println("Cert: "+certificate);
                     Utils.setRemoteCetificate(getActivity(),certificate);
-                    //util.set(getActivity().getString(R.string.remote_certificate), certificate);
                     return true;
                 }
             });
@@ -187,8 +199,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
 
             // peers preference click listener
-            Preference peers = findPreference(getString(R.string.key_get_peers));
-            peers.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference(getString(R.string.key_get_peers)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(getActivity(),GetPeersActivity.class);
                     startActivity(intent);
@@ -265,7 +276,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         Toast.makeText(getActivity(), "Rescan cancelled", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(getActivity(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
-                        util.setInt("block_checkpoint", (int) height);
                     }
                 }
             });
@@ -282,7 +292,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         @Override
-        public void onScan(final int rescanned_through) {
+        public boolean onScan(final int rescanned_through) {
+            if(util.getInt(PreferenceUtil.RESCAN_HEIGHT) < rescanned_through){
+                util.setInt(PreferenceUtil.RESCAN_HEIGHT, rescanned_through);
+            }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -290,7 +303,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     pd.setMessage(getString(R.string.scanning_block)+" "+rescanned_through);
                 }
             });
-
+            return true;
         }
     }
 

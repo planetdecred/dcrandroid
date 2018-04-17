@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DecredInputFilter;
@@ -187,11 +188,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         return;
                     }
                     if (destAddress.equals("")){
-                        destAddress = util.get("recent_address");
+                        destAddress = util.get(Constants.KEY_RECENT_ADDRESS);
                         if(destAddress.equals("")){
                             try {
                                 destAddress = constants.wallet.addressForAccount(0);
-                                util.set("recent_address", destAddress);
+                                util.set(Constants.KEY_RECENT_ADDRESS, destAddress);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -261,13 +262,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         Toast.makeText(SendFragment.this.getContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show();
                         return;
                     }
-//                    if(!Dcrwallet.isTestNet() && returnString.startsWith("D")){
-//                        address.setText(returnString);
-//                    }else if(returnString.startsWith("T")){
-//                        address.setText(returnString);
-//                    }else{
-//                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
-//                    }
+                    //TODO: Make available for mainnet
+                    if(returnString.startsWith("T")){
+                        address.setText(returnString);
+                    }else{
+                        Toast.makeText(SendFragment.this.getContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show();
                     address.setText("");

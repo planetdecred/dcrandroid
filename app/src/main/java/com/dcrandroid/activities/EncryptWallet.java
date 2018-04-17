@@ -11,10 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
 import org.json.JSONException;
@@ -26,13 +28,15 @@ import mobilewallet.LibWallet;
  * Created by collins on 12/26/17.
  */
 
-public class EncryptWallet extends AppCompatActivity implements BlockScanResponse {
+public class EncryptWallet extends AppCompatActivity{
     private String seed;
     ProgressDialog pd;
+    private PreferenceUtil util;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_passphrase);
+        util = new PreferenceUtil(EncryptWallet.this);
         pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"");
         final EditText passPhrase = (EditText) findViewById(R.id.passphrase);
         final EditText verifyPassPhrase = (EditText) findViewById(R.id.verifyPassphrase);
@@ -60,8 +64,22 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                 wallet.createWallet(pass, seed);
                                 show("Connecting to dcrd...");
                                 for(;;){
-                                    if(wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this),"dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes())){
+                                    try {
+                                        wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this), "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes());
                                         break;
+                                    }catch (final Exception e){
+                                        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                                            System.out.println("Showing debug messages");
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(EncryptWallet.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }else{
+                                            System.out.println("Not showing debug messages");
+                                        }
+                                        e.printStackTrace();
                                     }
                                     try{
                                         sleep(1500);
@@ -69,13 +87,27 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                                         e.printStackTrace();
                                     }
                                 }
-                                wallet.subscribeToBlockNotifications();
+                                wallet.subscribeToBlockNotifications(constants.notificationError);
                                 show("Discovering addresses...");
                                 wallet.discoverActiveAddresses(true, pass.getBytes());
                                 show("Fetching Headers...");
                                 wallet.fetchHeaders();
+                                long rescanHeight = constants.wallet.fetchHeaders();
+                                if (rescanHeight != -1) {
+                                    util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
+                                }
+                                System.out.println("Rescan Height: "+rescanHeight);
                                 wallet.loadActiveDataFilters();
-                                wallet.rescan(0, EncryptWallet.this);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                        Intent i = new Intent(EncryptWallet.this, MainActivity.class);
+                                        startActivity(i);
+                                        //Finish all the activities before this
+                                        ActivityCompat.finishAffinity(EncryptWallet.this);
+                                    }
+                                });
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -96,55 +128,5 @@ public class EncryptWallet extends AppCompatActivity implements BlockScanRespons
                 pd.show();
             }
         });
-    }
-
-    public void encryptWalletCallback(String responseJson){
-        try {
-            DcrResponse response = DcrResponse.parse(responseJson);
-            if(!response.errorOccurred){
-                Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(this);
-            }else{
-                Toast.makeText(this, R.string.error_occured_creating_wallet,Toast.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onEnd(final int height, boolean cancelled) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pd.dismiss();
-                Toast.makeText(EncryptWallet.this, height + " blocks scanned", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(EncryptWallet.this);
-            }
-        });
-    }
-
-    @Override
-    public void onError(int code, String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pd.dismiss();
-                Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                startActivity(i);
-                //Finish all the activities before this
-                ActivityCompat.finishAffinity(EncryptWallet.this);
-            }
-        });
-    }
-
-    @Override
-    public void onScan(int rescanned_through) {
-        show("Scanning blocks "+rescanned_through);
     }
 }
