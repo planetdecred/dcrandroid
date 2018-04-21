@@ -323,7 +323,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public void onTransaction(String s) {
         System.out.println("Notification Received");
         System.out.println(s);
-        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
         if(util.getBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, true)) {
             try {
                 JSONObject obj = new JSONObject(s);
@@ -341,6 +340,11 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                 }
             }
         }
+    }
+
+    @Override
+    public void onTransactionRefresh() {
+        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
     }
 
     private void sendNotification(String amount, String hash){
