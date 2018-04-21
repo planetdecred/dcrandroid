@@ -172,7 +172,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
         Toast toast = Toast.makeText(getApplicationContext(),
                 message, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER , 0, 100);
+        toast.setGravity(Gravity.CENTER , 0, -190);
         toast.show();
     }
 }
