@@ -224,6 +224,10 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        System.out.println("onDestroy");
+        if(constants.wallet != null){
+            constants.wallet.shutdown();
+        }
         System.exit(0);
         ActivityCompat.finishAffinity(MainActivity.this);
     }

@@ -58,6 +58,16 @@ func NormalizeAddress(addr string, defaultPort string) (hostport string, err err
 	return addr, nil
 }
 
+func (lw *LibWallet) Shutdown() {
+	log.Info("Shuting down mobile wallet")
+	lw.wallet.SetNetworkBackend(nil)
+	lw.loader.SetChainClient(nil)
+	lw.loader.UnloadWallet()
+	if logRotator != nil {
+		logRotator.Close()
+	}
+}
+
 func decodeAddress(a string, params *chaincfg.Params) (dcrutil.Address, error) {
 	addr, err := dcrutil.DecodeAddress(a)
 	if err != nil {
@@ -105,6 +115,11 @@ func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error 
 	// }
 	fmt.Println("Created Wallet")
 	return nil
+}
+
+func (lw *LibWallet) CloseWallet() error {
+	err := lw.loader.UnloadWallet()
+	return err
 }
 
 func (lw *LibWallet) GenerateSeed() (string, error) {
