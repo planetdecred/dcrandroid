@@ -2,6 +2,7 @@ package com.dcrandroid.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
 import com.dcrandroid.R;
@@ -54,6 +57,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List<Transaction> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
     private CurrencyTextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
+
     TransactionAdapter transactionAdapter;
     TextView refresh;
     PreferenceUtil util;
@@ -108,6 +112,14 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         }));
+        TextView showHistory= rootView.findViewById(R.id.show_history);
+        showHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMainA();
+            }
+        });
+
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
@@ -301,7 +313,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             });
         }
     }
-
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -328,5 +339,10 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
             getActivity().registerReceiver(receiver, filter);
         }
+    }
+
+    public void setMainA(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.displaySelectedScreen(R.id.nav_history);
     }
 }

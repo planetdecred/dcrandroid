@@ -97,7 +97,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         txHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyToClipboard(txHash.getText().toString());
+                copyToClipboard(txHash.getText().toString(),getString(R.string.tx_hash_copy));
             }
         });
         expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -113,7 +113,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     if(groupPosition == 1){
                         String[] temp =  expandableListView.getExpandableListAdapter().getChild(1,childPosition).toString().split("\\n");
                         String hash = temp[0];
-                        copyToClipboard(hash);
+                        copyToClipboard(hash,getString(R.string.your_address_is_copied));
                     }
                 }
                 return true;
@@ -158,7 +158,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         return childContent;
     }
 
-    public void copyToClipboard(String copyText) {
+    public void copyToClipboard(String copyText,String message) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -171,8 +171,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(getApplicationContext(),
-                R.string.tx_hash_copy, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER | Gravity.START, 50, 50);
+                message, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER , 0, -190);
         toast.show();
     }
 }

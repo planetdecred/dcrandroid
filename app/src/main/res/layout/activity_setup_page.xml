@@ -6,9 +6,11 @@
     android:background="@color/colorPrimary">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:layout_marginTop="16dp"
+        android:paddingTop="32dp"
+       >
     <ImageView
         android:layout_width="100dp"
         android:layout_height="80dp"
@@ -17,6 +19,7 @@
         android:background="@drawable/decred_logo"
         />
     <TextView
+        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
@@ -29,36 +32,33 @@
         android:layout_height="wrap_content"
         android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
         android:textColor="#ffff"
+        android:layout_margin="8dp"
+        android:lineSpacingExtra="3sp"
+        android:textSize="15sp"
         android:gravity="center"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:background="@color/backgcolorwhite"
-        >
         <Button
+            android:layout_marginTop="24dp"
             android:id="@+id/button_create_wallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="16dp"
-            android:layout_margin="1px"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:background="@drawable/btn_shape"
+            android:layout_gravity="center"
             android:text="@string/create_wallet"
             android:textColor="@android:color/background_light" />
 
         <Button
             android:id="@+id/button_retrieve_wallet"
             android:layout_width="match_parent"
+            android:layout_marginRight="80dp"
+            android:layout_marginLeft="80dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="16dp"
-            android:layout_margin="1px"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_shape2"
             android:text="@string/recover_wallet"
-            android:textColor="@android:color/background_light" />
-    </LinearLayout>
+            android:textColor="@android:color/background_light"
+            android:layout_marginTop="16dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

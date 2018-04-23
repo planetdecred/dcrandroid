@@ -25,14 +25,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private CurrencyTextView Amount;
-        private TextView txDate;
         private TextView txType;
         private TextView status;
         private CurrencyTextView minus;
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transferred);
-            txDate = view.findViewById(R.id.history_tx_date);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
             minus = view.findViewById(R.id.history_minus);
@@ -68,12 +66,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");
         }
-        holder.txDate.setText(history.getTxDate());
         if(holder.status.getText().toString().equalsIgnoreCase("pending")){
-            holder.status.setBackgroundResource(R.drawable.tx_status_pending);
             holder.status.setTextColor(Color.parseColor("#3d659c"));
         }else if(holder.status.getText().toString().equalsIgnoreCase("confirmed")) {
-            holder.status.setBackgroundResource(R.drawable.tx_status_confirmed);
             holder.status.setTextColor(Color.parseColor("#55bb97"));
         }
     }
