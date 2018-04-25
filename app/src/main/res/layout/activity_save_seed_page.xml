@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="Setting up Decred Wallet"
+        android:text="@string/setting_up_decred_wallet"
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="#fff" />
@@ -29,15 +29,6 @@
             android:text="@string/save_seed_instruction"
             android:textColor="#fff"
             />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Warning: Failure to keep this seed can result to theft of your entire wallet and  unable to recover wallet"
-            android:padding="5dp"
-            android:textColor="#000000"
-            android:textSize="13sp"
-            android:textAlignment="center"
-            android:background="#fff"/>
         <View
             android:id="@+id/separator21"
             android:layout_width="fill_parent"
@@ -54,13 +45,43 @@
             android:textColor="#000"
             android:textSize="18sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/border_error"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/border_error">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/warning"
+
+                android:layout_gravity="center"/>
+            </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/warninf_save_seed"
+            android:padding="5dp"
+            android:layout_weight="0.2"
+            android:textColor="@color/button2Color"
+            android:textSize="13sp"
+           />
+        </LinearLayout>
+
         <Button
             android:id="@+id/save_seed_btn_continue"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/btn_shape"
-            android:text="Continue"
+            android:background="@drawable/btn_shape2"
+            android:text="@string/i_copied_the_seed_phrase"
             android:layout_gravity="center"
             android:textColor="@android:color/background_light" />
     </LinearLayout>

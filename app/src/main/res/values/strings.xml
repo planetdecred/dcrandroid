@@ -242,6 +242,9 @@
     <string name="show_history">Show History</string>
     <string name="dcrd_log_title">Dcrd Log</string>
     <string name="dcrd_log_key">dcrd_log</string>
+    <string name="i_copied_the_seed_phrase">I COPIED THE SEED PHRASE</string>
+    <string name="warninf_save_seed">Failure to keep this seed can result to theft of your entire wallet and unable to recover wallet and inability to recover your wallet</string>
+    <string name="setting_up_decred_wallet">Setting up Decred Wallet</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>
