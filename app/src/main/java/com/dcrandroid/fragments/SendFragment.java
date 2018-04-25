@@ -210,7 +210,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS);
                     System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -285,7 +285,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try{
-                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     if(response.errorOccurred){
                         if(getActivity() == null){
                             System.out.println("Activity is null");

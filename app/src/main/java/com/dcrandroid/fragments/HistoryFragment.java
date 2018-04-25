@@ -80,11 +80,10 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
-                i.putExtra("Height", history.getHeight());
+                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
-                i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
                 i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
                 i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
@@ -210,7 +209,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 transaction.setHash(item.hash);
                 transaction.setHeight(item.height);
                 transaction.setAmount(item.amount);
-                transaction.setTxStatus(item.status);
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {
                     transaction.totalInput += item.debits.get(j).previous_amount;
@@ -223,7 +221,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);
-                if(item.status.equalsIgnoreCase("pending")){
+                if(item.height == 0){
                     System.out.println("Adding pending to top");
                     temp.add(transaction);
                 }else{

@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"net"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/decred/dcrd/chaincfg"
+	"github.com/decred/dcrd/dcrjson"
 	"github.com/decred/dcrd/dcrutil"
 	"github.com/decred/dcrd/hdkeychain"
 	"github.com/decred/dcrd/txscript"
@@ -271,7 +273,6 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					Credits:   &tempCredits,
 					Amount:    amount,
 					Height:    0,
-					Status:    "confirmed",
 					Debits:    &tempDebits}
 				fmt.Println("New Transaction")
 				result, err := json.Marshal(tempTransaction)
@@ -447,7 +448,6 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 					Credits:   &tempCredits,
 					Amount:    amount,
 					Height:    block.Height,
-					Status:    "confirmed",
 					Debits:    &tempDebits}
 				minedTransactions = append(minedTransactions, tempTransaction)
 			}
@@ -482,7 +482,6 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 					Credits:   &tempCredits,
 					Amount:    amount,
 					Height:    0,
-					Status:    "pending",
 					Debits:    &tempDebits}
 				minedTransactions = append(minedTransactions, tempTransaction)
 			}
@@ -693,7 +692,7 @@ func (lw *LibWallet) PublishTransaction(signedTransaction []byte) ([]byte, error
 	return txHash[:], nil
 }
 
-func (lw *LibWallet) GetAccounts() (string, error) {
+func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
 	resp, err := lw.wallet.Accounts()
 	if err != nil {
 		log.Error("Unable to get accounts from wallet")
@@ -702,7 +701,7 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 	accounts := make([]Account, len(resp.Accounts))
 	for i := range resp.Accounts {
 		a := &resp.Accounts[i]
-		bals, err := lw.wallet.CalculateAccountBalance(a.AccountNumber, 0)
+		bals, err := lw.wallet.CalculateAccountBalance(a.AccountNumber, requiredConfirmations)
 		if err != nil {
 			log.Errorf("Unable to calculate balance for account %v",
 				a.AccountNumber)
@@ -718,7 +717,6 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 			VotingAuthority:         int64(bals.VotingAuthority),
 			UnConfirmed:             int64(bals.Unconfirmed),
 		}
-		fmt.Println("Total Balance: " + bals.Total.String() + " For account: " + string(a.AccountNumber))
 		accounts[i] = Account{
 			Number:           int32(a.AccountNumber),
 			Name:             a.AccountName,

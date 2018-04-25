@@ -476,7 +476,9 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                                     break;
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                showText(e.getMessage());
+                                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                                    showText(e.getMessage());
+                                }
                             }
                             Thread.sleep(2500);
                         }

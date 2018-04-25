@@ -50,7 +50,6 @@ public class TransactionsResponse {
                 transaction.hash = tx.getString("Hash");
                 transaction.timestamp = tx.getLong("Timestamp");
                 transaction.tx = null;
-                transaction.status = tx.getString("Status");
                 transaction.type = tx.getString("Type");
                 transaction.height = tx.getInt("Height");
                 transaction.credits = credit;
@@ -88,7 +87,6 @@ public class TransactionsResponse {
                 transaction.hash = tx.getString("Hash");
                 transaction.timestamp = tx.getLong("Timestamp");
                 transaction.tx = null;
-                transaction.status = tx.getString("Status");
                 transaction.type = tx.getString("Type");
                 transaction.height = tx.getInt("Height");
                 transaction.credits = credit;
@@ -105,7 +103,7 @@ public class TransactionsResponse {
 
     public static class TransactionItem{
         public byte[] tx;
-        public String hash, type, status;
+        public String hash, type;
         public int height;
         public float fee,amount;
         public long timestamp;
