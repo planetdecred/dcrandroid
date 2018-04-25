@@ -13,11 +13,13 @@ import android.widget.Toast;
 
 import com.dcrandroid.adapter.PeerAdapter;
 import com.dcrandroid.R;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.data.Peers;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -80,13 +82,24 @@ public class GetPeersActivity extends AppCompatActivity{
         prepareConnectionData();
     }
 
-    public void prepareConnectionData(){
+    private String getNetworkAddress(){
+        //TODO: Make available for Mainnet
+        String dcrdAddress = Utils.getDcrdNetworkAddress(GetPeersActivity.this);
+        if(dcrdAddress.contains(":")){
+            return dcrdAddress.split(":")[0] + ":19109";
+        }
+        return dcrdAddress + ":19109";
+    }
+
+    private void prepareConnectionData(){
         final ProgressDialog pd  = Utils.getProgressDialog(this,false,false,"Getting Peers...");
         pd.show();
-        new Thread(){
-            public void run(){
-                try{
-                    String result = "[]";
+        new Thread() {
+            public void run() {
+                DcrConstants constants = DcrConstants.getInstance();
+                try {
+                    String result = constants.wallet.callJSONRPC("getpeerinfo", "",getNetworkAddress(), "dcrwallet","dcrwallet", Utils.getConnectionCertificate(GetPeersActivity.this));
+                    System.out.println("Peers: "+result);
                     JSONArray array = new JSONArray(result);
                     if(array.length() == 0){
                         runOnUiThread(new Runnable() {
@@ -138,15 +151,15 @@ public class GetPeersActivity extends AppCompatActivity{
                             }
                         }
                     });
-                }catch (final Exception e){
+                } catch (final Exception e) {
                     e.printStackTrace();
+                    if(pd.isShowing()){
+                        pd.dismiss();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(GetPeersActivity.this,getString(R.string.error)+e.getMessage(),Toast.LENGTH_SHORT).show();
-                            if(pd.isShowing()){
-                                pd.dismiss();
-                            }
+                            Toast.makeText(GetPeersActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

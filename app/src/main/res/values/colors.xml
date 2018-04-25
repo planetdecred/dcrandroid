@@ -19,4 +19,6 @@
     <color name="secondary_text">#727272</color>
     <color name="color_pendng_tx">#3d659c</color>
     <color name="color_confirmed_tx">#55bb97</color>
+    <color name="button2Color">#FFF45845</color>
+
 </resources>

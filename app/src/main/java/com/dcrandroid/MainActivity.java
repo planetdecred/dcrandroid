@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     private NotificationManager notificationManager;
     private TextView rescanHeight, chainStatus, connectionStatus;
     private Animation animRotate;
+    public MainActivity mainActivity;
     private ImageView rescanImage, stopScan;
     private boolean scanning = false;
     @Override
@@ -224,6 +225,10 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        System.out.println("onDestroy");
+        if(constants.wallet != null){
+            constants.wallet.shutdown();
+        }
         System.exit(0);
         ActivityCompat.finishAffinity(MainActivity.this);
     }
@@ -265,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         return super.onOptionsItemSelected(item);
     }
 
-    private void displaySelectedScreen(int itemId) {
+    public  void displaySelectedScreen(int itemId) {
 
         //initializing the fragment object which is selected
         switch (itemId) {
@@ -514,5 +519,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                 }
             }
         }).start();
+
     }
 }
