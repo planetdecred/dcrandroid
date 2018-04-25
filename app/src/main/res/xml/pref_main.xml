@@ -71,10 +71,6 @@
             android:title="@string/title_peers"
             android:key="@string/key_get_peers"
             />
-        <Preference
-            android:title="@string/title_block_height"
-            android:key="@string/key_current_block_height"
-            />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Debug">
