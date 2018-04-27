@@ -49,8 +49,9 @@ import com.dcrandroid.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.util.Locale;
 import java.util.Random;
 
 import mobilewallet.BlockScanResponse;
@@ -332,11 +333,12 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         if(util.getBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, true)) {
             try {
                 JSONObject obj = new JSONObject(s);
-                double fee = obj.getDouble("Fee");
+                double fee = obj.getDouble(Constants.EXTRA_TRANSACTION_FEE);
                 if (fee == 0) {
-                    float amount = obj.getLong("Amount") / 100000000;
-                    String hash = obj.getString("Hash");
-                    DecimalFormat format = new DecimalFormat("#.########");
+                    BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.EXTRA_AMOUNT));
+                    BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+                    String hash = obj.getString(Constants.EXTRA_TRANSACTION_HASH);
+                    DecimalFormat format = new DecimalFormat("You received #.######## DCR");
                     sendNotification(format.format(amount), hash);
                 }
             } catch (JSONException e) {
@@ -359,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             Notification.Action action = new Notification.Action.Builder(icon,"VIEW ON DCRDATA", pi).build();
             notification = new Notification.Builder(this, "new transaction")
                     .setContentTitle("New Transaction")
-                    .setContentText("You received "+amount+" dcr")
+                    .setContentText(amount)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(false)
                     .setAutoCancel(true)
@@ -370,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"VIEW ON DCRDATA", pi).build();
             notification = new NotificationCompat.Builder(this)
                     .setContentTitle("New Transaction")
-                    .setContentText("You received "+amount+" dcr")
+                    .setContentText(amount)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(false)
                     .setAutoCancel(true)
