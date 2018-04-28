@@ -76,6 +76,14 @@
                     />
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_history"
+            android:layout_gravity="center"
+            android:padding="2dp"
+            android:id="@+id/show_history"
+            android:textColor="@color/ButtonColor"/>
     </LinearLayout>
     <TextView
         android:id="@+id/no_history"

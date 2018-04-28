@@ -85,9 +85,9 @@
     <string name="total_amount_sending">Total amount sending:</string>
     <string name="scan">scan</string>
     <string name="from">From:</string>
-    <string name="confirmed">confirmed</string>
+    <string name="confirmed">Confirmed</string>
     <string name="private_passphrase">Private Passphrase</string>
-    <string name="pending">pending</string>
+    <string name="pending">Pending</string>
     <string name="id">Id</string>
     <string name="address_local">Address local</string>
     <string name="services">Services</string>
@@ -153,7 +153,7 @@
     <string name="blocks_scanned">blocks scanned</string>
     <string name="scanning_block">Scanning Blocks</string>
     <string name="receive">Receive</string>
-    <string name="your_address_is_copied">Address copied</string>
+    <string name="your_address_is_copied">Copied Address</string>
     <string name="your_address">Your address</string>
     <string name="getting_accounts">Getting Accounts...</string>
     <string name="getting_address">Getting Address...</string>
@@ -181,7 +181,7 @@
     <string name="invalid_amount">Invalid amount</string>
     <string name="invalid_number">Invalid number</string>
     <string name="view_on_dcrdata">view on dcrdata</string>
-    <string name="tx_hash_copy">Hash copied</string>
+    <string name="tx_hash_copy">Copied transaction ID</string>
     <string name="confirmations">Confirmation</string>
     <string name="zero_bytes">0 bytes</string>
     <string name="zero_decred">0.00 DCR</string>
@@ -239,6 +239,7 @@
     <string name="spinner_account">Account:</string>
     <string name="build_date">09 Apr 2018</string>
     <string name="label_hash">HASH:</string>
+    <string name="show_history">Show History</string>
     <string name="dcrd_log_title">Dcrd Log</string>
     <string name="dcrd_log_key">dcrd_log</string>
     <string-array name="network_modes">
