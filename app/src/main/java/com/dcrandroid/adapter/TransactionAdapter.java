@@ -61,7 +61,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.txType.setText(history.getType());
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
-        if(history.getHeight() == 0){
+        if(history.getHeight() == -1){
             //No included in block chain, therefore transaction is pending
             holder.status.setBackgroundResource(R.drawable.tx_status_pending);
             holder.status.setTextColor(Color.parseColor("#3d659c"));

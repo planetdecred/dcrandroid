@@ -72,8 +72,7 @@ type TransactionCredit struct {
 }
 
 type getTransactionsResponse struct {
-	Mined         []Transaction
-	UnMined       []Transaction
+	Transactions   []Transaction
 	ErrorOccurred bool
 	ErrorMessage  string
 }

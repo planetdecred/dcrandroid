@@ -12,7 +12,16 @@ public class Transaction implements Serializable{
     public float totalInput, totalOutput;
     private String type, hash, txDate;
     private int height;
+    private long time;
     private ArrayList<String> usedInput,walletOutput;
+
+    public void setTime(long time){
+        this.time = time;
+    }
+
+    public long getTime() {
+        return time;
+    }
 
     public String getHash() {
         return hash;

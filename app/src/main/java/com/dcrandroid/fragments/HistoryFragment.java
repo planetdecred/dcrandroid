@@ -23,6 +23,7 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
+import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;
 
@@ -204,6 +205,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 calendar.setTimeInMillis(item.timestamp * 1000);
                 SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
                 transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTime(item.timestamp);
                 transaction.setTransactionFee(item.fee);
                 transaction.setType(item.type);
                 transaction.setHash(item.hash);
@@ -221,12 +223,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);
-                if(item.height == 0){
-                    System.out.println("Adding pending to top");
-                    temp.add(transaction);
-                }else{
-                    temp.add(transaction);
-                }
+                temp.add(transaction);
             }
             if(getActivity() == null){
                 return;
@@ -234,7 +231,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Collections.reverse(temp);
+                    Collections.sort(temp, new TransactionSorter());
                     transactionList.clear();
                     transactionList.addAll(0,temp);
                     if(refresh.isShown()){

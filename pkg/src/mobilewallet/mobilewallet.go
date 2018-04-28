@@ -8,12 +8,10 @@ import (
 	"fmt"
 	"net"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/decred/dcrd/chaincfg"
-	"github.com/decred/dcrd/dcrjson"
 	"github.com/decred/dcrd/dcrutil"
 	"github.com/decred/dcrd/hdkeychain"
 	"github.com/decred/dcrd/txscript"
@@ -414,77 +412,40 @@ func (lw *LibWallet) GetAccountName(account int32) string {
 func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	ctx := context.Background()
 	var startBlock, endBlock *wallet.BlockIdentifier
-	minedTransactions := make([]Transaction, 0)
-	unMinedTransactions := make([]Transaction, 0)
+	transactions := make([]Transaction, 0)
 	rangeFn := func(block *wallet.Block) (bool, error) {
-		if block.Height != -1 {
-			for _, transaction := range block.Transactions {
-				var amount int64
-				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for index, credit := range transaction.MyOutputs {
-					if lw.IsAddressMine(credit.Address.String()) {
-						amount += int64(credit.Amount)
-					}
-					tempCredits[index] = TransactionCredit{
-						Index:    int32(credit.Index),
-						Account:  int32(credit.Account),
-						Internal: credit.Internal,
-						Amount:   int64(credit.Amount),
-						Address:  credit.Address.String()}
+		for _, transaction := range block.Transactions {
+			var amount int64
+			tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
+			for index, credit := range transaction.MyOutputs {
+				if lw.IsAddressMine(credit.Address.String()) {
+					amount += int64(credit.Amount)
 				}
-				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-				for index, debit := range transaction.MyInputs {
-					tempDebits[index] = TransactionDebit{
-						Index:           int32(debit.Index),
-						PreviousAccount: int32(debit.PreviousAccount),
-						PreviousAmount:  int64(debit.PreviousAmount),
-						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-				}
-				tempTransaction := Transaction{
-					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-					Timestamp: transaction.Timestamp,
-					Type:      transactionType(transaction.Type),
-					Credits:   &tempCredits,
-					Amount:    amount,
-					Height:    block.Height,
-					Debits:    &tempDebits}
-				minedTransactions = append(minedTransactions, tempTransaction)
+				tempCredits[index] = TransactionCredit{
+					Index:    int32(credit.Index),
+					Account:  int32(credit.Account),
+					Internal: credit.Internal,
+					Amount:   int64(credit.Amount),
+					Address:  credit.Address.String()}
 			}
-		} else {
-			for _, transaction := range block.Transactions {
-				var amount int64
-				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for index, credit := range transaction.MyOutputs {
-					if lw.IsAddressMine(credit.Address.String()) {
-						amount += int64(credit.Amount)
-					}
-					tempCredits[index] = TransactionCredit{
-						Index:    int32(credit.Index),
-						Account:  int32(credit.Account),
-						Internal: credit.Internal,
-						Amount:   int64(credit.Amount),
-						Address:  credit.Address.String()}
-				}
-				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-				for index, debit := range transaction.MyInputs {
-					tempDebits[index] = TransactionDebit{
-						Index:           int32(debit.Index),
-						PreviousAccount: int32(debit.PreviousAccount),
-						PreviousAmount:  int64(debit.PreviousAmount),
-						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-				}
-				tempTransaction := Transaction{
-					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-					Timestamp: transaction.Timestamp,
-					Type:      transactionType(transaction.Type),
-					Credits:   &tempCredits,
-					Amount:    amount,
-					Height:    0,
-					Debits:    &tempDebits}
-				minedTransactions = append(minedTransactions, tempTransaction)
+			tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
+			for index, debit := range transaction.MyInputs {
+				tempDebits[index] = TransactionDebit{
+					Index:           int32(debit.Index),
+					PreviousAccount: int32(debit.PreviousAccount),
+					PreviousAmount:  int64(debit.PreviousAmount),
+					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
 			}
+			tempTransaction := Transaction{
+				Fee:       int64(transaction.Fee),
+				Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+				Timestamp: transaction.Timestamp,
+				Type:      transactionType(transaction.Type),
+				Credits:   &tempCredits,
+				Amount:    amount,
+				Height:    block.Height,
+				Debits:    &tempDebits}
+			transactions = append(transactions, tempTransaction)
 		}
 		select {
 		case <-ctx.Done():
@@ -493,12 +454,9 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 			return false, nil
 		}
 	}
-	fmt.Println("Getting transactions")
 	err := lw.wallet.GetTransactions(rangeFn, startBlock, endBlock)
-	fmt.Println("Got transactions")
-	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Mined: minedTransactions, UnMined: unMinedTransactions})
+	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Transactions: transactions})
 	response.OnResult(string(result))
-
 	return err
 }
 

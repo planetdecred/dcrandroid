@@ -138,7 +138,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         int height = intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, 0);
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
         System.out.println("Height: "+height +" Bestblock: "+ DcrConstants.getInstance().wallet.getBestBlock());
-        if(height == 0){
+        if(height == -1){
             //No included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
