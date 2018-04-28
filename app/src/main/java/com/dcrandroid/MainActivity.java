@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
                     .setContentIntent(launchPendingIntent)
                     .build();
         }
-        notificationManager.notify(new Random().nextInt(), notification);
+        notificationManager.notify(Constants.TRANSACTION_NOTIFICATION_ID, notification);
     }
 
     @Override
