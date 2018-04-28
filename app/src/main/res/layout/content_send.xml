@@ -16,6 +16,7 @@
             android:gravity="center"
             android:textSize="22sp"
             android:padding="5dp"
+            android:textColor="@color/bacgroundColor"
             />
 
         <TextView
@@ -23,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textColor="@color/secondaryTextColor"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="8dp"
@@ -41,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
+                android:textColor="@color/secondaryTextColor"
                 android:gravity="end"
                 android:padding="5dp"
                 android:background="@color/backgcolorwhite"
@@ -100,20 +103,22 @@
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp"
+                android:textColor="@color/secondaryTextColor"
                 />
 
             <ImageView
                 android:id="@+id/send_dcr_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tx_status_pending"
-                android:src="@android:drawable/ic_menu_camera"
-
+                android:src="@mipmap/qr_code"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="bottom"
+                android:layout_gravity="center"
+                android:background="@drawable/tx_status_pending"
                 android:contentDescription="@string/scan"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
+
                 />
 
         </LinearLayout>
@@ -136,6 +141,7 @@
                 android:layout_weight="1"
                 android:lines="1"
                 android:maxLines="1"
+                android:textColor="@color/secondaryTextColor"
                 android:textSize="15sp"
 
                 />
@@ -170,7 +176,8 @@
                     android:text="@string/total_amount_sending"
                     android:layout_weight="1"
                     android:textSize="15sp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/secondaryTextColor"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -178,6 +185,7 @@
                     android:id="@+id/send_dcr_total_amt_sndng"
                     android:layout_weight="2"
                     android:textSize="15sp"
+                    android:textColor="@color/secondaryTextColor"
                     />
             </LinearLayout>
             <LinearLayout
@@ -191,13 +199,15 @@
                     android:text="@string/estimated_fee"
                     android:layout_weight="1"
                     android:textSize="15sp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/secondaryTextColor"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/_0_dcr"
                     android:id="@+id/send_dcr_estimate_fee"
                     android:layout_weight="2"
+                    android:textColor="@color/secondaryTextColor"
                     />
             </LinearLayout>
             <LinearLayout
@@ -211,7 +221,8 @@
                     android:text="@string/estimate_size"
                     android:layout_weight="1"
                     android:textSize="15sp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/secondaryTextColor"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -219,6 +230,7 @@
                     android:id="@+id/send_dcr_estimate_size"
                     android:layout_weight="2"
                     android:textSize="15sp"
+                    android:textColor="@color/secondaryTextColor"
                     />
             </LinearLayout>
         </LinearLayout>
