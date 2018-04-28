@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -113,6 +114,10 @@
                 android:src="@mipmap/qr_code"
                 android:clickable="true"
                 android:focusable="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
                 android:gravity="bottom"
                 android:layout_gravity="center"
                 android:background="@drawable/tx_status_pending"
@@ -162,8 +167,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingEnd="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="5dp"
+                android:paddingStart="10dp"
+                android:id="@+id/send_error_label"
+                android:textColor="?attr/colorError" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
