@@ -238,8 +238,16 @@
     <string name="build_date">09 Apr 2018</string>
     <string name="label_hash">HASH:</string>
     <string name="show_history">Show History</string>
-    <string name="dcrd_log_title">Dcrd Log</string>
+    <string name="dcrd_log_title">Node Log</string>
     <string name="dcrd_log_key">dcrd_log</string>
+    <string name="title_general">General</string>
+    <string name="tx_notify_title">Incoming transaction notifications</string>
+    <string name="unconfirmed_funds">Allow spending of unconfirmed funds</string>
+    <string name="title_network_mode">Network mode</string>
+    <string name="title_connect_to_peer">Connect to peer</string>
+    <string name="server_address_title">Server address</string>
+    <string name="wallet_log_title">Wallet Log</string>
+    <string name="crash_title">Crash</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>
