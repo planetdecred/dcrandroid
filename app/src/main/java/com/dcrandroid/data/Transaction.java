@@ -10,21 +10,17 @@ import java.util.ArrayList;
 public class Transaction implements Serializable{
     private float amount, TransactionFee;
     public float totalInput, totalOutput;
-    private String type, hash, txStatus, txDate;
+    private String type, hash, txDate;
     private int height;
+    private long time;
     private ArrayList<String> usedInput,walletOutput;
 
-    public Transaction(){
+    public void setTime(long time){
+        this.time = time;
     }
-    public Transaction(int amount, int TransactionFee, String txDate, String txStatus, int height, String txType, ArrayList<String> usedInput, ArrayList<String> walletOutput){
-        this.TransactionFee = TransactionFee;
-        this.txDate = txDate;
-        this.txStatus =txStatus;
-        this.type =txType;
-        this.amount = amount;
-        this.usedInput = usedInput;
-        this.walletOutput = walletOutput;
-        this.height = height;
+
+    public long getTime() {
+        return time;
     }
 
     public String getHash() {
@@ -59,13 +55,6 @@ public class Transaction implements Serializable{
         this.TransactionFee = transactionFee;
     }
 
-    public String getTxStatus() {
-        return txStatus;
-    }
-
-    public void setTxStatus(String txStatus) {
-        this.txStatus = txStatus;
-    }
     public String getType() {
         return type;
     }

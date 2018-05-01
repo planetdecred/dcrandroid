@@ -123,7 +123,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         //pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
         //pd.show();
         try{
-            final AccountResponse response  = AccountResponse.parse(constants.wallet.getAccounts());// = AccountResponse.parse(Dcrwallet.getAccounts());
+            final AccountResponse response  = AccountResponse.parse(constants.wallet.getAccounts(preferenceUtil.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             if(response.errorOccurred){
                 Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
                 return;

@@ -35,4 +35,6 @@ public class Constants {
     public static final String KEY_REMOTE_DCRD_ADDRESS = "remote_dcrd_address";
     public static final String KEY_RECENT_ADDRESS = "recent_address";
     public static final String KEY_DEBUG_MESSAGES = "debug_messages";
+    public static final String KEY_SPEND_UNCONFIRMED_FUNDS = "spend_unconfirmed_funds";
+    public static final int REQUIRED_CONFIRMATIONS = 2;
 }
