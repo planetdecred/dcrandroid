@@ -192,8 +192,8 @@
     <string name="pref_title_connection">Connections</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="pref_header_about">About</string>
-    <string name="app_version">0.1 alpha build 3</string>
-    <string name="build">Build Date</string>
+    <string name="app_version">Build date {09 Apr 2018}</string>
+    <string name="build">Version</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
     <string name="title_enable_local_dcrd">Enable local dcrd</string>
     <string name="title_testnet">Testnet</string>
@@ -242,7 +242,7 @@
     <string name="dcrd_log_key">dcrd_log</string>
     <string name="title_general">General</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>
-    <string name="unconfirmed_funds">Allow spending of unconfirmed funds</string>
+    <string name="unconfirmed_funds">Spend unconfirmed funds</string>
     <string name="title_network_mode">Network mode</string>
     <string name="title_connect_to_peer">Connect to peer</string>
     <string name="server_address_title">Server address</string>

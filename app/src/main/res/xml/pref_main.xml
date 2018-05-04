@@ -3,7 +3,7 @@
     <PreferenceCategory
         android:title="@string/build">
         <Preference
-            android:title="@string/build_date"/>
+            android:title="@string/app_version"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_general">
         <SwitchPreference
