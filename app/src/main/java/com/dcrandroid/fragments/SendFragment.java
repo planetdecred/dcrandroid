@@ -14,8 +14,11 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -54,6 +57,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class SendFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
 
+    private Boolean addressPass,amountPass;
     public EditText address,amount;
     public TextView totalAmountSending,estimateFee,estimateSize,sendAll;
     public ImageView scanAddress;
@@ -114,6 +118,27 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 startActivityForResult(intent, SCANNER_ACTIVITY_RESULT_CODE);
             }
         });
+        amount.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,6 +173,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         });
         prepareAccounts();
     }
+
 
     TextWatcher watcher = new TextWatcher() {
         @Override
