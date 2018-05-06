@@ -45,11 +45,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
         util = new PreferenceUtil(this);
+        Intent intent = getIntent();
         parentHeaderInformation = new ArrayList<>();
 
         parentHeaderInformation.add(getString(R.string.used_inputs));
         parentHeaderInformation.add(getString(R.string.new_wallet_output));
-        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(getIntent().getStringArrayListExtra("UsedInput"),getIntent().getStringArrayListExtra("newWalletOutPut"));
+        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(intent.getStringArrayListExtra("UsedInput"),intent.getStringArrayListExtra("newWalletOutPut"));
 
         expandableListView = findViewById(R.id.in_out);
 
@@ -64,8 +65,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
-        txHash.setText(getIntent().getStringExtra("Hash"));
-        txHash.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+        txHash.setText(intent.getStringExtra("Hash"));
+        txHash.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +91,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
         try {
-            Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+            Utils.getHash(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,30 +121,58 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if(getIntent().getFloatExtra("Fee",0) > 0){
-            value.formatAndSetText("- "+Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
-            System.out.println("Formatter: "+Utils.formatDecred(getIntent().getFloatExtra("Fee",0)));
-            transactionFee.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra("Fee",0)));
+        if(intent.getFloatExtra("Fee",0) > 0){
+            value.formatAndSetText("- "+Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
+            System.out.println("Formatter: "+Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_FEE,0)));
+            transactionFee.formatAndSetText(Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_FEE,0)));
         }
         else{
-            value.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
+            value.formatAndSetText(Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
             System.out.println(".2 F is on");
             transactionFee.formatAndSetText(Utils.formatDecred(0)+" DCR");
         }
-        date.setText(getIntent().getStringExtra("TxDate"));
-        status.setText(getIntent().getStringExtra("TxStatus"));
-        String type = getIntent().getStringExtra("TxType");
+        date.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
+        String type = intent.getStringExtra(Constants.EXTRA_TRANSACTION_TYPE);
         type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
         txType.setText(type);
-        if(status.getText().toString().equals("pending")){
+        int height = intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, 0);
+        int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
+        System.out.println("Height: "+height +" Bestblock: "+ DcrConstants.getInstance().wallet.getBestBlock());
+        if(height == -1){
+            //No included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
+            status.setText("pending");
             confirmation.setText("0");
-        }else if(status.getText().toString().equals("confirmed")) {
-            status.setBackgroundResource(R.drawable.tx_status_confirmed);
-            status.setTextColor(Color.parseColor("#55bb97"));
-            confirmation.setText(String.format(Locale.getDefault(),"%d", DcrConstants.getInstance().wallet.getBestBlock() - getIntent().getIntExtra("Height",0)));
+        }else{
+            confirmation.setText(String.valueOf(confirmations));
+            if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
+                if(confirmations > 1){
+                    System.out.println("Confirmation is greater than 1");
+                }
+                if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS)){
+                    System.out.println("Unconfirmed funds are spendable");
+                }
+                status.setBackgroundResource(R.drawable.tx_status_confirmed);
+                status.setTextColor(Color.parseColor("#55bb97"));
+                status.setText("confirmed");
+            }else{
+                status.setBackgroundResource(R.drawable.tx_status_pending);
+                status.setTextColor(Color.parseColor("#3d659c"));
+                status.setText("pending");
+            }
         }
+//        if(height == 0 || confirmations < 2){
+//            status.setBackgroundResource(R.drawable.tx_status_pending);
+//            status.setTextColor(Color.parseColor("#3d659c"));
+//            status.setText("pending");
+//            confirmation.setText(String.valueOf(height < 1 ? 0 : confirmations));
+//        }else{
+//            status.setBackgroundResource(R.drawable.tx_status_confirmed);
+//            status.setTextColor(Color.parseColor("#55bb97"));
+//            status.setText("confirmed");
+//            confirmation.setText(String.valueOf(confirmations));
+//        }
     }
 
     @Override

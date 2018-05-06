@@ -16,12 +16,11 @@
             android:title="@string/title_discover_address"
             android:key="@string/discover"
             />
-        <com.dcrandroid.view.IntegerEditTextPreference
-            android:defaultValue="@string/default_transaction_confirmation"
-            android:numeric="integer"
-            android:key="@string/key_transaction_confirmation"
-            android:summary="@string/default_transaction_confirmation"
-            android:title="@string/title_transaction_confirmation" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="Spend unconfirmed funds"
+            android:key="spend_unconfirmed_funds"
+            />
         <SwitchPreference
             android:defaultValue="true"
             android:title="New transaction notification"
@@ -70,10 +69,6 @@
             android:summary="@string/summary_peers"
             android:title="@string/title_peers"
             android:key="@string/key_get_peers"
-            />
-        <Preference
-            android:title="@string/title_block_height"
-            android:key="@string/key_current_block_height"
             />
     </PreferenceCategory>
 

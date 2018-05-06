@@ -288,7 +288,6 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					Credits:   &tempCredits,
 					Amount:    amount,
 					Height:    0,
-					Status:    "confirmed",
 					Debits:    &tempDebits}
 				fmt.Println("New Transaction")
 				result, err := json.Marshal(tempTransaction)
@@ -298,6 +297,7 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					listener.OnTransaction(string(result))
 				}
 			}
+			listener.OnTransactionRefresh()
 		}
 	}()
 }
@@ -429,79 +429,40 @@ func (lw *LibWallet) GetAccountName(account int32) string {
 func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	ctx := context.Background()
 	var startBlock, endBlock *wallet.BlockIdentifier
-	minedTransactions := make([]Transaction, 0)
-	unMinedTransactions := make([]Transaction, 0)
+	transactions := make([]Transaction, 0)
 	rangeFn := func(block *wallet.Block) (bool, error) {
-		if block.Height != -1 {
-			for _, transaction := range block.Transactions {
-				var amount int64
-				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for index, credit := range transaction.MyOutputs {
-					if lw.IsAddressMine(credit.Address.String()) {
-						amount += int64(credit.Amount)
-					}
-					tempCredits[index] = TransactionCredit{
-						Index:    int32(credit.Index),
-						Account:  int32(credit.Account),
-						Internal: credit.Internal,
-						Amount:   int64(credit.Amount),
-						Address:  credit.Address.String()}
+		for _, transaction := range block.Transactions {
+			var amount int64
+			tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
+			for index, credit := range transaction.MyOutputs {
+				if lw.IsAddressMine(credit.Address.String()) {
+					amount += int64(credit.Amount)
 				}
-				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-				for index, debit := range transaction.MyInputs {
-					tempDebits[index] = TransactionDebit{
-						Index:           int32(debit.Index),
-						PreviousAccount: int32(debit.PreviousAccount),
-						PreviousAmount:  int64(debit.PreviousAmount),
-						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-				}
-				tempTransaction := Transaction{
-					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-					Timestamp: transaction.Timestamp,
-					Type:      transactionType(transaction.Type),
-					Credits:   &tempCredits,
-					Amount:    amount,
-					Height:    block.Height,
-					Status:    "confirmed",
-					Debits:    &tempDebits}
-				minedTransactions = append(minedTransactions, tempTransaction)
+				tempCredits[index] = TransactionCredit{
+					Index:    int32(credit.Index),
+					Account:  int32(credit.Account),
+					Internal: credit.Internal,
+					Amount:   int64(credit.Amount),
+					Address:  credit.Address.String()}
 			}
-		} else {
-			for _, transaction := range block.Transactions {
-				var amount int64
-				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for index, credit := range transaction.MyOutputs {
-					if lw.IsAddressMine(credit.Address.String()) {
-						amount += int64(credit.Amount)
-					}
-					tempCredits[index] = TransactionCredit{
-						Index:    int32(credit.Index),
-						Account:  int32(credit.Account),
-						Internal: credit.Internal,
-						Amount:   int64(credit.Amount),
-						Address:  credit.Address.String()}
-				}
-				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-				for index, debit := range transaction.MyInputs {
-					tempDebits[index] = TransactionDebit{
-						Index:           int32(debit.Index),
-						PreviousAccount: int32(debit.PreviousAccount),
-						PreviousAmount:  int64(debit.PreviousAmount),
-						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-				}
-				tempTransaction := Transaction{
-					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-					Timestamp: transaction.Timestamp,
-					Type:      transactionType(transaction.Type),
-					Credits:   &tempCredits,
-					Amount:    amount,
-					Height:    0,
-					Status:    "pending",
-					Debits:    &tempDebits}
-				minedTransactions = append(minedTransactions, tempTransaction)
+			tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
+			for index, debit := range transaction.MyInputs {
+				tempDebits[index] = TransactionDebit{
+					Index:           int32(debit.Index),
+					PreviousAccount: int32(debit.PreviousAccount),
+					PreviousAmount:  int64(debit.PreviousAmount),
+					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
 			}
+			tempTransaction := Transaction{
+				Fee:       int64(transaction.Fee),
+				Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+				Timestamp: transaction.Timestamp,
+				Type:      transactionType(transaction.Type),
+				Credits:   &tempCredits,
+				Amount:    amount,
+				Height:    block.Height,
+				Debits:    &tempDebits}
+			transactions = append(transactions, tempTransaction)
 		}
 		select {
 		case <-ctx.Done():
@@ -510,12 +471,9 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 			return false, nil
 		}
 	}
-	fmt.Println("Getting transactions")
 	err := lw.wallet.GetTransactions(rangeFn, startBlock, endBlock)
-	fmt.Println("Got transactions")
-	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Mined: minedTransactions, UnMined: unMinedTransactions})
+	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Transactions: transactions})
 	response.OnResult(string(result))
-
 	return err
 }
 
@@ -709,7 +667,7 @@ func (lw *LibWallet) PublishTransaction(signedTransaction []byte) ([]byte, error
 	return txHash[:], nil
 }
 
-func (lw *LibWallet) GetAccounts() (string, error) {
+func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
 	resp, err := lw.wallet.Accounts()
 	if err != nil {
 		log.Error("Unable to get accounts from wallet")
@@ -718,7 +676,7 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 	accounts := make([]Account, len(resp.Accounts))
 	for i := range resp.Accounts {
 		a := &resp.Accounts[i]
-		bals, err := lw.wallet.CalculateAccountBalance(a.AccountNumber, 0)
+		bals, err := lw.wallet.CalculateAccountBalance(a.AccountNumber, requiredConfirmations)
 		if err != nil {
 			log.Errorf("Unable to calculate balance for account %v",
 				a.AccountNumber)
@@ -734,7 +692,6 @@ func (lw *LibWallet) GetAccounts() (string, error) {
 			VotingAuthority:         int64(bals.VotingAuthority),
 			UnConfirmed:             int64(bals.Unconfirmed),
 		}
-		fmt.Println("Total Balance: " + bals.Total.String() + " For account: " + string(a.AccountNumber))
 		accounts[i] = Account{
 			Number:           int32(a.AccountNumber),
 			Name:             a.AccountName,

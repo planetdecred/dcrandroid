@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Transaction;
+import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
@@ -22,6 +25,7 @@ import java.util.List;
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
     private List<Transaction> historyList;
     private LayoutInflater layoutInflater;
+    private PreferenceUtil util;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private CurrencyTextView Amount;
@@ -40,6 +44,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public TransactionAdapter(List<Transaction> historyListList , LayoutInflater inflater) {
         this.historyList = historyListList;
         this.layoutInflater = inflater;
+        this.util = new PreferenceUtil(inflater.getContext());
     }
 
     @Override
@@ -51,9 +56,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Transaction history = historyList.get(position);
-        //System.out.println("Hash: "+history.get);
         holder.txType.setText(history.getType());
-        holder.status.setText(history.getTxStatus());
+
+        int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
+        if(history.getHeight() == -1){
+            //No included in block chain, therefore transaction is pending
+            holder.status.setTextColor(Color.parseColor("#3d659c"));
+            holder.status.setText("pending");
+        }else{
+            if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
+                holder.status.setTextColor(Color.parseColor("#55bb97"));
+                holder.status.setText("confirmed");
+            }else{
+                holder.status.setTextColor(Color.parseColor("#3d659c"));
+                holder.status.setText("pending");
+            }
+        }
 
         if(history.getTransactionFee() > 0){
             holder.Amount.formatAndSetText(Utils.formatDecred(history.totalInput));
@@ -65,11 +83,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");
-        }
-        if(holder.status.getText().toString().equalsIgnoreCase("pending")){
-            holder.status.setTextColor(Color.parseColor("#3d659c"));
-        }else if(holder.status.getText().toString().equalsIgnoreCase("confirmed")) {
-            holder.status.setTextColor(Color.parseColor("#55bb97"));
         }
     }
 

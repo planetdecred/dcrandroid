@@ -30,6 +30,7 @@ import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
+import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.util.Utils;
@@ -93,14 +94,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra("Height", history.getHeight());
+                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
-                i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
                 i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
                 i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
@@ -141,7 +141,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     if(getContext() == null){
                         return;
                     }
-                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     float totalBalance = 0;
                     for(int i = 0; i < response.items.size(); i++){
                         AccountResponse.Balance balance = response.items.get(i).balance;
@@ -260,12 +260,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 calendar.setTimeInMillis(item.timestamp * 1000);
                 SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
                 transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTime(item.timestamp);
                 transaction.setTransactionFee(item.fee);
                 transaction.setType(item.type);
                 transaction.setHash(item.hash);
                 transaction.setHeight(item.height);
                 transaction.setAmount(item.amount);
-                transaction.setTxStatus(item.status);
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {
                     transaction.totalInput += item.debits.get(j).previous_amount;
@@ -278,18 +278,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);
-                if (item.status.equalsIgnoreCase("pending")) {
-                    System.out.println("Adding pending to top");
-                    temp.add(transaction);
-                } else {
-                    temp.add(transaction);
-                }
+                temp.add(transaction);
             }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     getBalance();
-                    Collections.reverse(temp);
+                    Collections.sort(temp, new TransactionSorter());
                     tempTxList.clear();
                     tempTxList.addAll(0, temp);
                     transactionList.clear();

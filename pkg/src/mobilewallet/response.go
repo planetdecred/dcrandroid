@@ -72,8 +72,7 @@ type TransactionCredit struct {
 }
 
 type getTransactionsResponse struct {
-	Mined         []Transaction
-	UnMined       []Transaction
+	Transactions  []Transaction
 	ErrorOccurred bool
 	ErrorMessage  string
 }
@@ -84,6 +83,7 @@ type GetTransactionsResponse interface {
 
 type TransactionListener interface {
 	OnTransaction(transaction string)
+	OnTransactionRefresh()
 }
 
 type BlockNotificationError interface {

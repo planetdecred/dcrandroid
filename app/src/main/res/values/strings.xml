@@ -209,7 +209,6 @@
     <string name="remote_dcrd">remote_dcrd</string>
     <string name="remote_certificate">remote_certificate</string>
     <string name="current_total_balance">Current Total Balance</string>
-    <string name="key_current_block_height">current_block_height</string>
     <string name="current_block_height">Current block height</string>
     <string name="getbestblock">getbestblock</string>
     <string name="information">Information</string>
@@ -221,7 +220,6 @@
     <string name="retry_caps">RETRY</string>
     <string name="error_msg_could_not_connect_dcrd_10_secs">Could not connect to dcrd after 10 attempts</string>
     <string name="error_camel">Error</string>
-    <string name="title_block_height">Current Block Height</string>
     <string name="summary_rescan_blockchain">This will Rescan the Blockchain</string>
     <string name="title_rescan_blockchain">Rescan Blockchain</string>
     <string name="title_discover_address">Discover Address</string>
