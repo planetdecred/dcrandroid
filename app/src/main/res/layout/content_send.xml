@@ -111,7 +111,7 @@
                 android:id="@+id/send_dcr_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/qr_code"
+                android:src="@mipmap/icons8_qr_code"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_marginEnd="5dp"
