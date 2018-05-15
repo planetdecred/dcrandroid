@@ -4,12 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,7 +47,6 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.util.Random;
 
 import mobilewallet.BlockScanResponse;
 import mobilewallet.TransactionListener;
@@ -353,30 +347,23 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     private void sendNotification(String amount, String hash){
         Intent launchIntent = new Intent(this,MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://testnet.dcrdata.org/tx/"+hash));
-        PendingIntent pi = PendingIntent.getActivity(this, 2, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         Notification notification;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Icon icon = Icon.createWithResource(this, R.drawable.ic_menu_share);
-            Notification.Action action = new Notification.Action.Builder(icon,"VIEW ON DCRDATA", pi).build();
             notification = new Notification.Builder(this, "new transaction")
                     .setContentTitle("New Transaction")
                     .setContentText(amount)
                     .setSmallIcon(R.drawable.ic_notification_icon)
                     .setOngoing(false)
                     .setAutoCancel(true)
-                    .addAction(action)
                     .setContentIntent(launchPendingIntent)
                     .build();
         }else{
-            NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"VIEW ON DCRDATA", pi).build();
             notification = new NotificationCompat.Builder(this)
                     .setContentTitle("New Transaction")
                     .setContentText(amount)
                     .setSmallIcon(R.drawable.ic_notification_icon)
                     .setOngoing(false)
                     .setAutoCancel(true)
-                    .addAction(action)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(launchPendingIntent)
                     .build();
