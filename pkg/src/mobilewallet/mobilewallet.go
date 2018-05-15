@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net"
 	"path/filepath"
 	"strings"
@@ -432,12 +433,12 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	transactions := make([]Transaction, 0)
 	rangeFn := func(block *wallet.Block) (bool, error) {
 		for _, transaction := range block.Transactions {
+			var inputAmounts int64
+			var outputAmounts int64
 			var amount int64
 			tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
 			for index, credit := range transaction.MyOutputs {
-				if lw.IsAddressMine(credit.Address.String()) {
-					amount += int64(credit.Amount)
-				}
+				outputAmounts += int64(credit.Amount)
 				tempCredits[index] = TransactionCredit{
 					Index:    int32(credit.Index),
 					Account:  int32(credit.Account),
@@ -447,11 +448,37 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 			}
 			tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
 			for index, debit := range transaction.MyInputs {
+				inputAmounts += int64(debit.PreviousAmount)
 				tempDebits[index] = TransactionDebit{
 					Index:           int32(debit.Index),
 					PreviousAccount: int32(debit.PreviousAccount),
 					PreviousAmount:  int64(debit.PreviousAmount),
 					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+			}
+			var direction int32
+			amountDifference := outputAmounts - inputAmounts
+			if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
+				//Transfered
+				direction = 2
+				amount = int64(transaction.Fee)
+			} else if amountDifference > 0 {
+				//Received
+				direction = 1
+				for _, credit := range transaction.MyOutputs {
+					if lw.IsAddressMine(credit.Address.String()) {
+						amount += int64(credit.Amount)
+					}
+				}
+			} else {
+				//Sent
+				direction = 0
+				for _, debit := range transaction.MyInputs {
+					amount += int64(debit.PreviousAmount)
+				}
+				for _, credit := range transaction.MyOutputs {
+					amount -= int64(credit.Amount)
+				}
+				amount -= int64(transaction.Fee)
 			}
 			tempTransaction := Transaction{
 				Fee:       int64(transaction.Fee),
@@ -461,6 +488,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				Credits:   &tempCredits,
 				Amount:    amount,
 				Height:    block.Height,
+				Direction: direction,
 				Debits:    &tempDebits}
 			transactions = append(transactions, tempTransaction)
 		}

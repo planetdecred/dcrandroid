@@ -120,17 +120,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        if(intent.getFloatExtra("Fee",0) > 0){
-            value.formatAndSetText("- "+Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
-            System.out.println("Formatter: "+Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_FEE,0)));
-            transactionFee.formatAndSetText(Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_FEE,0)));
-        }
-        else{
-            value.formatAndSetText(Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
-            System.out.println(".2 F is on");
-            transactionFee.formatAndSetText(Utils.formatDecred(0)+" DCR");
-        }
+        value.formatAndSetText(Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
+        transactionFee.formatAndSetText(Utils.formatDecred(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_FEE,0)) + " DCR");
         date.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
         String type = intent.getStringExtra(Constants.EXTRA_TRANSACTION_TYPE);
         type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
@@ -162,17 +153,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setText("pending");
             }
         }
-//        if(height == 0 || confirmations < 2){
-//            status.setBackgroundResource(R.drawable.tx_status_pending);
-//            status.setTextColor(Color.parseColor("#3d659c"));
-//            status.setText("pending");
-//            confirmation.setText(String.valueOf(height < 1 ? 0 : confirmations));
-//        }else{
-//            status.setBackgroundResource(R.drawable.tx_status_confirmed);
-//            status.setTextColor(Color.parseColor("#55bb97"));
-//            status.setText("confirmed");
-//            confirmation.setText(String.valueOf(confirmations));
-//        }
     }
 
     @Override

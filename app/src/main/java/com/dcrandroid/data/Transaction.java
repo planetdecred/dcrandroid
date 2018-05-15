@@ -11,9 +11,17 @@ public class Transaction implements Serializable{
     private float amount, TransactionFee;
     public float totalInput, totalOutput;
     private String type, hash, txDate;
-    private int height;
+    private int height, direction;
     private long time;
     private ArrayList<String> usedInput,walletOutput;
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
     public void setTime(long time){
         this.time = time;

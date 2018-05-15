@@ -53,6 +53,7 @@ public class TransactionsResponse {
                 transaction.tx = null;
                 transaction.type = tx.getString("Type");
                 transaction.height = tx.getInt("Height");
+                transaction.direction = tx.getInt("Direction");
                 transaction.credits = credit;
                 transaction.debits = debit;
                 transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
@@ -68,7 +69,7 @@ public class TransactionsResponse {
     public static class TransactionItem{
         public byte[] tx;
         public String hash, type;
-        public int height;
+        public int height, direction;
         public float fee,amount;
         public long timestamp;
         public ArrayList<TransactionCredit> credits;

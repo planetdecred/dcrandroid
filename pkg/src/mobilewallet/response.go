@@ -43,6 +43,12 @@ type BlockScanResponse interface {
 	OnError(code int32, message string)
 }
 
+/*
+Direction
+0: Sent
+1: Received
+2: Transfered
+*/
 type Transaction struct {
 	Hash        string
 	Transaction []byte
@@ -52,6 +58,7 @@ type Transaction struct {
 	Amount      int64
 	Status      string
 	Height      int32
+	Direction   int32
 	Debits      *[]TransactionDebit
 	Credits     *[]TransactionCredit
 }
