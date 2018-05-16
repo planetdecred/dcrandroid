@@ -318,6 +318,27 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
                 prepareHistoryData();
+            }else if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_NEW_TRANSACTION)){
+                Transaction transaction = new Transaction();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(intent.getLongExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP, 0) * 1000);
+                SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
+                transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTransactionFee(intent.getLongExtra(Constants.EXTRA_TRANSACTION_FEE, 0));
+                transaction.setType(intent.getStringExtra(Constants.EXTRA_TRANSACTION_TYPE));
+                transaction.setHash(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+                transaction.setHeight(intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, 0));
+                transaction.setAmount(intent.getFloatExtra(Constants.EXTRA_AMOUNT, 0));
+                transaction.setTxStatus(intent.getStringExtra(Constants.EXTRA_TRANSACTION_STATUS));
+                transaction.setUsedInput(intent.getStringArrayListExtra(Constants.EXTRA_INPUT_USED));
+                transaction.setWalletOutput(intent.getStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT));
+                transaction.setTotalInput(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, 0));
+                transaction.setTotalOutput(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, 0));
+                transactionList.add(0, transaction);
+                transactionAdapter.notifyDataSetChanged();
+                if(transactionList.size() > 0){
+                    transactionList.remove(transactionList.size() - 1);
+                }
             }
         }
     };
@@ -337,6 +358,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         System.out.println("Overview OnResume");
         if(getActivity() != null) {
             IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
+            filter.addAction(Constants.ACTION_NEW_TRANSACTION);
             getActivity().registerReceiver(receiver, filter);
         }
     }

@@ -41,12 +41,14 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import mobilewallet.BlockScanResponse;
 import mobilewallet.TransactionListener;
@@ -323,23 +325,51 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public void onTransaction(String s) {
         System.out.println("Notification Received");
         System.out.println(s);
-        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+        try {
+            JSONObject obj = new JSONObject(s);
+            BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.EXTRA_AMOUNT));
+            Intent newTransactionIntent = new Intent(Constants.ACTION_NEW_TRANSACTION)
+                    .putExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP,obj.getLong("Timestamp"))
+                    .putExtra(Constants.EXTRA_TRANSACTION_FEE, obj.getLong("Fee"))
+                    .putExtra(Constants.EXTRA_TRANSACTION_TYPE, obj.getString("Type"))
+                    .putExtra(Constants.EXTRA_TRANSACTION_HASH, obj.getString("Hash"))
+                    .putExtra(Constants.EXTRA_BLOCK_HEIGHT, obj.getInt("Height"))
+                    .putExtra(Constants.EXTRA_AMOUNT, satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100)).floatValue())
+                    .putExtra(Constants.EXTRA_TRANSACTION_STATUS, obj.getString("Status"));
+            System.out.println("Height: "+obj.getInt("Height")+ " Status: "+obj.getString("Status"));
+            float totalInput = 0, totalOutput = 0;
+            ArrayList<String> usedInput = new ArrayList<>();
+            JSONArray debits = obj.getJSONArray("Debits");
+            for(int i = 0; i < debits.length(); i++){
+                JSONObject debit = debits.getJSONObject(i);
+                totalInput += debit.getLong("PreviousAmount");
+                usedInput.add(debit.getString("AccountName") + "\n" + Utils.formatDecred(debit.getLong("PreviousAmount")));
+            }
+            ArrayList<String> walletOutput = new ArrayList<>();
+            JSONArray credits = obj.getJSONArray("Credits");
+            for(int i = 0; i < credits.length(); i++){
+                JSONObject credit = credits.getJSONObject(i);
+                totalOutput += credit.getLong("Amount");
+                walletOutput.add(credit.getString("Address") + "\n" + Utils.formatDecred(credit.getLong("Amount")));
+            }
+            newTransactionIntent.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, totalInput)
+                    .putExtra(Constants.EXTRA_INPUT_USED, usedInput)
+                    .putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, totalOutput)
+                    .putExtra(Constants.EXTRA_NEW_WALLET_OUTPUT, walletOutput);
+            sendBroadcast(newTransactionIntent);
         if(util.getBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, true)) {
-            try {
-                JSONObject obj = new JSONObject(s);
-                double fee = obj.getDouble(Constants.EXTRA_TRANSACTION_FEE);
-                if (fee == 0) {
-                    BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.EXTRA_AMOUNT));
-                    BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-                    String hash = obj.getString(Constants.EXTRA_TRANSACTION_HASH);
-                    DecimalFormat format = new DecimalFormat("You received #.######## DCR");
-                    sendNotification(format.format(amount), hash);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                    showText(e.getMessage());
-                }
+            double fee = obj.getDouble(Constants.EXTRA_TRANSACTION_FEE);
+            if (fee == 0) {
+                BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+                String hash = obj.getString(Constants.EXTRA_TRANSACTION_HASH);
+                DecimalFormat format = new DecimalFormat("You received #.######## DCR");
+                sendNotification(format.format(amount), hash);
+            }
+        }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                showText(e.getMessage());
             }
         }
     }

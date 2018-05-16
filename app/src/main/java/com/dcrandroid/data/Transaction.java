@@ -14,17 +14,20 @@ public class Transaction implements Serializable{
     private int height;
     private ArrayList<String> usedInput,walletOutput;
 
-    public Transaction(){
+    public void setTotalInput(float totalInput) {
+        this.totalInput = totalInput;
     }
-    public Transaction(int amount, int TransactionFee, String txDate, String txStatus, int height, String txType, ArrayList<String> usedInput, ArrayList<String> walletOutput){
-        this.TransactionFee = TransactionFee;
-        this.txDate = txDate;
-        this.txStatus =txStatus;
-        this.type =txType;
-        this.amount = amount;
-        this.usedInput = usedInput;
-        this.walletOutput = walletOutput;
-        this.height = height;
+
+    public float getTotalInput() {
+        return totalInput;
+    }
+
+    public void setTotalOutput(float totalOutput) {
+        this.totalOutput = totalOutput;
+    }
+
+    public float getTotalOutput() {
+        return totalOutput;
     }
 
     public String getHash() {
