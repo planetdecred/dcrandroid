@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Icon;
@@ -20,6 +21,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.NavigationView;
@@ -58,6 +60,7 @@ import mobilewallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy {
 
+    public int pageID;
     public String menuADD ="0";
     public static MenuItem menuOpen;
     private Fragment fragment;
@@ -217,9 +220,21 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(pageID == R.id.nav_overview) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Exit wallet?")
+                    .setMessage("Are you sure you want to exit?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    }).create().show();
+        }
+        else {
             displaySelectedScreen(R.id.nav_overview);
-        } 
+        }
     }
 
     @Override
@@ -273,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public  void displaySelectedScreen(int itemId) {
 
         //initializing the fragment object which is selected
+        pageID = itemId;
         switch (itemId) {
             case R.id.nav_overview:
                 fragment = new OverviewFragment();
