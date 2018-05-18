@@ -12,6 +12,7 @@ public class Transaction implements Serializable{
     public float totalInput, totalOutput;
     private String type, hash, txStatus, txDate;
     private int height;
+    public boolean animate = false;
     private ArrayList<String> usedInput,walletOutput;
 
     public void setTotalInput(float totalInput) {

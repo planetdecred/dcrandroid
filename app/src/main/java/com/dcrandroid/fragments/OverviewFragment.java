@@ -313,6 +313,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             });
         }
     }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -334,6 +335,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 transaction.setWalletOutput(intent.getStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT));
                 transaction.setTotalInput(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, 0));
                 transaction.setTotalOutput(intent.getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, 0));
+                transaction.animate = true;
                 transactionList.add(0, transaction);
                 transactionAdapter.notifyDataSetChanged();
                 if(transactionList.size() > 0){

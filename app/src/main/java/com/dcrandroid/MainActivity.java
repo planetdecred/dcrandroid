@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import mobilewallet.BlockScanResponse;
 import mobilewallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy {
 
     public String menuADD ="0";
     public static MenuItem menuOpen;
