@@ -15,10 +15,18 @@ android {
     }
     buildTypes {
         release {
+            resValue "string", "build_date", getDate()
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            resValue "string", "build_date", getDate()
+        }
     }
+}
+
+def getDate() {
+    new Date().format('MM dd yyyy')
 }
 
 dependencies {

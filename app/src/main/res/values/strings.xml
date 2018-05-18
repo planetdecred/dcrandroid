@@ -192,7 +192,6 @@
     <string name="pref_title_connection">Connections</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="pref_header_about">About</string>
-    <string name="app_version">0.1 alpha build 3</string>
     <string name="build">Build Date</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
     <string name="title_enable_local_dcrd">Enable local dcrd</string>
@@ -235,7 +234,6 @@
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="label_version">Version:</string>
     <string name="spinner_account">Account:</string>
-    <string name="build_date">09 Apr 2018</string>
     <string name="label_hash">HASH:</string>
     <string name="show_history">Show History</string>
     <string name="dcrd_log_title">Dcrd Log</string>
