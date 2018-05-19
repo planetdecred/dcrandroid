@@ -36,6 +36,7 @@ import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.BlockNotificationProxy;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -343,14 +344,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             for(int i = 0; i < debits.length(); i++){
                 JSONObject debit = debits.getJSONObject(i);
                 totalInput += debit.getLong("PreviousAmount");
-                usedInput.add(debit.getString("AccountName") + "\n" + Utils.formatDecred(debit.getLong("PreviousAmount")));
+                usedInput.add(debit.getString("AccountName") + "\n" + Utils.formatDecred(debit.getLong("PreviousAmount") / AccountResponse.SATOSHI));
             }
             ArrayList<String> walletOutput = new ArrayList<>();
             JSONArray credits = obj.getJSONArray("Credits");
             for(int i = 0; i < credits.length(); i++){
                 JSONObject credit = credits.getJSONObject(i);
                 totalOutput += credit.getLong("Amount");
-                walletOutput.add(credit.getString("Address") + "\n" + Utils.formatDecred(credit.getLong("Amount")));
+                walletOutput.add(credit.getString("Address") + "\n" + Utils.formatDecred(credit.getLong("Amount") / AccountResponse.SATOSHI));
             }
             newTransactionIntent.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, totalInput)
                     .putExtra(Constants.EXTRA_INPUT_USED, usedInput)

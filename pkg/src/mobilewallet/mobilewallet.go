@@ -287,8 +287,8 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					Type:      transactionType(transaction.Type),
 					Credits:   &tempCredits,
 					Amount:    amount,
-					Height:    0,
-					Status:    "confirmed",
+					Height:    -1,
+					Status:    "pending",
 					Debits:    &tempDebits}
 				fmt.Println("New Transaction")
 				result, err := json.Marshal(tempTransaction)
