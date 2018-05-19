@@ -323,7 +323,6 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					listener.OnTransaction(string(result))
 				}
 			}
-			listener.OnTransactionRefresh()
 		}
 	}()
 }

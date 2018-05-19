@@ -90,7 +90,6 @@ type GetTransactionsResponse interface {
 
 type TransactionListener interface {
 	OnTransaction(transaction string)
-	OnTransactionRefresh()
 }
 
 type BlockNotificationError interface {

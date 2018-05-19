@@ -347,11 +347,6 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         }
     }
 
-    @Override
-    public void onTransactionRefresh() {
-        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
-    }
-
     private void sendNotification(String amount, String hash){
         Intent launchIntent = new Intent(this,MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
