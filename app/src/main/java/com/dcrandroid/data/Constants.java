@@ -36,6 +36,7 @@ public class Constants {
     public static final String KEY_REMOTE_DCRD_ADDRESS = "remote_dcrd_address";
     public static final String KEY_RECENT_ADDRESS = "recent_address";
     public static final String KEY_DEBUG_MESSAGES = "debug_messages";
-    public static final int TRANSACTION_NOTIFICATION_ID = 5;
+    public static final int TRANSACTION_SUMMARY_ID = 5552478;
     public static final String EXTRA_TRANSACTION_TIMESTAMP = "transaction_timestamp";
+    public static final String TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS";
 }

@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -50,6 +51,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 import mobilewallet.BlockScanResponse;
 import mobilewallet.TransactionListener;
@@ -378,28 +380,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void sendNotification(String amount, String hash){
         Intent launchIntent = new Intent(this,MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notification = new Notification.Builder(this, "new transaction")
-                    .setContentTitle("New Transaction")
-                    .setContentText(amount)
-                    .setSmallIcon(R.drawable.ic_notification_icon)
-                    .setOngoing(false)
-                    .setAutoCancel(true)
-                    .setContentIntent(launchPendingIntent)
-                    .build();
-        }else{
-            notification = new NotificationCompat.Builder(this)
-                    .setContentTitle("New Transaction")
-                    .setContentText(amount)
-                    .setSmallIcon(R.drawable.ic_notification_icon)
-                    .setOngoing(false)
-                    .setAutoCancel(true)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(launchPendingIntent)
-                    .build();
+        Notification notification = new NotificationCompat.Builder(this, "new transaction")
+                .setContentTitle("New Transaction")
+                .setContentText(amount)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+                .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            System.out.println("Group: "+notification.getGroup());
         }
-        notificationManager.notify(Constants.TRANSACTION_NOTIFICATION_ID, notification);
+        Notification groupSummary = new NotificationCompat.Builder(this, "new transaction")
+                .setContentTitle("New Transaction")
+                .setContentText("You have some new transactions")
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+                .setGroupSummary(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build();
+        notificationManager.notify(new Random().nextInt(), notification);
+        notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
 
     @Override
