@@ -235,7 +235,6 @@
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="label_version">Version:</string>
     <string name="spinner_account">Account:</string>
-    <string name="build_date">09 Apr 2018</string>
     <string name="label_hash">HASH:</string>
     <string name="show_history">Show History</string>
     <string name="dcrd_log_title">Node Log</string>
@@ -248,6 +247,7 @@
     <string name="server_address_title">Server address</string>
     <string name="wallet_log_title">Wallet Log</string>
     <string name="crash_title">Crash</string>
+    <string name="build_date_system">build_date_system</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full full-node</item>

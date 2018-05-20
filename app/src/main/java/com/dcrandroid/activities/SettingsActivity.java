@@ -14,11 +14,18 @@ import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import mobilewallet.BlockScanResponse;
 
@@ -36,6 +43,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         protected PreferenceUtil util;
         ProgressDialog pd;
         private DcrConstants constants;
+        Date today;
+        String result;
+        SimpleDateFormat formatter;
+
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -49,6 +61,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
+            Preference buildDate = findPreference(getString(R.string.build_date_system));
+            formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
+            Date buildDated = BuildConfig.buildTime;
+            result = formatter.format(buildDated);
+            buildDate.setTitle("Build Date: "+result);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
                 System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
