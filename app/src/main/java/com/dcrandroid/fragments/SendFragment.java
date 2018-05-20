@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.AccountResponse;
+import com.dcrandroid.util.BlockedSelectionEditText;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DecredInputFilter;
 import com.dcrandroid.util.PreferenceUtil;
@@ -57,9 +59,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class SendFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
 
-    private Boolean addressPass,amountPass;
-    public EditText address,amount;
-    public TextView totalAmountSending,estimateFee,estimateSize,sendAll;
+    private Boolean amountPass;
+    public EditText address;
+    public BlockedSelectionEditText amount;
+    public TextView totalAmountSending,estimateFee,estimateSize,sendAll,error_label;
     public ImageView scanAddress;
     Button send;
     Spinner accountSpinner;
@@ -96,9 +99,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         estimateFee = getActivity().findViewById(R.id.send_dcr_estimate_fee);
         sendAll = getActivity().findViewById(R.id.send_dcr_all);
         send = getActivity().findViewById(R.id.send_btn_tx);
-        amount.addTextChangedListener(watcher);
-        address.addTextChangedListener(watcher);
         accountSpinner = view.findViewById(R.id.send_dropdown);
+        error_label = getActivity().findViewById(R.id.send_error_label);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         categories = new ArrayList<>();
@@ -110,12 +112,56 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         accountSpinner.setAdapter(dataAdapter);
 
-        amount.setFilters(new InputFilter[]{new DecredInputFilter()});
+       // amount.setFilters(new InputFilter[]{new DecredInputFilter()});
         scanAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ReaderActivity.class);
                 startActivityForResult(intent, SCANNER_ACTIVITY_RESULT_CODE);
+            }
+        });
+        address.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+              //  address.setError(null);
+                error_label.setText("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().equals("")){
+                   // address.setError("Address can not be empty");
+                   // address.getError();
+                    error_label.setText("Address can not be empty");
+                }else if(!validateAddress(s.toString())){
+                    Toast.makeText(getContext(), "Destination Address is not valid", Toast.LENGTH_SHORT).show();
+                   // address.setError("Destination Address is not valid");
+                   // address.getError();
+                    error_label.setText("Destination Address is not valid");
+                }
+
+
+            }
+        });
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                amountCheck(s,amountPass)
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
         amount.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
@@ -143,11 +189,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             @Override
             public void onClick(View view) {
                 String amnt = amount.getText().toString();
-                if(amnt.equals("")){
-                    amnt = "0";
-                }
                 final String destAddress = address.getText().toString();
                 final long amt = Math.round(Double.parseDouble(amnt) * 1e8);
+           /*     if(amnt.equals("")){
+                    amnt = "0";
+                }
+
                 if(destAddress.equals("")){
                     Toast.makeText(getContext(), "Destination Address cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -157,7 +204,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }else if(amt <= 0){
                     Toast.makeText(getContext(), "Amount is not valid", Toast.LENGTH_SHORT).show();
                     return;
-                }
+                }*/
                 showInputPassPhraseDialog(destAddress, amt);
             }
         });
@@ -174,23 +221,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         prepareAccounts();
     }
 
-
-    TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            constructTransaction();
-        }
-    };
 
     private void constructTransaction(){
         new Thread(){
@@ -504,5 +534,45 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 R.string.tx_hash_copy, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.END, 50, 50);
         toast.show();
+    }
+    public void amountCheck(CharSequence s, Boolean amountPas){
+        if(s.toString().startsWith("0")) {
+            amount.setKeyListener(DigitsKeyListener.getInstance("."));
+            if (s.toString().contains(".")) {
+                amount.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+                amount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amount.getText().toString().indexOf(".") + 9)});
+                if (s.toString().length() >2 & Double.parseDouble(s.toString()) > 0){
+                    amountPass = true;
+                }
+                else {
+                    amountPass = false;
+                }
+
+            }
+        }
+        else if(s.toString().contains(".")){
+            amount.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+            amount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amount.getText().toString().indexOf(".")+9)});
+        }
+
+        else {
+
+            if(s.toString().contains(".")) {
+                amountPass = false;
+                amount.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+                amount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(amount.getText().toString().indexOf(".") + 9)});
+            }
+            else {
+                if (s.toString().length() == 8)
+                {
+                    amount.setKeyListener(DigitsKeyListener.getInstance("."));
+                }
+                else {
+                    amountPass = true;
+                    amount.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
+                    amount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(9)});
+                }
+            }
+        }
     }
 }
