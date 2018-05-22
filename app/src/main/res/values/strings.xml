@@ -113,8 +113,8 @@
     <string name="date">Date</string>
     <string name="transaction_fee">Transaction fee</string>
     <string name="Transaction_details">Transaction details</string>
-    <string name="used_inputs">Used Inputs</string>
-    <string name="new_wallet_output">New Wallet Output</string>
+    <string name="inputs">Inputs</string>
+    <string name="outputs">Outputs</string>
     <string name="waiting_for_dcrwallet">Waiting for dcrwallet to come online</string>
     <string name="waiting_for_dcrd">Waiting for dcrd to come online</string>
     <string name="opening_wallet">Opening wallet...</string>

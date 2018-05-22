@@ -20,7 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -260,10 +262,18 @@ public class Utils {
         //seconds
         return millis + "s ago";
     }
-    
+
     public static String formatDecred(float dcr){
-            DecimalFormat format = new DecimalFormat();
-            format.applyPattern("#,###,###,##0.00######");
-            return format.format(dcr);
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.00######");
+        return format.format(dcr);
+    }
+
+    public static String formatDecred(long dcr){
+        BigDecimal satoshi = BigDecimal.valueOf(dcr);
+        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.00######");
+        return format.format(amount);
     }
 }

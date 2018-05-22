@@ -10,8 +10,6 @@ public class Constants {
     public static final String EXTRA_TRANSACTION_DATE = "TxDate";
     public static final String EXTRA_TRANSACTION_TYPE = "TxType";
     public static final String EXTRA_AMOUNT = "Amount";
-    public static final String EXTRA_INPUT_USED = "UsedInput";
-    public static final String EXTRA_NEW_WALLET_OUTPUT = "newWalletOutPut";
     public static final String EXTRA_BALANCE_SPENDABLE = "spendable_balance";
     public static final String EXTRA_BALANCE_TOTAL = "total_balance";
     public static final String EXTRA_BALANCE_IMMATURE_REWARDS = "immature_rewards";
@@ -35,4 +33,6 @@ public class Constants {
     public static final String KEY_SPEND_UNCONFIRMED_FUNDS = "spend_unconfirmed_funds";
     public static final int REQUIRED_CONFIRMATIONS = 2;
     public static final String EXTRA_TRANSACTION_DIRECTION = "transaction_direction";
+    public static final String EXTRA_TRANSACTION_INPUTS = "transaction_inputs";
+    public static final String EXTRA_TRANSACTION_OUTPUTS = "transaction_outputs";
 }

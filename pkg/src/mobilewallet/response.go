@@ -95,3 +95,29 @@ type TransactionListener interface {
 type BlockNotificationError interface {
 	OnBlockNotificationError(err error)
 }
+
+type DecodedTransaction struct {
+	Hash     string
+	Type     string
+	Version  int32
+	LockTime int32
+	Expiry   int32
+	Inputs   []DecodedInput
+	Outputs  []DecodedOutput
+}
+
+type DecodedInput struct {
+	PreviousTransactionHash  string
+	PreviousTransactionIndex int32
+	Sequence                 int32
+	AmountIn                 int64
+	BlockHeight              int32
+	BlockIndex               int32
+}
+
+type DecodedOutput struct {
+	Index     int32
+	Value     int64
+	Version   int32
+	Addresses []string
+}

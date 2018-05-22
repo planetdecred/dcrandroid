@@ -84,7 +84,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
-        tvBalance.formatAndSetText(Utils.formatDecred(util.getFloat(PreferenceUtil.TOTAL_BALANCE)) + " DCR");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -103,8 +102,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, history.getDirection());
-                i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
-                i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS,history.getUsedInput());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_OUTPUTS,history.getWalletOutput());
                 startActivity(i);
             }
 
@@ -143,13 +142,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                         return;
                     }
                     final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
-                    float totalBalance = 0;
+                    long totalBalance = 0;
                     for(int i = 0; i < response.items.size(); i++){
                         AccountResponse.Balance balance = response.items.get(i).balance;
                         totalBalance += balance.total;
                     }
-                    util.setFloat(PreferenceUtil.TOTAL_BALANCE,totalBalance);
-                    final float finalTotalBalance = totalBalance;
+                    final long finalTotalBalance = totalBalance;
                     if(getActivity() == null){
                         return;
                     }
@@ -271,12 +269,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {
                     transaction.totalInput += item.debits.get(j).previous_amount;
-                    usedInput.add(item.debits.get(j).accountName + "\n" + item.debits.get(j).previous_amount);
+                    usedInput.add(item.debits.get(j).accountName + "\n" + Utils.formatDecred(item.debits.get(j).previous_amount));
                 }
                 ArrayList<String> output = new ArrayList<>();
                 for (int j = 0; j < item.credits.size(); j++) {
                     transaction.totalOutput += item.credits.get(j).amount;
-                    output.add(item.credits.get(j).address + "\n" + item.credits.get(j).amount);
+                    output.add(item.credits.get(j).address + "\n" + Utils.formatDecred(item.credits.get(j).amount));
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);
