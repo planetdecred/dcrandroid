@@ -545,7 +545,7 @@ func (lw *LibWallet) AddressForAccount(account int32) (string, error) {
 	return addr.EncodeAddress(), nil
 }
 
-func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAccount int32, requiredConfirmations int32) (*ConstructTxResponse, error) {
+func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAccount int32, requiredConfirmations int32, sendAll bool) (*ConstructTxResponse, error) {
 	// output destination
 	addr, err := dcrutil.DecodeAddress(destAddr)
 	if err != nil {
@@ -560,13 +560,17 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 	version := txscript.DefaultScriptVersion
 
 	// pay output
-	outputs := make([]*wire.TxOut, 1)
-	outputs[0] = &wire.TxOut{
-		Value:    amount,
-		Version:  version,
-		PkScript: pkScript,
+	outputs := make([]*wire.TxOut, 0)
+	var algo wallet.OutputSelectionAlgorithm = 0
+	if !sendAll {
+		algo = 1
+		output := &wire.TxOut{
+			Value:    amount,
+			Version:  version,
+			PkScript: pkScript,
+		}
+		outputs = append(outputs, output)
 	}
-	var algo wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmDefault
 	feePerKb := txrules.DefaultRelayFeePerKb
 
 	// create tx

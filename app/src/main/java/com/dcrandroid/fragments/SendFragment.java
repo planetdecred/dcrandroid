@@ -73,6 +73,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     ProgressDialog pd;
     PreferenceUtil util;
     private DcrConstants constants;
+    private boolean isSendAll = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,26 +129,19 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-              //  address.setError(null);
                 error_label.setText("");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.toString().equals("")){
-                   // address.setError("Address can not be empty");
-                   // address.getError();
-                    error_label.setText("Address can not be empty");
+                    error_label.setText("Destination Address can not be empty");
                 }else if(!validateAddress(s.toString())){
-                    Toast.makeText(getContext(), "Destination Address is not valid", Toast.LENGTH_SHORT).show();
-                   // address.setError("Destination Address is not valid");
-                   // address.getError();
                     error_label.setText("Destination Address is not valid");
                 }
-
-
             }
         });
+
         amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -156,14 +150,15 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                amountCheck(s,amountPass)
+                amountCheck(s,amountPass);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                constructTransaction();
             }
         });
+
         amount.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -185,64 +180,72 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             }
         });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String amnt = amount.getText().toString();
-                final String destAddress = address.getText().toString();
-                final long amt = Math.round(Double.parseDouble(amnt) * 1e8);
-           /*     if(amnt.equals("")){
-                    amnt = "0";
+                if(address.getText().toString().equals("")){
+                    error_label.setText("Destination Address can not be empty");
+                    return;
+                }else if(amount.getText().toString().equals("")){
+                    error_label.setText("Amount cannot be empty");
+                    return;
                 }
-
-                if(destAddress.equals("")){
-                    Toast.makeText(getContext(), "Destination Address cannot be empty", Toast.LENGTH_SHORT).show();
+                final String destAddress = address.getText().toString();
+                final long amt = Utils.decredToAtom(amount.getText().toString());
+                if(!validateAddress(destAddress)){
+                    error_label.setText("Destination Address is not valid");
                     return;
-                }else if(!validateAddress(destAddress)){
-                    Toast.makeText(getContext(), "Destination Address is not valid", Toast.LENGTH_SHORT).show();
+                }else if(amt == 0){
+                    error_label.setText("Amount is not valid");
                     return;
-                }else if(amt <= 0){
-                    Toast.makeText(getContext(), "Amount is not valid", Toast.LENGTH_SHORT).show();
-                    return;
-                }*/
+                }
                 showInputPassPhraseDialog(destAddress, amt);
             }
         });
+
         sendAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()),0)/ AccountResponse.SATOSHI));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(isSendAll){
+                    amount.setEnabled(true);
+                    amount.setText("");
+                    isSendAll = false;
+                }else {
+                    try {
+                        amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0)));
+                        amount.setEnabled(false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    isSendAll = true;
                 }
             }
         });
         prepareAccounts();
     }
 
-
     private void constructTransaction(){
+        if(address.getText().toString().equals("") || !validateAddress(address.getText().toString())){
+            return;
+        }
+        if(amount.getText().toString().equals("")){
+            estimateSize.setText(R.string.zero_bytes);
+            totalAmountSending.setText(R.string.zero_decred);
+            estimateFee.setText(R.string.zero_decred);
+            return;
+        }
+
         new Thread(){
             public void run(){
-                System.out.println("Selection: "+amount.getSelectionStart());
                 if(getActivity() == null){
                     System.out.println("Activity is null");
                     return;
                 }
                 try {
-                    final String amnt = amount.getText().toString();
-                    if (amnt.equals("")) {
-                        return;
-                    }
                     String destAddress = address.getText().toString();
-                    final double amt;
-                    try {
-                        amt = (Double.parseDouble(amnt) * 1e8);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return;
-                    }
+
+                    final long amt = Utils.decredToAtom(amount.getText().toString());
                     if (destAddress.equals("")){
                         destAddress = util.get(Constants.KEY_RECENT_ADDRESS);
                         if(destAddress.equals("")){
@@ -253,8 +256,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 e.printStackTrace();
                             }
                         }
-                    }else if(!validateAddress(destAddress)){
-                        return;
                     }else if(amt <= 0){
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -266,15 +267,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, Math.round(amt), accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, (int) amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
                     System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            double totalAmount = (amt + (response.getEstimatedSignedSize() / 0.001)) / 1e8;
                             double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
                             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            totalAmountSending.setText(Utils.formatDecred((float) totalAmount).concat(" DCR"));
+                            totalAmountSending.setText(Utils.calculateTotalAmount(amt, response.getEstimatedSignedSize()).concat(" DCR"));
                             estimateFee.setText(Utils.formatDecred((float) estFee).concat(" DCR"));
                         }
                     });
@@ -334,6 +334,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(isSendAll){
+            try {
+                amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0)));
+                amount.setEnabled(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         constructTransaction();
     }
 
@@ -374,12 +382,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            if(pd.isShowing()){
-//                                pd.dismiss();
-//                            }
                             dataAdapter.notifyDataSetChanged();
-                            //Default Account
-                            //getTransactionFee(0);
                         }
                     });
                 }catch (Exception e){
@@ -400,7 +403,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try {
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0, isSendAll);
                     byte[] tx = constants.wallet.signTransaction(response.getUnsignedTransaction(),passphrase.getBytes());
                     byte[] serializedTx = constants.wallet.publishTransaction(tx);
                     List<Byte> hashList = new ArrayList<>();
@@ -425,8 +428,19 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             }
                         });
                     }
-                }catch (Exception e){
+                }catch (final Exception e){
                     e.printStackTrace();
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(pd.isShowing()){
+                                    pd.dismiss();
+                                }
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
             }
         }.start();
@@ -489,7 +503,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         dialogBuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialogBuilder.setCancelable(true);
-                //do something with edt.getText().toString();
             }
         });
 
@@ -511,6 +524,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         amount.setText("0");
         address.setText("");
     }
+
     public void copyToClipboard(String copyText) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -535,6 +549,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         toast.setGravity(Gravity.BOTTOM | Gravity.END, 50, 50);
         toast.show();
     }
+
     public void amountCheck(CharSequence s, Boolean amountPas){
         if(s.toString().startsWith("0")) {
             amount.setKeyListener(DigitsKeyListener.getInstance("."));
@@ -556,7 +571,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         }
 
         else {
-
             if(s.toString().contains(".")) {
                 amountPass = false;
                 amount.setKeyListener(DigitsKeyListener.getInstance("0123456789"));

@@ -20,7 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -265,5 +267,30 @@ public class Utils {
             DecimalFormat format = new DecimalFormat();
             format.applyPattern("#,###,###,##0.00######");
             return format.format(dcr);
+    }
+
+    public static String formatDecred(long dcr){
+        BigDecimal satoshi = BigDecimal.valueOf(dcr);
+        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.00######");
+        return format.format(amount);
+    }
+
+    public static String calculateTotalAmount(long dcr, long signedSize){
+        BigDecimal satoshi = BigDecimal.valueOf(dcr);
+        BigDecimal signed = BigDecimal.valueOf(signedSize);
+        signed = signed.divide(BigDecimal.valueOf(0.001), new MathContext(100));
+        satoshi = satoshi.subtract(signed);
+        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.00######");
+        return format.format(amount);
+    }
+
+    public static long decredToAtom(String atm){
+        BigDecimal dcr = BigDecimal.valueOf(Double.parseDouble(atm));
+        dcr = dcr.multiply(BigDecimal.valueOf(1e8), new MathContext(100));
+        return dcr.longValue();
     }
 }
