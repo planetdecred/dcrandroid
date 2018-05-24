@@ -277,11 +277,13 @@ public class Utils {
         return format.format(amount);
     }
 
-    public static String calculateTotalAmount(long dcr, long signedSize){
+    public static String calculateTotalAmount(long dcr, long signedSize, boolean isSendAll){
         BigDecimal satoshi = BigDecimal.valueOf(dcr);
         BigDecimal signed = BigDecimal.valueOf(signedSize);
         signed = signed.divide(BigDecimal.valueOf(0.001), new MathContext(100));
-        satoshi = satoshi.subtract(signed);
+        if(isSendAll) {
+            satoshi = satoshi.subtract(signed);
+        }
         BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#,###,###,##0.00######");

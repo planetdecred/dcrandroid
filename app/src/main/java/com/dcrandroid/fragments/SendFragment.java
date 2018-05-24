@@ -211,6 +211,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     amount.setEnabled(true);
                     isSendAll = false;
                     sendAll.setTextColor(Color.parseColor("#2970FF"));
+                    constructTransaction();
                 }else {
                     try {
                         amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0)));
@@ -275,7 +276,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         public void run() {
                             double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
                             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            totalAmountSending.setText(Utils.calculateTotalAmount(amt, response.getEstimatedSignedSize()).concat(" DCR"));
+                            totalAmountSending.setText(Utils.calculateTotalAmount(amt, response.getEstimatedSignedSize(), isSendAll).concat(" DCR"));
                             estimateFee.setText(Utils.formatDecred((float) estFee).concat(" DCR"));
                         }
                     });
