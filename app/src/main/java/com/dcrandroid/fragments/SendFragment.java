@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
@@ -156,7 +157,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                amountCheck(s,amountPass)
+                amountCheck(s,amountPass);
             }
 
             @Override
@@ -489,6 +490,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         dialogBuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialogBuilder.setCancelable(true);
+                setMainA();
                 //do something with edt.getText().toString();
             }
         });
@@ -510,6 +512,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         b.getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(Color.BLUE);
         amount.setText("0");
         address.setText("");
+        setMainA();
     }
     public void copyToClipboard(String copyText) {
         int sdk = android.os.Build.VERSION.SDK_INT;
@@ -574,5 +577,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             }
         }
+    }
+    public void setMainA(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.displaySelectedScreen(R.id.nav_overview);
     }
 }
