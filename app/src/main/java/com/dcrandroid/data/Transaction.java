@@ -55,7 +55,7 @@ public class Transaction implements Serializable{
         this.amount = amount;
     }
 
-    public float getTransactionFee() {
+    public long getTransactionFee() {
         return TransactionFee;
     }
 
