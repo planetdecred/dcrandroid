@@ -171,7 +171,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     if(j != 0){
                         sb.append("\n");
                     }
-                    sb.append(addresses.getString(j));
+                    if(wallet.isAddressMine(addresses.getString(j))){
+                        sb.append(addresses.getString(j)).append(" (").append(wallet.getAccountByAddress(addresses.getString(j))).append(")");
+                        if(getIntent().getIntExtra(Constants.EXTRA_TRANSACTION_DIRECTION, -1) == 0){
+                            sb.append(" (change)");
+                        }
+                        continue;
+                    }
+                    sb.append(addresses.getString(j)).append(" (external)");
                 }
                 walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.getLong("Value")));
             }
