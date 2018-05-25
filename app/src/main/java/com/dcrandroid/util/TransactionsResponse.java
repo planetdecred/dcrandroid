@@ -33,7 +33,7 @@ public class TransactionsResponse {
                     item.internal = cdt.getJSONObject(j).getBoolean("Internal");
                     item.address = cdt.getJSONObject(j).getString("Address");
                     item.index = cdt.getJSONObject(j).getInt("Index");
-                    item.amount = (float) cdt.getJSONObject(j).getDouble("Amount")  / AccountResponse.SATOSHI;
+                    item.amount = cdt.getJSONObject(j).getLong("Amount");
                     credit.add(item);
                 }
                 ArrayList<TransactionDebit> debit = new ArrayList<>();
@@ -42,20 +42,21 @@ public class TransactionsResponse {
                     TransactionDebit item = new TransactionDebit();
                     item.index = dbt.getJSONObject(j).getInt("Index");
                     item.previous_account = dbt.getJSONObject(j).getLong("PreviousAccount");
-                    item.previous_amount = (float) dbt.getJSONObject(j).getLong("PreviousAmount") / AccountResponse.SATOSHI;
+                    item.previous_amount = dbt.getJSONObject(j).getLong("PreviousAmount");
                     item.accountName = dbt.getJSONObject(j).getString("AccountName");
                     debit.add(item);
                 }
                 TransactionItem transaction = new TransactionItem();
-                transaction.fee = (float) tx.getDouble("Fee") / AccountResponse.SATOSHI;
+                transaction.fee = tx.getLong("Fee");
                 transaction.hash = tx.getString("Hash");
                 transaction.timestamp = tx.getLong("Timestamp");
                 transaction.tx = null;
                 transaction.type = tx.getString("Type");
                 transaction.height = tx.getInt("Height");
+                transaction.direction = tx.getInt("Direction");
                 transaction.credits = credit;
                 transaction.debits = debit;
-                transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
+                transaction.amount = tx.getLong("Amount");
                 response.transactions.add(transaction);
             }
 
@@ -68,8 +69,8 @@ public class TransactionsResponse {
     public static class TransactionItem{
         public byte[] tx;
         public String hash, type;
-        public int height;
-        public float fee,amount;
+        public int height, direction;
+        public long fee,amount;
         public long timestamp;
         public ArrayList<TransactionCredit> credits;
         public ArrayList<TransactionDebit> debits;
@@ -78,13 +79,13 @@ public class TransactionsResponse {
     public static class TransactionDebit{
         public long previous_account;
         public int index;
-        public float previous_amount;
+        public long previous_amount;
         public String accountName;
     }
 
     public static class TransactionCredit{
         public long index, account;
-        public float amount;
+        public long amount;
         public boolean internal;
         public String address;
     }

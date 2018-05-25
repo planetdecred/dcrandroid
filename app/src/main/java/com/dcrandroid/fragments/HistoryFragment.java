@@ -26,6 +26,7 @@ import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;
+import com.dcrandroid.util.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,8 +87,9 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
-                i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
-                i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
+                i.putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, history.getDirection());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS,history.getUsedInput());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_OUTPUTS,history.getWalletOutput());
                 startActivity(i);
             }
 
@@ -210,16 +212,17 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 transaction.setType(item.type);
                 transaction.setHash(item.hash);
                 transaction.setHeight(item.height);
+                transaction.setDirection(item.direction);
                 transaction.setAmount(item.amount);
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {
                     transaction.totalInput += item.debits.get(j).previous_amount;
-                    usedInput.add(item.debits.get(j).accountName + "\n" + String.format(Locale.getDefault(), "%f", item.debits.get(j).previous_amount));
+                    usedInput.add(item.debits.get(j).accountName + "\n" + Utils.formatDecred(item.debits.get(j).previous_amount));
                 }
                 ArrayList<String> output = new ArrayList<>();
                 for (int j = 0; j < item.credits.size(); j++) {
                     transaction.totalOutput += item.credits.get(j).amount;
-                    output.add(item.credits.get(j).address + "\n" + String.format(Locale.getDefault(), "%f", item.credits.get(j).amount));
+                    output.add(item.credits.get(j).address + "\n" + Utils.formatDecred(item.credits.get(j).amount));
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);

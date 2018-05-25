@@ -374,7 +374,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         if(response.items.get(i).name.trim().equals("imported")){
                             continue;
                         }
-                        categories.add(i, response.items.get(i).name + String.format(Locale.getDefault(), " [%f]",response.items.get(i).balance.spendable));
+                        categories.add(i, response.items.get(i).name + " " + Utils.formatDecred(response.items.get(i).balance.spendable));
                         accountNumbers.add(response.items.get(i).number);
                     }
                     if(getActivity() == null){

@@ -84,7 +84,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
-        tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR", util.getFloat(PreferenceUtil.TOTAL_BALANCE)));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -102,8 +101,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
-                i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
-                i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
+                i.putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, history.getDirection());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS,history.getUsedInput());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_OUTPUTS,history.getWalletOutput());
                 startActivity(i);
             }
 
@@ -142,20 +142,19 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                         return;
                     }
                     final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
-                    float totalBalance = 0;
+                    long totalBalance = 0;
                     for(int i = 0; i < response.items.size(); i++){
                         AccountResponse.Balance balance = response.items.get(i).balance;
                         totalBalance += balance.total;
                     }
-                    util.setFloat(PreferenceUtil.TOTAL_BALANCE,totalBalance);
-                    final float finalTotalBalance = totalBalance;
+                    final long finalTotalBalance = totalBalance;
                     if(getActivity() == null){
                         return;
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvBalance.formatAndSetText(Utils.formatDecred(finalTotalBalance));
+                            tvBalance.formatAndSetText(Utils.formatDecred(finalTotalBalance) + " DCR");
                         }
                     });
                 }catch (Exception e){
@@ -265,6 +264,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 transaction.setType(item.type);
                 transaction.setHash(item.hash);
                 transaction.setHeight(item.height);
+                transaction.setDirection(item.direction);
                 transaction.setAmount(item.amount);
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {

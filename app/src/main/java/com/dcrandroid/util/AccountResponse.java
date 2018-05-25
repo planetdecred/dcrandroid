@@ -40,13 +40,13 @@ public class AccountResponse {
                         importedKeyCount = account.getInt("ImportedKeyCount");
                         JSONObject balanceObj = account.getJSONObject("Balance");
                         balance = new Balance();
-                        balance.total = balanceObj.getLong("Total")/SATOSHI;
-                        balance.spendable = balanceObj.getLong("Spendable")/SATOSHI;
-                        balance.immatureReward = balanceObj.getLong("ImmatureReward")/SATOSHI;
-                        balance.immatureStakeGeneration = balanceObj.getLong("ImmatureStakeGeneration")/SATOSHI;
-                        balance.lockedByTickets = balanceObj.getLong("LockedByTickets")/SATOSHI;
-                        balance.votingAuthority = balanceObj.getLong("VotingAuthority")/SATOSHI;
-                        balance.unConfirmed = balanceObj.getLong("UnConfirmed")/SATOSHI;
+                        balance.total = balanceObj.getLong("Total");
+                        balance.spendable = balanceObj.getLong("Spendable");
+                        balance.immatureReward = balanceObj.getLong("ImmatureReward");
+                        balance.immatureStakeGeneration = balanceObj.getLong("ImmatureStakeGeneration");
+                        balance.lockedByTickets = balanceObj.getLong("LockedByTickets");
+                        balance.votingAuthority = balanceObj.getLong("VotingAuthority");
+                        balance.unConfirmed = balanceObj.getLong("UnConfirmed");
                     }
                 });
             }
@@ -59,6 +59,6 @@ public class AccountResponse {
         public Balance balance;
     }
     public static class Balance{
-        public float spendable, total,immatureReward, immatureStakeGeneration,lockedByTickets, votingAuthority, unConfirmed;
+        public long spendable, total,immatureReward, immatureStakeGeneration,lockedByTickets, votingAuthority, unConfirmed;
     }
 }

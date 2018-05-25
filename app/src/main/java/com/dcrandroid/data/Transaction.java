@@ -8,12 +8,20 @@ import java.util.ArrayList;
  */
 
 public class Transaction implements Serializable{
-    private float amount, TransactionFee;
-    public float totalInput, totalOutput;
+    private long amount, TransactionFee;
+    public long totalInput, totalOutput;
     private String type, hash, txDate;
-    private int height;
+    private int height, direction;
     private long time;
     private ArrayList<String> usedInput,walletOutput;
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
     public void setTime(long time){
         this.time = time;
@@ -39,19 +47,19 @@ public class Transaction implements Serializable{
         this.txDate = txDate;
     }
 
-    public float getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
-    public float getTransactionFee() {
+    public long getTransactionFee() {
         return TransactionFee;
     }
 
-    public void setTransactionFee(float transactionFee) {
+    public void setTransactionFee(long transactionFee) {
         this.TransactionFee = transactionFee;
     }
 

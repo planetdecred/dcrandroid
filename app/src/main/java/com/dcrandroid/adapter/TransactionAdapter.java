@@ -56,7 +56,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Transaction history = historyList.get(position);
-        holder.txType.setText(history.getType());
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
         if(history.getHeight() == -1){
@@ -73,15 +72,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }
         }
 
-        if(history.getTransactionFee() > 0){
-            holder.Amount.formatAndSetText(Utils.formatDecred(history.totalInput));
+        if(history.getDirection() == 0){
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
-        }else {
+        }else if(history.getDirection() == 1) {
             holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
+            holder.txType.setText("");
+        }else if(history.getDirection() == 2){
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
+            holder.minus.setVisibility(View.INVISIBLE);
+            holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
             holder.txType.setText("");
         }
     }

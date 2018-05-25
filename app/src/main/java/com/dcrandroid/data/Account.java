@@ -6,23 +6,8 @@ package com.dcrandroid.data;
 
 public class Account {
     private String accountName, hdPath, keys;
-    private float spendable, total, immatureRewards, lockedByTickets, votingAuthority, immatureStakeGeneration;
+    private long spendable, total, immatureRewards, lockedByTickets, votingAuthority, immatureStakeGeneration;
     private int accountNumber;
-    public Account(){
-    }
-    public Account(String accountName, float spendable, float total, float immatureRewards, float lockedByTickets, float votingAuthority, float immatureStakeGeneration, int accountNumber, String hdPath, String keys){
-        this.accountName = accountName;
-        this.accountNumber = accountNumber;
-        this.spendable = spendable;
-        this.total = total;
-        this.immatureRewards = immatureRewards;
-        this.lockedByTickets = lockedByTickets;
-        this.votingAuthority =votingAuthority;
-        this.immatureStakeGeneration = immatureStakeGeneration;
-        this.hdPath = hdPath;
-        this.keys =keys;
-
-    }
 
     public String getAccountName(){
         return  accountName;
@@ -32,51 +17,51 @@ public class Account {
         this.accountName = accountName;
     }
 
-    public float getSpendable() {
+    public long getSpendable() {
         return spendable;
     }
 
-    public void setSpendable(float spendable) {
+    public void setSpendable(long spendable) {
         this.spendable = spendable;
     }
 
-    public float getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 
-    public float getImmatureRewards() {
+    public long getImmatureRewards() {
         return immatureRewards;
     }
 
-    public void setImmatureRewards(float immatureRewards) {
+    public void setImmatureRewards(long immatureRewards) {
         this.immatureRewards = immatureRewards;
     }
 
-    public float getLockedByTickets() {
+    public long getLockedByTickets() {
         return lockedByTickets;
     }
 
-    public void setLockedByTickets(float lockedByTickets) {
+    public void setLockedByTickets(long lockedByTickets) {
         this.lockedByTickets = lockedByTickets;
     }
 
-    public float getVotingAuthority() {
+    public long getVotingAuthority() {
         return votingAuthority;
     }
 
-    public void setVotingAuthority(float votingAuthority) {
+    public void setVotingAuthority(long votingAuthority) {
         this.votingAuthority = votingAuthority;
     }
 
-    public float getImmatureStakeGeneration() {
+    public long getImmatureStakeGeneration() {
         return immatureStakeGeneration;
     }
 
-    public void setImmatureStakeGeneration(float immatureStakeGeneration) {
+    public void setImmatureStakeGeneration(long immatureStakeGeneration) {
         this.immatureStakeGeneration = immatureStakeGeneration;
     }
 
