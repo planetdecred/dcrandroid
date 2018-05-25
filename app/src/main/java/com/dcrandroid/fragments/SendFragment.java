@@ -210,7 +210,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 if (isSendAll) {
                     amount.setEnabled(true);
                     isSendAll = false;
-                    sendAll.setTextColor(Color.parseColor("#2970FF"));
+                    sendAll.setTextColor(Color.parseColor("#000000"));
                     constructTransaction();
                 } else {
                     try {
@@ -220,7 +220,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         e.printStackTrace();
                     }
                     isSendAll = true;
-                    sendAll.setTextColor(Color.parseColor("#0C1E3E"));
+                    sendAll.setTextColor(Color.parseColor("#2970FF"));
                 }
             }
         });

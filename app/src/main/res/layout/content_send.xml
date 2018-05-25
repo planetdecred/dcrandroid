@@ -157,7 +157,7 @@
                 android:text="@string/max"
                 android:clickable="true"
                 android:gravity="center"
-                android:textColor="#2970FF"
+                android:textColor="@android:color/black"
                 android:focusable="true"
                 android:textStyle="bold"
                 android:padding="5dp"
