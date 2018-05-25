@@ -6,13 +6,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
+	stake "github.com/decred/dcrd/blockchain/stake"
 	"github.com/decred/dcrd/chaincfg"
+	chainhash "github.com/decred/dcrd/chaincfg/chainhash"
 	"github.com/decred/dcrd/dcrjson"
 	"github.com/decred/dcrd/dcrutil"
 	"github.com/decred/dcrd/hdkeychain"
@@ -27,12 +30,14 @@ import (
 )
 
 type LibWallet struct {
-	dbDir      string
-	wallet     *wallet.Wallet
-	rpcClient  *chain.RPCClient
-	loader     *loader.Loader
-	netBackend wallet.NetworkBackend
-	mu         sync.Mutex
+	dbDir       string
+	wallet      *wallet.Wallet
+	rpcClient   *chain.RPCClient
+	loader      *loader.Loader
+	netBackend  wallet.NetworkBackend
+	mu          sync.Mutex
+	activeNet   *netparams.Params
+	chainParams *chaincfg.Params
 }
 
 func NewLibWallet(homeDir string) *LibWallet {
@@ -92,6 +97,8 @@ func (lw *LibWallet) InitLoader() {
 	l := loader.NewLoader(netparams.TestNet2Params.Params, lw.dbDir, stakeOptions,
 		20, false, 10e5)
 	lw.loader = l
+	lw.activeNet = &netparams.TestNet2Params
+	lw.chainParams = &chaincfg.TestNet2Params
 }
 
 func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error {
@@ -260,11 +267,11 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 			v := <-n.C
 			for _, transaction := range v.UnminedTransactions {
 				var amount int64
+				var inputAmounts int64
+				var outputAmounts int64
 				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
 				for index, credit := range transaction.MyOutputs {
-					if lw.IsAddressMine(credit.Address.String()) {
-						amount += int64(credit.Amount)
-					}
+					outputAmounts += int64(credit.Amount)
 					tempCredits[index] = TransactionCredit{
 						Index:    int32(credit.Index),
 						Account:  int32(credit.Account),
@@ -274,11 +281,35 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 				}
 				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
 				for index, debit := range transaction.MyInputs {
+					inputAmounts += int64(debit.PreviousAmount)
 					tempDebits[index] = TransactionDebit{
 						Index:           int32(debit.Index),
 						PreviousAccount: int32(debit.PreviousAccount),
 						PreviousAmount:  int64(debit.PreviousAmount),
 						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+				}
+				var direction int32
+				amountDifference := outputAmounts - inputAmounts
+				if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
+					//Transfered
+					direction = 2
+					amount = int64(transaction.Fee)
+				} else if amountDifference > 0 {
+					//Received
+					direction = 1
+					for _, credit := range transaction.MyOutputs {
+						amount += int64(credit.Amount)
+					}
+				} else {
+					//Sent
+					direction = 0
+					for _, debit := range transaction.MyInputs {
+						amount += int64(debit.PreviousAmount)
+					}
+					for _, credit := range transaction.MyOutputs {
+						amount -= int64(credit.Amount)
+					}
+					amount -= int64(transaction.Fee)
 				}
 				tempTransaction := Transaction{
 					Fee:       int64(transaction.Fee),
@@ -287,7 +318,8 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					Type:      transactionType(transaction.Type),
 					Credits:   &tempCredits,
 					Amount:    amount,
-					Height:    0,
+					Height:    -1,
+					Direction: direction,
 					Debits:    &tempDebits}
 				fmt.Println("New Transaction")
 				result, err := json.Marshal(tempTransaction)
@@ -297,7 +329,6 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					listener.OnTransaction(string(result))
 				}
 			}
-			listener.OnTransactionRefresh()
 		}
 	}()
 }
@@ -426,18 +457,28 @@ func (lw *LibWallet) GetAccountName(account int32) string {
 	return name
 }
 
+func (lw *LibWallet) GetAccountByAddress(address string) string {
+	addr, err := dcrutil.DecodeAddress(address)
+	if err != nil {
+		log.Error(err)
+		return "Address decode error"
+	}
+	info, _ := lw.wallet.AddressInfo(addr)
+	return lw.GetAccountName(int32(info.Account()))
+}
+
 func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	ctx := context.Background()
 	var startBlock, endBlock *wallet.BlockIdentifier
 	transactions := make([]Transaction, 0)
 	rangeFn := func(block *wallet.Block) (bool, error) {
 		for _, transaction := range block.Transactions {
+			var inputAmounts int64
+			var outputAmounts int64
 			var amount int64
 			tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
 			for index, credit := range transaction.MyOutputs {
-				if lw.IsAddressMine(credit.Address.String()) {
-					amount += int64(credit.Amount)
-				}
+				outputAmounts += int64(credit.Amount)
 				tempCredits[index] = TransactionCredit{
 					Index:    int32(credit.Index),
 					Account:  int32(credit.Account),
@@ -447,11 +488,35 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 			}
 			tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
 			for index, debit := range transaction.MyInputs {
+				inputAmounts += int64(debit.PreviousAmount)
 				tempDebits[index] = TransactionDebit{
 					Index:           int32(debit.Index),
 					PreviousAccount: int32(debit.PreviousAccount),
 					PreviousAmount:  int64(debit.PreviousAmount),
 					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+			}
+			var direction int32
+			amountDifference := outputAmounts - inputAmounts
+			if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
+				//Transfered
+				direction = 2
+				amount = int64(transaction.Fee)
+			} else if amountDifference > 0 {
+				//Received
+				direction = 1
+				for _, credit := range transaction.MyOutputs {
+					amount += int64(credit.Amount)
+				}
+			} else {
+				//Sent
+				direction = 0
+				for _, debit := range transaction.MyInputs {
+					amount += int64(debit.PreviousAmount)
+				}
+				for _, credit := range transaction.MyOutputs {
+					amount -= int64(credit.Amount)
+				}
+				amount -= int64(transaction.Fee)
 			}
 			tempTransaction := Transaction{
 				Fee:       int64(transaction.Fee),
@@ -461,6 +526,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				Credits:   &tempCredits,
 				Amount:    amount,
 				Height:    block.Height,
+				Direction: direction,
 				Debits:    &tempDebits}
 			transactions = append(transactions, tempTransaction)
 		}
@@ -475,6 +541,95 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Transactions: transactions})
 	response.OnResult(string(result))
 	return err
+}
+
+func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
+	hash, err := chainhash.NewHash(txHash)
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+	txSummary, err := lw.wallet.TransactionSummary(hash)
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+	serializedTx := txSummary.Transaction
+	var mtx wire.MsgTx
+	err = mtx.Deserialize(bytes.NewReader(serializedTx))
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+
+	var tx = DecodedTransaction{
+		Hash:     fmt.Sprintf("%02x", reverse(hash[:])),
+		Type:     transactionType(wallet.TxTransactionType(&mtx)),
+		Version:  int32(mtx.Version),
+		LockTime: int32(mtx.LockTime),
+		Expiry:   int32(mtx.Expiry),
+		Inputs:   decodeTxInputs(&mtx),
+		Outputs:  decodeTxOutputs(&mtx, lw.chainParams),
+	}
+	result, _ := json.Marshal(tx)
+	return string(result), nil
+}
+
+func decodeTxInputs(mtx *wire.MsgTx) []DecodedInput {
+	inputs := make([]DecodedInput, len(mtx.TxIn))
+	for i, txIn := range mtx.TxIn {
+
+		inputs[i] = DecodedInput{
+			PreviousTransactionHash:  fmt.Sprintf("%02x", reverse(txIn.PreviousOutPoint.Hash[:])),
+			PreviousTransactionIndex: int32(txIn.PreviousOutPoint.Index),
+			Sequence:                 int32(txIn.Sequence),
+			AmountIn:                 txIn.ValueIn,
+			BlockHeight:              int32(txIn.BlockHeight),
+			BlockIndex:               int32(txIn.BlockIndex),
+		}
+	}
+	return inputs
+}
+
+func decodeTxOutputs(mtx *wire.MsgTx, chainParams *chaincfg.Params) []DecodedOutput {
+	outputs := make([]DecodedOutput, len(mtx.TxOut))
+	txType := stake.DetermineTxType(mtx)
+	for i, v := range mtx.TxOut {
+
+		var addrs []dcrutil.Address
+		var encodedAddrs []string
+		if (txType == stake.TxTypeSStx) && (stake.IsStakeSubmissionTxOut(i)) {
+			addr, err := stake.AddrFromSStxPkScrCommitment(v.PkScript,
+				chainParams)
+			if err != nil {
+				encodedAddrs = []string{fmt.Sprintf(
+					"[error] failed to decode ticket "+
+						"commitment addr output for tx hash "+
+						"%v, output idx %v", mtx.TxHash(), i)}
+			} else {
+				encodedAddrs = []string{addr.EncodeAddress()}
+			}
+		} else {
+			// Ignore the error here since an error means the script
+			// couldn't parse and there is no additional information
+			// about it anyways.
+			_, addrs, _, _ = txscript.ExtractPkScriptAddrs(
+				v.Version, v.PkScript, chainParams)
+			encodedAddrs = make([]string, len(addrs))
+			for j, addr := range addrs {
+				encodedAddrs[j] = addr.EncodeAddress()
+			}
+		}
+
+		outputs[i] = DecodedOutput{
+			Index:     int32(i),
+			Value:     v.Value,
+			Version:   int32(v.Version),
+			Addresses: encodedAddrs,
+		}
+	}
+
+	return outputs
 }
 
 func reverse(hash []byte) []byte {
@@ -561,9 +716,9 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 
 	// pay output
 	outputs := make([]*wire.TxOut, 0)
-	var algo wallet.OutputSelectionAlgorithm = 0
+	var algo wallet.OutputSelectionAlgorithm = 1
 	if !sendAll {
-		algo = 1
+		algo = 0
 		output := &wire.TxOut{
 			Value:    amount,
 			Version:  version,

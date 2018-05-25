@@ -262,11 +262,11 @@ public class Utils {
         //seconds
         return millis + "s ago";
     }
-    
+
     public static String formatDecred(float dcr){
-            DecimalFormat format = new DecimalFormat();
-            format.applyPattern("#,###,###,##0.00######");
-            return format.format(dcr);
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.00######");
+        return format.format(dcr);
     }
 
     public static String formatDecred(long dcr){
