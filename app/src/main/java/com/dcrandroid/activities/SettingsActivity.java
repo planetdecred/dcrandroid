@@ -63,9 +63,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
-            Date buildDated = BuildConfig.buildTime;
-            result = formatter.format(buildDated);
-            buildDate.setTitle("Build Date: "+result);
+            Date buildTime = BuildConfig.buildTime;
+            result = formatter.format(buildTime);
+            buildDate.setSummary(result);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
                 System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
