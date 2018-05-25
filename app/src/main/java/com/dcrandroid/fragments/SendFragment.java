@@ -85,7 +85,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        if(getActivity() == null){
+        if (getActivity() == null) {
             System.out.println("Activity is null");
             return;
         }
@@ -105,7 +105,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         categories = new ArrayList<>();
-        if(getContext() == null){
+        if (getContext() == null) {
             System.out.println("Context is null");
             return;
         }
@@ -113,7 +113,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         accountSpinner.setAdapter(dataAdapter);
 
-       // amount.setFilters(new InputFilter[]{new DecredInputFilter()});
+        // amount.setFilters(new InputFilter[]{new DecredInputFilter()});
         scanAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,9 +134,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().equals("")){
+                if (s.toString().equals("")) {
                     error_label.setText("Destination Address can not be empty");
-                }else if(!validateAddress(s.toString())){
+                } else if (!constants.wallet.isAddressValid(s.toString())) {
                     error_label.setText("Destination Address is not valid");
                 }
             }
@@ -150,7 +150,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                amountCheck(s,amountPass);
+                amountCheck(s, amountPass);
             }
 
             @Override
@@ -184,19 +184,19 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(address.getText().toString().equals("")){
+                if (address.getText().toString().equals("")) {
                     error_label.setText("Destination Address can not be empty");
                     return;
-                }else if(amount.getText().toString().equals("")){
+                } else if (amount.getText().toString().equals("")) {
                     error_label.setText("Amount cannot be empty");
                     return;
                 }
                 final String destAddress = address.getText().toString();
                 final long amt = Utils.decredToAtom(amount.getText().toString());
-                if(!validateAddress(destAddress)){
+                if (!constants.wallet.isAddressValid(destAddress)) {
                     error_label.setText("Destination Address is not valid");
                     return;
-                }else if(amt == 0){
+                } else if (amt == 0) {
                     error_label.setText("Amount is not valid");
                     return;
                 }
@@ -207,12 +207,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         sendAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isSendAll){
+                if (isSendAll) {
                     amount.setEnabled(true);
                     isSendAll = false;
                     sendAll.setTextColor(Color.parseColor("#2970FF"));
                     constructTransaction();
-                }else {
+                } else {
                     try {
                         amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0)));
                         amount.setEnabled(false);
@@ -228,7 +228,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     }
 
     private void constructTransaction(){
-        if(address.getText().toString().equals("") || !validateAddress(address.getText().toString())){
+        if(address.getText().toString().equals("") || !constants.wallet.isAddressValid(address.getText().toString())){
             return;
         }
         if(amount.getText().toString().equals("")){
@@ -291,17 +291,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             }
         }.start();
-    }
-
-    private boolean validateAddress(String address){
-        if(address.startsWith("decred:"))
-            address = address.replace("decred:","");
-        if(address.length() < 25){
-            return false;
-        }else if(address.length() > 36){
-            return false;
-        }
-        return !address.startsWith("D");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
