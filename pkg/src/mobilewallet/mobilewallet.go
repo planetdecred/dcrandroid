@@ -448,6 +448,15 @@ func (lw *LibWallet) IsAddressMine(address string) bool {
 	return err == nil
 }
 
+func (lw *LibWallet) IsAddressValid(address string) bool {
+	_, err := decodeAddress(address, lw.wallet.ChainParams())
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	return true
+}
+
 func (lw *LibWallet) GetAccountName(account int32) string {
 	name, err := lw.wallet.AccountName(uint32(account))
 	if err != nil {
