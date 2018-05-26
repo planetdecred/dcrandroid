@@ -183,8 +183,8 @@
     <string name="view_on_dcrdata">view on dcrdata</string>
     <string name="tx_hash_copy">Copied transaction ID</string>
     <string name="confirmations">Confirmation</string>
-    <string name="zero_bytes">0 bytes</string>
-    <string name="zero_decred">0.00 DCR</string>
+    <string name="zero_bytes">0 byte</string>
+    <string name="zero_decred">0 DCR</string>
     <string name="dcrd_settings">Dcrd Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="pref_title_certificate">Certificate</string>
