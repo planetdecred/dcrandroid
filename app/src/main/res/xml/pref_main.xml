@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory
+        android:title="@string/build">
+        <Preference
+            android:key="@string/build_date_system"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/title_general">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:title="@string/tx_notify_title"
+            android:key="transaction_notification"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="@string/unconfirmed_funds"
+            android:key="spend_unconfirmed_funds"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_connection">
         <SwitchPreference
             android:defaultValue="true"
             android:enabled="false"
             android:key="@string/key_testnet"
             android:summary="@string/summary_testnet"
             android:title="@string/title_testnet" />
-        <Preference
-            android:summary="@string/summary_rescan_blockchain"
-            android:title="@string/title_rescan_blockchain"
-            android:key="@string/key_rescan_block"
-            />
-        <Preference
-            android:title="@string/title_discover_address"
-            android:key="@string/discover"
-            />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:title="Spend unconfirmed funds"
-            android:key="spend_unconfirmed_funds"
-            />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:title="New transaction notification"
-            android:key="transaction_notification"
-            />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:title="Show debug messages"
-            android:key="debug_messages"
-            />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_title_connection">
         <ListPreference
-            android:title="Network mode"
+            android:title="@string/title_network_mode"
             android:summary="Simplified Payment Verification (SPV)"
             android:defaultValue="0"
             android:key="network_modes"
@@ -43,13 +34,13 @@
             android:entries="@array/network_modes"
             />
         <EditTextPreference
-            android:title="Connect to peer"
+            android:title="@string/title_connect_to_peer"
             android:key="peer_ip"
             />
         <EditTextPreference
             android:key="@string/remote_dcrd_address"
             android:enabled="false"
-            android:title="Remote dcrd address"
+            android:title="@string/server_address_title"
             />
         <EditTextPreference
             android:key="@string/key_connection_certificate"
@@ -64,32 +55,37 @@
             android:summary="@string/summary_connection_timeout"
             android:title="@string/pref_title_timout" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/information">
+    <PreferenceCategory android:title="Debug">
         <Preference
             android:summary="@string/summary_peers"
             android:title="@string/title_peers"
             android:key="@string/key_get_peers"
             />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Debug">
         <Preference
-            android:title="Crash"
-            android:key="crash"
+            android:title="@string/title_discover_address"
+            android:key="@string/discover"
+            />
+        <Preference
+            android:summary="@string/summary_rescan_blockchain"
+            android:title="@string/title_rescan_blockchain"
+            android:key="@string/key_rescan_block"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="Show debug messages"
+            android:key="debug_messages"
+            />
+        <Preference
+            android:title="@string/wallet_log_title"
+            android:key="dcrwallet_log"
             />
         <Preference
             android:title="@string/dcrd_log_title"
             android:key="@string/dcrd_log_key"
             />
         <Preference
-            android:title="Dcrwallet Log"
-            android:key="dcrwallet_log"
+            android:title="@string/crash_title"
+            android:key="crash"
             />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_header_about">
-        <Preference
-            android:summary="@string/build_date"
-            android:title="@string/build" />
     </PreferenceCategory>
 </PreferenceScreen>
