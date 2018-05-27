@@ -138,6 +138,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     error_label.setText("Destination Address can not be empty");
                 } else if (!constants.wallet.isAddressValid(s.toString())) {
                     error_label.setText("Destination Address is not valid");
+                }else{
+                    constructTransaction();
                 }
             }
         });
@@ -214,7 +216,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     constructTransaction();
                 } else {
                     try {
-                        amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0)));
+                        amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
                         amount.setEnabled(false);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -228,13 +230,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     }
 
     private void constructTransaction(){
+        estimateSize.setText(R.string.zero_bytes);
+        totalAmountSending.setText(R.string.zero_decred);
+        estimateFee.setText(R.string.zero_decred);
+        error_label.setText("");
         if(address.getText().toString().equals("") || !constants.wallet.isAddressValid(address.getText().toString())){
             return;
         }
         if(amount.getText().toString().equals("")){
-            estimateSize.setText(R.string.zero_bytes);
-            totalAmountSending.setText(R.string.zero_decred);
-            estimateFee.setText(R.string.zero_decred);
             return;
         }
 
@@ -270,7 +273,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         return;
                     }
                     final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, (int) amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
-                    System.out.println("Recent address: "+destAddress);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -285,7 +287,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SendFragment.this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            error_label.setText(e.getMessage());
                         }
                     });
                 }
