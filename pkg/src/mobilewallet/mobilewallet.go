@@ -725,9 +725,9 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 
 	// pay output
 	outputs := make([]*wire.TxOut, 0)
-	var algo wallet.OutputSelectionAlgorithm = 1
+	var algo wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmAll
 	if !sendAll {
-		algo = 0
+		algo = wallet.OutputSelectionAlgorithmDefault
 		output := &wire.TxOut{
 			Value:    amount,
 			Version:  version,

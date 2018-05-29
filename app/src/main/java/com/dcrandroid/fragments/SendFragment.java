@@ -210,18 +210,18 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             @Override
             public void onClick(View v) {
                 if (isSendAll) {
-                    amount.setEnabled(true);
                     isSendAll = false;
+                    amount.setEnabled(true);
                     sendAll.setTextColor(Color.parseColor("#000000"));
                     constructTransaction();
                 } else {
+                    isSendAll = true;
                     try {
                         amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
                         amount.setEnabled(false);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    isSendAll = true;
                     sendAll.setTextColor(Color.parseColor("#2970FF"));
                 }
             }
@@ -240,7 +240,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         if(amount.getText().toString().equals("")){
             return;
         }
-
+        
         new Thread(){
             public void run(){
                 if(getActivity() == null){
@@ -272,11 +272,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, (int) amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            double estFee = ((response.getEstimatedSignedSize() / 0.001) / 1e8);
+                            double estFee = 0.001 * response.getEstimatedSignedSize() / 1000;
                             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
                             totalAmountSending.setText(Utils.calculateTotalAmount(amt, response.getEstimatedSignedSize(), isSendAll).concat(" DCR"));
                             estimateFee.setText(Utils.formatDecred((float) estFee).concat(" DCR"));
@@ -396,7 +396,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try {
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0, isSendAll);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
                     byte[] tx = constants.wallet.signTransaction(response.getUnsignedTransaction(),passphrase.getBytes());
                     byte[] serializedTx = constants.wallet.publishTransaction(tx);
                     List<Byte> hashList = new ArrayList<>();
