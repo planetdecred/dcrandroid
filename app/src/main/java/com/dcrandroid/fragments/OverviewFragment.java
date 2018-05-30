@@ -317,9 +317,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
+            if(intent.getAction() == null){
+                return;
+            }
+            if(intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
                 prepareHistoryData();
-            }else if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_NEW_TRANSACTION)){
+            }else if(intent.getAction().equals(Constants.ACTION_NEW_TRANSACTION)){
                 Transaction transaction = new Transaction();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(intent.getLongExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP, 0) * 1000);
@@ -341,6 +344,18 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if(transactionList.size() > 0){
                     transactionList.remove(transactionList.size() - 1);
                 }
+            }else if(intent.getAction().equals(Constants.ACTION_TRANSACTION_CONFRIMED)){
+                String hash = intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH);
+                for(int i = 0; i < transactionList.size(); i++){
+                    if(transactionList.get(i).getHash().equals(hash)){
+                        Transaction transaction = transactionList.get(i);
+                        transaction.setHeight(intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, -1));
+                        transaction.setTxStatus("confirmed");
+                        transactionList.set(i, transaction);
+                        transactionAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
             }
         }
     };
@@ -361,6 +376,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         if(getActivity() != null) {
             IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
             filter.addAction(Constants.ACTION_NEW_TRANSACTION);
+            filter.addAction(Constants.ACTION_TRANSACTION_CONFRIMED);
             getActivity().registerReceiver(receiver, filter);
         }
     }

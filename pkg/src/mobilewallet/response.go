@@ -84,6 +84,7 @@ type GetTransactionsResponse interface {
 
 type TransactionListener interface {
 	OnTransaction(transaction string)
+	OnTransactionConfirmed(hash string, height int32)
 }
 
 type BlockNotificationError interface {

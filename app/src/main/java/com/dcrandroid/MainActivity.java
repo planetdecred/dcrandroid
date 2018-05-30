@@ -377,6 +377,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void onTransactionConfirmed(String hash, int height){
+        Intent confirmedTransactionIntent = new Intent(Constants.ACTION_TRANSACTION_CONFRIMED)
+                .putExtra(Constants.EXTRA_TRANSACTION_HASH, hash)
+                .putExtra(Constants.EXTRA_BLOCK_HEIGHT, height);
+        sendBroadcast(confirmedTransactionIntent);
+    }
+
     private void sendNotification(String amount, String hash){
         Intent launchIntent = new Intent(this,MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
