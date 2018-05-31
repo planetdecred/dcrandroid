@@ -23,6 +23,6 @@ public class BlockedSelectionEditText extends AppCompatEditText {
     }
     @Override
     protected  void onSelectionChanged(int selstart, int selEnd){
-        setSelection(this.length());
+        //setSelection(this.length());
     }
 }

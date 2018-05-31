@@ -448,6 +448,15 @@ func (lw *LibWallet) IsAddressMine(address string) bool {
 	return err == nil
 }
 
+func (lw *LibWallet) IsAddressValid(address string) bool {
+	_, err := decodeAddress(address, lw.wallet.ChainParams())
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	return true
+}
+
 func (lw *LibWallet) GetAccountName(account int32) string {
 	name, err := lw.wallet.AccountName(uint32(account))
 	if err != nil {
@@ -716,9 +725,9 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 
 	// pay output
 	outputs := make([]*wire.TxOut, 0)
-	var algo wallet.OutputSelectionAlgorithm = 1
+	var algo wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmAll
 	if !sendAll {
-		algo = 0
+		algo = wallet.OutputSelectionAlgorithmDefault
 		output := &wire.TxOut{
 			Value:    amount,
 			Version:  version,
