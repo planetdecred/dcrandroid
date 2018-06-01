@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
@@ -32,12 +34,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         private TextView txType;
         private TextView status;
         private CurrencyTextView minus;
+        private View view;
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transferred);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
             minus = view.findViewById(R.id.history_minus);
+            this.view = view;
         }
     }
 
@@ -87,6 +91,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
             holder.txType.setText("");
+        }
+        if(history.animate) {
+            Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
+            holder.view.setAnimation(blinkAnim);
         }
     }
 

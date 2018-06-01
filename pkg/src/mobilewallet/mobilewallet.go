@@ -329,6 +329,11 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					listener.OnTransaction(string(result))
 				}
 			}
+			for _, block := range v.AttachedBlocks {
+				for _, transaction := range block.Transactions {
+					listener.OnTransactionConfirmed(fmt.Sprintf("%02x", reverse(transaction.Hash[:])), block.Height)
+				}
+			}
 		}
 	}()
 }

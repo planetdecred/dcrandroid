@@ -24,6 +24,8 @@ public class Constants {
     public static final String EXTRA_TRANSACTION_TOTAL_OUTPUT = "totalOutputs";
     public static final String EXTRA_BLOCK_HEIGHT = "block_height";
     public static final String ACTION_BLOCK_SCAN_COMPLETE = "block_scan_complete";
+    public static final String ACTION_NEW_TRANSACTION = "new_transaction";
+    public static final String ACTION_TRANSACTION_CONFRIMED = "transaction_confirmed";
     public static final String KEY_TRANSACTION_NOTIFICATION = "transaction_notification";
     public static final String KEY_NETWORK_MODES = "network_modes";
     public static final String KEY_PEER_IP = "peer_ip";
@@ -35,4 +37,7 @@ public class Constants {
     public static final String EXTRA_TRANSACTION_DIRECTION = "transaction_direction";
     public static final String EXTRA_TRANSACTION_INPUTS = "transaction_inputs";
     public static final String EXTRA_TRANSACTION_OUTPUTS = "transaction_outputs";
+    public static final int TRANSACTION_SUMMARY_ID = 5552478;
+    public static final String EXTRA_TRANSACTION_TIMESTAMP = "transaction_timestamp";
+    public static final String TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS";
 }
