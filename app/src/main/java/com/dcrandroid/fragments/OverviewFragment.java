@@ -339,6 +339,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if(transactionList.size() > 0){
                     transactionList.remove(transactionList.size() - 1);
                 }
+                getBalance();
             }else if(intent.getAction().equals(Constants.ACTION_TRANSACTION_CONFRIMED)){
                 String hash = intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH);
                 for(int i = 0; i < transactionList.size(); i++){
@@ -350,6 +351,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                         break;
                     }
                 }
+                getBalance();
             }
         }
     };
