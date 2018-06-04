@@ -32,7 +32,7 @@ public class SaveSeedActivity extends AppCompatActivity {
         DcrConstants constants = DcrConstants.getInstance();
         try {
             seed = constants.wallet.generateSeed();
-            String tempSeed[] = seed.split("");
+            String tempSeed[] = seed.split(" ");
             for(int i = 0; i <= tempSeed.length-1; i++){
                 seed =tempSeed[i];
                 View seedView = layoutInflater.inflate(R.layout.seed_layout,null,false);

@@ -3,6 +3,7 @@ package com.dcrandroid.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by collins on 1/10/18.
@@ -21,9 +22,9 @@ public class TransactionsResponse {
             if(response.errorOccurred){
                 response.errorMessage = object.getString("ErrorMessage");
             }
-            JSONArray mined = object.getJSONArray("Mined");
-            for(int i = 0; i < mined.length(); i++){
-                JSONObject tx = mined.getJSONObject(i);
+            JSONArray transactions = object.getJSONArray("Transactions");
+            for(int i = 0; i < transactions.length(); i++){
+                JSONObject tx = transactions.getJSONObject(i);
                 ArrayList<TransactionCredit> credit = new ArrayList<>();
                 JSONArray cdt = tx.getJSONArray("Credits");
                 for(int j = 0; j < cdt.length(); j++){
@@ -32,7 +33,7 @@ public class TransactionsResponse {
                     item.internal = cdt.getJSONObject(j).getBoolean("Internal");
                     item.address = cdt.getJSONObject(j).getString("Address");
                     item.index = cdt.getJSONObject(j).getInt("Index");
-                    item.amount = (float) cdt.getJSONObject(j).getDouble("Amount")  / AccountResponse.SATOSHI;
+                    item.amount = cdt.getJSONObject(j).getLong("Amount");
                     credit.add(item);
                 }
                 ArrayList<TransactionDebit> debit = new ArrayList<>();
@@ -41,59 +42,21 @@ public class TransactionsResponse {
                     TransactionDebit item = new TransactionDebit();
                     item.index = dbt.getJSONObject(j).getInt("Index");
                     item.previous_account = dbt.getJSONObject(j).getLong("PreviousAccount");
-                    item.previous_amount = (float) dbt.getJSONObject(j).getLong("PreviousAmount") / AccountResponse.SATOSHI;
+                    item.previous_amount = dbt.getJSONObject(j).getLong("PreviousAmount");
                     item.accountName = dbt.getJSONObject(j).getString("AccountName");
                     debit.add(item);
                 }
                 TransactionItem transaction = new TransactionItem();
-                transaction.fee = (float) tx.getDouble("Fee") / AccountResponse.SATOSHI;
+                transaction.fee = tx.getLong("Fee");
                 transaction.hash = tx.getString("Hash");
                 transaction.timestamp = tx.getLong("Timestamp");
                 transaction.tx = null;
-                transaction.status = tx.getString("Status");
                 transaction.type = tx.getString("Type");
                 transaction.height = tx.getInt("Height");
+                transaction.direction = tx.getInt("Direction");
                 transaction.credits = credit;
                 transaction.debits = debit;
-                transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
-                response.transactions.add(transaction);
-            }
-            System.out.println("FIFF: "+object.getJSONArray("UnMined"));
-            JSONArray unMined = object.getJSONArray("UnMined");
-            for(int i = 0; i < unMined.length(); i++){
-                JSONObject tx = unMined.getJSONObject(i);
-                ArrayList<TransactionCredit> credit = new ArrayList<>();
-                JSONArray cdt = tx.getJSONArray("Credits");
-                for(int j = 0; j < cdt.length(); j++){
-                    TransactionCredit item = new TransactionCredit();
-                    item.account = cdt.getJSONObject(j).getInt("Account");
-                    item.internal = cdt.getJSONObject(j).getBoolean("Internal");
-                    item.address = cdt.getJSONObject(j).getString("Address");
-                    item.index = cdt.getJSONObject(j).getInt("Index");
-                    item.amount = (float) cdt.getJSONObject(j).getDouble("Amount")  / AccountResponse.SATOSHI;
-                    credit.add(item);
-                }
-                ArrayList<TransactionDebit> debit = new ArrayList<>();
-                JSONArray dbt = tx.getJSONArray("Debits");
-                for(int j = 0; j < dbt.length(); j++){
-                    TransactionDebit item = new TransactionDebit();
-                    item.index = dbt.getJSONObject(j).getInt("Index");
-                    item.previous_account = dbt.getJSONObject(j).getLong("PreviousAccount");
-                    item.previous_amount = (float) dbt.getJSONObject(j).getLong("PreviousAmount") / AccountResponse.SATOSHI;
-                    item.accountName = dbt.getJSONObject(j).getString("AccountName");
-                    debit.add(item);
-                }
-                TransactionItem transaction = new TransactionItem();
-                transaction.fee = (float) tx.getDouble("Fee") / AccountResponse.SATOSHI;
-                transaction.hash = tx.getString("Hash");
-                transaction.timestamp = tx.getLong("Timestamp");
-                transaction.tx = null;
-                transaction.status = tx.getString("Status");
-                transaction.type = tx.getString("Type");
-                transaction.height = tx.getInt("Height");
-                transaction.credits = credit;
-                transaction.debits = debit;
-                transaction.amount = (float) tx.getDouble("Amount") / AccountResponse.SATOSHI;
+                transaction.amount = tx.getLong("Amount");
                 response.transactions.add(transaction);
             }
 
@@ -105,9 +68,9 @@ public class TransactionsResponse {
 
     public static class TransactionItem{
         public byte[] tx;
-        public String hash, type, status;
-        public int height;
-        public float fee,amount;
+        public String hash, type;
+        public int height, direction;
+        public long fee,amount;
         public long timestamp;
         public ArrayList<TransactionCredit> credits;
         public ArrayList<TransactionDebit> debits;
@@ -116,13 +79,13 @@ public class TransactionsResponse {
     public static class TransactionDebit{
         public long previous_account;
         public int index;
-        public float previous_amount;
+        public long previous_amount;
         public String accountName;
     }
 
     public static class TransactionCredit{
         public long index, account;
-        public float amount;
+        public long amount;
         public boolean internal;
         public String address;
     }

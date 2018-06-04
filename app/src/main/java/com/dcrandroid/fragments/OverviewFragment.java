@@ -30,6 +30,7 @@ import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
+import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.util.Utils;
@@ -83,7 +84,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
-        tvBalance.formatAndSetText(String.format(Locale.getDefault(),"%f DCR", util.getFloat(PreferenceUtil.TOTAL_BALANCE)));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -93,17 +93,17 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onClick(View view, int position) {
                 Transaction history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra("Height", history.getHeight());
+                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
                 i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
                 i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
                 i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
                 i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
-                i.putExtra(Constants.EXTRA_TRANSACTION_STATUS,history.getTxStatus());
                 i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
-                i.putStringArrayListExtra(Constants.EXTRA_INPUT_USED,history.getUsedInput());
-                i.putStringArrayListExtra(Constants.EXTRA_NEW_WALLET_OUTPUT,history.getWalletOutput());
+                i.putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, history.getDirection());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS,history.getUsedInput());
+                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_OUTPUTS,history.getWalletOutput());
                 startActivity(i);
             }
 
@@ -141,21 +141,20 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     if(getContext() == null){
                         return;
                     }
-                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts());
-                    float totalBalance = 0;
+                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+                    long totalBalance = 0;
                     for(int i = 0; i < response.items.size(); i++){
                         AccountResponse.Balance balance = response.items.get(i).balance;
                         totalBalance += balance.total;
                     }
-                    util.setFloat(PreferenceUtil.TOTAL_BALANCE,totalBalance);
-                    final float finalTotalBalance = totalBalance;
+                    final long finalTotalBalance = totalBalance;
                     if(getActivity() == null){
                         return;
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvBalance.formatAndSetText(Utils.formatDecred(finalTotalBalance));
+                            tvBalance.formatAndSetText(Utils.formatDecred(finalTotalBalance) + " DCR");
                         }
                     });
                 }catch (Exception e){
@@ -260,12 +259,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 calendar.setTimeInMillis(item.timestamp * 1000);
                 SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
                 transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTime(item.timestamp);
                 transaction.setTransactionFee(item.fee);
                 transaction.setType(item.type);
                 transaction.setHash(item.hash);
                 transaction.setHeight(item.height);
+                transaction.setDirection(item.direction);
                 transaction.setAmount(item.amount);
-                transaction.setTxStatus(item.status);
                 ArrayList<String> usedInput = new ArrayList<>();
                 for (int j = 0; j < item.debits.size(); j++) {
                     transaction.totalInput += item.debits.get(j).previous_amount;
@@ -278,18 +278,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
                 transaction.setUsedInput(usedInput);
                 transaction.setWalletOutput(output);
-                if (item.status.equalsIgnoreCase("pending")) {
-                    System.out.println("Adding pending to top");
-                    temp.add(transaction);
-                } else {
-                    temp.add(transaction);
-                }
+                temp.add(transaction);
             }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     getBalance();
-                    Collections.reverse(temp);
+                    Collections.sort(temp, new TransactionSorter());
                     tempTxList.clear();
                     tempTxList.addAll(0, temp);
                     transactionList.clear();
@@ -313,11 +308,48 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             });
         }
     }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
+            if(intent.getAction() == null){
+                return;
+            }
+            if(intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
                 prepareHistoryData();
+            }else if(intent.getAction().equals(Constants.ACTION_NEW_TRANSACTION)){
+                Transaction transaction = new Transaction();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(intent.getLongExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP, 0) * 1000);
+                SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
+                transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+                transaction.setTransactionFee(intent.getLongExtra(Constants.EXTRA_TRANSACTION_FEE, 0));
+                transaction.setType(intent.getStringExtra(Constants.EXTRA_TRANSACTION_TYPE));
+                transaction.setHash(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+                transaction.setHeight(intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, 0));
+                transaction.setAmount(intent.getLongExtra(Constants.EXTRA_AMOUNT, 0));
+                transaction.setDirection(intent.getIntExtra(Constants.EXTRA_TRANSACTION_DIRECTION, -1));
+                transaction.setUsedInput(intent.getStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS));
+                transaction.setWalletOutput(intent.getStringArrayListExtra(Constants.EXTRA_TRANSACTION_OUTPUTS));
+                transaction.setTotalInput(intent.getLongExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, 0));
+                transaction.setTotalOutput(intent.getLongExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, 0));
+                transaction.animate = true;
+                transactionList.add(0, transaction);
+                transactionAdapter.notifyDataSetChanged();
+                if(transactionList.size() > 0){
+                    transactionList.remove(transactionList.size() - 1);
+                }
+            }else if(intent.getAction().equals(Constants.ACTION_TRANSACTION_CONFRIMED)){
+                String hash = intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH);
+                for(int i = 0; i < transactionList.size(); i++){
+                    if(transactionList.get(i).getHash().equals(hash)){
+                        Transaction transaction = transactionList.get(i);
+                        transaction.setHeight(intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, -1));
+                        transactionList.set(i, transaction);
+                        transactionAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
             }
         }
     };
@@ -337,6 +369,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         System.out.println("Overview OnResume");
         if(getActivity() != null) {
             IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
+            filter.addAction(Constants.ACTION_NEW_TRANSACTION);
+            filter.addAction(Constants.ACTION_TRANSACTION_CONFRIMED);
             getActivity().registerReceiver(receiver, filter);
         }
     }

@@ -24,6 +24,7 @@ import com.dcrandroid.data.Account;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
 
 import org.json.JSONException;
@@ -41,6 +42,7 @@ public class AccountsFragment extends Fragment {
 
     private List<Account> accountList = new ArrayList<>();
     AccountAdapter accountAdapter;
+    private PreferenceUtil util;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_account, container, false);
@@ -77,7 +79,6 @@ public class AccountsFragment extends Fragment {
         }));
         recyclerView.setAdapter(accountAdapter);
         registerForContextMenu(recyclerView);
-        prepareAccountData();
         return rootView;
     }
 
@@ -86,7 +87,7 @@ public class AccountsFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    final AccountResponse response = AccountResponse.parse(DcrConstants.getInstance().wallet.getAccounts());
+                    final AccountResponse response = AccountResponse.parse(DcrConstants.getInstance().wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     if(!response.errorOccurred) {
                         accountList.clear();
                         for (int i = 0; i < response.items.size(); i++) {
@@ -129,8 +130,14 @@ public class AccountsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
+        if(getActivity() == null){
+            return;
+        }
         getActivity().setTitle(getString(R.string.account));
+        util = new PreferenceUtil(getActivity());
+        prepareAccountData();
     }
+
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
     }
     @Override

@@ -14,11 +14,18 @@ import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import mobilewallet.BlockScanResponse;
 
@@ -36,6 +43,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         protected PreferenceUtil util;
         ProgressDialog pd;
         private DcrConstants constants;
+        Date today;
+        String result;
+        SimpleDateFormat formatter;
+
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -45,11 +57,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_main);
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
-            final Preference currentBlockHeight = findPreference(getString(R.string.key_current_block_height));
             final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
+            Preference buildDate = findPreference(getString(R.string.build_date_system));
+            formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
+            Date buildTime = BuildConfig.buildTime;
+            result = formatter.format(buildTime);
+            buildDate.setSummary(result);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
                 System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
@@ -72,44 +88,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 dcrLog.setEnabled(false);
             }
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0"))]);
-            //networkModes.setValueIndex(util.getInt(Constants.KEY_NETWORK_MODES));
-            /*
-            * Get the current block height from the chain server, parse it and display it
-            * */
-            new Thread(){
-                public void run(){
-                    for(;;) {
-                        try {
-                            if(getActivity() == null){
-                                break;
-                            }
-//                            final BestBlock bestBlock = Utils.parseBestBlock(Dcrwallet.runDcrCommands(getActivity().getString(R.string.getbestblock)));
-//                            JSONObject rawBlock = new JSONObject(Dcrwallet.runDcrCommands("getblockheader "+bestBlock.getHash()));
-//                            final long lastBlockTime = rawBlock.getLong("time");
-//                            long currentTime = System.currentTimeMillis() / 1000;
-//                            //TODO: Make available for both testnet and mainnet
-//                            final long estimatedBlocks = (currentTime - lastBlockTime) / 120;
-//                            getActivity().runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    if(estimatedBlocks > bestBlock.getHeight()) {
-//                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (%d blocks behind)", bestBlock.getHeight(), estimatedBlocks-bestBlock.getHeight()));
-//                                    }else{
-//                                        currentBlockHeight.setSummary(String.format(Locale.getDefault(),"%d blocks (Last block %d seconds ago)", bestBlock.getHeight(), (System.currentTimeMillis()/1000) - lastBlockTime));
-//                                    }
-//                                }
-                            //});
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }.start();
 
             networkModes.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

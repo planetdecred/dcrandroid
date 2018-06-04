@@ -8,23 +8,44 @@ import java.util.ArrayList;
  */
 
 public class Transaction implements Serializable{
-    private float amount, TransactionFee;
-    public float totalInput, totalOutput;
-    private String type, hash, txStatus, txDate;
-    private int height;
+
+    private long amount, TransactionFee, time;
+    public long totalInput, totalOutput;
+    private String type, hash, txDate;
+    private int height, direction;
+    public boolean animate = false;
     private ArrayList<String> usedInput,walletOutput;
 
-    public Transaction(){
+    public int getDirection() {
+        return direction;
     }
-    public Transaction(int amount, int TransactionFee, String txDate, String txStatus, int height, String txType, ArrayList<String> usedInput, ArrayList<String> walletOutput){
-        this.TransactionFee = TransactionFee;
-        this.txDate = txDate;
-        this.txStatus =txStatus;
-        this.type =txType;
-        this.amount = amount;
-        this.usedInput = usedInput;
-        this.walletOutput = walletOutput;
-        this.height = height;
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public void setTime(long time){
+        this.time = time;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTotalInput(long totalInput) {
+        this.totalInput = totalInput;
+    }
+
+    public long getTotalInput() {
+        return totalInput;
+    }
+
+    public void setTotalOutput(long totalOutput) {
+        this.totalOutput = totalOutput;
+    }
+
+    public long getTotalOutput() {
+        return totalOutput;
     }
 
     public String getHash() {
@@ -43,29 +64,22 @@ public class Transaction implements Serializable{
         this.txDate = txDate;
     }
 
-    public float getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
-    public float getTransactionFee() {
+    public long getTransactionFee() {
         return TransactionFee;
     }
 
-    public void setTransactionFee(float transactionFee) {
+    public void setTransactionFee(long transactionFee) {
         this.TransactionFee = transactionFee;
     }
 
-    public String getTxStatus() {
-        return txStatus;
-    }
-
-    public void setTxStatus(String txStatus) {
-        this.txStatus = txStatus;
-    }
     public String getType() {
         return type;
     }

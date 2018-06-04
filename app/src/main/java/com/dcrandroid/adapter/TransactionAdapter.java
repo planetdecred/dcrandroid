@@ -5,10 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Transaction;
+import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
@@ -22,24 +27,28 @@ import java.util.List;
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
     private List<Transaction> historyList;
     private LayoutInflater layoutInflater;
+    private PreferenceUtil util;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private CurrencyTextView Amount;
         private TextView txType;
         private TextView status;
         private CurrencyTextView minus;
+        private View view;
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transferred);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
             minus = view.findViewById(R.id.history_minus);
+            this.view = view;
         }
     }
 
     public TransactionAdapter(List<Transaction> historyListList , LayoutInflater inflater) {
         this.historyList = historyListList;
         this.layoutInflater = inflater;
+        this.util = new PreferenceUtil(inflater.getContext());
     }
 
     @Override
@@ -51,25 +60,41 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Transaction history = historyList.get(position);
-        //System.out.println("Hash: "+history.get);
-        holder.txType.setText(history.getType());
-        holder.status.setText(history.getTxStatus());
 
-        if(history.getTransactionFee() > 0){
-            holder.Amount.formatAndSetText(Utils.formatDecred(history.totalInput));
+        int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
+        if(history.getHeight() == -1){
+            //No included in block chain, therefore transaction is pending
+            holder.status.setTextColor(Color.parseColor("#3d659c"));
+            holder.status.setText("pending");
+        }else{
+            if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
+                holder.status.setTextColor(Color.parseColor("#55bb97"));
+                holder.status.setText("confirmed");
+            }else{
+                holder.status.setTextColor(Color.parseColor("#3d659c"));
+                holder.status.setText("pending");
+            }
+        }
+
+        if(history.getDirection() == 0){
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
-        }else {
+        }else if(history.getDirection() == 1) {
             holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");
+        }else if(history.getDirection() == 2){
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
+            holder.minus.setVisibility(View.INVISIBLE);
+            holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
+            holder.txType.setText("");
         }
-        if(holder.status.getText().toString().equalsIgnoreCase("pending")){
-            holder.status.setTextColor(Color.parseColor("#3d659c"));
-        }else if(holder.status.getText().toString().equalsIgnoreCase("confirmed")) {
-            holder.status.setTextColor(Color.parseColor("#55bb97"));
+        if(history.animate) {
+            Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
+            holder.view.setAnimation(blinkAnim);
         }
     }
 

@@ -21,12 +21,14 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
+
+import mobilewallet.LibWallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
@@ -45,11 +47,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
         util = new PreferenceUtil(this);
+        Intent intent = getIntent();
         parentHeaderInformation = new ArrayList<>();
 
-        parentHeaderInformation.add(getString(R.string.used_inputs));
-        parentHeaderInformation.add(getString(R.string.new_wallet_output));
-        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(getIntent().getStringArrayListExtra("UsedInput"),getIntent().getStringArrayListExtra("newWalletOutPut"));
+        parentHeaderInformation.add(getString(R.string.inputs));
+        parentHeaderInformation.add(getString(R.string.outputs));
+        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(intent.getStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS));
 
         expandableListView = findViewById(R.id.in_out);
 
@@ -64,16 +67,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
-        txHash.setText(getIntent().getStringExtra("Hash"));
-        txHash.setText(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+        txHash.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-//                if(Dcrwallet.isTestNet()){
-//                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-//                }
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
@@ -82,15 +81,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-//                if(Dcrwallet.isTestNet()){
-//                    url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-//                }
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
         });
         try {
-            Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+            Utils.getHash(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,30 +115,38 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        if(getIntent().getFloatExtra("Fee",0) > 0){
-            value.formatAndSetText("- "+Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT,0)) +" "+getString(R.string.dcr));
-            System.out.println("Formatter: "+Utils.formatDecred(getIntent().getFloatExtra("Fee",0)));
-            transactionFee.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra("Fee",0)));
-        }
-        else{
-            value.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra("Amount",0)) +" "+getString(R.string.dcr));
-            System.out.println(".2 F is on");
-            transactionFee.formatAndSetText(Utils.formatDecred(0)+" DCR");
-        }
-        date.setText(getIntent().getStringExtra("TxDate"));
-        status.setText(getIntent().getStringExtra("TxStatus"));
-        String type = getIntent().getStringExtra("TxType");
+        value.formatAndSetText(Utils.formatDecred(intent.getLongExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
+        transactionFee.formatAndSetText(Utils.formatDecred(intent.getLongExtra(Constants.EXTRA_TRANSACTION_FEE,0)) + " DCR");
+        date.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
+        String type = intent.getStringExtra(Constants.EXTRA_TRANSACTION_TYPE);
         type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
         txType.setText(type);
-        if(status.getText().toString().equals("pending")){
+        int height = intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, 0);
+        int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
+        System.out.println("Height: "+height +" Bestblock: "+ DcrConstants.getInstance().wallet.getBestBlock());
+        if(height == -1){
+            //No included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
+            status.setText("pending");
             confirmation.setText("0");
-        }else if(status.getText().toString().equals("confirmed")) {
-            status.setBackgroundResource(R.drawable.tx_status_confirmed);
-            status.setTextColor(Color.parseColor("#55bb97"));
-            confirmation.setText(String.format(Locale.getDefault(),"%d", DcrConstants.getInstance().wallet.getBestBlock() - getIntent().getIntExtra("Height",0)));
+        }else{
+            confirmation.setText(String.valueOf(confirmations));
+            if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
+                if(confirmations > 1){
+                    System.out.println("Confirmation is greater than 1");
+                }
+                if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS)){
+                    System.out.println("Unconfirmed funds are spendable");
+                }
+                status.setBackgroundResource(R.drawable.tx_status_confirmed);
+                status.setTextColor(Color.parseColor("#55bb97"));
+                status.setText("confirmed");
+            }else{
+                status.setBackgroundResource(R.drawable.tx_status_pending);
+                status.setTextColor(Color.parseColor("#3d659c"));
+                status.setText("pending");
+            }
         }
     }
 
@@ -151,10 +155,39 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private HashMap<String, List<String>> returnGroupedChildItems(ArrayList<String> usedInput,ArrayList<String> output){
-        HashMap<String, List<String>> childContent = new HashMap<String, List<String>>();
+    private HashMap<String, List<String>> returnGroupedChildItems(ArrayList<String> usedInput){
+        ArrayList<String> walletOutput = new ArrayList<>();
+        LibWallet wallet = DcrConstants.getInstance().wallet;
+        try {
+            String rawJson = wallet.decodeTransaction(Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH)));
+            JSONObject parent = new JSONObject(rawJson);
+            JSONArray input = parent.getJSONArray("Inputs");
+            JSONArray outputs = parent.getJSONArray("Outputs");
+            for(int i = 0; i < outputs.length(); i++){
+                JSONObject output = outputs.getJSONObject(i);
+                StringBuilder sb = new StringBuilder();
+                JSONArray addresses = output.getJSONArray("Addresses");
+                for(int j = 0; j < addresses.length(); j++){
+                    if(j != 0){
+                        sb.append("\n");
+                    }
+                    if(wallet.isAddressMine(addresses.getString(j))){
+                        sb.append(addresses.getString(j)).append(" (").append(wallet.getAccountByAddress(addresses.getString(j))).append(")");
+                        if(getIntent().getIntExtra(Constants.EXTRA_TRANSACTION_DIRECTION, -1) == 0){
+                            sb.append(" (change)");
+                        }
+                        continue;
+                    }
+                    sb.append(addresses.getString(j)).append(" (external)");
+                }
+                walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.getLong("Value")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        HashMap<String, List<String>> childContent = new HashMap<>();
         childContent.put(parentHeaderInformation.get(0), usedInput);
-        childContent.put(parentHeaderInformation.get(1), output);
+        childContent.put(parentHeaderInformation.get(1), walletOutput);
         return childContent;
     }
 

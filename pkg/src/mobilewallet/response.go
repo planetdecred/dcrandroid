@@ -43,6 +43,12 @@ type BlockScanResponse interface {
 	OnError(code int32, message string)
 }
 
+/*
+Direction
+0: Sent
+1: Received
+2: Transfered
+*/
 type Transaction struct {
 	Hash        string
 	Transaction []byte
@@ -52,6 +58,7 @@ type Transaction struct {
 	Amount      int64
 	Status      string
 	Height      int32
+	Direction   int32
 	Debits      *[]TransactionDebit
 	Credits     *[]TransactionCredit
 }
@@ -72,8 +79,7 @@ type TransactionCredit struct {
 }
 
 type getTransactionsResponse struct {
-	Mined         []Transaction
-	UnMined       []Transaction
+	Transactions  []Transaction
 	ErrorOccurred bool
 	ErrorMessage  string
 }
@@ -84,8 +90,35 @@ type GetTransactionsResponse interface {
 
 type TransactionListener interface {
 	OnTransaction(transaction string)
+	OnTransactionConfirmed(hash string, height int32)
 }
 
 type BlockNotificationError interface {
 	OnBlockNotificationError(err error)
+}
+
+type DecodedTransaction struct {
+	Hash     string
+	Type     string
+	Version  int32
+	LockTime int32
+	Expiry   int32
+	Inputs   []DecodedInput
+	Outputs  []DecodedOutput
+}
+
+type DecodedInput struct {
+	PreviousTransactionHash  string
+	PreviousTransactionIndex int32
+	Sequence                 int32
+	AmountIn                 int64
+	BlockHeight              int32
+	BlockIndex               int32
+}
+
+type DecodedOutput struct {
+	Index     int32
+	Value     int64
+	Version   int32
+	Addresses []string
 }

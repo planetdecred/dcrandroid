@@ -44,12 +44,12 @@ public class AccountDetailsActivity extends AppCompatActivity {
         TextView hDPath = findViewById(R.id.acc_dts_hd_path);
         TextView keys = findViewById(R.id.acc_dts_keys);
 
-        spendable.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0F)));
-        total.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_TOTAL, 0F)));
-        immatureRewards.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0F)));
-        lockedByTickets.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0F)));
-        votingAuthority.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0F)));
-        immatureStakeGeneration.formatAndSetText(Utils.formatDecred(getIntent().getFloatExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0F)));
+        spendable.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0))  +" "+ getString(R.string.dcr));
+        total.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_TOTAL, 0))  +" "+ getString(R.string.dcr));
+        immatureRewards.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0))  +" "+ getString(R.string.dcr));
+        lockedByTickets.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0))  +" "+ getString(R.string.dcr));
+        votingAuthority.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0))  +" "+ getString(R.string.dcr));
+        immatureStakeGeneration.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0))  +" "+ getString(R.string.dcr));
         accountNumber.setText(String.valueOf(getIntent().getIntExtra(Constants.EXTRA_ACCOUNT_NUMBER, 0)));
         hDPath.setText(getIntent().getStringExtra(Constants.EXTRA_HD_PATH));
         keys.setText(getIntent().getStringExtra(Constants.EXTRA_KEYS));
