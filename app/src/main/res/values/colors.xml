@@ -21,5 +21,6 @@
     <color name="color_pendng_tx">#3d659c</color>
     <color name="color_confirmed_tx">#2ED8A3</color>
     <color name="button2Color">#FD714A</color>
+    <color name="nedw">#F4F6F6</color>
 
 </resources>

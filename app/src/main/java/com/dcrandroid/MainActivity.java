@@ -8,9 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -43,22 +41,26 @@ import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.BlockNotificationProxy;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.util.Locale;
+import java.util.ArrayList;
 import java.util.Random;
 
 import mobilewallet.BlockScanResponse;
 import mobilewallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy {
 
     public int pageID;
     public String menuADD ="0";
@@ -344,62 +346,90 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public void onTransaction(String s) {
         System.out.println("Notification Received");
         System.out.println(s);
+        try {
+            JSONObject obj = new JSONObject(s);
+
+            Intent newTransactionIntent = new Intent(Constants.ACTION_NEW_TRANSACTION)
+                    .putExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP,obj.getLong("Timestamp"))
+                    .putExtra(Constants.EXTRA_TRANSACTION_FEE, obj.getLong(Constants.EXTRA_TRANSACTION_FEE))
+                    .putExtra(Constants.EXTRA_TRANSACTION_TYPE, obj.getString("Type"))
+                    .putExtra(Constants.EXTRA_TRANSACTION_HASH, obj.getString(Constants.EXTRA_TRANSACTION_HASH))
+                    .putExtra(Constants.EXTRA_BLOCK_HEIGHT, obj.getInt("Height"))
+                    .putExtra(Constants.EXTRA_AMOUNT, obj.getLong(Constants.EXTRA_AMOUNT))
+                    .putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, obj.getInt("Direction"));
+            long totalInput = 0, totalOutput = 0;
+            ArrayList<String> usedInput = new ArrayList<>();
+            JSONArray debits = obj.getJSONArray("Debits");
+            for(int i = 0; i < debits.length(); i++){
+                JSONObject debit = debits.getJSONObject(i);
+                totalInput += debit.getLong("PreviousAmount");
+                usedInput.add(debit.getString("AccountName") + "\n" + Utils.formatDecred(debit.getLong("PreviousAmount") / AccountResponse.SATOSHI));
+            }
+            ArrayList<String> walletOutput = new ArrayList<>();
+            JSONArray credits = obj.getJSONArray("Credits");
+            for(int i = 0; i < credits.length(); i++){
+                JSONObject credit = credits.getJSONObject(i);
+                totalOutput += credit.getLong("Amount");
+                walletOutput.add(credit.getString("Address") + "\n" + Utils.formatDecred(credit.getLong("Amount") / AccountResponse.SATOSHI));
+            }
+            newTransactionIntent.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, totalInput)
+                    .putExtra(Constants.EXTRA_TRANSACTION_INPUTS, usedInput)
+                    .putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, totalOutput)
+                    .putExtra(Constants.EXTRA_TRANSACTION_OUTPUTS, walletOutput);
+            sendBroadcast(newTransactionIntent);
         if(util.getBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, true)) {
-            try {
-                JSONObject obj = new JSONObject(s);
-                double fee = obj.getDouble("Fee");
-                if (fee == 0) {
-                    float amount = obj.getLong("Amount") / 100000000;
-                    String hash = obj.getString("Hash");
-                    DecimalFormat format = new DecimalFormat("#.########");
-                    sendNotification(format.format(amount), hash);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                    showText(e.getMessage());
-                }
+            double fee = obj.getDouble(Constants.EXTRA_TRANSACTION_FEE);
+            if (fee == 0) {
+                BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.EXTRA_AMOUNT));
+
+                BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+                String hash = obj.getString(Constants.EXTRA_TRANSACTION_HASH);
+                DecimalFormat format = new DecimalFormat("You received #.######## DCR");
+                sendNotification(format.format(amount), hash);
+            }
+        }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+                showText(e.getMessage());
             }
         }
     }
 
     @Override
-    public void onTransactionRefresh() {
-        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+    public void onTransactionConfirmed(String hash, int height){
+        Intent confirmedTransactionIntent = new Intent(Constants.ACTION_TRANSACTION_CONFRIMED)
+                .putExtra(Constants.EXTRA_TRANSACTION_HASH, hash)
+                .putExtra(Constants.EXTRA_BLOCK_HEIGHT, height);
+        sendBroadcast(confirmedTransactionIntent);
     }
 
     private void sendNotification(String amount, String hash){
         Intent launchIntent = new Intent(this,MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://testnet.dcrdata.org/tx/"+hash));
-        PendingIntent pi = PendingIntent.getActivity(this, 2, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        Notification notification;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Icon icon = Icon.createWithResource(this, R.drawable.ic_menu_share);
-            Notification.Action action = new Notification.Action.Builder(icon,"VIEW ON DCRDATA", pi).build();
-            notification = new Notification.Builder(this, "new transaction")
-                    .setContentTitle("New Transaction")
-                    .setContentText("You received "+amount+" dcr")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setOngoing(false)
-                    .setAutoCancel(true)
-                    .addAction(action)
-                    .setContentIntent(launchPendingIntent)
-                    .build();
-        }else{
-            NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_menu_share,"VIEW ON DCRDATA", pi).build();
-            notification = new NotificationCompat.Builder(this)
-                    .setContentTitle("New Transaction")
-                    .setContentText("You received "+amount+" dcr")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setOngoing(false)
-                    .setAutoCancel(true)
-                    .addAction(action)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(launchPendingIntent)
-                    .build();
+        Notification notification = new NotificationCompat.Builder(this, "new transaction")
+                .setContentTitle("New Transaction")
+                .setContentText(amount)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+                .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            System.out.println("Group: "+notification.getGroup());
         }
+        Notification groupSummary = new NotificationCompat.Builder(this, "new transaction")
+                .setContentTitle("New Transaction")
+                .setContentText("You have some new transactions")
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+                .setGroupSummary(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build();
         notificationManager.notify(new Random().nextInt(), notification);
+        notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
 
     @Override

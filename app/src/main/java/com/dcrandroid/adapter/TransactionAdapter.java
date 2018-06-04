@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
@@ -32,12 +34,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         private TextView txType;
         private TextView status;
         private CurrencyTextView minus;
+        private View view;
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transferred);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
             minus = view.findViewById(R.id.history_minus);
+            this.view = view;
         }
     }
 
@@ -56,7 +60,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Transaction history = historyList.get(position);
-        holder.txType.setText(history.getType());
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
         if(history.getHeight() == -1){
@@ -73,16 +76,25 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }
         }
 
-        if(history.getTransactionFee() > 0){
-            holder.Amount.formatAndSetText(Utils.formatDecred(history.totalInput));
+        if(history.getDirection() == 0){
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
             holder.txType.setText("");
-        }else {
+        }else if(history.getDirection() == 1) {
             holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
             holder.txType.setText("");
+        }else if(history.getDirection() == 2){
+            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
+            holder.minus.setVisibility(View.INVISIBLE);
+            holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
+            holder.txType.setText("");
+        }
+        if(history.animate) {
+            Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
+            holder.view.setAnimation(blinkAnim);
         }
     }
 
