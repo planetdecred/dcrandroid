@@ -512,7 +512,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         b.getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(Color.BLUE);
         amount.setText("0");
         address.setText("");
-        setMainA();
     }
     public void copyToClipboard(String copyText) {
         int sdk = android.os.Build.VERSION.SDK_INT;
