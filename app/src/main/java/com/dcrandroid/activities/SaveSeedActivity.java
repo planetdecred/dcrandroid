@@ -21,6 +21,7 @@ import com.dcrandroid.view.SeedLayout;
 public class SaveSeedActivity extends AppCompatActivity {
     private SeedLayout saveSeedTextView;
     private String seed = "";
+    String Fullseed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,13 +29,14 @@ public class SaveSeedActivity extends AppCompatActivity {
         Button saveSeedContBtn = (Button)findViewById(R.id.save_seed_btn_continue);
         saveSeedTextView = (SeedLayout) findViewById(R.id.seedLayout);
         LayoutInflater layoutInflater =getLayoutInflater();
-       String seed = "";
+
+
         DcrConstants constants = DcrConstants.getInstance();
         try {
-            seed = constants.wallet.generateSeed();
-            String tempSeed[] = seed.split(" ");
+            Fullseed = constants.wallet.generateSeed();
+            String tempSeed[] = Fullseed.split(" ");
             for(int i = 0; i <= tempSeed.length-1; i++){
-                seed =tempSeed[i];
+               String seed =tempSeed[i];
                 View seedView = layoutInflater.inflate(R.layout.seed_layout,null,false);
                 TextView seedTexView = seedView.findViewById(R.id.seedTextView);
                 seedTexView.setText(seed);
@@ -52,7 +54,7 @@ public class SaveSeedActivity extends AppCompatActivity {
     }
 
     private void btnCopyPhrase(){
-        if(!seed.equals("")) {
+        if(!Fullseed.equals("")) {
             Intent i = new Intent(SaveSeedActivity.this, ConfirmSeedActivity.class)
                     .putExtra("seed", seed)
                     .putExtra("restore", false);
