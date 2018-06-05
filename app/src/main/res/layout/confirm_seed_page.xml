@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F4F6F6">
 
     <LinearLayout
         android:id="@+id/headerTop"
@@ -33,7 +34,7 @@
             android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
             android:textAllCaps="false"
             android:textColor="#c4cbd2"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
     <RelativeLayout
@@ -49,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_your_seed"
-            android:textColor="@color/Amount1Text"
+            android:textColor="#000000"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             android:inputType="textFilter"
             android:id="@+id/autoCompleteSeed"
@@ -79,7 +80,7 @@
                 android:layout_marginTop="5dp"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="#fff"
+                android:background="#F4F6F6"
                 android:textColor="#000"/>
 
         </ScrollView>
@@ -93,6 +94,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_margin="15dp"
+            android:background="#F4F6F6"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:tint="@android:color/holo_red_dark" />
 
@@ -104,7 +106,8 @@
         android:layout_below="@+id/seedViewScrollcon"
         android:layout_margin="8dp"
         android:id="@+id/border"
-        android:background="@color/Amount2Text" />
+        android:background="#231F20"
+        android:alpha="0.16"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
