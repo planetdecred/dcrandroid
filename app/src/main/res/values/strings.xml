@@ -257,18 +257,17 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string-array name="pref_upload_quality_entries">
-        <item>360p</item>
-        <item>480p</item>
-        <item>720p</item>
-        <item>1080p</item>
-        <item>Original</item>
+    <string-array name="currency_conversion">
+        <item>None</item>
+        <item>USD (bittrex)</item>
     </string-array>
-    <string-array name="pref_upload_quality_values">
+    <string-array name="currency_conversion_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
     </string-array>
+    <string-array name="currency_conversion_symbols">
+        <item></item>
+        <item>$</item>
+    </string-array>
+    <string name="dcr_to_usd_exchange_url">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
 </resources>

@@ -47,7 +47,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         String result;
         SimpleDateFormat formatter;
 
-
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -66,22 +65,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Date buildTime = BuildConfig.buildTime;
             result = formatter.format(buildTime);
             buildDate.setSummary(result);
+            ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
+            currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
-                System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
                 remoteDcrdAddress.setEnabled(true);
                 connectToPeer.setEnabled(false);
                 dcrLog.setEnabled(false);
             }
             else if(util.getInt("network_mode") == 1) {
-                System.out.println("Mode : 1");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
                 dcrLog.setEnabled(true);
             }
             else {
-                System.out.println("Mode : 0");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
@@ -211,6 +209,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+
             findPreference("dcrd_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -221,6 +220,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -240,6 +240,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            currencyConversion.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    preference.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt((newValue.toString()))]);
+                    return true;
+                }
+            });
         }
 
         @Override

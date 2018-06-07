@@ -5,6 +5,13 @@
         android:title="@string/build_date"
         />
     <PreferenceCategory android:title="@string/title_general">
+        <ListPreference
+            android:title="Currency Conversion"
+            android:key="currency_conversion"
+            android:entries="@array/currency_conversion"
+            android:entryValues="@array/currency_conversion_values"
+            android:defaultValue="0"
+            />
         <SwitchPreference
             android:defaultValue="true"
             android:title="@string/tx_notify_title"
@@ -53,6 +60,9 @@
             android:key="60"
             android:summary="@string/summary_connection_timeout"
             android:title="@string/pref_title_timout" />
+        <EditTextPreference
+            android:key="user_agent"
+            android:title="User agent"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <Preference
