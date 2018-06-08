@@ -636,7 +636,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 connection.setDoInput(true);
                 connection.setReadTimeout(7000);
                 connection.setConnectTimeout(7000);
-                connection.setRequestProperty("user-agent","");
+                connection.setRequestProperty("user-agent",util.get("user_agent",""));
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
                 StringBuilder result = new StringBuilder();
