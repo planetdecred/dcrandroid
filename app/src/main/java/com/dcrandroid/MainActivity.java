@@ -313,9 +313,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_help:
                 fragment = new HelpFragment();
                 break;
-//            case R.id.nav_settings:
-//                fragment = new SettingsFragment();
-//                break;
+            case R.id.nav_settings:
+                fragment = new SettingsActivity.MainPreferenceFragment();
+                break;
         }
         //replacing the fragment
         if (fragment != null) {
@@ -331,14 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         //calling the method displayselectedscreen and passing the id of selected menu
-        if(item.getItemId() == R.id.nav_settings){
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }else {
-            displaySelectedScreen(item.getItemId());
-        }
-        //make this method blank
+        displaySelectedScreen(item.getItemId());
         return true;
     }
 

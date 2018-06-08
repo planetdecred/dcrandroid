@@ -5,12 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,17 +30,17 @@ import java.util.Locale;
 
 import mobilewallet.BlockScanResponse;
 
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // load main preference fragment
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse{
+    public static class MainPreferenceFragment extends PreferenceFragmentCompat implements BlockScanResponse{
         protected PreferenceUtil util;
         ProgressDialog pd;
         private DcrConstants constants;
@@ -50,10 +51,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            getActivity().setTitle("Settings");
             constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
-            addPreferencesFromResource(R.xml.pref_main);
+            //addPreferencesFromResource(R.xml.pref_main);
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
@@ -247,6 +249,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String s) {
+            setPreferencesFromResource(R.xml.pref_main, s);
         }
 
         @Override
