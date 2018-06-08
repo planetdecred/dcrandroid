@@ -40,4 +40,5 @@ public class Constants {
     public static final int TRANSACTION_SUMMARY_ID = 5552478;
     public static final String EXTRA_TRANSACTION_TIMESTAMP = "transaction_timestamp";
     public static final String TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS";
+    public static final String CURRENCY_CONVERSION = "currency_conversion";
 }

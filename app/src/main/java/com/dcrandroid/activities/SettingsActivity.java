@@ -5,12 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,17 +30,17 @@ import java.util.Locale;
 
 import mobilewallet.BlockScanResponse;
 
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // load main preference fragment
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragment implements BlockScanResponse{
+    public static class MainPreferenceFragment extends PreferenceFragmentCompat implements BlockScanResponse{
         protected PreferenceUtil util;
         ProgressDialog pd;
         private DcrConstants constants;
@@ -47,14 +48,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         String result;
         SimpleDateFormat formatter;
 
-
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            getActivity().setTitle("Settings");
             constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
-            addPreferencesFromResource(R.xml.pref_main);
+            //addPreferencesFromResource(R.xml.pref_main);
             final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
             final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
@@ -66,22 +67,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Date buildTime = BuildConfig.buildTime;
             result = formatter.format(buildTime);
             buildDate.setSummary(result);
+            ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
+            currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
-                System.out.println("Mode : 2");
                 dcrdCertificate.setEnabled(true);
                 remoteDcrdAddress.setEnabled(true);
                 connectToPeer.setEnabled(false);
                 dcrLog.setEnabled(false);
             }
             else if(util.getInt("network_mode") == 1) {
-                System.out.println("Mode : 1");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
                 dcrLog.setEnabled(true);
             }
             else {
-                System.out.println("Mode : 0");
                 dcrdCertificate.setEnabled(false);
                 remoteDcrdAddress.setEnabled(false);
                 connectToPeer.setEnabled(true);
@@ -211,6 +211,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+
             findPreference("dcrd_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -221,6 +222,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -240,6 +242,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            currencyConversion.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    preference.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt((newValue.toString()))]);
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String s) {
+            setPreferencesFromResource(R.xml.pref_main, s);
         }
 
         @Override
