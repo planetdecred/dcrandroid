@@ -3,65 +3,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:padding="16dp"
+    android:background="#0C1E3E"
+    android:padding="8dp"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
+        android:layout_marginTop="8dp"
         android:text="Setting up Decred Wallet"
-        android:gravity="center"
         android:textSize="18sp"
-        android:textColor="#fff" />
-    <LinearLayout
+        android:textColor="#fff"
+        android:id="@+id/header"
+        android:layout_alignParentTop="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet."
+        android:textColor="#fff"
+        android:padding="8dp"
+        android:layout_below="@+id/header"
+        android:textSize="14sp"
+        android:id="@+id/subheader"
+        />
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/subheader"
+        android:layout_above="@+id/warningf"
+        android:layout_marginBottom="5dp"
+        android:fadeScrollbars="true"
         >
-        <TextView
+        <com.dcrandroid.view.SeedLayout
+            android:padding="8dp"
+            android:id="@+id/seedLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/save_seed_instruction"
-            android:textColor="#fff"
+            android:minHeight="350dp"
+            android:background="#0C1E3E"
             />
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/warningf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/border_error"
+        android:layout_above="@+id/save_seed_btn_continue"
+        android:layout_marginBottom="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/border_error"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/warning"
+                android:layout_gravity="center"/>
+        </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Warning: Failure to keep this seed can result to theft of your entire wallet and  unable to recover wallet"
-            android:padding="5dp"
-            android:textColor="#000000"
+            android:text="@string/warninf_save_seed"
+            android:padding="10dp"
+            android:layout_weight="0.2"
+            android:textColor="#fd714a"
             android:textSize="13sp"
-            android:textAlignment="center"
-            android:background="#fff"/>
-        <View
-            android:id="@+id/separator21"
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/primary_text" />
-
-        <com.dcrandroid.util.MyCustomTextView
-            android:id="@+id/save_seed_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:padding="5dp"
-            android:text="parargon  tritor school major"
-            android:textColor="#000"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/save_seed_btn_continue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/btn_shape"
-            android:text="Continue"
-            android:layout_gravity="center"
-            android:textColor="@android:color/background_light" />
+            />
     </LinearLayout>
+    <Button
+        android:id="@+id/save_seed_btn_continue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_shape3"
+        android:text="I copied the seed Phrase"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@android:color/background_light" />
 </RelativeLayout>

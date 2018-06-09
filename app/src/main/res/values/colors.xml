@@ -19,8 +19,11 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="color_pendng_tx">#3d659c</color>
-    <color name="color_confirmed_tx">#2ED8A3</color>
-    <color name="button2Color">#FD714A</color>
+    <color name="color_confirmed_tx">#55bb97</color>
+    <color name="button2Color">#FFF45845</color>
+    <color name="seedColor">#D4F0FD</color>
     <color name="nedw">#F4F6F6</color>
+    <color name="green">#1dc54c</color>
+
 
 </resources>
