@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_seed_page);
-        Button buttonSeedClear = findViewById(R.id.button_clear_seed);
+        ImageView buttonSeedClear = findViewById(R.id.button_clear_seed);
         Button btnConfirmSeed = findViewById(R.id.button_confirm_seed);
         Button btnDeleteSeed = findViewById(R.id.button_delete_seed);
         seedTv = findViewById(R.id.autoCompleteSeed);

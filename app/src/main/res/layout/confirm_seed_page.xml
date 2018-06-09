@@ -1,88 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/bacgroundColor">
+    android:background="#F4F6F6">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.5"
-        android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
-        android:textColor="#fff"
-        android:gravity="center"
-        />
     <LinearLayout
+        android:id="@+id/headerTop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bacgroundColor"
+        android:minHeight="120dp"
         android:orientation="vertical"
-        android:layout_weight="1"
+        android:padding="8dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:text="Seed phrase verification..."
+            android:textColor="#fff"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
+            android:textAllCaps="false"
+            android:textColor="#c4cbd2"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8.0dip"
+        android:paddingTop="8.0dip"
+        android:layout_below="@+id/headerTop"
         >
+
         <android.support.v7.widget.AppCompatAutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_your_seed"
-            android:textColor="#fff"
-            android:textColorHint="#eee"
+            android:textColor="#000000"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             android:inputType="textFilter"
             android:id="@+id/autoCompleteSeed"
+            android:padding="8dp"
+            android:background="#ffff"/>
 
-            />
-    </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.2">
-        <com.dcrandroid.util.MyCustomTextView
-            android:layout_marginTop="5dp"
-            android:id="@+id/seed_display_confirm"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bottom_bar"
+        android:id="@+id/seedViewScrollcon"
+        >
+        <ScrollView
+            android:id="@+id/seedViewScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
-            android:padding="5dp"
-            android:textSize="18sp"
-            android:textColor="#000"/>
-    </ScrollView>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1.5"
-        android:layout_gravity="end"
-        android:gravity="center"
-        >
-            <Button
-                android:id="@+id/button_delete_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/btn_shape"
-                android:padding="5dp"
-                android:text="@string/delete"
-                android:layout_margin="5dp"
-                android:textColor="#fff" />
+            android:layout_toLeftOf="@id/button_clear_seed"
+
+
+            >
+            <com.dcrandroid.util.MyCustomTextView
+                android:id="@+id/seed_display_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:padding="8dp"
+                android:textSize="18sp"
+                android:background="#F4F6F6"
+                android:textColor="#000"/>
+
+        </ScrollView>
+
+        <ImageView
+            android:id="@+id/button_clear_seed"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="15dp"
+            android:background="#F4F6F6"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="@android:color/holo_red_dark" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/seedViewScrollcon"
+        android:layout_margin="8dp"
+        android:id="@+id/border"
+        android:background="#231F20"
+        android:alpha="0.16"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/border"
+        android:orientation="horizontal"
+        android:padding="8.0dip">
 
         <Button
-            android:id="@+id/button_clear_seed"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
+            android:id="@+id/button_delete_seed"
+            android:layout_width="102dp"
+            android:layout_height="42dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:background="@drawable/btn_shape"
-            android:padding="5dp"
-            android:text="clear"
-            android:textColor="#fff" />
-            <Button
-                android:id="@+id/button_confirm_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/btn_shape"
-                android:padding="5dp"
-                android:text="confirm"
-                android:layout_margin="5dp"
-                android:textColor="#fff" />
-    </LinearLayout>
-</LinearLayout>
+            android:text="Delete"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_confirm_seed"
+            android:layout_width="102dp"
+            android:layout_height="42dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_shape3"
+            android:text="Confirm"
+            android:textColor="#ffffff"
+
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

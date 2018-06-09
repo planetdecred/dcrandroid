@@ -61,7 +61,7 @@
     <string name="input_your_new_account_name_and_enter_your_private_passphrase">Input your new account name and enter your private passphrase</string>
     <string name="account_name">Account Name</string>
     <string name="create_account">Create Account</string>
-    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">PLEASE CONFIRM YOUR SEED BY TYPING AND TAPPING EACH WORD ACCORDINGLY</string>
+    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Please confirm your seed by typing and tapping each word accordingly</string>
     <string name="enter_your_seed">Enter your seed...</string>
     <string name="delete">delete</string>
     <string name="available_balance">AVAILABLE BALANCE</string>
