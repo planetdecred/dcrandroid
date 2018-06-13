@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -77,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView rescanImage, stopScan;
     private boolean scanning = false;
     private MainApplication mainApplication;
+    private SoundPool alertSound;
+    private int lastBestBlock = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //add this line to display menu1 when the activity is loaded
         displaySelectedScreen(R.id.nav_overview);
 
+        alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
+        final int soundId = alertSound.load(MainActivity.this, R.raw.beep, 1);
+
         final TextView bestBlockHeight = findViewById(R.id.best_block_height);
         chainStatus = findViewById(R.id.chain_status);
         rescanImage = findViewById(R.id.iv_rescan_blocks);
@@ -159,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }else{
                                     bestBlockHeight.setText(String.valueOf(bestBlock));
                                     chainStatus.setText(Utils.calculateTime((System.currentTimeMillis()/1000) - lastBlockTime));
+                                    if((lastBestBlock == 0 || lastBestBlock != bestBlock) && util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+                                        alertSound.play(soundId, 1, 1, 1, 0, 1);
+                                    }
+                                    lastBestBlock = bestBlock;
                                 }
                             }
                         });
