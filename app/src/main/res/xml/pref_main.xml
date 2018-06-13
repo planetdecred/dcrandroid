@@ -19,6 +19,12 @@
             />
         <SwitchPreference
             android:defaultValue="false"
+            android:title="New block notification"
+            android:key="new_block_notification"
+            android:summary="You would hear a beep if enabled"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
             android:title="@string/unconfirmed_funds"
             android:key="spend_unconfirmed_funds"
             />

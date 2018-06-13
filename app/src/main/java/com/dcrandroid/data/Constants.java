@@ -41,4 +41,5 @@ public class Constants {
     public static final String EXTRA_TRANSACTION_TIMESTAMP = "transaction_timestamp";
     public static final String TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS";
     public static final String CURRENCY_CONVERSION = "currency_conversion";
+    public static final String NEW_BLOCK_NOTIFICATION = "new_block_notification";
 }
