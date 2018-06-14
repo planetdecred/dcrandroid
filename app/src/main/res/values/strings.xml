@@ -73,7 +73,7 @@
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
     <string name="send_funds">Send Funds</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\n and the amount in DCR to send funds.</string>
+    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
     <string name="destination_address">" "Destination Address</string>
     <string name="amount_dcr">" "Amount</string>
     <string name="max">Max</string>

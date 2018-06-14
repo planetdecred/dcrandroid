@@ -3,20 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F4F6F6"
 
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#fff">
+        android:padding="16dp"
+        android:background="#F4F6F6">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_funds"
-            android:gravity="center"
+            android:gravity="left"
             android:textSize="22sp"
-            android:padding="5dp"
+            android:paddingBottom="5dp"
             android:textColor="@color/bacgroundColor"
             />
 
@@ -24,21 +26,19 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:textColor="@color/secondaryTextColor"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="8dp"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:paddingBottom="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
             android:paddingEnd="5dp"
-            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -46,22 +46,23 @@
                 android:text="@string/from"
                 android:textColor="@color/secondaryTextColor"
                 android:gravity="end"
-                android:padding="5dp"
-                android:background="@color/backgcolorwhite"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:textSize="16sp"
 
                 />
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+
                 android:layout_marginTop="1dp"
-                android:background="@drawable/background_shadow">
+                android:background="#B6e9f9">
 
                 <Spinner
                     android:id="@+id/send_dropdown"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/nav_item_activity_titles"
                     android:layout_marginRight="-10dp"
@@ -71,23 +72,21 @@
                     >
                 </Spinner>
             </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@color/backgcolorwhite"
-                />
-        </LinearLayout>
 
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_margin="5dp"
+            android:id="@+id/border"
+            android:background="#231F20"
+            android:alpha="0.32"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp">
+            android:padding="5dp">
 
             <EditText
                 android:id="@+id/send_dcr_add"
@@ -98,11 +97,10 @@
                 android:layout_weight="1"
                 android:inputType="text"
                 android:textSize="15sp"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="8dp"
                 android:textColor="@color/secondaryTextColor"
+                android:background="#F4F6F6"
                 />
 
             <ImageView
@@ -112,6 +110,7 @@
                 android:src="@mipmap/icons8_qr_code"
                 android:clickable="true"
                 android:focusable="true"
+                android:padding="8dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="2dp"
@@ -119,43 +118,71 @@
                 android:gravity="bottom"
                 android:layout_gravity="center"
                 android:contentDescription="@string/scan"
-                android:layout_marginTop="3dp"
                 />
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_margin="5dp"
+            android:id="@+id/border2"
+            android:background="#231F20"
+            android:alpha="0.32"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp">
-            <LinearLayout
+            android:padding="5dp">
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 >
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/input_currency_display"
+                    android:padding="5dp"
+                    android:text="Amount: "
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     />
 
                 <com.dcrandroid.util.BlockedSelectionEditText
                     android:id="@+id/send_dcr_amount"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/amount_dcr"
                     android:inputType="numberDecimal"
+                    android:layout_toRightOf="@id/input_currency_display"
                     android:lines="1"
                     android:maxLines="1"
-                    android:textColor="@color/secondaryTextColor"
+                    android:text="32.4"
+                    android:maxLength="17"
+                    android:paddingLeft="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#0C1E3E"
                     android:textSize="15sp"
+                    android:background="#B6E9F9"
                     />
-            </LinearLayout>
+
+                <TextView
+                    android:id="@+id/exchange_currency_display"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/send_dcr_amount"
+                    android:layout_toRightOf="@id/send_dcr_amount"
+                    android:background="@color/green2"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:text="DCR" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/send_dcr_all"
@@ -166,10 +193,17 @@
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:focusable="true"
-                android:textStyle="bold"
-                android:padding="5dp"
+                android:textSize="17sp"
+                android:padding="8dp"
                 android:paddingBottom="3dp" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_margin="5dp"
+            android:id="@+id/border3"
+            android:background="#231F20"
+            android:alpha="0.32"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -304,6 +338,7 @@
                     android:textColor="@color/secondaryTextColor"
                     />
             </LinearLayout>
+
         </LinearLayout>
         <Button
             android:id="@+id/send_btn_tx"
