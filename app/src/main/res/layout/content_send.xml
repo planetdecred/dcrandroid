@@ -170,17 +170,16 @@
                     android:background="#B6E9F9"
                     />
 
-                <TextView
-                    android:id="@+id/exchange_currency_display"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <Button
+                    android:id="@+id/send_btn_convert"
+                    android:layout_width="50dp"
+                    android:layout_height="30.5dp"
                     android:layout_toEndOf="@id/send_dcr_amount"
                     android:layout_toRightOf="@id/send_dcr_amount"
                     android:background="@color/green2"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:text="DCR" />
+                    android:text="¬DCR"
+                    android:visibility="gone"
+                    android:textColor="#0C1E3E"/>
 
             </RelativeLayout>
 
@@ -352,7 +351,7 @@
             android:layout_margin="8dp"
             android:textColor="@android:color/background_light" />
         <Button
-            android:id="@+id/send_btn_convert"
+            android:id="@+id/send_btn_convert2"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_shape"
