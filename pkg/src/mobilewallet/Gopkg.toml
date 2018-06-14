@@ -21,4 +21,10 @@
 
 [[constraint]]
   name = "github.com/decred/dcrwallet"
-  revision = "87b1f9a230dfa916a4501c2360e741081ca035a0"
+  source = "github.com/jrick/btcwallet"
+  revision = "53963b0042a629192fee7d96aeeea31452914493"
+
+[[override]]
+  name = "github.com/decred/dcrd"
+  source = "github.com/decred/dcrd"
+  revision = "45e313e6d234cb795799dea8166007bef9665266"
