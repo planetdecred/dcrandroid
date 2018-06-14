@@ -68,7 +68,6 @@ func NormalizeAddress(addr string, defaultPort string) (hostport string, err err
 func (lw *LibWallet) Shutdown() {
 	log.Info("Shuting down mobile wallet")
 	lw.wallet.SetNetworkBackend(nil)
-	lw.loader.SetChainClient(nil)
 	lw.loader.UnloadWallet()
 	if logRotator != nil {
 		logRotator.Close()
@@ -180,18 +179,6 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 
 	lw.netBackend = chain.BackendFromRPCClient(c.Client)
 	lw.rpcClient = c
-	lw.loader.SetChainClient(c.Client)
-	//lw.wallet.SetNetworkBackend(lw.netBackend)
-
-	// syncer := chain.NewRPCSyncer(lw.wallet, c)
-	// lw.syncer = syncer
-	// go syncer.Run(ctx, true)
-
-	// err = c.NotifyBlocks()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return false
-	// }
 	return nil
 }
 
@@ -232,13 +219,13 @@ func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []b
 	}
 
 	n := chain.BackendFromRPCClient(chainClient.Client)
-	err := wallet.DiscoverActiveAddresses(n, discoverAccounts)
+	err := wallet.DiscoverActiveAddresses(context.Background(), n, wallet.ChainParams().GenesisHash, discoverAccounts)
 	return err
 }
 
 func (lw *LibWallet) FetchHeaders() (int32, error) {
 	fmt.Println("Fetching Headers")
-	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(lw.netBackend)
+	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(context.Background(), lw.netBackend)
 	if err != nil {
 		log.Error(err)
 		return 0, err
@@ -252,7 +239,7 @@ func (lw *LibWallet) FetchHeaders() (int32, error) {
 
 func (lw *LibWallet) LoadActiveDataFilters() error {
 	fmt.Println("Loading Active Data Filters")
-	err := lw.wallet.LoadActiveDataFilters(lw.netBackend)
+	err := lw.wallet.LoadActiveDataFilters(context.Background(), lw.netBackend)
 	if err != nil {
 		log.Error(err)
 	}
@@ -331,7 +318,7 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 			}
 			for _, block := range v.AttachedBlocks {
 				for _, transaction := range block.Transactions {
-					listener.OnTransactionConfirmed(fmt.Sprintf("%02x", reverse(transaction.Hash[:])), block.Height)
+					listener.OnTransactionConfirmed(fmt.Sprintf("%02x", reverse(transaction.Hash[:])), int32(block.Header.Height))
 				}
 			}
 		}
@@ -539,7 +526,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				Type:      transactionType(transaction.Type),
 				Credits:   &tempCredits,
 				Amount:    amount,
-				Height:    block.Height,
+				Height:    int32(block.Header.Height),
 				Direction: direction,
 				Debits:    &tempDebits}
 			transactions = append(transactions, tempTransaction)
@@ -563,7 +550,7 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 		log.Error(err)
 		return "", err
 	}
-	txSummary, err := lw.wallet.TransactionSummary(hash)
+	txSummary, _, _, err := lw.wallet.TransactionSummary(hash)
 	if err != nil {
 		log.Error(err)
 		return "", err
