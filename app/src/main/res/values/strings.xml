@@ -273,4 +273,5 @@
         <item>$</item>
     </string-array>
     <string name="dcr_to_usd_exchange_url">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
+    <string name="key_timeout">timeout</string>
 </resources>

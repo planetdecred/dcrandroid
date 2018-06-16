@@ -29,6 +29,7 @@ public class Constants {
     public static final String KEY_TRANSACTION_NOTIFICATION = "transaction_notification";
     public static final String KEY_NETWORK_MODES = "network_modes";
     public static final String KEY_PEER_IP = "peer_ip";
+    public static final String KEY_TIMEOUT = "timeout";
     public static final String KEY_REMOTE_DCRD_ADDRESS = "remote_dcrd_address";
     public static final String KEY_RECENT_ADDRESS = "recent_address";
     public static final String KEY_DEBUG_MESSAGES = "debug_messages";

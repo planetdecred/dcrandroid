@@ -57,7 +57,7 @@
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
         <EditTextPreference
-            android:key="60"
+            android:key="@string/key_timeout"
             android:summary="@string/summary_connection_timeout"
             android:title="@string/pref_title_timout" />
         <EditTextPreference

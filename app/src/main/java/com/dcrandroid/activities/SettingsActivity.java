@@ -32,6 +32,7 @@ import mobilewallet.BlockScanResponse;
 
 public class SettingsActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,11 @@ public class SettingsActivity extends AppCompatActivity {
         Date today;
         String result;
         SimpleDateFormat formatter;
+        EditTextPreference remoteDcrdAddress;
+        EditTextPreference dcrdCertificate;
+        Preference dcrLog;
+        EditTextPreference connectToPeer;
+        EditTextPreference timeout;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -56,11 +62,12 @@ public class SettingsActivity extends AppCompatActivity {
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             //addPreferencesFromResource(R.xml.pref_main);
-            final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
-            final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
-            final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
+            remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
+            timeout = (EditTextPreference)findPreference(getString(R.string.key_timeout));
+            dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
+            dcrLog = findPreference(getString(R.string.dcrd_log_key));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
-            final EditTextPreference connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
+            connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
@@ -70,22 +77,13 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
-                dcrdCertificate.setEnabled(true);
-                remoteDcrdAddress.setEnabled(true);
-                connectToPeer.setEnabled(false);
-                dcrLog.setEnabled(false);
+                remoteFullModeSet();
             }
             else if(util.getInt("network_mode") == 1) {
-                dcrdCertificate.setEnabled(false);
-                remoteDcrdAddress.setEnabled(false);
-                connectToPeer.setEnabled(true);
-                dcrLog.setEnabled(true);
+                localfullModeSet();
             }
             else {
-                dcrdCertificate.setEnabled(false);
-                remoteDcrdAddress.setEnabled(false);
-                connectToPeer.setEnabled(true);
-                dcrLog.setEnabled(false);
+                SpvModeset();
             }
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0"))]);
 
@@ -96,20 +94,11 @@ public class SettingsActivity extends AppCompatActivity {
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.KEY_NETWORK_MODES, String.valueOf(i));
                     if(i == 0){
-                        connectToPeer.setEnabled(true);
-                        remoteDcrdAddress.setEnabled(false);
-                        dcrdCertificate.setEnabled(false);
-                        dcrLog.setEnabled(false);
+                        MainPreferenceFragment.this.SpvModeset();
                     }else if(i == 1){
-                        connectToPeer.setEnabled(true);
-                        remoteDcrdAddress.setEnabled(false);
-                        dcrdCertificate.setEnabled(false);
-                        dcrLog.setEnabled(true);
+                        MainPreferenceFragment.this.localfullModeSet();
                     }else{
-                        connectToPeer.setEnabled(false);
-                        remoteDcrdAddress.setEnabled(true);
-                        dcrdCertificate.setEnabled(true);
-                        dcrLog.setEnabled(false);
+                        MainPreferenceFragment.this.remoteFullModeSet();
                         Utils.removeDcrdConfig("connect");
                     }
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
@@ -297,6 +286,39 @@ public class SettingsActivity extends AppCompatActivity {
             });
             return true;
         }
+        public void SpvModeset(){
+            connectToPeer.setEnabled(true);
+            connectToPeer.setVisible(true);
+            remoteDcrdAddress.setEnabled(false);
+            dcrdCertificate.setEnabled(false);
+            dcrLog.setEnabled(false);
+            remoteDcrdAddress.setVisible(false);
+            dcrdCertificate.setVisible(false);
+            dcrLog.setVisible(false);
+            timeout.setVisible(false);
+        }
+        public void localfullModeSet(){
+            connectToPeer.setEnabled(true);
+            connectToPeer.setVisible(true);
+            remoteDcrdAddress.setEnabled(false);
+            remoteDcrdAddress.setVisible(false);
+            dcrdCertificate.setEnabled(false);
+            dcrdCertificate.setVisible(false);
+            dcrLog.setEnabled(true);
+            dcrLog.setVisible(true);
+            timeout.setVisible(true);
+        }
+        public void remoteFullModeSet(){
+            connectToPeer.setEnabled(false);
+            connectToPeer.setVisible(false);
+            dcrdCertificate.setEnabled(true);
+            dcrdCertificate.setVisible(true);
+            remoteDcrdAddress.setVisible(true);
+            remoteDcrdAddress.setEnabled(true);
+            dcrLog.setEnabled(false);
+            dcrLog.setVisible(false);
+            timeout.setVisible(true);
+        }
     }
 
     @Override
@@ -313,4 +335,7 @@ public class SettingsActivity extends AppCompatActivity {
         setResult(0);
         finishActivity(2);
     }
+
+
+
 }
