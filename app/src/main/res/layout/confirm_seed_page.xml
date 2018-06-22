@@ -41,11 +41,8 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8.0dip"
-        android:paddingTop="8.0dip"
         android:layout_below="@+id/headerTop"
         >
-
         <android.support.v7.widget.AppCompatAutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,11 +55,18 @@
             android:background="#ffff"/>
 
     </RelativeLayout>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirm_seedScroll"
+        android:layout_below="@id/bottom_bar">
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       >
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/bottom_bar"
         android:id="@+id/seedViewScrollcon"
         >
         <ScrollView
@@ -70,6 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/button_clear_seed"
+            android:layout_toStartOf="@id/button_clear_seed"
 
 
             >
@@ -139,6 +144,9 @@
 
             android:textSize="14sp" />
     </RelativeLayout>
+
+   </RelativeLayout>
+    </ScrollView>
 
 
 

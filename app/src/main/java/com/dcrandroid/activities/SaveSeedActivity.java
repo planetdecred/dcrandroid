@@ -56,7 +56,7 @@ public class SaveSeedActivity extends AppCompatActivity {
     private void btnCopyPhrase(){
         if(!Fullseed.equals("")) {
             Intent i = new Intent(SaveSeedActivity.this, ConfirmSeedActivity.class)
-                    .putExtra("seed", seed)
+                    .putExtra("seed", Fullseed)
                     .putExtra("restore", false);
             startActivity(i);
         }else{
