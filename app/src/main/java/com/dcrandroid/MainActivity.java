@@ -5,9 +5,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -93,6 +95,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mainApplication = (MainApplication) getApplicationContext();
         util = new PreferenceUtil(this);
         constants = DcrConstants.getInstance();
+        if(constants.wallet == null){
+            PackageManager packageManager = getPackageManager();
+            Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
+            ComponentName componentName = intent.getComponent();
+            Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+            startActivity(mainIntent);
+            Runtime.getRuntime().exit(0);
+        }
         constants.wallet.transactionNotification(this);
         constants.notificationProxy = this;
         rescanHeight = findViewById(R.id.rescan_height);
