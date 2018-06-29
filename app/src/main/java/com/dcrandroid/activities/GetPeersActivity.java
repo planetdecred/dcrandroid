@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.adapter.PeerAdapter;
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
@@ -84,7 +85,7 @@ public class GetPeersActivity extends AppCompatActivity{
 
     private String getNetworkAddress(){
         //TODO: Make available for Mainnet
-        String dcrdAddress = Utils.getDcrdNetworkAddress(GetPeersActivity.this);
+        String dcrdAddress = Utils.getDcrdNetworkAddress(GetPeersActivity.this, (MainApplication) getApplicationContext());
         if(dcrdAddress.contains(":")){
             return dcrdAddress.split(":")[0] + ":19109";
         }
@@ -98,7 +99,7 @@ public class GetPeersActivity extends AppCompatActivity{
             public void run() {
                 DcrConstants constants = DcrConstants.getInstance();
                 try {
-                    String result = constants.wallet.callJSONRPC("getpeerinfo", "",getNetworkAddress(), "dcrwallet","dcrwallet", Utils.getConnectionCertificate(GetPeersActivity.this));
+                    String result = constants.wallet.callJSONRPC("getpeerinfo", "",getNetworkAddress(), "dcrwallet","dcrwallet", Utils.getConnectionCertificate(GetPeersActivity.this, (MainApplication) getApplicationContext()));
                     System.out.println("Peers: "+result);
                     JSONArray array = new JSONArray(result);
                     if(array.length() == 0){

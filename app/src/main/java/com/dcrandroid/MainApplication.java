@@ -25,7 +25,17 @@ import org.acra.annotation.ReportsCrashes;
 )
 public class MainApplication extends Application {
 
-    PreferenceUtil util;
+    private PreferenceUtil util;
+    private static int networkMode;
+
+    public int getNetworkMode(){
+        return networkMode;
+    }
+
+    public void setNetworkMode(int networkMode) {
+        MainApplication.networkMode = networkMode;
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -42,10 +52,11 @@ public class MainApplication extends Application {
         super.onCreate();
         util = new PreferenceUtil(this);
         try {
-            Utils.writeDcrdCertificate(this);
+            Utils.writeDcrdCertificate(this, this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        setNetworkMode(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")));
         if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 1){
             //local full-node
             System.out.println("Starting local server");
