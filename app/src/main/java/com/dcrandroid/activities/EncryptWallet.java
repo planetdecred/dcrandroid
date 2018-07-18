@@ -110,6 +110,7 @@ public class EncryptWallet extends AppCompatActivity{
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                //Todo: Handle Error here
                             }
                         }
                     }.start();
