@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DcrResponse;
@@ -45,7 +46,6 @@ public class EncryptWallet extends AppCompatActivity{
         Bundle b = i.getExtras();
         if(b != null)
             seed = b.getString("seed");
-        System.out.println("Encrypt Seed: "+seed);
         encryptWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,19 +65,16 @@ public class EncryptWallet extends AppCompatActivity{
                                 show("Connecting to dcrd...");
                                 for(;;){
                                     try {
-                                        wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this), "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes());
+                                        wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this, (MainApplication) getApplicationContext()), "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this, (MainApplication) getApplicationContext()).getBytes());
                                         break;
                                     }catch (final Exception e){
                                         if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                                            System.out.println("Showing debug messages");
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     Toast.makeText(EncryptWallet.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-                                        }else{
-                                            System.out.println("Not showing debug messages");
                                         }
                                         e.printStackTrace();
                                     }

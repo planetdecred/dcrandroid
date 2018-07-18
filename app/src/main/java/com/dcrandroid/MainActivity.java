@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public MainActivity mainActivity;
     private ImageView rescanImage, stopScan;
     private boolean scanning = false;
+    private MainApplication mainApplication;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             channel.setImportance(NotificationManager.IMPORTANCE_LOW);
             notificationManager.createNotificationChannel(channel);
         }
+        mainApplication = (MainApplication) getApplicationContext();
         util = new PreferenceUtil(this);
         constants = DcrConstants.getInstance();
         constants.wallet.transactionNotification(this);
@@ -508,15 +510,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 try {
                     setConnectionStatus("Connecting to RPC Server");
-                    String dcrdAddress = Utils.getDcrdNetworkAddress(MainActivity.this);
-                    if (Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) != 0) {
+                    String dcrdAddress = Utils.getDcrdNetworkAddress(MainActivity.this, mainApplication);
+                    if (mainApplication.getNetworkMode() != 0) {
                         int i = 0;
                         for (; ; ) {
                             try {
                                 if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
                                     showText("Connecting attempt " + (++i));
                                 }
-                                constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(MainActivity.this).getBytes());
+                                constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(MainActivity.this, mainApplication).getBytes());
                                     break;
                             } catch (Exception e) {
                                 e.printStackTrace();

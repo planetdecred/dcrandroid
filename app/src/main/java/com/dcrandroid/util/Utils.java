@@ -3,6 +3,7 @@ package com.dcrandroid.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.BestBlock;
 import com.dcrandroid.data.Constants;
@@ -106,9 +107,9 @@ public class Utils {
         return String.format("%040x", new BigInteger(1, arg.getBytes()));
     }
 
-    public static String getConnectionCertificate(Context context){
+    public static String getConnectionCertificate(Context context, MainApplication application){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
+        if(application.getNetworkMode() == 2){
             return Utils.getRemoteCertificate(context);
         }else{
             return Utils.getDefaultCertificate(context);
@@ -183,9 +184,9 @@ public class Utils {
         return "";
     }
 
-    public static String getDcrdNetworkAddress(Context context){
+    public static String getDcrdNetworkAddress(Context context, MainApplication application){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 1 || Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 0){
+        if(application.getNetworkMode() != 2){
             System.out.println("Util is using local server");
             //return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
             return "";
@@ -196,21 +197,16 @@ public class Utils {
         }
     }
 
-    public static void writeDcrdCertificate(Context context) throws Exception{
+    public static void writeDcrdCertificate(Context context, MainApplication application) throws Exception{
         File path = new File(context.getFilesDir().getPath(),"/dcrd");
         path.mkdirs();
         File file = new File(path, "rpc.cert");
         FileOutputStream fout = new FileOutputStream(file);
-        System.out.println("Cert: "+getConnectionCertificate(context));
-        byte[] buffer = getConnectionCertificate(context).getBytes();
+        System.out.println("Cert: "+getConnectionCertificate(context, application));
+        byte[] buffer = getConnectionCertificate(context, application).getBytes();
         fout.write(buffer, 0, buffer.length);
         fout.flush();
         fout.close();
-    }
-
-    public static BestBlock parseBestBlock(String json) throws JSONException{
-        JSONObject obj = new JSONObject(json);
-        return new BestBlock(obj.getString("hash"), obj.getInt("height"));
     }
 
     //TODO: Make available for both testnet and mainnet
