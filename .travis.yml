@@ -1,0 +1,7 @@
+language: go
+go:
+ - 1.9
+before_install:
+ - go get -u github.com/alecthomas/gometalinter
+ - gometalinter --install
+ - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
