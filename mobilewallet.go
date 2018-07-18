@@ -327,7 +327,7 @@ func (lw *LibWallet) ProcessNotification(listener ProcessListener) {
 		defer n.Done()
 		for {
 			v := <-n.C
-			
+
 			listener.OnProcessCallback(v.Name, v.State, strings.Join(v.Params, ";"))
 		}
 	}()
