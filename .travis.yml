@@ -5,7 +5,8 @@ go:
 sudo: required
 
 before_install:
- - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sudo sh
+ - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+ - dep ensure -v
  - go get -u github.com/alecthomas/gometalinter
  - gometalinter --install
  - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
