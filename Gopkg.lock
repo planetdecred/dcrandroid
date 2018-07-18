@@ -3,6 +3,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/aead/siphash"
+  packages = ["."]
+  revision = "e404fcfc888570cadd1610538e2dbc89f66af814"
+
+[[projects]]
+  branch = "master"
   name = "github.com/agl/ed25519"
   packages = [
     ".",
@@ -18,38 +24,27 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/btcsuite/btclog"
-  packages = ["."]
-  revision = "84c8d2346e9fc8c7b947e243b9c24e6df9fd206a"
-
-[[projects]]
-  branch = "master"
   name = "github.com/btcsuite/go-socks"
   packages = ["socks"]
   revision = "4720035b7bfd2a9bb130b1c184f8bbe41b6f0d0f"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/btcsuite/websocket"
-  packages = ["."]
-  revision = "31079b6807923eb23992c421b114992b95131b55"
-
-[[projects]]
-  branch = "master"
   name = "github.com/dchest/blake256"
   packages = ["."]
   revision = "dee3fe6eb0e98dc774a94fc231f85baf7c29d360"
+  version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/decred/base58"
   packages = ["."]
   revision = "56c501706f00d9e1cfacee19a27117e12da24734"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
   name = "github.com/decred/dcrd"
   packages = [
+    "addrmgr",
     "blockchain",
     "blockchain/indexers",
     "blockchain/internal/dbnamespace",
@@ -61,12 +56,16 @@
     "chaincfg",
     "chaincfg/chainec",
     "chaincfg/chainhash",
+    "connmgr",
     "database",
+    "dcrec",
     "dcrec/edwards",
     "dcrec/secp256k1",
     "dcrec/secp256k1/schnorr",
     "dcrjson",
     "dcrutil",
+    "gcs",
+    "gcs/blockcf",
     "hdkeychain",
     "mempool",
     "mining",
@@ -74,47 +73,69 @@
     "txscript",
     "wire"
   ]
-  revision = "4e01f768cb28a138b1b51dc17f0de284703b5f7a"
+  revision = "ddd66de60466b544ef7b41abe00ecd3f248b00d9"
 
 [[projects]]
   name = "github.com/decred/dcrwallet"
   packages = [
-    "apperrors",
     "chain",
+    "deployments",
+    "errors",
     "internal/helpers",
     "internal/zero",
     "loader",
+    "lru",
     "netparams",
+    "p2p",
     "pgpwordlist",
-    "snacl",
+    "spv",
     "ticketbuyer",
+    "ticketbuyer/v2",
+    "validate",
+    "version",
     "wallet",
+    "wallet/drivers/bdb",
+    "wallet/internal/snacl",
     "wallet/internal/txsizes",
+    "wallet/internal/walletdb",
+    "wallet/internal/walletdb/bdb",
     "wallet/txauthor",
     "wallet/txrules",
     "wallet/udb",
-    "walletdb",
-    "walletdb/bdb",
     "walletseed"
   ]
-  revision = "87b1f9a230dfa916a4501c2360e741081ca035a0"
+  revision = "779bec6c48e20d64fd4c3c24a395e6c6c3d6e7e8"
+  source = "github.com/c-ollins/btcwallet"
 
 [[projects]]
-  branch = "master"
+  name = "github.com/decred/slog"
+  packages = ["."]
+  revision = "fbd821ef791ba2b8ae945f5d44f4e49396d230c5"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
+  version = "v1.2.0"
+
+[[projects]]
   name = "github.com/jrick/bitset"
   packages = ["."]
   revision = "06eae37cdf93c699c0503c23f998167ce841974c"
+  version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/jrick/logrotate"
   packages = ["rotator"]
   revision = "a93b200c26cbae3bb09dd0dc2c7c7fe1468a034a"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = [
+    "internal/subtle",
     "nacl/secretbox",
     "pbkdf2",
     "poly1305",
@@ -122,13 +143,13 @@
     "salsa20/salsa",
     "scrypt"
   ]
-  revision = "80db560fac1fb3e6ac81dbc7f8ae4c061f5257bd"
+  revision = "a49355c7e3f8fe157a85be2f77e6e269a0f89602"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "6078986fec03a1dcc236c34816c71b0e05018fda"
+  revision = "cffdcf672aee934982473246bc7e9a8ba446aa9b"
 
 [[projects]]
   branch = "master"
@@ -140,11 +161,11 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "7ceb54c8418b8f9cdf0177b511d5cbb06e9fae39"
+  revision = "1b2967e3c290b7c545b3db0deeda16e9be4f98a2"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a32b024b09d45b47a2349a33a5ef764ca3096412e2ed76ab80b0f2a168ef3fdf"
+  inputs-digest = "3df4784991ceff8ad0c0994bd26f960946976700edc5ce41a02435445a52c170"
   solver-name = "gps-cdcl"
-solver-version = 1
+  solver-version = 1
