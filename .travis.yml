@@ -41,4 +41,4 @@ before_install:
   - gometalinter --install
   - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
   - gomobile bind -target=android/386
-  - cp mobilewallet.aar $GOPATH/../dcrandroid/app/libs/mobilewallet.aar && cd ../../../
+  - cp mobilewallet.aar $GOPATH/../dcrandroid/app/libs/mobilewallet.aar && cd $GOPATH/../dcrandroid
