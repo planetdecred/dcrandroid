@@ -24,7 +24,7 @@ before_install:
   - echo $PATH
   - which go
   - go version
-  - cd ../ ls && pwd && mkdir go
+  - cd ../ && ls && pwd && mkdir go
   - cd go
   - mkdir bin
   - export GOPATH=$(pwd)
@@ -34,7 +34,7 @@ before_install:
   - chmod +x $GOPATH/bin/gomobile && chmod +x $GOPATH/bin/gobind
   - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind && sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile && sudo ln -s $GOPATH/bin/dep /usr/bin/dep
   - gomobile init -ndk $ANDROID_NDK_HOME
-  - go get -u github.com/raedahgroup/mobilewallet
+  - go get -v github.com/raedahgroup/mobilewallet
   - go get -u github.com/alecthomas/gometalinter
   - cd $GOPATH/src/github.com/raedahgroup/mobilewallet
   - dep ensure -v
