@@ -24,19 +24,19 @@ before_install:
   - echo $PATH
   - which go
   - go version
-  - cd ../ && ls && pwd && mkdir go
+  - cd ../ && mkdir go
   - cd go
   - mkdir bin
-  - export GOPATH=$(pwd)
+  - export GOPATH=$(pwd) && echo $GOPATH
   - export PATH=$PATH:$GOPATH/bin
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sudo sh
   - go get -u golang.org/x/mobile/cmd/gomobile && go get -u golang.org/x/mobile/cmd/gobind
   - chmod +x $GOPATH/bin/gomobile && chmod +x $GOPATH/bin/gobind
   - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind && sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile && sudo ln -s $GOPATH/bin/dep /usr/bin/dep
   - gomobile init -ndk $ANDROID_NDK_HOME
-  - go get -v -d github.com/raedahgroup/mobilewallet
   - go get -u github.com/alecthomas/gometalinter
-  - cd $GOPATH/src/github.com/raedahgroup/mobilewallet
+  - mkdir -p src/github.com/raedahgroup && cd src/github.com/raedahgroup
+  - git clone https://github.com/raedahgroup/mobilewallet && cd mobilewallet
   - dep ensure -v
   - gometalinter --install
   - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
