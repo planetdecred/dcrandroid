@@ -44,7 +44,6 @@ public class SettingsActivity extends AppCompatActivity {
         protected PreferenceUtil util;
         ProgressDialog pd;
         private DcrConstants constants;
-        Date today;
         String result;
         SimpleDateFormat formatter;
 
@@ -55,12 +54,10 @@ public class SettingsActivity extends AppCompatActivity {
             constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
-            //addPreferencesFromResource(R.xml.pref_main);
-            final EditTextPreference remoteDcrdAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
-            final EditTextPreference dcrdCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
-            final Preference dcrLog = findPreference(getString(R.string.dcrd_log_key));
+            final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
+            final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
-            final EditTextPreference connectToPeer = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
+            final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
@@ -70,22 +67,14 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
-                dcrdCertificate.setEnabled(true);
-                remoteDcrdAddress.setEnabled(true);
-                connectToPeer.setEnabled(false);
-                dcrLog.setEnabled(false);
-            }
-            else if(util.getInt("network_mode") == 1) {
-                dcrdCertificate.setEnabled(false);
-                remoteDcrdAddress.setEnabled(false);
-                connectToPeer.setEnabled(true);
-                dcrLog.setEnabled(true);
+                remoteNodeCertificate.setEnabled(true);
+                remoteNodeAddress.setEnabled(true);
+                peerAddress.setEnabled(false);
             }
             else {
-                dcrdCertificate.setEnabled(false);
-                remoteDcrdAddress.setEnabled(false);
-                connectToPeer.setEnabled(true);
-                dcrLog.setEnabled(false);
+                remoteNodeCertificate.setEnabled(false);
+                remoteNodeAddress.setEnabled(false);
+                peerAddress.setEnabled(true);
             }
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0"))]);
 
@@ -96,28 +85,20 @@ public class SettingsActivity extends AppCompatActivity {
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.KEY_NETWORK_MODES, String.valueOf(i));
                     if(i == 0){
-                        connectToPeer.setEnabled(true);
-                        remoteDcrdAddress.setEnabled(false);
-                        dcrdCertificate.setEnabled(false);
-                        dcrLog.setEnabled(false);
-                    }else if(i == 1){
-                        connectToPeer.setEnabled(true);
-                        remoteDcrdAddress.setEnabled(false);
-                        dcrdCertificate.setEnabled(false);
-                        dcrLog.setEnabled(true);
+                        peerAddress.setEnabled(true);
+                        remoteNodeAddress.setEnabled(false);
+                        remoteNodeCertificate.setEnabled(false);
                     }else{
-                        connectToPeer.setEnabled(false);
-                        remoteDcrdAddress.setEnabled(true);
-                        dcrdCertificate.setEnabled(true);
-                        dcrLog.setEnabled(false);
-                        Utils.removeDcrdConfig("connect");
+                        peerAddress.setEnabled(false);
+                        remoteNodeAddress.setEnabled(true);
+                        remoteNodeCertificate.setEnabled(true);
                     }
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
 
-            connectToPeer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            peerAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String address = newValue.toString();
@@ -129,8 +110,6 @@ public class SettingsActivity extends AppCompatActivity {
                     if(address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")
                             || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
                             || address.equals("")) {
-                        //Utils.setDcrwalletConfig("spvconnect",address);
-                        Utils.setDcrdConfiguration("connect",address);
                         return true;
                     }else{
                         Toast.makeText(getActivity(), "Peer address is invalid", Toast.LENGTH_SHORT).show();
@@ -139,7 +118,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            remoteDcrdAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            remoteNodeAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String address = o.toString();
@@ -159,7 +138,7 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
-            dcrdCertificate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            remoteNodeCertificate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String certificate = o.toString();
@@ -167,6 +146,7 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
             findPreference("discover").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -208,17 +188,6 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
                             }).setNegativeButton("NO", null)
                             .show();
-                    return true;
-                }
-            });
-
-            findPreference("dcrd_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    //TODO: Make this available for both testnet and mainnet
-                    Intent i = new Intent(getActivity(), LogViewer.class);
-                    i.putExtra("log_path","/data/data/com.dcrandroid/files/dcrd/logs/testnet2/dcrd.log");
-                    startActivity(i);
                     return true;
                 }
             });

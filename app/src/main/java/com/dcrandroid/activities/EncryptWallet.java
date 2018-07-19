@@ -14,15 +14,11 @@ import android.widget.Toast;
 import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
-import org.json.JSONException;
-
-import mobilewallet.BlockScanResponse;
 import mobilewallet.LibWallet;
 
 /**
@@ -39,9 +35,9 @@ public class EncryptWallet extends AppCompatActivity{
         setContentView(R.layout.activity_enter_passphrase);
         util = new PreferenceUtil(EncryptWallet.this);
         pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"");
-        final EditText passPhrase = (EditText) findViewById(R.id.passphrase);
-        final EditText verifyPassPhrase = (EditText) findViewById(R.id.verifyPassphrase);
-        Button encryptWallet = (Button) findViewById(R.id.button_encrypt_wallet);
+        final EditText passPhrase = findViewById(R.id.passphrase);
+        final EditText verifyPassPhrase = findViewById(R.id.verifyPassphrase);
+        Button encryptWallet = findViewById(R.id.button_encrypt_wallet);
         Intent i = getIntent();
         Bundle b = i.getExtras();
         if(b != null)
@@ -62,10 +58,10 @@ public class EncryptWallet extends AppCompatActivity{
                                 LibWallet wallet = constants.wallet;
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
-                                show("Connecting to dcrd...");
+                                show("Connecting to node...");
                                 for(;;){
                                     try {
-                                        wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this, (MainApplication) getApplicationContext()), "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this, (MainApplication) getApplicationContext()).getBytes());
+                                        wallet.startRPCClient(Utils.getNetworkAddress(EncryptWallet.this, (MainApplication) getApplicationContext()), "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(EncryptWallet.this).getBytes());
                                         break;
                                     }catch (final Exception e){
                                         if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {

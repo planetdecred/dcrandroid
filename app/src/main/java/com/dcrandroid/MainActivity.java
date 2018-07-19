@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NotificationManager notificationManager;
     private TextView rescanHeight, chainStatus, connectionStatus;
     private Animation animRotate;
-    public MainActivity mainActivity;
     private ImageView rescanImage, stopScan;
     private boolean scanning = false;
     private MainApplication mainApplication;
@@ -510,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 try {
                     setConnectionStatus("Connecting to RPC Server");
-                    String dcrdAddress = Utils.getDcrdNetworkAddress(MainActivity.this, mainApplication);
+                    String dcrdAddress = Utils.getNetworkAddress(MainActivity.this, mainApplication);
                     if (mainApplication.getNetworkMode() != 0) {
                         int i = 0;
                         for (; ; ) {
@@ -518,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
                                     showText("Connecting attempt " + (++i));
                                 }
-                                constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(MainActivity.this, mainApplication).getBytes());
+                                constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(MainActivity.this).getBytes());
                                     break;
                             } catch (Exception e) {
                                 e.printStackTrace();

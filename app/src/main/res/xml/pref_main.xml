@@ -57,10 +57,6 @@
             android:summary="@string/summary_paste_certificate"
             android:title="@string/pref_title_certificate" />
         <EditTextPreference
-            android:key="60"
-            android:summary="@string/summary_connection_timeout"
-            android:title="@string/pref_title_timout" />
-        <EditTextPreference
             android:key="user_agent"
             android:title="User agent"/>
     </PreferenceCategory>
@@ -87,10 +83,6 @@
         <Preference
             android:title="@string/wallet_log_title"
             android:key="dcrwallet_log"
-            />
-        <Preference
-            android:title="@string/dcrd_log_title"
-            android:key="@string/dcrd_log_key"
             />
         <Preference
             android:title="@string/crash_title"

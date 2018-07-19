@@ -194,12 +194,10 @@
     <string name="pref_header_about">About</string>
     <string name="build_date">Build Date</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
-    <string name="title_enable_local_dcrd">Enable local dcrd</string>
     <string name="title_testnet">Testnet</string>
     <string name="summary_testnet">Use testnet connection</string>
     <string name="key_transaction_confirmation">key_transaction_confirmation</string>
     <string name="key_connection_certificate">key_connection_certificate</string>
-    <string name="key_connection_local_dcrd">key_connection_local_dcrd</string>
     <string name="key_testnet">key_testnet</string>
     <string name="key_get_peers">key_get_peers</string>
     <string name="summary_peers">View available peers and details</string>
@@ -252,13 +250,11 @@
     <string name="build_date_system">build_date_system</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
-        <item>Local Full full-node</item>
         <item>Remote Full full-node</item>
     </string-array>
     <string-array name="network_modes_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="currency_conversion">
         <item>None</item>

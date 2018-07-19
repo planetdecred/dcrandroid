@@ -52,20 +52,10 @@ public class MainApplication extends Application {
         super.onCreate();
         util = new PreferenceUtil(this);
         try {
-            Utils.writeDcrdCertificate(this, this);
+            Utils.writeDcrdCertificate(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
         setNetworkMode(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")));
-        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 1){
-            //local full-node
-            System.out.println("Starting local server");
-            Intent i = new Intent(this, DcrdService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(i);
-            }else{
-                startService(i);
-            }
-        }
     }
 }
