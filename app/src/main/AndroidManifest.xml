@@ -79,21 +79,8 @@
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.DiscoverAddress" />
 
-        <service
-            android:name=".service.DcrdService"
-            android:enabled="true"
-            android:exported="false"
-            android:label="Decred Chain Server"
-            android:process=":dcrd" />
-
         <activity android:name=".activities.LogViewer" />
 
-        <receiver
-            android:name=".receiver.ShutdownReceiver"
-            android:enabled="true"
-            android:exported="true">
-
-        </receiver>
     </application>
 
 </manifest>

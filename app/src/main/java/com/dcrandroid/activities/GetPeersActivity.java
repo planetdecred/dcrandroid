@@ -20,7 +20,6 @@ import com.dcrandroid.util.Utils;
 import com.dcrandroid.data.Peers;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class GetPeersActivity extends AppCompatActivity{
 
     private String getNetworkAddress(){
         //TODO: Make available for Mainnet
-        String dcrdAddress = Utils.getDcrdNetworkAddress(GetPeersActivity.this, (MainApplication) getApplicationContext());
+        String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this, (MainApplication) getApplicationContext());
         if(dcrdAddress.contains(":")){
             return dcrdAddress.split(":")[0] + ":19109";
         }
@@ -99,7 +98,7 @@ public class GetPeersActivity extends AppCompatActivity{
             public void run() {
                 DcrConstants constants = DcrConstants.getInstance();
                 try {
-                    String result = constants.wallet.callJSONRPC("getpeerinfo", "",getNetworkAddress(), "dcrwallet","dcrwallet", Utils.getConnectionCertificate(GetPeersActivity.this, (MainApplication) getApplicationContext()));
+                    String result = constants.wallet.callJSONRPC("getpeerinfo", "",getNetworkAddress(), "dcrwallet","dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
                     System.out.println("Peers: "+result);
                     JSONArray array = new JSONArray(result);
                     if(array.length() == 0){
