@@ -2,12 +2,9 @@ package com.dcrandroid;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.service.DcrdService;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
