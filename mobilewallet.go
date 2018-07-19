@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"math"
 	"net"
+	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -31,6 +33,10 @@ import (
 	"github.com/decred/dcrwallet/wallet/txrules"
 	walletseed "github.com/decred/dcrwallet/walletseed"
 )
+
+var shutdownRequestChannel = make(chan struct{})
+var shutdownSignaled = make(chan struct{})
+var signals = []os.Signal{os.Interrupt}
 
 type LibWallet struct {
 	dataDir     string
@@ -100,11 +106,46 @@ func (lw *LibWallet) LockWallet() {
 func (lw *LibWallet) Shutdown() {
 	log.Info("Shuting down mobile wallet")
 	lw.LockWallet()
-	lw.wallet.SetNetworkBackend(nil)
-	lw.loader.UnloadWallet()
+	shutdownRequestChannel <- struct{}{}
 	if logRotator != nil {
+		log.Infof("Shutting down log rotator")
 		logRotator.Close()
 	}
+}
+
+func shutdownListener() {
+	interruptChannel := make(chan os.Signal, 1)
+	signal.Notify(interruptChannel, signals...)
+
+	// Listen for the initial shutdown signal
+	select {
+	case sig := <-interruptChannel:
+		log.Infof("Received signal (%s).  Shutting down...", sig)
+	case <-shutdownRequestChannel:
+		log.Info("Shutdown requested.  Shutting down...")
+	}
+
+	// Cancel all contexts created from withShutdownCancel.
+	close(shutdownSignaled)
+
+	// Listen for any more shutdown signals and log that shutdown has already
+	// been signaled.
+	for {
+		select {
+		case <-interruptChannel:
+		case <-shutdownRequestChannel:
+		}
+		log.Info("Shutdown signaled.  Already shutting down...")
+	}
+}
+
+func contextWithShutdownCancel(ctx context.Context) context.Context {
+	ctx, cancel := context.WithCancel(ctx)
+	go func() {
+		<-shutdownSignaled
+		cancel()
+	}()
+	return ctx
 }
 
 func decodeAddress(a string, params *chaincfg.Params) (dcrutil.Address, error) {
@@ -132,11 +173,11 @@ func (lw *LibWallet) InitLoader() {
 	lw.loader = l
 	lw.activeNet = &netparams.TestNet2Params
 	lw.chainParams = &chaincfg.TestNet2Params
+	go shutdownListener()
 }
 
 func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error {
 	fmt.Println("Creating wallet")
-
 	pubPass := []byte(wallet.InsecurePubPassphrase)
 	privPass := []byte(passphrase)
 	seed, err := walletseed.DecodeUserInput(seedMnemonic)
@@ -151,10 +192,7 @@ func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error 
 		return err
 	}
 	lw.wallet = w
-	// err = w.UpgradeToSLIP0044CoinType()
-	// if err != nil {
-	// 	return err
-	// }
+
 	fmt.Println("Created Wallet")
 	return nil
 }
@@ -190,7 +228,7 @@ func (lw *LibWallet) IsNetBackendNil() bool {
 
 func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) error {
 	fmt.Println("Connecting to rpc client")
-	ctx := context.Background()
+	ctx := contextWithShutdownCancel(context.Background())
 	networkAddress, err := NormalizeAddress(rpcHost, "19109")
 	if err != nil {
 		log.Error(err)
@@ -213,12 +251,16 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 
 	lw.netBackend = chain.BackendFromRPCClient(c.Client)
 	lw.rpcClient = c
+	go func() {
+		<-shutdownSignaled
+		lw.wallet.SetNetworkBackend(nil)
+	}()
 	return nil
 }
 
 func (lw *LibWallet) StartSPVConnection(peerAddress string) {
 	go func() {
-		ctx := context.Background()
+		ctx := contextWithShutdownCancel(context.Background())
 		addr := &net.TCPAddr{IP: net.ParseIP("::1"), Port: 19108}
 		amgrDir := filepath.Join(lw.dataDir, lw.wallet.ChainParams().Name)
 		amgr := addrmgr.New(amgrDir, net.LookupIP) // TODO: be mindful of tor
@@ -291,13 +333,13 @@ func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []b
 	}
 
 	n := chain.BackendFromRPCClient(chainClient.Client)
-	err := wallet.DiscoverActiveAddresses(context.Background(), n, wallet.ChainParams().GenesisHash, discoverAccounts)
+	err := wallet.DiscoverActiveAddresses(contextWithShutdownCancel(context.Background()), n, wallet.ChainParams().GenesisHash, discoverAccounts)
 	return err
 }
 
 func (lw *LibWallet) FetchHeaders() (int32, error) {
 	fmt.Println("Fetching Headers")
-	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(context.Background(), lw.netBackend)
+	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(contextWithShutdownCancel(context.Background()), lw.netBackend)
 	if err != nil {
 		log.Error(err)
 		return 0, err
@@ -311,7 +353,7 @@ func (lw *LibWallet) FetchHeaders() (int32, error) {
 
 func (lw *LibWallet) LoadActiveDataFilters() error {
 	fmt.Println("Loading Active Data Filters")
-	err := lw.wallet.LoadActiveDataFilters(context.Background(), lw.netBackend, false)
+	err := lw.wallet.LoadActiveDataFilters(contextWithShutdownCancel(context.Background()), lw.netBackend, false)
 	if err != nil {
 		log.Error(err)
 	}
@@ -431,15 +473,14 @@ func (lw *LibWallet) SubscribeToBlockNotifications(listener BlockNotificationErr
 	wallet.SetNetworkBackend(chain.BackendFromRPCClient(lw.rpcClient.Client))
 	go func() {
 		syncer := chain.NewRPCSyncer(lw.wallet, lw.rpcClient)
-		err = syncer.Run(context.Background(), false)
-		fmt.Println("Syncer returned")
+		err = syncer.Run(contextWithShutdownCancel(context.Background()), false)
+		log.Infof("Syncer returned")
 		if err == context.Canceled {
 			fmt.Println("Context was cancelled")
 			return
 		}
 		lw.netBackend = nil
 		wallet.SetNetworkBackend(nil)
-		fmt.Println("Sending notification")
 		listener.OnBlockNotificationError(err)
 		log.Error(err)
 	}()
@@ -455,30 +496,11 @@ func (lw *LibWallet) OpenWallet() error {
 		return err
 	}
 	lw.wallet = w
-	// err = w.DiscoverActiveAddresses(lw.netBackend, true)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// err = w.LoadActiveDataFilters(lw.netBackend)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// lets skip loading all headers for now...
-	// _, _, _, _, _, err = w.FetchHeaders(lw.netBackend)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// no need to rescan on this test.
-	// if fetchedHeaderCount > 0 {
-	// 	err = w.Rescan(ctx, lw.netBackend, &rescanStart)
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// }
-
+	go func() {
+		<-shutdownSignaled
+		lw.loader.UnloadWallet()
+		log.Infof("Wallet Unloaded")
+	}()
 	return nil
 }
 
@@ -493,7 +515,7 @@ func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
 			return
 		}
 		progress := make(chan wallet.RescanProgress, 1)
-		ctx := context.Background()
+		ctx := contextWithShutdownCancel(context.Background())
 		n, _ := lw.wallet.NetworkBackend()
 		var totalHeight int32
 		go lw.wallet.RescanProgressFromHeight(ctx, n, startHeight, progress)
@@ -556,7 +578,7 @@ func (lw *LibWallet) GetAccountByAddress(address string) string {
 }
 
 func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
-	ctx := context.Background()
+	ctx := contextWithShutdownCancel(context.Background())
 	var startBlock, endBlock *wallet.BlockIdentifier
 	transactions := make([]Transaction, 0)
 	rangeFn := func(block *wallet.Block) (bool, error) {
@@ -763,7 +785,7 @@ func (lw *LibWallet) PublishUnminedTransactions() error {
 	if lw.netBackend == nil {
 		return errors.New("wallet is not associated with a consensus server RPC client")
 	}
-	err := lw.wallet.PublishUnminedTransactions(context.Background(), lw.netBackend)
+	err := lw.wallet.PublishUnminedTransactions(contextWithShutdownCancel(context.Background()), lw.netBackend)
 	return err
 }
 
