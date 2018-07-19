@@ -24,24 +24,21 @@ before_install:
   - echo $PATH
   - which go
   - go version
-  - cd pkg
+  - ls && pwd 
+  - cd ../ & mkdir go
+  - cd go
   - mkdir bin
   - export GOPATH=$(pwd)
   - export PATH=$PATH:$GOPATH/bin
-  - cd src/mobilewallet
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sudo sh
-  - go get -u golang.org/x/mobile/cmd/gomobile
-  - go get -u golang.org/x/mobile/cmd/gobind
-  - chmod +x $GOPATH/bin/gomobile
-  - chmod +x $GOPATH/bin/gobind
-  - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind
-  - sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile
+  - go get -u golang.org/x/mobile/cmd/gomobile && go get -u golang.org/x/mobile/cmd/gobind
+  - chmod +x $GOPATH/bin/gomobile && chmod +x $GOPATH/bin/gobind
+  - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind && sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile && sudo ln -s $GOPATH/bin/dep /usr/bin/dep
   - gomobile init -ndk $ANDROID_NDK_HOME
-  - sudo ln -s $GOPATH/bin/dep /usr/bin/dep
+  - go get -u github.com/raedahgroup/mobilewallet && go get -u github.com/alecthomas/gometalinter
+  - cd $GOPATH/src/github.com/raedahgroup/mobilewallet
   - dep ensure -v
-  - go get -u github.com/alecthomas/gometalinter
   - gometalinter --install
   - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
   - gomobile bind -target=android/386
-  - cp mobilewallet.aar ../../../app/libs/mobilewallet.aar
-  - cd ../../../
+  - cp mobilewallet.aar $GOPATH/../dcrandroid/app/libs/mobilewallet.aar && cd ../../../
