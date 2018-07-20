@@ -2,6 +2,7 @@ package com.dcrandroid.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.util.EncodeQrCode;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.google.zxing.EncodeHintType;
 
 import net.glxn.qrgen.android.QRCode;
 
@@ -153,8 +155,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             System.out.println("Got Address in "+(System.currentTimeMillis() - startTime)+"ms");
             preferenceUtil.set(Constants.KEY_RECENT_ADDRESS,receiveAddress);
             address.setText(receiveAddress);
-            //imageView.setImageBitmap(EncodeQrCode.encodeToQrCode("decred:"+receiveAddress,200,200));
-            imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).bitmap());
+            imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
             System.out.println("Generated QR in "+(System.currentTimeMillis() - startTime)+"ms");
         } catch (Exception e) {
             e.printStackTrace();
