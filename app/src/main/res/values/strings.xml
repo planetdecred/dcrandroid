@@ -274,4 +274,6 @@
     </string-array>
     <string name="dcr_to_usd_exchange_url">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
     <string name="copy_on_click">(copy on click)</string>
+    <string name="for_more_information_please_visit">For more information please visit</string>
+    <string name="https_docs_decred_org">https://docs.decred.org</string>
 </resources>
