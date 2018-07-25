@@ -482,21 +482,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onAnimationStart(Animation animation) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
-    }
-
-    @Override
     public void onBlockNotificationError(Exception e) {
         System.out.println("Error received: "+e.getMessage());
         showText(e.getMessage());
