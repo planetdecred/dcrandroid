@@ -1,5 +1,6 @@
 package com.dcrandroid.activities;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -125,6 +126,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     ActivityCompat.finishAffinity(SplashScreen.this);
                 }catch (Exception e){
                     e.printStackTrace();
+                    //System.out.println("Restoring Wallet");
+                    //Utils.restoreWalletDB(SplashScreen.this);
+                    //load();
                 }
             }};
         loadThread.start();

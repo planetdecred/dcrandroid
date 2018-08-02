@@ -58,44 +58,13 @@ public class EncryptWallet extends AppCompatActivity{
                                 LibWallet wallet = constants.wallet;
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
-                                show("Connecting to node...");
-                                for(;;){
-                                    try {
-                                        wallet.startRPCClient(Utils.getNetworkAddress(EncryptWallet.this, (MainApplication) getApplicationContext()), "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(EncryptWallet.this).getBytes());
-                                        break;
-                                    }catch (final Exception e){
-                                        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(EncryptWallet.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                        e.printStackTrace();
-                                    }
-                                    try{
-                                        sleep(1500);
-                                    }catch (InterruptedException e){
-                                        e.printStackTrace();
-                                    }
-                                }
-                                wallet.subscribeToBlockNotifications(constants.notificationError);
-                                show("Discovering addresses...");
-                                wallet.discoverActiveAddresses(true, pass.getBytes());
-                                show("Fetching Headers...");
-                                wallet.fetchHeaders();
-                                long rescanHeight = constants.wallet.fetchHeaders();
-                                if (rescanHeight != -1) {
-                                    util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
-                                }
-                                System.out.println("Rescan Height: "+rescanHeight);
-                                wallet.loadActiveDataFilters();
+                                //Utils.backupWalletDB(EncryptWallet.this);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         pd.dismiss();
                                         Intent i = new Intent(EncryptWallet.this, MainActivity.class);
+                                        i.putExtra("passphrase", pass);
                                         startActivity(i);
                                         //Finish all the activities before this
                                         ActivityCompat.finishAffinity(EncryptWallet.this);

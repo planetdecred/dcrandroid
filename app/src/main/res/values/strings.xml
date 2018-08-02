@@ -117,10 +117,11 @@
     <string name="outputs">Outputs</string>
     <string name="waiting_for_dcrwallet">Waiting for dcrwallet to come online</string>
     <string name="waiting_for_dcrd">Waiting for dcrd to come online</string>
-    <string name="opening_wallet">Opening wallet...</string>
-    <string name="subscribe_to_block_notification">Subscribing to block notifications...</string>
-    <string name="discovering_address">Discovering addresses...</string>
-    <string name="fetching_headers">Fetching Headers...</string>
+    <string name="opening_wallet">Opening wallet…</string>
+    <string name="subscribe_to_block_notification">Subscribing to block notifications…</string>
+    <string name="discovering_used_addresses">Discovering used addresses</string>
+    <string name="discovering_used_accounts">Discovering used accounts</string>
+    <string name="fetching_headers">Fetching Headers…</string>
     <string name="could_not_open_wallet">Could not open wallet</string>
     <string name="error_seed_not_generated">Error occurred, Seed was not generated</string>
     <string name="error_occurred">Error Occurred:</string>
@@ -273,4 +274,7 @@
     <string name="copy_on_click">(copy on tap)</string>
     <string name="for_more_information_please_visit">For more information please visit</string>
     <string name="https_docs_decred_org">https://docs.decred.org</string>
+    <string name="not_connected_to_peer">Not connected to any peer</string>
+    <string name="exit_app_prompt_title">Exit wallet?</string>
+    <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
 </resources>

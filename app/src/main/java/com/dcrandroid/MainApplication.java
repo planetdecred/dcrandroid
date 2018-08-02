@@ -38,7 +38,6 @@ public class MainApplication extends Application {
         super.attachBaseContext(base);
         try {
             ACRA.init(this);
-            Log.d("ACRA","ACRA INIT SUCCESS");
         }catch (Exception e){
             e.printStackTrace();
         }
