@@ -193,6 +193,9 @@ public class Utils {
             //minute
             return millis + "m ago";
         }
+        if(millis < 0){
+            return "now";
+        }
         //seconds
         return millis + "s ago";
     }
@@ -228,5 +231,72 @@ public class Utils {
         BigDecimal dcr = BigDecimal.valueOf(Double.parseDouble(atm));
         dcr = dcr.multiply(BigDecimal.valueOf(1e8), new MathContext(100));
         return dcr.longValue();
+    }
+
+    public static String getPeerAddress(PreferenceUtil util){
+        String ip = util.get("peer_ip");
+        if(ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")){
+            return ip;
+        }else{
+            return ip+":19108";
+        }
+    }
+
+    public static void backupWalletDB(final Context context){
+        try {
+            long startTime = System.currentTimeMillis();
+            //TODO: Mainnet support
+            File walletDb = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db");
+            File backup = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db.bak");
+            if (backup.exists()) {
+                backup.delete();
+            }
+
+            FileOutputStream out = new FileOutputStream(backup);
+            FileInputStream in = new FileInputStream(walletDb);
+
+            byte[] buff = new byte[8192];
+            int len;
+
+            while ((len = in.read(buff)) != -1) {
+                out.write(buff, 0, len);
+                out.flush();
+            }
+            out.close();
+            in.close();
+            System.out.println("Backup took "+(System.currentTimeMillis() - startTime)+" ms");
+        }catch (IOException e){
+            System.out.println("Backup Failed");
+            e.printStackTrace();
+        }
+    }
+
+    public static void restoreWalletDB(final Context context){
+        try {
+            long startTime = System.currentTimeMillis();
+            //TODO: Mainnet support
+            File walletDb = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db");
+            File backup = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db.bak");
+            if (walletDb.exists()) {
+                walletDb.delete();
+            }
+
+            FileOutputStream out = new FileOutputStream(walletDb);
+            FileInputStream in = new FileInputStream(backup);
+
+            byte[] buff = new byte[8192];
+            int len;
+
+            while ((len = in.read(buff)) != -1) {
+                out.write(buff, 0, len);
+                out.flush();
+            }
+            out.close();
+            in.close();
+            System.out.println("Restore took "+(System.currentTimeMillis() - startTime)+" ms");
+        }catch (IOException e){
+            System.out.println("Restore Failed");
+            e.printStackTrace();
+        }
     }
 }

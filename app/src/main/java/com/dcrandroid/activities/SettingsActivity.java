@@ -111,9 +111,9 @@ public class SettingsActivity extends AppCompatActivity {
                             || address.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
                             || address.equals("")) {
                         return true;
-                    }else{
-                        Toast.makeText(getActivity(), "Peer address is invalid", Toast.LENGTH_SHORT).show();
                     }
+
+                    Toast.makeText(getActivity(), "Peer address is invalid", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
