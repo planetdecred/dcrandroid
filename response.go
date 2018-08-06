@@ -94,8 +94,30 @@ type TransactionListener interface {
 }
 
 type ProcessListener interface {
-	OnProcessCallback(name string, state int, params string)
+	OnProcessCallback(processType int, state int, params string)
 }
+
+const (
+	ProcessStateUnknown int = iota
+
+	ProcessStateStart
+
+	ProcessStateUpdate
+
+	ProcessStateEnd
+)
+
+const (
+	ProcessTypeUnknown int = iota
+
+	ProcessTypeFetchHeaders
+
+	ProcessTypeFetchCFilters
+
+	ProcessTypeAddressDiscovery
+
+	ProcessTypeRescan
+)
 
 type BlockNotificationError interface {
 	OnBlockNotificationError(err error)

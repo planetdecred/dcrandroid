@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -105,12 +106,19 @@ func (lw *LibWallet) LockWallet() {
 
 func (lw *LibWallet) Shutdown() {
 	log.Info("Shuting down mobile wallet")
-	lw.LockWallet()
 	shutdownRequestChannel <- struct{}{}
+	lw.LockWallet()
+	err := lw.loader.UnloadWallet()
+	if err != nil {
+		log.Errorf("Failed to close wallet: %v", err)
+	} else {
+		log.Infof("Closed wallet")
+	}
 	if logRotator != nil {
 		log.Infof("Shutting down log rotator")
 		logRotator.Close()
 	}
+	//os.Exit(0)
 }
 
 func shutdownListener() {
@@ -169,7 +177,6 @@ func (lw *LibWallet) InitLoader() {
 	}
 	l := loader.NewLoader(netparams.TestNet2Params.Params, lw.dataDir, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
-	fmt.Println("Accoutn GAP LIMIT: ", wallet.DefaultAccountGapLimit)
 	lw.loader = l
 	lw.activeNet = &netparams.TestNet2Params
 	lw.chainParams = &chaincfg.TestNet2Params
@@ -276,6 +283,7 @@ func (lw *LibWallet) StartSPVConnection(peerAddress string) {
 		for {
 			err := syncer.Run(ctx)
 			if done(ctx) {
+				log.Info("Syncer Context is done")
 				return
 			}
 			log.Errorf("SPV synchronization ended: %v", err)
@@ -369,10 +377,45 @@ func (lw *LibWallet) ProcessNotification(listener ProcessListener) {
 		defer n.Done()
 		for {
 			v := <-n.C
-
-			listener.OnProcessCallback(v.Name, v.State, strings.Join(v.Params, ";"))
+			listener.OnProcessCallback(marshalProcessType(v.Type), marshalProcessState(v.State), strings.Join(int32ToString(v.Params), ";"))
 		}
 	}()
+}
+
+func int32ToString(arr []int32) []string {
+	var result []string
+	for _, i := range arr {
+		result = append(result, strconv.Itoa(int(i)))
+	}
+	return result
+}
+
+func marshalProcessType(processType wallet.ProcessType) int {
+	switch processType {
+	case wallet.ProcessTypeAddressDiscovery:
+		return ProcessTypeAddressDiscovery
+	case wallet.ProcessTypeFetchCFilters:
+		return ProcessTypeFetchCFilters
+	case wallet.ProcessTypeFetchHeaders:
+		return ProcessTypeFetchHeaders
+	case wallet.ProcessTypeRescan:
+		return ProcessTypeRescan
+	default:
+		return ProcessTypeUnknown
+	}
+}
+
+func marshalProcessState(state wallet.ProcessState) int {
+	switch state {
+	case wallet.ProcessStateStart:
+		return ProcessStateStart
+	case wallet.ProcessStateEnd:
+		return ProcessStateEnd
+	case wallet.ProcessStateUpdate:
+		return ProcessStateUpdate
+	default:
+		return ProcessStateUnknown
+	}
 }
 
 func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
@@ -496,11 +539,6 @@ func (lw *LibWallet) OpenWallet() error {
 		return err
 	}
 	lw.wallet = w
-	go func() {
-		<-shutdownSignaled
-		lw.loader.UnloadWallet()
-		log.Infof("Wallet Unloaded")
-	}()
 	return nil
 }
 
@@ -628,6 +666,10 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				}
 				amount -= int64(transaction.Fee)
 			}
+			var height int32 = -1
+			if block.Header != nil {
+				height = int32(block.Header.Height)
+			}
 			tempTransaction := Transaction{
 				Fee:       int64(transaction.Fee),
 				Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
@@ -635,7 +677,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 				Type:      transactionType(transaction.Type),
 				Credits:   &tempCredits,
 				Amount:    amount,
-				Height:    int32(block.Header.Height),
+				Height:    height,
 				Direction: direction,
 				Debits:    &tempDebits}
 			transactions = append(transactions, tempTransaction)
