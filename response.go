@@ -148,3 +148,15 @@ type DecodedOutput struct {
 	Version   int32
 	Addresses []string
 }
+
+type SpvSyncResponse interface{
+	OnSynced(synced bool)
+	/*
+	* Handled Error Codes
+	* -1 - Unexpected Error
+	*  1 - Context Canceled
+	*  2 - Deadline Exceeded
+	*  3 - Invalid Address
+	*/
+	OnSyncError(code int, err error)
+}

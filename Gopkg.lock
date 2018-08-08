@@ -112,7 +112,7 @@
     "wallet/udb",
     "walletseed"
   ]
-  revision = "3a502a7247257870cdffe6f8510fb22124193eec"
+  revision = "fea0c01420c97167fc72af7c983a1fc9756962af"
   source = "github.com/c-ollins/btcwallet"
 
 [[projects]]
@@ -210,6 +210,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f188e3ee2367a9f46260d21a4b8af8517be3c045845ae5fbc269770174698f4b"
+  inputs-digest = "c0550beb110219200b910e5d45b3182ff773543525d16dd673d23fdfd1ceb09f"
   solver-name = "gps-cdcl"
   solver-version = 1

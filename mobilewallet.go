@@ -15,6 +15,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/decred/slog"
 	"github.com/decred/dcrd/addrmgr"
 	stake "github.com/decred/dcrd/blockchain/stake"
 	"github.com/decred/dcrd/chaincfg"
@@ -59,6 +60,13 @@ func NewLibWallet(homeDir string) *LibWallet {
 	errors.Separator = ":: "
 	initLogRotator(filepath.Join(homeDir, "/logs/testnet2/dcrwallet.log"))
 	return lw
+}
+
+func (lw *LibWallet) SetLogLevel(loglevel string){
+	_, ok := slog.LevelFromString(loglevel)
+	if ok {
+		setLogLevels(loglevel)
+	}
 }
 
 func NormalizeAddress(addr string, defaultPort string) (hostport string, err error) {
@@ -239,29 +247,25 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 	networkAddress, err := NormalizeAddress(rpcHost, "19109")
 	if err != nil {
 		log.Error(err)
-		return errors.New(err.Error() + ", Error while normalizing address")
+		return err
 	}
 	c, err := chain.NewRPCClient(netparams.TestNet2Params.Params, networkAddress,
 		rpcUser, rpcPass, certs, false)
 	if err != nil {
 		log.Error(err)
-		return errors.New(err.Error() + ", New RPC Client")
+		return err
 	}
 
 	err = c.Start(ctx, false)
 	if err != nil {
 		log.Error(err)
-		return errors.New(err.Error() + ", Start Failed")
+		return err
 	}
 
-	fmt.Println("Connected to rpc client")
-
 	lw.netBackend = chain.BackendFromRPCClient(c.Client)
+	lw.wallet.SetNetworkBackend(lw.netBackend)
+	lw.loader.SetNetworkBackend(lw.netBackend)
 	lw.rpcClient = c
-	go func() {
-		<-shutdownSignaled
-		lw.wallet.SetNetworkBackend(nil)
-	}()
 	return nil
 }
 
@@ -291,8 +295,94 @@ func (lw *LibWallet) StartSPVConnection(peerAddress string) {
 	}()
 }
 
-func (lw *LibWallet) GetPeerLength() int {
-	return len(lw.spvSyncer.GetRemotes())
+func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse,peerAddresses string, discoverAccounts bool, privatePassphrase []byte) error {
+	wallet, ok := lw.loader.LoadedWallet()
+	if !ok {
+		return errors.E(errors.Invalid, "Wallet has not been loaded")
+	}
+
+	if discoverAccounts && len(privatePassphrase) == 0 {
+		return errors.E(errors.Invalid, "private passphrase is required for discovering accounts")
+	}
+	var lockWallet func()
+	if discoverAccounts {
+		lock := make(chan time.Time, 1)
+		lockWallet = func() {
+			lock <- time.Time{}
+			for i := range privatePassphrase {
+				privatePassphrase[i] = 0
+			}
+		}
+		err := wallet.Unlock(privatePassphrase, lock)
+		if err != nil {
+			return err
+		}
+	}
+	addr := &net.TCPAddr{IP: net.ParseIP("::1"), Port: 0}
+	amgrDir := filepath.Join(lw.dataDir, lw.wallet.ChainParams().Name)
+	amgr := addrmgr.New(amgrDir, net.LookupIP) // TODO: be mindful of tor
+	lp := p2p.NewLocalPeer(wallet.ChainParams(), addr, amgr)
+
+	ntfns := &spv.Notifications{
+		Synced: func(sync bool) {
+			syncResponse.OnSynced(sync)
+			// Lock the wallet after the first time synced while also
+			// discovering accounts.
+			if sync && lockWallet != nil {
+				lockWallet()
+				lockWallet = nil
+			}
+		},
+	}
+	var spvConnect []string
+	if len(peerAddresses) > 0{
+		spvConnect = strings.Split(peerAddresses, ";")
+	}
+	fmt.Println("Spv connect:", spvConnect, len(spvConnect), len(peerAddresses))
+	go func(){
+		syncer := spv.NewSyncer(wallet, lp)
+		syncer.SetNotifications(ntfns)
+		if len(spvConnect) > 0 {
+			spvConnects := make([]string, len(spvConnect))
+			for i := 0; i < len(spvConnect); i++ {
+				spvConnect, err := NormalizeAddress(spvConnect[i], lw.activeNet.Params.DefaultPort)
+				if err != nil {
+					syncResponse.OnSyncError(3, errors.E("SPV Connect address invalid: %v", err))
+					return
+				}
+				spvConnects[i] = spvConnect
+			}
+			fmt.Println("Setting Persistant Peers")
+			syncer.SetPersistantPeers(spvConnects)
+		}
+		wallet.SetNetworkBackend(syncer)
+		lw.loader.SetNetworkBackend(syncer)
+		ctx := contextWithShutdownCancel(context.Background())
+		err := syncer.Run(ctx)
+		if err != nil {
+			if err == context.Canceled {
+				syncResponse.OnSyncError(1, errors.E("SPV synchronization canceled: %v", err))
+				return
+			} else if err == context.DeadlineExceeded {
+				syncResponse.OnSyncError(2, errors.E("SPV synchronization deadline exceeded: %v", err))
+				return
+			}
+			syncResponse.OnSyncError(-1, err)
+			return
+		}
+	}()
+	return nil
+}
+
+func (lw *LibWallet) RescanPoint() []byte{
+	rescanPoint, err := lw.wallet.RescanPoint()
+	if err != nil{
+		fmt.Println("Couldn't get rescan point:", err)
+	}
+	if rescanPoint != nil{
+		return rescanPoint[:]
+	}
+	return nil
 }
 
 func done(ctx context.Context) bool {
@@ -304,7 +394,7 @@ func done(ctx context.Context) bool {
 	}
 }
 
-func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []byte) error {
+func (lw *LibWallet) DiscoverActiveAddresses() error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
 		return fmt.Errorf("Wallet has not been loaded")
@@ -318,27 +408,7 @@ func (lw *LibWallet) DiscoverActiveAddresses(discoverAccounts bool, privPass []b
 		return errors.New("Consensus server RPC client has not been loaded")
 	}
 
-	if discoverAccounts && len(privPass) == 0 {
-		log.Error("private passphrase is required for discovering accounts")
-		return errors.New("private passphrase is required for discovering accounts")
-	}
-
-	if discoverAccounts {
-		lock := make(chan time.Time, 1)
-		defer func() {
-			lock <- time.Time{}
-			defer func() {
-				for i := range privPass {
-					privPass[i] = 0
-				}
-			}()
-		}()
-		err := wallet.Unlock(privPass, lock)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-	}
+	discoverAccounts := !lw.wallet.Locked()
 
 	n := chain.BackendFromRPCClient(chainClient.Client)
 	err := wallet.DiscoverActiveAddresses(contextWithShutdownCancel(context.Background()), n, wallet.ChainParams().GenesisHash, discoverAccounts)
@@ -370,16 +440,16 @@ func (lw *LibWallet) LoadActiveDataFilters() error {
 
 func (lw *LibWallet) ProcessNotification(listener ProcessListener) {
 	log.Info("Process Notification Called")
-	go func() {
-		log.Infof("Creating Process Notification channel")
-		n := lw.wallet.NtfnServer.ProcessNotifications()
-		log.Info("Process Notification Ready")
-		defer n.Done()
-		for {
-			v := <-n.C
-			listener.OnProcessCallback(marshalProcessType(v.Type), marshalProcessState(v.State), strings.Join(int32ToString(v.Params), ";"))
-		}
-	}()
+	// go func() {
+	// 	log.Infof("Creating Process Notification channel")
+	// 	n := lw.wallet.NtfnServer.ProcessNotifications()
+	// 	log.Info("Process Notification Ready")
+	// 	defer n.Done()
+	// 	for {
+	// 		v := <-n.C
+	// 		listener.OnProcessCallback(marshalProcessType(v.Type), marshalProcessState(v.State), strings.Join(int32ToString(v.Params), ";"))
+	// 	}
+	// }()
 }
 
 func int32ToString(arr []int32) []string {
@@ -390,33 +460,33 @@ func int32ToString(arr []int32) []string {
 	return result
 }
 
-func marshalProcessType(processType wallet.ProcessType) int {
-	switch processType {
-	case wallet.ProcessTypeAddressDiscovery:
-		return ProcessTypeAddressDiscovery
-	case wallet.ProcessTypeFetchCFilters:
-		return ProcessTypeFetchCFilters
-	case wallet.ProcessTypeFetchHeaders:
-		return ProcessTypeFetchHeaders
-	case wallet.ProcessTypeRescan:
-		return ProcessTypeRescan
-	default:
-		return ProcessTypeUnknown
-	}
-}
+// func marshalProcessType(processType wallet.ProcessType) int {
+// 	switch processType {
+// 	case wallet.ProcessTypeAddressDiscovery:
+// 		return ProcessTypeAddressDiscovery
+// 	case wallet.ProcessTypeFetchCFilters:
+// 		return ProcessTypeFetchCFilters
+// 	case wallet.ProcessTypeFetchHeaders:
+// 		return ProcessTypeFetchHeaders
+// 	case wallet.ProcessTypeRescan:
+// 		return ProcessTypeRescan
+// 	default:
+// 		return ProcessTypeUnknown
+// 	}
+// }
 
-func marshalProcessState(state wallet.ProcessState) int {
-	switch state {
-	case wallet.ProcessStateStart:
-		return ProcessStateStart
-	case wallet.ProcessStateEnd:
-		return ProcessStateEnd
-	case wallet.ProcessStateUpdate:
-		return ProcessStateUpdate
-	default:
-		return ProcessStateUnknown
-	}
-}
+// func marshalProcessState(state wallet.ProcessState) int {
+// 	switch state {
+// 	case wallet.ProcessStateStart:
+// 		return ProcessStateStart
+// 	case wallet.ProcessStateEnd:
+// 		return ProcessStateEnd
+// 	case wallet.ProcessStateUpdate:
+// 		return ProcessStateUpdate
+// 	default:
+// 		return ProcessStateUnknown
+// 	}
+// }
 
 func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 	go func() {

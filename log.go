@@ -122,3 +122,11 @@ func setLogLevel(subsystemID string, logLevel string) {
 	level, _ := slog.LevelFromString(logLevel)
 	logger.SetLevel(level)
 }
+
+func setLogLevels(logLevel string) {
+	// Configure all sub-systems with the new logging level.  Dynamically
+	// create loggers as needed.
+	for subsystemID := range subsystemLoggers {
+		setLogLevel(subsystemID, logLevel)
+	}
+}
