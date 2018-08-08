@@ -58,6 +58,21 @@ public class EncryptWallet extends AppCompatActivity{
                                 LibWallet wallet = constants.wallet;
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
+                                //constants.wallet.unlockWallet(pass.getBytes());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                        Intent i = new Intent(EncryptWallet.this, MainActivity.class);
+                                        i.putExtra("passphrase", pass);
+                                        startActivity(i);
+                                        //Finish all the activities before this
+                                        ActivityCompat.finishAffinity(EncryptWallet.this);
+                                    }
+                                });
+                                if (true){
+                                    return;
+                                }
                                 //Utils.backupWalletDB(EncryptWallet.this);
                                 runOnUiThread(new Runnable() {
                                     @Override

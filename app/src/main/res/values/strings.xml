@@ -203,8 +203,7 @@
     <string name="key_get_peers">key_get_peers</string>
     <string name="summary_peers">View available peers and details</string>
     <string name="title_peers">Peers</string>
-    <string name="remote_dcrd_address">remote_dcrd_address</string>
-    <string name="remote_dcrd">remote_dcrd</string>
+    <string name="remote_node_address">remote_node_address</string>
     <string name="remote_certificate">remote_certificate</string>
     <string name="current_total_balance">Current Total Balance</string>
     <string name="current_block_height">Current block height</string>
@@ -249,6 +248,7 @@
     <string name="wallet_log_title">Wallet Log</string>
     <string name="crash_title">Crash</string>
     <string name="build_date_system">build_date_system</string>
+    <string name="logging_level">Logging Level</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
         <item>Local Full Node</item>
@@ -269,6 +269,14 @@
     <string-array name="currency_conversion_symbols">
         <item></item>
         <item>$</item>
+    </string-array>
+    <string-array name="logging_levels">
+        <item>Trace</item>
+        <item>Debug</item>
+        <item>Info</item>
+        <item>Warn</item>
+        <item>Error</item>
+        <item>Critical</item>
     </string-array>
     <string name="dcr_to_usd_exchange_url">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
     <string name="copy_on_click">(copy on tap)</string>

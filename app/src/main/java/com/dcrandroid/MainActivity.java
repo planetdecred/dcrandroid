@@ -45,10 +45,12 @@ import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SendFragment;
-import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.BlockNotificationProxy;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.TransactionsResponse;
+import com.dcrandroid.util.TransactionsResponse.TransactionInput;
+import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
 
 import org.json.JSONArray;
@@ -63,17 +65,15 @@ import java.util.Locale;
 import java.util.Random;
 
 import mobilewallet.BlockScanResponse;
-import mobilewallet.LibWallet;
 import mobilewallet.Mobilewallet;
-import mobilewallet.ProcessListener;
+import mobilewallet.SpvSyncResponse;
 import mobilewallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy, ProcessListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy, SpvSyncResponse {
 
     public int pageID, menuAdd = 0;
     public static MenuItem menuOpen;
     private Fragment fragment;
-    private NavigationView navigationView;
     private DcrConstants constants;
     private PreferenceUtil util;
     private NotificationManager notificationManager;
@@ -83,15 +83,66 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MainApplication mainApplication;
     private SoundPool alertSound;
     private int lastBestBlock = 0;
-    private boolean scanning = false, isProcessRunning = false, addressDiscovery = false;
+    private boolean scanning = false, synced = false;
     private Thread blockUpdate;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void onLowMemory() {
+        super.onLowMemory();
+        System.out.println("OnLowMemory");
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        System.out.println("Memory Trim: "+level);
+    }
+
+    private void initViews(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        rescanHeight = findViewById(R.id.rescan_height);
+        latestBlock = findViewById(R.id.tv_latest_block);
+        connectionStatus = findViewById(R.id.tv_connection_status);
+        bestBlockHeight = findViewById(R.id.best_block_height);
+        chainStatus = findViewById(R.id.chain_status);
+        rescanImage = findViewById(R.id.iv_rescan_blocks);
+        stopScan = findViewById(R.id.iv_stop_rescan);
+
+        ((NavigationView) findViewById(R.id.nav_view)).setNavigationItemSelectedListener(this);
+        displaySelectedScreen(R.id.nav_overview);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
+        animRotate.setRepeatCount(-1);
+        animRotate.setAnimationListener(this);
+
+        stopScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanning = false;
+            }
+        });
+    }
+
+    private void restartApp(){
+        PackageManager packageManager = getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
+        if (intent != null) {
+            ComponentName componentName = intent.getComponent();
+            Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+            startActivity(mainIntent);
+            Runtime.getRuntime().exit(0);
+        }
+    }
+
+    private void registerNotificationChannel(){
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("new transaction", getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT);
@@ -101,90 +152,106 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             channel.setImportance(NotificationManager.IMPORTANCE_LOW);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         mainApplication = (MainApplication) getApplicationContext();
+
+        setContentView(R.layout.activity_main);
+
+        initViews();
+
+        registerNotificationChannel();
+
         util = new PreferenceUtil(this);
         constants = DcrConstants.getInstance();
-        if(constants.wallet == null){
-            PackageManager packageManager = getPackageManager();
-            Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
-            ComponentName componentName = intent.getComponent();
-            Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-            startActivity(mainIntent);
-            Runtime.getRuntime().exit(0);
-        }
+        if(constants.wallet == null){ restartApp(); }
         constants.wallet.transactionNotification(this);
         constants.notificationProxy = this;
-        rescanHeight = findViewById(R.id.rescan_height);
-        latestBlock = findViewById(R.id.tv_latest_block);
-        connectionStatus = findViewById(R.id.tv_connection_status);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        connectToDecredNetwork();
+    }
 
-        //add this line to display menu1 when the activity is loaded
-        displaySelectedScreen(R.id.nav_overview);
+    private void connectToDecredNetwork(){
+        Bundle b = getIntent().getExtras();
+        String passPhrase = null;
+        if (b != null){
+            passPhrase = b.getString("passphrase");
+        }
+        if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0){
+            System.out.println("Starting SPV Connection");
+            setConnectionStatus("Not Synced");
+            final String finalPassPhrase = passPhrase;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        constants.wallet.spvSync(MainActivity.this, Utils.getPeerAddress(util), finalPassPhrase != null, finalPassPhrase == null ? null : finalPassPhrase.getBytes());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }else{
+            if (passPhrase != null){
+                try {
+                    constants.wallet.unlockWallet(passPhrase.getBytes());
+                } catch (Exception e) {
+                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                        showText("Failed to unlock wallet" + e.getMessage());
+                    }
+                    e.printStackTrace();
+                }
+            }
+            //connectToRPCServer();
+        }
+    }
 
+    private void startBlockUpdate(){
+        if (blockUpdate != null) {
+            return;
+        }
         alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
         final int soundId = alertSound.load(MainActivity.this, R.raw.beep, 1);
-
-        //final TextView bestBlockHeight = findViewById(R.id.best_block_height);
-        bestBlockHeight = findViewById(R.id.best_block_height);
-        chainStatus = findViewById(R.id.chain_status);
-        rescanImage = findViewById(R.id.iv_rescan_blocks);
-        stopScan = findViewById(R.id.iv_stop_rescan);
-        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
-        animRotate.setRepeatCount(-1);
-        animRotate.setAnimationListener(this);
-        if(!constants.wallet.isNetBackendNil()){
-            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                showText("Already connected to RPC server");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                latestBlock.setVisibility(View.VISIBLE);
             }
-            setConnectionStatus("Connected");
-            constants.wallet.startSPVConnection(Utils.getPeerAddress(util));
-            constants.wallet.processNotification(MainActivity.this);
-            if (Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) != 0) {
-                rescanBlocks();
-            }
-        }else{
-            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                showText("Connecting to RPC server");
-            }
-            connectToRPCServer();
-        }
-
+        });
         blockUpdate = new Thread(){
             public void run(){
                 while(!this.isInterrupted()){
                     try {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int bestBlock = constants.wallet.getBestBlock();
-                                if (scanning) {
-                                    bestBlockHeight.setText(String.valueOf(bestBlock));
-                                    return;
-                                }
-                                long lastBlockTime = constants.wallet.getBestBlockTimeStamp();
-                                long currentTime = System.currentTimeMillis() / 1000;
-                                long estimatedBlocks = ((currentTime - lastBlockTime) / 120) + bestBlock;
-                                if (estimatedBlocks > bestBlock) {
-                                    bestBlockHeight.setText(bestBlock + " of " + estimatedBlocks);
-                                    chainStatus.setText("");
-                                } else {
-                                    bestBlockHeight.setText(String.valueOf(bestBlock));
-                                    chainStatus.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - lastBlockTime));
-                                    if ((lastBestBlock == 0 || lastBestBlock != bestBlock) && util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
-                                        alertSound.play(soundId, 1, 1, 1, 0, 1);
+                        if(!scanning) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
+                                        setConnectionStatus(synced ? "Synced" : "Not Synced");
                                     }
-                                    lastBestBlock = bestBlock;
+                                    int bestBlock = constants.wallet.getBestBlock();
+                                    long lastBlockTime = constants.wallet.getBestBlockTimeStamp();
+                                    long currentTime = System.currentTimeMillis() / 1000;
+                                    long estimatedBlocks = ((currentTime - lastBlockTime) / 120) + bestBlock;
+                                    if ((currentTime - lastBlockTime) > 300000) {
+                                        String blockHeight = String.format(Locale.getDefault(), "%d of %d", bestBlock, estimatedBlocks);
+                                        bestBlockHeight.setText(blockHeight);
+                                        chainStatus.setText(null);
+                                    } else {
+                                        bestBlockHeight.setText(String.valueOf(bestBlock));
+                                        chainStatus.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - lastBlockTime));
+                                        if ((lastBestBlock == 0 || lastBestBlock != bestBlock) && util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+                                            alertSound.play(soundId, 1, 1, 1, 0, 1);
+                                        }
+                                        lastBestBlock = bestBlock;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -198,12 +265,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         blockUpdate.start();
-        stopScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scanning = false;
-            }
-        });
     }
 
     private long estimateBlocks(){
@@ -369,48 +430,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             JSONObject obj = new JSONObject(s);
 
-            Intent newTransactionIntent = new Intent(Constants.ACTION_NEW_TRANSACTION)
-                    .putExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP,obj.getLong(Constants.TIMESTAMP))
-                    .putExtra(Constants.EXTRA_TRANSACTION_FEE, obj.getLong(Constants.EXTRA_TRANSACTION_FEE))
-                    .putExtra(Constants.EXTRA_TRANSACTION_TYPE, obj.getString(Constants.TYPE))
-                    .putExtra(Constants.EXTRA_TRANSACTION_HASH, obj.getString(Constants.EXTRA_TRANSACTION_HASH))
-                    .putExtra(Constants.EXTRA_BLOCK_HEIGHT, obj.getInt("Height"))
-                    .putExtra(Constants.EXTRA_AMOUNT, obj.getLong(Constants.EXTRA_AMOUNT))
-                    .putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, obj.getInt("Direction"));
+            Intent newTransactionIntent = new Intent(Constants.NEW_TRANSACTION);
+            Bundle b = new Bundle();
+            b.putLong(Constants.EXTRA_TRANSACTION_TIMESTAMP,obj.getLong(Constants.TIMESTAMP));
+            b.putLong(Constants.FEE, obj.getLong(Constants.FEE));
+            b.putString(Constants.TYPE, obj.getString(Constants.TYPE));
+            b.putString(Constants.HASH, obj.getString(Constants.HASH));
+            b.putInt(Constants.HEIGHT, obj.getInt(Constants.HEIGHT));
+            b.putLong(Constants.AMOUNT, obj.getLong(Constants.AMOUNT));
+            b.putInt(Constants.DIRECTION, obj.getInt(Constants.DIRECTION));
             long totalInput = 0, totalOutput = 0;
-            ArrayList<String> usedInput = new ArrayList<>();
-            JSONArray debits = obj.getJSONArray("Debits");
+            ArrayList<TransactionsResponse.TransactionInput> inputs = new ArrayList<>();
+            JSONArray debits = obj.getJSONArray(Constants.DEBITS);
             for(int i = 0; i < debits.length(); i++){
                 JSONObject debit = debits.getJSONObject(i);
-                totalInput += debit.getLong("PreviousAmount");
-                usedInput.add(debit.getString("AccountName") + "\n" + Utils.formatDecred(debit.getLong("PreviousAmount") / AccountResponse.SATOSHI));
+                TransactionInput input = new TransactionInput();
+                input.index = debit.getInt(Constants.INDEX);
+                input.previous_account = debit.getLong(Constants.PREVIOUS_ACCOUNT);
+                input.previous_amount = debit.getLong(Constants.PREVIOUS_AMOUNT);
+                input.accountName = debit.getString(Constants.ACCOUNT_NAME);
+                totalInput += debit.getLong(Constants.PREVIOUS_ACCOUNT);
+
+                inputs.add(input);
             }
-            ArrayList<String> walletOutput = new ArrayList<>();
-            JSONArray credits = obj.getJSONArray("Credits");
+            ArrayList<TransactionOutput> outputs = new ArrayList<>();
+            JSONArray credits = obj.getJSONArray(Constants.CREDITS);
             for(int i = 0; i < credits.length(); i++){
                 JSONObject credit = credits.getJSONObject(i);
-                totalOutput += credit.getLong("Amount");
-                walletOutput.add(credit.getString("Address") + "\n" + Utils.formatDecred(credit.getLong("Amount") / AccountResponse.SATOSHI));
+                TransactionOutput output = new TransactionOutput();
+                output.account = credit.getInt(Constants.ACCOUNT);
+                output.internal = credit.getBoolean(Constants.INTERNAL);
+                output.address = credit.getString(Constants.ADDRESS);
+                output.index = credit.getInt(Constants.INDEX);
+                output.amount = credit.getLong(Constants.AMOUNT);
+                totalOutput += credit.getLong(Constants.AMOUNT);
             }
-            newTransactionIntent.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, totalInput)
-                    .putExtra(Constants.EXTRA_TRANSACTION_INPUTS, usedInput)
-                    .putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, totalOutput)
-                    .putExtra(Constants.EXTRA_TRANSACTION_OUTPUTS, walletOutput);
+            b.putLong(Constants.TOTAL_INPUT, totalInput);
+            b.putSerializable(Constants.Inputs, inputs);
+            b.putLong(Constants.TOTAL_OUTPUT, totalOutput);
+            b.putSerializable(Constants.OUTPUTS, outputs);
+            newTransactionIntent.putExtras(b);
             sendBroadcast(newTransactionIntent);
-        if(util.getBoolean(Constants.KEY_TRANSACTION_NOTIFICATION, true)) {
-            double fee = obj.getDouble(Constants.EXTRA_TRANSACTION_FEE);
+        if(util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
+            double fee = obj.getDouble(Constants.FEE);
             if (fee == 0) {
-                BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.EXTRA_AMOUNT));
+                BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
 
                 BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-                String hash = obj.getString(Constants.EXTRA_TRANSACTION_HASH);
+                String hash = obj.getString(Constants.HASH);
                 DecimalFormat format = new DecimalFormat("You received #.######## DCR");
                 sendNotification(format.format(amount), hash);
             }
         }
         } catch (JSONException e) {
             e.printStackTrace();
-            if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+            if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
                 showText(e.getMessage());
             }
         }
@@ -418,9 +492,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onTransactionConfirmed(String hash, int height){
-        Intent confirmedTransactionIntent = new Intent(Constants.ACTION_TRANSACTION_CONFRIMED)
-                .putExtra(Constants.EXTRA_TRANSACTION_HASH, hash)
-                .putExtra(Constants.EXTRA_BLOCK_HEIGHT, height);
+        Intent confirmedTransactionIntent = new Intent(Constants.TRANSACTION_CONFIRMED)
+                .putExtra(Constants.HASH, hash)
+                .putExtra(Constants.HEIGHT, height);
         sendBroadcast(confirmedTransactionIntent);
     }
 
@@ -455,7 +529,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onEnd(int i, boolean b) {
         System.out.println("Done: "+i+"/"+constants.wallet.getBestBlock());
-        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
+        sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -473,8 +547,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onError(int i, String s) {
         System.out.println("Block scan error: "+s);
-        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
-        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
+        sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
+        if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
             showText(s);
         }
         runOnUiThread(new Runnable() {
@@ -536,49 +610,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 try {
                     setConnectionStatus("Connecting to RPC Server");
                     String dcrdAddress = Utils.getNetworkAddress(MainActivity.this, mainApplication);
-                    if (mainApplication.getNetworkMode() != 0) {
-                        int i = 0;
-                        for (; ; ) {
-                            try {
-                                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                                    showText("Connecting attempt " + (++i));
-                                }
-                                constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(MainActivity.this).getBytes());
-                                    break;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                                    showText(e.getMessage());
-                                }
+                    int i = 0;
+                    for (; ; ) {
+                        try {
+                            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                                showText("Connecting attempt " + (++i));
                             }
-                            Thread.sleep(2500);
+                            constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(MainActivity.this).getBytes());
+                            break;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                                showText("RPC Connection Failed: " + e.getMessage());
+                            }
                         }
-                        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                            showText("Subscribe to block notification");
-                        }
-                        constants.wallet.subscribeToBlockNotifications(constants.notificationError);
-                        setConnectionStatus(getString(R.string.discovering_used_addresses));
-                        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                            showText("Discover addresses");
-                        }
-                        constants.wallet.discoverActiveAddresses(false,null);
-                        constants.wallet.loadActiveDataFilters();
-                        setConnectionStatus(getString(R.string.fetching_headers));
-                        if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                            showText("Fetch Headers");
-                        }
-                        long rescanHeight = constants.wallet.fetchHeaders();
-                        if (rescanHeight != -1) {
-                            util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
-                        }
-                        setConnectionStatus(getString(R.string.publish_unmined_transaction));
-                        constants.wallet.publishUnminedTransactions();
-                        setConnectionStatus("Connected");
-                        rescanBlocks();
-                    } else {
-                        constants.wallet.processNotification(MainActivity.this);
-                        constants.wallet.startSPVConnection(Utils.getPeerAddress(util));
+                        Thread.sleep(2500);
                     }
+                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                        showText("Subscribe to block notification");
+                    }
+                    constants.wallet.subscribeToBlockNotifications(constants.notificationError);
+                    setConnectionStatus(getString(R.string.discovering_used_addresses));
+                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                        showText("Discover addresses");
+                    }
+                    constants.wallet.discoverActiveAddresses();
+                    constants.wallet.loadActiveDataFilters();
+                    setConnectionStatus(getString(R.string.fetching_headers));
+                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                        showText("Fetching Headers");
+                    }
+                    long rescanHeight = constants.wallet.fetchHeaders();
+                    if (rescanHeight != -1) {
+                        util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
+                    }
+                    setConnectionStatus(getString(R.string.publish_unmined_transaction));
+                    constants.wallet.publishUnminedTransactions();
+                    setConnectionStatus("Connected To Remote Node");
+                    rescanBlocks();
+                    startBlockUpdate();
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -589,71 +659,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onProcessCallback(final long processType, final long state, final String params) {
-        System.out.println("Process Received: "+processType+" State: "+state);
-        if(state == Mobilewallet.ProcessStateEnd){
-            isProcessRunning = false;
-            scanning = false;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    addressDiscovery = false;
-                    rescanHeight.setText("");
-                    latestBlock.setVisibility(View.VISIBLE);
-                    if(processType == Mobilewallet.ProcessTypeRescan){
-                        sendBroadcast(new Intent(Constants.ACTION_BLOCK_SCAN_COMPLETE));
-                    }
-                }
-            });
-            if(processType == Mobilewallet.ProcessTypeFetchHeaders || processType == Mobilewallet.ProcessTypeAddressDiscovery){
-                //Utils.backupWalletDB(MainActivity.this);
-            }
-            return;
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(state == Mobilewallet.ProcessStateStart) {
-                    latestBlock.setVisibility(View.GONE);
-                    isProcessRunning = true;
-                    bestBlockHeight.setText(String.format(Locale.getDefault(), " of %d", estimateBlocks()));
-                    if(processType == Mobilewallet.ProcessTypeFetchCFilters){
-                        connectionStatus.setText("Fetching CFilter...");
-                    }else if(processType == Mobilewallet.ProcessTypeFetchHeaders){
-                        connectionStatus.setText(getString(R.string.fetching_headers));
-                    }else if(processType == Mobilewallet.ProcessTypeRescan){
-                        scanning = true;
-                        connectionStatus.setText("Rescanning");
-                    }else if(processType == Mobilewallet.ProcessTypeAddressDiscovery){
-                        addressDiscovery = true;
-                        setConnectionStatus(getString(R.string.discovering_used_addresses));
-                    }
-                }else if(state == Mobilewallet.ProcessStateUpdate){
-                    isProcessRunning = true;
-                    String[] args = params.split(";");
-                    if(processType == Mobilewallet.ProcessTypeFetchCFilters){
-                        connectionStatus.setText("Fetching CFilter "+args[0]+" - "+ args[1]);
-                        bestBlockHeight.setText(String.format(Locale.getDefault(), " of %d", estimateBlocks()));
-                    }else if(processType == Mobilewallet.ProcessTypeFetchHeaders){
-                        connectionStatus.setText(getString(R.string.fetching_headers));
-                        rescanHeight.setText(args[0]);
-                        bestBlockHeight.setText(String.format(Locale.getDefault(), " of %d", estimateBlocks()));
-                    }else if(processType == Mobilewallet.ProcessTypeRescan){
-                        scanning = true;
-                        connectionStatus.setText("Rescanning");
-                        rescanHeight.setText(args[0]);
-                        bestBlockHeight.setText(String.format(Locale.getDefault(), " of %d", constants.wallet.getBestBlock()));
-                    }else if(processType == Mobilewallet.ProcessTypeAddressDiscovery){
-                        addressDiscovery = true;
-                        if(args[0].equals("0")){
-                            setConnectionStatus(getString(R.string.discovering_used_accounts));
-                        }else{
-                            setConnectionStatus(getString(R.string.discovering_used_addresses));
-                        }
+    public void onSyncError(long l, Exception e) {
+        Toast.makeText(this, "Sync Error: "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
 
-                    }
-                }
-            }
-        });
+    @Override
+    public void onSynced(boolean b) {
+        synced = b;
+        if (b){
+            startBlockUpdate();
+        }
     }
 }

@@ -20,18 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
-import com.dcrandroid.util.EncodeQrCode;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.google.zxing.EncodeHintType;
 
 import net.glxn.qrgen.android.QRCode;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,6 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     ImageView imageView;
     LinearLayout ReceiveContainer;
     private TextView address;
-    ProgressDialog pd;
     ArrayAdapter dataAdapter;
     List<String> categories;
     PreferenceUtil preferenceUtil;
@@ -122,22 +117,16 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void prepareAccounts(){
-        //pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_accounts));
-        //pd.show();
         try{
-            final AccountResponse response  = AccountResponse.parse(constants.wallet.getAccounts(preferenceUtil.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
-            if(response.errorOccurred){
-                Toast.makeText(ReceiveFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
-                return;
-            }
+            final ArrayList<Account> accounts  = Account.parse(constants.wallet.getAccounts(preferenceUtil.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             accountNumbers.clear();
             categories.clear();
-            for(int i = 0; i < response.items.size(); i++){
-                if(response.items.get(i).name.trim().equals("imported")){
+            for(int i = 0; i < accounts.size(); i++){
+                if(accounts.get(i).getAccountName().trim().equalsIgnoreCase("imported")){
                     continue;
                 }
-                categories.add(i, response.items.get(i).name);
-                accountNumbers.add(response.items.get(i).number);
+                categories.add(i, accounts.get(i).getAccountName());
+                accountNumbers.add(accounts.get(i).getAccountNumber());
             }
             System.out.println("Got Accounts in "+(System.currentTimeMillis() - startTime)+"ms");
             getAddress(0);
@@ -153,7 +142,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         try {
             final String receiveAddress = constants.wallet.addressForAccount(accountNumber);
             System.out.println("Got Address in "+(System.currentTimeMillis() - startTime)+"ms");
-            preferenceUtil.set(Constants.KEY_RECENT_ADDRESS,receiveAddress);
+            preferenceUtil.set(Constants.RECENT_ADDRESS,receiveAddress);
             address.setText(receiveAddress);
             imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
             System.out.println("Generated QR in "+(System.currentTimeMillis() - startTime)+"ms");

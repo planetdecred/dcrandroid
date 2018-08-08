@@ -10,16 +10,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dcrandroid.activities.AccountDetailsActivity;
 import com.dcrandroid.adapter.AccountAdapter;
+import com.dcrandroid.data.Balance;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
@@ -31,7 +28,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -43,6 +39,7 @@ public class AccountsFragment extends Fragment {
     private List<Account> accountList = new ArrayList<>();
     AccountAdapter accountAdapter;
     private PreferenceUtil util;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_account, container, false);
@@ -53,22 +50,23 @@ public class AccountsFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Account account = accountList.get(position);
+                Balance balance = account.getBalance();
                 Intent i = new Intent(getContext(), AccountDetailsActivity.class);
-                i.putExtra(Constants.EXTRA_ACCOUNT_NAME,account.getAccountName());
-                i.putExtra(Constants.EXTRA_ACCOUNT_NUMBER,account.getAccountNumber());
-                i.putExtra(Constants.EXTRA_BALANCE_SPENDABLE,account.getSpendable());
-                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS,account.getImmatureRewards());
-                i.putExtra(Constants.EXTRA_HD_PATH,account.getHDPath());
-                i.putExtra(Constants.EXTRA_KEYS,account.getKeys());
-                i.putExtra(Constants.EXTRA_BALANCE_TOTAL,account.getTotal());
-                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN,account.getImmatureStakeGeneration());
-                i.putExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY,account.getVotingAuthority());
-                i.putExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS,account.getLockedByTickets());
+                i.putExtra(Constants.ACCOUNT_NAME, account.getAccountName());
+                i.putExtra(Constants.EXTRA_ACCOUNT_NUMBER, account.getAccountNumber());
+                i.putExtra(Constants.EXTRA_BALANCE_SPENDABLE, balance.getSpendable());
+                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, balance.getImmatureReward());
+                i.putExtra(Constants.EXTRA_HD_PATH, account.getHDPath());
+                i.putExtra(Constants.KEYS, account.getInternalKeyCount() + " Internal, " + account.getExternalKeyCount() + " External, " + account.getImportedKeyCount() + " Imported");
+                i.putExtra(Constants.EXTRA_BALANCE_TOTAL, balance.getTotal());
+                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, balance.getImmatureStakeGeneration());
+                i.putExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, balance.getVotingAuthority());
+                i.putExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, balance.getLockedByTickets());
                 startActivity(i);
             }
 
@@ -82,44 +80,25 @@ public class AccountsFragment extends Fragment {
         return rootView;
     }
 
-    public void prepareAccountData(){
+    public void prepareAccountData() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final AccountResponse response = AccountResponse.parse(DcrConstants.getInstance().wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
-                    if(!response.errorOccurred) {
-                        accountList.clear();
-                        for (int i = 0; i < response.items.size(); i++) {
-                            Account account = new Account();
-                            AccountResponse.AccountItem item = response.items.get(i);
-                            account.setAccountName(item.name);
-                            account.setAccountNumber(item.number);
-                            account.setTotal(item.balance.total);
-                            account.setSpendable(item.balance.spendable);
-                            account.setImmatureRewards(item.balance.immatureReward);
-                            account.setImmatureStakeGeneration(item.balance.immatureStakeGeneration);
-                            account.setLockedByTickets(item.balance.lockedByTickets);
-                            account.setVotingAuthority(item.balance.votingAuthority);
-                            account.setHDPath("m / 44' / 11' / "+item.number);
-//                            if(Dcrwallet.isTestNet()){
-//                                account.setHDPath("m / 44' / 11' / "+item.number);
-//                            }else{
-//                                account.setHDPath("m / 44' / 20' / "+item.number);
-//                            }
-                            account.setKeys(item.internalKeyCount+" Internal, "+item.externalKeyCount+" External, "+item.importedKeyCount+" Imported");
-                            accountList.add(account);
-                        }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                accountAdapter.notifyDataSetChanged();
-                            }
-                        });
+                    accountList.clear();
+                    accountList.addAll(Account.parse(DcrConstants.getInstance().wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
+                    if (getActivity() == null) {
+                        return;
                     }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            accountAdapter.notifyDataSetChanged();
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -130,7 +109,7 @@ public class AccountsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        if(getActivity() == null){
+        if (getActivity() == null) {
             return;
         }
         getActivity().setTitle(getString(R.string.account));
@@ -138,19 +117,8 @@ public class AccountsFragment extends Fragment {
         prepareAccountData();
     }
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-    }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
-    public void onDestroyView (){
+    public void onDestroyView() {
         super.onDestroyView();
         MainActivity.menuOpen.setVisible(false);
     }

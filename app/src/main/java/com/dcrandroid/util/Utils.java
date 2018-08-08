@@ -150,9 +150,15 @@ public class Utils {
 
     public static String getNetworkAddress(Context context, MainApplication application){
         PreferenceUtil util = new PreferenceUtil(context);
-        String addr = util.get(Constants.KEY_REMOTE_DCRD_ADDRESS);
-        System.out.println("Util is using remote server: "+addr);
-        return addr;
+        if(application.getNetworkMode() != 2){
+            System.out.println("Util is using local server");
+            //return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
+            return "";
+        }else{
+            String addr = util.get(Constants.REMOTE_NODE_ADDRESS);
+            System.out.println("Util is using remote server: "+addr);
+            return addr;
+        }
     }
 
     public static void writeDcrdCertificate(Context context) throws Exception{
@@ -235,6 +241,9 @@ public class Utils {
 
     public static String getPeerAddress(PreferenceUtil util){
         String ip = util.get("peer_ip");
+        if (ip.length() == 0){
+            return "";
+        }
         if(ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")){
             return ip;
         }else{
@@ -251,20 +260,21 @@ public class Utils {
             if (backup.exists()) {
                 backup.delete();
             }
+            if(walletDb.exists() && walletDb.isFile()) {
+                FileOutputStream out = new FileOutputStream(backup);
+                FileInputStream in = new FileInputStream(walletDb);
 
-            FileOutputStream out = new FileOutputStream(backup);
-            FileInputStream in = new FileInputStream(walletDb);
+                byte[] buff = new byte[8192];
+                int len;
 
-            byte[] buff = new byte[8192];
-            int len;
-
-            while ((len = in.read(buff)) != -1) {
-                out.write(buff, 0, len);
-                out.flush();
+                while ((len = in.read(buff)) != -1) {
+                    out.write(buff, 0, len);
+                    out.flush();
+                }
+                out.close();
+                in.close();
+                System.out.println("Backup took " + (System.currentTimeMillis() - startTime) + " ms");
             }
-            out.close();
-            in.close();
-            System.out.println("Backup took "+(System.currentTimeMillis() - startTime)+" ms");
         }catch (IOException e){
             System.out.println("Backup Failed");
             e.printStackTrace();
@@ -280,20 +290,21 @@ public class Utils {
             if (walletDb.exists()) {
                 walletDb.delete();
             }
+            if (walletDb.exists()) {
+                FileOutputStream out = new FileOutputStream(walletDb);
+                FileInputStream in = new FileInputStream(backup);
 
-            FileOutputStream out = new FileOutputStream(walletDb);
-            FileInputStream in = new FileInputStream(backup);
+                byte[] buff = new byte[8192];
+                int len;
 
-            byte[] buff = new byte[8192];
-            int len;
-
-            while ((len = in.read(buff)) != -1) {
-                out.write(buff, 0, len);
-                out.flush();
+                while ((len = in.read(buff)) != -1) {
+                    out.write(buff, 0, len);
+                    out.flush();
+                }
+                out.close();
+                in.close();
+                System.out.println("Restore took " + (System.currentTimeMillis() - startTime) + " ms");
             }
-            out.close();
-            in.close();
-            System.out.println("Restore took "+(System.currentTimeMillis() - startTime)+" ms");
         }catch (IOException e){
             System.out.println("Restore Failed");
             e.printStackTrace();

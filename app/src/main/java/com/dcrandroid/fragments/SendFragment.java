@@ -30,8 +30,8 @@ import android.widget.Toast;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.activities.ReaderActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.AccountResponse;
 import com.dcrandroid.util.BlockedSelectionEditText;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DecredInputFilter;
@@ -222,9 +222,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     isSendAll = true;
                     try {
                         if(currencyIsDCR) {
-                            amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
+                            amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
                         }else{
-                            BigDecimal currentAmount = new BigDecimal(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)), new MathContext(7));
+                            BigDecimal currentAmount = new BigDecimal(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)), new MathContext(7));
                             BigDecimal convertedAmount = currentAmount.multiply(BigDecimal.valueOf(exchangeRate), new MathContext(7));
                             amount.setText(convertedAmount.toString());
                         }
@@ -286,11 +286,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         amt = Utils.decredToAtom(convertedAmount.toString());
                     }
                     if (destAddress.equals("")){
-                        destAddress = util.get(Constants.KEY_RECENT_ADDRESS);
+                        destAddress = util.get(Constants.RECENT_ADDRESS);
                         if(destAddress.equals("")){
                             try {
                                 destAddress = constants.wallet.addressForAccount(0);
-                                util.set(Constants.KEY_RECENT_ADDRESS, destAddress);
+                                util.set(Constants.RECENT_ADDRESS, destAddress);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -306,7 +306,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         });
                         return;
                     }
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -376,28 +376,16 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try{
-                    final AccountResponse response = AccountResponse.parse(constants.wallet.getAccounts(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
-                    if(response.errorOccurred){
-                        if(getActivity() == null){
-                            System.out.println("Activity is null");
-                            return;
-                        }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(SendFragment.this.getContext(),response.errorMessage,Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        return;
-                    }
+                    final ArrayList<Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     accountNumbers.clear();
                     categories.clear();
-                    for(int i = 0; i < response.items.size(); i++){
-                        if(response.items.get(i).name.trim().equals("imported")){
+                    System.out.println("Account length: "+ accounts.size());
+                    for(int i = 0; i < accounts.size(); i++){
+                        if(accounts.get(i).getAccountName().trim().equalsIgnoreCase("imported")){
                             continue;
                         }
-                        categories.add(i, response.items.get(i).name + " " + Utils.formatDecred(response.items.get(i).balance.spendable));
-                        accountNumbers.add(response.items.get(i).number);
+                        categories.add(i, accounts.get(i).getAccountName() + " " + Utils.formatDecred(accounts.get(i).getBalance().getSpendable()));
+                        accountNumbers.add(accounts.get(i).getAccountNumber());
                     }
                     if(getActivity() == null){
                         System.out.println("Activity is null");
@@ -427,7 +415,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         new Thread(){
             public void run(){
                 try {
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
+                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
                     byte[] tx = constants.wallet.signTransaction(response.getUnsignedTransaction(),passphrase.getBytes());
                     byte[] serializedTx = constants.wallet.publishTransaction(tx);
                     List<Byte> hashList = new ArrayList<>();
