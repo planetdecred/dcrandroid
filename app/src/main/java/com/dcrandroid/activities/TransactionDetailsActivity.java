@@ -18,15 +18,21 @@ import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import mobilewallet.LibWallet;
 
@@ -40,6 +46,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private ExpandableListView expandableListView;
     private PreferenceUtil util;
     private List<String> parentHeaderInformation;
+    private String transactionType;
+    private Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +55,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
         util = new PreferenceUtil(this);
-        Intent intent = getIntent();
+        extras = getIntent().getExtras();
+        if (extras == null){
+            System.out.println("Extras is null");
+            return;
+        }
+
+        transactionType = extras.getString(Constants.TYPE);
+        transactionType = transactionType.substring(0,1).toUpperCase() + transactionType.substring(1).toLowerCase();
+
         parentHeaderInformation = new ArrayList<>();
 
         parentHeaderInformation.add(getString(R.string.inputs));
         parentHeaderInformation.add(getString(R.string.outputs));
-        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(intent.getStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS));
+        ArrayList<TransactionsResponse.TransactionInput> inputs
+                = (ArrayList<TransactionsResponse.TransactionInput>) extras.getSerializable(Constants.Inputs);
+        ArrayList<TransactionsResponse.TransactionOutput> outputs
+                = (ArrayList<TransactionsResponse.TransactionOutput>) extras.getSerializable(Constants.Inputs);
+        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(inputs, outputs);
 
         expandableListView = findViewById(R.id.in_out);
 
@@ -67,8 +87,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
-        txHash.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
+        txHash.setText(extras.getString(Constants.HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
+
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,25 +98,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 startActivity(browserIntent);
             }
         });
-        txHash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
-            }
-        });
-        try {
-            Utils.getHash(intent.getStringExtra(Constants.EXTRA_TRANSACTION_HASH));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         txHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 copyToClipboard(txHash.getText().toString(),getString(R.string.tx_hash_copy));
             }
         });
+
         expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id) {
@@ -115,13 +125,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
-        value.formatAndSetText(Utils.formatDecred(intent.getLongExtra(Constants.EXTRA_AMOUNT,0)) +" "+getString(R.string.dcr));
-        transactionFee.formatAndSetText(Utils.formatDecred(intent.getLongExtra(Constants.EXTRA_TRANSACTION_FEE,0)) + " DCR");
-        date.setText(intent.getStringExtra(Constants.EXTRA_TRANSACTION_DATE));
-        String type = intent.getStringExtra(Constants.EXTRA_TRANSACTION_TYPE);
-        type = type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase();
-        txType.setText(type);
-        int height = intent.getIntExtra(Constants.EXTRA_BLOCK_HEIGHT, 0);
+
+        value.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.AMOUNT,0)) +" "+getString(R.string.dcr));
+        transactionFee.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.FEE,0)) + " DCR");
+
+        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+        calendar.setTimeInMillis(extras.getLong(Constants.TIMESTAMP) * 1000);
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
+
+        date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+        txType.setText(transactionType);
+        int height = extras.getInt(Constants.HEIGHT, 0);
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
         System.out.println("Height: "+height +" Bestblock: "+ DcrConstants.getInstance().wallet.getBestBlock());
         if(height == -1){
@@ -132,11 +146,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             confirmation.setText("0");
         }else{
             confirmation.setText(String.valueOf(confirmations));
-            if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
+            if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
                 if(confirmations > 1){
                     System.out.println("Confirmation is greater than 1");
                 }
-                if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS)){
+                if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)){
                     System.out.println("Unconfirmed funds are spendable");
                 }
                 status.setBackgroundResource(R.drawable.tx_status_confirmed);
@@ -150,43 +164,60 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    private HashMap<String, List<String>> returnGroupedChildItems(ArrayList<String> usedInput){
+    private HashMap<String, List<String>> returnGroupedChildItems(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput){
         ArrayList<String> walletOutput = new ArrayList<>();
         LibWallet wallet = DcrConstants.getInstance().wallet;
-        try {
-            String rawJson = wallet.decodeTransaction(Utils.getHash(getIntent().getStringExtra(Constants.EXTRA_TRANSACTION_HASH)));
-            JSONObject parent = new JSONObject(rawJson);
-            JSONArray input = parent.getJSONArray("Inputs");
-            JSONArray outputs = parent.getJSONArray("Outputs");
-            for(int i = 0; i < outputs.length(); i++){
-                JSONObject output = outputs.getJSONObject(i);
+        if (transactionType.equalsIgnoreCase("vote")){
+            for (int i = 0; i < usedOutput.size(); i++){
+                TransactionsResponse.TransactionOutput output = usedOutput.get(i);
                 StringBuilder sb = new StringBuilder();
-                JSONArray addresses = output.getJSONArray("Addresses");
-                for(int j = 0; j < addresses.length(); j++){
-                    if(j != 0){
-                        sb.append("\n");
+                if (wallet.isAddressMine(output.address)) {
+                    sb.append(output.address).append(" (").append(wallet.getAccountByAddress(output.address)).append(")");
+                    if (extras.getInt(Constants.DIRECTION, -1) == 0) {
+                        sb.append(" (change)");
                     }
-                    if(wallet.isAddressMine(addresses.getString(j))){
-                        sb.append(addresses.getString(j)).append(" (").append(wallet.getAccountByAddress(addresses.getString(j))).append(")");
-                        if(getIntent().getIntExtra(Constants.EXTRA_TRANSACTION_DIRECTION, -1) == 0){
-                            sb.append(" (change)");
-                        }
-                        continue;
-                    }
-                    sb.append(addresses.getString(j)).append(" (external)");
+                    continue;
                 }
-                walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.getLong("Value")));
+
+                sb.append(output.address).append(" (external)");
+                walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.amount));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }else {
+            try {
+                Bundle b = getIntent().getExtras();
+                String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
+                JSONObject parent = new JSONObject(rawJson);
+                JSONArray input = parent.getJSONArray(Constants.Inputs);
+                JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
+                for (int i = 0; i < outputs.length(); i++) {
+                    JSONObject output = outputs.getJSONObject(i);
+                    StringBuilder sb = new StringBuilder();
+                    JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
+                    for (int j = 0; j < addresses.length(); j++) {
+                        if (j != 0) {
+                            sb.append("\n");
+                        }
+                        if (wallet.isAddressMine(addresses.getString(j))) {
+                            sb.append(addresses.getString(j)).append(" (").append(wallet.getAccountByAddress(addresses.getString(j))).append(")");
+                            if (getIntent().getIntExtra(Constants.DIRECTION, -1) == 0) {
+                                sb.append(" (change)");
+                            }
+                            continue;
+                        }
+                        sb.append(addresses.getString(j)).append(" (external)");
+                    }
+                    walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.getLong("Value")));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         HashMap<String, List<String>> childContent = new HashMap<>();
-        childContent.put(parentHeaderInformation.get(0), usedInput);
+        ArrayList<String> inputs = new ArrayList<>();
+        for (int j = 0; j < usedInput.size(); j++) {
+            inputs.add(usedInput.get(j).accountName + "\n" + Utils.formatDecred(usedInput.get(j).previous_amount));
+        }
+        childContent.put(parentHeaderInformation.get(0), inputs);
         childContent.put(parentHeaderInformation.get(1), walletOutput);
         return childContent;
     }

@@ -18,8 +18,6 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
-import java.text.NumberFormat;
-
 /**
  * Created by Macsleven on 28/12/2017.
  */
@@ -30,8 +28,8 @@ public class AccountDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getIntent().getStringExtra(Constants.EXTRA_ACCOUNT_NAME));
-        accountNameTemp = getIntent().getStringExtra(Constants.EXTRA_ACCOUNT_NAME);
+        setTitle(getIntent().getStringExtra(Constants.ACCOUNT_NAME));
+        accountNameTemp = getIntent().getStringExtra(Constants.ACCOUNT_NAME);
         setContentView(R.layout.account_details_view);
 
         CurrencyTextView spendable = findViewById(R.id.acc_dts_spendable);
@@ -52,7 +50,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         immatureStakeGeneration.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0))  +" "+ getString(R.string.dcr));
         accountNumber.setText(String.valueOf(getIntent().getIntExtra(Constants.EXTRA_ACCOUNT_NUMBER, 0)));
         hDPath.setText(getIntent().getStringExtra(Constants.EXTRA_HD_PATH));
-        keys.setText(getIntent().getStringExtra(Constants.EXTRA_KEYS));
+        keys.setText(getIntent().getStringExtra(Constants.KEYS));
     }
 
     @Override

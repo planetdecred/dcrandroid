@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
@@ -45,7 +46,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void onSingleClick(View v) {
 
             }
-
             @Override
             public void onDoubleClick(View v) {
                 if(loadThread != null) {
@@ -66,9 +66,10 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         constants = DcrConstants.getInstance();
         String homeDir = getFilesDir()+"/dcrwallet/";
         constants.wallet = new LibWallet(homeDir);
+        constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
         constants.wallet.initLoader();
         //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
-        File f = new File(homeDir, "/testnet2/wallet.db");
+        File f = new File(homeDir, "/testnet3/wallet.db");
         if(!f.exists()){
             loadThread = new Thread(){
                 public void run(){

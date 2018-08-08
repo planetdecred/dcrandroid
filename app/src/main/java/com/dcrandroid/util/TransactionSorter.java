@@ -8,9 +8,12 @@ import java.util.Comparator;
  * Created by collins on 4/28/18.
  */
 
-public class TransactionSorter implements Comparator<Transaction> {
+public class TransactionSorter implements Comparator<TransactionsResponse.TransactionItem> {
     @Override
-    public int compare(Transaction o1, Transaction o2) {
-        return o1.getTime() > o2.getTime() ? -1 : 1;
+    public int compare(TransactionsResponse.TransactionItem o1, TransactionsResponse.TransactionItem o2) {
+        if (o1.getTimestamp() == o2.getTimestamp()){
+            return 0;
+        }
+        return o1.getTimestamp() > o2.getTimestamp() ? -1 : 1;
     }
 }

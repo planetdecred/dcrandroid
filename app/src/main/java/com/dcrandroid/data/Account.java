@@ -1,13 +1,55 @@
 package com.dcrandroid.data;
 
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 /**
  * Created by Macsleven on 28/12/2017.
  */
 
 public class Account {
-    private String accountName, hdPath, keys;
-    private long spendable, total, immatureRewards, lockedByTickets, votingAuthority, immatureStakeGeneration;
-    private int accountNumber;
+    private String accountName;
+    private Balance balance;
+    private int accountNumber, externalKeyCount, internalKeyCount, importedKeyCount;
+
+    public static ArrayList<Account> parse(String json) throws JSONException{
+        JSONObject obj = new JSONObject(json);
+        JSONArray acc = obj.getJSONArray("Acc");
+        ArrayList<Account> items = new ArrayList<>();
+        for (int i = 0; i < acc.length(); i++) {
+            final JSONObject accJSONObject = acc.getJSONObject(i);
+            Account account = new Account();
+            account.setAccountNumber(accJSONObject.getInt("Number"));
+            account.setAccountName(accJSONObject.getString("Name"));
+            account.setExternalKeyCount(accJSONObject.getInt("ExternalKeyCount"));
+            account.setInternalKeyCount(accJSONObject.getInt("InternalKeyCount"));
+            account.setImportedKeyCount(accJSONObject.getInt("ImportedKeyCount"));
+            JSONObject balanceObj = accJSONObject.getJSONObject("Balance");
+            Balance balance = new Balance();
+            balance.setTotal(balanceObj.getLong("Total"));
+            balance.setSpendable(balanceObj.getLong("Spendable"));
+            balance.setImmatureReward(balanceObj.getLong("ImmatureReward"));
+            balance.setImmatureStakeGeneration(balanceObj.getLong("ImmatureStakeGeneration"));
+            balance.setLockedByTickets(balanceObj.getLong("LockedByTickets"));
+            balance.setVotingAuthority(balanceObj.getLong("VotingAuthority"));
+            balance.setUnConfirmed(balanceObj.getLong("UnConfirmed"));
+            account.setBalance(balance);
+            items.add(account);
+        }
+        return items;
+    }
+
+    public Balance getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Balance balance) {
+        this.balance = balance;
+    }
 
     public String getAccountName(){
         return  accountName;
@@ -15,54 +57,6 @@ public class Account {
 
     public void setAccountName(String accountName){
         this.accountName = accountName;
-    }
-
-    public long getSpendable() {
-        return spendable;
-    }
-
-    public void setSpendable(long spendable) {
-        this.spendable = spendable;
-    }
-
-    public long getTotal() {
-        return total;
-    }
-
-    public void setTotal(long total) {
-        this.total = total;
-    }
-
-    public long getImmatureRewards() {
-        return immatureRewards;
-    }
-
-    public void setImmatureRewards(long immatureRewards) {
-        this.immatureRewards = immatureRewards;
-    }
-
-    public long getLockedByTickets() {
-        return lockedByTickets;
-    }
-
-    public void setLockedByTickets(long lockedByTickets) {
-        this.lockedByTickets = lockedByTickets;
-    }
-
-    public long getVotingAuthority() {
-        return votingAuthority;
-    }
-
-    public void setVotingAuthority(long votingAuthority) {
-        this.votingAuthority = votingAuthority;
-    }
-
-    public long getImmatureStakeGeneration() {
-        return immatureStakeGeneration;
-    }
-
-    public void setImmatureStakeGeneration(long immatureStakeGeneration) {
-        this.immatureStakeGeneration = immatureStakeGeneration;
     }
 
     public int getAccountNumber() {
@@ -74,18 +68,30 @@ public class Account {
     }
 
     public String getHDPath() {
-        return hdPath;
+        return "m / 44' / 11' / "+accountNumber;
     }
 
-    public void setHDPath(String HDPath) {
-        this.hdPath = HDPath;
+    public void setExternalKeyCount(int externalKeyCount) {
+        this.externalKeyCount = externalKeyCount;
     }
 
-    public String getKeys() {
-        return keys;
+    public int getExternalKeyCount() {
+        return externalKeyCount;
     }
 
-    public void setKeys(String keys) {
-        this.keys = keys;
+    public void setImportedKeyCount(int importedKeyCount) {
+        this.importedKeyCount = importedKeyCount;
+    }
+
+    public int getImportedKeyCount() {
+        return importedKeyCount;
+    }
+
+    public void setInternalKeyCount(int internalKeyCount) {
+        this.internalKeyCount = internalKeyCount;
+    }
+
+    public int getInternalKeyCount() {
+        return internalKeyCount;
     }
 }

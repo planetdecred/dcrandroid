@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,20 +26,16 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
-import com.dcrandroid.data.Transaction;
-import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import mobilewallet.GetTransactionsResponse;
 
@@ -47,16 +44,16 @@ import mobilewallet.GetTransactionsResponse;
  */
 
 public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
-    private List<Transaction> transactionList = new ArrayList<>();
+    private List<TransactionItem> transactionList = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
     private  TextView refresh;
     private SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
     private DcrConstants constants;
-    //    private View progressContainer;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_history, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
@@ -66,7 +63,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 R.color.colorPrimary,
                 R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(this);
-//        progressContainer = rootView.findViewById(R.id.progressContainers);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
@@ -77,19 +73,21 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Transaction history = transactionList.get(position);
+                TransactionItem history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
-                i.putExtra(Constants.EXTRA_AMOUNT,history.getAmount());
-                i.putExtra(Constants.EXTRA_TRANSACTION_FEE,history.getTransactionFee());
-                i.putExtra(Constants.EXTRA_TRANSACTION_DATE,history.getTxDate());
-                i.putExtra(Constants.EXTRA_BLOCK_HEIGHT, history.getHeight());
-                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_INPUT, history.totalInput);
-                i.putExtra(Constants.EXTRA_TRANSACTION_TOTAL_OUTPUT, history.totalOutput);
-                i.putExtra(Constants.EXTRA_TRANSACTION_TYPE,history.getType());
-                i.putExtra(Constants.EXTRA_TRANSACTION_HASH, history.getHash());
-                i.putExtra(Constants.EXTRA_TRANSACTION_DIRECTION, history.getDirection());
-                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_INPUTS,history.getUsedInput());
-                i.putStringArrayListExtra(Constants.EXTRA_TRANSACTION_OUTPUTS,history.getWalletOutput());
+                Bundle extras = new Bundle();
+                extras.putLong(Constants.AMOUNT, history.getAmount());
+                extras.putLong(Constants.FEE, history.getFee());
+                extras.putLong(Constants.TIMESTAMP, history.getTimestamp());
+                extras.putInt(Constants.HEIGHT, history.getHeight());
+                extras.putLong(Constants.TOTAL_INPUT, history.totalInput);
+                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutputs);
+                extras.putString(Constants.TYPE, history.type);
+                extras.putString(Constants.HASH, history.hash);
+                extras.putInt(Constants.DIRECTION, history.getDirection());
+                extras.putSerializable(Constants.Inputs, history.inputs);
+                extras.putSerializable(Constants.OUTPUTS, history.outputs);
+                i.putExtras(extras);
                 startActivity(i);
             }
 
@@ -105,16 +103,16 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
+        if (getActivity() != null)
         getActivity().setTitle(getString(R.string.history));
     }
 
     private void prepareHistoryData(){
         swipeRefreshLayout.setRefreshing(true);
         loadTransactions();
-        transactionList.clear();
         new Thread(){
             public void run(){
                 try {
@@ -147,7 +145,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             File file = new File(getContext().getFilesDir()+"/savedata/transactions");
             if(file.exists()){
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
-                List<Transaction> temp = (List<Transaction>) objectInputStream.readObject();
+                List<TransactionItem> temp = (List<TransactionItem>) objectInputStream.readObject();
                 transactionList.addAll(temp);
                 transactionAdapter.notifyDataSetChanged();
                 System.out.println("Done: "+transactionList.size());
@@ -164,31 +162,27 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        prepareHistoryData();
+        new Thread(){
+            public void run(){
+                try {
+                    constants.wallet.getTransactions(HistoryFragment.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override
-    public void onResult(String s) {
+    public void onResult(final String s) {
         if(getActivity() == null){
             return;
         }
-        TransactionsResponse response = TransactionsResponse.parse(s);
-        if(response.errorOccurred){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if(!refresh.isShown()){
-                        refresh.setVisibility(View.VISIBLE);
-                    }
-                    if(swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-            });
-        }else if(response.transactions.size() == 0){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TransactionsResponse response = TransactionsResponse.parse(s);
+                if(response.transactions.size() == 0){
                     if(!refresh.isShown()){
                         refresh.setVisibility(View.VISIBLE);
                     }
@@ -196,47 +190,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     if(swipeRefreshLayout.isRefreshing()){
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                }
-            });
-        }else {
-            final List<Transaction> temp = new ArrayList<>();
-            for (int i = 0; i < response.transactions.size(); i++) {
-                Transaction transaction = new Transaction();
-                TransactionsResponse.TransactionItem item = response.transactions.get(i);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(item.timestamp * 1000);
-                SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma",Locale.getDefault());
-                transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT,Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                transaction.setTime(item.timestamp);
-                transaction.setTransactionFee(item.fee);
-                transaction.setType(item.type);
-                transaction.setHash(item.hash);
-                transaction.setHeight(item.height);
-                transaction.setDirection(item.direction);
-                transaction.setAmount(item.amount);
-                ArrayList<String> usedInput = new ArrayList<>();
-                for (int j = 0; j < item.debits.size(); j++) {
-                    transaction.totalInput += item.debits.get(j).previous_amount;
-                    usedInput.add(item.debits.get(j).accountName + "\n" + Utils.formatDecred(item.debits.get(j).previous_amount));
-                }
-                ArrayList<String> output = new ArrayList<>();
-                for (int j = 0; j < item.credits.size(); j++) {
-                    transaction.totalOutput += item.credits.get(j).amount;
-                    output.add(item.credits.get(j).address + "\n" + Utils.formatDecred(item.credits.get(j).amount));
-                }
-                transaction.setUsedInput(usedInput);
-                transaction.setWalletOutput(output);
-                temp.add(transaction);
-            }
-            if(getActivity() == null){
-                return;
-            }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Collections.sort(temp, new TransactionSorter());
+                }else{
+                    ArrayList<TransactionItem> transactions = response.transactions;
+                    Collections.sort(transactions, new TransactionSorter());
                     transactionList.clear();
-                    transactionList.addAll(0,temp);
+                    transactionList.addAll(0, transactions);
                     if(refresh.isShown()){
                         refresh.setVisibility(View.INVISIBLE);
                     }
@@ -247,14 +205,14 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     transactionAdapter.notifyDataSetChanged();
                     saveTransactions();
                 }
-            });
-        }
+            }
+        });
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() != null && intent.getAction().equals(Constants.ACTION_BLOCK_SCAN_COMPLETE)){
+            if(intent.getAction() != null && intent.getAction().equals(Constants.BLOCK_SCAN_COMPLETE)){
                 prepareHistoryData();
             }
         }
@@ -274,7 +232,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         super.onResume();
         System.out.println("History OnResume");
         if(getActivity() != null) {
-            IntentFilter filter = new IntentFilter(Constants.ACTION_BLOCK_SCAN_COMPLETE);
+            IntentFilter filter = new IntentFilter(Constants.BLOCK_SCAN_COMPLETE);
             getActivity().registerReceiver(receiver, filter);
         }
     }

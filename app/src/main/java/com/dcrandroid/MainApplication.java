@@ -3,6 +3,8 @@ package com.dcrandroid;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.content.Intent;
+import android.os.Build;
 
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -52,6 +54,6 @@ public class MainApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setNetworkMode(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")));
+        setNetworkMode(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")));
     }
 }

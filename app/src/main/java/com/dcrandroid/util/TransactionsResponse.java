@@ -1,9 +1,12 @@
 package com.dcrandroid.util;
 
+import com.dcrandroid.data.Constants;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by collins on 1/10/18.
@@ -22,41 +25,43 @@ public class TransactionsResponse {
             if(response.errorOccurred){
                 response.errorMessage = object.getString("ErrorMessage");
             }
-            JSONArray transactions = object.getJSONArray("Transactions");
+            JSONArray transactions = object.getJSONArray(Constants.TRANSACTIONS);
             for(int i = 0; i < transactions.length(); i++){
-                JSONObject tx = transactions.getJSONObject(i);
-                ArrayList<TransactionCredit> credit = new ArrayList<>();
-                JSONArray cdt = tx.getJSONArray("Credits");
-                for(int j = 0; j < cdt.length(); j++){
-                    TransactionCredit item = new TransactionCredit();
-                    item.account = cdt.getJSONObject(j).getInt("Account");
-                    item.internal = cdt.getJSONObject(j).getBoolean("Internal");
-                    item.address = cdt.getJSONObject(j).getString("Address");
-                    item.index = cdt.getJSONObject(j).getInt("Index");
-                    item.amount = cdt.getJSONObject(j).getLong("Amount");
-                    credit.add(item);
-                }
-                ArrayList<TransactionDebit> debit = new ArrayList<>();
-                JSONArray dbt = tx.getJSONArray("Debits");
-                for(int j = 0; j < dbt.length(); j++){
-                    TransactionDebit item = new TransactionDebit();
-                    item.index = dbt.getJSONObject(j).getInt("Index");
-                    item.previous_account = dbt.getJSONObject(j).getLong("PreviousAccount");
-                    item.previous_amount = dbt.getJSONObject(j).getLong("PreviousAmount");
-                    item.accountName = dbt.getJSONObject(j).getString("AccountName");
-                    debit.add(item);
-                }
                 TransactionItem transaction = new TransactionItem();
-                transaction.fee = tx.getLong("Fee");
-                transaction.hash = tx.getString("Hash");
-                transaction.timestamp = tx.getLong("Timestamp");
+                JSONObject tx = transactions.getJSONObject(i);
+                ArrayList<TransactionOutput> outputs = new ArrayList<>();
+                JSONArray cdt = tx.getJSONArray(Constants.CREDITS);
+                for(int j = 0; j < cdt.length(); j++){
+                    TransactionOutput output = new TransactionOutput();
+                    output.account = cdt.getJSONObject(j).getInt(Constants.ACCOUNT);
+                    output.internal = cdt.getJSONObject(j).getBoolean(Constants.INTERNAL);
+                    output.address = cdt.getJSONObject(j).getString(Constants.ADDRESS);
+                    output.index = cdt.getJSONObject(j).getInt(Constants.INDEX);
+                    output.amount = cdt.getJSONObject(j).getLong(Constants.AMOUNT);
+                    transaction.totalOutputs += output.amount;
+                    outputs.add(output);
+                }
+                ArrayList<TransactionInput> inputs = new ArrayList<>();
+                JSONArray dbt = tx.getJSONArray(Constants.DEBITS);
+                for(int j = 0; j < dbt.length(); j++){
+                    TransactionInput input = new TransactionInput();
+                    input.index = dbt.getJSONObject(j).getInt(Constants.INDEX);
+                    input.previous_account = dbt.getJSONObject(j).getLong(Constants.PREVIOUS_ACCOUNT);
+                    input.previous_amount = dbt.getJSONObject(j).getLong(Constants.PREVIOUS_AMOUNT);
+                    input.accountName = dbt.getJSONObject(j).getString(Constants.ACCOUNT_NAME);
+                    transaction.totalInput += input.previous_amount;
+                    inputs.add(input);
+                }
+                transaction.fee = tx.getLong(Constants.FEE);
+                transaction.hash = tx.getString(Constants.HASH);
+                transaction.timestamp = tx.getLong(Constants.TIMESTAMP);
                 transaction.tx = null;
-                transaction.type = tx.getString("Type");
-                transaction.height = tx.getInt("Height");
-                transaction.direction = tx.getInt("Direction");
-                transaction.credits = credit;
-                transaction.debits = debit;
-                transaction.amount = tx.getLong("Amount");
+                transaction.type = tx.getString(Constants.TYPE);
+                transaction.height = tx.getInt(Constants.HEIGHT);
+                transaction.direction = tx.getInt(Constants.DIRECTION);
+                transaction.outputs = outputs;
+                transaction.inputs = inputs;
+                transaction.amount = tx.getLong(Constants.AMOUNT);
                 response.transactions.add(transaction);
             }
 
@@ -66,24 +71,62 @@ public class TransactionsResponse {
         return response;
     }
 
-    public static class TransactionItem{
+    public static class TransactionItem implements Serializable{
         public byte[] tx;
         public String hash, type;
         public int height, direction;
-        public long fee,amount;
+        public long fee, amount, totalInput = 0, totalOutputs = 0;
         public long timestamp;
-        public ArrayList<TransactionCredit> credits;
-        public ArrayList<TransactionDebit> debits;
+        public boolean animate = false;
+        public ArrayList<TransactionOutput> outputs;
+        public ArrayList<TransactionInput> inputs;
+
+        public int getHeight() {
+            return height;
+        }
+
+        public int getDirection() {
+            return direction;
+        }
+
+        public long getAmount() {
+            return amount;
+        }
+
+        public long getFee() {
+            return fee;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+//        public ArrayList<String> getInputs(){
+//            ArrayList<String> inputs = new ArrayList<>();
+//            for (int j = 0; j < this.inputaccountNames.size(); j++) {
+//                inputs.add(this.inputs.get(j).accountName + "\n" + Utils.formatDecred(this.inputs.get(j).previous_amount));
+//            }
+//            return inputs;
+//        }
+//
+//        public ArrayList<String> getOutputs(){
+//            ArrayList<String> outputs = new ArrayList<>();
+//            for (int j = 0; j < this.outputs.size(); j++) {
+//                outputs.add(this.outputs.get(j).address + "\n" + Utils.formatDecred(this.outputs.get(j).amount));
+//            }
+//            return outputs;
+//        }
     }
 
-    public static class TransactionDebit{
+    public static class TransactionInput implements Serializable{
         public long previous_account;
         public int index;
         public long previous_amount;
         public String accountName;
+
     }
 
-    public static class TransactionCredit{
+    public static class TransactionOutput implements Serializable{
         public long index, account;
         public long amount;
         public boolean internal;

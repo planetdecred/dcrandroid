@@ -72,6 +72,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:textColor="#69d5f7"
+                    android:visibility="gone"
                     android:id="@+id/tv_latest_block"
                     />
                 <TextView

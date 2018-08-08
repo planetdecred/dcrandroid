@@ -48,7 +48,16 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         btnConfirmSeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String enteredSeed = confirmView.getText().toString().trim();
+                //String enteredSeed = confirmView.getText().toString().trim();
+//                String enteredSeed = "scorecard paperweight eyetooth molasses bison opulent " +
+//                        "dropper crucifix rhythm indigo treadmill graduate " +
+//                        "breadline sociable spearhead Pandora spellbind infancy " +
+//                        "inverse surrender chairlift Istanbul preclude vagabond " +
+//                        "gremlin amulet absurd Jamaica aardvark revenue " +
+//                        "vapor hamburger absurd";
+                String enteredSeed = "miser stupendous backward inception slowdown Capricorn uncut visitor slowdown caravan blockade hemisphere repay article " +
+                        "necklace hazardous cobra inferno python suspicious minnow Norwegian chairlift backwater surmount impetus cement stupendous " +
+                        "snowslide sympathy fallout embezzle afflict";
                 if (!restore) {
                     System.out.println("Seed: " + seed);
                     System.out.println("Entered Seed: " + enteredSeed);

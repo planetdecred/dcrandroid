@@ -14,10 +14,10 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
-import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ import java.util.List;
  */
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
-    private List<Transaction> historyList;
+    private List<TransactionItem> historyList;
     private LayoutInflater layoutInflater;
     private PreferenceUtil util;
 
@@ -45,7 +45,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
     }
 
-    public TransactionAdapter(List<Transaction> historyListList , LayoutInflater inflater) {
+    public TransactionAdapter(List<TransactionItem> historyListList , LayoutInflater inflater) {
         this.historyList = historyListList;
         this.layoutInflater = inflater;
         this.util = new PreferenceUtil(inflater.getContext());
@@ -59,7 +59,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Transaction history = historyList.get(position);
+        TransactionItem history = historyList.get(position);
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
         if(history.getHeight() == -1){
@@ -67,13 +67,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.status.setTextColor(Color.parseColor("#3d659c"));
             holder.status.setText("pending");
         }else{
-            if(util.getBoolean(Constants.KEY_SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
+            if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
                 holder.status.setTextColor(Color.parseColor("#55bb97"));
                 holder.status.setText("confirmed");
             }else{
                 holder.status.setTextColor(Color.parseColor("#3d659c"));
                 holder.status.setText("pending");
             }
+        }
+
+        if(history.animate) {
+            Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
+            holder.view.setAnimation(blinkAnim);
         }
 
         if(history.getDirection() == 0){
@@ -92,10 +97,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
             holder.txType.setText("");
         }
-        if(history.animate) {
-            Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
-            holder.view.setAnimation(blinkAnim);
+
+        if (history.type.equalsIgnoreCase("vote")) {
+            holder.Amount.setText("Vote");
         }
+
     }
 
     @Override

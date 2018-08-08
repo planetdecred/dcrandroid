@@ -50,7 +50,7 @@
             android:key="peer_ip"
             />
         <EditTextPreference
-            android:key="@string/remote_dcrd_address"
+            android:key="@string/remote_node_address"
             android:enabled="false"
             android:title="@string/server_address_title"
             />
@@ -67,6 +67,14 @@
             android:title="User agent"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
+        <ListPreference
+            android:title="@string/logging_level"
+            android:entries="@array/logging_levels"
+            android:entryValues="@array/logging_levels"
+            android:summary="Changes reflect after restart"
+            android:key="logging_level"
+            android:defaultValue="info"
+            />
         <Preference
             android:summary="@string/summary_peers"
             android:title="@string/title_peers"
