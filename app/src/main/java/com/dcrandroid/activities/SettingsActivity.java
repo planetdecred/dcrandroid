@@ -57,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
             Preference buildDate = findPreference(getString(R.string.build_date_system));
-            formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
+            formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             Date buildTime = BuildConfig.buildTime;
             result = formatter.format(buildTime);
             buildDate.setSummary(result);
@@ -79,8 +79,6 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int i = Integer.valueOf((String)newValue);
-                    preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
-                    util.set(Constants.NETWORK_MODES, String.valueOf(i));
                     if(i == 0){
                         peerAddress.setEnabled(true);
                         remoteNodeAddress.setEnabled(false);
@@ -90,6 +88,8 @@ public class SettingsActivity extends AppCompatActivity {
                         remoteNodeAddress.setEnabled(true);
                         remoteNodeCertificate.setEnabled(true);
                     }
+                    preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
+                    util.set(Constants.NETWORK_MODES, String.valueOf(i));
                     Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
                     return true;
                 }

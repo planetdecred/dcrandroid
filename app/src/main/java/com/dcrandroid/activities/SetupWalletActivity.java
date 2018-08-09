@@ -30,7 +30,7 @@ public class SetupWalletActivity extends AppCompatActivity {
         TextView buildDate= findViewById(R.id.build_date);
         Button createWalletBtn = findViewById(R.id.button_create_wallet);
         Button retrieveWalletBtn = findViewById(R.id.button_retrieve_wallet);
-        formatter = new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH);
+        formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date buildDated = BuildConfig.buildTime;
         result = formatter.format(buildDated);
         buildDate.setText(result);

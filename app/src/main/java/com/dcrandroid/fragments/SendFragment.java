@@ -67,7 +67,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
     private EditText address;
     private BlockedSelectionEditText amount;
-    private TextView totalAmountSending,estimateFee,estimateSize,error_label, exchangeRateLabel, exchangeCurrency, inputCurrencyDisplay;
+    private TextView totalAmountSending, estimateFee, estimateSize, error_label, exchangeRateLabel, exchangeCurrency;
     private Spinner accountSpinner;
     private static final int SCANNER_ACTIVITY_RESULT_CODE = 0;
     private List<String> categories;
@@ -79,6 +79,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     private boolean isSendAll = false, currencyIsDCR = true;
     private String addressError = "", amountError = "";
     private double exchangeRate = -1;
+    private Button convertBtn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,7 +107,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         error_label = getActivity().findViewById(R.id.send_error_label);
         exchangeRateLabel = getActivity().findViewById(R.id.send_dcr_exchange_rate);
         exchangeCurrency = getActivity().findViewById(R.id.send_dcr_exchange_currency);
-        inputCurrencyDisplay = getActivity().findViewById(R.id.input_currency_display);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         categories = new ArrayList<>();
@@ -236,9 +236,10 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             }
         });
-        if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0") ) != 0 ){
+
+        if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
             getActivity().findViewById(R.id.exchange_details).setVisibility(View.VISIBLE);
-            Button convertBtn = getActivity().findViewById(R.id.send_btn_convert);
+            convertBtn = getActivity().findViewById(R.id.send_btn_convert);
             convertBtn.setVisibility(View.VISIBLE);
             convertBtn.setEnabled(true);
             convertBtn.setOnClickListener(new View.OnClickListener() {
@@ -432,9 +433,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(pd.isShowing()){
-                                    pd.dismiss();
-                                }addressError = "";
+                                if(pd.isShowing()){ pd.dismiss(); }
+                                addressError = "";
                                 showTxConfirmDialog(sb.toString());
                             }
                         });
@@ -585,14 +585,17 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             new GetExchangeRate(Utils.getProgressDialog(getContext(), false, false, "Fetching Data")).execute();
             return;
         }
-        String exchangerateTemp = getContext().getResources().getStringArray(R.array.currency_conversion_symbols)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]+ exchangeRate + getContext().getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))] + "/DCR";
-        exchangeRateLabel.setText(exchangerateTemp);
+
+        String currency = getContext().getResources().getStringArray(R.array.currency_conversion_abbrv)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))];
+
+        //+ exchangeRate + getContext().getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))] + "/DCR"
+        exchangeRateLabel.setText(String.format(Locale.getDefault(), "%.2f %s/DCR", exchangeRate, currency));
         exchangeCurrency.setText(getContext().getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]);
         if(currencyIsDCR){
             //Using if dcr is true because it will be flipped later in the function
-            inputCurrencyDisplay.setText(getContext().getResources().getStringArray(R.array.currency_conversion_symbols)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]);
+            convertBtn.setText(getContext().getResources().getStringArray(R.array.currency_conversion_abbrv)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]);
         }else{
-            inputCurrencyDisplay.setText("");
+            convertBtn.setText("DCR");
         }
         if(amount.getText().toString().length() == 0){
             currencyIsDCR = !currencyIsDCR;

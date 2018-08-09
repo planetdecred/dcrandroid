@@ -7,7 +7,6 @@ package com.dcrandroid.data;
 public class Constants {
     public static final String HASH = "Hash",
             FEE = "Fee",
-            EXTRA_TRANSACTION_DATE = "TxDate",
             TYPE = "Type",
             AMOUNT = "Amount",
             EXTRA_BALANCE_SPENDABLE = "spendable_balance",
@@ -36,7 +35,6 @@ public class Constants {
             DIRECTION = "Direction",
             Inputs = "Inputs",
             OUTPUTS = "Outputs",
-            EXTRA_TRANSACTION_TIMESTAMP = "transaction_timestamp",
             TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS",
             CURRENCY_CONVERSION = "currency_conversion",
             TIMESTAMP = "Timestamp",

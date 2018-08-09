@@ -45,25 +45,27 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         seedTv = findViewById(R.id.autoCompleteSeed);
         seedTv.setSingleLine(true);
         seedTv.setCompletionHint(getString(R.string.tap_to_select));
+
+        btnConfirmSeed.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String enteredSeed = "";
+                Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
+                        .putExtra("seed", enteredSeed);
+                startActivity(i);
+                return true;
+            }
+        });
         btnConfirmSeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //String enteredSeed = confirmView.getText().toString().trim();
-//                String enteredSeed = "scorecard paperweight eyetooth molasses bison opulent " +
-//                        "dropper crucifix rhythm indigo treadmill graduate " +
-//                        "breadline sociable spearhead Pandora spellbind infancy " +
-//                        "inverse surrender chairlift Istanbul preclude vagabond " +
-//                        "gremlin amulet absurd Jamaica aardvark revenue " +
-//                        "vapor hamburger absurd";
-                String enteredSeed = "miser stupendous backward inception slowdown Capricorn uncut visitor slowdown caravan blockade hemisphere repay article " +
-                        "necklace hazardous cobra inferno python suspicious minnow Norwegian chairlift backwater surmount impetus cement stupendous " +
-                        "snowslide sympathy fallout embezzle afflict";
+                String enteredSeed = confirmView.getText().toString().trim();
                 if (!restore) {
                     System.out.println("Seed: " + seed);
                     System.out.println("Entered Seed: " + enteredSeed);
                     if (seed.equals(enteredSeed)) {
                         Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
-                                .putExtra("seed", seed);
+                                .putExtra("seed", enteredSeed);
                         startActivity(i);
                     } else {
                         Toast.makeText(ConfirmSeedActivity.this, R.string.incorrect_seed_input, Toast.LENGTH_LONG).show();
@@ -129,7 +131,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
             seeds = new ArrayList<>();
             String[] seedsArray = seed.split(" ");
             tempSeeds = new HashSet<>(Arrays.asList(seedsArray));
-            List<String> list=  new ArrayList<>(tempSeeds);
+            List<String> list = new ArrayList<>(tempSeeds);
             seeds.addAll(Arrays.asList(seedsArray));
             if(restore){
                 Collections.sort(seeds, new SortIgnoreCase());
