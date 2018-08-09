@@ -149,7 +149,7 @@ type DecodedOutput struct {
 	Addresses []string
 }
 
-type SpvSyncResponse interface{
+type SpvSyncResponse interface {
 	OnSynced(synced bool)
 	/*
 	* Handled Error Codes
@@ -157,6 +157,6 @@ type SpvSyncResponse interface{
 	*  1 - Context Canceled
 	*  2 - Deadline Exceeded
 	*  3 - Invalid Address
-	*/
+	 */
 	OnSyncError(code int, err error)
 }

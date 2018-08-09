@@ -79,7 +79,7 @@
     "txscript",
     "wire"
   ]
-  revision = "ddd66de60466b544ef7b41abe00ecd3f248b00d9"
+  revision = "9536f0c88fa85180c348043766f6c1d4d42107da"
 
 [[projects]]
   name = "github.com/decred/dcrwallet"
@@ -112,7 +112,7 @@
     "wallet/udb",
     "walletseed"
   ]
-  revision = "fea0c01420c97167fc72af7c983a1fc9756962af"
+  revision = "371c8c71925fc8afa4eafc5884a18a04b84ad418"
   source = "github.com/c-ollins/btcwallet"
 
 [[projects]]
@@ -183,7 +183,7 @@
     "salsa20/salsa",
     "scrypt"
   ]
-  revision = "a49355c7e3f8fe157a85be2f77e6e269a0f89602"
+  revision = "de0752318171da717af4ce24d0a2e8626afaeb11"
 
 [[projects]]
   branch = "master"
@@ -193,7 +193,7 @@
     "internal/timeseries",
     "trace"
   ]
-  revision = "cffdcf672aee934982473246bc7e9a8ba446aa9b"
+  revision = "f9ce57c11b242f0f1599cf25c89d8cb02c45295a"
 
 [[projects]]
   branch = "master"
@@ -205,11 +205,11 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "1b2967e3c290b7c545b3db0deeda16e9be4f98a2"
+  revision = "f0d5e33068cb57c22a181f5df0ffda885309eb5a"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c0550beb110219200b910e5d45b3182ff773543525d16dd673d23fdfd1ceb09f"
+  inputs-digest = "6ffc7f911e9691b6de17fc293d0bb5aa31e6dd9e2ec98a96df863a8e66ce3637"
   solver-name = "gps-cdcl"
   solver-version = 1

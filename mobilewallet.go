@@ -15,7 +15,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/decred/slog"
 	"github.com/decred/dcrd/addrmgr"
 	stake "github.com/decred/dcrd/blockchain/stake"
 	"github.com/decred/dcrd/chaincfg"
@@ -34,6 +33,7 @@ import (
 	"github.com/decred/dcrwallet/wallet"
 	"github.com/decred/dcrwallet/wallet/txrules"
 	walletseed "github.com/decred/dcrwallet/walletseed"
+	"github.com/decred/slog"
 )
 
 var shutdownRequestChannel = make(chan struct{})
@@ -55,14 +55,14 @@ type LibWallet struct {
 
 func NewLibWallet(homeDir string) *LibWallet {
 	lw := &LibWallet{
-		dataDir: filepath.Join(homeDir, "testnet2/"),
+		dataDir: filepath.Join(homeDir, "testnet3/"),
 	}
 	errors.Separator = ":: "
-	initLogRotator(filepath.Join(homeDir, "/logs/testnet2/dcrwallet.log"))
+	initLogRotator(filepath.Join(homeDir, "/logs/testnet3/dcrwallet.log"))
 	return lw
 }
 
-func (lw *LibWallet) SetLogLevel(loglevel string){
+func (lw *LibWallet) SetLogLevel(loglevel string) {
 	_, ok := slog.LevelFromString(loglevel)
 	if ok {
 		setLogLevels(loglevel)
@@ -183,11 +183,11 @@ func (lw *LibWallet) InitLoader() {
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
-	l := loader.NewLoader(netparams.TestNet2Params.Params, lw.dataDir, stakeOptions,
+	l := loader.NewLoader(netparams.TestNet3Params.Params, lw.dataDir, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
 	lw.loader = l
-	lw.activeNet = &netparams.TestNet2Params
-	lw.chainParams = &chaincfg.TestNet2Params
+	lw.activeNet = &netparams.TestNet3Params
+	lw.chainParams = &chaincfg.TestNet3Params
 	go shutdownListener()
 }
 
@@ -249,7 +249,7 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 		log.Error(err)
 		return err
 	}
-	c, err := chain.NewRPCClient(netparams.TestNet2Params.Params, networkAddress,
+	c, err := chain.NewRPCClient(netparams.TestNet3Params.Params, networkAddress,
 		rpcUser, rpcPass, certs, false)
 	if err != nil {
 		log.Error(err)
@@ -295,7 +295,7 @@ func (lw *LibWallet) StartSPVConnection(peerAddress string) {
 	}()
 }
 
-func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse,peerAddresses string, discoverAccounts bool, privatePassphrase []byte) error {
+func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string, discoverAccounts bool, privatePassphrase []byte) error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
 		return errors.E(errors.Invalid, "Wallet has not been loaded")
@@ -335,11 +335,11 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse,peerAddresses string, 
 		},
 	}
 	var spvConnect []string
-	if len(peerAddresses) > 0{
+	if len(peerAddresses) > 0 {
 		spvConnect = strings.Split(peerAddresses, ";")
 	}
 	fmt.Println("Spv connect:", spvConnect, len(spvConnect), len(peerAddresses))
-	go func(){
+	go func() {
 		syncer := spv.NewSyncer(wallet, lp)
 		syncer.SetNotifications(ntfns)
 		if len(spvConnect) > 0 {
@@ -374,12 +374,12 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse,peerAddresses string, 
 	return nil
 }
 
-func (lw *LibWallet) RescanPoint() []byte{
+func (lw *LibWallet) RescanPoint() []byte {
 	rescanPoint, err := lw.wallet.RescanPoint()
-	if err != nil{
+	if err != nil {
 		fmt.Println("Couldn't get rescan point:", err)
 	}
-	if rescanPoint != nil{
+	if rescanPoint != nil {
 		return rescanPoint[:]
 	}
 	return nil
