@@ -11,17 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.DcrResponse;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
-import org.json.JSONException;
-
-import mobilewallet.BlockScanResponse;
 import mobilewallet.LibWallet;
 
 /**
@@ -38,14 +35,13 @@ public class EncryptWallet extends AppCompatActivity{
         setContentView(R.layout.activity_enter_passphrase);
         util = new PreferenceUtil(EncryptWallet.this);
         pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"");
-        final EditText passPhrase = (EditText) findViewById(R.id.passphrase);
-        final EditText verifyPassPhrase = (EditText) findViewById(R.id.verifyPassphrase);
-        Button encryptWallet = (Button) findViewById(R.id.button_encrypt_wallet);
+        final EditText passPhrase = findViewById(R.id.passphrase);
+        final EditText verifyPassPhrase = findViewById(R.id.verifyPassphrase);
+        Button encryptWallet = findViewById(R.id.button_encrypt_wallet);
         Intent i = getIntent();
         Bundle b = i.getExtras();
         if(b != null)
             seed = b.getString("seed");
-        System.out.println("Encrypt Seed: "+seed);
         encryptWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,22 +58,19 @@ public class EncryptWallet extends AppCompatActivity{
                                 LibWallet wallet = constants.wallet;
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
-                                show("Connecting to dcrd...");
+                                show("Connecting to node...");
                                 for(;;){
                                     try {
-                                        wallet.startRPCClient(Utils.getDcrdNetworkAddress(EncryptWallet.this), "dcrwallet", "dcrwallet", Utils.getConnectionCertificate(EncryptWallet.this).getBytes());
+                                        wallet.startRPCClient(Utils.getNetworkAddress(EncryptWallet.this, (MainApplication) getApplicationContext()), "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(EncryptWallet.this).getBytes());
                                         break;
                                     }catch (final Exception e){
                                         if(util.getBoolean(Constants.KEY_DEBUG_MESSAGES)) {
-                                            System.out.println("Showing debug messages");
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     Toast.makeText(EncryptWallet.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-                                        }else{
-                                            System.out.println("Not showing debug messages");
                                         }
                                         e.printStackTrace();
                                     }
@@ -110,6 +103,7 @@ public class EncryptWallet extends AppCompatActivity{
                                 });
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                //Todo: Handle Error here
                             }
                         }
                     }.start();

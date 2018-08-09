@@ -3,91 +3,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="#F3F6F6"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#fff">
+        android:padding="8dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/send_funds"
-            android:gravity="center"
-            android:textSize="22sp"
-            android:padding="5dp"
-            android:textColor="@color/bacgroundColor"
+            android:text="@string/sending_decred"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#0C1E3E"
             />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/secondaryTextColor"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="8dp"
+            android:textColor="#617386"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_marginBottom="25dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
             android:paddingEnd="5dp"
-            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:gravity="center"
+            android:paddingBottom="5dp"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="#617386"
                 android:gravity="end"
-                android:padding="5dp"
-                android:background="@color/backgcolorwhite"
                 android:textSize="16sp"
 
                 />
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="1dp"
-                android:background="@drawable/background_shadow">
+                android:background="#B6e9f9">
 
                 <Spinner
                     android:id="@+id/send_dropdown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:entries="@array/nav_item_activity_titles"
-                    android:layout_marginRight="-10dp"
-                    android:layout_marginEnd="-10dp"
+                    android:layout_marginRight="-7dp"
+                    android:layout_marginEnd="-7dp"
                     android:layout_gravity="center"
                     android:gravity="start"
                     >
                 </Spinner>
             </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@color/backgcolorwhite"
-                />
-        </LinearLayout>
 
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="1dp"
+            android:background="#D0D1D1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp">
+            android:padding="5dp">
 
             <EditText
                 android:id="@+id/send_dcr_add"
@@ -95,14 +92,14 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/destination_address"
                 android:maxLines="1"
+                android:textColorHint="#A7AFBC"
                 android:layout_weight="1"
                 android:inputType="text"
                 android:textSize="15sp"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:paddingRight="5dp"
+                android:paddingBottom="3dp"
+                android:paddingTop="8dp"
                 android:textColor="@color/secondaryTextColor"
+                android:background="#F4F6F6"
                 />
 
             <ImageView
@@ -112,64 +109,95 @@
                 android:src="@mipmap/icons8_qr_code"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
+                android:padding="4dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginStart="2dp"
-                android:gravity="bottom"
                 android:layout_gravity="center"
                 android:contentDescription="@string/scan"
-                android:layout_marginTop="3dp"
                 />
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/border2"
+            android:background="#D0D1D1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp">
-            <LinearLayout
+            android:padding="5dp">
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 >
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/input_currency_display"
+                    android:text="Amount:"
+                    android:textColor="#617386"
+                    android:layout_centerVertical="true"
                     />
 
                 <com.dcrandroid.util.BlockedSelectionEditText
                     android:id="@+id/send_dcr_amount"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/amount_dcr"
                     android:inputType="numberDecimal"
+                    android:layout_toRightOf="@id/input_currency_display"
                     android:lines="1"
                     android:maxLines="1"
-                    android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginStart="3dp"
+                    android:maxLength="17"
+                    android:paddingLeft="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#0C1E3E"
+                    android:textSize="16sp"
+                    android:background="#ABE9FB"
                     />
-            </LinearLayout>
+
+                <Button
+                    android:id="@+id/send_btn_convert"
+                    android:layout_width="50dp"
+                    android:layout_height="30.5dp"
+                    android:layout_toEndOf="@id/send_dcr_amount"
+                    android:layout_toRightOf="@id/send_dcr_amount"
+                    android:background="#6ACFC5"
+                    android:text="DCR"
+                    android:elevation="0dp"
+                    android:visibility="gone"
+                    android:textColor="#0C1E3E"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/send_dcr_all"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/max"
                 android:clickable="true"
                 android:gravity="center"
-                android:textColor="@android:color/black"
+                android:textColor="#0F1D3B"
                 android:focusable="true"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:paddingBottom="3dp" />
+                android:textSize="14sp"
+
+                />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/border3"
+            android:background="#D0D1D1"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -190,12 +218,7 @@
                 android:paddingStart="10dp"
                 android:id="@+id/send_error_label"
                 android:textColor="?attr/colorError" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/exchange_details"
-                android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -205,62 +228,20 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:text="Exchange Currency"
-                    android:textSize="15sp"
+                    android:text="@string/total_sending"
+                    android:textSize="16sp"
                     android:gravity="start"
-                    android:textColor="@color/secondaryTextColor"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/send_dcr_exchange_currency"
-                    android:textSize="15sp"
-                    android:text="-"
-                    android:textColor="@color/secondaryTextColor"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                >
-                <TextView
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:text="Exchange Rate"
-                    android:textSize="15sp"
-                    android:gravity="start"
-                    android:textColor="@color/secondaryTextColor"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/send_dcr_exchange_rate"
-                    android:textSize="15sp"
-                    android:text="-"
-                    android:textColor="@color/secondaryTextColor"
-                    />
-            </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                >
-                <TextView
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_amount_sending"
-                    android:textSize="15sp"
-                    android:gravity="start"
-                    android:textColor="@color/secondaryTextColor"/>
+                    android:textStyle="bold"
+                    android:textColor="#0C1E3E"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/send_dcr_total_amt_sndng"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:text="-"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textStyle="bold"
+                    android:textColor="#0C1E3E"
                     />
             </LinearLayout>
             <LinearLayout
@@ -268,13 +249,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="5dp">
+
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/estimated_fee"
+                    android:text="@string/fee"
                     android:textSize="15sp"
                     android:gravity="start"
                     android:textColor="@color/secondaryTextColor"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -304,20 +287,71 @@
                     android:textColor="@color/secondaryTextColor"
                     />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/exchange_details"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    >
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:text="Exchange Currency"
+                        android:textSize="15sp"
+                        android:gravity="start"
+                        android:textColor="@color/secondaryTextColor"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/send_dcr_exchange_currency"
+                        android:textSize="15sp"
+                        android:text="-"
+                        android:textColor="@color/secondaryTextColor"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    >
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:text="Exchange Rate"
+                        android:textSize="15sp"
+                        android:gravity="start"
+                        android:textColor="@color/secondaryTextColor"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/send_dcr_exchange_rate"
+                        android:textSize="15sp"
+                        android:text="-"
+                        android:textColor="@color/secondaryTextColor"
+                        />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
         <Button
             android:id="@+id/send_btn_tx"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
+            android:layout_width="90dp"
+            android:layout_height="36dp"
             android:background="@drawable/btn_shape"
             android:padding="5dp"
             android:text="@string/send"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:textColor="@android:color/background_light" />
+            android:layout_marginTop="25dp"
+            android:textColor="#FFFFFF" />
         <Button
-            android:id="@+id/send_btn_convert"
+            android:id="@+id/send_btn_convert2"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_shape"

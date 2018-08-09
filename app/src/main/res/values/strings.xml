@@ -72,17 +72,17 @@
     <string name="receive_funds">Receive Funds</string>
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
-    <string name="send_funds">Send Funds</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\n and the amount in DCR to send funds.</string>
+    <string name="sending_decred">Sending Decred</string>
+    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
     <string name="destination_address">" "Destination Address</string>
     <string name="amount_dcr">" "Amount</string>
-    <string name="max">Max</string>
+    <string name="max">MAX</string>
     <string name="send">Send</string>
     <string name="_0_bytes">0 bytes</string>
     <string name="estimate_size">Estimate Size:</string>
     <string name="_0_dcr">0 DCR</string>
-    <string name="estimated_fee">Estimated Fee:</string>
-    <string name="total_amount_sending">Total amount sending:</string>
+    <string name="fee">Fee:</string>
+    <string name="total_sending">Total Sending:</string>
     <string name="scan">scan</string>
     <string name="from">From:</string>
     <string name="confirmed">Confirmed</string>
@@ -194,12 +194,10 @@
     <string name="pref_header_about">About</string>
     <string name="build_date">Build Date</string>
     <string name="title_transaction_confirmation">Confirmations required</string>
-    <string name="title_enable_local_dcrd">Enable local dcrd</string>
     <string name="title_testnet">Testnet</string>
     <string name="summary_testnet">Use testnet connection</string>
     <string name="key_transaction_confirmation">key_transaction_confirmation</string>
     <string name="key_connection_certificate">key_connection_certificate</string>
-    <string name="key_connection_local_dcrd">key_connection_local_dcrd</string>
     <string name="key_testnet">key_testnet</string>
     <string name="key_get_peers">key_get_peers</string>
     <string name="summary_peers">View available peers and details</string>
@@ -252,13 +250,11 @@
     <string name="build_date_system">build_date_system</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
-        <item>Local Full full-node</item>
         <item>Remote Full full-node</item>
     </string-array>
     <string-array name="network_modes_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="currency_conversion">
         <item>None</item>
@@ -273,5 +269,7 @@
         <item>$</item>
     </string-array>
     <string name="dcr_to_usd_exchange_url">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
-    <string name="key_timeout">timeout</string>
+    <string name="copy_on_click">(copy on click)</string>
+    <string name="for_more_information_please_visit">For more information please visit</string>
+    <string name="https_docs_decred_org">https://docs.decred.org</string>
 </resources>

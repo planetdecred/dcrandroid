@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#F4F6F6">
     <TextView
         android:id="@+id/help_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="For more information please visit"
-        android:textColor="@color/colorText"
+        android:text="@string/for_more_information_please_visit"
         android:textSize="18sp"
-        android:layout_centerInParent="true"
         />
     <TextView
         android:id="@+id/website_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="2"
-        android:text="https://docs.decred.org"
-        android:textColor="@color/ButtonColor"
+        android:text="@string/https_docs_decred_org"
+        android:textColor="#2970FF"
         android:textSize="18sp"
         android:layout_below="@+id/help_info"
-        android:layout_centerInParent="true"
         />
 
 </RelativeLayout>

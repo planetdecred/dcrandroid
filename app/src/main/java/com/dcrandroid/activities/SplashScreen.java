@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.dcrandroid.MainActivity;
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.MyCustomTextView;
@@ -34,6 +35,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MainApplication) getApplicationContext()).getNetworkMode();
         util = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);
         imgAnim = findViewById(R.id.splashscreen_icon);

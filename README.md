@@ -19,13 +19,14 @@ Android 3.0 or above.
 Run the following commands
 
     git clone https://github.com/decred/dcrandroid.git
-    cd dcrandroid/pkg
-    mkdir bin
-    export GOPATH=$(pwd)
+    mkdir -p go/bin
+    mkdir -p go/src/github.com/raedahgroup/mobilewallet
+    git clone github.com/raedahgroup/mobilewallet go/src/github.com/raedahgroup/mobilewallet
+    export GOPATH=$(pwd)/go
     export PATH=$PATH:$GOPATH/bin
-    cd src/mobilewallet
+    cd go/src/github.com/raedahgroup/mobilewallet
     dep ensure -v
     gomobile bind -target=android/arm
-    cp mobilewallet.aar ../../../app/libs/mobilewallet.aar
-    cd ../../../
+    cp mobilewallet.aar $GOPATH/../dcrandroid/app/libs/mobilewallet.aar
+    cd $GOPATH/../dcrandroid
     ./gradlew

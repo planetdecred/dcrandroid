@@ -3,14 +3,8 @@ package com.dcrandroid.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.dcrandroid.R;
-import com.dcrandroid.data.BestBlock;
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Constants;
-
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,8 +24,6 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-
-//import dcrwallet.Dcrwallet;
 
 public class Utils {
     public static ProgressDialog getProgressDialog(Context context,boolean cancelable, boolean cancelOnTouchOutside,
@@ -106,15 +98,6 @@ public class Utils {
         return String.format("%040x", new BigInteger(1, arg.getBytes()));
     }
 
-    public static String getConnectionCertificate(Context context){
-        PreferenceUtil util = new PreferenceUtil(context);
-        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
-            return Utils.getRemoteCertificate(context);
-        }else{
-            return Utils.getDefaultCertificate(context);
-        }
-    }
-
     public static String getRemoteCertificate(Context context){
         try {
             File path = new File(context.getFilesDir()+"/savedata");
@@ -165,35 +148,11 @@ public class Utils {
         }
     }
 
-    public static String getDefaultCertificate(Context context){
-        try {
-            InputStream in = context.getAssets().open("dcrdrpc.cert");
-            StringBuilder sb = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String s;
-            while ((s = reader.readLine()) != null) {
-                sb.append(s);
-                sb.append("\n");
-            }
-            return sb.toString();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public static String getDcrdNetworkAddress(Context context){
+    public static String getNetworkAddress(Context context, MainApplication application){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 1 || Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 0){
-            System.out.println("Util is using local server");
-            //return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
-            return "";
-        }else{
-            String addr = util.get(Constants.KEY_REMOTE_DCRD_ADDRESS);
-            System.out.println("Util is using remote server: "+addr);
-            return addr;
-        }
+        String addr = util.get(Constants.KEY_REMOTE_DCRD_ADDRESS);
+        System.out.println("Util is using remote server: "+addr);
+        return addr;
     }
 
     public static void writeDcrdCertificate(Context context) throws Exception{
@@ -201,16 +160,11 @@ public class Utils {
         path.mkdirs();
         File file = new File(path, "rpc.cert");
         FileOutputStream fout = new FileOutputStream(file);
-        System.out.println("Cert: "+getConnectionCertificate(context));
-        byte[] buffer = getConnectionCertificate(context).getBytes();
+        System.out.println("Cert: "+getRemoteCertificate(context));
+        byte[] buffer = getRemoteCertificate(context).getBytes();
         fout.write(buffer, 0, buffer.length);
         fout.flush();
         fout.close();
-    }
-
-    public static BestBlock parseBestBlock(String json) throws JSONException{
-        JSONObject obj = new JSONObject(json);
-        return new BestBlock(obj.getString("hash"), obj.getInt("height"));
     }
 
     //TODO: Make available for both testnet and mainnet
@@ -221,26 +175,6 @@ public class Utils {
         long totalDays = (today.getTimeInMillis() - startDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
         int blocksPerDay = 720;
         return Math.round(totalDays * blocksPerDay * (0.95));
-    }
-
-    public static void setDcrdConfiguration(String key, String value){
-        try {
-            PropertiesConfiguration properties = new PropertiesConfiguration(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
-            properties.setProperty(key,value);
-            properties.save(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void removeDcrdConfig(String key){
-        try {
-            PropertiesConfiguration properties = new PropertiesConfiguration(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
-            properties.clearProperty(key);
-            properties.save(new File("/data/data/com.dcrandroid/files/dcrd/dcrd.conf"));
-        }catch (ConfigurationException e) {
-            e.printStackTrace();
-        }
     }
 
     public static String calculateTime(long millis) {
