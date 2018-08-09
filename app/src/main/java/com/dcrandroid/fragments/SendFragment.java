@@ -236,10 +236,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             }
         });
-        if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "-1")) != 0) {
+        if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "-1") ) != 0 && util.get(Constants.CURRENCY_CONVERSION, "-1")  != null ){
             getActivity().findViewById(R.id.exchange_details).setVisibility(View.VISIBLE);
             Button convertBtn = getActivity().findViewById(R.id.send_btn_convert);
             convertBtn.setVisibility(View.VISIBLE);
+            convertBtn.setEnabled(true);
             convertBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -247,7 +248,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             });
         }
-
+        else {
+            Button convertBtn = getActivity().findViewById(R.id.send_btn_convert);
+            convertBtn.setVisibility(View.VISIBLE);
+            convertBtn.setEnabled(false);
+        }
         prepareAccounts();
     }
 
