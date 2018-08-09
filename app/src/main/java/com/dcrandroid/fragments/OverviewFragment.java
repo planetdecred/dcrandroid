@@ -49,7 +49,7 @@ import mobilewallet.GetTransactionsResponse;
  */
 
 public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
-    private List<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>(), tempTxList = new ArrayList<>();
+    private List<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>();
     private CurrencyTextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -118,8 +118,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
-        prepareHistoryData();
         getBalance();
+        prepareHistoryData();
         return rootView;
     }
 
@@ -161,7 +161,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private void prepareHistoryData(){
         swipeRefreshLayout.setRefreshing(true);
-        tempTxList.clear();
         transactionList.clear();
         loadTransactions();
         new Thread(){
@@ -175,14 +174,14 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }.start();
     }
 
-    public void saveTransactions(){
+    public void saveTransactions(ArrayList<TransactionsResponse.TransactionItem> transactions){
         try {
             File path = new File(getContext().getFilesDir()+"/savedata/");
             path.mkdirs();
             File file = new File(getContext().getFilesDir()+"/savedata/transactions");
             file.createNewFile();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
-            objectOutputStream.writeObject(tempTxList);
+            objectOutputStream.writeObject(transactions);
             objectOutputStream.close();
         }catch (Exception e){
             e.printStackTrace();
@@ -196,12 +195,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             File file = new File(getContext().getFilesDir()+"/savedata/transactions");
             if(file.exists()){
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
-                tempTxList = (List<TransactionsResponse.TransactionItem>) objectInputStream.readObject();
-                if(tempTxList.size() > 0) {
-                    if (tempTxList.size() > 7) {
-                        transactionList.addAll(tempTxList.subList(0, 7));
+                ArrayList<TransactionsResponse.TransactionItem> temp = (ArrayList<TransactionsResponse.TransactionItem>) objectInputStream.readObject();
+                if(temp.size() > 0) {
+                    if (temp.size() > 7) {
+                        transactionList.addAll(temp.subList(0, 7));
                     } else {
-                        transactionList.addAll(tempTxList.subList(0, tempTxList.size() - 1));
+                        transactionList.addAll(temp.subList(0, temp.size() - 1));
                     }
                 }
                 transactionAdapter.notifyDataSetChanged();
@@ -225,13 +224,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void run() {
                 TransactionsResponse response = TransactionsResponse.parse(json);
-
-                recyclerView.setVisibility(View.GONE);
-                if(swipeRefreshLayout.isRefreshing()){
-                    swipeRefreshLayout.setRefreshing(false);
-                }
                 if(response.transactions.size() == 0){
                     refresh.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }else{
                     ArrayList<TransactionsResponse.TransactionItem> transactions = response.transactions;
                     Collections.sort(transactions, new TransactionSorter());
@@ -254,7 +252,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     if(refresh.isShown()){
                         refresh.setVisibility(View.GONE);
                     }
-                    saveTransactions();
+                    saveTransactions(transactions);
                 }
             }
         });
@@ -274,11 +272,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if (b == null){
                     return;
                 }
-                //Calendar calendar = Calendar.getInstance();
-                //calendar.setTimeInMillis(intent.getLongExtra(Constants.EXTRA_TRANSACTION_TIMESTAMP, 0) * 1000);
-                //SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
-                //transaction.setTxDate(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
-                transaction.timestamp = b.getLong(Constants.EXTRA_TRANSACTION_TIMESTAMP, 0) * 1000;
+                transaction.timestamp = b.getLong(Constants.TIMESTAMP, 0);
                 transaction.fee = b.getLong(Constants.FEE, 0);
                 transaction.type = b.getString(Constants.TYPE);
                 transaction.hash = b.getString(Constants.HASH);

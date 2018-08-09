@@ -1,7 +1,9 @@
 package com.dcrandroid.activities;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,9 +51,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private String transactionType;
     private Bundle extras;
 
+    private void restartApp(){
+        PackageManager packageManager = getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
+        if (intent != null) {
+            ComponentName componentName = intent.getComponent();
+            Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+            startActivity(mainIntent);
+            Runtime.getRuntime().exit(0);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (DcrConstants.getInstance().wallet == null){
+            restartApp();
+            return;
+        }
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
         util = new PreferenceUtil(this);

@@ -42,7 +42,7 @@ public class EncryptWallet extends AppCompatActivity{
         Bundle b = i.getExtras();
         if(b != null)
             seed = b.getString("seed");
-        encryptWallet.setOnClickListener(new View.OnClickListener() {
+            encryptWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String pass = passPhrase.getText().toString();
@@ -56,24 +56,12 @@ public class EncryptWallet extends AppCompatActivity{
                             try {
                                 DcrConstants constants = DcrConstants.getInstance();
                                 LibWallet wallet = constants.wallet;
+                                if (wallet == null){
+                                    return;
+                                }
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
                                 //constants.wallet.unlockWallet(pass.getBytes());
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        pd.dismiss();
-                                        Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                                        i.putExtra("passphrase", pass);
-                                        startActivity(i);
-                                        //Finish all the activities before this
-                                        ActivityCompat.finishAffinity(EncryptWallet.this);
-                                    }
-                                });
-                                if (true){
-                                    return;
-                                }
-                                //Utils.backupWalletDB(EncryptWallet.this);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -161,17 +162,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mainApplication = (MainApplication) getApplicationContext();
 
         setContentView(R.layout.activity_main);
-
+        
         initViews();
-
+        
         registerNotificationChannel();
-
+        
         util = new PreferenceUtil(this);
         constants = DcrConstants.getInstance();
-        if(constants.wallet == null){ restartApp(); }
+        
+        if(constants.wallet == null){
+            System.out.println("Restarting app");
+            restartApp();
+        }
+
         constants.wallet.transactionNotification(this);
         constants.notificationProxy = this;
-
+        
         connectToDecredNetwork();
     }
 
@@ -181,10 +187,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (b != null){
             passPhrase = b.getString("passphrase");
         }
+        final String finalPassPhrase = passPhrase;
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0){
             System.out.println("Starting SPV Connection");
             setConnectionStatus("Not Synced");
-            final String finalPassPhrase = passPhrase;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -196,17 +202,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }).start();
         }else{
-            if (passPhrase != null){
-                try {
-                    constants.wallet.unlockWallet(passPhrase.getBytes());
-                } catch (Exception e) {
-                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                        showText("Failed to unlock wallet" + e.getMessage());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (finalPassPhrase != null){
+                        try {
+                            constants.wallet.unlockWallet(finalPassPhrase.getBytes());
+                        } catch (Exception e) {
+                            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+                                showText("Failed to unlock wallet" + e.getMessage());
+                            }
+                            e.printStackTrace();
+                        }
                     }
-                    e.printStackTrace();
+                    connectToRPCServer();
                 }
-            }
-            //connectToRPCServer();
+            }).start();
         }
     }
 
@@ -432,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             Intent newTransactionIntent = new Intent(Constants.NEW_TRANSACTION);
             Bundle b = new Bundle();
-            b.putLong(Constants.EXTRA_TRANSACTION_TIMESTAMP,obj.getLong(Constants.TIMESTAMP));
+            b.putLong(Constants.TIMESTAMP ,obj.getLong(Constants.TIMESTAMP));
             b.putLong(Constants.FEE, obj.getLong(Constants.FEE));
             b.putString(Constants.TYPE, obj.getString(Constants.TYPE));
             b.putString(Constants.HASH, obj.getString(Constants.HASH));
@@ -667,6 +678,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onSynced(boolean b) {
         synced = b;
         if (b){
+            sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
             startBlockUpdate();
         }
     }

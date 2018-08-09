@@ -266,9 +266,9 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-    <string-array name="currency_conversion_symbols">
+    <string-array name="currency_conversion_abbrv">
         <item></item>
-        <item>$</item>
+        <item>USD</item>
     </string-array>
     <string-array name="logging_levels">
         <item>Trace</item>

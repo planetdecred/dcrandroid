@@ -136,7 +136,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/input_currency_display"
+                    android:id="@+id/amount_tv"
                     android:text="Amount:"
                     android:textColor="#617386"
                     android:layout_centerVertical="true"
@@ -147,8 +147,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:layout_toRightOf="@id/input_currency_display"
+                    android:layout_toRightOf="@id/amount_tv"
                     android:lines="1"
+                    android:hint="0"
                     android:maxLines="1"
                     android:layout_marginLeft="3dp"
                     android:layout_marginStart="3dp"
@@ -172,7 +173,7 @@
                     android:layout_toRightOf="@id/send_dcr_amount"
                     android:background="#6ACFC5"
                     android:text="DCR"
-                    android:elevation="0dp"
+                    style="?android:attr/borderlessButtonStyle"
                     android:visibility="gone"
                     android:textColor="#0C1E3E"/>
 
