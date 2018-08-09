@@ -236,7 +236,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             }
         });
-        if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "-1") ) != 0 && util.get(Constants.CURRENCY_CONVERSION, "-1")  != null ){
+        if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0") ) != 0 ){
             getActivity().findViewById(R.id.exchange_details).setVisibility(View.VISIBLE);
             Button convertBtn = getActivity().findViewById(R.id.send_btn_convert);
             convertBtn.setVisibility(View.VISIBLE);
