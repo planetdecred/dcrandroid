@@ -597,7 +597,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             new GetExchangeRate(Utils.getProgressDialog(getContext(), false, false, "Fetching Data")).execute();
             return;
         }
-        exchangeRateLabel.setText(getContext().getResources().getStringArray(R.array.currency_conversion_symbols)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]+ exchangeRate +"/dcr");
+        String exchangerateTemp = getContext().getResources().getStringArray(R.array.currency_conversion_symbols)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]+ exchangeRate + getContext().getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))] + "/DCR";
+        exchangeRateLabel.setText(exchangerateTemp);
         exchangeCurrency.setText(getContext().getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0"))]);
         if(currencyIsDCR){
             //Using if dcr is true because it will be flipped later in the function
