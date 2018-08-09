@@ -250,8 +250,8 @@
     <string name="build_date_system">build_date_system</string>
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
-        <item>Local Full Full-Node</item>
-        <item>Remote Full Full-Node</item>
+        <item>Local Full Node</item>
+        <item>Remote Full Node</item>
     </string-array>
     <string-array name="network_modes_values">
         <item>0</item>
