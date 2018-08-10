@@ -32,6 +32,7 @@ import mobilewallet.BlockScanResponse;
 
 public class SettingsActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,10 @@ public class SettingsActivity extends AppCompatActivity {
         private DcrConstants constants;
         String result;
         SimpleDateFormat formatter;
-
+        EditTextPreference remoteNodeAddress;
+        EditTextPreference remoteNodeCertificate;
+        EditTextPreference peerAddress;
+      
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -54,8 +58,8 @@ public class SettingsActivity extends AppCompatActivity {
             constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
-            final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
-            final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
+            remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_dcrd_address));
+            remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.KEY_PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
@@ -67,11 +71,13 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.KEY_NETWORK_MODES, "0")) == 2){
+                remoteFullModeSet();
                 remoteNodeCertificate.setEnabled(true);
                 remoteNodeAddress.setEnabled(true);
                 peerAddress.setEnabled(false);
             }
             else {
+                SpvModeset();
                 remoteNodeCertificate.setEnabled(false);
                 remoteNodeAddress.setEnabled(false);
                 peerAddress.setEnabled(true);
@@ -85,10 +91,12 @@ public class SettingsActivity extends AppCompatActivity {
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.KEY_NETWORK_MODES, String.valueOf(i));
                     if(i == 0){
+                        MainPreferenceFragment.this.SpvModeset();
                         peerAddress.setEnabled(true);
                         remoteNodeAddress.setEnabled(false);
                         remoteNodeCertificate.setEnabled(false);
                     }else{
+                        MainPreferenceFragment.this.remoteFullModeSet();
                         peerAddress.setEnabled(false);
                         remoteNodeAddress.setEnabled(true);
                         remoteNodeCertificate.setEnabled(true);
@@ -266,6 +274,19 @@ public class SettingsActivity extends AppCompatActivity {
             });
             return true;
         }
+      
+        public void SpvModeset(){
+            connectToPeer.setVisible(true);
+            remoteDcrdAddress.setVisible(false);
+            dcrdCertificate.setVisible(false);
+            timeout.setVisible(false);
+        }
+
+        public void remoteFullModeSet(){
+            connectToPeer.setVisible(false);
+            dcrdCertificate.setVisible(true);
+            remoteDcrdAddress.setVisible(true);
+        }
     }
 
     @Override
@@ -282,4 +303,7 @@ public class SettingsActivity extends AppCompatActivity {
         setResult(0);
         finishActivity(2);
     }
+
+
+
 }
