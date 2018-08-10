@@ -22,7 +22,6 @@ before_install:
   - export PATH=$PATH:$GOROOT/bin
   - sudo ln -s $GOROOT/bin/go /usr/bin/go
   - echo $PATH
-  - which go
   - go version
   - cd ../ && mkdir go
   - cd go
