@@ -126,7 +126,7 @@ func (lw *LibWallet) Shutdown() {
 		log.Infof("Shutting down log rotator")
 		logRotator.Close()
 	}
-	//os.Exit(0)
+	os.Exit(0)
 }
 
 func shutdownListener() {
