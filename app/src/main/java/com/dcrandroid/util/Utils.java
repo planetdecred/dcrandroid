@@ -220,6 +220,14 @@ public class Utils {
         return format.format(amount);
     }
 
+    public static String formatDecredWithoutComma(long dcr){
+        BigDecimal satoshi = BigDecimal.valueOf(dcr);
+        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#########0.00######");
+        return format.format(amount);
+    }
+
     public static String calculateTotalAmount(long dcr, long signedSize, boolean isSendAll){
         BigDecimal satoshi = BigDecimal.valueOf(dcr);
         BigDecimal signed = BigDecimal.valueOf(signedSize);

@@ -62,6 +62,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         TransactionItem history = historyList.get(position);
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
+        confirmations += 1;
         if(history.getHeight() == -1){
             //No included in block chain, therefore transaction is pending
             holder.status.setTextColor(Color.parseColor("#3d659c"));
@@ -77,6 +78,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
 
         if(history.animate) {
+            System.out.println("Item is animating.");
             Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
             holder.view.setAnimation(blinkAnim);
         }

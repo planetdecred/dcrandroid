@@ -222,9 +222,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     isSendAll = true;
                     try {
                         if(currencyIsDCR) {
-                            amount.setText(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
+                            amount.setText(Utils.formatDecredWithoutComma(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
                         }else{
-                            BigDecimal currentAmount = new BigDecimal(Utils.formatDecred(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)), new MathContext(7));
+                            BigDecimal currentAmount = new BigDecimal(Utils.formatDecredWithoutComma(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)), new MathContext(7));
                             BigDecimal convertedAmount = currentAmount.multiply(BigDecimal.valueOf(exchangeRate), new MathContext(7));
                             amount.setText(convertedAmount.toString());
                         }
