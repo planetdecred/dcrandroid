@@ -42,6 +42,7 @@ var signals = []os.Signal{os.Interrupt}
 
 type LibWallet struct {
 	dataDir     string
+	dbDriver    string
 	wallet      *wallet.Wallet
 	rpcClient   *chain.RPCClient
 	spvSyncer   *spv.Syncer
@@ -53,9 +54,10 @@ type LibWallet struct {
 	lock        chan time.Time
 }
 
-func NewLibWallet(homeDir string) *LibWallet {
+func NewLibWallet(homeDir string, dbDriver string) *LibWallet {
 	lw := &LibWallet{
-		dataDir: filepath.Join(homeDir, "testnet3/"),
+		dataDir:  filepath.Join(homeDir, "testnet3/"),
+		dbDriver: dbDriver,
 	}
 	errors.Separator = ":: "
 	initLogRotator(filepath.Join(homeDir, "/logs/testnet3/dcrwallet.log"))
@@ -183,7 +185,7 @@ func (lw *LibWallet) InitLoader() {
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
-	l := loader.NewLoader(netparams.TestNet3Params.Params, lw.dataDir, stakeOptions,
+	l := loader.NewLoader(netparams.TestNet3Params.Params, lw.dataDir, lw.dbDriver, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
 	lw.loader = l
 	lw.activeNet = &netparams.TestNet3Params
@@ -333,6 +335,26 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 				lockWallet = nil
 			}
 		},
+		FetchedHeaders: func(fetchedHeadersCount int32, lastHeaderTime int64) {
+			syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime)
+		},
+		FetchMissingCFilters: func(fetchedCfiltersCount int32) {
+			syncResponse.OnFetchMissingCFilters(fetchedCfiltersCount)
+		},
+		DiscoveredAddresses: func(finished bool) {
+			syncResponse.OnDiscoveredAddresses(finished)
+		},
+		RescanProgress: func(rescannedThrough int32) {
+			syncResponse.OnRescanProgress(rescannedThrough)
+		},
+		PeerDisconnected: func(peerCount int32) {
+			log.Info("Peer Disconnected:", peerCount)
+			syncResponse.OnPeerDisconnected(peerCount)
+		},
+		PeerConnected: func(peerCount int32) {
+			log.Info("Peer Connected:", peerCount)
+			syncResponse.OnPeerConnected(peerCount)
+		},
 	}
 	var spvConnect []string
 	if len(peerAddresses) > 0 {
@@ -352,7 +374,6 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 				}
 				spvConnects[i] = spvConnect
 			}
-			fmt.Println("Setting Persistant Peers")
 			syncer.SetPersistantPeers(spvConnects)
 		}
 		wallet.SetNetworkBackend(syncer)
@@ -436,20 +457,6 @@ func (lw *LibWallet) LoadActiveDataFilters() error {
 		log.Error(err)
 	}
 	return err
-}
-
-func (lw *LibWallet) ProcessNotification(listener ProcessListener) {
-	log.Info("Process Notification Called")
-	// go func() {
-	// 	log.Infof("Creating Process Notification channel")
-	// 	n := lw.wallet.NtfnServer.ProcessNotifications()
-	// 	log.Info("Process Notification Ready")
-	// 	defer n.Done()
-	// 	for {
-	// 		v := <-n.C
-	// 		listener.OnProcessCallback(marshalProcessType(v.Type), marshalProcessState(v.State), strings.Join(int32ToString(v.Params), ";"))
-	// 	}
-	// }()
 }
 
 func int32ToString(arr []int32) []string {

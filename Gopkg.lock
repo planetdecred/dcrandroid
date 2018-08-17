@@ -3,51 +3,66 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:9569a7b92f7af54783a882e5d37596401540a0cd5d97201f0b7d8ef457657733"
   name = "github.com/AndreasBriese/bbloom"
   packages = ["."]
+  pruneopts = ""
   revision = "28f7e881ca57bc00e028f9ede9f0d9104cfeef5e"
 
 [[projects]]
   branch = "master"
-  name = "github.com/aead/siphash"
-  packages = ["."]
-  revision = "e404fcfc888570cadd1610538e2dbc89f66af814"
-
-[[projects]]
-  branch = "master"
+  digest = "1:7c95e6ada3cb4c4034a75f88a137400dfe7cbd5823c66b2ec4b014018b537ff7"
   name = "github.com/agl/ed25519"
   packages = [
     ".",
-    "edwards25519"
+    "edwards25519",
   ]
+  pruneopts = ""
   revision = "5312a61534124124185d41f09206b9fef1d88403"
 
 [[projects]]
+  digest = "1:ed112122ed4a920d944cc99b9d00b0441c11685939c28462c719488d36fe29aa"
   name = "github.com/boltdb/bolt"
   packages = ["."]
+  pruneopts = ""
   revision = "2f1ce7a837dcb8da3ec595b1dac9d0632f0f99e8"
   version = "v1.3.1"
 
 [[projects]]
   branch = "master"
+  digest = "1:422f38d57f1bc0fdc34f26d0f1026869a3710400b09b5478c9288efa13573cfa"
   name = "github.com/btcsuite/go-socks"
   packages = ["socks"]
+  pruneopts = ""
   revision = "4720035b7bfd2a9bb130b1c184f8bbe41b6f0d0f"
 
 [[projects]]
+  branch = "master"
+  digest = "1:73e8c7e9fcc5e303a712480e453232447ac49bc57d240de5731f789eb309658f"
   name = "github.com/dchest/blake256"
   packages = ["."]
+  pruneopts = ""
   revision = "dee3fe6eb0e98dc774a94fc231f85baf7c29d360"
-  version = "v1.0.0"
 
 [[projects]]
-  name = "github.com/decred/base58"
+  digest = "1:9b7a3b3bdd99d0029fae9a21969d9bcca0ad035a44639a5510fed88793a3f50b"
+  name = "github.com/dchest/siphash"
   packages = ["."]
-  revision = "56c501706f00d9e1cfacee19a27117e12da24734"
-  version = "v1.0.0"
+  pruneopts = ""
+  revision = "ca249f45189071f5d44dc6401334e3572037b9cb"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:9949fe0d4cc9ff8b19287545444774420e5f6ba90da135e4eb5fe8e7edc348d4"
+  name = "github.com/decred/base58"
+  packages = ["."]
+  pruneopts = ""
+  revision = "56c501706f00d9e1cfacee19a27117e12da24734"
+
+[[projects]]
+  branch = "master"
+  digest = "1:15954780970aa5414c83d3cc9a4a2471f81d02d1d4b3f82ffff878d1fa9f3414"
   name = "github.com/decred/dcrd"
   packages = [
     "addrmgr",
@@ -77,11 +92,14 @@
     "mining",
     "rpcclient",
     "txscript",
-    "wire"
+    "wire",
   ]
-  revision = "9536f0c88fa85180c348043766f6c1d4d42107da"
+  pruneopts = ""
+  revision = "05e242da0f9c9798d211531ba4f3847d555d825c"
 
 [[projects]]
+  branch = "pr-1244"
+  digest = "1:d9c49b549c020b1ce24fcabd086e8712a63e47f9dc3d08ce9eab19d4b1603ca5"
   name = "github.com/decred/dcrwallet"
   packages = [
     "chain",
@@ -110,19 +128,23 @@
     "wallet/txauthor",
     "wallet/txrules",
     "wallet/udb",
-    "walletseed"
+    "walletseed",
   ]
-  revision = "371c8c71925fc8afa4eafc5884a18a04b84ad418"
-  source = "github.com/c-ollins/btcwallet"
+  pruneopts = ""
+  revision = "3045d36efc4f15ec0c6f7425082cc57a1b2e97a8"
+  source = "github.com/raedahgroup/dcrwallet"
 
 [[projects]]
+  digest = "1:72c1f6339c7ca1ecea3e3d30f9cae51bfca19b02d04cfe7e6db32cbfb9a65ddc"
   name = "github.com/decred/slog"
   packages = ["."]
+  pruneopts = ""
   revision = "fbd821ef791ba2b8ae945f5d44f4e49396d230c5"
   version = "v1.0.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:5bf2c3aee3dcb1135588a76131b9f023d4005f1d4da005e343b1ad5386c5b64c"
   name = "github.com/dgraph-io/badger"
   packages = [
     ".",
@@ -130,49 +152,62 @@
     "protos",
     "skl",
     "table",
-    "y"
+    "y",
   ]
-  revision = "70ca5decb0af01d10ccbdd3c97690441fd43c57c"
-  source = "github.com/c-ollins/badger"
+  pruneopts = ""
+  revision = "3a87f6d9c273c4a5aaf4a69eb82ecfafc8d767d7"
 
 [[projects]]
   branch = "master"
+  digest = "1:2407d73d2349c9dd9d7b2c9fafcee9412444cb6cb261ee47ebb751b2a5507976"
   name = "github.com/dgryski/go-farm"
   packages = ["."]
+  pruneopts = ""
   revision = "2de33835d10275975374b37b2dcfd22c9020a1f5"
 
 [[projects]]
+  digest = "1:f958a1c137db276e52f0b50efee41a1a389dcdded59a69711f3e872757dab34b"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
+  pruneopts = ""
   revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
   version = "v1.1.0"
 
 [[projects]]
+  digest = "1:64d212c703a2b94054be0ce470303286b177ad260b2f89a307e3d1bb6c073ef6"
   name = "github.com/gorilla/websocket"
   packages = ["."]
+  pruneopts = ""
   revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:5e231a323e6e25870d122520aaf1b5ccaf61714e4c72908ecea0649675eb6917"
   name = "github.com/jrick/bitset"
   packages = ["."]
+  pruneopts = ""
   revision = "06eae37cdf93c699c0503c23f998167ce841974c"
-  version = "v1.0.0"
 
 [[projects]]
+  digest = "1:80178c385273ade9d14d523f23397468a70a3c14f9ab2b1b8c52cf35dbebe03d"
   name = "github.com/jrick/logrotate"
   packages = ["rotator"]
+  pruneopts = ""
   revision = "a93b200c26cbae3bb09dd0dc2c7c7fe1468a034a"
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:7365acd48986e205ccb8652cc746f09c8b7876030d53710ea6ef7d0bd0dcd7ca"
   name = "github.com/pkg/errors"
   packages = ["."]
+  pruneopts = ""
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:4cae11053a5fc8e7b08228fcc14d161d3e60b64ba508a8b216937da472690991"
   name = "golang.org/x/crypto"
   packages = [
     "internal/subtle",
@@ -181,35 +216,68 @@
     "poly1305",
     "ripemd160",
     "salsa20/salsa",
-    "scrypt"
+    "scrypt",
   ]
+  pruneopts = ""
   revision = "de0752318171da717af4ce24d0a2e8626afaeb11"
 
 [[projects]]
   branch = "master"
+  digest = "1:98219b20d296a0031fdb434d30ca6e109623a09530a76cf57e41c94bd1e391a0"
   name = "golang.org/x/net"
   packages = [
     "context",
     "internal/timeseries",
-    "trace"
+    "trace",
   ]
-  revision = "f9ce57c11b242f0f1599cf25c89d8cb02c45295a"
+  pruneopts = ""
+  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
 
 [[projects]]
   branch = "master"
+  digest = "1:b2ea75de0ccb2db2ac79356407f8a4cd8f798fe15d41b381c00abf3ae8e55ed1"
   name = "golang.org/x/sync"
   packages = ["errgroup"]
+  pruneopts = ""
   revision = "1d60e4601c6fd243af51cc01ddf169918a5407ca"
 
 [[projects]]
   branch = "master"
+  digest = "1:1132cbdac95d6a2a30f7434f7190b3b1345e85b6071e74911b1dce3e19e1543d"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "f0d5e33068cb57c22a181f5df0ffda885309eb5a"
+  pruneopts = ""
+  revision = "1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6ffc7f911e9691b6de17fc293d0bb5aa31e6dd9e2ec98a96df863a8e66ce3637"
+  input-imports = [
+    "github.com/decred/dcrd/addrmgr",
+    "github.com/decred/dcrd/blockchain/stake",
+    "github.com/decred/dcrd/chaincfg",
+    "github.com/decred/dcrd/chaincfg/chainhash",
+    "github.com/decred/dcrd/connmgr",
+    "github.com/decred/dcrd/dcrjson",
+    "github.com/decred/dcrd/dcrutil",
+    "github.com/decred/dcrd/hdkeychain",
+    "github.com/decred/dcrd/rpcclient",
+    "github.com/decred/dcrd/txscript",
+    "github.com/decred/dcrd/wire",
+    "github.com/decred/dcrwallet/chain",
+    "github.com/decred/dcrwallet/errors",
+    "github.com/decred/dcrwallet/loader",
+    "github.com/decred/dcrwallet/netparams",
+    "github.com/decred/dcrwallet/p2p",
+    "github.com/decred/dcrwallet/spv",
+    "github.com/decred/dcrwallet/ticketbuyer",
+    "github.com/decred/dcrwallet/ticketbuyer/v2",
+    "github.com/decred/dcrwallet/wallet",
+    "github.com/decred/dcrwallet/wallet/txrules",
+    "github.com/decred/dcrwallet/wallet/udb",
+    "github.com/decred/dcrwallet/walletseed",
+    "github.com/decred/slog",
+    "github.com/jrick/logrotate/rotator",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

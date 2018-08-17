@@ -93,32 +93,6 @@ type TransactionListener interface {
 	OnTransactionConfirmed(hash string, height int32)
 }
 
-type ProcessListener interface {
-	OnProcessCallback(processType int, state int, params string)
-}
-
-const (
-	ProcessStateUnknown int = iota
-
-	ProcessStateStart
-
-	ProcessStateUpdate
-
-	ProcessStateEnd
-)
-
-const (
-	ProcessTypeUnknown int = iota
-
-	ProcessTypeFetchHeaders
-
-	ProcessTypeFetchCFilters
-
-	ProcessTypeAddressDiscovery
-
-	ProcessTypeRescan
-)
-
 type BlockNotificationError interface {
 	OnBlockNotificationError(err error)
 }
@@ -150,6 +124,12 @@ type DecodedOutput struct {
 }
 
 type SpvSyncResponse interface {
+	OnPeerConnected(peerCount int32)
+	OnPeerDisconnected(peerCount int32)
+	OnFetchMissingCFilters(fetchedCFiltersCount int32)
+	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64)
+	OnDiscoveredAddresses(finished bool)
+	OnRescanProgress(rescannedThrough int32)
 	OnSynced(synced bool)
 	/*
 	* Handled Error Codes

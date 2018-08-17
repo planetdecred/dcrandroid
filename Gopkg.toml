@@ -21,5 +21,5 @@
 
 [[constraint]]
   name = "github.com/decred/dcrwallet"
-  source = "github.com/c-ollins/btcwallet"
-  revision = "371c8c71925fc8afa4eafc5884a18a04b84ad418"
+  source = "github.com/raedahgroup/dcrwallet"
+  branch = "pr-1244"
