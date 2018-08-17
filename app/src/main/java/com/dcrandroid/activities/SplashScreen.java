@@ -65,7 +65,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         tvLoading = findViewById(R.id.loading_status);
         constants = DcrConstants.getInstance();
         String homeDir = getFilesDir()+"/dcrwallet/";
-        constants.wallet = new LibWallet(homeDir);
+        constants.wallet = new LibWallet(homeDir, "badgerdb");
         constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
         constants.wallet.initLoader();
         //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
@@ -99,9 +99,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private void createWallet(){
         loadThread = new Thread(){
             public void run(){
-                if(isInterrupted()){
-                    return;
-                }
                 if(isInterrupted()){
                     return;
                 }

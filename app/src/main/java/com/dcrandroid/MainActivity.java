@@ -1,18 +1,11 @@
 package com.dcrandroid;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.app.*;
+import android.content.*;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Build;
-import android.os.Bundle;
+import android.graphics.Color;
+import android.media.*;
+import android.os.*;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -37,39 +30,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dcrandroid.activities.AddAccountActivity;
-import com.dcrandroid.activities.SettingsActivity;
+import com.dcrandroid.activities.*;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.fragments.AccountsFragment;
-import com.dcrandroid.fragments.HelpFragment;
-import com.dcrandroid.fragments.HistoryFragment;
-import com.dcrandroid.fragments.OverviewFragment;
-import com.dcrandroid.fragments.ReceiveFragment;
-import com.dcrandroid.fragments.SendFragment;
-import com.dcrandroid.util.BlockNotificationProxy;
-import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.TransactionsResponse;
+import com.dcrandroid.fragments.*;
+import com.dcrandroid.util.*;
 import com.dcrandroid.util.TransactionsResponse.TransactionInput;
 import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 
-import mobilewallet.BlockScanResponse;
-import mobilewallet.SpvSyncResponse;
-import mobilewallet.TransactionListener;
+import mobilewallet.*;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy, SpvSyncResponse {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy, SpvSyncResponse {
 
     public int pageID, menuAdd = 0;
     public static MenuItem menuOpen;
@@ -77,12 +56,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DcrConstants constants;
     private PreferenceUtil util;
     private NotificationManager notificationManager;
-    private TextView rescanHeight, chainStatus, connectionStatus, bestBlockHeight, latestBlock;
+    private TextView chainStatus, bestBlockTime, connectionStatus;
     private Animation animRotate;
     private ImageView rescanImage, stopScan;
     private MainApplication mainApplication;
     private SoundPool alertSound;
-    private int lastBestBlock = 0;
+    private int lastBestBlock = 0, peerCount;
     private boolean scanning = false, synced = false;
     private Thread blockUpdate;
 
@@ -116,10 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        rescanHeight = findViewById(R.id.rescan_height);
-        latestBlock = findViewById(R.id.tv_latest_block);
         connectionStatus = findViewById(R.id.tv_connection_status);
-        bestBlockHeight = findViewById(R.id.best_block_height);
+        bestBlockTime = findViewById(R.id.best_block_time);
         chainStatus = findViewById(R.id.chain_status);
         rescanImage = findViewById(R.id.iv_rescan_blocks);
         stopScan = findViewById(R.id.iv_stop_rescan);
@@ -238,14 +215,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (blockUpdate != null) {
             return;
         }
-        alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            SoundPool.Builder builder = new SoundPool.Builder().setMaxStreams(3);
+            AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build();
+            builder.setAudioAttributes(attributes);
+            alertSound = builder.build();
+        }else{
+            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
+        }
+
         final int soundId = alertSound.load(MainActivity.this, R.raw.beep, 1);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                latestBlock.setVisibility(View.VISIBLE);
-            }
-        });
+
+        updatePeerCount();
+
         blockUpdate = new Thread(){
             public void run(){
                 while(!this.isInterrupted()){
@@ -254,24 +238,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
-                                        setConnectionStatus(synced ? "Synced" : "Not Synced");
-                                    }
                                     int bestBlock = constants.wallet.getBestBlock();
                                     long lastBlockTime = constants.wallet.getBestBlockTimeStamp();
                                     long currentTime = System.currentTimeMillis() / 1000;
                                     long estimatedBlocks = ((currentTime - lastBlockTime) / 120) + bestBlock;
+
+                                    bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - lastBlockTime));
+
                                     if ((currentTime - lastBlockTime) > 300000) {
-                                        String blockHeight = String.format(Locale.getDefault(), "%d of %d", bestBlock, estimatedBlocks);
-                                        bestBlockHeight.setText(blockHeight);
-                                        chainStatus.setText(null);
+                                        String status = String.format(Locale.getDefault(), "Latest Block: %d of %d", bestBlock, estimatedBlocks);
+                                        chainStatus.setText(status);
                                     } else {
-                                        bestBlockHeight.setText(String.valueOf(bestBlock));
-                                        chainStatus.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - lastBlockTime));
+                                        String status  = String.format(Locale.getDefault(), "Latest Block: %d", bestBlock);
+                                        chainStatus.setText(status);
+
                                         if ((lastBestBlock == 0 || lastBestBlock != bestBlock) && util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
                                             alertSound.play(soundId, 1, 1, 1, 0, 1);
                                         }
                                         lastBestBlock = bestBlock;
+
                                     }
                                 }
                             });
@@ -318,6 +303,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void run() {
                 connectionStatus.setText(str);
+            }
+        });
+    }
+
+    private void setChainStatus(final String str){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chainStatus.setText(str);
+            }
+        });
+    }
+
+    private void setBestBlockTime(final long seconds){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (seconds == -1){
+                    bestBlockTime.setText(null);
+                    return;
+                }
+                bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - seconds));
             }
         });
     }
@@ -557,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                rescanHeight.setText("");
+                //rescanHeight.setText("");
                 animRotate.cancel();
                 animRotate.reset();
                 rescanImage.setEnabled(true);
@@ -578,7 +585,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                rescanHeight.setText("");
                 animRotate.cancel();
                 animRotate.reset();
                 rescanImage.setEnabled(true);
@@ -598,7 +604,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                rescanHeight.setText(i+"/");
+                int bestBlock = constants.wallet.getBestBlock();
+                int scannedPercentage = (i/bestBlock) * 100;
+                String status = String.format(Locale.getDefault(), "Latest Block: %d(%d&percnt;)", constants.wallet.getBestBlock(), scannedPercentage);
+                chainStatus.setText(status);
             }
         });
         return scanning;
@@ -691,8 +700,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onSynced(boolean b) {
         synced = b;
         if (b){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
+                }
+            });
             sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
             startBlockUpdate();
         }
+    }
+
+    @Override
+    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime) {
+        setConnectionStatus(getString(R.string.fetching_headers));
+        String status = String.format(Locale.getDefault() , "Fetched %d Headers", fetchedHeadersCount);
+
+        //Nanoseconds to seconds
+        setBestBlockTime(lastHeaderTime / 1000000000);
+        setChainStatus(status);
+    }
+
+    @Override
+    public void onFetchMissingCFilters(int fetchedCFiltersCount) {
+        setConnectionStatus("Fetching Missing CFilters");
+        String status = String.format(Locale.getDefault() , "Fetched %d CFilters", fetchedCFiltersCount);
+        setChainStatus(status);
+    }
+
+    @Override
+    public void onDiscoveredAddresses(boolean finished) {
+        setChainStatus(null);
+        setBestBlockTime(-1);
+        if (!finished) {
+            setConnectionStatus(getString(R.string.discovering_used_addresses));
+            return;
+        }
+        updatePeerCount();
+    }
+
+    @Override
+    public void onRescanProgress(int rescannedThrough) {
+        setConnectionStatus("Rescanning in progress...");
+        int bestBlock = constants.wallet.getBestBlock();
+        int scannedPercentage = Math.round(((float) rescannedThrough/bestBlock) * 100);
+        String status = String.format(Locale.getDefault(), "Latest Block: %d(%d%%)", constants.wallet.getBestBlock(), scannedPercentage);
+        float ff = (float)rescannedThrough/bestBlock;
+        ff *= 100;
+        System.out.println(status +" "+ ff);
+        setChainStatus(status);
+    }
+
+    @Override
+    public void onPeerConnected(int peerCount) {
+        this.peerCount = peerCount;
+        updatePeerCount();
+    }
+
+    @Override
+    public void onPeerDisconnected(int peerCount) {
+        this.peerCount = peerCount;
+        updatePeerCount();
+    }
+
+    private void updatePeerCount(){
+        setConnectionStatus((synced ? "Synced" : "Syncing") + " with " + peerCount + " " + (peerCount == 1 ? "peer" : "peers"));
     }
 }

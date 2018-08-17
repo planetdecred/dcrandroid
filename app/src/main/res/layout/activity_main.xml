@@ -28,30 +28,29 @@
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center"
-                android:background="#08172E">
+                android:layout_height="20dp">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/tv_connection_status"
                     android:text="Not Synced"
-                    android:textColor="#fff"
+                    android:gravity="start"
+                    android:textSize="13sp"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="#444F65"
+                    android:background="#FFC84E"
+
                     />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#3a547b"
-                />
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="#08172E"
+                android:background="#FFFFFF"
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
@@ -66,39 +65,23 @@
                     />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Latest Block"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="#69d5f7"
-                    android:visibility="gone"
-                    android:id="@+id/tv_latest_block"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rescan_height"
-                    android:textColor="#28BE93"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/best_block_height"
-                    android:textColor="#28BE93"
+                    android:id="@+id/chain_status"
+                    android:textColor="#8997A5"
                     android:layout_weight="1"
-                    android:gravity="start"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
                     />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="#69d5f7"
+                    android:textColor="#8997A5"
                     android:layout_marginLeft="1dp"
                     android:layout_marginStart="1dp"
-                    android:id="@+id/chain_status"
+                    android:id="@+id/best_block_time"
                     />
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="18dp"

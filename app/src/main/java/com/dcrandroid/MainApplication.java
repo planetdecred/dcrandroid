@@ -24,7 +24,6 @@ import org.acra.annotation.ReportsCrashes;
 )
 public class MainApplication extends Application {
 
-    private PreferenceUtil util;
     private static int networkMode;
 
     public int getNetworkMode(){
@@ -48,7 +47,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        util = new PreferenceUtil(this);
+        PreferenceUtil util = new PreferenceUtil(this);
         try {
             Utils.writeDcrdCertificate(this);
         } catch (Exception e) {
