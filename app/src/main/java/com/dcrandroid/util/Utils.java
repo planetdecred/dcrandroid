@@ -183,27 +183,27 @@ public class Utils {
         return Math.round(totalDays * blocksPerDay * (0.95));
     }
 
-    public static String calculateTime(long millis) {
-        if (millis > 59) {
-            millis /= 60;
-            if (millis > 59) {
-                millis /= 60;
-                if (millis > 23) {
-                    millis /= 24;
+    public static String calculateTime(long seconds) {
+        if (seconds > 59) {
+            seconds /= 60;
+            if (seconds > 59) {
+                seconds /= 60;
+                if (seconds > 23) {
+                    seconds /= 24;
                     //days
-                    return millis + "d ago";
+                    return seconds + "d ago";
                 }
                 //hour
-                return millis + "h ago";
+                return seconds + "h ago";
             }
             //minute
-            return millis + "m ago";
+            return seconds + "m ago";
         }
-        if(millis < 0){
+        if(seconds < 0){
             return "now";
         }
         //seconds
-        return millis + "s ago";
+        return seconds + "s ago";
     }
 
     public static String formatDecred(float dcr){
