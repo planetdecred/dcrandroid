@@ -144,7 +144,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
         value.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.AMOUNT,0)) +" "+getString(R.string.dcr));
-        transactionFee.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.FEE,0)) + " DCR");
+        transactionFee.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.FEE,0)) +" "+getString(R.string.dcr));
 
         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
         calendar.setTimeInMillis(extras.getLong(Constants.TIMESTAMP) * 1000);
@@ -153,23 +153,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
         txType.setText(transactionType);
         int height = extras.getInt(Constants.HEIGHT, 0);
-        int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
-        System.out.println("Height: "+height +" Bestblock: "+ DcrConstants.getInstance().wallet.getBestBlock());
         if(height == -1){
             //No included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
             status.setText("pending");
-            confirmation.setText("0");
+            confirmation.setText("unconfirmed");
         }else{
+            int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
+            confirmations += 1; //+1 confirmation that it exist in a block. best block - height returns 0.
             confirmation.setText(String.valueOf(confirmations));
             if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
-                if(confirmations > 1){
-                    System.out.println("Confirmation is greater than 1");
-                }
-                if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)){
-                    System.out.println("Unconfirmed funds are spendable");
-                }
                 status.setBackgroundResource(R.drawable.tx_status_confirmed);
                 status.setTextColor(Color.parseColor("#55bb97"));
                 status.setText("confirmed");

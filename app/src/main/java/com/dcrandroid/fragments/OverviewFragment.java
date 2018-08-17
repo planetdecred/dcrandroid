@@ -49,6 +49,7 @@ import mobilewallet.GetTransactionsResponse;
  */
 
 public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
+
     private List<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>();
     private CurrencyTextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -200,7 +201,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     if (temp.size() > 7) {
                         transactionList.addAll(temp.subList(0, 7));
                     } else {
-                        transactionList.addAll(temp.subList(0, temp.size() - 1));
+                        transactionList.addAll(temp);
                     }
                 }
                 transactionAdapter.notifyDataSetChanged();
@@ -286,7 +287,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 transaction.animate = true;
                 transactionList.add(0, transaction);
                 transactionAdapter.notifyDataSetChanged();
-                if(transactionList.size() > 0){
+                if(transactionList.size() > 7){
                     transactionList.remove(transactionList.size() - 1);
                 }
             }else if(intent.getAction().equals(Constants.TRANSACTION_CONFIRMED)){
