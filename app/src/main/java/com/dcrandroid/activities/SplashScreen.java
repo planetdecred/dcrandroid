@@ -37,7 +37,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainApplication) getApplicationContext()).getNetworkMode();
+        if(!isTaskRoot()){
+            final Intent intent = getIntent();
+            final String intentAction = intent.getAction();
+            if(intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)){
+                finish();
+                return;
+            }
+        }
         util = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);
         imgAnim = findViewById(R.id.splashscreen_icon);
