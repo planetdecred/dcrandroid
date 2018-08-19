@@ -62,7 +62,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:15954780970aa5414c83d3cc9a4a2471f81d02d1d4b3f82ffff878d1fa9f3414"
+  digest = "1:ceb594b0f2143e47f946032e2df7a4c034c22ee01542494a6df45f546be2c9ed"
   name = "github.com/decred/dcrd"
   packages = [
     "addrmgr",
@@ -95,11 +95,11 @@
     "wire",
   ]
   pruneopts = ""
-  revision = "05e242da0f9c9798d211531ba4f3847d555d825c"
+  revision = "20eda7ec92291fea74f440e2215d300a0bf6ba0c"
 
 [[projects]]
   branch = "pr-1244"
-  digest = "1:d9c49b549c020b1ce24fcabd086e8712a63e47f9dc3d08ce9eab19d4b1603ca5"
+  digest = "1:2360be38451778aef8018f3a0ce3ee17099db82f92dfbda047cfaa5a83e14b81"
   name = "github.com/decred/dcrwallet"
   packages = [
     "chain",
@@ -131,7 +131,7 @@
     "walletseed",
   ]
   pruneopts = ""
-  revision = "3045d36efc4f15ec0c6f7425082cc57a1b2e97a8"
+  revision = "3dd8fd72db47abe9be57f46b5009d3cfd1e74964"
   source = "github.com/raedahgroup/dcrwallet"
 
 [[projects]]
@@ -207,7 +207,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4cae11053a5fc8e7b08228fcc14d161d3e60b64ba508a8b216937da472690991"
+  digest = "1:97fb4f02b231deef44704b6fa74d31e46f669fb217f192754ba603c2b32a190b"
   name = "golang.org/x/crypto"
   packages = [
     "internal/subtle",
@@ -219,11 +219,11 @@
     "scrypt",
   ]
   pruneopts = ""
-  revision = "de0752318171da717af4ce24d0a2e8626afaeb11"
+  revision = "aabede6cba87e37f413b3e60ebfc214f8eeca1b0"
 
 [[projects]]
   branch = "master"
-  digest = "1:98219b20d296a0031fdb434d30ca6e109623a09530a76cf57e41c94bd1e391a0"
+  digest = "1:4f7d853903a2a32b60c99f92492752a52bf9b56425258afbed5cfc2ee86cd216"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -231,7 +231,7 @@
     "trace",
   ]
   pruneopts = ""
-  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
+  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
 
 [[projects]]
   branch = "master"

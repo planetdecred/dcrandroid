@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -61,6 +62,7 @@ func NewLibWallet(homeDir string, dbDriver string) *LibWallet {
 	}
 	errors.Separator = ":: "
 	initLogRotator(filepath.Join(homeDir, "/logs/testnet3/dcrwallet.log"))
+	log.Info("GC PERCENT:", debug.SetGCPercent(100))
 	return lw
 }
 
@@ -335,8 +337,8 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 				lockWallet = nil
 			}
 		},
-		FetchedHeaders: func(fetchedHeadersCount int32, lastHeaderTime int64) {
-			syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime)
+		FetchedHeaders: func(peerInitialHeight, fetchedHeadersCount int32, lastHeaderTime int64) {
+			syncResponse.OnFetchedHeaders(peerInitialHeight, fetchedHeadersCount, lastHeaderTime)
 		},
 		FetchMissingCFilters: func(fetchedCfiltersCount int32) {
 			syncResponse.OnFetchMissingCFilters(fetchedCfiltersCount)
@@ -348,11 +350,9 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 			syncResponse.OnRescanProgress(rescannedThrough)
 		},
 		PeerDisconnected: func(peerCount int32) {
-			log.Info("Peer Disconnected:", peerCount)
 			syncResponse.OnPeerDisconnected(peerCount)
 		},
 		PeerConnected: func(peerCount int32) {
-			log.Info("Peer Connected:", peerCount)
 			syncResponse.OnPeerConnected(peerCount)
 		},
 	}
@@ -360,7 +360,6 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 	if len(peerAddresses) > 0 {
 		spvConnect = strings.Split(peerAddresses, ";")
 	}
-	fmt.Println("Spv connect:", spvConnect, len(spvConnect), len(peerAddresses))
 	go func() {
 		syncer := spv.NewSyncer(wallet, lp)
 		syncer.SetNotifications(ntfns)
@@ -467,34 +466,6 @@ func int32ToString(arr []int32) []string {
 	return result
 }
 
-// func marshalProcessType(processType wallet.ProcessType) int {
-// 	switch processType {
-// 	case wallet.ProcessTypeAddressDiscovery:
-// 		return ProcessTypeAddressDiscovery
-// 	case wallet.ProcessTypeFetchCFilters:
-// 		return ProcessTypeFetchCFilters
-// 	case wallet.ProcessTypeFetchHeaders:
-// 		return ProcessTypeFetchHeaders
-// 	case wallet.ProcessTypeRescan:
-// 		return ProcessTypeRescan
-// 	default:
-// 		return ProcessTypeUnknown
-// 	}
-// }
-
-// func marshalProcessState(state wallet.ProcessState) int {
-// 	switch state {
-// 	case wallet.ProcessStateStart:
-// 		return ProcessStateStart
-// 	case wallet.ProcessStateEnd:
-// 		return ProcessStateEnd
-// 	case wallet.ProcessStateUpdate:
-// 		return ProcessStateUpdate
-// 	default:
-// 		return ProcessStateUnknown
-// 	}
-// }
-
 func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 	go func() {
 		n := lw.wallet.NtfnServer.TransactionNotifications()
@@ -566,6 +537,7 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 				}
 			}
 			for _, block := range v.AttachedBlocks {
+				listener.OnBlockAttached(int32(block.Header.Height))
 				for _, transaction := range block.Transactions {
 					listener.OnTransactionConfirmed(fmt.Sprintf("%02x", reverse(transaction.Hash[:])), int32(block.Header.Height))
 				}
@@ -983,14 +955,64 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 		EstimatedSignedSize:       int32(tx.EstimatedSignedSerializeSize)}, nil
 }
 
-func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]byte, error) {
+func (lw *LibWallet) RunGC() {
+	debug.FreeOSMemory()
+}
+
+func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount int64, srcAccount int32, requiredConfs int32, sendAll bool) ([]byte, error) {
+	n, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
 	defer func() {
 		for i := range privPass {
 			privPass[i] = 0
 		}
 	}()
+	// output destination
+	addr, err := dcrutil.DecodeAddress(destAddr)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	pkScript, err := txscript.PayToAddrScript(addr)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	// pay output
+	outputs := make([]*wire.TxOut, 0)
+	var algo wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmAll
+	if !sendAll {
+		algo = wallet.OutputSelectionAlgorithmDefault
+		output := &wire.TxOut{
+			Value:    amount,
+			Version:  txscript.DefaultScriptVersion,
+			PkScript: pkScript,
+		}
+		outputs = append(outputs, output)
+	}
+
+	// create tx
+	unsignedTx, err := lw.wallet.NewUnsignedTransaction(outputs, txrules.DefaultRelayFeePerKb, uint32(srcAccount),
+		requiredConfs, algo, nil)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	var txBuf bytes.Buffer
+	txBuf.Grow(unsignedTx.Tx.SerializeSize())
+	err = unsignedTx.Tx.Serialize(&txBuf)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
 	var tx wire.MsgTx
-	err := tx.Deserialize(bytes.NewReader(rawTransaction))
+	err = tx.Deserialize(bytes.NewReader(txBuf.Bytes()))
 	if err != nil {
 		log.Error(err)
 		//Bytes do not represent a valid raw transaction
@@ -999,7 +1021,7 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 
 	lock := make(chan time.Time, 1)
 	defer func() {
-		lock <- time.Time{} // send matters, not the value
+		lock <- time.Time{}
 	}()
 
 	err = lw.wallet.Unlock(privPass, lock)
@@ -1028,31 +1050,18 @@ func (lw *LibWallet) SignTransaction(rawTransaction []byte, privPass []byte) ([]
 		log.Error(err)
 		return nil, err
 	}
-	return serializedTransaction.Bytes(), nil
-}
-
-func (lw *LibWallet) PublishTransaction(signedTransaction []byte) ([]byte, error) {
-	n, err := lw.wallet.NetworkBackend()
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
 
 	var msgTx wire.MsgTx
-	err = msgTx.Deserialize(bytes.NewReader(signedTransaction))
+	err = msgTx.Deserialize(bytes.NewReader(serializedTransaction.Bytes()))
 	if err != nil {
 		//Invalid tx
 		log.Error(err)
 		return nil, err
 	}
 
-	txHash, err := lw.wallet.PublishTransaction(&msgTx, signedTransaction, n)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
+	txHash, err := lw.wallet.PublishTransaction(&msgTx, serializedTransaction.Bytes(), n)
 
-	return txHash[:], nil
+	return txHash[:], err
 }
 
 func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
@@ -1121,6 +1130,11 @@ func (lw *LibWallet) NextAccount(accountName string, privPass []byte) bool {
 		return false
 	}
 	return true
+}
+
+func (lw *LibWallet) RenameAccount(accountNumber int32, newName string) error {
+	err := lw.wallet.RenameAccount(uint32(accountNumber), newName)
+	return err
 }
 
 func (lw *LibWallet) CallJSONRPC(method string, args string, address string, username string, password string, caCert string) (string, error) {

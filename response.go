@@ -91,6 +91,7 @@ type GetTransactionsResponse interface {
 type TransactionListener interface {
 	OnTransaction(transaction string)
 	OnTransactionConfirmed(hash string, height int32)
+	OnBlockAttached(height int32)
 }
 
 type BlockNotificationError interface {
@@ -127,7 +128,7 @@ type SpvSyncResponse interface {
 	OnPeerConnected(peerCount int32)
 	OnPeerDisconnected(peerCount int32)
 	OnFetchMissingCFilters(fetchedCFiltersCount int32)
-	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64)
+	OnFetchedHeaders(peerInitialHeight, fetchedHeadersCount int32, lastHeaderTime int64)
 	OnDiscoveredAddresses(finished bool)
 	OnRescanProgress(rescannedThrough int32)
 	OnSynced(synced bool)
