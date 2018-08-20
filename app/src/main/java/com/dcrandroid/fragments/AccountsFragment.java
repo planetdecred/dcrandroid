@@ -29,6 +29,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -58,7 +60,7 @@ public class AccountsFragment extends Fragment {
                 Balance balance = account.getBalance();
                 Intent i = new Intent(getContext(), AccountDetailsActivity.class);
                 i.putExtra(Constants.ACCOUNT_NAME, account.getAccountName());
-                i.putExtra(Constants.EXTRA_ACCOUNT_NUMBER, account.getAccountNumber());
+                i.putExtra(Constants.ACCOUNT_NUMBER, account.getAccountNumber());
                 i.putExtra(Constants.EXTRA_BALANCE_SPENDABLE, balance.getSpendable());
                 i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, balance.getImmatureReward());
                 i.putExtra(Constants.EXTRA_HD_PATH, account.getHDPath());
@@ -67,7 +69,7 @@ public class AccountsFragment extends Fragment {
                 i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, balance.getImmatureStakeGeneration());
                 i.putExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, balance.getVotingAuthority());
                 i.putExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, balance.getLockedByTickets());
-                startActivity(i);
+                startActivityForResult(i, 200);
             }
 
             @Override
@@ -78,6 +80,22 @@ public class AccountsFragment extends Fragment {
         recyclerView.setAdapter(accountAdapter);
         registerForContextMenu(recyclerView);
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200 && resultCode == RESULT_OK){
+            String accountName = data.getStringExtra(Constants.ACCOUNT_NAME);
+            int accountNumber = data.getIntExtra(Constants.ACCOUNT_NUMBER, -1);
+            for (int i = 0; i < accountList.size(); i++){
+                if (accountList.get(i).getAccountNumber() == accountNumber){
+                    accountList.get(i).setAccountName(accountName);
+                    accountAdapter.notifyItemChanged(i);
+                    return;
+                }
+            }
+        }
     }
 
     public void prepareAccountData() {

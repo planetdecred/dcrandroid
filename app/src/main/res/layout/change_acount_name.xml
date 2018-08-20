@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/new_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="@string/account_name"
+        android:inputType="textPassword"
+        android:textStyle="normal"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text"
+        />
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.dcrandroid.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -9,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
 
@@ -24,83 +27,103 @@ import com.dcrandroid.view.CurrencyTextView;
 
 public class AccountDetailsActivity extends AppCompatActivity {
 
-    String accountNameTemp;
+    private boolean accountNameChanged = false;
+    private String accountName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getIntent().getStringExtra(Constants.ACCOUNT_NAME));
-        accountNameTemp = getIntent().getStringExtra(Constants.ACCOUNT_NAME);
+
+        accountName = getIntent().getStringExtra(Constants.ACCOUNT_NAME);
+        setTitle(accountName);
+
         setContentView(R.layout.account_details_view);
 
         CurrencyTextView spendable = findViewById(R.id.acc_dts_spendable);
-        CurrencyTextView total = findViewById(R.id.acc_dts_total);
-        CurrencyTextView immatureRewards = findViewById(R.id.acc_dts_immature_reward);
-        CurrencyTextView lockedByTickets = findViewById(R.id.acc_dts_locked_bt_tcks);
-        CurrencyTextView votingAuthority = findViewById(R.id.acc_dts_voting_auth);
-        CurrencyTextView immatureStakeGeneration = findViewById(R.id.acc_dts_immature_stake_gen);
-        TextView accountNumber = findViewById(R.id.acc_dts_acc_number);
-        TextView hDPath = findViewById(R.id.acc_dts_hd_path);
-        TextView keys = findViewById(R.id.acc_dts_keys);
-
         spendable.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0))  +" "+ getString(R.string.dcr));
+
+        CurrencyTextView total = findViewById(R.id.acc_dts_total);
         total.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_TOTAL, 0))  +" "+ getString(R.string.dcr));
+
+        CurrencyTextView immatureRewards = findViewById(R.id.acc_dts_immature_reward);
         immatureRewards.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0))  +" "+ getString(R.string.dcr));
+
+        CurrencyTextView lockedByTickets = findViewById(R.id.acc_dts_locked_bt_tcks);
         lockedByTickets.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0))  +" "+ getString(R.string.dcr));
+
+        CurrencyTextView votingAuthority = findViewById(R.id.acc_dts_voting_auth);
         votingAuthority.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0))  +" "+ getString(R.string.dcr));
+
+        CurrencyTextView immatureStakeGeneration = findViewById(R.id.acc_dts_immature_stake_gen);
         immatureStakeGeneration.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0))  +" "+ getString(R.string.dcr));
-        accountNumber.setText(String.valueOf(getIntent().getIntExtra(Constants.EXTRA_ACCOUNT_NUMBER, 0)));
+
+        TextView accountNumber = findViewById(R.id.acc_dts_acc_number);
+        accountNumber.setText(String.valueOf(getIntent().getIntExtra(Constants.ACCOUNT_NUMBER, 0)));
+
+        TextView hDPath = findViewById(R.id.acc_dts_hd_path);
         hDPath.setText(getIntent().getStringExtra(Constants.EXTRA_HD_PATH));
+
+        TextView keys = findViewById(R.id.acc_dts_keys);
         keys.setText(getIntent().getStringExtra(Constants.KEYS));
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    public void showInputAccountNameDialog(final String accountNam,final String messageInfo,final String messagehint) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+    public void showInputAccountNameDialog() {
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.input_passphrase_box, null);
+        final View dialogView = inflater.inflate(R.layout.change_acount_name, null);
+
+        final EditText newName = dialogView.findViewById(R.id.new_account_name);
+        newName.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+        newName.setHint(getString(R.string.account_name));
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
         dialogBuilder.setCancelable(false);
         dialogBuilder.setView(dialogView);
+        dialogBuilder.setTitle(getString(R.string.rename_account));
 
-        final EditText accountName = dialogView.findViewById(R.id.passphrase_input);
-        accountName.setText(accountNam);
-        accountName.setHint(messagehint);
-
-        dialogBuilder.setMessage(messageInfo);
-        dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(R.string.rename, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if(accountName.getText().toString().trim().equals("")){
-                    Toast.makeText(getApplicationContext(), "Name cannot be empty",Toast.LENGTH_LONG).show();return;
+                if(newName.getText().toString().trim().equals("")){
+                    Toast.makeText(getApplicationContext(), "Name cannot be empty",Toast.LENGTH_LONG).show();
+                    return;
                 }
+
                 try{
-                    String pass = accountName.getText().toString();
-                }
-                catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "invalid Name",Toast.LENGTH_LONG).show();
+                    accountName = newName.getText().toString();
+                    DcrConstants.getInstance().wallet.renameAccount(getIntent().getIntExtra(Constants.ACCOUNT_NUMBER, -1), accountName);
+                    setTitle(accountName);
+                    accountNameChanged = true;
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialogBuilder.setCancelable(true);
-            }
-        });
+        dialogBuilder.setNegativeButton(R.string.cancel, null);
+
         AlertDialog b = dialogBuilder.create();
         b.show();
         b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
     }
 
     @Override
+    public void onBackPressed() {
+        if(accountNameChanged){
+            Intent intent = new Intent();
+            intent.putExtra(Constants.ACCOUNT_NAME, accountName);
+            intent.putExtra(Constants.ACCOUNT_NUMBER, getIntent().getIntExtra(Constants.ACCOUNT_NUMBER, -1));
+            setResult(RESULT_OK, intent);
+            finish();
+        }else
+            super.onBackPressed();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu);
-//        MenuItem menuOpen = menu.findItem(R.id.action_edit_name);
-//        menuOpen.setVisible(true);
-        return false;
+        getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem menuOpen = menu.findItem(R.id.action_edit_name);
+        menuOpen.setVisible(true);
+        return true;
     }
 
     @Override
@@ -111,7 +134,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit_name) {
-            showInputAccountNameDialog(accountNameTemp,getString(R.string.edit_account_name_msg_info),getString(R.string.account_name));
+            showInputAccountNameDialog();
             return true;
         }
 

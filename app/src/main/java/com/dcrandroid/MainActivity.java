@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.*;
 import android.os.*;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -48,7 +48,11 @@ import java.util.*;
 import mobilewallet.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        TransactionListener, BlockScanResponse, Animation.AnimationListener, BlockNotificationProxy, SpvSyncResponse {
+        TransactionListener, BlockScanResponse, BlockNotificationError, SpvSyncResponse {
+
+    private TextView chainStatus, bestBlockTime, connectionStatus;
+    private ImageView rescanImage, stopScan;
+    private NavigationView mNavigationView;
 
     public int pageID, menuAdd = 0;
     public static MenuItem menuOpen;
@@ -56,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DcrConstants constants;
     private PreferenceUtil util;
     private NotificationManager notificationManager;
-    private TextView chainStatus, bestBlockTime, connectionStatus;
     private Animation animRotate;
-    private ImageView rescanImage, stopScan;
     private MainApplication mainApplication;
     private SoundPool alertSound;
     private int lastBestBlock = 0, peerCount;
@@ -101,8 +103,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rescanImage = findViewById(R.id.iv_rescan_blocks);
         stopScan = findViewById(R.id.iv_stop_rescan);
 
-        ((NavigationView) findViewById(R.id.nav_view)).setNavigationItemSelectedListener(this);
-        displaySelectedScreen(R.id.nav_overview);
+        mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        displayOverview();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -112,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
         animRotate.setRepeatCount(-1);
-        animRotate.setAnimationListener(this);
 
         stopScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         constants.wallet.transactionNotification(this);
-        constants.notificationProxy = this;
         
         connectToDecredNetwork();
     }
@@ -276,10 +278,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         blockUpdate.start();
     }
 
-    private long estimateBlocks(){
-        return (((System.currentTimeMillis() / 1000) - constants.wallet.getBestBlockTimeStamp()) / 120) + constants.wallet.getBestBlock();
-    }
-
     private void rescanBlocks(){
         runOnUiThread(new Runnable() {
             @Override
@@ -356,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }).create().show();
         }
         else {
-            displaySelectedScreen(R.id.nav_overview);
+            displayOverview();
         }
     }
 
@@ -369,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(constants.wallet != null){
             constants.wallet.shutdown();
         }
-        ActivityCompat.finishAffinity(MainActivity.this);
+        finish();
     }
 
     @Override
@@ -409,13 +407,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    public void displaySelectedScreen(int itemId) {
-        //initializing the fragment object which is selected
-        pageID = itemId;
-        switch (itemId) {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        pageID = item.getItemId();
+
+        switch (pageID) {
             case R.id.nav_overview:
-                fragment = new OverviewFragment();
-                break;
+                displayOverview();
+                return true;
             case R.id.nav_accounts:
                 fragment = new AccountsFragment();
                 break;
@@ -437,22 +436,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 fragment = new SettingsActivity.MainPreferenceFragment();
                 break;
+            default:
+                return false;
         }
-        //replacing the fragment
-        if (fragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame, fragment);
-            ft.commit();
-        }
+
+        //Change the fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
+        mNavigationView.setCheckedItem(pageID);
+
+        //Close Navigation Drawer
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    public void displayOverview(){
+        pageID = R.id.nav_overview;
+        fragment = new OverviewFragment();
+
+        //Change the fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
+        mNavigationView.setCheckedItem(R.id.nav_overview);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        displaySelectedScreen(item.getItemId());
-        return true;
+    public void displayHistory(){
+        pageID = R.id.nav_history;
+        fragment = new HistoryFragment();
+
+        //Change the fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
+        mNavigationView.setCheckedItem(R.id.nav_history);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -527,6 +547,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .putExtra(Constants.HASH, hash)
                 .putExtra(Constants.HEIGHT, height);
         sendBroadcast(confirmedTransactionIntent);
+    }
+
+    @Override
+    public void onBlockAttached(int height) {
+
     }
 
     private void sendNotification(String amount, String hash){
@@ -606,26 +631,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 int bestBlock = constants.wallet.getBestBlock();
                 int scannedPercentage = (i/bestBlock) * 100;
-                String status = String.format(Locale.getDefault(), "Latest Block: %d(%d&percnt;)", constants.wallet.getBestBlock(), scannedPercentage);
+                String status = String.format(Locale.getDefault(), "Latest Block: %d(%d%%)", constants.wallet.getBestBlock(), scannedPercentage);
                 chainStatus.setText(status);
             }
         });
         return scanning;
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
     }
 
     @Override
@@ -662,7 +672,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
                         showText("Subscribe to block notification");
                     }
-                    constants.wallet.subscribeToBlockNotifications(constants.notificationError);
+                    constants.wallet.subscribeToBlockNotifications(MainActivity.this);
                     setConnectionStatus(getString(R.string.discovering_used_addresses));
                     if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
                         showText("Discover addresses");
@@ -692,8 +702,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onSyncError(long l, Exception e) {
-        Toast.makeText(this, "Sync Error: "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+    public void onSyncError(long l, final Exception e) {
+        e.printStackTrace();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "Sync Error: "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

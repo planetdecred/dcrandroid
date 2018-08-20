@@ -26,20 +26,24 @@ import mobilewallet.LibWallet;
  */
 
 public class EncryptWallet extends AppCompatActivity{
+
     private String seed;
     ProgressDialog pd;
-    private PreferenceUtil util;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_passphrase);
-        util = new PreferenceUtil(EncryptWallet.this);
+
         pd = Utils.getProgressDialog(EncryptWallet.this, false,false,"");
+
         final EditText passPhrase = findViewById(R.id.passphrase);
         final EditText verifyPassPhrase = findViewById(R.id.verifyPassphrase);
         Button encryptWallet = findViewById(R.id.button_encrypt_wallet);
+
         Intent i = getIntent();
         Bundle b = i.getExtras();
+
         if(b != null)
             seed = b.getString("seed");
             encryptWallet.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +65,6 @@ public class EncryptWallet extends AppCompatActivity{
                                 }
                                 show("Creating wallet...");
                                 wallet.createWallet(pass, seed);
-                                //constants.wallet.unlockWallet(pass.getBytes());
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

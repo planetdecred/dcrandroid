@@ -21,6 +21,7 @@ import java.util.Locale;
  */
 
 public class SetupWalletActivity extends AppCompatActivity {
+
     String result;
     SimpleDateFormat formatter;
     @Override
@@ -30,10 +31,11 @@ public class SetupWalletActivity extends AppCompatActivity {
         TextView buildDate= findViewById(R.id.build_date);
         Button createWalletBtn = findViewById(R.id.button_create_wallet);
         Button retrieveWalletBtn = findViewById(R.id.button_retrieve_wallet);
-        formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date buildDated = BuildConfig.buildTime;
         result = formatter.format(buildDated);
         buildDate.setText(result);
+
         createWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,6 +43,7 @@ public class SetupWalletActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
         retrieveWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,8 +53,5 @@ public class SetupWalletActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-    }
-    @Override
-    public void onBackPressed() {
     }
 }
