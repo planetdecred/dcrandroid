@@ -15,7 +15,7 @@ public class Constants {
             EXTRA_BALANCE_LOCKED_BY_TICKETS = "locked_by_tickets",
             EXTRA_BALANCE_VOTING_AUTHORITY = "voting_authority",
             EXTRA_BALANCE_IMMATURE_STAKE_GEN = "immature_stake_generation",
-            EXTRA_ACCOUNT_NUMBER = "account_number",
+            ACCOUNT_NUMBER = "account_number",
             ACCOUNT_NAME = "AccountName",
             EXTRA_HD_PATH = "hd_path",
             KEYS = "keys",

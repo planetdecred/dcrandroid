@@ -142,12 +142,13 @@
                     android:layout_centerVertical="true"
                     />
 
-                <com.dcrandroid.util.BlockedSelectionEditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/send_dcr_amount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30.5dp"
                     android:inputType="numberDecimal"
                     android:layout_toRightOf="@id/amount_tv"
+                    android:layout_toEndOf="@id/amount_tv"
                     android:lines="1"
                     android:hint="0"
                     android:maxLines="1"
@@ -172,9 +173,9 @@
                     android:layout_toEndOf="@id/send_dcr_amount"
                     android:layout_toRightOf="@id/send_dcr_amount"
                     android:background="#6ACFC5"
-                    android:text="DCR"
+                    android:text="@string/dcr"
+                    android:enabled="false"
                     style="?android:attr/borderlessButtonStyle"
-                    android:visibility="gone"
                     android:textColor="#0C1E3E"/>
 
             </RelativeLayout>

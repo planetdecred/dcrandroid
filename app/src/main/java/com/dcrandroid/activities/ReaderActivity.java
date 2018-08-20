@@ -11,9 +11,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
+import com.dcrandroid.data.Constants;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.dcrandroid.R;
@@ -25,9 +25,6 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
 
     String address;
 
-    private static final int PERMISSION_REQUEST_CAMERA = 0;
-
-     View mLayout;
     /**
      * Called when the activity is first created.
      */
@@ -35,68 +32,33 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_ui_read);
-       // IntentIntegrator intentIntegrator=new IntentIntegrator(this);
-        //intentIntegrator.shareText("this is just a secrete");
-        showCameraPreview();
 
-
-    }
-
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult=IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
-        if (scanResult !=null) {
-            try{
-                address = scanResult.getContents();
-                intent.putExtra("keyName", address);
-                setResult(RESULT_OK, intent);
-                finish();
-
-            }catch (Exception e){
-                address="";
-                finish();
-            }
-        }
-        else {
-            finish();
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //onResume
-//        scannerView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //onPause
-      //  scannerView.onPause();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-    }
-
-    private void showCameraPreview() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
             requestCameraPermission();
+        }else {
+            startCamera();
         }
-        else {
-                startCamera();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == IntentIntegrator.REQUEST_CODE) {
+            IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+            if (scanResult.getContents() != null) {
+                address = scanResult.getContents();
+                intent.putExtra(Constants.ADDRESS, address);
+                setResult(RESULT_OK, intent);
+                finish();
+            }else{
+                finish();
             }
         }
+    }
+
     private void requestCameraPermission() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             int allowed = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-            if (allowed == PackageManager.PERMISSION_DENIED
-                    || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            if (allowed == PackageManager.PERMISSION_DENIED) {
                 new AlertDialog.Builder(this).setTitle(R.string.permission)
                         .setMessage(R.string.camera_permission_scan)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -127,7 +89,6 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
             }
         }
     }
-
 
     private void startCamera() {
         IntentIntegrator integrator = new IntentIntegrator(this);

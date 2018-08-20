@@ -113,7 +113,10 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         showHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setMainA();
+                if (getActivity() != null && getActivity() instanceof MainActivity){
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.displayHistory();
+                }
             }
         });
 
@@ -128,7 +131,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle(getString(R.string.overview));
+        if (getActivity() != null){
+            getActivity().setTitle(getString(R.string.overview));
+        }
     }
 
     private void getBalance(){
@@ -325,10 +330,5 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             filter.addAction(Constants.TRANSACTION_CONFIRMED);
             getActivity().registerReceiver(receiver, filter);
         }
-    }
-
-    public void setMainA(){
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.displaySelectedScreen(R.id.nav_history);
     }
 }

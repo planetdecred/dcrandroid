@@ -168,6 +168,8 @@
     <string name="transaction_confirmation">Please confirm transaction for</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="rename">Rename</string>
+    <string name="rename_account">Rename Account</string>
     <string name="save">Save</string>
     <string name="close_app">Close App</string>
     <string name="add">Add Account</string>

@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -241,9 +242,21 @@ public class Utils {
         return format.format(amount);
     }
 
-    public static long decredToAtom(String atm){
-        BigDecimal dcr = BigDecimal.valueOf(Double.parseDouble(atm));
-        dcr = dcr.multiply(BigDecimal.valueOf(1e8), new MathContext(100));
+    public static long decredToAtom(String amt){
+        BigDecimal dcr = new BigDecimal(amt);
+        dcr = dcr.setScale(7, RoundingMode.HALF_UP);
+        BigDecimal atoms = new BigDecimal(1e8);
+        atoms = atoms.setScale(7, RoundingMode.HALF_UP);
+        dcr = dcr.multiply(atoms);
+        return dcr.longValue();
+    }
+
+    public static long decredToAtom(double amt){
+        BigDecimal dcr = new BigDecimal(amt);
+        dcr = dcr.setScale(7, RoundingMode.HALF_UP);
+        BigDecimal atoms = new BigDecimal(1e8);
+        atoms = atoms.setScale(7, RoundingMode.HALF_UP);
+        dcr = dcr.multiply(atoms);
         return dcr.longValue();
     }
 
