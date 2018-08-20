@@ -91,7 +91,7 @@ type GetTransactionsResponse interface {
 type TransactionListener interface {
 	OnTransaction(transaction string)
 	OnTransactionConfirmed(hash string, height int32)
-	OnBlockAttached(height int32)
+	OnBlockAttached(height int32, timestamp int64)
 }
 
 type BlockNotificationError interface {
