@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Animation animRotate;
     private MainApplication mainApplication;
     private SoundPool alertSound;
-    private int lastBestBlock = 0, peerCount;
+    private int bestBlock = 0, peerCount, blockNotificationSound;
+    private long bestBlockTimestamp;
     private boolean scanning = false, synced = false;
     private Thread blockUpdate;
 
@@ -168,6 +169,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             restartApp();
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            SoundPool.Builder builder = new SoundPool.Builder().setMaxStreams(3);
+            AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build();
+            builder.setAudioAttributes(attributes);
+            alertSound = builder.build();
+        }else{
+            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
+        }
+
+        blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
+
         constants.wallet.transactionNotification(this);
         
         connectToDecredNetwork();
@@ -217,48 +231,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (blockUpdate != null) {
             return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            SoundPool.Builder builder = new SoundPool.Builder().setMaxStreams(3);
-            AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
-                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build();
-            builder.setAudioAttributes(attributes);
-            alertSound = builder.build();
-        }else{
-            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
-        }
-
-        final int soundId = alertSound.load(MainActivity.this, R.raw.beep, 1);
-
         updatePeerCount();
 
         blockUpdate = new Thread(){
             public void run(){
                 while(!this.isInterrupted()){
                     try {
-                        if(!scanning) {
+                        if(!scanning && synced) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     int bestBlock = constants.wallet.getBestBlock();
-                                    long lastBlockTime = constants.wallet.getBestBlockTimeStamp();
                                     long currentTime = System.currentTimeMillis() / 1000;
-                                    long estimatedBlocks = ((currentTime - lastBlockTime) / 120) + bestBlock;
+                                    long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + bestBlock;
 
-                                    bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - lastBlockTime));
+                                    setBestBlockTime(bestBlockTimestamp);
 
-                                    if ((currentTime - lastBlockTime) > 300000) {
+                                    //6 Minutes
+                                    if ((currentTime - bestBlockTimestamp) > 360) {
                                         String status = String.format(Locale.getDefault(), "Latest Block: %d of %d", bestBlock, estimatedBlocks);
                                         chainStatus.setText(status);
-                                    } else {
-                                        String status  = String.format(Locale.getDefault(), "Latest Block: %d", bestBlock);
-                                        chainStatus.setText(status);
-
-                                        if ((lastBestBlock == 0 || lastBestBlock != bestBlock) && util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
-                                            alertSound.play(soundId, 1, 1, 1, 0, 1);
-                                        }
-                                        lastBestBlock = bestBlock;
-
                                     }
                                 }
                             });
@@ -267,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         e.printStackTrace();
                     }
                     try {
-                        sleep(1000);
+                        sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         return;
@@ -550,8 +542,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onBlockAttached(int height) {
-
+    public void onBlockAttached(int height, long timestamp) {
+        this.bestBlock = height;
+        this.bestBlockTimestamp = timestamp;
+        if(util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+            alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
+        }
+        if(synced) {
+            String status = String.format(Locale.getDefault(), "Latest Block: %d", bestBlock);
+            setChainStatus(status);
+            //Nanoseconds to seconds
+            setBestBlockTime(timestamp / 1000000000);
+        }
     }
 
     private void sendNotification(String amount, String hash){
@@ -691,6 +693,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     constants.wallet.publishUnminedTransactions();
                     setConnectionStatus("Connected To Remote Node");
                     rescanBlocks();
+                    synced = true;
                     startBlockUpdate();
                 }catch (Exception e){
                     e.printStackTrace();
@@ -722,16 +725,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
                 }
             });
+            bestBlock = constants.wallet.getBestBlock();
+            bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
+            String status = String.format(Locale.getDefault(), "Latest Block: %d", constants.wallet.getBestBlock());
+            setChainStatus(status);
+            setBestBlockTime(bestBlockTimestamp);
             sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
             startBlockUpdate();
         }
     }
 
     @Override
-    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime) {
+    public void onFetchedHeaders(int peerInitialHeight, int fetchedHeadersCount, long lastHeaderTime) {
         setConnectionStatus(getString(R.string.fetching_headers));
-        String status = String.format(Locale.getDefault() , "Fetched %d Headers", fetchedHeadersCount);
-
+        String status = String.format(Locale.getDefault() , "Fetched %d of %d Headers", fetchedHeadersCount, peerInitialHeight);
         //Nanoseconds to seconds
         setBestBlockTime(lastHeaderTime / 1000000000);
         setChainStatus(status);
