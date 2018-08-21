@@ -49,6 +49,8 @@ public class Constants {
             INTERNAL = "Internal",
             LOGGING_LEVEL = "logging_level",
             NEW_BLOCK_NOTIFICATION = "new_block_notification",
+            EMPTY_STRING = "",
+            DASH = "-",
             CREDITS = "Credits";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
