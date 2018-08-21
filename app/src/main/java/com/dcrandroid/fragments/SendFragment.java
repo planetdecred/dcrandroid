@@ -56,7 +56,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import mobilewallet.ConstructTxResponse;
+import mobilewallet.UnsignedTransaction;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -76,9 +76,10 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     private ProgressDialog pd;
     private PreferenceUtil util;
     private DcrConstants constants = DcrConstants.getInstance();
-    private boolean isSendAll = false, currencyIsDCR = true;
+    private boolean isSendAll = false, currencyIsDCR = true, textChanged = false;
     private String addressError = "", amountError = "";
     private double exchangeRate = -1;
+    private BigDecimal originalAmount;
     private Button convertBtn;
 
     @Nullable
@@ -121,53 +122,71 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
 
                 if(addressError.length() > 0 || amountError.length() > 0){
-                    displayError();
+                    displayError(false);
                     return;
                 }
 
-                final long amt;
-
-                if(currencyIsDCR){
-                    amt = Utils.decredToAtom(amount.getText().toString());
-                }else{
-                    BigDecimal currentAmount = new BigDecimal(amount.getText().toString());
-                    currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
-                    BigDecimal exchangeDecimal = new BigDecimal(exchangeRate);
-                    exchangeDecimal = exchangeDecimal.setScale(9, RoundingMode.HALF_UP);
-                    BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
-                    amt = Utils.decredToAtom(convertedAmount.doubleValue());
-                }
-
-                if (amt == 0 || !validateAmount()) {
+                if (validateAmount(true)) {
                     amountError = "Amount is not valid";
-                    displayError();
+                    displayError(false);
                     return;
                 }
 
-                amountError = "";
-                addressError = "";
-                displayError();
+                final long amt = getAmount();
+
+                displayError(true);
 
                 showInputPassPhraseDialog(destAddress, amt);
             }
         });
 
         amount.setFilters(new InputFilter[]{new DecredInputFilter()});
-        amount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        amount.addTextChangedListener(amountWatcher);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                constructTransaction();
-            }
-        });
+        address.addTextChangedListener(addressWatcher);
 
         return vi;
     }
+
+    private TextWatcher addressWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().equals("")) {
+                addressError = "Destination Address can not be empty";
+                displayError(false);
+            } else if (!constants.wallet.isAddressValid(s.toString())) {
+                addressError = "Destination Address is not valid";
+                displayError(false);
+            }else{
+                addressError = "";
+                displayError(false);
+                constructTransaction();
+            }
+        }
+    };
+
+    private TextWatcher amountWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            textChanged = true;
+            constructTransaction();
+        }
+    };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -205,32 +224,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             });
         }
 
-        address.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().equals("")) {
-                    addressError = "Destination Address can not be empty";
-                    displayError();
-                } else if (!constants.wallet.isAddressValid(s.toString())) {
-                    addressError = "Destination Address is not valid";
-                    displayError();
-                }else{
-                    addressError = "";
-                    displayError();
-                    constructTransaction();
-                }
-            }
-        });
-
         getActivity().findViewById(R.id.send_dcr_all).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,84 +258,77 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             }
         });
 
-
         prepareAccounts();
     }
 
-    private void constructTransaction(){
-        estimateSize.setText("-");
-        totalAmountSending.setText("-");
-        estimateFee.setText("-");
-        addressError = "";
-        amountError = "";
-        displayError();
-        if(amount.getText().toString().length() == 0){
-            return;
-        }else if(!validateAmount()){
-            return;
-        }
-        
-        new Thread(){
-            public void run(){
-                if(getActivity() == null){
-                    System.out.println("Activity is null");
-                    return;
-                }
+    private void setInvalid(){
+        estimateSize.setText(Constants.DASH);
+        totalAmountSending.setText(Constants.DASH);
+        estimateFee.setText(Constants.DASH);
+    }
+
+    private String getDestinationAddress(){
+        String destAddress = address.getText().toString();
+        if (destAddress.equals(Constants.EMPTY_STRING)){
+            destAddress = util.get(Constants.RECENT_ADDRESS);
+            if(destAddress.equals(Constants.EMPTY_STRING)){
                 try {
-                    String destAddress = address.getText().toString();
-                    final long amt;
-                    if(currencyIsDCR){
-                        amt = Utils.decredToAtom(amount.getText().toString());
-                    }else{
-                        BigDecimal currentAmount = new BigDecimal(amount.getText().toString());
-                        currentAmount = currentAmount.setScale(7, RoundingMode.HALF_UP);
-                        BigDecimal exchangeDecimal = new BigDecimal(exchangeRate);
-                        exchangeDecimal = exchangeDecimal.setScale(7, RoundingMode.HALF_UP);
-                        BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
-                        amt = Utils.decredToAtom(convertedAmount.doubleValue());
-                    }
-                    if (destAddress.equals("")){
-                        destAddress = util.get(Constants.RECENT_ADDRESS);
-                        if(destAddress.equals("")){
-                            try {
-                                destAddress = constants.wallet.addressForAccount(0);
-                                util.set(Constants.RECENT_ADDRESS, destAddress);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }else if(amt <= 0){
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                estimateSize.setText("-");
-                                totalAmountSending.setText("-");
-                                estimateFee.setText("-");
-                            }
-                        });
-                        return;
-                    }
-                    final ConstructTxResponse response = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            double estFee = 0.001 * response.getEstimatedSignedSize() / 1000;
-                            estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",response.getEstimatedSignedSize()));
-                            totalAmountSending.setText(Utils.calculateTotalAmount(amt, response.getEstimatedSignedSize(), isSendAll).concat(" DCR"));
-                            estimateFee.setText(Utils.formatDecred((float) estFee).concat(" DCR"));
-                        }
-                    });
-                }catch (final Exception e){
+                    destAddress = constants.wallet.addressForAccount(0);
+                    util.set(Constants.RECENT_ADDRESS, destAddress);
+                }catch (Exception e){
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            error_label.setText(e.getMessage().substring(0, 1).toUpperCase() + e.getMessage().substring(1));
-                        }
-                    });
                 }
             }
-        }.start();
+        }
+        return destAddress;
+    }
+
+    private long getAmount(){
+        long amt;
+        if(currencyIsDCR){
+            amt = Utils.decredToAtom(amount.getText().toString());
+        }else{
+            BigDecimal currentAmount;
+            if (textChanged){
+                currentAmount = new BigDecimal(amount.getText().toString());
+                currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
+            }else{
+                currentAmount = originalAmount;
+            }
+
+            BigDecimal exchangeDecimal = new BigDecimal(exchangeRate);
+            exchangeDecimal = exchangeDecimal.setScale(9, RoundingMode.HALF_UP);
+            BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
+            amt = Utils.decredToAtom(convertedAmount.doubleValue());
+        }
+        return amt;
+    }
+
+    private void constructTransaction(){
+        displayError(true);
+
+        if(!validateAmount(false)){
+            setInvalid();
+            return;
+        }
+
+        try {
+            String destAddress = getDestinationAddress();
+            long amt = getAmount();
+
+            UnsignedTransaction transaction = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
+
+            float estFee = (0.001F * transaction.getEstimatedSignedSize()) / 1000;
+            estimateFee.setText(Utils.formatDecred(estFee).concat(" DCR"));
+
+            estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",transaction.getEstimatedSignedSize()));
+
+            totalAmountSending.setText(Utils.calculateTotalAmount(amt, transaction.getEstimatedSignedSize(), isSendAll).concat(" DCR"));
+
+        }catch (final Exception e){
+            e.printStackTrace();
+            error_label.setText(e.getMessage().substring(0, 1).toUpperCase() + e.getMessage().substring(1));
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -390,6 +376,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         constructTransaction();
     }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) { }
+
     private void prepareAccounts(){
         new Thread(){
             public void run(){
@@ -397,7 +386,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     final ArrayList<Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     accountNumbers.clear();
                     categories.clear();
-                    System.out.println("Account length: "+ accounts.size());
                     for(int i = 0; i < accounts.size(); i++){
                         if(accounts.get(i).getAccountName().trim().equalsIgnoreCase("imported")){
                             continue;
@@ -420,11 +408,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 }
             }
         }.start();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     public void startTransaction(final String passphrase, final String destAddress,final long amt){
@@ -555,7 +538,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         address.setText("");
         addressError = "";
         amountError = "";
-        displayError();
+        displayError(false);
     }
 
     public void copyToClipboard(String copyText) {
@@ -583,22 +566,36 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         toast.show();
     }
 
-    private boolean validateAmount(){
+    private boolean validateAmount(boolean sending){
         String s = amount.getText().toString();
+        if(s.length() == 0){
+            if(sending) {
+                amountError = "Amount is empty";
+                displayError(false);
+            }
+            return false;
+        }
         if(s.indexOf('.') != -1){
             String atoms = s.substring(s.indexOf('.'));
             if(atoms.length() > 9){
-                addressError = "Amount has more then 8 decimal places";
-                displayError();
+                amountError = "Amount has more then 8 decimal places";
+                displayError(false);
                 return false;
             }
         }
-        addressError = "";
-        displayError();
+        if(Double.parseDouble(s) == 0){
+            return false;
+        }
+        amountError = "";
+        displayError(false);
         return true;
     }
 
-    private void displayError() {
+    private void displayError(boolean empty) {
+        if (empty){
+            error_label.setText(null);
+            return;
+        }
         String error = addressError + "\n" + amountError;
         error_label.setText(error.trim());
     }
@@ -606,7 +603,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     private void exchangeCurrency(){
         exchangeRate = 40.96;
         if(exchangeRate == -1){
-            new GetExchangeRate(Utils.getProgressDialog(getContext(), false, false, "Fetching Data")).execute();
+            new GetExchangeRate(Utils.getProgressDialog(getContext(), false, false, "Fetching Data"), this).execute();
             return;
         }
 
@@ -624,28 +621,50 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             currencyIsDCR = !currencyIsDCR;
             return;
         }
-        BigDecimal currentAmount = new BigDecimal(amount.getText().toString());
-        currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
+        BigDecimal currentAmount;
+
+        if(textChanged){
+            System.out.println("Using edittext value");
+            currentAmount = new BigDecimal(amount.getText().toString());
+            currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
+        }else{
+            System.out.println("Using original Value");
+            currentAmount = originalAmount;
+        }
+
         BigDecimal exchangeDecimal = new BigDecimal(exchangeRate);
         exchangeDecimal = exchangeDecimal.setScale(9, RoundingMode.HALF_UP);
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#.########");
+        System.out.println("Current Amount: "+currentAmount.doubleValue());
         if(currencyIsDCR){
             BigDecimal convertedAmount = currentAmount.multiply(exchangeDecimal);
             currencyIsDCR = !currencyIsDCR;
+            textChanged = false;
+            originalAmount = convertedAmount;
+            System.out.println("Multiplied: "+ convertedAmount.doubleValue()+", Reverse: "+ convertedAmount.divide(exchangeDecimal, MathContext.DECIMAL128).doubleValue());
+            amount.removeTextChangedListener(amountWatcher);
             amount.setText(format.format(convertedAmount.doubleValue()));
+            amount.addTextChangedListener(amountWatcher);
         }else{
             BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
             currencyIsDCR = !currencyIsDCR;
+            textChanged = false;
+            originalAmount = convertedAmount;
+            System.out.println("Multiplied: "+ convertedAmount.doubleValue()+", Reverse: "+ convertedAmount.multiply(exchangeDecimal).doubleValue());
+            amount.removeTextChangedListener(amountWatcher);
             amount.setText(format.format(convertedAmount.doubleValue()));
+            amount.addTextChangedListener(amountWatcher);
         }
     }
 
-    private class GetExchangeRate extends AsyncTask<Void, String, String>{
+    private static class GetExchangeRate extends AsyncTask<Void, String, String>{
 
         private ProgressDialog pd;
-        public GetExchangeRate(ProgressDialog pd){
+        private SendFragment sendFragment;
+        public GetExchangeRate(ProgressDialog pd, SendFragment sendFragment){
             this.pd = pd;
+            this.sendFragment =  sendFragment;
         }
 
         @Override
@@ -662,7 +681,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 connection.setDoInput(true);
                 connection.setReadTimeout(7000);
                 connection.setConnectTimeout(7000);
-                connection.setRequestProperty("user-agent",util.get("user_agent",""));
+                connection.setRequestProperty("user-agent",sendFragment.util.get("user_agent",""));
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
                 StringBuilder result = new StringBuilder();
@@ -701,8 +720,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 JSONObject apiResult = new JSONObject(s);
                 if(apiResult.getBoolean("success")){
                     JSONObject result = apiResult.getJSONObject("result");
-                    exchangeRate = result.getDouble("Last");
-                    exchangeCurrency();
+                    sendFragment.exchangeRate = result.getDouble("Last");
+                    sendFragment.exchangeCurrency();
                 }else{
                     Toast.makeText(pd.getContext(), "Exchange failed with error: "+apiResult.getString("message"), Toast.LENGTH_SHORT).show();
                 }

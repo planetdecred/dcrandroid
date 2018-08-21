@@ -222,41 +222,51 @@ public class Utils {
     }
 
     public static String formatDecredWithoutComma(long dcr){
-        BigDecimal satoshi = BigDecimal.valueOf(dcr);
-        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+        BigDecimal atom = new BigDecimal(dcr);
+        BigDecimal amount = atom.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#########0.00######");
         return format.format(amount);
     }
 
     public static String calculateTotalAmount(long dcr, long signedSize, boolean isSendAll){
-        BigDecimal satoshi = BigDecimal.valueOf(dcr);
-        BigDecimal signed = BigDecimal.valueOf(signedSize);
-        signed = signed.divide(BigDecimal.valueOf(0.001), new MathContext(100));
+        BigDecimal atoms = new BigDecimal(dcr);
+        atoms = atoms.setScale(9, RoundingMode.HALF_UP);
         if(isSendAll) {
-            satoshi = satoshi.subtract(signed);
+            BigDecimal signed = new BigDecimal(signedSize);
+            signed = signed.setScale(9, RoundingMode.HALF_UP);
+
+            BigDecimal feePerKb = new BigDecimal(0.001);
+            feePerKb = feePerKb.setScale(9, RoundingMode.HALF_UP);
+
+            signed = signed.divide(feePerKb, new MathContext(100));
+            atoms = atoms.subtract(signed);
         }
-        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+
+        BigDecimal amount = atoms.divide(new BigDecimal(1e8), MathContext.DECIMAL128);
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#,###,###,##0.00######");
-        return format.format(amount);
+
+        return format.format(amount.doubleValue());
     }
 
     public static long decredToAtom(String amt){
         BigDecimal dcr = new BigDecimal(amt);
-        dcr = dcr.setScale(7, RoundingMode.HALF_UP);
+        dcr = dcr.setScale(9, RoundingMode.HALF_UP);
         BigDecimal atoms = new BigDecimal(1e8);
-        atoms = atoms.setScale(7, RoundingMode.HALF_UP);
+        atoms = atoms.setScale(9, RoundingMode.HALF_UP);
         dcr = dcr.multiply(atoms);
+
         return dcr.longValue();
     }
 
     public static long decredToAtom(double amt){
         BigDecimal dcr = new BigDecimal(amt);
-        dcr = dcr.setScale(7, RoundingMode.HALF_UP);
+        dcr = dcr.setScale(9, RoundingMode.HALF_UP);
         BigDecimal atoms = new BigDecimal(1e8);
-        atoms = atoms.setScale(7, RoundingMode.HALF_UP);
+        atoms = atoms.setScale(9, RoundingMode.HALF_UP);
         dcr = dcr.multiply(atoms);
+
         return dcr.longValue();
     }
 
