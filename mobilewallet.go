@@ -901,7 +901,7 @@ func (lw *LibWallet) AddressForAccount(account int32) (string, error) {
 	return addr.EncodeAddress(), nil
 }
 
-func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAccount int32, requiredConfirmations int32, sendAll bool) (*ConstructTxResponse, error) {
+func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAccount int32, requiredConfirmations int32, sendAll bool) (*UnsignedTransaction, error) {
 	// output destination
 	addr, err := dcrutil.DecodeAddress(destAddr)
 	if err != nil {
@@ -937,6 +937,10 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 		return nil, err
 	}
 
+	if tx.ChangeIndex >= 0 {
+		tx.RandomizeChangePosition()
+	}
+
 	var txBuf bytes.Buffer
 	txBuf.Grow(tx.Tx.SerializeSize())
 	err = tx.Tx.Serialize(&txBuf)
@@ -944,15 +948,19 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 		log.Error(err)
 		return nil, err
 	}
+
 	var totalOutput dcrutil.Amount
 	for _, txOut := range outputs {
 		totalOutput += dcrutil.Amount(txOut.Value)
 	}
-	return &ConstructTxResponse{
-		TotalOutputAmount:         int64(totalOutput),
+
+	return &UnsignedTransaction{
 		UnsignedTransaction:       txBuf.Bytes(),
+		TotalOutputAmount:         int64(totalOutput),
 		TotalPreviousOutputAmount: int64(tx.TotalInput),
-		EstimatedSignedSize:       int32(tx.EstimatedSignedSerializeSize)}, nil
+		EstimatedSignedSize:       tx.EstimatedSignedSerializeSize,
+		ChangeIndex:               tx.ChangeIndex,
+	}, nil
 }
 
 func (lw *LibWallet) RunGC() {

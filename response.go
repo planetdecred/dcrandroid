@@ -1,10 +1,11 @@
 package mobilewallet
 
-type ConstructTxResponse struct {
-	EstimatedSignedSize       int32
+type UnsignedTransaction struct {
+	UnsignedTransaction       []byte
+	EstimatedSignedSize       int
+	ChangeIndex               int
 	TotalOutputAmount         int64
 	TotalPreviousOutputAmount int64
-	UnsignedTransaction       []byte
 }
 
 type Balance struct {
