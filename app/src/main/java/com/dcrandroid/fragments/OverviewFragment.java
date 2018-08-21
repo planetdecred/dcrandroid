@@ -79,6 +79,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
+        tvBalance.formatAndSetText(Utils.formatDecred(0) + " DCR");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -122,8 +123,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
-        getBalance();
-        prepareHistoryData();
         return rootView;
     }
 
@@ -134,6 +133,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (getActivity() != null){
             getActivity().setTitle(getString(R.string.overview));
         }
+        getBalance();
+        prepareHistoryData();
     }
 
     private void getBalance(){
