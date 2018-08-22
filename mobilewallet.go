@@ -330,21 +330,24 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 	ntfns := &spv.Notifications{
 		Synced: func(sync bool) {
 			syncResponse.OnSynced(sync)
+		},
+		FetchHeadersProgress: func(fetchedHeadersCount int32, lastHeaderTime int64) {
+			syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime)
+		},
+		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
+			syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd)
+		},
+		DiscoverAddressesStarted: func(){
+			syncResponse.OnDiscoveredAddresses(false)
+		},
+		DiscoverAddressesFinished: func() {
+			syncResponse.OnDiscoveredAddresses(true)
 			// Lock the wallet after the first time synced while also
 			// discovering accounts.
-			if sync && lockWallet != nil {
+			if lockWallet != nil {
 				lockWallet()
 				lockWallet = nil
 			}
-		},
-		FetchedHeaders: func(peerInitialHeight, fetchedHeadersCount int32, lastHeaderTime int64) {
-			syncResponse.OnFetchedHeaders(peerInitialHeight, fetchedHeadersCount, lastHeaderTime)
-		},
-		FetchMissingCFilters: func(fetchedCfiltersCount int32) {
-			syncResponse.OnFetchMissingCFilters(fetchedCfiltersCount)
-		},
-		DiscoveredAddresses: func(finished bool) {
-			syncResponse.OnDiscoveredAddresses(finished)
 		},
 		RescanProgress: func(rescannedThrough int32) {
 			syncResponse.OnRescanProgress(rescannedThrough)
@@ -1009,6 +1012,10 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 	if err != nil {
 		log.Error(err)
 		return nil, err
+	}
+
+	if unsignedTx.ChangeIndex >= 0 {
+		unsignedTx.RandomizeChangePosition()
 	}
 
 	var txBuf bytes.Buffer
