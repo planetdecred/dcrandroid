@@ -236,7 +236,7 @@
                     android:textStyle="bold"
                     android:textColor="#0C1E3E"/>
 
-                <TextView
+                <com.dcrandroid.view.CurrencyTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/send_dcr_total_amt_sndng"
@@ -260,7 +260,7 @@
                     android:gravity="start"
                     android:textColor="@color/secondaryTextColor"/>
 
-                <TextView
+                <com.dcrandroid.view.CurrencyTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="-"

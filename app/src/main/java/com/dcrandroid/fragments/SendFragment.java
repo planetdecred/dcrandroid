@@ -37,6 +37,7 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.DecredInputFilter;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.view.CurrencyTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +68,8 @@ import static android.app.Activity.RESULT_OK;
 public class SendFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
 
     private EditText address, amount;
-    private TextView totalAmountSending, estimateFee, estimateSize, error_label, exchangeRateLabel, exchangeCurrency;
+    private TextView estimateSize, error_label, exchangeRateLabel, exchangeCurrency;
+    private CurrencyTextView totalAmountSending, estimateFee;
     private Spinner accountSpinner;
     private static final int SCANNER_ACTIVITY_RESULT_CODE = 0;
     private List<String> categories;
@@ -126,11 +128,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     return;
                 }
 
-                if (validateAmount(true)) {
-                    amountError = "Amount is not valid";
-                    displayError(false);
-                    return;
-                }
+                if (!validateAmount(true)) return;
 
                 final long amt = getAmount();
 
@@ -319,13 +317,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             UnsignedTransaction transaction = constants.wallet.constructTransaction(destAddress, amt, accountNumbers.get(accountSpinner.getSelectedItemPosition()), util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS, isSendAll);
 
             float estFee = (0.001F * transaction.getEstimatedSignedSize()) / 1000;
-            estimateFee.setText(Utils.formatDecred(estFee).concat(" DCR"));
+            estimateFee.formatAndSetText(Utils.formatDecred(estFee).concat(" DCR"));
 
             estimateSize.setText(String.format(Locale.getDefault(),"%d bytes",transaction.getEstimatedSignedSize()));
 
-            totalAmountSending.setText(Utils.calculateTotalAmount(amt, transaction.getEstimatedSignedSize(), isSendAll).concat(" DCR"));
+            totalAmountSending.formatAndSetText(Utils.calculateTotalAmount(amt, transaction.getEstimatedSignedSize(), isSendAll).concat(" DCR"));
 
         }catch (final Exception e){
+            setInvalid();
             e.printStackTrace();
             error_label.setText(e.getMessage().substring(0, 1).toUpperCase() + e.getMessage().substring(1));
         }
@@ -584,6 +583,10 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             }
         }
         if(Double.parseDouble(s) == 0){
+            if(sending){
+                amountError = "Amount is not valid";
+                displayError(false);
+            }
             return false;
         }
         amountError = "";
@@ -601,7 +604,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     }
 
     private void exchangeCurrency(){
-        exchangeRate = 40.96;
         if(exchangeRate == -1){
             new GetExchangeRate(Utils.getProgressDialog(getContext(), false, false, "Fetching Data"), this).execute();
             return;
