@@ -104,17 +104,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     private void createWallet(){
-        loadThread = new Thread(){
-            public void run(){
-                if(isInterrupted()){
-                    return;
-                }
-                Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
-                startActivity(i);
-                finish();
-            }
-        };
-        loadThread.start();
+        Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
+        startActivity(i);
+        finish();
     }
 
     public void load(){

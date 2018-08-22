@@ -241,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    int bestBlock = constants.wallet.getBestBlock();
                                     long currentTime = System.currentTimeMillis() / 1000;
                                     long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + bestBlock;
 
@@ -736,18 +735,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onFetchedHeaders(int peerInitialHeight, int fetchedHeadersCount, long lastHeaderTime) {
+    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime) {
         setConnectionStatus(getString(R.string.fetching_headers));
-        String status = String.format(Locale.getDefault() , "Fetched %d of %d Headers", fetchedHeadersCount, peerInitialHeight);
+        String status = String.format(Locale.getDefault() , "Fetched %d Headers", fetchedHeadersCount);
         //Nanoseconds to seconds
         setBestBlockTime(lastHeaderTime / 1000000000);
         setChainStatus(status);
     }
 
     @Override
-    public void onFetchMissingCFilters(int fetchedCFiltersCount) {
+    public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd) {
         setConnectionStatus("Fetching Missing CFilters");
-        String status = String.format(Locale.getDefault() , "Fetched %d CFilters", fetchedCFiltersCount);
+        System.out.println("CFilters start: "+missingCFiltersStart + " CFilters end: "+ missingCFiltersEnd);
+        String status = String.format(Locale.getDefault() , "Fetched %d CFilters", missingCFiltersEnd);
         setChainStatus(status);
     }
 
