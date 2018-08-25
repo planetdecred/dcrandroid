@@ -174,13 +174,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         ArrayList<String> walletOutput = new ArrayList<>();
         ArrayList<String> walletInput = new ArrayList<>();
-        ArrayList<String> nonWalletInput = new ArrayList<>();
-        ArrayList<String> nonWalletOutput = new ArrayList<>();
         ArrayList<Integer> walletOutputIndexes = new ArrayList<>();
         ArrayList<Integer> walletInputIndexes = new ArrayList<>();
 
         for (int i = 0; i < usedInput.size(); i++) {
-            System.out.println("Used Input Index: "+usedInput.get(i).index);
             walletInputIndexes.add(usedInput.get(i).index);
             walletInput.add(usedInput.get(i).accountName + "\n" + Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedInput.get(i).previous_amount)) + " DCR");
         }
@@ -215,7 +212,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 boolean nullScript = output.getBoolean("NullScript");
 
-                nonWalletOutput.add(address + "\n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR"));
+                walletOutput.add(address + "(external) \n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR (external)"));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
@@ -227,10 +224,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     continue;
                 }
 
-                System.out.println("unused Input index: "+ inputs.length());
-
-                nonWalletInput.add(input.getString("PreviousTransactionHash") + ":" + input.getInt("PreviousTransactionIndex")
-                        + "\n"+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong("AmountIn"))) + " DCR");
+                walletInput.add(input.getString("PreviousTransactionHash") + ":" + input.getInt("PreviousTransactionIndex")
+                        + " (external)\n"+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong("AmountIn"))) + " DCR");
             }
 
         } catch (Exception e) {
@@ -239,17 +234,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         List<String> headerTitle = new ArrayList<>();
 
-        headerTitle.add("Wallet Inputs");
-        headerTitle.add("Wallet Outputs");
-        headerTitle.add("Non Wallet Inputs");
-        headerTitle.add("Non Wallet Outputs");
+        headerTitle.add("Inputs");
+        headerTitle.add("Outputs");
 
         HashMap<String, List<String>> childContent = new HashMap<>();
 
         childContent.put(headerTitle.get(0), walletInput);
         childContent.put(headerTitle.get(1), walletOutput);
-        childContent.put(headerTitle.get(2), nonWalletInput);
-        childContent.put(headerTitle.get(3), nonWalletOutput);
 
         ExpandableListViewAdapter expandableListViewAdapter = new ExpandableListViewAdapter(getApplicationContext(), headerTitle, childContent);
 
