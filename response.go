@@ -112,17 +112,15 @@ type DecodedTransaction struct {
 type DecodedInput struct {
 	PreviousTransactionHash  string
 	PreviousTransactionIndex int32
-	Sequence                 int32
 	AmountIn                 int64
-	BlockHeight              int32
-	BlockIndex               int32
 }
 
 type DecodedOutput struct {
-	Index     int32
-	Value     int64
-	Version   int32
-	Addresses []string
+	Index      int32
+	Value      int64
+	Version    int32
+	NullScript bool
+	Addresses  []string
 }
 
 type SpvSyncResponse interface {

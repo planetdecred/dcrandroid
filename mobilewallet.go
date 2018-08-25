@@ -337,7 +337,7 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
 			syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd)
 		},
-		DiscoverAddressesStarted: func(){
+		DiscoverAddressesStarted: func() {
 			syncResponse.OnDiscoveredAddresses(false)
 		},
 		DiscoverAddressesFinished: func() {
@@ -695,28 +695,31 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 					PreviousAmount:  int64(debit.PreviousAmount),
 					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
 			}
+
 			var direction int32
-			amountDifference := outputAmounts - inputAmounts
-			if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
-				//Transfered
-				direction = 2
-				amount = int64(transaction.Fee)
-			} else if amountDifference > 0 {
-				//Received
-				direction = 1
-				for _, credit := range transaction.MyOutputs {
-					amount += int64(credit.Amount)
+			if transaction.Type == wallet.TransactionTypeRegular {
+				amountDifference := outputAmounts - inputAmounts
+				if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
+					//Transfered
+					direction = 2
+					amount = int64(transaction.Fee)
+				} else if amountDifference > 0 {
+					//Received
+					direction = 1
+					for _, credit := range transaction.MyOutputs {
+						amount += int64(credit.Amount)
+					}
+				} else {
+					//Sent
+					direction = 0
+					for _, debit := range transaction.MyInputs {
+						amount += int64(debit.PreviousAmount)
+					}
+					for _, credit := range transaction.MyOutputs {
+						amount -= int64(credit.Amount)
+					}
+					amount -= int64(transaction.Fee)
 				}
-			} else {
-				//Sent
-				direction = 0
-				for _, debit := range transaction.MyInputs {
-					amount += int64(debit.PreviousAmount)
-				}
-				for _, credit := range transaction.MyOutputs {
-					amount -= int64(credit.Amount)
-				}
-				amount -= int64(transaction.Fee)
 			}
 			var height int32 = -1
 			if block.Header != nil {
@@ -786,10 +789,7 @@ func decodeTxInputs(mtx *wire.MsgTx) []DecodedInput {
 		inputs[i] = DecodedInput{
 			PreviousTransactionHash:  fmt.Sprintf("%02x", reverse(txIn.PreviousOutPoint.Hash[:])),
 			PreviousTransactionIndex: int32(txIn.PreviousOutPoint.Index),
-			Sequence:                 int32(txIn.Sequence),
 			AmountIn:                 txIn.ValueIn,
-			BlockHeight:              int32(txIn.BlockHeight),
-			BlockIndex:               int32(txIn.BlockIndex),
 		}
 	}
 	return inputs
@@ -802,7 +802,9 @@ func decodeTxOutputs(mtx *wire.MsgTx, chainParams *chaincfg.Params) []DecodedOut
 
 		var addrs []dcrutil.Address
 		var encodedAddrs []string
+		var scriptClass txscript.ScriptClass
 		if (txType == stake.TxTypeSStx) && (stake.IsStakeSubmissionTxOut(i)) {
+			scriptClass = txscript.StakeSubmissionTy
 			addr, err := stake.AddrFromSStxPkScrCommitment(v.PkScript,
 				chainParams)
 			if err != nil {
@@ -817,7 +819,7 @@ func decodeTxOutputs(mtx *wire.MsgTx, chainParams *chaincfg.Params) []DecodedOut
 			// Ignore the error here since an error means the script
 			// couldn't parse and there is no additional information
 			// about it anyways.
-			_, addrs, _, _ = txscript.ExtractPkScriptAddrs(
+			scriptClass, addrs, _, _ = txscript.ExtractPkScriptAddrs(
 				v.Version, v.PkScript, chainParams)
 			encodedAddrs = make([]string, len(addrs))
 			for j, addr := range addrs {
@@ -826,10 +828,11 @@ func decodeTxOutputs(mtx *wire.MsgTx, chainParams *chaincfg.Params) []DecodedOut
 		}
 
 		outputs[i] = DecodedOutput{
-			Index:     int32(i),
-			Value:     v.Value,
-			Version:   int32(v.Version),
-			Addresses: encodedAddrs,
+			Index:      int32(i),
+			Value:      v.Value,
+			Version:    int32(v.Version),
+			Addresses:  encodedAddrs,
+			NullScript: scriptClass.String() == "nulldata",
 		}
 	}
 
@@ -902,6 +905,19 @@ func (lw *LibWallet) AddressForAccount(account int32) (string, error) {
 		return "", err
 	}
 	return addr.EncodeAddress(), nil
+}
+
+func AmountCoin(amount int64) float64 {
+	return dcrutil.Amount(amount).ToCoin()
+}
+
+func AmountAtom(f float64) int64 {
+	amount, err := dcrutil.NewAmount(f)
+	if err != nil {
+		log.Error(err)
+		return -1
+	}
+	return int64(amount)
 }
 
 func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAccount int32, requiredConfirmations int32, sendAll bool) (*UnsignedTransaction, error) {
