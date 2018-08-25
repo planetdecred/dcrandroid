@@ -264,6 +264,10 @@
         <item>None</item>
         <item>USD (bittrex)</item>
     </string-array>
+    <string-array name="currency_conversion_source">
+        <item></item>
+        <item>bittrex</item>
+    </string-array>
     <string-array name="currency_conversion_values">
         <item>0</item>
         <item>1</item>

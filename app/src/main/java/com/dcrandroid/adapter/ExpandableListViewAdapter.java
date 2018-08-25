@@ -67,12 +67,12 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         View view = convertView;
         if(view == null){
-            LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.group_tx_in_out, parent, false);
         }
 
-        String parentHeader = (String)getGroup(groupPosition);
-        TextView parentItem = (TextView)view.findViewById(R.id.parent_layout);
+        String parentHeader = (String) getGroup(groupPosition);
+        TextView parentItem = view.findViewById(R.id.parent_layout);
         parentItem.setText(parentHeader);
         return view;
     }
@@ -81,12 +81,12 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         View view = convertView;
         if(view == null){
-            LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.child_addr_and_amount, parent, false);
         }
 
-        String childName = (String)getChild(groupPosition, childPosition);
-        TextView childItem = (TextView)view.findViewById(R.id.child_layout);
+        String childName = (String) getChild(groupPosition, childPosition);
+        TextView childItem = view.findViewById(R.id.child_layout);
         childItem.setText(childName);
         return view;
     }

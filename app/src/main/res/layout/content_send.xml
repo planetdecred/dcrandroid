@@ -292,53 +292,46 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:orientation="horizontal"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:text="Balance Remaining:"
+                    android:textSize="15sp"
+                    android:gravity="start"
+                    android:textColor="@color/secondaryTextColor"/>
+                <com.dcrandroid.view.CurrencyTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/send_dcr_balance_remain"
+                    android:textSize="15sp"
+                    android:text="-"
+                    android:textColor="@color/secondaryTextColor"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
                 android:id="@+id/exchange_details"
-                android:orientation="vertical">
-                <LinearLayout
+                android:visibility="gone"
+                >
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:text="Exchange Rate:"
+                    android:textSize="15sp"
+                    android:gravity="start"
+                    android:textColor="@color/secondaryTextColor"/>
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    >
-                    <TextView
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:text="Exchange Currency"
-                        android:textSize="15sp"
-                        android:gravity="start"
-                        android:textColor="@color/secondaryTextColor"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/send_dcr_exchange_currency"
-                        android:textSize="15sp"
-                        android:text="-"
-                        android:textColor="@color/secondaryTextColor"
-                        />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    >
-                    <TextView
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:text="Exchange Rate"
-                        android:textSize="15sp"
-                        android:gravity="start"
-                        android:textColor="@color/secondaryTextColor"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/send_dcr_exchange_rate"
-                        android:textSize="15sp"
-                        android:text="-"
-                        android:textColor="@color/secondaryTextColor"
-                        />
-                </LinearLayout>
+                    android:id="@+id/send_dcr_exchange_rate"
+                    android:textSize="15sp"
+                    android:textColor="@color/secondaryTextColor"
+                    />
             </LinearLayout>
         </LinearLayout>
         <Button

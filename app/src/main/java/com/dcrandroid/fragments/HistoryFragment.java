@@ -85,7 +85,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 extras.putString(Constants.TYPE, history.type);
                 extras.putString(Constants.HASH, history.hash);
                 extras.putInt(Constants.DIRECTION, history.getDirection());
-                extras.putSerializable(Constants.Inputs, history.inputs);
+                extras.putSerializable(Constants.INPUTS, history.inputs);
                 extras.putSerializable(Constants.OUTPUTS, history.outputs);
                 i.putExtras(extras);
                 startActivity(i);

@@ -20,6 +20,8 @@ import com.dcrandroid.view.CurrencyTextView;
 
 import java.util.List;
 
+import mobilewallet.Mobilewallet;
+
 /**
  * Created by Macsleven on 01/01/2018.
  */
@@ -78,26 +80,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
 
         if(history.animate) {
-            System.out.println("Item is animating.");
             Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
             holder.view.setAnimation(blinkAnim);
         }
 
+        holder.Amount.formatAndSetText(Utils.removeTrailingZeros(Mobilewallet.amountCoin(history.getAmount())) + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr));
+        holder.txType.setText("");
+
         if(history.getDirection() == 0){
-            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
-            holder.txType.setText("");
         }else if(history.getDirection() == 1) {
-            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
-            holder.txType.setText("");
         }else if(history.getDirection() == 2){
-            holder.Amount.formatAndSetText(Utils.formatDecred(history.getAmount()));
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
-            holder.txType.setText("");
         }
 
         if (history.type.equalsIgnoreCase("vote")) {

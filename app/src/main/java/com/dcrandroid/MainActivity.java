@@ -8,7 +8,6 @@ import android.media.*;
 import android.os.*;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
@@ -508,22 +507,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 totalOutput += credit.getLong(Constants.AMOUNT);
             }
             b.putLong(Constants.TOTAL_INPUT, totalInput);
-            b.putSerializable(Constants.Inputs, inputs);
+            b.putSerializable(Constants.INPUTS, inputs);
             b.putLong(Constants.TOTAL_OUTPUT, totalOutput);
             b.putSerializable(Constants.OUTPUTS, outputs);
             newTransactionIntent.putExtras(b);
             sendBroadcast(newTransactionIntent);
-        if(util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
-            double fee = obj.getDouble(Constants.FEE);
-            if (fee == 0) {
-                BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
+            if(util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
+                double fee = obj.getDouble(Constants.FEE);
+                if (fee == 0) {
+                    BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
 
-                BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-                String hash = obj.getString(Constants.HASH);
-                DecimalFormat format = new DecimalFormat("You received #.######## DCR");
-                sendNotification(format.format(amount), hash);
+                    BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+                    String hash = obj.getString(Constants.HASH);
+                    DecimalFormat format = new DecimalFormat("You received #.######## DCR");
+                    sendNotification(format.format(amount), hash);
+                }
             }
-        }
         } catch (JSONException e) {
             e.printStackTrace();
             if(util.getBoolean(Constants.DEBUG_MESSAGES)) {

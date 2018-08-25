@@ -99,7 +99,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 extras.putString(Constants.TYPE, history.type);
                 extras.putString(Constants.HASH, history.hash);
                 extras.putInt(Constants.DIRECTION, history.getDirection());
-                extras.putSerializable(Constants.Inputs, history.inputs);
+                extras.putSerializable(Constants.INPUTS, history.inputs);
                 extras.putSerializable(Constants.OUTPUTS, history.outputs);
                 i.putExtras(extras);
                 startActivity(i);
@@ -274,9 +274,11 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(intent.getAction().equals(Constants.BLOCK_SCAN_COMPLETE)){
                 prepareHistoryData();
             }else if(intent.getAction().equals(Constants.NEW_TRANSACTION)){
+                System.out.println("New Transaction received. in nnew fragmennt");
                 TransactionsResponse.TransactionItem transaction = new TransactionsResponse.TransactionItem();
                 Bundle b = intent.getExtras();
                 if (b == null){
+                    System.out.println("Bundle is null");
                     return;
                 }
                 transaction.timestamp = b.getLong(Constants.TIMESTAMP, 0);
@@ -286,7 +288,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 transaction.height = b.getInt(Constants.HEIGHT, 0);
                 transaction.amount = b.getLong(Constants.AMOUNT, 0);
                 transaction.direction = b.getInt(Constants.DIRECTION, -1);
-                transaction.inputs = (ArrayList<TransactionsResponse.TransactionInput>) b.getSerializable(Constants.Inputs);
+                transaction.inputs = (ArrayList<TransactionsResponse.TransactionInput>) b.getSerializable(Constants.INPUTS);
                 transaction.outputs = (ArrayList<TransactionsResponse.TransactionOutput>) b.getSerializable(Constants.OUTPUTS);
                 transaction.totalInput = b.getLong(Constants.TOTAL_INPUT, 0);
                 transaction.totalOutputs = b.getLong(Constants.TOTAL_OUTPUT, 0);
