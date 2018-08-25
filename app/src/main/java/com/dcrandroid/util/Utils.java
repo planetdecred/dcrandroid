@@ -20,11 +20,14 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import mobilewallet.Mobilewallet;
 
 public class Utils {
     public static ProgressDialog getProgressDialog(Context context,boolean cancelable, boolean cancelOnTouchOutside,
@@ -207,7 +210,7 @@ public class Utils {
         return seconds + "s ago";
     }
 
-    public static String formatDecred(float dcr){
+    public static String formatDecred(double dcr){
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#,###,###,##0.00######");
         return format.format(dcr);
@@ -217,16 +220,34 @@ public class Utils {
         BigDecimal satoshi = BigDecimal.valueOf(dcr);
         BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         DecimalFormat format = new DecimalFormat();
-        format.applyPattern("#,###,###,##0.00######");
+        format.applyPattern("#,###,###,##0.########");
         return format.format(amount);
+    }
+
+    public static String removeTrailingZeros(double dcr){
+        DecimalFormat format = new DecimalFormat();
+        format.applyPattern("#,###,###,##0.########");
+        return format.format(dcr);
     }
 
     public static String formatDecredWithoutComma(long dcr){
         BigDecimal atom = new BigDecimal(dcr);
         BigDecimal amount = atom.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         DecimalFormat format = new DecimalFormat();
-        format.applyPattern("#########0.00######");
+        format.applyPattern("#########0.########");
         return format.format(amount);
+    }
+
+    public static long signedSizeToAtom(long signedSize){
+        BigDecimal signed = new BigDecimal(signedSize);
+        signed = signed.setScale(9, RoundingMode.HALF_UP);
+
+        BigDecimal feePerKb = new BigDecimal(0.01);
+        feePerKb = feePerKb.setScale(9, RoundingMode.HALF_UP);
+
+        signed = signed.divide(feePerKb, MathContext.DECIMAL128);
+
+        return signed.longValue();
     }
 
     public static String calculateTotalAmount(long dcr, long signedSize, boolean isSendAll){
@@ -236,18 +257,17 @@ public class Utils {
             BigDecimal signed = new BigDecimal(signedSize);
             signed = signed.setScale(9, RoundingMode.HALF_UP);
 
-            BigDecimal feePerKb = new BigDecimal(0.001);
+            BigDecimal feePerKb = new BigDecimal(0.01);
             feePerKb = feePerKb.setScale(9, RoundingMode.HALF_UP);
 
-            signed = signed.divide(feePerKb, new MathContext(100));
+            signed = signed.divide(feePerKb, MathContext.DECIMAL128);
             atoms = atoms.subtract(signed);
         }
 
-        BigDecimal amount = atoms.divide(new BigDecimal(1e8), MathContext.DECIMAL128);
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#,###,###,##0.00######");
 
-        return format.format(amount.doubleValue());
+        return format.format(Mobilewallet.amountCoin(atoms.longValue()));
     }
 
     public static long decredToAtom(String amt){
@@ -340,5 +360,11 @@ public class Utils {
             System.out.println("Restore Failed");
             e.printStackTrace();
         }
+    }
+
+    public static Byte[] reverseHash(Byte[] hash){
+        List<Byte> hashList = Arrays.asList(hash);
+        Collections.reverse(hashList);
+        return (Byte[]) hashList.toArray();
     }
 }

@@ -33,7 +33,7 @@ public class Constants {
             DEBUG_MESSAGES = "debug_messages",
             SPEND_UNCONFIRMED_FUNDS = "spend_unconfirmed_funds",
             DIRECTION = "Direction",
-            Inputs = "Inputs",
+            INPUTS = "Inputs",
             OUTPUTS = "Outputs",
             TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS",
             CURRENCY_CONVERSION = "currency_conversion",
@@ -51,6 +51,7 @@ public class Constants {
             NEW_BLOCK_NOTIFICATION = "new_block_notification",
             EMPTY_STRING = "",
             DASH = "-",
+            NBSP = " ",
             CREDITS = "Credits";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

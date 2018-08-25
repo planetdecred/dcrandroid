@@ -37,6 +37,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import mobilewallet.LibWallet;
+import mobilewallet.Mobilewallet;
 
 /**
  * Created by Macsleven on 02/01/2018.
@@ -47,7 +48,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private ExpandableListView expandableListView;
     private PreferenceUtil util;
-    private List<String> parentHeaderInformation;
     private String transactionType;
     private Bundle extras;
 
@@ -78,24 +78,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        expandableListView = findViewById(R.id.in_out);
+
         transactionType = extras.getString(Constants.TYPE);
         transactionType = transactionType.substring(0,1).toUpperCase() + transactionType.substring(1).toLowerCase();
 
-        parentHeaderInformation = new ArrayList<>();
-
-        parentHeaderInformation.add(getString(R.string.inputs));
-        parentHeaderInformation.add(getString(R.string.outputs));
         ArrayList<TransactionsResponse.TransactionInput> inputs
-                = (ArrayList<TransactionsResponse.TransactionInput>) extras.getSerializable(Constants.Inputs);
+                = (ArrayList<TransactionsResponse.TransactionInput>) extras.getSerializable(Constants.INPUTS);
         ArrayList<TransactionsResponse.TransactionOutput> outputs
-                = (ArrayList<TransactionsResponse.TransactionOutput>) extras.getSerializable(Constants.Inputs);
-        HashMap<String, List<String>> allChildItems = returnGroupedChildItems(inputs, outputs);
+                = (ArrayList<TransactionsResponse.TransactionOutput>) extras.getSerializable(Constants.OUTPUTS);
 
-        expandableListView = findViewById(R.id.in_out);
-
-        ExpandableListViewAdapter expandableListViewAdapter = new ExpandableListViewAdapter(getApplicationContext(), parentHeaderInformation, allChildItems);
-
-        expandableListView.setAdapter(expandableListViewAdapter);
+        loadInOut(inputs, outputs);
 
         CurrencyTextView value = findViewById(R.id.tx_dts_value);
         TextView date = findViewById(R.id.tx_date);
@@ -143,8 +136,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        value.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.AMOUNT,0)) +" "+getString(R.string.dcr));
-        transactionFee.formatAndSetText(Utils.formatDecred(extras.getLong(Constants.FEE,0)) +" "+getString(R.string.dcr));
+        value.formatAndSetText( Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.AMOUNT,0))) +" "+getString(R.string.dcr));
+        transactionFee.formatAndSetText(Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.FEE,0))) +" "+getString(R.string.dcr));
 
         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
         calendar.setTimeInMillis(extras.getLong(Constants.TIMESTAMP) * 1000);
@@ -175,62 +168,92 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private HashMap<String, List<String>> returnGroupedChildItems(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput){
-        ArrayList<String> walletOutput = new ArrayList<>();
+    private void loadInOut(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput){
+        int txDirection = getIntent().getIntExtra(Constants.DIRECTION, -1);
         LibWallet wallet = DcrConstants.getInstance().wallet;
-        if (transactionType.equalsIgnoreCase("vote")){
-            for (int i = 0; i < usedOutput.size(); i++){
-                TransactionsResponse.TransactionOutput output = usedOutput.get(i);
-                StringBuilder sb = new StringBuilder();
-                if (wallet.isAddressMine(output.address)) {
-                    sb.append(output.address).append(" (").append(wallet.getAccountByAddress(output.address)).append(")");
-                    if (extras.getInt(Constants.DIRECTION, -1) == 0) {
-                        sb.append(" (change)");
-                    }
+
+        ArrayList<String> walletOutput = new ArrayList<>();
+        ArrayList<String> walletInput = new ArrayList<>();
+        ArrayList<String> nonWalletInput = new ArrayList<>();
+        ArrayList<String> nonWalletOutput = new ArrayList<>();
+        ArrayList<Integer> walletOutputIndexes = new ArrayList<>();
+        ArrayList<Integer> walletInputIndexes = new ArrayList<>();
+
+        for (int i = 0; i < usedInput.size(); i++) {
+            System.out.println("Used Input Index: "+usedInput.get(i).index);
+            walletInputIndexes.add(usedInput.get(i).index);
+            walletInput.add(usedInput.get(i).accountName + "\n" + Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedInput.get(i).previous_amount)) + " DCR");
+        }
+
+        for (int i = 0; i < usedOutput.size(); i++){
+            walletOutputIndexes.add(usedOutput.get(i).index);
+            walletOutput.add(
+                    usedOutput.get(i).address +
+                            (txDirection == 0 ? " (change) " : Constants.NBSP) +
+                            "("+wallet.getAccountName(usedOutput.get(i).account) +")\n" +
+                            Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedOutput.get(i).amount)) + " DCR"
+            );
+        }
+
+        try {
+            Bundle b = getIntent().getExtras();
+            String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
+            JSONObject parent = new JSONObject(rawJson);
+
+            JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
+
+            for (int i = 0; i < outputs.length(); i++) {
+                JSONObject output = outputs.getJSONObject(i);
+
+                if(walletOutputIndexes.indexOf(output.getInt(Constants.INDEX)) != -1){
                     continue;
                 }
 
-                sb.append(output.address).append(" (external)");
-                walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.amount));
+                JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
+
+                String address = addresses.length() > 0 ? addresses.getString(0) : "[script]";
+
+                boolean nullScript = output.getBoolean("NullScript");
+
+                nonWalletOutput.add(address + "\n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR"));
             }
-        }else {
-            try {
-                Bundle b = getIntent().getExtras();
-                String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
-                JSONObject parent = new JSONObject(rawJson);
-                JSONArray input = parent.getJSONArray(Constants.Inputs);
-                JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
-                for (int i = 0; i < outputs.length(); i++) {
-                    JSONObject output = outputs.getJSONObject(i);
-                    StringBuilder sb = new StringBuilder();
-                    JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
-                    for (int j = 0; j < addresses.length(); j++) {
-                        if (j != 0) {
-                            sb.append("\n");
-                        }
-                        if (wallet.isAddressMine(addresses.getString(j))) {
-                            sb.append(addresses.getString(j)).append(" (").append(wallet.getAccountByAddress(addresses.getString(j))).append(")");
-                            if (getIntent().getIntExtra(Constants.DIRECTION, -1) == 0) {
-                                sb.append(" (change)");
-                            }
-                            continue;
-                        }
-                        sb.append(addresses.getString(j)).append(" (external)");
-                    }
-                    walletOutput.add(sb.toString() + "\n" + Utils.formatDecred(output.getLong("Value")));
+
+            JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
+            for (int i = 0; i < inputs.length(); i++){
+
+                JSONObject input = inputs.getJSONObject(i);
+
+                if(walletInputIndexes.indexOf(input.getInt("PreviousTransactionIndex")) != -1){
+                    continue;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+                System.out.println("unused Input index: "+ inputs.length());
+
+                nonWalletInput.add(input.getString("PreviousTransactionHash") + ":" + input.getInt("PreviousTransactionIndex")
+                        + "\n"+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong("AmountIn"))) + " DCR");
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        List<String> headerTitle = new ArrayList<>();
+
+        headerTitle.add("Wallet Inputs");
+        headerTitle.add("Wallet Outputs");
+        headerTitle.add("Non Wallet Inputs");
+        headerTitle.add("Non Wallet Outputs");
+
         HashMap<String, List<String>> childContent = new HashMap<>();
-        ArrayList<String> inputs = new ArrayList<>();
-        for (int j = 0; j < usedInput.size(); j++) {
-            inputs.add(usedInput.get(j).accountName + "\n" + Utils.formatDecred(usedInput.get(j).previous_amount));
-        }
-        childContent.put(parentHeaderInformation.get(0), inputs);
-        childContent.put(parentHeaderInformation.get(1), walletOutput);
-        return childContent;
+
+        childContent.put(headerTitle.get(0), walletInput);
+        childContent.put(headerTitle.get(1), walletOutput);
+        childContent.put(headerTitle.get(2), nonWalletInput);
+        childContent.put(headerTitle.get(3), nonWalletOutput);
+
+        ExpandableListViewAdapter expandableListViewAdapter = new ExpandableListViewAdapter(getApplicationContext(), headerTitle, childContent);
+
+        expandableListView.setAdapter(expandableListViewAdapter);
     }
 
     public void copyToClipboard(String copyText,String message) {

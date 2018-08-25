@@ -100,22 +100,6 @@ public class TransactionsResponse {
         public long getTimestamp() {
             return timestamp;
         }
-
-//        public ArrayList<String> getInputs(){
-//            ArrayList<String> inputs = new ArrayList<>();
-//            for (int j = 0; j < this.inputaccountNames.size(); j++) {
-//                inputs.add(this.inputs.get(j).accountName + "\n" + Utils.formatDecred(this.inputs.get(j).previous_amount));
-//            }
-//            return inputs;
-//        }
-//
-//        public ArrayList<String> getOutputs(){
-//            ArrayList<String> outputs = new ArrayList<>();
-//            for (int j = 0; j < this.outputs.size(); j++) {
-//                outputs.add(this.outputs.get(j).address + "\n" + Utils.formatDecred(this.outputs.get(j).amount));
-//            }
-//            return outputs;
-//        }
     }
 
     public static class TransactionInput implements Serializable{
@@ -123,11 +107,10 @@ public class TransactionsResponse {
         public int index;
         public long previous_amount;
         public String accountName;
-
     }
 
     public static class TransactionOutput implements Serializable{
-        public long index, account;
+        public int index, account;
         public long amount;
         public boolean internal;
         public String address;
