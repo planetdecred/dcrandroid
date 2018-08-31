@@ -10,7 +10,6 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.dcrandroid.util.Utils;
 
@@ -53,8 +52,10 @@ public class CurrencyTextView extends AppCompatTextView {
         Matcher wholeNumber = Pattern.compile("\\d+").matcher(str);
 
         Spannable spannable = new SpannableString(str);
+
         TextAppearanceSpan span = new TextAppearanceSpan(getContext(), android.R.style.TextAppearance_Large);
         AbsoluteSizeSpan span2 = new AbsoluteSizeSpan((int) getTextSize() + 9);
+
         int startIndex, endIndex;
         if (doubleOrMoreDecimalPlaces.find()){
             startIndex = doubleOrMoreDecimalPlaces.start();

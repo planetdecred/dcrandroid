@@ -52,6 +52,9 @@ public class Constants {
             EMPTY_STRING = "",
             DASH = "-",
             NBSP = " ",
+            CONFIRMATIONS = "confirmations",
+            SENDALL = "send_all",
+            PASSPHRASE = "passphrase",
             CREDITS = "Credits";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

@@ -2,8 +2,11 @@ package com.dcrandroid.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.dcrandroid.MainApplication;
+import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 
 import java.io.BufferedReader;
@@ -250,26 +253,6 @@ public class Utils {
         return signed.longValue();
     }
 
-    public static String calculateTotalAmount(long dcr, long signedSize, boolean isSendAll){
-        BigDecimal atoms = new BigDecimal(dcr);
-        atoms = atoms.setScale(9, RoundingMode.HALF_UP);
-        if(isSendAll) {
-            BigDecimal signed = new BigDecimal(signedSize);
-            signed = signed.setScale(9, RoundingMode.HALF_UP);
-
-            BigDecimal feePerKb = new BigDecimal(0.01);
-            feePerKb = feePerKb.setScale(9, RoundingMode.HALF_UP);
-
-            signed = signed.divide(feePerKb, MathContext.DECIMAL128);
-            atoms = atoms.subtract(signed);
-        }
-
-        DecimalFormat format = new DecimalFormat();
-        format.applyPattern("#,###,###,##0.00######");
-
-        return format.format(Mobilewallet.amountCoin(atoms.longValue()));
-    }
-
     public static long decredToAtom(String amt){
         BigDecimal dcr = new BigDecimal(amt);
         dcr = dcr.setScale(9, RoundingMode.HALF_UP);
@@ -300,6 +283,27 @@ public class Utils {
         }else{
             return ip+":19108";
         }
+    }
+
+    public static void copyToClipboard(Context ctx, String copyText) {
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+            if(clipboard != null) {
+                clipboard.setText(copyText);
+            }
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
+                    ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData
+                    .newPlainText(ctx.getString(R.string.your_address), copyText);
+            if(clipboard != null)
+                clipboard.setPrimaryClip(clip);
+        }
+        Toast toast = Toast.makeText(ctx,
+                R.string.tx_hash_copy, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM | Gravity.END, 50, 50);
+        toast.show();
     }
 
     public static void backupWalletDB(final Context context){
