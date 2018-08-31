@@ -1091,8 +1091,10 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 	}
 
 	txHash, err := lw.wallet.PublishTransaction(&msgTx, serializedTransaction.Bytes(), n)
-
-	return txHash[:], err
+	if err != nil {
+		return nil, err
+	}
+	return txHash[:], nil
 }
 
 func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
