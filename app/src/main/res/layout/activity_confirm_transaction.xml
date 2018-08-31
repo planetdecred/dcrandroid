@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    tools:context=".activities.ConfirmTransaction">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Are you sure you want to send"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/confirm_tx_message"
+        />
+
+    <com.dcrandroid.view.CurrencyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.48393544 DCR"
+        android:id="@+id/amount"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/confirm_tx_message"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to DsgGWnAc2vqYTacFQt9BFF8weDL5c38RVWt"
+        android:layout_below="@+id/amount"
+        android:id="@+id/address"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/address"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:id="@+id/fee_layout"
+        >
+        <com.dcrandroid.view.CurrencyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:gravity="center"
+            android:id="@+id/fee"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/fee_layout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Amount"
+            />
+        <com.dcrandroid.view.CurrencyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="1093.584839 DCR"
+            android:id="@+id/total_amount"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirm_tx"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_shape"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:text="CONFIRM"
+        android:textAllCaps="false"
+        android:textColor="@color/buttonText"
+        android:visibility="visible" />
+
+</RelativeLayout>

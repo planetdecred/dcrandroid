@@ -56,9 +56,8 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         }
         constants = DcrConstants.getInstance();
         preferenceUtil = new PreferenceUtil(getContext());
-        //change R.layout.yourlayoutfilename for each of your fragments
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
-        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+
         ReceiveContainer = rootView.findViewById(R.id.receive_container);
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
@@ -78,11 +77,10 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                 copyToClipboard(address.getText().toString());
             }
         });
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 copyToClipboard(address.getText().toString());
-                return true;
             }
         });
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +93,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         getActivity().setTitle(getString(R.string.receive));
         startTime = System.currentTimeMillis();
         prepareAccounts();
+
         return rootView;
     }
 
