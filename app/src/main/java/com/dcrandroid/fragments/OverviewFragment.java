@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +14,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.dcrandroid.MainActivity;
@@ -28,7 +31,6 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
-import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
@@ -39,7 +41,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import mobilewallet.GetTransactionsResponse;
@@ -59,6 +60,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     PreferenceUtil util;
     RecyclerView recyclerView;
     DcrConstants constants;
+
+    private int recyclerViewHeight;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -121,6 +125,23 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
+        ViewTreeObserver vto = recyclerView.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    recyclerViewHeight = recyclerView.getHeight();
+                    if (recyclerViewHeight != 0)
+                        prepareHistoryData();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }else{
+                            recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        }
+                }
+            });
+        }
+
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         return rootView;
@@ -134,7 +155,33 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             getActivity().setTitle(getString(R.string.overview));
         }
         getBalance();
-        prepareHistoryData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(getActivity() != null){
+            getActivity().unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getActivity() != null) {
+            IntentFilter filter = new IntentFilter(Constants.BLOCK_SCAN_COMPLETE);
+            filter.addAction(Constants.NEW_TRANSACTION);
+            filter.addAction(Constants.TRANSACTION_CONFIRMED);
+            getActivity().registerReceiver(receiver, filter);
+        }
+    }
+
+    private int getMaxDisplayItems(){
+        if(getActivity() == null){
+            return 0;
+        }
+        int px = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52, getActivity().getResources().getDisplayMetrics()));
+        return recyclerViewHeight / px;
     }
 
     private void getBalance(){
@@ -173,7 +220,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         new Thread(){
             public void run(){
                 try {
-                    constants.wallet.getTransactions(OverviewFragment.this);
+                    constants.wallet.getRecentTransactions(OverviewFragment.this, constants.wallet.getBestBlock(), getMaxDisplayItems());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -204,8 +251,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 ArrayList<TransactionsResponse.TransactionItem> temp = (ArrayList<TransactionsResponse.TransactionItem>) objectInputStream.readObject();
                 if(temp.size() > 0) {
-                    if (temp.size() > 7) {
-                        transactionList.addAll(temp.subList(0, 7));
+                    if (temp.size() > getMaxDisplayItems()) {
+                        transactionList.addAll(temp.subList(0, getMaxDisplayItems()));
                     } else {
                         transactionList.addAll(temp);
                     }
@@ -239,11 +286,10 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                 }else{
                     ArrayList<TransactionsResponse.TransactionItem> transactions = response.transactions;
-                    Collections.sort(transactions, new TransactionSorter());
                     transactionList.clear();
                     if (transactions.size() > 0) {
-                        if (transactions.size() > 7) {
-                            transactionList.addAll(transactions.subList(0, 7));
+                        if (transactions.size() > getMaxDisplayItems()) {
+                            transactionList.addAll(transactions.subList(0, getMaxDisplayItems()));
                         }else{
                             transactionList.addAll(transactions);
                         }
@@ -274,7 +320,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(intent.getAction().equals(Constants.BLOCK_SCAN_COMPLETE)){
                 prepareHistoryData();
             }else if(intent.getAction().equals(Constants.NEW_TRANSACTION)){
-                System.out.println("New Transaction received. in nnew fragmennt");
+                System.out.println("New Transaction received in new fragment");
                 TransactionsResponse.TransactionItem transaction = new TransactionsResponse.TransactionItem();
                 Bundle b = intent.getExtras();
                 if (b == null){
@@ -295,7 +341,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 transaction.animate = true;
                 transactionList.add(0, transaction);
                 transactionAdapter.notifyDataSetChanged();
-                if(transactionList.size() > 7){
+                if(transactionList.size() > getMaxDisplayItems()){
                     transactionList.remove(transactionList.size() - 1);
                 }
             }else if(intent.getAction().equals(Constants.TRANSACTION_CONFIRMED)){
@@ -313,25 +359,4 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             getBalance();
         }
     };
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        System.out.println("Overview OnPause");
-        if(getActivity() != null){
-            getActivity().unregisterReceiver(receiver);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("Overview OnResume");
-        if(getActivity() != null) {
-            IntentFilter filter = new IntentFilter(Constants.BLOCK_SCAN_COMPLETE);
-            filter.addAction(Constants.NEW_TRANSACTION);
-            filter.addAction(Constants.TRANSACTION_CONFIRMED);
-            getActivity().registerReceiver(receiver, filter);
-        }
-    }
 }
