@@ -69,7 +69,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration( getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -128,7 +128,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         try {
             File path = new File(getContext().getFilesDir()+"/savedata/");
             path.mkdirs();
-            File file = new File(getContext().getFilesDir()+"/savedata/transactions");
+            File file = new File(getContext().getFilesDir()+"/savedata/history_transactions");
             file.createNewFile();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
             objectOutputStream.writeObject(transactionList);
@@ -142,7 +142,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         try {
             File path = new File(getContext().getFilesDir()+"/savedata/");
             path.mkdirs();
-            File file = new File(getContext().getFilesDir()+"/savedata/transactions");
+            File file = new File(getContext().getFilesDir()+"/savedata/history_transactions");
             if(file.exists()){
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 List<TransactionItem> temp = (List<TransactionItem>) objectInputStream.readObject();

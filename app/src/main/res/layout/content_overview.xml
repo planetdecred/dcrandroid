@@ -61,10 +61,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:text="@string/recent_transactions"/>
+                android:text="@string/recent_transactions"
+                />
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout2"
+                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.v7.widget.RecyclerView
@@ -72,7 +74,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
-                    android:layout_marginBottom="5dp"
                     />
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
