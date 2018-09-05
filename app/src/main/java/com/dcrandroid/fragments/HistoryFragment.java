@@ -1,9 +1,6 @@
 package com.dcrandroid.fragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,6 +47,8 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
     private DcrConstants constants;
+
+    private boolean needsUpdate = false,  isForeground;
 
     @Nullable
     @Override
@@ -110,7 +109,27 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         getActivity().setTitle(getString(R.string.history));
     }
 
-    private void prepareHistoryData(){
+    @Override
+    public void onResume() {
+        super.onResume();
+        isForeground = true;
+        if(needsUpdate){
+            needsUpdate = false;
+            prepareHistoryData();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isForeground = false;
+    }
+
+    public void prepareHistoryData(){
+        if(!isForeground){
+            needsUpdate = true;
+            return;
+        }
         swipeRefreshLayout.setRefreshing(true);
         loadTransactions();
         new Thread(){
@@ -207,33 +226,5 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             }
         });
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() != null && intent.getAction().equals(Constants.BLOCK_SCAN_COMPLETE)){
-                prepareHistoryData();
-            }
-        }
-    };
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        System.out.println("History OnPause");
-        if(getActivity() != null){
-            getActivity().unregisterReceiver(receiver);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("History OnResume");
-        if(getActivity() != null) {
-            IntentFilter filter = new IntentFilter(Constants.BLOCK_SCAN_COMPLETE);
-            getActivity().registerReceiver(receiver, filter);
-        }
     }
 }

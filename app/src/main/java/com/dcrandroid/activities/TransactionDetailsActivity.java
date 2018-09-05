@@ -212,7 +212,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 boolean nullScript = output.getBoolean("NullScript");
 
-                walletOutput.add(address + "(external) \n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR (external)"));
+                walletOutput.add(address + " (external) \n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR"));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);

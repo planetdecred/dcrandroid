@@ -41,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import mobilewallet.GetTransactionsResponse;
@@ -62,6 +63,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     DcrConstants constants;
 
     private int recyclerViewHeight;
+
+    private boolean needsUpdate = false,  isForeground;
 
     @Nullable
     @Override
@@ -157,25 +160,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         getBalance();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(getActivity() != null){
-            getActivity().unregisterReceiver(receiver);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(getActivity() != null) {
-            IntentFilter filter = new IntentFilter(Constants.BLOCK_SCAN_COMPLETE);
-            filter.addAction(Constants.NEW_TRANSACTION);
-            filter.addAction(Constants.TRANSACTION_CONFIRMED);
-            getActivity().registerReceiver(receiver, filter);
-        }
-    }
-
     private int getMaxDisplayItems(){
         if(getActivity() == null){
             return 0;
@@ -213,14 +197,27 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }.start();
     }
 
-    private void prepareHistoryData(){
-        swipeRefreshLayout.setRefreshing(true);
+    public void prepareHistoryData(){
+        if(!isForeground){
+            needsUpdate = true;
+            return;
+        }
+        if(getActivity() == null){
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
         transactionList.clear();
         loadTransactions();
         new Thread(){
             public void run(){
                 try {
-                    constants.wallet.getRecentTransactions(OverviewFragment.this, constants.wallet.getBestBlock(), getMaxDisplayItems());
+                    getBalance();
+                    constants.wallet.getTransactions(OverviewFragment.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -257,7 +254,15 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                         transactionList.addAll(temp);
                     }
                 }
-                transactionAdapter.notifyDataSetChanged();
+                if(getActivity() == null){
+                    return;
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        transactionAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -267,6 +272,22 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
         prepareHistoryData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isForeground = true;
+        if(needsUpdate){
+            needsUpdate = false;
+            prepareHistoryData();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isForeground = false;
     }
 
     @Override
@@ -286,6 +307,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                 }else{
                     ArrayList<TransactionsResponse.TransactionItem> transactions = response.transactions;
+                    Collections.reverse(transactions);
                     transactionList.clear();
                     if (transactions.size() > 0) {
                         if (transactions.size() > getMaxDisplayItems()) {
@@ -311,52 +333,26 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() == null){
-                return;
-            }
-            if(intent.getAction().equals(Constants.BLOCK_SCAN_COMPLETE)){
-                prepareHistoryData();
-            }else if(intent.getAction().equals(Constants.NEW_TRANSACTION)){
-                System.out.println("New Transaction received in new fragment");
-                TransactionsResponse.TransactionItem transaction = new TransactionsResponse.TransactionItem();
-                Bundle b = intent.getExtras();
-                if (b == null){
-                    System.out.println("Bundle is null");
-                    return;
-                }
-                transaction.timestamp = b.getLong(Constants.TIMESTAMP, 0);
-                transaction.fee = b.getLong(Constants.FEE, 0);
-                transaction.type = b.getString(Constants.TYPE);
-                transaction.hash = b.getString(Constants.HASH);
-                transaction.height = b.getInt(Constants.HEIGHT, 0);
-                transaction.amount = b.getLong(Constants.AMOUNT, 0);
-                transaction.direction = b.getInt(Constants.DIRECTION, -1);
-                transaction.inputs = (ArrayList<TransactionsResponse.TransactionInput>) b.getSerializable(Constants.INPUTS);
-                transaction.outputs = (ArrayList<TransactionsResponse.TransactionOutput>) b.getSerializable(Constants.OUTPUTS);
-                transaction.totalInput = b.getLong(Constants.TOTAL_INPUT, 0);
-                transaction.totalOutputs = b.getLong(Constants.TOTAL_OUTPUT, 0);
-                transaction.animate = true;
-                transactionList.add(0, transaction);
-                transactionAdapter.notifyDataSetChanged();
-                if(transactionList.size() > getMaxDisplayItems()){
-                    transactionList.remove(transactionList.size() - 1);
-                }
-            }else if(intent.getAction().equals(Constants.TRANSACTION_CONFIRMED)){
-                String hash = intent.getStringExtra(Constants.HASH);
-                for(int i = 0; i < transactionList.size(); i++){
-                    if(transactionList.get(i).hash.equals(hash)){
-                        TransactionsResponse.TransactionItem transaction = transactionList.get(i);
-                        transaction.height = intent.getIntExtra(Constants.HEIGHT, -1);
-                        transactionList.set(i, transaction);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    }
-                }
-            }
-            getBalance();
+    public void newTransaction(TransactionsResponse.TransactionItem transaction){
+        transaction.animate = true;
+        transactionList.add(0, transaction);
+        transactionAdapter.notifyDataSetChanged();
+        if(transactionList.size() > getMaxDisplayItems()){
+            transactionList.remove(transactionList.size() - 1);
         }
-    };
+        getBalance();
+    }
+
+    public void transactionConfirmed(String hash, int height){
+        for(int i = 0; i < transactionList.size(); i++){
+            if(transactionList.get(i).hash.equals(hash)){
+                TransactionsResponse.TransactionItem transaction = transactionList.get(i);
+                transaction.height = height;
+                transactionList.set(i, transaction);
+                transactionAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
+        getBalance();
+    }
 }
