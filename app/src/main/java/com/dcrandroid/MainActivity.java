@@ -68,12 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Thread blockUpdate;
 
     @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        System.out.println("OnLowMemory");
-    }
-
-    @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
         System.out.println("Memory Trim: "+level);
@@ -182,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
 
         constants.wallet.transactionNotification(this);
-        
+
         connectToDecredNetwork();
     }
 
@@ -471,15 +465,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             JSONObject obj = new JSONObject(s);
 
-            Intent newTransactionIntent = new Intent(Constants.NEW_TRANSACTION);
-            Bundle b = new Bundle();
-            b.putLong(Constants.TIMESTAMP ,obj.getLong(Constants.TIMESTAMP));
-            b.putLong(Constants.FEE, obj.getLong(Constants.FEE));
-            b.putString(Constants.TYPE, obj.getString(Constants.TYPE));
-            b.putString(Constants.HASH, obj.getString(Constants.HASH));
-            b.putInt(Constants.HEIGHT, obj.getInt(Constants.HEIGHT));
-            b.putLong(Constants.AMOUNT, obj.getLong(Constants.AMOUNT));
-            b.putInt(Constants.DIRECTION, obj.getInt(Constants.DIRECTION));
+            TransactionsResponse.TransactionItem transaction = new TransactionsResponse.TransactionItem();
+
+            transaction.timestamp = obj.getLong(Constants.TIMESTAMP);
+            transaction.fee = obj.getLong(Constants.FEE);
+            transaction.type = obj.getString(Constants.TYPE);
+            transaction.hash = obj.getString(Constants.HASH);
+            transaction.height = obj.getInt(Constants.HEIGHT);
+            transaction.amount = obj.getLong(Constants.AMOUNT);
+            transaction.direction = obj.getInt(Constants.DIRECTION);
             long totalInput = 0, totalOutput = 0;
             ArrayList<TransactionsResponse.TransactionInput> inputs = new ArrayList<>();
             JSONArray debits = obj.getJSONArray(Constants.DEBITS);
@@ -506,12 +500,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 output.amount = credit.getLong(Constants.AMOUNT);
                 totalOutput += credit.getLong(Constants.AMOUNT);
             }
-            b.putLong(Constants.TOTAL_INPUT, totalInput);
-            b.putSerializable(Constants.INPUTS, inputs);
-            b.putLong(Constants.TOTAL_OUTPUT, totalOutput);
-            b.putSerializable(Constants.OUTPUTS, outputs);
-            newTransactionIntent.putExtras(b);
-            sendBroadcast(newTransactionIntent);
+            transaction.totalInput = totalInput;
+            transaction.totalOutputs = totalOutput;
+            transaction.inputs = inputs;
+            transaction.outputs = outputs;
+
+            if(fragment instanceof OverviewFragment){
+                OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                overviewFragment.newTransaction(transaction);
+            }
+
             if(util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
                 double fee = obj.getDouble(Constants.FEE);
                 if (fee == 0) {
@@ -532,11 +530,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onTransactionConfirmed(String hash, int height){
-        Intent confirmedTransactionIntent = new Intent(Constants.TRANSACTION_CONFIRMED)
-                .putExtra(Constants.HASH, hash)
-                .putExtra(Constants.HEIGHT, height);
-        sendBroadcast(confirmedTransactionIntent);
+    public void onTransactionConfirmed(String hash, int height) {
+        if(fragment instanceof OverviewFragment){
+            OverviewFragment overviewFragment = (OverviewFragment) fragment;
+            overviewFragment.transactionConfirmed(hash, height);
+        }
     }
 
     @Override
@@ -585,7 +583,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onEnd(int i, boolean b) {
         System.out.println("Done: "+i+"/"+constants.wallet.getBestBlock());
-        sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
+
+        if(fragment instanceof OverviewFragment){
+            OverviewFragment overviewFragment = (OverviewFragment) fragment;
+            overviewFragment.prepareHistoryData();
+        }else if(fragment instanceof HistoryFragment){
+            HistoryFragment historyFragment = (HistoryFragment) fragment;
+            historyFragment.prepareHistoryData();
+        }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -603,7 +609,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onError(int i, String s) {
         System.out.println("Block scan error: "+s);
-        sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
+
+        if(fragment instanceof OverviewFragment){
+            OverviewFragment overviewFragment = (OverviewFragment) fragment;
+            overviewFragment.prepareHistoryData();
+        }else if(fragment instanceof HistoryFragment){
+            HistoryFragment historyFragment = (HistoryFragment) fragment;
+            historyFragment.prepareHistoryData();
+        }
+
         if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
             showText(s);
         }
@@ -728,7 +742,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String status = String.format(Locale.getDefault(), "Latest Block: %d", constants.wallet.getBestBlock());
             setChainStatus(status);
             setBestBlockTime(bestBlockTimestamp);
-            sendBroadcast(new Intent(Constants.BLOCK_SCAN_COMPLETE));
+
+            if(fragment instanceof OverviewFragment){
+                OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                overviewFragment.prepareHistoryData();
+            }else if(fragment instanceof HistoryFragment){
+                HistoryFragment historyFragment = (HistoryFragment) fragment;
+                historyFragment.prepareHistoryData();
+            }
+
             startBlockUpdate();
         }
     }
