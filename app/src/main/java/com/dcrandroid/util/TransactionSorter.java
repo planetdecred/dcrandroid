@@ -1,7 +1,5 @@
 package com.dcrandroid.util;
 
-import com.dcrandroid.data.Transaction;
-
 import java.util.Comparator;
 
 /**

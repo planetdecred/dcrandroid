@@ -130,8 +130,14 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             needsUpdate = true;
             return;
         }
-        swipeRefreshLayout.setRefreshing(true);
-        loadTransactions();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                loadTransactions();
+            }
+        });
+
         new Thread(){
             public void run(){
                 try {
@@ -190,6 +196,17 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             }
         }.start();
+    }
+
+    public void newTransaction(TransactionsResponse.TransactionItem transaction){
+        transaction.animate = true;
+        transactionList.add(0, transaction);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                transactionAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

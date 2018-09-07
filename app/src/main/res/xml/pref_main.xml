@@ -82,13 +82,10 @@
             android:key="@string/key_get_peers"
             />
         <Preference
-            android:title="@string/title_discover_address"
-            android:key="@string/discover"
-            />
-        <Preference
             android:summary="@string/summary_rescan_blockchain"
             android:title="@string/title_rescan_blockchain"
             android:key="@string/key_rescan_block"
+            android:enabled="false"
             />
         <SwitchPreference
             android:defaultValue="false"

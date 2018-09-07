@@ -508,6 +508,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(fragment instanceof OverviewFragment){
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
                 overviewFragment.newTransaction(transaction);
+            }else if(fragment instanceof HistoryFragment){
+                HistoryFragment historyFragment = (HistoryFragment) fragment;
+                historyFragment.newTransaction(transaction);
             }
 
             if(util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
@@ -743,10 +746,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setChainStatus(status);
             setBestBlockTime(bestBlockTimestamp);
 
+            System.out.println("SYNCEEED: "+fragment);
+
             if(fragment instanceof OverviewFragment){
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
                 overviewFragment.prepareHistoryData();
             }else if(fragment instanceof HistoryFragment){
+                System.out.println("Calling history fragment");
                 HistoryFragment historyFragment = (HistoryFragment) fragment;
                 historyFragment.prepareHistoryData();
             }
@@ -756,7 +762,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime) {
+    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, boolean finished) {
+        if(finished){
+            updatePeerCount();
+            return;
+        }
         setConnectionStatus(getString(R.string.fetching_headers));
         String status = String.format(Locale.getDefault() , "Fetched %d Headers", fetchedHeadersCount);
         //Nanoseconds to seconds
@@ -765,7 +775,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd) {
+    public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd, boolean finished) {
+        if(finished){
+            updatePeerCount();
+            return;
+        }
         setConnectionStatus("Fetching Missing CFilters");
         System.out.println("CFilters start: "+missingCFiltersStart + " CFilters end: "+ missingCFiltersEnd);
         String status = String.format(Locale.getDefault() , "Fetched %d CFilters", missingCFiltersEnd);
@@ -784,7 +798,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onRescanProgress(int rescannedThrough) {
+    public void onRescanProgress(int rescannedThrough, boolean finished) {
+        if(finished){
+            updatePeerCount();
+            return;
+        }
         setConnectionStatus("Rescanning in progress...");
         int bestBlock = constants.wallet.getBestBlock();
         int scannedPercentage = Math.round(((float) rescannedThrough/bestBlock) * 100);
@@ -798,12 +816,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPeerConnected(int peerCount) {
         this.peerCount = peerCount;
+        if(synced)
         updatePeerCount();
     }
 
     @Override
     public void onPeerDisconnected(int peerCount) {
         this.peerCount = peerCount;
+        if(synced)
         updatePeerCount();
     }
 

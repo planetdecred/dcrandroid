@@ -53,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
             pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
-            Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
+            final Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference("network_modes");
             Preference buildDate = findPreference(getString(R.string.build_date_system));
@@ -63,15 +63,16 @@ public class SettingsActivity extends AppCompatActivity {
             buildDate.setSummary(result);
             ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
-            if(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 2){
+            if(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 1){
                 remoteNodeCertificate.setEnabled(true);
                 remoteNodeAddress.setEnabled(true);
                 peerAddress.setEnabled(false);
-            }
-            else {
+                rescanBlocks.setEnabled(true);
+            }else {
                 remoteNodeCertificate.setEnabled(false);
                 remoteNodeAddress.setEnabled(false);
                 peerAddress.setEnabled(true);
+                rescanBlocks.setEnabled(false);
             }
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.NETWORK_MODES, "0"))]);
 
@@ -83,10 +84,12 @@ public class SettingsActivity extends AppCompatActivity {
                         peerAddress.setEnabled(true);
                         remoteNodeAddress.setEnabled(false);
                         remoteNodeCertificate.setEnabled(false);
+                        rescanBlocks.setEnabled(false);
                     }else{
                         peerAddress.setEnabled(false);
                         remoteNodeAddress.setEnabled(true);
                         remoteNodeCertificate.setEnabled(true);
+                        rescanBlocks.setEnabled(true);
                     }
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.NETWORK_MODES, String.valueOf(i));
@@ -139,15 +142,6 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     String certificate = o.toString();
                     Utils.setRemoteCetificate(getActivity(),certificate);
-                    return true;
-                }
-            });
-
-            findPreference("discover").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent(getActivity(), DiscoverAddress.class);
-                    startActivity(i);
                     return true;
                 }
             });
