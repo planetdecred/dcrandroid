@@ -126,10 +126,10 @@ type DecodedOutput struct {
 type SpvSyncResponse interface {
 	OnPeerConnected(peerCount int32)
 	OnPeerDisconnected(peerCount int32)
-	OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd int32)
-	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64)
+	OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd int32, finished bool)
+	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64, finished bool)
 	OnDiscoveredAddresses(finished bool)
-	OnRescanProgress(rescannedThrough int32)
+	OnRescanProgress(rescannedThrough int32, finished bool)
 	OnSynced(synced bool)
 	/*
 	* Handled Error Codes

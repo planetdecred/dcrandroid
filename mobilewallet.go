@@ -33,6 +33,7 @@ import (
 	"github.com/decred/dcrwallet/p2p"
 	"github.com/decred/dcrwallet/spv"
 	"github.com/decred/dcrwallet/wallet"
+	"github.com/decred/dcrwallet/wallet/txauthor"
 	"github.com/decred/dcrwallet/wallet/txrules"
 	walletseed "github.com/decred/dcrwallet/walletseed"
 	"github.com/decred/slog"
@@ -332,10 +333,16 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 			syncResponse.OnSynced(sync)
 		},
 		FetchHeadersProgress: func(fetchedHeadersCount int32, lastHeaderTime int64) {
-			syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime)
+			syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, false)
+		},
+		FetchHeadersFinished: func() {
+			syncResponse.OnFetchedHeaders(0, 0, true)
 		},
 		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
-			syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd)
+			syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, false)
+		},
+		FetchMissingCFiltersFinished: func() {
+			syncResponse.OnFetchMissingCFilters(0, 0, true)
 		},
 		DiscoverAddressesStarted: func() {
 			syncResponse.OnDiscoveredAddresses(false)
@@ -350,7 +357,10 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 			}
 		},
 		RescanProgress: func(rescannedThrough int32) {
-			syncResponse.OnRescanProgress(rescannedThrough)
+			syncResponse.OnRescanProgress(rescannedThrough, false)
+		},
+		RescanFinished: func() {
+			syncResponse.OnRescanProgress(0, true)
 		},
 		PeerDisconnected: func(peerCount int32) {
 			syncResponse.OnPeerDisconnected(peerCount)
@@ -884,7 +894,6 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 func decodeTxInputs(mtx *wire.MsgTx) []DecodedInput {
 	inputs := make([]DecodedInput, len(mtx.TxIn))
 	for i, txIn := range mtx.TxIn {
-
 		inputs[i] = DecodedInput{
 			PreviousTransactionHash:  fmt.Sprintf("%02x", reverse(txIn.PreviousOutPoint.Hash[:])),
 			PreviousTransactionIndex: int32(txIn.PreviousOutPoint.Index),
@@ -1019,6 +1028,37 @@ func AmountAtom(f float64) int64 {
 	return int64(amount)
 }
 
+type txChangeSource struct {
+	version uint16
+	script  []byte
+}
+
+func (src *txChangeSource) Script() ([]byte, uint16, error) {
+	return src.script, src.version, nil
+}
+
+func (src *txChangeSource) ScriptSize() int {
+	return len(src.script)
+}
+
+func makeTxChangeSource(destAddr string) (*txChangeSource, error) {
+	addr, err := dcrutil.DecodeAddress(destAddr)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	pkScript, err := txscript.PayToAddrScript(addr)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	changeSource := &txChangeSource{
+		script:  pkScript,
+		version: txscript.DefaultScriptVersion,
+	}
+	return changeSource, nil
+}
+
 func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAccount int32, requiredConfirmations int32, sendAll bool) (*UnsignedTransaction, error) {
 	// output destination
 	addr, err := dcrutil.DecodeAddress(destAddr)
@@ -1036,6 +1076,7 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 	// pay output
 	outputs := make([]*wire.TxOut, 0)
 	var algo wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmAll
+	var changeSource txauthor.ChangeSource
 	if !sendAll {
 		algo = wallet.OutputSelectionAlgorithmDefault
 		output := &wire.TxOut{
@@ -1044,12 +1085,18 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 			PkScript: pkScript,
 		}
 		outputs = append(outputs, output)
+	} else {
+		changeSource, err = makeTxChangeSource(destAddr)
+		if err != nil {
+			log.Error(err)
+			return nil, err
+		}
 	}
 	feePerKb := txrules.DefaultRelayFeePerKb
 
 	// create tx
 	tx, err := lw.wallet.NewUnsignedTransaction(outputs, feePerKb, uint32(srcAccount),
-		requiredConfirmations, algo, nil)
+		requiredConfirmations, algo, changeSource)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -1111,6 +1158,7 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 	// pay output
 	outputs := make([]*wire.TxOut, 0)
 	var algo wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmAll
+	var changeSource txauthor.ChangeSource
 	if !sendAll {
 		algo = wallet.OutputSelectionAlgorithmDefault
 		output := &wire.TxOut{
@@ -1119,11 +1167,17 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 			PkScript: pkScript,
 		}
 		outputs = append(outputs, output)
+	} else {
+		changeSource, err = makeTxChangeSource(destAddr)
+		if err != nil {
+			log.Error(err)
+			return nil, err
+		}
 	}
 
 	// create tx
 	unsignedTx, err := lw.wallet.NewUnsignedTransaction(outputs, txrules.DefaultRelayFeePerKb, uint32(srcAccount),
-		requiredConfs, algo, nil)
+		requiredConfs, algo, changeSource)
 	if err != nil {
 		log.Error(err)
 		return nil, err
