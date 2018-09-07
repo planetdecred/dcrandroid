@@ -31,6 +31,7 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
+import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.view.CurrencyTextView;
@@ -94,6 +95,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                if (transactionList.size() <= position || position < 0) {
+                    return;
+                }
                 TransactionsResponse.TransactionItem history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
                 Bundle extras = new Bundle();
@@ -307,7 +311,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                 }else{
                     ArrayList<TransactionsResponse.TransactionItem> transactions = response.transactions;
-                    Collections.reverse(transactions);
+                    Collections.sort(transactions, new TransactionSorter());
                     transactionList.clear();
                     if (transactions.size() > 0) {
                         if (transactions.size() > getMaxDisplayItems()) {
@@ -336,10 +340,15 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void newTransaction(TransactionsResponse.TransactionItem transaction){
         transaction.animate = true;
         transactionList.add(0, transaction);
-        transactionAdapter.notifyDataSetChanged();
         if(transactionList.size() > getMaxDisplayItems()){
             transactionList.remove(transactionList.size() - 1);
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                transactionAdapter.notifyDataSetChanged();
+            }
+        });
         getBalance();
     }
 
