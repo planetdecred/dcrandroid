@@ -17,12 +17,12 @@ import android.widget.Toast;
 
 import com.dcrandroid.adapter.ExpandableListViewAdapter;
 import com.dcrandroid.R;
+import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.view.CurrencyTextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -90,12 +90,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         loadInOut(inputs, outputs);
 
-        CurrencyTextView value = findViewById(R.id.tx_dts_value);
+        TextView value = findViewById(R.id.tx_dts_value);
         TextView date = findViewById(R.id.tx_date);
         TextView status = findViewById(R.id.tx_dts__status);
         TextView txType = findViewById(R.id.txtype);
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
-        CurrencyTextView transactionFee = findViewById(R.id.tx_fee);
+        TextView transactionFee = findViewById(R.id.tx_fee);
         final TextView txHash = findViewById(R.id.tx_hash);
         txHash.setText(extras.getString(Constants.HASH));
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
@@ -136,8 +136,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        value.formatAndSetText( Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.AMOUNT,0))) +" "+getString(R.string.dcr));
-        transactionFee.formatAndSetText(Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.FEE,0))) +" "+getString(R.string.dcr));
+        value.setText(CoinFormat.Companion.format(Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.AMOUNT,0))) +" "+getString(R.string.dcr)));
+        transactionFee.setText(CoinFormat.Companion.format(Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.FEE,0))) +" "+getString(R.string.dcr)));
 
         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
         calendar.setTimeInMillis(extras.getLong(Constants.TIMESTAMP) * 1000);

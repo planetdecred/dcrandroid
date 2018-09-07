@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Balance;
+import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.view.CurrencyTextView;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     private Context context;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView accountName;
-        public CurrencyTextView total;
-        public CurrencyTextView spendable;
+        public TextView total;
+        public TextView spendable;
 
         public MyViewHolder(View view) {
             super(view);
@@ -53,8 +53,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         Account account = accountList.get(position);
         Balance balance = account.getBalance();
         holder.accountName.setText(account.getAccountName());
-        holder.spendable.formatAndSetText(Utils.formatDecred(balance.getSpendable()) +" "+ context.getString(R.string.dcr));
-        holder.total.formatAndSetText(Utils.formatDecred(balance.getTotal()) +" "+ context.getString(R.string.dcr));
+        holder.spendable.setText(CoinFormat.Companion.format(Utils.formatDecred(balance.getSpendable()) +" "+ context.getString(R.string.dcr)));
+        holder.total.setText(CoinFormat.Companion.format(Utils.formatDecred(balance.getTotal()) +" "+ context.getString(R.string.dcr)));
     }
 
     @Override

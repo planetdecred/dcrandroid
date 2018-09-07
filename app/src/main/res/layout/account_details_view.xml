@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_shadow">
     <RelativeLayout
@@ -41,8 +43,9 @@
                 android:text="@string/labeltotal"
                 android:textColor="@color/secondary_text" />
 
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/acc_dts_total"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -71,8 +74,10 @@
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
-            <com.dcrandroid.view.CurrencyTextView
+        
+            <TextView
                 android:id="@+id/acc_dts_spendable"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator12"
@@ -100,8 +105,9 @@
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/acc_dts_immature_reward"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -129,8 +135,9 @@
                 android:text="@string/label_locked_by_tickets"
                 android:textColor="@color/secondary_text" />
 
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/acc_dts_locked_bt_tcks"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator13"
@@ -158,8 +165,9 @@
                 android:padding="8dp"
                 android:textColor="@color/secondary_text" />
 
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/acc_dts_voting_auth"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator21"
@@ -185,8 +193,9 @@
                 android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
 
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/acc_dts_immature_stake_gen"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

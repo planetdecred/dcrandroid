@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,8 +30,9 @@
                 android:paddingEnd="0dp"
                 android:textSize="16sp"
                 android:textColor="@color/primary_text"/>
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/tx_dts_value"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -176,8 +178,9 @@
                 android:textColor="@color/secondary_text"
                 android:layout_below="@+id/separator17"/>
 
-            <com.dcrandroid.view.CurrencyTextView
+            <TextView
                 android:id="@+id/tx_fee"
+                app:fontFamily="@font/inconsolata_regular_family"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

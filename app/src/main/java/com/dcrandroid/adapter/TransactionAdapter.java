@@ -11,12 +11,11 @@ import android.widget.TextView;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.data.Transaction;
+import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.view.CurrencyTextView;
 
 import java.util.List;
 
@@ -32,10 +31,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private PreferenceUtil util;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private CurrencyTextView Amount;
+        private TextView Amount;
         private TextView txType;
         private TextView status;
-        private CurrencyTextView minus;
+        private TextView minus;
         private View view;
         public MyViewHolder(View view) {
             super(view);
@@ -84,7 +83,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.view.setAnimation(blinkAnim);
         }
 
-        holder.Amount.formatAndSetText(Utils.removeTrailingZeros(Mobilewallet.amountCoin(history.getAmount())) + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr));
+        holder.Amount.setText(CoinFormat.Companion.format(Utils.removeTrailingZeros(Mobilewallet.amountCoin(history.getAmount())) + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
         holder.txType.setText("");
 
         if(history.getDirection() == 0){

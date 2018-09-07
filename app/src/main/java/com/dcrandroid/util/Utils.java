@@ -60,18 +60,6 @@ public class Utils {
         }
     }
 
-    public static String getHash(byte[] mHash){
-        List<Byte> hashList = new ArrayList<>();
-        for (byte aHash : mHash) {
-            hashList.add(aHash);
-        }
-        Collections.reverse(hashList);
-        StringBuilder sb = new StringBuilder();
-        for(byte b : hashList){
-            sb.append(String.format(Locale.getDefault(),"%02x", b));
-        }
-        return sb.toString();
-    }
 
     public static byte[] getHash(String hash){
         List<String> hashList = new ArrayList<>();
@@ -99,10 +87,6 @@ public class Utils {
                     + Character.digit(s.charAt(i+1), 16));
         }
         return data;
-    }
-
-    public static String toHex(String arg) {
-        return String.format("%040x", new BigInteger(1, arg.getBytes()));
     }
 
     public static String getRemoteCertificate(Context context){

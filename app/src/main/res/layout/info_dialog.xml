@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="259dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp"
+        >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/icon"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            android:textSize="18sp"
+            android:textColor="#2DD8A3"
+            android:layout_marginTop="26dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/message"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            android:textSize="16sp"
+            android:textColor="#617386"
+            android:layout_marginTop="13dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:weightSum="2"
+        android:id="@+id/btn_layout"
+        android:background="#F3F5F6">
+
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_semibold_family"
+            android:textColor="#091440"
+            android:id="@+id/btn_negative"
+            />
+
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_semibold_family"
+            android:textColor="#2970FF"
+            android:id="@+id/btn_positive"
+            />
+    </LinearLayout>
+
+</LinearLayout>

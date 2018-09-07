@@ -16,9 +16,10 @@
         android:id="@+id/confirm_tx_message"
         />
 
-    <com.dcrandroid.view.CurrencyTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:fontFamily="@font/inconsolata_regular_family"
         android:text="0.48393544 DCR"
         android:id="@+id/amount"
         android:layout_centerHorizontal="true"
@@ -45,10 +46,11 @@
         android:layout_marginTop="10dp"
         android:id="@+id/fee_layout"
         >
-        <com.dcrandroid.view.CurrencyTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:gravity="center"
+            app:fontFamily="@font/inconsolata_regular_family"
+            android:gravity="center"
             android:id="@+id/fee"
             />
     </LinearLayout>
@@ -66,9 +68,10 @@
             android:layout_height="wrap_content"
             android:text="Total Amount"
             />
-        <com.dcrandroid.view.CurrencyTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:fontFamily="@font/inconsolata_regular_family"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:text="1093.584839 DCR"

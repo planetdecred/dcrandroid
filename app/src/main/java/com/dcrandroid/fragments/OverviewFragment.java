@@ -28,13 +28,13 @@ import com.dcrandroid.R;
 
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.view.CurrencyTextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,7 +54,7 @@ import mobilewallet.GetTransactionsResponse;
 public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
     private List<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>();
-    private CurrencyTextView tvBalance;
+    private TextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     TransactionAdapter transactionAdapter;
@@ -87,7 +87,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
-        tvBalance.formatAndSetText(Utils.formatDecred(0) + " DCR");
+        tvBalance.setText(CoinFormat.Companion.format("0 DCR"));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -191,7 +191,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tvBalance.formatAndSetText(Utils.formatDecred(finalTotalBalance) + " DCR");
+                            tvBalance.setText(CoinFormat.Companion.format(Utils.formatDecred(finalTotalBalance) + " DCR"));
                         }
                     });
                 }catch (Exception e){
