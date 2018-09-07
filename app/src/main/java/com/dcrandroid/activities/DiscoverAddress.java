@@ -13,11 +13,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
 
 
@@ -28,7 +28,7 @@ import com.dcrandroid.util.PreferenceUtil;
 public class DiscoverAddress extends AppCompatActivity implements Animation.AnimationListener {
     Animation animRotate;
     ImageView imgAnim;
-    MyCustomTextView tvLoading;
+    TextView tvLoading;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

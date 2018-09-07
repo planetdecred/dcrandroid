@@ -9,15 +9,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dcrandroid.MainActivity;
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.util.MyCustomTextView;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.Utils;
 
 import java.io.File;
 
@@ -31,7 +29,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     Animation animRotate;
     ImageView imgAnim;
     PreferenceUtil util;
-    MyCustomTextView tvLoading;
+    TextView tvLoading;
     Thread loadThread;
     private DcrConstants constants;
     @Override

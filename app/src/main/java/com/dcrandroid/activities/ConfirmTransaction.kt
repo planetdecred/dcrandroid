@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
@@ -15,9 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.Utils
-import com.dcrandroid.view.CurrencyTextView
 import mobilewallet.Mobilewallet
 import java.text.DecimalFormat
 import java.util.*
@@ -104,10 +103,10 @@ class ConfirmTransaction : AppCompatActivity(), View.OnClickListener {
 
         setContentView(R.layout.activity_confirm_transaction)
         findViewById<Button>(R.id.btn_confirm_tx).setOnClickListener(this)
-        val amount = findViewById<CurrencyTextView>(R.id.amount)
+        val amount = findViewById<TextView>(R.id.amount)
         val address = findViewById<TextView>(R.id.address)
-        val totalAmount = findViewById<CurrencyTextView>(R.id.total_amount)
-        val fee = findViewById<CurrencyTextView>(R.id.fee)
+        val totalAmount = findViewById<TextView>(R.id.total_amount)
+        val fee = findViewById<TextView>(R.id.fee)
 
         destinationAddress = intent.getStringExtra(Constants.ADDRESS)
         address.text = "to $destinationAddress"
@@ -122,16 +121,16 @@ class ConfirmTransaction : AppCompatActivity(), View.OnClickListener {
 
         val unsignedTransaction = wallet.constructTransaction(destinationAddress, txAmount, srcAccount, requiredConfs, sendAll)
 
-        amount.formatAndSetText(txAmount)
+        amount.text = CoinFormat.format(txAmount)
 
         val estFee = Utils.signedSizeToAtom(unsignedTransaction.estimatedSignedSize)
 
         val format = DecimalFormat()
         format.applyPattern("#.########")
 
-        fee.formatAndSetText("${format.format(Mobilewallet.amountCoin(estFee))} DCR added as a transaction fee (${format.format(unsignedTransaction.estimatedSignedSize / 1024F)} kB)")
+        fee.text = CoinFormat.format("${format.format(Mobilewallet.amountCoin(estFee))} DCR added as a transaction fee (${format.format(unsignedTransaction.estimatedSignedSize / 1024F)} kB)")
 
-        totalAmount.formatAndSetText(Mobilewallet.amountCoin(txAmount + estFee))
+        totalAmount.text = CoinFormat.format(Mobilewallet.amountCoin(txAmount + estFee))
 
     }
 }

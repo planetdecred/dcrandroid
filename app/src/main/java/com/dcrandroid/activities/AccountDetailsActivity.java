@@ -17,9 +17,9 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.view.CurrencyTextView;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -38,23 +38,23 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
         setContentView(R.layout.account_details_view);
 
-        CurrencyTextView spendable = findViewById(R.id.acc_dts_spendable);
-        spendable.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0))  +" "+ getString(R.string.dcr));
+        TextView spendable = findViewById(R.id.acc_dts_spendable);
+        spendable.setText(CoinFormat.Companion.format(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_SPENDABLE, 0))  +" "+ getString(R.string.dcr)));
 
-        CurrencyTextView total = findViewById(R.id.acc_dts_total);
-        total.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_TOTAL, 0))  +" "+ getString(R.string.dcr));
+        TextView total = findViewById(R.id.acc_dts_total);
+        total.setText(CoinFormat.Companion.format(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_TOTAL, 0))  +" "+ getString(R.string.dcr)));
 
-        CurrencyTextView immatureRewards = findViewById(R.id.acc_dts_immature_reward);
-        immatureRewards.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0))  +" "+ getString(R.string.dcr));
+        TextView immatureRewards = findViewById(R.id.acc_dts_immature_reward);
+        immatureRewards.setText(CoinFormat.Companion.format(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, 0))  +" "+ getString(R.string.dcr)));
 
-        CurrencyTextView lockedByTickets = findViewById(R.id.acc_dts_locked_bt_tcks);
-        lockedByTickets.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0))  +" "+ getString(R.string.dcr));
+        TextView lockedByTickets = findViewById(R.id.acc_dts_locked_bt_tcks);
+        lockedByTickets.setText(CoinFormat.Companion.format(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, 0))  +" "+ getString(R.string.dcr)));
 
-        CurrencyTextView votingAuthority = findViewById(R.id.acc_dts_voting_auth);
-        votingAuthority.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0))  +" "+ getString(R.string.dcr));
+        TextView votingAuthority = findViewById(R.id.acc_dts_voting_auth);
+        votingAuthority.setText(CoinFormat.Companion.format(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, 0))  +" "+ getString(R.string.dcr)));
 
-        CurrencyTextView immatureStakeGeneration = findViewById(R.id.acc_dts_immature_stake_gen);
-        immatureStakeGeneration.formatAndSetText(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0))  +" "+ getString(R.string.dcr));
+        TextView immatureStakeGeneration = findViewById(R.id.acc_dts_immature_stake_gen);
+        immatureStakeGeneration.setText(CoinFormat.Companion.format(Utils.formatDecred(getIntent().getLongExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, 0))  +" "+ getString(R.string.dcr)));
 
         TextView accountNumber = findViewById(R.id.acc_dts_acc_number);
         accountNumber.setText(String.valueOf(getIntent().getIntExtra(Constants.ACCOUNT_NUMBER, 0)));
