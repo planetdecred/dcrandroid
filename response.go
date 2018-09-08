@@ -52,6 +52,7 @@ Direction
 */
 type Transaction struct {
 	Hash        string
+	Raw         string
 	Transaction []byte
 	Fee         int64
 	Timestamp   int64

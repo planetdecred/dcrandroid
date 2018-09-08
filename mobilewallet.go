@@ -11,7 +11,6 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime/debug"
-	"strconv"
 	"strings"
 	"sync"
 	"syscall"
@@ -471,14 +470,6 @@ func (lw *LibWallet) LoadActiveDataFilters() error {
 	return err
 }
 
-func int32ToString(arr []int32) []string {
-	var result []string
-	for _, i := range arr {
-		result = append(result, strconv.Itoa(int(i)))
-	}
-	return result
-}
-
 func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 	go func() {
 		n := lw.wallet.NtfnServer.TransactionNotifications()
@@ -534,6 +525,7 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 				tempTransaction := Transaction{
 					Fee:       int64(transaction.Fee),
 					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+					Raw:       fmt.Sprintf("%02x", transaction.Transaction[:]),
 					Timestamp: transaction.Timestamp,
 					Type:      transactionType(transaction.Type),
 					Credits:   &tempCredits,
@@ -738,6 +730,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 			tempTransaction := Transaction{
 				Fee:       int64(transaction.Fee),
 				Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+				Raw:       fmt.Sprintf("%02x", transaction.Transaction[:]),
 				Timestamp: transaction.Timestamp,
 				Type:      transactionType(transaction.Type),
 				Credits:   &tempCredits,
@@ -827,6 +820,7 @@ func (lw *LibWallet) GetRecentTransactions(response GetTransactionsResponse, sta
 			tempTransaction := Transaction{
 				Fee:       int64(transaction.Fee),
 				Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+				Raw:       fmt.Sprintf("%02x", transaction.Transaction[:]),
 				Timestamp: transaction.Timestamp,
 				Type:      transactionType(transaction.Type),
 				Credits:   &tempCredits,
