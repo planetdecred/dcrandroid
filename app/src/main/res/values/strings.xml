@@ -237,7 +237,7 @@
     <string name="dcrd_log_title">Node Log</string>
     <string name="dcrd_log_key">dcrd_log</string>
     <string name="i_copied_the_seed_phrase">I COPIED THE SEED PHRASE</string>
-    <string name="warninf_save_seed">Failure to keep this seed can result to theft of your entire wallet and unable to recover wallet and inability to recover your wallet</string>
+    <string name="warning_save_seed">Failure to keep this seed safe can result in theft of your entire wallet or inability to recover your wallet</string>
     <string name="setting_up_decred_wallet">Setting up Decred Wallet</string>
     <string name="title_general">General</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>

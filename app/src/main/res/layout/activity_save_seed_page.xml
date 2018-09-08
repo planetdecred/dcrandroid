@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/warninf_save_seed"
+            android:text="@string/warning_save_seed"
             android:padding="10dp"
             android:layout_weight="0.2"
             android:textColor="#fd714a"
