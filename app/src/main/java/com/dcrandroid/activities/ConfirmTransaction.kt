@@ -74,7 +74,7 @@ class ConfirmTransaction : AppCompatActivity(), View.OnClickListener {
         val txHashtv = dialogView.findViewById<TextView>(R.id.tx_hash_confirm_view)
         txHashtv.text = txHash
 
-        txHashtv.setOnClickListener { Utils.copyToClipboard(this, txHashtv.text.toString()) }
+        txHashtv.setOnClickListener { Utils.copyToClipboard(this, txHashtv.text.toString(), getString(R.string.tx_hash_copy)) }
 
         dialogBuilder.setTitle("Transaction was successful")
         dialogBuilder.setPositiveButton("OKAY") { dialog, _ ->

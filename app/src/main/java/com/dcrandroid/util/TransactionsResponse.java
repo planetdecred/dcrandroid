@@ -54,8 +54,8 @@ public class TransactionsResponse {
                 }
                 transaction.fee = tx.getLong(Constants.FEE);
                 transaction.hash = tx.getString(Constants.HASH);
+                transaction.raw = tx.getString(Constants.RAW);
                 transaction.timestamp = tx.getLong(Constants.TIMESTAMP);
-                transaction.tx = null;
                 transaction.type = tx.getString(Constants.TYPE);
                 transaction.height = tx.getInt(Constants.HEIGHT);
                 transaction.direction = tx.getInt(Constants.DIRECTION);
@@ -72,8 +72,7 @@ public class TransactionsResponse {
     }
 
     public static class TransactionItem implements Serializable{
-        public byte[] tx;
-        public String hash, type;
+        public String hash, type, raw;
         public int height, direction;
         public long fee, amount, totalInput = 0, totalOutputs = 0;
         public long timestamp;

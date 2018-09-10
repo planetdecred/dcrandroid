@@ -109,6 +109,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutputs);
                 extras.putString(Constants.TYPE, history.type);
                 extras.putString(Constants.HASH, history.hash);
+                extras.putString(Constants.RAW, history.raw);
                 extras.putInt(Constants.DIRECTION, history.getDirection());
                 extras.putSerializable(Constants.INPUTS, history.inputs);
                 extras.putSerializable(Constants.OUTPUTS, history.outputs);

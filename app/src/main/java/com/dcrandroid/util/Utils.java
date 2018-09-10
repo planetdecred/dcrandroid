@@ -269,7 +269,7 @@ public class Utils {
         }
     }
 
-    public static void copyToClipboard(Context ctx, String copyText) {
+    public static void copyToClipboard(Context ctx, String copyText, String successMessage) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.text.ClipboardManager clipboard = (android.text.ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -285,7 +285,7 @@ public class Utils {
                 clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(ctx,
-                R.string.tx_hash_copy, Toast.LENGTH_SHORT);
+                successMessage, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM | Gravity.END, 50, 50);
         toast.show();
     }
