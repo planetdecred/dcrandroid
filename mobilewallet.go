@@ -361,10 +361,10 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 		RescanFinished: func() {
 			syncResponse.OnRescanProgress(0, true)
 		},
-		PeerDisconnected: func(peerCount int32) {
+		PeerDisconnected: func(peerCount int32, addr string) {
 			syncResponse.OnPeerDisconnected(peerCount)
 		},
-		PeerConnected: func(peerCount int32) {
+		PeerConnected: func(peerCount int32, addr string) {
 			syncResponse.OnPeerConnected(peerCount)
 		},
 	}

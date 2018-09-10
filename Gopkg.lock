@@ -62,7 +62,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f5183c5f4d8a8bf56fb1bb0c242b82a1b501fc9531788d97e8ec5aecec8c4e53"
+  digest = "1:fdbe7164bdc0cc52daeab2bbf1f64cb6b3aa3ce0e30bf22be12eca2e1126f9a5"
   name = "github.com/decred/dcrd"
   packages = [
     "addrmgr",
@@ -95,11 +95,11 @@
     "wire",
   ]
   pruneopts = ""
-  revision = "a1985a4b3af502b1ec4979356240a78af6772462"
+  revision = "61cdcb81fc13d16846fa2481ae8c5fbf3ac26f75"
 
 [[projects]]
-  branch = "pr-1244"
-  digest = "1:01611f4fec4fbaf52dd1b847b0e02f13b8465562da43676895a71e4bc0d51558"
+  branch = "temp"
+  digest = "1:122c95cd81b34bb9e8e6fc002b875bee12a28735b5de809b2565856586337d19"
   name = "github.com/decred/dcrwallet"
   packages = [
     "chain",
@@ -131,7 +131,7 @@
     "walletseed",
   ]
   pruneopts = ""
-  revision = "4b07174763e49c8336a709c2148a9fae93e7a354"
+  revision = "2129e335c7f7d85b2b2c76cf0e252d076ac551f0"
   source = "github.com/raedahgroup/dcrwallet"
 
 [[projects]]
@@ -143,8 +143,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:5bf2c3aee3dcb1135588a76131b9f023d4005f1d4da005e343b1ad5386c5b64c"
+  digest = "1:ec55950e8b31d457c0794ea7779c38db8174b289593d847700bae99e1872941c"
   name = "github.com/dgraph-io/badger"
   packages = [
     ".",
@@ -155,7 +154,8 @@
     "y",
   ]
   pruneopts = ""
-  revision = "3a87f6d9c273c4a5aaf4a69eb82ecfafc8d767d7"
+  revision = "391b6d3b93e6014fe8c2971fcc0c1266e47dbbd9"
+  version = "v1.5.3"
 
 [[projects]]
   branch = "master"
@@ -174,20 +174,20 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:e2766c5ca6578e62dfd0dca4eb40d4e3470c52a92abdf8f66e57d79f4d13ef5f"
+  digest = "1:09aa5dd1332b93c96bde671bafb053249dc813febf7d5ca84e8f382ba255d67d"
   name = "github.com/gorilla/websocket"
   packages = ["."]
   pruneopts = ""
-  revision = "3ff3320c2a1756a3691521efc290b4701575147c"
-  version = "v1.3.0"
+  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
+  version = "v1.4.0"
 
 [[projects]]
-  branch = "master"
   digest = "1:5e231a323e6e25870d122520aaf1b5ccaf61714e4c72908ecea0649675eb6917"
   name = "github.com/jrick/bitset"
   packages = ["."]
   pruneopts = ""
   revision = "06eae37cdf93c699c0503c23f998167ce841974c"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:80178c385273ade9d14d523f23397468a70a3c14f9ab2b1b8c52cf35dbebe03d"
@@ -207,7 +207,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:793a79198b755828dec284c6f1325e24e09186f1b7ba818b65c7c35104ed86eb"
+  digest = "1:b2d8b39397ca07929a3de3a3fd2b6ca4c8d48e9cadaa7cf2b083e27fd9e78107"
   name = "golang.org/x/crypto"
   packages = [
     "internal/subtle",
@@ -219,11 +219,11 @@
     "scrypt",
   ]
   pruneopts = ""
-  revision = "614d502a4dac94afa3a6ce146bd1736da82514c6"
+  revision = "0709b304e793a5edb4a2c0145f281ecdc20838a4"
 
 [[projects]]
   branch = "master"
-  digest = "1:7a1f3a425a5c3cbef7ff19f11aeef1b3c057a71b4df7f396af5c62cd220ba120"
+  digest = "1:782723d6fc27d202f1943219d68d58b3f6bcab6212c85294b1ddd8b586b1d356"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -231,7 +231,7 @@
     "trace",
   ]
   pruneopts = ""
-  revision = "922f4815f713f213882e8ef45e0d315b164d705c"
+  revision = "161cd47e91fd58ac17490ef4d742dc98bb4cf60e"
 
 [[projects]]
   branch = "master"
@@ -243,11 +243,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:54d1b4c40f05586ddc168fc0f94ceebe85bdb285613ae4a5dafd5e43b52b4d0f"
+  digest = "1:ba13470bdbf1a3a82e7c64f776df86cb9f6d924f39b8171851418610a2ed781c"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = ""
-  revision = "3b58ed4ad3395d483fc92d5d14123ce2c3581fec"
+  revision = "4526dd3c8b56729dc6b5a24d9dafb1915e89945b"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -273,6 +273,7 @@
     "github.com/decred/dcrwallet/ticketbuyer",
     "github.com/decred/dcrwallet/ticketbuyer/v2",
     "github.com/decred/dcrwallet/wallet",
+    "github.com/decred/dcrwallet/wallet/txauthor",
     "github.com/decred/dcrwallet/wallet/txrules",
     "github.com/decred/dcrwallet/wallet/udb",
     "github.com/decred/dcrwallet/walletseed",
