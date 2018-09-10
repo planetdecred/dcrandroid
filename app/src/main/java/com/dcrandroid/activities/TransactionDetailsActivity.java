@@ -1,19 +1,18 @@
 package com.dcrandroid.activities;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dcrandroid.adapter.ExpandableListViewAdapter;
 import com.dcrandroid.R;
@@ -48,7 +47,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private ExpandableListView expandableListView;
     private PreferenceUtil util;
-    private String transactionType;
+    private String transactionType, txHash, rawTx;
     private Bundle extras;
 
     private void restartApp(){
@@ -96,23 +95,23 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView txType = findViewById(R.id.txtype);
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         TextView transactionFee = findViewById(R.id.tx_fee);
-        final TextView txHash = findViewById(R.id.tx_hash);
-        txHash.setText(extras.getString(Constants.HASH));
+        final TextView tvHash = findViewById(R.id.tx_hash);
+
         TextView viewOnDcrdata = findViewById(R.id.tx_view_on_dcrdata);
 
         viewOnDcrdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://testnet.dcrdata.org/tx/"+txHash.getText().toString();
+                String url = "https://testnet.dcrdata.org/tx/"+txHash;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
             }
         });
 
-        txHash.setOnClickListener(new View.OnClickListener() {
+        tvHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyToClipboard(txHash.getText().toString(),getString(R.string.tx_hash_copy));
+                Utils.copyToClipboard(TransactionDetailsActivity.this, txHash, getString(R.string.tx_hash_copy));
             }
         });
 
@@ -129,12 +128,18 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     if(groupPosition == 1){
                         String[] temp =  expandableListView.getExpandableListAdapter().getChild(1,childPosition).toString().split("\\n");
                         String hash = temp[0];
-                        copyToClipboard(hash,getString(R.string.your_address_is_copied));
+                        Utils.copyToClipboard(TransactionDetailsActivity.this, hash, getString(R.string.address_copy_text));
                     }
                 }
                 return true;
             }
         });
+
+        rawTx = extras.getString(Constants.RAW);
+
+        txHash = extras.getString(Constants.HASH);
+        tvHash.setText(txHash);
+        //DcrConstants.getInstance().wallet.getTransaction(txHash.getBytes());
 
         value.setText(CoinFormat.Companion.format(Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.AMOUNT,0))) +" "+getString(R.string.dcr)));
         transactionFee.setText(CoinFormat.Companion.format(Utils.removeTrailingZeros(Mobilewallet.amountCoin(extras.getLong(Constants.FEE,0))) +" "+getString(R.string.dcr)));
@@ -247,21 +252,23 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         expandableListView.setAdapter(expandableListViewAdapter);
     }
 
-    public void copyToClipboard(String copyText,String message) {
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            clipboard.setText(copyText);
-        } else {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
-                    getApplication().getSystemService(Context.CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData
-                    .newPlainText(getString(R.string.your_address), copyText);
-            clipboard.setPrimaryClip(clip);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.transaction_details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.tx_details_tx_hash:
+                Utils.copyToClipboard(this, txHash, getString(R.string.tx_hash_copy));
+                break;
+            case R.id.tx_details_raw_tx:
+                System.out.println("RawTx: "+rawTx);
+                Utils.copyToClipboard(this, rawTx, "Raw transaction copied to clipboard");
+                break;
         }
-        Toast toast = Toast.makeText(getApplicationContext(),
-                message, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER , 0, -190);
-        toast.show();
+        return super.onOptionsItemSelected(item);
     }
 }

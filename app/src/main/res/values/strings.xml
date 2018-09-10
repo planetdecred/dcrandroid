@@ -154,7 +154,7 @@
     <string name="blocks_scanned">blocks scanned</string>
     <string name="scanning_block">Scanning Blocks</string>
     <string name="receive">Receive</string>
-    <string name="your_address_is_copied">Copied Address</string>
+    <string name="address_copy_text">Address copied to clipboard</string>
     <string name="your_address">Your address</string>
     <string name="getting_accounts">Getting Accounts...</string>
     <string name="getting_address">Getting Address...</string>
@@ -184,7 +184,7 @@
     <string name="invalid_amount">Invalid amount</string>
     <string name="invalid_number">Invalid number</string>
     <string name="view_on_dcrdata">view on dcrdata</string>
-    <string name="tx_hash_copy">Copied transaction ID</string>
+    <string name="tx_hash_copy">Hash copied to clipboard</string>
     <string name="confirmations">Confirmation</string>
     <string name="zero_bytes">0 byte</string>
     <string name="zero_decred">0 DCR</string>

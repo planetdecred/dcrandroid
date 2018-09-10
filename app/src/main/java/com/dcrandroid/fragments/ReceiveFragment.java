@@ -1,6 +1,5 @@
 package com.dcrandroid.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.Utils;
 import com.google.zxing.EncodeHintType;
 
 import net.glxn.qrgen.android.QRCode;
@@ -110,7 +108,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             clipboard.setPrimaryClip(clip);
         }
         Toast toast = Toast.makeText(getContext(),
-                R.string.your_address_is_copied, Toast.LENGTH_SHORT);
+                R.string.address_copy_text, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, -190);
         toast.show();
     }

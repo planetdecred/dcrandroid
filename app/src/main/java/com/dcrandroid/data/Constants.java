@@ -6,6 +6,7 @@ package com.dcrandroid.data;
 
 public class Constants {
     public static final String HASH = "Hash",
+            RAW = "Raw",
             FEE = "Fee",
             TYPE = "Type",
             AMOUNT = "Amount",
