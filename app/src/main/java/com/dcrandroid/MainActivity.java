@@ -537,6 +537,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(fragment instanceof OverviewFragment){
             OverviewFragment overviewFragment = (OverviewFragment) fragment;
             overviewFragment.transactionConfirmed(hash, height);
+        }else if (fragment instanceof HistoryFragment){
+            HistoryFragment historyFragment = (HistoryFragment) fragment;
+            historyFragment.transactionConfirmed(hash, height);
         }
     }
 
@@ -552,6 +555,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setChainStatus(status);
             //Nanoseconds to seconds
             setBestBlockTime(timestamp / 1000000000);
+        }
+        if(fragment instanceof OverviewFragment){
+            OverviewFragment overviewFragment = (OverviewFragment) fragment;
+            overviewFragment.blockAttached(height);
+        } else if(fragment instanceof HistoryFragment){
+            HistoryFragment historyFragment = (HistoryFragment) fragment;
+            historyFragment.blockAttached(height);
         }
     }
 

@@ -60,6 +60,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        if(position > historyList.size() - 1){
+            return;
+        }
         TransactionItem history = historyList.get(position);
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();

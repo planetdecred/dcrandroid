@@ -1,9 +1,6 @@
 package com.dcrandroid.fragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,11 +25,12 @@ import com.dcrandroid.R;
 
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.data.Transaction;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.RecyclerTouchListener;
-import com.dcrandroid.util.TransactionSorter;
+import com.dcrandroid.util.TransactionComparator;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.Utils;
 
@@ -63,7 +61,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     RecyclerView recyclerView;
     DcrConstants constants;
 
-    private int recyclerViewHeight;
+    private int recyclerViewHeight, latestTransactionHeight;
 
     private boolean needsUpdate = false,  isForeground;
 
@@ -258,6 +256,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     } else {
                         transactionList.addAll(temp);
                     }
+                    TransactionsResponse.TransactionItem latestTx = Collections.min(temp, new TransactionComparator.MinConfirmationSort());
+                    latestTransactionHeight = latestTx.getHeight() + 1;
                 }
                 if(getActivity() == null){
                     return;
@@ -312,7 +312,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                 }else{
                     ArrayList<TransactionsResponse.TransactionItem> transactions = response.transactions;
-                    Collections.sort(transactions, new TransactionSorter());
+                    Collections.sort(transactions, new TransactionComparator.TimestampSort());
+                    TransactionsResponse.TransactionItem latestTx = Collections.min(transactions, new TransactionComparator.MinConfirmationSort());
+                    latestTransactionHeight = latestTx.getHeight() + 1;
                     transactionList.clear();
                     if (transactions.size() > 0) {
                         if (transactions.size() > getMaxDisplayItems()) {
@@ -344,6 +346,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         if(transactionList.size() > getMaxDisplayItems()){
             transactionList.remove(transactionList.size() - 1);
         }
+        latestTransactionHeight = transaction.getHeight() + 1;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -358,11 +361,31 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(transactionList.get(i).hash.equals(hash)){
                 TransactionsResponse.TransactionItem transaction = transactionList.get(i);
                 transaction.height = height;
+                latestTransactionHeight = transaction.getHeight() + 1;
                 transactionList.set(i, transaction);
                 transactionAdapter.notifyDataSetChanged();
                 break;
             }
         }
         getBalance();
+    }
+
+    public void blockAttached(int height){
+        if((height - latestTransactionHeight) < 2){
+            for(int i = 0; i < transactionList.size(); i++){
+                TransactionsResponse.TransactionItem tx = transactionList.get(i);
+                if((height - tx.getHeight()) >= 2){
+                    continue;
+                }
+                tx.animate = true;
+                final int finalI = i;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        transactionAdapter.notifyItemChanged(finalI);
+                    }
+                });
+            }
+        }
     }
 }
