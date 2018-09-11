@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary2">#3F51B5</color>
     <color name="colorPrimaryDark2">#303F9F</color>
-    <color name="colorPrimary">#0C1E3E</color>
-    <color name="colorPrimaryDark">#0C1E3E</color>
+    <color name="colorPrimary">#F3F5F6</color>
+    <color name="colorPrimaryDark">#F3F5F6</color>
     <color name="colorAccent">#888a8b</color>
     <color name="secondaryTextColor">#617386</color>
     <color name="colorText">#11161b</color>
@@ -14,7 +14,7 @@
     <color name="backgcolor">#ebefee</color>
     <color name="backgcolorwhite">#ffffff</color>
     <color name="ButtonColor">#2970FF</color>
-    <color name="bacgroundColor">#0C1E3E</color>
+    <color name="bacgroundColor">#F3F5F6</color>
     <color name="bacgroundTxColor">#f2f6f7</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>

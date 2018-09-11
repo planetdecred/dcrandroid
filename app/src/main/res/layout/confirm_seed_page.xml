@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:padding="8dp"
             android:text="Seed phrase verification..."
-            android:textColor="#fff"
+            android:textColor="#091440"
             android:textSize="20sp" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:paddingEnd="8dp"
             android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
             android:textAllCaps="false"
-            android:textColor="#c4cbd2"
+            android:textColor="#596D81"
             android:textSize="14sp" />
 
     </LinearLayout>

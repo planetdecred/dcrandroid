@@ -97,7 +97,7 @@
                 android:maxLines="1"
                 android:paddingBottom="3dp"
                 android:paddingTop="8dp"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="#4A92FF"
                 android:textColorHint="#A7AFBC"
                 android:textSize="15sp" />
 
