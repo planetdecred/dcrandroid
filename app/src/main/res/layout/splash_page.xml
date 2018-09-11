@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bacgroundColor"
-    android:gravity="center">
+    android:background="@color/colorPrimary"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/decred_logo"
         android:id="@+id/splashscreen_icon"
-       />
+        android:layout_width="91.3dp"
+        android:layout_height="104.31dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/decred_logo" />
+
     <TextView
+        android:id="@+id/loading_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="39.8dp"
         android:text="@string/loading"
-        android:textColor="#fff"
-        android:textSize="20sp"
-        android:id="@+id/loading_status"
-        app:fontFamily="@font/inconsolata_regular_family"
-        />
+        android:textColor="@color/auth_text_color"
+        android:textSize="14sp"
+        app:fontFamily="@font/source_sans_pro_regular" />
 </LinearLayout>

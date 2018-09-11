@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary2">#3F51B5</color>
     <color name="colorPrimaryDark2">#303F9F</color>
-    <color name="colorPrimary">#0C1E3E</color>
-    <color name="colorPrimaryDark">#0C1E3E</color>
+    <color name="colorPrimary">#F3F5F6</color>
+    <color name="colorPrimaryDark">#F3F5F6</color>
     <color name="colorAccent">#888a8b</color>
     <color name="secondaryTextColor">#617386</color>
     <color name="colorText">#11161b</color>
@@ -20,11 +20,14 @@
     <color name="secondary_text">#727272</color>
     <color name="color_pendng_tx">#3d659c</color>
     <color name="color_confirmed_tx">#55bb97</color>
-    <color name="button2Color">#FFF45845</color>
+    <color name="button2Color">#c4cbd2</color>
     <color name="seedColor">#D4F0FD</color>
     <color name="nedw">#F4F6F6</color>
     <color name="green">#1dc54c</color>
     <color name="green2">#60d982</color>
+
+    <color name="auth_text_color">#091440</color>
+    <color name="auth_text_color_description">#596D81</color>
 
     <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

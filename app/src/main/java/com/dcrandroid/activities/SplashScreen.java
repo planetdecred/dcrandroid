@@ -32,13 +32,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     TextView tvLoading;
     Thread loadThread;
     private DcrConstants constants;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!isTaskRoot()){
+        if (!isTaskRoot()) {
             final Intent intent = getIntent();
             final String intentAction = intent.getAction();
-            if(intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)){
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)) {
                 finish();
                 return;
             }
@@ -51,48 +52,49 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void onSingleClick(View v) {
 
             }
+
             @Override
             public void onDoubleClick(View v) {
-                if(loadThread != null) {
+                if (loadThread != null) {
                     loadThread.interrupt();
                 }
-                Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-                startActivityForResult(intent,2);
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivityForResult(intent, 2);
             }
         });
-        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
-        animRotate.setAnimationListener(this);
-        imgAnim.startAnimation(animRotate);
+//        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
+//        animRotate.setAnimationListener(this);
+//        imgAnim.startAnimation(animRotate);
         startup();
     }
 
-    private void startup(){
+    private void startup() {
         tvLoading = findViewById(R.id.loading_status);
         constants = DcrConstants.getInstance();
-        String homeDir = getFilesDir()+"/dcrwallet/";
+        String homeDir = getFilesDir() + "/dcrwallet/";
         constants.wallet = new LibWallet(homeDir, "badgerdb");
         constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
         constants.wallet.initLoader();
         //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
         File f = new File(homeDir, "/testnet3/wallet.db");
-        if(!f.exists()){
-            loadThread = new Thread(){
-                public void run(){
-                    try{
+        if (!f.exists()) {
+            loadThread = new Thread() {
+                public void run() {
+                    try {
                         sleep(3000);
                         createWallet();
-                    }catch (InterruptedException e){
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             };
             loadThread.start();
-        }else{
+        } else {
             load();
         }
     }
 
-    private void setText(final String str){
+    private void setText(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -101,14 +103,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         });
     }
 
-    private void createWallet(){
+    private void createWallet() {
         Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
         startActivity(i);
         finish();
     }
 
-    public void load(){
-        loadThread = new Thread(){
+    public void load() {
+        loadThread = new Thread() {
             public void run() {
                 try {
                     System.out.println("Opening");
@@ -119,29 +121,32 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     startActivity(i);
                     //Finish all the activities before this
                     ActivityCompat.finishAffinity(SplashScreen.this);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     //System.out.println("Restoring Wallet");
                     //Utils.restoreWalletDB(SplashScreen.this);
                     //load();
                 }
-            }};
+            }
+        };
         loadThread.start();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 2){
+        if (requestCode == 2) {
             startup();
         }
     }
 
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+    }
 
     @Override
-    public void onAnimationStart(Animation animation) {}
+    public void onAnimationStart(Animation animation) {
+    }
 
     @Override
     public void onAnimationEnd(Animation animation) {
@@ -149,7 +154,8 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     @Override
-    public void onAnimationRepeat(Animation animation) {}
+    public void onAnimationRepeat(Animation animation) {
+    }
 
     public abstract class DoubleClickListener implements View.OnClickListener {
 
@@ -160,7 +166,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         @Override
         public void onClick(View v) {
             long clickTime = System.currentTimeMillis();
-            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
+            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
                 onDoubleClick(v);
                 lastClickTime = 0;
             } else {
@@ -170,6 +176,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
 
         public abstract void onSingleClick(View v);
+
         public abstract void onDoubleClick(View v);
     }
 }
