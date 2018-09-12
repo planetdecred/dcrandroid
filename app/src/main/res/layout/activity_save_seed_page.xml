@@ -3,92 +3,112 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0C1E3E"
-    android:padding="8dp"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarSeedActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Setting up Decred Wallet"
-        android:textSize="18sp"
-        android:textColor="#fff"
-        android:id="@+id/header"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/ivBackArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@mipmap/baseline_arrow_back_black_18dp" />
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:fontFamily="@font/source_sans_pro_regular"
+            android:text="@string/setting_up_your_wallet"
+            android:textColor="@color/auth_text_color"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
+
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet."
-        android:textColor="#fff"
-        android:padding="8dp"
-        android:layout_below="@+id/header"
-        android:textSize="14sp"
         android:id="@+id/subheader"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbarSeedActivity"
+        android:fontFamily="@font/source_sans_pro_regular"
+        android:paddingHorizontal="17dp"
+        android:text="Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet."
+        android:textColor="@color/auth_text_color_description"
+        android:textSize="14sp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/tvWarning"
         android:layout_below="@+id/subheader"
-        android:layout_above="@+id/warningf"
         android:layout_marginBottom="5dp"
         android:fadeScrollbars="true"
-        >
+        android:paddingHorizontal="17dp">
+
         <com.dcrandroid.view.SeedLayout
-            android:padding="8dp"
             android:id="@+id/seedLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="350dp"
-            android:background="#0C1E3E"
-            />
+            android:layout_marginTop="17dp"
+            android:background="@color/colorPrimary"
+            android:minHeight="350dp" />
+
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/warningf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/border_error"
+    <!--<LinearLayout-->
+    <!--android:id="@+id/warningf"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:layout_marginLeft="5dp"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:background="@drawable/border_error"-->
+    <!--android:layout_marginBottom="20dp">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/border_error"-->
+    <!--&gt;-->
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@mipmap/warning"-->
+    <!--android:layout_gravity="center"/>-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+
+    <TextView
+        android:id="@+id/tvWarning"
+        android:layout_width="301dp"
+        android:layout_height="48dp"
         android:layout_above="@+id/save_seed_btn_continue"
-        android:layout_marginBottom="20dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:background="@drawable/border_error"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/warning"
-                android:layout_gravity="center"/>
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/warninf_save_seed"
-            android:padding="10dp"
-            android:layout_weight="0.2"
-            android:textColor="#fd714a"
-            android:textSize="13sp"
-            />
-    </LinearLayout>
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/source_sans_pro_regular"
+        android:gravity="center"
+        android:text="@string/warninf_save_seed"
+        android:textColor="#ED6D47"
+        android:textSize="14sp" />
+
     <Button
         android:id="@+id/save_seed_btn_continue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="232dp"
+        android:layout_height="42dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/btn_shape3"
-        android:text="I copied the seed Phrase"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/btn_shape"
+        android:fontFamily="@font/source_sans_pro_regular"
         android:padding="8dp"
-        android:layout_marginBottom="25dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:textColor="@android:color/background_light" />
+        android:text="I copied the seed Phrase"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp" />
+
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Decred Wallet</string>
+    <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
     application to stop. Please help us fix this by sending us your device specification and app log,
     all you have to do is click OK. This will help us prevent the error from occurring again</string>
@@ -237,7 +238,7 @@
     <string name="label_hash">HASH:</string>
     <string name="show_history">Show History</string>
     <string name="i_copied_the_seed_phrase">I COPIED THE SEED PHRASE</string>
-    <string name="warninf_save_seed">Failure to keep this seed can result to theft of your entire wallet and unable to recover wallet and inability to recover your wallet</string>
+    <string name="warninf_save_seed">Failure to keep this seed can result in theft of your funds and inability to recover your wallet</string>
     <string name="setting_up_decred_wallet">Setting up Decred Wallet</string>
     <string name="title_general">General</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>
@@ -288,4 +289,5 @@
     <string name="not_connected_to_peer">Not connected to any peer</string>
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
+    <string name="setting_up_your_wallet">Setting up your wallet</string>
 </resources>
