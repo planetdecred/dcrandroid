@@ -27,7 +27,8 @@
         android:padding="8dp"
         android:text="@string/create_a_private_passphrase_to_encrypt_your_wallet"
         android:gravity="center"
-        android:textSize="14sp"
+        android:textSize="18sp"
+        android:fontFamily="@font/source_sans_pro_regular"
         android:textColor="@color/auth_text_color_description"
         />
 
@@ -37,10 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/passphrase"
-        android:textColor="#fff"
+        android:textColor="@color/auth_text_color_description"
         android:maxLines="1"
+        android:textSize="14sp"
+        android:fontFamily="@font/source_sans_pro_regular"
         android:inputType="textPassword"
-        android:textColorHint="#c4cbd2" />
+        android:textColorHint="@color/hint_txt_color" />
 
     <EditText
         android:layout_width="match_parent"
@@ -50,9 +53,11 @@
         android:inputType="textPassword"
         android:id="@+id/verifyPassphrase"
         android:lines="1"
+        android:textSize="14sp"
         android:textColor="#fff"
+        android:fontFamily="@font/source_sans_pro_regular"
         android:maxLines="1"
-        android:textColorHint="#c4cbd2"/>
+        android:textColorHint="@color/hint_txt_color"/>
 
     <Button
         android:id="@+id/button_encrypt_wallet"
@@ -62,6 +67,7 @@
         android:background="@drawable/btn_shape"
         android:padding="5dp"
         android:text="@string/encrypt_wallet"
+        android:fontFamily="@font/source_sans_pro_regular"
         android:layout_gravity="center"
         android:textColor="#fff" />
     </LinearLayout>

@@ -289,4 +289,5 @@
     <string name="not_connected_to_peer">Not connected to any peer</string>
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
+    <string name="setting_up_your_wallet">Setting up your wallet</string>
 </resources>

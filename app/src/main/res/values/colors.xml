@@ -25,6 +25,7 @@
     <color name="nedw">#F4F6F6</color>
     <color name="green">#1dc54c</color>
     <color name="green2">#60d982</color>
+    <color name="hint_txt_color">#989da3</color>
 
     <color name="auth_text_color">#091440</color>
     <color name="auth_text_color_description">#596D81</color>

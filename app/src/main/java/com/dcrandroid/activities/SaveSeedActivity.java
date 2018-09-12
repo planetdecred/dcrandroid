@@ -3,10 +3,12 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,9 @@ import com.dcrandroid.view.SeedLayout;
 
 public class SaveSeedActivity extends AppCompatActivity {
     private SeedLayout saveSeedTextView;
+    private Toolbar toolbar;
+    private ImageView ivBackArrow;
+
     String seed = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,17 @@ public class SaveSeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_save_seed_page);
         Button saveSeedContBtn = findViewById(R.id.save_seed_btn_continue);
         saveSeedTextView = findViewById(R.id.seedLayout);
+        toolbar = findViewById(R.id.toolbarSeedActivity);
+        setSupportActionBar(toolbar);
+
+        ivBackArrow = findViewById(R.id.ivBackArrow);
+        ivBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         LayoutInflater layoutInflater = getLayoutInflater();
 
         DcrConstants constants = DcrConstants.getInstance();
