@@ -3,11 +3,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9569a7b92f7af54783a882e5d37596401540a0cd5d97201f0b7d8ef457657733"
+  digest = "1:be8511fbdf669eb267e4ba4f964b9c380ec3b95b8931ee3e89ce22ae01418b4b"
   name = "github.com/AndreasBriese/bbloom"
   packages = ["."]
   pruneopts = ""
-  revision = "28f7e881ca57bc00e028f9ede9f0d9104cfeef5e"
+  revision = "343706a395b76e5ca5c7dca46a5d937b48febc74"
 
 [[projects]]
   branch = "master"
@@ -53,16 +53,16 @@
   version = "v1.2.0"
 
 [[projects]]
-  branch = "master"
   digest = "1:9949fe0d4cc9ff8b19287545444774420e5f6ba90da135e4eb5fe8e7edc348d4"
   name = "github.com/decred/base58"
   packages = ["."]
   pruneopts = ""
   revision = "56c501706f00d9e1cfacee19a27117e12da24734"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:fdbe7164bdc0cc52daeab2bbf1f64cb6b3aa3ce0e30bf22be12eca2e1126f9a5"
+  digest = "1:48b6ca422999c5fe65c94a2a130d1adc7ffb9a9d44287d0f0b102b8293e7f8f9"
   name = "github.com/decred/dcrd"
   packages = [
     "addrmgr",
@@ -95,11 +95,11 @@
     "wire",
   ]
   pruneopts = ""
-  revision = "61cdcb81fc13d16846fa2481ae8c5fbf3ac26f75"
+  revision = "e0ce731efe2e57b25047d1983aab60e2c5f38a39"
 
 [[projects]]
-  branch = "temp"
-  digest = "1:122c95cd81b34bb9e8e6fc002b875bee12a28735b5de809b2565856586337d19"
+  branch = "badgerdb"
+  digest = "1:f297f8fb56dcd2838603d4e4cfb2ba32a807791fedade0324a9ba558370237f8"
   name = "github.com/decred/dcrwallet"
   packages = [
     "chain",
@@ -131,7 +131,7 @@
     "walletseed",
   ]
   pruneopts = ""
-  revision = "2129e335c7f7d85b2b2c76cf0e252d076ac551f0"
+  revision = "29956e49d4c03c8130356cefd39029cb03e8c2b7"
   source = "github.com/raedahgroup/dcrwallet"
 
 [[projects]]
@@ -143,7 +143,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:ec55950e8b31d457c0794ea7779c38db8174b289593d847700bae99e1872941c"
+  digest = "1:81d49e94365e7f1ed77edddf9a5482ab4ced461dab56fbf8fc2834da6c295de5"
   name = "github.com/dgraph-io/badger"
   packages = [
     ".",
@@ -154,8 +154,8 @@
     "y",
   ]
   pruneopts = ""
-  revision = "391b6d3b93e6014fe8c2971fcc0c1266e47dbbd9"
-  version = "v1.5.3"
+  revision = "99233d725dbdd26d156c61b2f42ae1671b794656"
+  version = "v1.5.4"
 
 [[projects]]
   branch = "master"
@@ -207,7 +207,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b2d8b39397ca07929a3de3a3fd2b6ca4c8d48e9cadaa7cf2b083e27fd9e78107"
+  digest = "1:61a86f0be8b466d6e3fbdabb155aaa4006137cb5e3fd3b949329d103fa0ceb0f"
   name = "golang.org/x/crypto"
   packages = [
     "internal/subtle",
@@ -219,11 +219,11 @@
     "scrypt",
   ]
   pruneopts = ""
-  revision = "0709b304e793a5edb4a2c0145f281ecdc20838a4"
+  revision = "0e37d006457bf46f9e6692014ba72ef82c33022c"
 
 [[projects]]
   branch = "master"
-  digest = "1:782723d6fc27d202f1943219d68d58b3f6bcab6212c85294b1ddd8b586b1d356"
+  digest = "1:6846191f608c0dd6109f37ca46b784f9630191ff13f86ae974135c05a4c92971"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -231,7 +231,7 @@
     "trace",
   ]
   pruneopts = ""
-  revision = "161cd47e91fd58ac17490ef4d742dc98bb4cf60e"
+  revision = "f04abc6bdfa7a0171a8a0c9fd2ada9391044d056"
 
 [[projects]]
   branch = "master"
@@ -243,11 +243,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ba13470bdbf1a3a82e7c64f776df86cb9f6d924f39b8171851418610a2ed781c"
+  digest = "1:18ebd6e65d5223778b5fc92bbf2afffb54c6ac3889bbc362df692b965f932fae"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = ""
-  revision = "4526dd3c8b56729dc6b5a24d9dafb1915e89945b"
+  revision = "b09afc3d579e346c4a7e4705953acaf6f9e551bd"
 
 [solve-meta]
   analyzer-name = "dep"

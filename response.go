@@ -141,3 +141,13 @@ type SpvSyncResponse interface {
 	 */
 	OnSyncError(code int, err error)
 }
+
+const (
+	ErrInsufficientBalance = "insufficient_balance"
+	ErrInvalid             = "invalid"
+	ErrWalletNotLoaded     = "wallet_not_loaded"
+	ErrPassphraseRequired  = "passphrase_required"
+	ErrNotConnected        = "not_connected"
+	ErrNotExist            = "not_exists"
+	ErrEmptySeed           = "empty_seed"
+)
