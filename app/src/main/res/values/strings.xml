@@ -70,19 +70,19 @@
     <string name="recent_transactions">Recent Transactions</string>
     <string name="receive_fund_privacy_info">Each time you request a payment, a new address \nis created to protect your privacy.</string>
     <string name="account">Account</string>
-    <string name="receive_funds">Receive Funds</string>
+    <string name="receive_funds">Receiving Decred</string>
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
     <string name="sending_decred">Sending Decred</string>
     <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
     <string name="destination_address">" "Destination Address</string>
     <string name="amount_dcr">" "Amount</string>
-    <string name="max">MAX</string>
+    <string name="max">SEND MAX</string>
     <string name="send">Send</string>
     <string name="_0_bytes">0 bytes</string>
     <string name="estimate_size">Estimate Size:</string>
     <string name="_0_dcr">0 DCR</string>
-    <string name="fee">Fee:</string>
+    <string name="fee">Estimated Fee:</string>
     <string name="total_sending">Total Sending:</string>
     <string name="scan">scan</string>
     <string name="from">From:</string>
@@ -107,7 +107,7 @@
     <string name="current_height">Current height</string>
     <string name="banscore">Banscore</string>
     <string name="syncode">Syncode</string>
-    <string name="loading">Loading</string>
+    <string name="loading">Loading...</string>
     <string name="transaction">Transaction</string>
     <string name="TxType">Type</string>
     <string name="status">Status</string>
@@ -290,4 +290,8 @@
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
     <string name="setting_up_your_wallet">Setting up your wallet</string>
+    <string name="send_in_dcr">Send in DCR:</string>
+    <string name="send_in_usd">Send in USD:</string>
+    <string name="usd">USD</string>
+    <string name="_0_00_dcr">0.00 DCR</string>
 </resources>

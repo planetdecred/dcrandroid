@@ -9,10 +9,16 @@
 
     <ImageView
         android:id="@+id/splashscreen_icon"
+        android:layout_width="90.22dp"
+        android:layout_height="75.18dp"
+        android:src="@drawable/simple_logo" />
+
+    <ImageView
+        android:id="@+id/appNameIcon"
         android:layout_width="91.3dp"
-        android:layout_height="104.31dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/decred_logo" />
+        android:layout_height="29dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/simple_app_name_logo" />
 
     <TextView
         android:id="@+id/loading_status"

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -62,8 +62,8 @@ import java.util.Locale;
 
 import mobilewallet.Mobilewallet;
 import mobilewallet.UnsignedTransaction;
-
 import static android.app.Activity.RESULT_OK;
+
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -89,11 +89,14 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     private double exchangeRate = -1;
     private BigDecimal exchangeDecimal;
     private DecimalFormat format;
+    private TextView tvSendInDcr, tvTotalSending, tvSendMax;
+    private Button btnSend;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View vi = inflater.inflate(R.layout.content_send, container, false);
+        View vi = inflater.inflate(R.layout. content_send, container, false);
 
         address = vi.findViewById(R.id.send_dcr_add);
         amount = vi.findViewById(R.id.send_dcr_amount);
@@ -107,8 +110,12 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         exchangeDetails = vi.findViewById(R.id.exchange_details);
         exchangeUnavailable = vi.findViewById(R.id.rate_unavailable);
         equivalentAmount = vi.findViewById(R.id.equivalent_tv);
-        exchangeCurrency = vi.findViewById(R.id.send_exchange_currency);
+        tvSendInDcr = vi.findViewById(R.id.amount_tv);
+        tvTotalSending = vi.findViewById(R.id.tvTotalSending);
+        tvSendMax = vi.findViewById(R.id.send_dcr_all);
+        btnSend = vi.findViewById(R.id.send_btn_tx);
 
+        //exchangeCurrency = vi.findViewById(R.id.send_exchange_currency);
         accountSpinner.setOnItemSelectedListener(this);
 
         vi.findViewById(R.id.send_dcr_scan).setOnClickListener(new View.OnClickListener() {
@@ -119,7 +126,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             }
         });
 
-        vi.findViewById(R.id.send_btn_tx).setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String destAddress = address.getText().toString();
@@ -210,6 +217,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     exchangeAmount.removeTextChangedListener(exchangeWatcher);
                     exchangeAmount.setText(format.format(convertedAmount.doubleValue()));
                     exchangeAmount.addTextChangedListener(exchangeWatcher);
+                    tvSendMax.setTextColor(Color.parseColor("#ED6D47"));
+                    btnSend.setTextColor(Color.parseColor("#2970FF"));
                 } else {
                     exchangeAmount.removeTextChangedListener(exchangeWatcher);
                     exchangeAmount.setText(null);
@@ -244,6 +253,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
                 amount.removeTextChangedListener(amountWatcher);
                 amount.setText(format.format(convertedAmount.doubleValue()));
+                tvTotalSending.setText(amount.getText().toString());
                 amount.addTextChangedListener(amountWatcher);
             }
 
@@ -271,15 +281,15 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             System.out.println("Context is null");
             return;
         }
-        dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        dataAdapter = new ArrayAdapter<>(getContext(), R.layout.custom_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(R.layout.custom_dropdown_item);
         accountSpinner.setAdapter(dataAdapter);
 
         if(Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
             new GetExchangeRate(this).execute();
         }
 
-        getActivity().findViewById(R.id.send_dcr_all).setOnClickListener(new View.OnClickListener() {
+        tvSendMax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isSendAll = true;
@@ -313,8 +323,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     }
 
     private void setInvalid(){
-        estimateSize.setText(Constants.DASH);
-        estimateFee.setText(Constants.DASH);
+        estimateSize.setText(R.string._0_bytes);
+        estimateFee.setText(R.string._0_00_dcr);
         balanceRemaining.setText(Constants.DASH);
     }
 
@@ -591,8 +601,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         });
 
         AlertDialog b = dialogBuilder.create();
+        b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.parseColor("#2970FF"));
+        b.getButton(b.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#091440"));
         b.show();
-        b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
     }
 
     public void showTxConfirmDialog(final String txHash) {
@@ -764,7 +775,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
                     sendFragment.exchangeAmount.setVisibility(View.VISIBLE);
                     sendFragment.equivalentAmount.setVisibility(View.VISIBLE);
-                    sendFragment.exchangeCurrency.setVisibility(View.VISIBLE);
+                    sendFragment.equivalentAmount.setTextColor(Color.parseColor("#617386"));
+                    sendFragment.tvSendInDcr.setTextColor(Color.parseColor("#617386"));
+                    //sendFragment.exchangeCurrency.setVisibility(View.VISIBLE);
                 }else{
                     Toast.makeText(sendFragment.getContext(), "Exchange failed with error: "+apiResult.getString("message"), Toast.LENGTH_SHORT).show();
                 }

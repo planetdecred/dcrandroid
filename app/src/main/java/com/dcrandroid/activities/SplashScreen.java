@@ -62,9 +62,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 startActivityForResult(intent, 2);
             }
         });
-//        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
-//        animRotate.setAnimationListener(this);
-//        imgAnim.startAnimation(animRotate);
+        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
+        animRotate.setAnimationListener(this);
+        imgAnim.startAnimation(animRotate);
         startup();
     }
 

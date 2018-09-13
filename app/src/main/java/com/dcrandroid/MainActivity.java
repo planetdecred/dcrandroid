@@ -43,7 +43,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.*;
-
 import mobilewallet.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
@@ -149,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mainApplication = (MainApplication) getApplicationContext();
 
         setContentView(R.layout.activity_main);
-        
         initViews();
         
         registerNotificationChannel();

@@ -43,7 +43,7 @@
         android:textSize="14sp"
         android:fontFamily="@font/source_sans_pro_regular"
         android:inputType="textPassword"
-        android:textColorHint="@color/hint_txt_color" />
+        android:textColorHint="@color/secondaryTextColor" />
 
     <EditText
         android:layout_width="match_parent"
@@ -57,7 +57,7 @@
         android:textColor="#fff"
         android:fontFamily="@font/source_sans_pro_regular"
         android:maxLines="1"
-        android:textColorHint="@color/hint_txt_color"/>
+        android:textColorHint="@color/secondaryTextColor"/>
 
     <Button
         android:id="@+id/button_encrypt_wallet"

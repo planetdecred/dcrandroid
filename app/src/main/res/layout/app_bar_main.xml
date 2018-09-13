@@ -15,10 +15,12 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="?android:attr/actionBarSize"
+            app:subtitleTextColor="@color/auth_text_color"
+            android:background="?android:attr/colorPrimary"
             app:titleTextColor="@color/auth_text_color"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            tools:targetApi="lollipop" />
 
     </android.support.design.widget.AppBarLayout>
 
