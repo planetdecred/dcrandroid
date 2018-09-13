@@ -302,5 +302,12 @@
     <string name="wallet_balance_will_be_ignored">Wallet balance will be ignored.</string>
     <string name="default_wallet">Default Wallet</string>
     <string name="make_this_wallet_default_for_all_outgoing_and_incoming_transactions">Make this wallet default for all outgoing and incoming transactions.</string>
+    
+    <!--Error Messages-->
     <string name="not_enough_funds">Not Enough Funds</string>
+    <string name="empty_seed">Empty Seed</string>
+    <string name="not_connected">Not Connected To Decred Network</string>
+    <string name="passphrase_required">Private Passphrase is required</string>
+    <string name="wallet_not_loaded">Wallet Not Loaded</string>
+    <!--/Error Messages-->
 </resources>

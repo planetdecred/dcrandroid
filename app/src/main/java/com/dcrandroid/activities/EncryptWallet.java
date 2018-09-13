@@ -76,9 +76,17 @@ public class EncryptWallet extends AppCompatActivity{
                                         ActivityCompat.finishAffinity(EncryptWallet.this);
                                     }
                                 });
-                            } catch (Exception e) {
+                            } catch (final Exception e) {
                                 e.printStackTrace();
-                                //Todo: Handle Error here
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(pd.isShowing()){
+                                            pd.dismiss();
+                                        }
+                                        Toast.makeText(EncryptWallet.this, Utils.translateError(EncryptWallet.this, e), Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
                         }
                     }.start();

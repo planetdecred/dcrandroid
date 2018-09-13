@@ -358,8 +358,16 @@ public class Utils {
 
     public static String translateError(Context ctx, Exception e){
         switch (e.getMessage()){
-            case Mobilewallet.ErrInsuficientBalance:
+            case Mobilewallet.ErrInsufficientBalance:
                 return ctx.getString(R.string.not_enough_funds);
+            case Mobilewallet.ErrEmptySeed:
+                return ctx.getString(R.string.empty_seed);
+            case Mobilewallet.ErrNotConnected:
+                return ctx.getString(R.string.not_connected);
+            case Mobilewallet.ErrPassphraseRequired:
+                return ctx.getString(R.string.passphrase_required);
+            case Mobilewallet.ErrWalletNotLoaded:
+                return ctx.getString(R.string.wallet_not_loaded);
             default:
                 return e.getMessage();
         }
