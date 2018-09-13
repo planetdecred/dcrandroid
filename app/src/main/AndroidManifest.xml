@@ -81,15 +81,8 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="android.app.NativeActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="gojni" />
-        </activity>
+            android:name=".activities.ConnectionActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.GetPeersActivity"
             android:launchMode="singleTask"
