@@ -302,4 +302,5 @@
     <string name="wallet_balance_will_be_ignored">Wallet balance will be ignored.</string>
     <string name="default_wallet">Default Wallet</string>
     <string name="make_this_wallet_default_for_all_outgoing_and_incoming_transactions">Make this wallet default for all outgoing and incoming transactions.</string>
+    <string name="not_enough_funds">Not Enough Funds</string>
 </resources>

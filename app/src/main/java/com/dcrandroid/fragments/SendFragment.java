@@ -397,7 +397,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
         }catch (final Exception e){
             setInvalid();
-            error_label.setText(e.getMessage().substring(0, 1).toUpperCase() + e.getMessage().substring(1));
+            error_label.setText(Utils.translateError(getContext(), e));
         }
     }
 

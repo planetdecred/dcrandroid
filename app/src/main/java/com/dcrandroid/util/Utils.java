@@ -355,4 +355,13 @@ public class Utils {
         Collections.reverse(hashList);
         return (Byte[]) hashList.toArray();
     }
+
+    public static String translateError(Context ctx, Exception e){
+        switch (e.getMessage()){
+            case Mobilewallet.ErrInsuficientBalance:
+                return ctx.getString(R.string.not_enough_funds);
+            default:
+                return e.getMessage();
+        }
+    }
 }
