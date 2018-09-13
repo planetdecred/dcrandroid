@@ -110,7 +110,7 @@
                 android:maxEms="37"
                 android:minEms="26"
                 android:padding="5dp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="#2970FF"
                 android:textSize="14sp"
                 android:textStyle="bold" />
             <TextView
