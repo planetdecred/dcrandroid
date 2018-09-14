@@ -284,7 +284,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                                     long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + bestBlock;
 
                                     setBestBlockTime(bestBlockTimestamp);
-
                                     //6 Minutes
                                     if ((currentTime - bestBlockTimestamp) > 360) {
                                         String status = String.format(Locale.getDefault(), "Latest Block: %d of %d", bestBlock, estimatedBlocks);
@@ -583,16 +582,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onBlockAttached(int height, long timestamp) {
         this.bestBlock = height;
-        this.bestBlockTimestamp = timestamp;
+        this.bestBlockTimestamp = timestamp / 1000000000;
         if(util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
         if(synced) {
             String status = String.format(Locale.getDefault(), "Latest Block: %d", bestBlock);
             setChainStatus(status);
-            //Nanoseconds to seconds
-            setBestBlockTime(timestamp / 1000000000);
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -600,6 +596,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
                 }
             });
+            setBestBlockTime(bestBlockTimestamp);
         }
         if(fragment instanceof OverviewFragment){
             OverviewFragment overviewFragment = (OverviewFragment) fragment;
@@ -833,7 +830,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         setConnectionStatus(getString(R.string.fetching_headers));
         String status = String.format(Locale.getDefault() , "Fetched %d Headers", fetchedHeadersCount);
         //Nanoseconds to seconds
-        setBestBlockTime(lastHeaderTime / 1000000000);
+        setBestBlockTime(lastHeaderTime);
         setChainStatus(status);
     }
 
