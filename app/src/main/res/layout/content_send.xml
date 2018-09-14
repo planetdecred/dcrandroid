@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F3F6F6">
 
     <LinearLayout
@@ -18,18 +19,20 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/sending_decred"
             android:textColor="#0C1E3E"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
+            android:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
             android:textColor="#617386"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,9 +47,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/source_sans_pro_regular"
                 android:gravity="end"
                 android:text="@string/from"
-                android:textColor="#617386"
+                android:textColor="@color/secondaryTextColor87"
                 android:textSize="16sp"
 
                 />
@@ -57,7 +61,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="1dp"
-                android:background="#B6e9f9"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -69,7 +72,9 @@
                     android:layout_marginEnd="-7dp"
                     android:layout_marginRight="-7dp"
                     android:entries="@array/nav_item_activity_titles"
-                    android:gravity="start"></Spinner>
+                    android:gravity="start">
+
+                </Spinner>
             </LinearLayout>
 
         </LinearLayout>
@@ -97,9 +102,9 @@
                 android:maxLines="1"
                 android:paddingBottom="3dp"
                 android:paddingTop="8dp"
-                android:textColor="#4A92FF"
-                android:textColorHint="#A7AFBC"
-                android:textSize="15sp" />
+                android:textColor="@color/linkTxtColor"
+                android:textColorHint="@color/secondaryTextColor38"
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/send_dcr_scan"
@@ -130,104 +135,97 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="88dp"
                 android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/amount_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="30.5dp"
-                    android:text="Amount:"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="center"
-                    android:textColor="#617386" />
+                    android:text="@string/send_in_dcr"
+                    android:textColor="@color/secondaryTextColor38"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/equivalent_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="30.5dp"
                     android:layout_below="@id/amount_tv"
-                    android:text="Equivalent:"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="center"
-                    android:visibility="gone"
-                    android:textColor="#617386" />
+                    android:text="@string/send_in_usd"
+                    android:textColor="@color/secondaryTextColor38"
+                    android:textSize="16sp"
+                    android:visibility="visible" />
 
-                <android.support.v7.widget.AppCompatEditText
+
+                <EditText
                     android:id="@+id/send_dcr_amount"
-                    app:fontFamily="@font/inconsolata_regular_family"
                     android:layout_width="wrap_content"
-                    android:layout_height="30.5dp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginStart="18dp"
-                    android:layout_toEndOf="@id/amount_tv"
-                    android:layout_toRightOf="@id/amount_tv"
-                    android:background="#ABE9FB"
-                    android:hint="0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="150dp"
+                    android:layout_marginStart="150dp"
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:maxLength="17"
                     android:maxLines="1"
-                    android:paddingBottom="5dp"
-                    android:paddingEnd="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingStart="16dp"
-                    android:paddingTop="5dp"
-                    android:textColor="#0C1E3E"
-                    android:textSize="16sp" />
+                    android:minWidth="50dp"
+                    android:textColor="@color/auth_text_color"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/inconsolata_regular_family" />
 
-                <android.support.v7.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/send_exchange_amount"
-                    app:fontFamily="@font/inconsolata_regular_family"
                     android:layout_width="wrap_content"
-                    android:layout_height="30.5dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/send_dcr_amount"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toEndOf="@id/equivalent_tv"
-                    android:layout_toRightOf="@id/equivalent_tv"
-                    android:background="#ABE9FB"
-                    android:visibility="gone"
-                    android:hint="0"
+                    android:layout_marginLeft="150dp"
+                    android:layout_marginStart="150dp"
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:maxLength="17"
                     android:maxLines="1"
-                    android:paddingBottom="5dp"
-                    android:paddingEnd="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingStart="16dp"
-                    android:paddingTop="5dp"
-                    android:textColor="#0C1E3E"
-                    android:textSize="16sp" />
+                    android:minWidth="50dp"
+                    android:textColor="@color/auth_text_color"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    app:fontFamily="@font/inconsolata_regular_family" />
 
                 <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="30.5dp"
+                    android:id="@+id/tvDCR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_toEndOf="@id/send_dcr_amount"
                     android:layout_toRightOf="@id/send_dcr_amount"
-                    android:background="#6ACFC5"
+                    android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="center"
-                    android:textStyle="bold"
                     android:text="@string/dcr"
-                    android:textColor="#0C1E3E" />
+                    android:textColor="@color/auth_text_color"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
 
                 <TextView
                     android:id="@+id/send_exchange_currency"
-                    android:layout_width="50dp"
-                    android:layout_height="30.5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/send_dcr_amount"
+                    android:layout_marginTop="10dp"
                     android:layout_toEndOf="@id/send_exchange_amount"
                     android:layout_toRightOf="@id/send_exchange_amount"
-                    android:layout_below="@+id/send_dcr_amount"
-                    android:background="#6ACFC5"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="center"
-                    android:text="USD"
+                    android:text="@string/usd"
+                    android:textColor="@color/auth_text_color"
+                    android:textSize="14sp"
                     android:visibility="gone"
-                    android:layout_marginTop="5dp"
-                    android:textColor="#0C1E3E" />
+                    tools:visibility="visible" />
 
 
             </RelativeLayout>
@@ -240,7 +238,7 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:text="@string/max"
-                android:textColor="#0F1D3B"
+                android:textColor="@color/secondaryTextColor54"
                 android:textSize="14sp"
 
                 />
@@ -270,29 +268,33 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
                 android:paddingStart="10dp"
-                android:textColor="?attr/colorError" />
+                android:textColor="@color/orange" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
-                    android:text="@string/fee"
+                    android:text="@string/total_sending"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp" />
+                    android:textSize="16sp"
+                    android:visibility="visible" />
 
                 <TextView
-                    android:id="@+id/send_dcr_estimate_fee"
-                    app:fontFamily="@font/inconsolata_regular_family"
+                    android:id="@+id/tvTotalSending"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="-"
-                    android:textColor="@color/secondaryTextColor" />
+                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:text="@string/_0_00_dcr"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -304,25 +306,53 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:gravity="start"
+                    android:text="@string/fee"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/send_dcr_estimate_fee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:text="@string/_0_00_dcr"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/estimate_size"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/send_dcr_estimate_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="-"
+                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:text="@string/_0_bytes"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:visibility="invisible">
 
                 <TextView
                     android:layout_width="160dp"
@@ -334,12 +364,12 @@
 
                 <TextView
                     android:id="@+id/send_dcr_balance_remain"
-                    app:fontFamily="@font/inconsolata_regular_family"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="-"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:fontFamily="@font/inconsolata_regular_family" />
             </LinearLayout>
 
             <LinearLayout
@@ -347,8 +377,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="160dp"
@@ -367,14 +397,13 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/rate_unavailable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="#ff0004"
-                android:id="@+id/rate_unavailable"
-                android:visibility="invisible"
                 android:text="Bittrex rate unavailable (tap to retry)"
-                />
+                android:textColor="#ff0004"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <Button
@@ -382,11 +411,11 @@
             android:layout_width="90dp"
             android:layout_height="36dp"
             android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="25dp"
-            android:background="@drawable/btn_shape"
-            android:padding="5dp"
+            android:background="@drawable/btn_shape1"
             android:text="@string/send"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black38"
             android:textSize="14sp" />
     </LinearLayout>
 </ScrollView>

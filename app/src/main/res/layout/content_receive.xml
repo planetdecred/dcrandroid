@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#F4F6F6">
 
     <LinearLayout
@@ -20,17 +21,19 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="@string/receive_funds"
-                android:textSize="22sp"
-                android:textColor="#0C1E3E"
+                android:textSize="18sp"
+                android:textColor="@color/auth_text_color"
+                android:fontFamily="@font/source_sans_pro_regular"
                 android:alpha="1"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:fontFamily="@font/source_sans_pro_regular"
                 android:text="@string/receive_fund_privacy_info"
                 android:textSize="14sp"
-                android:textColor="#617386"
+                android:textColor="@color/secondaryTextColor"
                 android:alpha="1"
                 android:layout_marginTop="8dp"/>
 
@@ -48,7 +51,9 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:padding="5dp"
+                android:fontFamily="@font/source_sans_pro_regular"
                 android:layout_marginBottom="2dp"
+                android:textColor="@color/secondaryTextColor87"
                 android:text="@string/spinner_account"
                 android:textSize="16sp" />
 
@@ -85,7 +90,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="2dp"
-           >
+            >
 
             <ImageView
                 android:id="@+id/bitm"
@@ -104,15 +109,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:lines="1"
                 android:maxEms="37"
                 android:minEms="26"
+                android:fontFamily="@font/source_sans_pro_regular"
                 android:padding="5dp"
-                android:textColor="#2970FF"
+                android:textColor="@color/linkTxtColor"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                tools:text="test text"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,9 +141,10 @@
                 android:paddingRight="8dp"
                 android:paddingStart="8dp"
                 android:layout_marginBottom="10dp"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:fontFamily="@font/source_sans_pro_regular"
                 android:text="@string/generate_new_address"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="@color/buttonText"
                 android:visibility="visible" />
         </LinearLayout>

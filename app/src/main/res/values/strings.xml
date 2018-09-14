@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Decred Wallet</string>
+    <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
     application to stop. Please help us fix this by sending us your device specification and app log,
     all you have to do is click OK. This will help us prevent the error from occurring again</string>
@@ -69,19 +70,19 @@
     <string name="recent_transactions">Recent Transactions</string>
     <string name="receive_fund_privacy_info">Each time you request a payment, a new address \nis created to protect your privacy.</string>
     <string name="account">Account</string>
-    <string name="receive_funds">Receive Funds</string>
+    <string name="receive_funds">Receiving Decred</string>
     <string name="generate_new_address">Generate New Address</string>
     <string name="wallet_address">[WALLET ADDRESS]</string>
     <string name="sending_decred">Sending Decred</string>
     <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
     <string name="destination_address">" "Destination Address</string>
     <string name="amount_dcr">" "Amount</string>
-    <string name="max">MAX</string>
+    <string name="max">SEND MAX</string>
     <string name="send">Send</string>
     <string name="_0_bytes">0 bytes</string>
     <string name="estimate_size">Estimate Size:</string>
     <string name="_0_dcr">0 DCR</string>
-    <string name="fee">Fee:</string>
+    <string name="fee">Estimated Fee:</string>
     <string name="total_sending">Total Sending:</string>
     <string name="scan">scan</string>
     <string name="from">From:</string>
@@ -237,7 +238,7 @@
     <string name="label_hash">HASH:</string>
     <string name="show_history">Show History</string>
     <string name="i_copied_the_seed_phrase">I COPIED THE SEED PHRASE</string>
-    <string name="warning_save_seed">Failure to keep this seed safe can result in theft of your entire wallet or inability to recover your wallet</string>
+    <string name="warninf_save_seed">Failure to keep this seed can result in theft of your funds and inability to recover your wallet</string>
     <string name="setting_up_decred_wallet">Setting up Decred Wallet</string>
     <string name="title_general">General</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>
@@ -305,7 +306,7 @@
     <string name="wallet_balance_will_be_ignored">Wallet balance will be ignored.</string>
     <string name="default_wallet">Default Wallet</string>
     <string name="make_this_wallet_default_for_all_outgoing_and_incoming_transactions">Make this wallet default for all outgoing and incoming transactions.</string>
-    
+
     <!--Error Messages-->
     <string name="not_enough_funds">Not Enough Funds</string>
     <string name="empty_seed">Empty Seed</string>
@@ -332,4 +333,9 @@
     <string name="confirmation_required">Confirmation Required</string>
     <string name="passphrase_is_empty">Passphrase is empty</string>
     <string name="signature_copied_successfully">Signature copied successfully</string>
+    <string name="setting_up_your_wallet">Setting up your wallet</string>
+    <string name="send_in_dcr">Send in DCR:</string>
+    <string name="send_in_usd">Send in USD:</string>
+    <string name="usd">USD</string>
+    <string name="_0_00_dcr">0.00 DCR</string>
 </resources>

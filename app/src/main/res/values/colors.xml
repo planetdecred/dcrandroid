@@ -27,4 +27,15 @@
     <color name="green2">#60d982</color>
 
     <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="grey_button">#E6EAED</color>
+    <color name="black38">#61000000</color>
+    <color name="orange">#ED6D47</color>
+    <color name="secondaryTextColor87">#de617386</color>
+    <color name="secondaryTextColor38">#61617386</color>
+    <color name="secondaryTextColor54">#8a617386</color>
+    <color name="auth_text_color">#091440</color>
+    <color name="auth_text_color_description">#596D81</color>
+    <color name="linkTxtColor">#4A92FF</color>
+
+
 </resources>
