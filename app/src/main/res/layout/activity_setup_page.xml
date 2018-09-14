@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="@color/colorPrimary">
@@ -15,7 +16,7 @@
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/decred_logo"
         />
         <LinearLayout
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:layout_marginBottom="18dp"
             >
             <TextView
 
@@ -31,7 +33,7 @@
                 android:text="de"
                 android:textColor="#091440"
                 android:gravity="center"
-                android:textSize="26sp"
+                android:textSize="30sp"
                 android:textStyle="normal"
                 android:layout_gravity="bottom"/>
             <TextView
@@ -41,7 +43,7 @@
                 android:textColor="#091440"
                 android:gravity="center"
                 android:layout_gravity="bottom"
-                android:textSize="19sp"
+                android:textSize="23sp"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -53,17 +55,19 @@
             android:text="Wallet"
             android:textColor="#091440"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            app:fontFamily="@font/source_sans_pro_semibold"
             android:textStyle="normal"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
         android:textColor="#596D81"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="20dp"
         android:lineSpacingExtra="3sp"
         android:textSize="15sp"
-        android:gravity="center"/>
+        android:gravity="center"
+        />
         <Button
             android:layout_marginTop="24dp"
             android:id="@+id/button_create_wallet"
