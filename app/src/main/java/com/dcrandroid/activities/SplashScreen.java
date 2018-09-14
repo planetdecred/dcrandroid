@@ -1,5 +1,6 @@
 package com.dcrandroid.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -9,10 +10,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.InfoDialog;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 
@@ -118,8 +121,27 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                     startActivity(i);
                     //Finish all the activities before this
                     ActivityCompat.finishAffinity(SplashScreen.this);
-                }catch (Exception e){
+                }catch (final Exception e){
                     e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            InfoDialog infoDialog = new InfoDialog(SplashScreen.this)
+                                    .setDialogTitle("Failed to open wallet")
+                                    .setMessage(e.getMessage())
+                                    .setIcon(R.drawable.np_amount_withdrawal) //Temporary Icon
+                                    .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    });
+                            infoDialog.setCancelable(false);
+                            infoDialog.setCanceledOnTouchOutside(false);
+                            infoDialog.show();
+
+                        }
+                    });
                     //System.out.println("Restoring Wallet");
                     //Utils.restoreWalletDB(SplashScreen.this);
                     //load();
