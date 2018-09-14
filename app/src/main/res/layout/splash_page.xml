@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bacgroundColor"
+    android:background="@color/colorPrimary"
     android:gravity="top">
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/splashscreen_icon"
-        android:layout_width="100dp"
-        android:layout_height="85dp"
+        android:layout_width="130dp"
+        android:layout_height="110dp"
         android:src="@drawable/decred_logo"
         android:padding="16dp"
 
@@ -39,7 +39,7 @@
             android:text="de"
             android:textColor="#091440"
             android:gravity="center"
-            android:textSize="26sp"
+            android:textSize="30sp"
             android:textStyle="normal"
             android:layout_gravity="bottom"/>
         <TextView
@@ -49,7 +49,7 @@
             android:textColor="#091440"
             android:gravity="center"
             android:layout_gravity="bottom"
-            android:textSize="19sp"
+            android:textSize="23sp"
             android:textStyle="bold"/>
 
     </LinearLayout>
@@ -59,10 +59,10 @@
         android:layout_height="wrap_content"
         android:text="@string/loading"
         android:textColor="#091440"
-        android:textSize="16sp"
+        android:textSize="19sp"
         android:layout_marginTop="16dp"
         android:id="@+id/loading_status"
-        app:fontFamily="@font/inconsolata_regular_family"
+        app:fontFamily="@font/source_sans_pro_regular"
         android:layout_marginBottom="100dp"
         />
     </LinearLayout>
