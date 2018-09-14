@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="280dp"
     android:layout_height="259dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#fff"
     android:orientation="vertical">
 
@@ -12,69 +13,68 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp"
-        >
+        android:padding="5dp">
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
             android:id="@+id/icon"
-            />
+            android:layout_width="60dp"
+            android:visibility="visible"
+            android:layout_height="60dp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/title"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:textSize="18sp"
-            android:textColor="#2DD8A3"
-            android:layout_marginTop="26dp"
-            />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:textColor="#2DD8A3"
+            android:textSize="18sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
             android:id="@+id/message"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:textSize="16sp"
-            android:textColor="#617386"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
-            />
+            android:textColor="#617386"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:weightSum="2"
-        android:id="@+id/btn_layout"
-        android:background="#F3F5F6">
+        android:background="#F3F5F6"
+        android:weightSum="2">
 
         <TextView
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:visibility="invisible"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:textColor="#091440"
             android:id="@+id/btn_negative"
-            />
-
-        <TextView
-            android:layout_height="match_parent"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:visibility="invisible"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
+            android:textColor="#091440"
             android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:textColor="#2970FF"
+            android:visibility="invisible"
+            tools:text="test text"
+            tools:visibility="visible"
+            app:fontFamily="@font/source_sans_pro_semibold_family" />
+
+        <TextView
             android:id="@+id/btn_positive"
-            />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:textColor="#2970FF"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            tools:text="test text"
+            tools:visibility="visible"
+            app:fontFamily="@font/source_sans_pro_semibold_family" />
     </LinearLayout>
 
 </LinearLayout>
