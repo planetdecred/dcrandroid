@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_activated="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#2ED8A3"/>
+                </shape>
+            </item>
+            <item android:left="5dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#ffffff"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item android:state_enabled="true">
+        <color android:color="#F9FAFA"/>
+    </item>
+
+    <item android:state_enabled="false">
+        <color android:color="#8C8C8C"/>
+    </item>
+</selector>
