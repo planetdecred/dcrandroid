@@ -589,6 +589,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             setChainStatus(status);
             //Nanoseconds to seconds
             setBestBlockTime(timestamp / 1000000000);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    displayBalance();
+                    connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
+                }
+            });
         }
     }
 
