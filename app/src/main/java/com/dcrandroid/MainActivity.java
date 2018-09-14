@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.*;
 import android.os.*;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -16,7 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -24,12 +22,18 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.activities.*;
+import com.dcrandroid.adapter.NavigationListAdapter;
+import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
+import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.fragments.*;
 import com.dcrandroid.util.*;
@@ -46,12 +50,11 @@ import java.util.*;
 
 import mobilewallet.*;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        TransactionListener, BlockScanResponse, BlockNotificationError, SpvSyncResponse {
+public class MainActivity extends AppCompatActivity implements TransactionListener, BlockScanResponse,
+        BlockNotificationError, SpvSyncResponse {
 
-    private TextView chainStatus, bestBlockTime, connectionStatus;
+    private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView rescanImage, stopScan;
-    private NavigationView mNavigationView;
 
     public int pageID, menuAdd = 0;
     public static MenuItem menuOpen;
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private long bestBlockTimestamp;
     private boolean scanning = false, synced = false;
     private Thread blockUpdate;
+    private ArrayList<NavigationBarItem> items;
+    private NavigationListAdapter listAdapter;
 
     @Override
     public void onTrimMemory(int level) {
@@ -96,9 +101,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chainStatus = findViewById(R.id.chain_status);
         rescanImage = findViewById(R.id.iv_rescan_blocks);
         stopScan = findViewById(R.id.iv_stop_rescan);
+        totalBalance = findViewById(R.id.tv_total_balance);
 
-        mNavigationView = findViewById(R.id.nav_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
+        ListView mListView = findViewById(R.id.lv_nav);
+
+        String[] itemTitles = getResources().getStringArray(R.array.nav_list_titles);
+        int[] itemIcons = new int[]{R.mipmap.overview, R.mipmap.accounts, R.mipmap.send,
+                R.mipmap.receive, R.mipmap.history, R.mipmap.settings, R.mipmap.help};
+        items = new ArrayList<>();
+        for(int i = 0; i < itemTitles.length; i++){
+            NavigationBarItem item = new NavigationBarItem(itemTitles[i], itemIcons[i]);
+            items.add(item);
+        }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switchFragment(position);
+            }
+        });
+
+        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+
+        listAdapter = new NavigationListAdapter(this, items);
+
+        mListView.setAdapter(listAdapter);
+
+        if(itemTitles.length > 0){
+            mListView.setItemChecked(0, true);
+        }
 
         displayOverview();
 
@@ -151,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         
         initViews();
-        
+
         registerNotificationChannel();
         
         util = new PreferenceUtil(this);
@@ -177,7 +208,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         constants.wallet.transactionNotification(this);
 
+        displayBalance();
+
         connectToDecredNetwork();
+    }
+
+    private void displayBalance(){
+        try {
+            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+            long walletBalance = 0;
+            for(int i = 0; i < accounts.size(); i++){
+                walletBalance += accounts.get(i).getBalance().getTotal();
+            }
+            totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecred(walletBalance) + " DCR"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void connectToDecredNetwork(){
@@ -325,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(pageID == R.id.nav_overview) {
+        } else if(pageID == 0) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.exit_app_prompt_title)
                     .setMessage(R.string.exit_app_prompt_message)
@@ -391,42 +437,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        pageID = item.getItemId();
-
-        switch (pageID) {
-            case R.id.nav_overview:
-                displayOverview();
-                return true;
-            case R.id.nav_accounts:
+    public boolean switchFragment(int position) {
+        switch (position) {
+            case 0:
+                fragment = new OverviewFragment();
+                break;
+            case 1:
                 fragment = new AccountsFragment();
                 break;
-            case R.id.nav_send:
+            case 2:
                 fragment = new SendFragment();
                 break;
-            case R.id.nav_receive:
+            case 3:
                 fragment = new ReceiveFragment();
                 break;
-            case R.id.nav_history:
+            case 4:
                 fragment = new HistoryFragment();
                 break;
-           /* case R.id.nav_tickets:
-                fragment = new TicketsFragment();
-                break;*/
-            case R.id.nav_help:
-                fragment = new HelpFragment();
-                break;
-            case R.id.nav_settings:
+            case 5:
                 fragment = new SettingsActivity.MainPreferenceFragment();
+                break;
+            case 6:
+                fragment = new HelpFragment();
                 break;
             default:
                 return false;
         }
 
+        pageID = position;
+
         //Change the fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
-        mNavigationView.setCheckedItem(pageID);
 
         //Close Navigation Drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -436,32 +477,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void displayOverview(){
-        pageID = R.id.nav_overview;
-        fragment = new OverviewFragment();
-
-        //Change the fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
-        mNavigationView.setCheckedItem(R.id.nav_overview);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        switchFragment(0);
     }
 
     public void displayHistory(){
-        pageID = R.id.nav_history;
-        fragment = new HistoryFragment();
-
-        //Change the fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
-        mNavigationView.setCheckedItem(R.id.nav_history);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        switchFragment(4);
     }
 
     @Override
     public void onTransaction(String s) {
         System.out.println("Notification Received: "+s);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayBalance();
+            }
+        });
         try {
             JSONObject obj = new JSONObject(s);
 
@@ -534,6 +565,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onTransactionConfirmed(String hash, int height) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayBalance();
+            }
+        });
         if(fragment instanceof OverviewFragment){
             OverviewFragment overviewFragment = (OverviewFragment) fragment;
             overviewFragment.transactionConfirmed(hash, height);
@@ -596,6 +633,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onEnd(int i, boolean b) {
         System.out.println("Done: "+i+"/"+constants.wallet.getBestBlock());
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayBalance();
+            }
+        });
 
         if(fragment instanceof OverviewFragment){
             OverviewFragment overviewFragment = (OverviewFragment) fragment;
@@ -747,6 +791,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    displayBalance();
                     connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
                 }
             });
