@@ -73,11 +73,6 @@
             android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
-            android:name=".activities.AccountDetailsActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
             android:name=".activities.CaptureActivityAnyOrientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -95,10 +90,6 @@
                 android:name="android.app.lib_name"
                 android:value="gojni" />
         </activity>
-        <activity
-            android:name=".activities.ConfirmTransaction"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".activities.GetPeersActivity"
             android:launchMode="singleTask"
@@ -128,7 +119,6 @@
             android:name=".activities.LogViewer"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
-
     </application>
 
 </manifest>

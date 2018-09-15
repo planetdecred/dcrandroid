@@ -69,12 +69,13 @@ public class PreferenceUtil {
         editor.putInt(key, n);
         editor.commit();
     }
-    public int getInt(String key){
+
+    public int getInt(String key, int defaultValue){
         if(ctx == null){
-            return 0;
+            return defaultValue;
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getInt(key,0);
+        return sp.getInt(key,defaultValue);
     }
 
     public void setBoolean(String key, boolean n){

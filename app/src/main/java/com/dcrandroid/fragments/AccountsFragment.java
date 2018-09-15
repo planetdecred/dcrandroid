@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,16 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dcrandroid.activities.AccountDetailsActivity;
 import com.dcrandroid.adapter.AccountAdapter;
-import com.dcrandroid.data.Balance;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.RecyclerTouchListener;
 
 import org.json.JSONException;
 
@@ -52,31 +50,9 @@ public class AccountsFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Account account = accountList.get(position);
-                Balance balance = account.getBalance();
-                Intent i = new Intent(getContext(), AccountDetailsActivity.class);
-                i.putExtra(Constants.ACCOUNT_NAME, account.getAccountName());
-                i.putExtra(Constants.ACCOUNT_NUMBER, account.getAccountNumber());
-                i.putExtra(Constants.EXTRA_BALANCE_SPENDABLE, balance.getSpendable());
-                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_REWARDS, balance.getImmatureReward());
-                i.putExtra(Constants.EXTRA_HD_PATH, account.getHDPath());
-                i.putExtra(Constants.KEYS, account.getInternalKeyCount() + " Internal, " + account.getExternalKeyCount() + " External, " + account.getImportedKeyCount() + " Imported");
-                i.putExtra(Constants.EXTRA_BALANCE_TOTAL, balance.getTotal());
-                i.putExtra(Constants.EXTRA_BALANCE_IMMATURE_STAKE_GEN, balance.getImmatureStakeGeneration());
-                i.putExtra(Constants.EXTRA_BALANCE_VOTING_AUTHORITY, balance.getVotingAuthority());
-                i.putExtra(Constants.EXTRA_BALANCE_LOCKED_BY_TICKETS, balance.getLockedByTickets());
-                startActivityForResult(i, 200);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_divider));
+        recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setAdapter(accountAdapter);
         registerForContextMenu(recyclerView);
         return rootView;

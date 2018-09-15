@@ -39,11 +39,9 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="save_seed_instruction">Write down this seed and save it in a secure location\nYou will be asked to enter it in the next screen</string>
     <string name="view_peers">View peers</string>
-    <string name="labelbalance">Balance</string>
-    <string name="labeltotal">Total</string>
     <string name="account_number">Account Number</string>
-    <string name="labelkeys">Keys</string>
-    <string name="label_property">Property</string>
+    <string name="label_keys">Keys</string>
+    <string name="label_properties">Properties</string>
     <string name="hd_path">HD Path</string>
     <string name="label_spendable">Spendable</string>
     <string name="immature_stake_generation">Immature Stake Generation</string>
@@ -288,4 +286,10 @@
     <string name="not_connected_to_peer">Not connected to any peer</string>
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
+    <string name="details">Details</string>
+    <string name="wallet_setting">Wallet Setting</string>
+    <string name="hide_this_wallet">Hide This Wallet</string>
+    <string name="wallet_balance_will_be_ignored">Wallet balance will be ignored.</string>
+    <string name="default_wallet">Default Wallet</string>
+    <string name="make_this_wallet_default_for_all_outgoing_and_incoming_transactions">Make this wallet default for all outgoing and incoming transactions.</string>
 </resources>

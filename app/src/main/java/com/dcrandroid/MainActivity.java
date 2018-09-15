@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT);
+                int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0);
                 int blockHeight = constants.wallet.getBestBlock();
                 if(rescanHeight < blockHeight){
                     constants.wallet.rescan(rescanHeight, MainActivity.this);
@@ -649,7 +649,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onScan(final int i) {
-        if(util.getInt(PreferenceUtil.RESCAN_HEIGHT) < i){
+        if(util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0) < i){
             util.setInt(PreferenceUtil.RESCAN_HEIGHT, i);
         }
         System.out.println("Scanning: "+i+"/"+constants.wallet.getBestBlock());

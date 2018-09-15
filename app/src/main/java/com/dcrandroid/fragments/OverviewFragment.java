@@ -181,6 +181,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     final ArrayList<Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     long totalBalance = 0;
                     for(int i = 0; i < accounts.size(); i++){
+                        if(util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())){
+                            continue;
+                        }
                         totalBalance += accounts.get(i).getBalance().getTotal();
                     }
                     final long finalTotalBalance = totalBalance;
