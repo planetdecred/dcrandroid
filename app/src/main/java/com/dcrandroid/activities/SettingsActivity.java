@@ -244,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onScan(final int rescanned_through) {
-            if(util.getInt(PreferenceUtil.RESCAN_HEIGHT) < rescanned_through){
+            if(util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0) < rescanned_through){
                 util.setInt(PreferenceUtil.RESCAN_HEIGHT, rescanned_through);
             }
             getActivity().runOnUiThread(new Runnable() {

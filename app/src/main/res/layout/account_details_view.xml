@@ -1,315 +1,362 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_shadow">
-    <RelativeLayout
+    android:id="@+id/layout_account_details"
+    android:orientation="vertical"
+    android:paddingEnd="10dp"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:visibility="gone"
+    tools:showIn="@layout/account_list_row">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/details"
+        android:textColor="#091440"
+        android:textSize="18sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#C4CBD2" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:padding="8dp"
-        android:background="@drawable/background_shadow">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
         <TextView
-            android:id="@+id/label_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_immature_rewards"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_immature_rewards_label"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:padding="5dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/labelbalance"
-            android:textColor="@color/secondary_text"
-            android:textSize="16sp" />
-        <View
-            android:id="@+id/separator123"
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:layout_below="@+id/label_balance"
-            android:background="@color/primary_text" />
+            android:gravity="end"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_immature_rewards"
+            app:fontFamily="@font/source_sans_pro_regular_family"
 
-            <TextView
-                android:id="@+id/label_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator123"
-                android:padding="8dp"
-                android:text="@string/labeltotal"
-                android:textColor="@color/secondary_text" />
+            />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/acc_dts_total"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:layout_toEndOf="@+id/label_total"
-                android:layout_toRightOf="@+id/label_total"
-                android:layout_below="@+id/separator123"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#C4CBD2" />
 
-            <View
-                android:id="@+id/separator12"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
 
-                android:layout_below="@+id/label_total"
-                android:background="@color/primary_text" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/label_spendable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator12"
-                android:text="@string/label_spendable"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_locked_by_tickets"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_locked_by_tickets_label"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
 
-        
-            <TextView
-                android:id="@+id/acc_dts_spendable"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator12"
-                android:layout_toRightOf="@+id/label_spendable"
-                android:layout_toEndOf="@+id/label_spendable"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
-
-            <View
-                android:id="@+id/separator20"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_spendable"
-                android:background="@color/primary_text" />
-
-            <TextView
-                android:id="@+id/label_immature_reward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator20"
-                android:text="@string/label_immature_rewards"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
-
-            <TextView
-                android:id="@+id/acc_dts_immature_reward"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:padding="8dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/separator20"
-                android:layout_toEndOf="@+id/label_immature_reward"
-                android:layout_toRightOf="@+id/label_immature_reward"
-                android:textColor="@color/primary_text" />
-
-            <View
-                android:id="@+id/separator13"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_immature_reward"
-                android:background="@color/primary_text" />
-
-            <TextView
-                android:id="@+id/label_lock_ticket"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator13"
-                android:padding="8dp"
-                android:text="@string/label_locked_by_tickets"
-                android:textColor="@color/secondary_text" />
-
-            <TextView
-                android:id="@+id/acc_dts_locked_bt_tcks"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator13"
-                android:layout_toEndOf="@+id/label_lock_ticket"
-                android:layout_toRightOf="@+id/label_lock_ticket"
-                android:padding="8dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:textColor="@color/primary_text" />
-
-            <View
-                android:id="@+id/separator21"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_lock_ticket"
-                android:background="@color/primary_text" />
-
-            <TextView
-                android:id="@+id/label_auth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator21"
-                android:text="@string/label_voting_authority"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
-
-            <TextView
-                android:id="@+id/acc_dts_voting_auth"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator21"
-                android:layout_toEndOf="@+id/label_auth"
-                android:layout_toRightOf="@+id/label_auth"
-                android:gravity="end"
-                android:padding="8dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/primary_text" />
-            <View
-                android:id="@+id/separator17"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/acc_dts_voting_auth"
-                android:background="@color/primary_text" />
-            <TextView
-                android:id="@+id/label_stake_gen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/immature_stake_generation"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text"
-                android:layout_below="@+id/separator17"/>
-
-            <TextView
-                android:id="@+id/acc_dts_immature_stake_gen"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/label_stake_gen"
-                android:layout_toEndOf="@+id/label_stake_gen"
-                android:layout_below="@+id/separator17"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:padding="8dp"
-            android:background="@drawable/background_shadow">
+            android:gravity="end"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_locked_by_tickets"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#C4CBD2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_voting_authority"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_voting_authority_label"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_voting_authority"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#C4CBD2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/immature_stake_generation"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_immature_stake_generation_label"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_immature_stake_generation"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#C4CBD2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/label_properties"
+        android:textColor="#091440"
+        android:textSize="18sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="#C4CBD2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account_number"
+            android:textColor="#C4CBD2"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#C4CBD2"
+            android:textSize="16sp"
+            android:id="@+id/tv_account_number"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="#C4CBD2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hd_path"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_hd_path"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="#C4CBD2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_keys"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#617386"
+            android:textSize="16sp"
+            android:id="@+id/tv_keys"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:background="#C4CBD2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/wallet_setting"
+        android:textColor="#091440"
+        android:textSize="18sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/label_property"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/label_property"
-                android:textColor="@color/secondary_text"
-                android:textSize="16sp" />
-            <View
-                android:id="@+id/separastor1277"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_property"
-                android:background="@color/primary_text" />
+                android:text="@string/hide_this_wallet"
+                android:textColor="#617386"
+                android:textSize="18sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
 
             <TextView
-                android:id="@+id/label_account_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separastor1277"
-                android:padding="8dp"
-                android:text="@string/account_number"
-                android:textColor="@color/secondary_text" />
-            <TextView
-                android:id="@+id/acc_dts_acc_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/label_account_number"
-                android:layout_toEndOf="@+id/label_account_number"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/separastor1277"
-                android:padding="8dp"
-                android:gravity="end"
-                android:textColor="@color/primary_text" />
+                android:layout_marginTop="3dp"
+                android:text="@string/wallet_balance_will_be_ignored"
+                android:textColor="#C4CBD2"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+        </LinearLayout>
 
-            <View
-                android:id="@+id/separastor12"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_account_number"
-                android:background="@color/primary_text" />
-            <TextView
-                android:id="@+id/label_hd_path"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <android.support.v7.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separastor12"
-                android:text="@string/hd_path"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
+                android:id="@+id/switch_hide_wallet"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/acc_dts_hd_path"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separastor12"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@+id/label_hd_path"
-                android:layout_toRightOf="@+id/label_hd_path"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
-            <View
-                android:id="@+id/separators12s"
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_below="@+id/label_hd_path"
-                android:background="@color/primary_text" />
+                android:text="@string/default_wallet"
+                android:textColor="#617386"
+                android:textSize="18sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
             <TextView
-                android:id="@+id/label_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separators12s"
-                android:text="@string/labelkeys"
-                android:padding="8dp"
-                android:textColor="@color/secondary_text" />
-            <TextView
-                android:id="@+id/acc_dts_keys"
+                android:layout_marginTop="3dp"
+                android:text="@string/make_this_wallet_default_for_all_outgoing_and_incoming_transactions"
+                android:textColor="#C4CBD2"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <android.support.v7.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separators12s"
-                android:layout_toRightOf="@+id/label_key"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/label_key"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/primary_text" />
-        </RelativeLayout>
+                android:id="@+id/switch_default_wallet"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

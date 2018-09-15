@@ -53,6 +53,8 @@ public class Constants {
             CONFIRMATIONS = "confirmations",
             SENDALL = "send_all",
             PASSPHRASE = "passphrase",
-            CREDITS = "Credits";
+            CREDITS = "Credits",
+            DEFAULT_ACCOUNT = "default_account",
+            HIDE_WALLET = "hide_wallet";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
