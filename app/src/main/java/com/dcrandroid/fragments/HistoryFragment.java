@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dcrandroid.activities.TransactionDetailsActivity;
@@ -48,6 +49,8 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private RecyclerView recyclerView;
     private DcrConstants constants;
     private int latestTransactionHeight;
+    private Spinner spinnerHostory;
+
     private boolean needsUpdate = false,  isForeground;
 
     @Nullable
@@ -56,6 +59,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_history, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
+        spinnerHostory = rootView.findViewById(R.id.spinnerHistory);
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark2,
                 R.color.colorPrimaryDark2,

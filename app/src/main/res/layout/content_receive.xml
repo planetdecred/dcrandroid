@@ -145,7 +145,7 @@
                 android:fontFamily="@font/source_sans_pro_regular"
                 android:text="@string/generate_new_address"
                 android:textAllCaps="true"
-                android:textColor="@color/buttonText"
+                android:textColor="@color/buttonWhiteText"
                 android:visibility="visible" />
         </LinearLayout>
     </LinearLayout>

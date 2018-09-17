@@ -252,6 +252,11 @@ public class Utils {
         format.applyPattern("#########0.########");
         return format.format(amount);
     }
+    public static double formatDecredToDobule(long dcr){
+        BigDecimal satoshi = BigDecimal.valueOf(dcr);
+        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
+        return amount.doubleValue();
+    }
 
     public static long signedSizeToAtom(long signedSize){
         BigDecimal signed = new BigDecimal(signedSize);
