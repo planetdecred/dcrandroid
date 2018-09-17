@@ -7,7 +7,7 @@
     <color name="colorAccent">#888a8b</color>
     <color name="secondaryTextColor">#617386</color>
     <color name="colorText">#11161b</color>
-    <color name="buttonText">#e5fdfd</color>
+    <color name="buttonWhiteText">#e5fdfd</color>
     <color name="buttonColor">#2970FF</color>
     <color name="Amount1Text">#333333</color>
     <color name="Amount2Text">#11161b</color>

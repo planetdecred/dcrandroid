@@ -1,12 +1,12 @@
 package com.dcrandroid.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +59,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -174,6 +175,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 new GetExchangeRate(SendFragment.this).execute();
             }
         });
+
         return vi;
     }
 
@@ -216,38 +218,23 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         public void afterTextChanged(Editable s) {
             textChanged = true;
             isSendAll = false;
-            Log.d(SEND_FRAGMENT, "amountWatcher: Editable s.length() = " + s.length());
             if (exchangeDecimal != null) {
-                Log.d(SEND_FRAGMENT, "amountWatcher: exchangeDecimal = " + exchangeDecimal);
                 if (s.length() > 0) {
                     BigDecimal currentAmount = new BigDecimal(s.toString());
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
                     BigDecimal convertedAmount = currentAmount.multiply(exchangeDecimal);
-                    Log.d(SEND_FRAGMENT, "amountWatcher: amount = " + amount.getText().toString());
                     exchangeAmount.removeTextChangedListener(exchangeWatcher);
                     exchangeAmount.setText(format.format(convertedAmount.doubleValue()));
                     exchangeAmount.addTextChangedListener(exchangeWatcher);
-                    tvTotalSending.setText(amount.getText().toString());
-                    Log.d(SEND_FRAGMENT, "amountWatcher: exchangeAmount =  " + exchangeAmount.getText().toString());
-                    tvSendMax.setTextColor(Color.parseColor("#ED6D47"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        btnSend.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape));
-                    } else {
-                        btnSend.setBackgroundDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape));
-                    }
-                    btnSend.setTextColor(Color.parseColor("#e5fdfd"));
-                    exchangeCurrency.setVisibility(View.VISIBLE);
-                    tvDCR.setVisibility(View.VISIBLE);
-                    tvSendInDcr.setTextColor(Color.parseColor("#617386"));
-                    equivalentAmount.setTextColor(Color.parseColor("#617386"));
+                    changeViewParameters(true);
+
                 } else {
                     exchangeAmount.removeTextChangedListener(exchangeWatcher);
                     exchangeAmount.setText(null);
-                    Log.d(SEND_FRAGMENT, "amountWatcher: Editable s.length() = " + s.length());
                     exchangeAmount.addTextChangedListener(exchangeWatcher);
+                    changeViewParameters(false);
                 }
             }
-            Log.d(SEND_FRAGMENT, "amountWatcher: exchangeDecimal = " + exchangeDecimal);
             constructTransaction();
         }
     };
@@ -263,42 +250,68 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (exchangeDecimal == null) {
-                Log.d(SEND_FRAGMENT, "exchangeWatcher: exchangeDecimal == null");
+            if (exchangeDecimal == null){
                 return;
             }
             isSendAll = false;
-            if (s.length() == 0) {
-                amount.removeTextChangedListener(amountWatcher);
-                Log.d(SEND_FRAGMENT, "exchangeWatcher: s.length() == null");
-                amount.setText(null);
-                amount.addTextChangedListener(amountWatcher);
-            } else {
+            if (s.length() > 0) {
                 BigDecimal currentAmount = new BigDecimal(s.toString());
                 currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
-                BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
-                Log.d(SEND_FRAGMENT, "exchangeWatcher: exchangeAmount  = " + exchangeAmount.getText().toString());
-                amount.removeTextChangedListener(amountWatcher);
-                amount.setText(format.format(convertedAmount.doubleValue()));
-                Log.d(SEND_FRAGMENT, "exchangeWatcher: amount  = " + amount.getText().toString());
-                amount.addTextChangedListener(amountWatcher);
-                tvTotalSending.setText(amount.getText().toString());
-                tvSendMax.setTextColor(Color.parseColor("#ED6D47"));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    btnSend.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape));
-                } else {
-                    btnSend.setBackgroundDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape));
-                }
-                btnSend.setTextColor(Color.parseColor("#e5fdfd"));
-                exchangeCurrency.setVisibility(View.VISIBLE);
-                tvDCR.setVisibility(View.VISIBLE);
-                tvSendInDcr.setTextColor(Color.parseColor("#617386"));
-                equivalentAmount.setTextColor(Color.parseColor("#617386"));
-            }
 
+                BigDecimal convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128);
+                double currentAmountDouble = convertedAmount.doubleValue();
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                formatter.applyPattern("######0.###");
+
+                String stringCurrentAmount = formatter.format(currentAmountDouble);
+                Log.d(SEND_FRAGMENT, "stringCurrentAmount " + stringCurrentAmount);
+                amount.removeTextChangedListener(amountWatcher);
+                amount.setText(stringCurrentAmount);
+                Log.d(SEND_FRAGMENT, "amount.getText.toString: " + amount.getText().toString());
+                amount.addTextChangedListener(amountWatcher);
+                changeViewParameters(true);
+            } else {
+                amount.removeTextChangedListener(amountWatcher);
+                amount.setText(null);
+                amount.addTextChangedListener(amountWatcher);
+                changeViewParameters(false);
+            }
             constructTransaction();
         }
     };
+
+    @SuppressLint("SetTextI18n")
+    private void changeViewParameters(boolean textChanged) {
+        if (textChanged) {
+            double dAmount = Double.parseDouble(amount.getText().toString());
+            tvTotalSending.setText(String.valueOf(dAmount) + " DCR");
+            tvSendMax.setTextColor(getResources().getColor(R.color.orange));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                btnSend.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape));
+            } else {
+                btnSend.setBackgroundDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape));
+            }
+            btnSend.setTextColor(getResources().getColor(R.color.buttonWhiteText));
+            exchangeCurrency.setVisibility(View.VISIBLE);
+            tvDCR.setVisibility(View.VISIBLE);
+            tvSendInDcr.setTextColor(getResources().getColor(R.color.secondaryTextColor));
+            equivalentAmount.setTextColor(getResources().getColor(R.color.secondaryTextColor));
+        } else {
+            tvTotalSending.setText(R.string._0_00_dcr);
+            tvSendMax.setTextColor(getResources().getColor(R.color.secondaryTextColor54));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                btnSend.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape1));
+            } else {
+                btnSend.setBackgroundDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.btn_shape1));
+            }
+            btnSend.setTextColor(getResources().getColor(R.color.black38));
+            tvSendInDcr.setTextColor(getResources().getColor(R.color.secondaryTextColor38));
+            equivalentAmount.setTextColor(getResources().getColor(R.color.secondaryTextColor38));
+            exchangeCurrency.setVisibility(View.GONE);
+            tvDCR.setVisibility(View.GONE);
+        }
+
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -332,12 +345,18 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             @Override
             public void onClick(View v) {
                 isSendAll = true;
+
                 try {
                     long spendableBalance = getSpendableForSelectedAccount();
-                    amount.removeTextChangedListener(amountWatcher);
-                    amount.setText(Utils.formatDecredWithoutComma(spendableBalance));
-                    amount.addTextChangedListener(amountWatcher);
+                    double dAmountInWallet = Utils.formatDecredToDobule(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0));
 
+                    Log.d(SEND_FRAGMENT, "dAmountInWallet: " + dAmountInWallet);
+                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                    formatter.applyPattern("######0.###");
+                    amount.removeTextChangedListener(amountWatcher);
+                    amount.setText(formatter.format(dAmountInWallet));
+                    Log.d(SEND_FRAGMENT, "amount.getText().toString(): " + amount.getText().toString());
+                    amount.addTextChangedListener(amountWatcher);
                     if (exchangeDecimal != null) {
                         BigDecimal currentAmount = new BigDecimal(Mobilewallet.amountCoin(spendableBalance));
                         currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
@@ -431,7 +450,9 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 amount.addTextChangedListener(amountWatcher);
 
                 if (exchangeDecimal != null) {
-                    BigDecimal currentAmount = new BigDecimal(Mobilewallet.amountCoin(transaction.getTotalPreviousOutputAmount() - Utils.signedSizeToAtom(transaction.getEstimatedSignedSize())));
+                    BigDecimal currentAmount = new BigDecimal(Mobilewallet.amountCoin(transaction.getTotalPreviousOutputAmount()
+                            - Utils.signedSizeToAtom(transaction.getEstimatedSignedSize())));
+
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP);
 
                     BigDecimal convertedAmount = currentAmount.multiply(exchangeDecimal);
@@ -709,6 +730,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
     private boolean validateAmount(boolean sending) {
         String s = amount.getText().toString();
+
         if (s.length() == 0) {
             if (sending) {
                 amountError = "Amount is empty";
@@ -730,6 +752,19 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 displayError(false);
             }
             return false;
+        }
+        if (!amount.getText().toString().equals("")) {
+            double dAmountInWallet = 0.0;
+            try {
+                dAmountInWallet = Utils.formatDecredToDobule(constants.wallet.spendableForAccount(accountNumbers.get(accountSpinner.getSelectedItemPosition()), 0));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (dAmountInWallet < Double.parseDouble(s)) {
+                amountError = "Insufficient balance";
+                displayError(false);
+                return false;
+            }
         }
         amountError = "";
         displayError(false);
@@ -816,11 +851,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         sendFragment.exchangeAmount.addTextChangedListener(sendFragment.exchangeWatcher);
                     }
 
-                    sendFragment.exchangeAmount.setVisibility(View.VISIBLE);
-                    sendFragment.equivalentAmount.setVisibility(View.VISIBLE);
-                    sendFragment.equivalentAmount.setTextColor(Color.parseColor("#617386"));
-                    sendFragment.tvSendInDcr.setTextColor(Color.parseColor("#617386"));
-                    sendFragment.exchangeCurrency.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(sendFragment.getContext(), "Exchange failed with error: " + apiResult.getString("message"), Toast.LENGTH_SHORT).show();
                 }
