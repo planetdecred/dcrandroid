@@ -10,6 +10,7 @@ public class Constants {
             FEE = "Fee",
             TYPE = "Type",
             AMOUNT = "Amount",
+            AMOUNT_IN = "AmountIn",
             EXTRA_BALANCE_SPENDABLE = "spendable_balance",
             EXTRA_BALANCE_TOTAL = "total_balance",
             EXTRA_BALANCE_IMMATURE_REWARDS = "immature_rewards",
@@ -55,6 +56,9 @@ public class Constants {
             PASSPHRASE = "passphrase",
             CREDITS = "Credits",
             DEFAULT_ACCOUNT = "default_account",
-            HIDE_WALLET = "hide_wallet";
+            HIDE_WALLET = "hide_wallet",
+            NULL_SCRIPT = "NullScript",
+            PREVIOUS_TRANSACTION_HASH = "PreviousTransactionHash",
+            PREVIOUS_TRANSACTION_INDEX = "PreviousTransactionIndex";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
