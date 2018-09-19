@@ -3,58 +3,136 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+
+        >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="@string/setting_up_decrediton"
+        android:text="@string/create_security_pass"
         android:gravity="center"
+        android:textSize="18sp"
         android:textColor="#091440"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/require_to_send_fund"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:padding="5dp"
+        />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/passview"
         android:layout_centerInParent="true"
         >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/create_a_private_passphrase_to_encrypt_your_wallet"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:textColor="#596D81"
-        />
 
-    <EditText
+        android:text="Password"
+        android:gravity="center"
+        android:textSize="15sp"
+
+        />
+        <EditText
         android:id="@+id/passphrase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:hint="@string/passphrase"
-        android:textColor="#8997A5"
-        android:maxLines="1"
-        android:inputType="textPassword"
-        android:textColorHint="#8997A5" />
 
-    <EditText
+        android:maxLines="1"
+            android:maxEms="8"
+            android:layout_marginLeft="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginStart="40dp"
+            android:gravity="center"
+            android:textSize="18sp"
+        android:inputType="textPassword"
+
+        />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="Confirm Password"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:paddingTop="16dp"
+
+            />
+
+        <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/verify_passphrase"
-        android:layout_margin="8dp"
         android:inputType="textPassword"
         android:id="@+id/verifyPassphrase"
         android:lines="1"
-        android:textColor="#8997A5"
+            android:maxEms="8"
+            android:layout_marginLeft="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginStart="40dp"
+
         android:maxLines="1"
-        android:textColorHint="#8997A5"/>
+            android:gravity="center"
+            android:textSize="18sp"
+       />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_margin="8dp"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8 Characters"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:textColor="@color/green"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="1 UpperCase"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:textColor="@color/green"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="1 Number"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:alpha="0.6"
+
+                />
+
+        </LinearLayout>
+
 
     <Button
         android:id="@+id/button_encrypt_wallet"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/btn_shape"
@@ -62,9 +140,11 @@
         android:paddingLeft="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/encrypt_wallet"
+        android:gravity="center"
+        android:text="Confirm "
         android:layout_gravity="center"
         android:textColor="#fff" />
+
     </LinearLayout>
 
 </RelativeLayout>

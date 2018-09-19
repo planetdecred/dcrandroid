@@ -51,6 +51,8 @@
     <string name="label_locked_by_tickets">Locked by Tickets</string>
     <string name="label_voting_authority">Voting Authority</string>
     <string name="setting_up_decrediton">SETTING UP DECRED WALLET</string>
+    <string name="create_security_pass">Create Security Password</string>
+    <string name="require_to_send_fund">Required to send funds</string>
     <string name="create_a_private_passphrase_to_encrypt_your_wallet">Create a private passphrase to encrypt your wallet</string>
     <string name="passphrase">Passphrase</string>
     <string name="verify_passphrase">Verify Passphrase</string>
