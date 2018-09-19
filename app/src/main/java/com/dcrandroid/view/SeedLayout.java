@@ -55,8 +55,8 @@ public class SeedLayout extends ViewGroup {
                 return;
 
             //Get the maximum size of the subview
-            child.measure(MeasureSpec.makeMeasureSpec(SubviewWidth, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(SubviewHeight, MeasureSpec.AT_MOST));
-            currentWidth = child.getMeasuredWidth();
+            child.measure(MeasureSpec.makeMeasureSpec(SubviewWidth, SubviewWidth / 3), MeasureSpec.makeMeasureSpec(SubviewHeight, MeasureSpec.AT_MOST));
+            currentWidth = SubviewWidth / 3;
             currentHeight = child.getMeasuredHeight();
             //wrap is reach to the end
             if (currentLeft + currentWidth >= RightSubview) {
