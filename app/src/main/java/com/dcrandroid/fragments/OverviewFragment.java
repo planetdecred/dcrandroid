@@ -76,10 +76,10 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark2,
+                R.color.colorPrimaryDark2,
+                R.color.colorPrimaryDark2,
+                R.color.colorPrimaryDark2);
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
