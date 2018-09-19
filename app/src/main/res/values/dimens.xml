@@ -8,8 +8,8 @@
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="edit_text_size_4">4sp</dimen>
-    <dimen name="edit_text_size_5">5sp</dimen>
+    <dimen name="edit_text_size_14">4sp</dimen>
+    <dimen name="edit_text_size_16">5sp</dimen>
     <dimen name="profile_width">75dp</dimen>
     <dimen name="profile_height">75dp</dimen>
     <dimen name="row_padding_vertical">10dp</dimen>
