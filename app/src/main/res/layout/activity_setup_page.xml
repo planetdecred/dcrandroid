@@ -108,7 +108,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/background_light"
         android:layout_gravity="bottom"
         android:text=""
         android:id="@+id/build_date"
