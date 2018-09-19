@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#F4F6F6">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="#fff">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_docs"
+        android:layout_marginTop="100dp"
+        />
+
     <TextView
         android:id="@+id/help_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/for_more_information_please_visit"
-        android:textSize="18sp"
+        android:textSize="17sp"
+        android:layout_marginTop="15dp"
+        app:fontFamily="@font/source_sans_pro_regular_family"
         />
     <TextView
         android:id="@+id/website_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="2"
+        android:layout_marginTop="5dp"
         android:text="@string/https_docs_decred_org"
         android:textColor="#2970FF"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:layout_below="@+id/help_info"
+        app:fontFamily="@font/source_sans_pro_regular_family"
         />
 
-</RelativeLayout>
+</LinearLayout>
