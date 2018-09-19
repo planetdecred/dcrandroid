@@ -338,4 +338,5 @@
     <string name="send_in_usd">Send in USD:</string>
     <string name="usd">USD</string>
     <string name="_0_00_dcr">0.00 DCR</string>
+    <string name="_0_00_">0.00 </string>
 </resources>
