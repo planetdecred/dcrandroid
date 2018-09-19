@@ -179,19 +179,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         ArrayList<String> walletOutput = new ArrayList<>();
         ArrayList<String> walletInput = new ArrayList<>();
-        ArrayList<Integer> walletOutputIndexes = new ArrayList<>();
-        ArrayList<Integer> walletInputIndexes = new ArrayList<>();
+        ArrayList<Integer> walletOutputIndices = new ArrayList<>();
+        ArrayList<Integer> walletInputIndices = new ArrayList<>();
 
         for (int i = 0; i < usedInput.size(); i++) {
-            walletInputIndexes.add(usedInput.get(i).index);
+            walletInputIndices.add(usedInput.get(i).index);
             walletInput.add(usedInput.get(i).accountName + "\n" + Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedInput.get(i).previous_amount)) + " DCR");
         }
 
         for (int i = 0; i < usedOutput.size(); i++){
-            walletOutputIndexes.add(usedOutput.get(i).index);
+            walletOutputIndices.add(usedOutput.get(i).index);
             walletOutput.add(
                     usedOutput.get(i).address +
-                            (txDirection == 0 ? " (change) " : Constants.NBSP) +
+                            (txDirection == 0 ? Constants.NBSP + "(change)" + Constants.NBSP : Constants.NBSP) +
                             "("+wallet.getAccountName(usedOutput.get(i).account) +")\n" +
                             Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedOutput.get(i).amount)) + " DCR"
             );
@@ -207,7 +207,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             for (int i = 0; i < outputs.length(); i++) {
                 JSONObject output = outputs.getJSONObject(i);
 
-                if(walletOutputIndexes.indexOf(output.getInt(Constants.INDEX)) != -1){
+                if(walletOutputIndices.indexOf(i) != -1){
                     continue;
                 }
 
@@ -215,7 +215,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 String address = addresses.length() > 0 ? addresses.getString(0) : "[script]";
 
-                boolean nullScript = output.getBoolean("NullScript");
+                boolean nullScript = output.getBoolean(Constants.NULL_SCRIPT);
 
                 walletOutput.add(address + " (external) \n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR"));
             }
@@ -225,12 +225,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 JSONObject input = inputs.getJSONObject(i);
 
-                if(walletInputIndexes.indexOf(input.getInt("PreviousTransactionIndex")) != -1){
+                if(walletInputIndices.indexOf(i) != -1){
                     continue;
                 }
 
-                walletInput.add(input.getString("PreviousTransactionHash") + ":" + input.getInt("PreviousTransactionIndex")
-                        + " (external)\n"+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong("AmountIn"))) + " DCR");
+                walletInput.add(input.getString(Constants.PREVIOUS_TRANSACTION_HASH) + ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX)
+                        + " (external)\n"+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong(Constants.AMOUNT_IN))) + " DCR");
             }
 
         } catch (Exception e) {
@@ -239,8 +239,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         List<String> headerTitle = new ArrayList<>();
 
-        headerTitle.add("Inputs");
-        headerTitle.add("Outputs");
+        headerTitle.add(Constants.INPUTS);
+        headerTitle.add(Constants.OUTPUTS);
 
         HashMap<String, List<String>> childContent = new HashMap<>();
 
