@@ -37,7 +37,7 @@ public class SaveSeedActivity extends AppCompatActivity {
             String tempSeed[] = seed.split(" ");
             for(int i = 0; i <= tempSeed.length-1; i++){
                String seed = (i+1) +"."+tempSeed[i];
-               
+
                 View seedView = layoutInflater.inflate(R.layout.seed_layout,null,false);
                 TextView seedTexView = seedView.findViewById(R.id.seedTextView);
                 seedTexView.setText(seed);
