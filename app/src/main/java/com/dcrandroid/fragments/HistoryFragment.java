@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import mobilewallet.GetTransactionsResponse;
@@ -100,9 +103,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             }
         }));
+
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
         prepareHistoryData();
+        setupSort();
         return rootView;
     }
 
@@ -291,5 +296,49 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         }
     }
+
+    private void setupSort() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.history_transaction_list, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHostory.setAdapter(adapter);
+
+        spinnerHostory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: getAllItems();
+                    case 1: sortByRegular();
+                    case 2: sortBySent();
+                    case 3: sortByReceived();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void getAllItems() {
+        onRefresh();
+    }
+
+    private void sortByRegular() {
+        Collections.sort(transactionList, (new TransactionComparator.sortItemsByRegularType()));
+
+        transactionAdapter.notifyDataSetChanged();
+    }
+
+    private void sortBySent() {
+        Collections.sort(transactionList, (new TransactionComparator.sortItemsBySent()));
+        transactionAdapter.notifyDataSetChanged();
+    }
+
+    private void sortByReceived() {
+        Collections.sort(transactionList, (new TransactionComparator.sortItemsByReceived()));
+        transactionAdapter.notifyDataSetChanged();
+    }
+
 
 }
