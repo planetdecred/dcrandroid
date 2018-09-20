@@ -486,12 +486,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onTransaction(String s) {
         System.out.println("Notification Received: "+s);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                displayBalance();
-            }
-        });
         try {
             JSONObject obj = new JSONObject(s);
 
@@ -560,6 +554,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 showText(e.getMessage());
             }
         }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayBalance();
+            }
+        });
     }
 
     @Override
