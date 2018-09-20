@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/tx_details_tx_hash"
-        android:title="Copy Hash"
-        android:contentDescription="Copy Hash"
+        android:title="@string/copy_hash"
+        android:contentDescription="@string/tap_this_to_copy_transaction_hash"
         app:showAsAction="never"
         />
     <item
         android:id="@+id/tx_details_raw_tx"
-        android:title="Copy Raw Transaction"
-        android:contentDescription="Copy Hash"
+        android:title="@string/copy_raw_transaction"
+        android:contentDescription="@string/tap_this_to_copy_raw_transaction_hex"
         app:showAsAction="never"
         />
 </menu>

@@ -9,13 +9,13 @@ public class Balance {
     public static Balance parse(String json) throws JSONException{
         JSONObject obj = new JSONObject(json);
         Balance balance = new Balance();
-        balance.total = obj.getLong("Total");
-        balance.spendable = obj.getLong("Spendable");
-        balance.immatureReward = obj.getLong("ImmatureReward");
-        balance.immatureStakeGeneration = obj.getLong("ImmatureStakeGeneration");
-        balance.lockedByTickets = obj.getLong("LockedByTickets");
-        balance.votingAuthority = obj.getLong("VotingAuthority");
-        balance.unConfirmed = obj.getLong("UnConfirmed");
+        balance.total = obj.getLong(Constants.TOTAL);
+        balance.spendable = obj.getLong(Constants.SPENDABLE);
+        balance.immatureReward = obj.getLong(Constants.IMMATURE_REWARDS);
+        balance.immatureStakeGeneration = obj.getLong(Constants.IMMATURE_STAKE_GEN);
+        balance.lockedByTickets = obj.getLong(Constants.LOCKED_BY_TICKETS);
+        balance.votingAuthority = obj.getLong(Constants.VOTING_AUTHORITY);
+        balance.unConfirmed = obj.getLong(Constants.UNCONFIRMED);
         return balance;
     }
 

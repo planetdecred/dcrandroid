@@ -70,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
                     android:layout_marginStart="2dp"
-                    android:entries="@array/nav_item_activity_titles"
                     android:tag="@string/account"
                     android:gravity="start"
                     android:padding="3dp"
@@ -122,7 +121,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/copy_on_click"
+                android:text="@string/copy_on_tap"
                 android:gravity="center"
                 android:textColor="#C4CBD2"
                 android:layout_marginTop="3dp"/>

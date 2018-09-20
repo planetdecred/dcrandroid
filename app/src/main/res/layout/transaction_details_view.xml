@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/separator13"
                 android:padding="8dp"
-                android:text="@string/TxType"
+                android:text="@string/type"
                 android:textColor="@color/secondary_text" />
 
             <TextView
@@ -225,7 +225,7 @@
                 android:paddingRight="0dp"
                 android:singleLine="true"
                 android:ellipsize="middle"
-                android:text="jsdkjdfjkfkjfjkfjksjkdjkdsjksdkjkdjksdjkdskjdskjsdkdkkjdjksdjkjkdjkdskjdjkjkdsjkdsjkdsjkdjksdjkjkdsjkdsjksdjk"
+                android:text=""
                 android:textColor="@color/primary_text" />
             <View
                 android:id="@+id/separator12355"

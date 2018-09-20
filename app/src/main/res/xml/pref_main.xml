@@ -4,9 +4,9 @@
         android:key="@string/build_date_system"
         android:title="@string/build_date"
         />
-    <PreferenceCategory android:title="@string/title_general">
+    <PreferenceCategory android:title="@string/general">
         <ListPreference
-            android:title="Currency Conversion"
+            android:title="@string/currency_conversion"
             android:key="currency_conversion"
             android:entries="@array/currency_conversion"
             android:entryValues="@array/currency_conversion_values"
@@ -19,9 +19,9 @@
             />
         <SwitchPreference
             android:defaultValue="false"
-            android:title="New block notification"
+            android:title="@string/new_block_notification"
             android:key="new_block_notification"
-            android:summary="You will hear a beep if enabled"
+            android:summary="@string/new_block_notification_description"
             />
         <SwitchPreference
             android:defaultValue="false"
@@ -30,29 +30,28 @@
             />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_connection">
+    <PreferenceCategory android:title="@string/connection">
         <SwitchPreference
             android:defaultValue="true"
             android:enabled="false"
             android:key="@string/key_testnet"
-            android:summary="@string/summary_testnet"
-            android:title="@string/title_testnet" />
+            android:summary="@string/use_testnet_connection"
+            android:title="@string/testnet" />
         <ListPreference
-            android:title="@string/title_network_mode"
-            android:summary="Simplified Payment Verification (SPV)"
+            android:title="@string/network_mode"
             android:defaultValue="0"
             android:key="network_modes"
             android:entryValues="@array/network_modes_values"
             android:entries="@array/network_modes"
             />
         <EditTextPreference
-            android:title="@string/title_connect_to_peer"
+            android:title="@string/connect_to_peer"
             android:key="peer_ip"
             />
         <EditTextPreference
             android:key="@string/remote_node_address"
             android:enabled="false"
-            android:title="@string/server_address_title"
+            android:title="@string/server_address"
             />
         <EditTextPreference
             android:key="@string/key_connection_certificate"
@@ -61,7 +60,7 @@
             android:scrollbars="vertical"
             android:gravity="top|left"
             android:summary="@string/summary_paste_certificate"
-            android:title="@string/pref_title_certificate" />
+            android:title="@string/certificate" />
         <EditTextPreference
             android:key="user_agent"
             android:title="User agent"/>
@@ -71,13 +70,13 @@
             android:title="@string/logging_level"
             android:entries="@array/logging_levels"
             android:entryValues="@array/logging_levels"
-            android:summary="Changes reflect after restart"
+            android:summary="@string/changes_reflect_after_restart"
             android:key="logging_level"
             android:defaultValue="info"
             />
         <Preference
             android:summary="@string/summary_peers"
-            android:title="@string/title_peers"
+            android:title="@string/peers"
             android:enabled="false"
             android:key="@string/key_get_peers"
             />
@@ -93,7 +92,7 @@
             android:key="debug_messages"
             />
         <Preference
-            android:title="@string/wallet_log_title"
+            android:title="@string/wallet_log"
             android:key="dcrwallet_log"
             />
         <Preference

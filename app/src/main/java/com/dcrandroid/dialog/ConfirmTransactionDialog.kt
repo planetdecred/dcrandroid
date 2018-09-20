@@ -1,5 +1,6 @@
 package com.dcrandroid.dialog
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -22,6 +23,7 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
     private var fee : Long? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -34,7 +36,8 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         format.applyPattern("#.########")
 
         val tvTitle = findViewById<TextView>(R.id.title)
-        tvTitle.text = "Sending ${format.format(Mobilewallet.amountCoin(amount!!))} DCR"
+
+        tvTitle.text =  context.getString(R.string.sending) + " ${format.format(Mobilewallet.amountCoin(amount!!))} DCR"
 
         val tvAddress = findViewById<TextView>(R.id.address)
         tvAddress.text = address
@@ -42,7 +45,7 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         val tvFee = findViewById<TextView>(R.id.fee)
 
         val estFee = Utils.signedSizeToAtom(fee!!)
-        tvFee.text = "${format.format(Mobilewallet.amountCoin(estFee!!))} DCR FEE (${format.format(fee!! / 1024F)} kB)"
+        tvFee.text = "${format.format(Mobilewallet.amountCoin(estFee!!))} DCR ${context.getString(R.string.fee_cap)} (${format.format(fee!! / 1024F)} kB)"
 
         val tvTotal = findViewById<TextView>(R.id.total)
 

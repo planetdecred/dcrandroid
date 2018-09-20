@@ -1,5 +1,6 @@
 package com.dcrandroid.adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private List<TransactionItem> historyList;
     private LayoutInflater layoutInflater;
     private PreferenceUtil util;
+    private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView Amount;
@@ -46,10 +48,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
     }
 
-    public TransactionAdapter(List<TransactionItem> historyListList , LayoutInflater inflater) {
+    public TransactionAdapter(List<TransactionItem> historyListList , Context context) {
         this.historyList = historyListList;
-        this.layoutInflater = inflater;
-        this.util = new PreferenceUtil(inflater.getContext());
+        this.context = context;
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.util = new PreferenceUtil(context);
     }
 
     @Override
@@ -70,14 +73,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if(history.getHeight() == -1){
             //No included in block chain, therefore transaction is pending
             holder.status.setTextColor(Color.parseColor("#3d659c"));
-            holder.status.setText("pending");
+            holder.status.setText(context.getString(R.string.pending));
         }else{
             if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
                 holder.status.setTextColor(Color.parseColor("#55bb97"));
-                holder.status.setText("confirmed");
+                holder.status.setText(context.getString(R.string.confirmed));
             }else{
                 holder.status.setTextColor(Color.parseColor("#3d659c"));
-                holder.status.setText("pending");
+                holder.status.setText(context.getString(R.string.pending));
             }
         }
 
@@ -101,7 +104,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
 
         if (history.type.equalsIgnoreCase("vote")) {
-            holder.Amount.setText("Vote");
+            holder.Amount.setText(R.string.vote);
         }
 
     }

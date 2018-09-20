@@ -74,7 +74,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(this);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
-        transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
+        transactionAdapter = new TransactionAdapter(transactionList, rootView.getContext());
         recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -190,8 +190,8 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 latestTransactionHeight = latestTx.getHeight() + 1;
                 transactionAdapter.notifyDataSetChanged();
                 System.out.println("Done: " + transactionList.size());
-                if (transactionList.size() == 0) {
-                    if (refresh.isShown()) {
+                if(transactionList.size() == 0){
+                    if(refresh.isShown()){
                         refresh.setVisibility(View.INVISIBLE);
                     }
                 }

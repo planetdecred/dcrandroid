@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
             public boolean onLongClick(View v) {
                 String enteredSeed = "";
                 Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
-                        .putExtra("seed", enteredSeed);
+                        .putExtra(Constants.SEED, enteredSeed);
                 startActivity(i);
                 return true;
             }
@@ -63,21 +64,18 @@ public class ConfirmSeedActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String enteredSeed = confirmView.getText().toString().trim();
                 if (!restore) {
-                    System.out.println("Seed: " + seed);
-                    System.out.println("Entered Seed: " + enteredSeed);
                     if (seed.equals(enteredSeed)) {
                         Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
-                                .putExtra("seed", enteredSeed);
+                                .putExtra(Constants.SEED, enteredSeed);
                         startActivity(i);
                     } else {
                         Toast.makeText(ConfirmSeedActivity.this, R.string.incorrect_seed_input, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    System.out.println("Verifying: " + enteredSeed);
                     DcrConstants constants = DcrConstants.getInstance();
                     if (constants.wallet.verifySeed(enteredSeed)) {
                         Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
-                                .putExtra("seed", enteredSeed);
+                                .putExtra(Constants.SEED, enteredSeed);
                         startActivity(i);
                     } else {
                         Toast.makeText(ConfirmSeedActivity.this, R.string.incorrect_seed_input, Toast.LENGTH_LONG).show();
@@ -128,8 +126,8 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         Intent i = getIntent();
         Bundle b = i.getExtras();
         if(b != null) {
-            seed = b.getString("seed").trim();
-            restore = b.getBoolean("restore");
+            seed = b.getString(Constants.SEED).trim();
+            restore = b.getBoolean(Constants.RESTORE);
             seeds = new ArrayList<>();
             String[] seedsArray = seed.split(" ");
             tempSeeds = new HashSet<>(Arrays.asList(seedsArray));

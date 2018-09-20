@@ -31,6 +31,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     private List<Account> accountList;
     private LayoutInflater layoutInflater;
     private PreferenceUtil preferenceUtil;
+    private Context context;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView accountName, total, spendable, labelImmatureRewards, immatureRewards, labelLockedByTickets,
@@ -75,6 +76,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     public AccountAdapter(List<Account> accountListList ,LayoutInflater inflater, Context context) {
         this.accountList = accountListList;
         this.layoutInflater = inflater;
+        this.context = context;
         preferenceUtil = new PreferenceUtil(context);
     }
 
@@ -92,7 +94,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         boolean hidden = preferenceUtil.getBoolean(Constants.HIDE_WALLET + account.getAccountNumber(), false);
         if(hidden){
             holder.accountName.setText(
-                    String.format(Locale.getDefault(), "%s (hidden)", account.getAccountName())
+                    String.format(Locale.getDefault(), "%s (%s)", account.getAccountName(), context.getString(R.string.hidden))
             );
             holder.view.setBackgroundColor(Color.parseColor("#F4F6F6"));
             holder.icon.setBackgroundResource(R.drawable.account_default);
@@ -133,7 +135,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         holder.hdPath.setText(account.getHDPath());
 
         holder.keys.setText(
-                String.format(Locale.getDefault(), "%d external, %d internal, %d imported", account.getExternalKeyCount(), account.getInternalKeyCount(), account.getImportedKeyCount())
+                String.format(Locale.getDefault(), "%d %s, %d %s, %d %s", account.getExternalKeyCount(), context.getString(R.string.external),
+                        account.getInternalKeyCount(), context.getString(R.string.internal), account.getImportedKeyCount(), context.getString(R.string.imported))
         );
 
         int emptyColor = Color.parseColor("#C4CBD2");

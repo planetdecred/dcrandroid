@@ -72,7 +72,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         tvLoading = findViewById(R.id.loading_status);
         constants = DcrConstants.getInstance();
         String homeDir = getFilesDir()+"/dcrwallet/";
-        constants.wallet = new LibWallet(homeDir, "badgerdb");
+        constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB);
         constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
         constants.wallet.initLoader();
         //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
@@ -113,7 +113,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         loadThread = new Thread(){
             public void run() {
                 try {
-                    System.out.println("Opening");
                     setText(getString(R.string.opening_wallet));
                     constants.wallet.openWallet();
                     Intent i = new Intent(SplashScreen.this, MainActivity.class);
@@ -127,10 +126,10 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         @Override
                         public void run() {
                             InfoDialog infoDialog = new InfoDialog(SplashScreen.this)
-                                    .setDialogTitle("Failed to open wallet")
+                                    .setDialogTitle(getString(R.string.failed_to_open_wallet))
                                     .setMessage(e.getMessage())
                                     .setIcon(R.drawable.np_amount_withdrawal) //Temporary Icon
-                                    .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             finish();

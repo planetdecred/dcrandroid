@@ -86,7 +86,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:textColor="#8997A5"
-                android:text="Total balance:"
+                android:text="@string/total_balance"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/tv_connection_status"
-                        android:text="Not Synced"
+                        android:text="@string/connecting_to_peers"
                         android:gravity="start"
                         android:textSize="13sp"
                         android:paddingStart="5dp"

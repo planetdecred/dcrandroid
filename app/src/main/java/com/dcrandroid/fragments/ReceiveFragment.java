@@ -119,13 +119,12 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             accountNumbers.clear();
             categories.clear();
             for(int i = 0; i < accounts.size(); i++){
-                if(accounts.get(i).getAccountName().trim().equalsIgnoreCase("imported")){
+                if(accounts.get(i).getAccountName().trim().equalsIgnoreCase(Constants.IMPORTED)){
                     continue;
                 }
                 categories.add(i, accounts.get(i).getAccountName());
                 accountNumbers.add(accounts.get(i).getAccountNumber());
             }
-            System.out.println("Got Accounts in "+(System.currentTimeMillis() - startTime)+"ms");
             getAddress(0);
             dataAdapter.notifyDataSetChanged();
         }catch (Exception e){
@@ -134,19 +133,15 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     private void getAddress(final int accountNumber){
-//        pd = Utils.getProgressDialog(ReceiveFragment.this.getContext(), false,false,getString(R.string.getting_address));
-//        pd.show();
         try {
             final String receiveAddress = constants.wallet.addressForAccount(accountNumber);
-            System.out.println("Got Address in "+(System.currentTimeMillis() - startTime)+"ms");
             preferenceUtil.set(Constants.RECENT_ADDRESS,receiveAddress);
             address.setText(receiveAddress);
             imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
-            System.out.println("Generated QR in "+(System.currentTimeMillis() - startTime)+"ms");
         } catch (Exception e) {
             e.printStackTrace();
             Looper.prepare();
-            Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occured_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
+            Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occurred_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
         }
     }
 

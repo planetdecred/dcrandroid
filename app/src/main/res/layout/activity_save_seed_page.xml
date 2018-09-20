@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:layout_marginTop="8dp"
-        android:text="Setting up Decred Wallet"
+        android:text="@string/setting_up_dcrandroid"
         android:textSize="18sp"
         android:textColor="#091440"
         android:id="@+id/header"
@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet."
+        android:text="@string/save_seed_instruction"
         android:textColor="#596D81"
         android:padding="8dp"
         android:layout_below="@+id/header"
@@ -67,9 +67,8 @@
 
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/btn_shape"
-        android:text="I copied the seed Phrase"
+        android:text="@string/i_copied_the_seed_phrase"
         android:layout_gravity="center"
         android:padding="8dp"
         android:layout_marginBottom="25dp"

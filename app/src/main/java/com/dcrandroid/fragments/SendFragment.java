@@ -147,11 +147,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 final String destAddress = address.getText().toString();
 
                 if (destAddress.equals("")) {
-                    addressError = "Destination Address can not be empty";
-                } else if (!constants.wallet.isAddressValid(destAddress)) {
-                    addressError = "Destination Address is not valid";
-                } else if (amount.getText().toString().equals("")) {
-                    amountError = "Amount cannot be empty";
+                    addressError  = getString(R.string.empty_destination_address);
+                }else if(!constants.wallet.isAddressValid(destAddress)){
+                    addressError = getString(R.string.invalid_destination_address);
+                }else if (amount.getText().toString().equals("")) {
+                    amountError = getString(R.string.empty_amount);
                 }
 
                 if (addressError.length() > 0 || amountError.length() > 0) {
@@ -208,10 +208,10 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         @Override
         public void afterTextChanged(Editable s) {
             if (s.toString().equals("")) {
-                addressError = "";
+                addressError = getString(R.string.empty_destination_address);
                 displayError(false);
             } else if (!constants.wallet.isAddressValid(s.toString())) {
-                addressError = "Destination Address is not valid";
+                addressError = getString(R.string.invalid_destination_address);
                 displayError(false);
             } else {
                 addressError = "";
@@ -401,7 +401,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
         FragmentActivity activity = getActivity();
         if (activity == null) {
-            System.out.println("Activity is null");
             return;
         }
 
@@ -412,7 +411,6 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         categories = new ArrayList<>();
 
         if (getContext() == null) {
-            System.out.println("Context is null");
             return;
         }
         dataAdapter = new ArrayAdapter<>(getContext(), R.layout.custom_spinner_item, categories);
@@ -589,10 +587,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             if (resultCode == RESULT_OK) {
                 try {
                     String returnString = intent.getStringExtra(Constants.ADDRESS);
-                    System.out.println("Code: " + returnString);
-                    if (returnString.startsWith("decred:"))
-                        returnString = returnString.replace("decred:", "");
-                    if (returnString.length() < 25) {
+
+                    if(returnString.startsWith("decred:"))
+                        returnString = returnString.replace("decred:","");
+                
+                    if(returnString.length() < 25){
                         Toast.makeText(SendFragment.this.getContext(), R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     } else if (returnString.length() > 36) {
@@ -639,8 +638,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     final ArrayList<Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     accountNumbers.clear();
                     categories.clear();
-                    for (int i = 0; i < accounts.size(); i++) {
-                        if (accounts.get(i).getAccountName().trim().equalsIgnoreCase("imported")) {
+                    for(int i = 0; i < accounts.size(); i++){
+                        if(accounts.get(i).getAccountName().trim().equalsIgnoreCase(Constants.IMPORTED)){
                             continue;
                         }
 
@@ -653,8 +652,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         categories.add(i, accounts.get(i).getAccountName() + " [" + spanCoinsInWallet + " DCR" + "]");
                         accountNumbers.add(accounts.get(i).getAccountNumber());
                     }
-                    if (getActivity() == null) {
-                        System.out.println("Activity is null");
+                    if(getActivity() == null){
                         return;
                     }
                     getActivity().runOnUiThread(new Runnable() {
@@ -670,8 +668,8 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         }.start();
     }
 
-    public void startTransaction(final String passphrase, final String destAddress, final long amt) {
-        pd = Utils.getProgressDialog(getContext(), false, false, "Processing...");
+    public void startTransaction(final String passphrase, final String destAddress,final long amt){
+        pd = Utils.getProgressDialog(getContext(),false,false,getString(R.string.processing_colon));
         pd.show();
         new Thread() {
             public void run() {
@@ -688,8 +686,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                     for (byte b : hashList) {
                         sb.append(String.format(Locale.getDefault(), "%02x", b));
                     }
-                    System.out.println("Hash: " + sb.toString());
-                    if (getActivity() != null) {
+                    if(getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -725,17 +722,17 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
             return;
         }
         Spannable dialogTitle = CoinFormat.Companion.format(
-                String.format(Locale.getDefault(), "Sending %s DCR", Utils.removeTrailingZeros(Mobilewallet.amountCoin(amt)))
+                String.format(Locale.getDefault(), "%x %s DCR", getString(R.string.sending),Utils.removeTrailingZeros(Mobilewallet.amountCoin(amt)))
         );
         InfoDialog infoDialog = new InfoDialog(getContext());
         infoDialog.setDialogTitle(dialogTitle)
-                .setMessage("Please confirm to send funds")
+                .setMessage(getString(R.string.confirm_send_funds))
                 .setIcon(R.drawable.np_amount_withdrawal)
                 .setTitleTextColor(Color.parseColor("#2DD8A3"))
                 .setMessageTextColor(Color.parseColor("#617386"))
-                .setPositiveButton("CONFIRM", null)
-                .setNegativeButton("CANCEL", null);
-        //.show(); Needs UI Design for send confirmation with passphrase input
+                .setPositiveButton(getString(R.string.confirm).toUpperCase(), null)
+                .setNegativeButton(getString(R.string.cancel).toUpperCase(), null);
+                //.show(); Needs UI Design for send confirmation with passphrase input
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -759,7 +756,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                                 .setAddress(getDestinationAddress())
                                 .setAmount(getAmount())
                                 .setFee(unsignedTransaction.getEstimatedSignedSize())
-                                .setPositiveButton("SEND", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         startTransaction(pass, getDestinationAddress(), getAmount());
@@ -785,26 +782,24 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
     }
 
     public void showTxConfirmDialog(final String txHash) {
-        if (getActivity() == null) {
-            System.out.println("Activity is null");
+        if(getActivity() == null){
             return;
         }
-        if (getContext() == null) {
-            System.out.println("Context is null");
+        if(getContext() == null){
             return;
         }
         new InfoDialog(getContext())
-                .setDialogTitle("Transaction Was Successful")
-                .setMessage("HASH:\n" + txHash)
+                .setDialogTitle(getString(R.string.transaction_was_successful))
+                .setMessage(getString(R.string.hash_colon) + "\n" + txHash)
                 .setIcon(R.drawable.np_amount_withdrawal)
                 .setTitleTextColor(Color.parseColor("#2DD8A3"))
                 .setMessageTextColor(Color.parseColor("#2970FF"))
-                .setPositiveButton("VIEW", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.view_cap), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         displayOverview();
                     }
-                }).setNegativeButton("CLOSE", null)
+                }).setNegativeButton(getString(R.string.close_cap), null)
                 .setMessageClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -870,15 +865,15 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
         }
         if (s.indexOf('.') != -1) {
             String atoms = s.substring(s.indexOf('.'));
-            if (atoms.length() > 9) {
-                amountError = "Amount has more then 8 decimal places";
+            if(atoms.length() > 9){
+                amountError = getString(R.string.amount_invalid_decimal_places);
                 displayError(false);
                 return false;
             }
         }
-        if (Double.parseDouble(s) == 0) {
-            if (sending) {
-                amountError = "Amount is not valid";
+        if(Double.parseDouble(s) == 0){
+            if(sending){
+                amountError = getString(R.string.invalid_amount);
                 displayError(false);
             }
             return false;
@@ -940,7 +935,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                 connection.setDoInput(true);
                 connection.setReadTimeout(7000);
                 connection.setConnectTimeout(7000);
-                connection.setRequestProperty("user-agent", sendFragment.util.get("user_agent", ""));
+                connection.setRequestProperty(Constants.USER_AGENT,sendFragment.util.get(Constants.USER_AGENT,""));
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
                 StringBuilder result = new StringBuilder();
@@ -971,7 +966,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
 
             if (s == null) {
                 sendFragment.exchangeUnavailable.setVisibility(View.VISIBLE);
-                sendFragment.exchangeUnavailable.setText(String.format("%s rate unavailable (tap to retry)", source));
+                sendFragment.exchangeUnavailable.setText(String.format(sendFragment.getString(R.string.exchange_rate_unavailable), source));
                 return;
             }
             try {
@@ -1003,8 +998,11 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                         sendFragment.exchangeAmount.addTextChangedListener(sendFragment.exchangeWatcher);
                     }
 
-                } else {
-                    Toast.makeText(sendFragment.getContext(), "Exchange failed with error: " + apiResult.getString("message"), Toast.LENGTH_SHORT).show();
+                    sendFragment.exchangeAmount.setVisibility(View.VISIBLE);
+                    sendFragment.equivalentAmount.setVisibility(View.VISIBLE);
+                    sendFragment.exchangeCurrency.setVisibility(View.VISIBLE);
+                }else{
+                    Toast.makeText(sendFragment.getContext(), sendFragment.getString(R.string.exchange_rate_error) + apiResult.getString(Constants.MESSAGE), Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

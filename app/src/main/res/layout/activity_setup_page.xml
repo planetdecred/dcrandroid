@@ -101,7 +101,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Build Date: "
+        android:text="@string/build_date"
         android:layout_marginEnd="3dp"
         android:layout_marginRight="3dp"
         />
@@ -109,7 +109,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text=""
         android:id="@+id/build_date"
         android:gravity="bottom"
         />
