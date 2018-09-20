@@ -509,6 +509,7 @@ public class SendFragment extends android.support.v4.app.Fragment implements Ada
                             public void run() {
                                 if(pd.isShowing()){ pd.dismiss(); }
                                 addressError = "";
+                                prepareAccounts();
                                 showTxConfirmDialog(sb.toString());
                             }
                         });
