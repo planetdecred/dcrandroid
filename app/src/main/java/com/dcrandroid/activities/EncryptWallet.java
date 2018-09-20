@@ -45,7 +45,7 @@ public class EncryptWallet extends AppCompatActivity{
         Bundle b = i.getExtras();
 
         if(b != null)
-            seed = b.getString("seed");
+            seed = b.getString(Constants.SEED);
             encryptWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,14 +63,14 @@ public class EncryptWallet extends AppCompatActivity{
                                 if (wallet == null){
                                     return;
                                 }
-                                show("Creating wallet...");
+                                show(getString(R.string.creating_wallet));
                                 wallet.createWallet(pass, seed);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         pd.dismiss();
                                         Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                                        i.putExtra("passphrase", pass);
+                                        i.putExtra(Constants.PASSPHRASE, pass);
                                         startActivity(i);
                                         //Finish all the activities before this
                                         ActivityCompat.finishAffinity(EncryptWallet.this);

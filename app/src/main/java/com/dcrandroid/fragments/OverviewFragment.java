@@ -83,7 +83,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         util = new PreferenceUtil(getContext());
         constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
-        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark2,
                 R.color.colorPrimaryDark2,
@@ -92,7 +91,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view2);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
-        transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
+        transactionAdapter = new TransactionAdapter(transactionList, getContext());
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
         syncIndicator = rootView.getRootView().findViewById(R.id.iv_sync_indicator);
 

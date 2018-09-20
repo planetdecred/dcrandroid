@@ -155,8 +155,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             //No included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(Color.parseColor("#3d659c"));
-            status.setText("pending");
-            confirmation.setText("unconfirmed");
+            status.setText(R.string.pending);
+            confirmation.setText(R.string.unconfirmed);
         }else{
             int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
             confirmations += 1; //+1 confirmation that it exist in a block. best block - height returns 0.
@@ -164,11 +164,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
                 status.setBackgroundResource(R.drawable.tx_status_confirmed);
                 status.setTextColor(Color.parseColor("#55bb97"));
-                status.setText("confirmed");
+                status.setText(R.string.confirmed);
             }else{
                 status.setBackgroundResource(R.drawable.tx_status_pending);
                 status.setTextColor(Color.parseColor("#3d659c"));
-                status.setText("pending");
+                status.setText(R.string.pending);
             }
         }
     }
@@ -191,7 +191,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             walletOutputIndices.add(usedOutput.get(i).index);
             walletOutput.add(
                     usedOutput.get(i).address +
-                            (txDirection == 0 ? Constants.NBSP + "(change)" + Constants.NBSP : Constants.NBSP) +
+                            (txDirection == 0 ? getString(R.string.change_bracket)  + Constants.NBSP : Constants.NBSP) +
                             "("+wallet.getAccountName(usedOutput.get(i).account) +")\n" +
                             Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedOutput.get(i).amount)) + " DCR"
             );
@@ -213,11 +213,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
 
-                String address = addresses.length() > 0 ? addresses.getString(0) : "[script]";
+                String address = addresses.length() > 0 ? addresses.getString(0) : getString(R.string.script_bracket);
 
                 boolean nullScript = output.getBoolean(Constants.NULL_SCRIPT);
 
-                walletOutput.add(address + " (external) \n" + (nullScript ? "[null data]" : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong("Value"))) + " DCR"));
+                walletOutput.add(address + getString(R.string.external_bracket) + (nullScript ? getString(R.string.null_data_bracket) : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong(Constants.VALUE))) + " DCR"));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
@@ -230,7 +230,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
 
                 walletInput.add(input.getString(Constants.PREVIOUS_TRANSACTION_HASH) + ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX)
-                        + " (external)\n"+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong(Constants.AMOUNT_IN))) + " DCR");
+                        + Constants.NBSP + getString(R.string.external_bracket)+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong(Constants.AMOUNT_IN))) + " DCR");
             }
 
         } catch (Exception e) {
@@ -265,8 +265,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 Utils.copyToClipboard(this, txHash, getString(R.string.tx_hash_copy));
                 break;
             case R.id.tx_details_raw_tx:
-                System.out.println("RawTx: "+rawTx);
-                Utils.copyToClipboard(this, rawTx, "Raw transaction copied to clipboard");
+                Utils.copyToClipboard(this, rawTx, getString(R.string.raw_tx_copied));
                 break;
         }
         return super.onOptionsItemSelected(item);

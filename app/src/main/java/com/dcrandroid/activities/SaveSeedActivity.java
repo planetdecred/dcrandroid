@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.R;
 import com.dcrandroid.view.SeedLayout;
@@ -34,7 +35,7 @@ public class SaveSeedActivity extends AppCompatActivity {
         DcrConstants constants = DcrConstants.getInstance();
         try {
             seed = constants.wallet.generateSeed();
-            String tempSeed[] = seed.split(" ");
+            String tempSeed[] = seed.split(Constants.NBSP);
             for(int i = 0; i <= tempSeed.length-1; i++){
                String seed = (i+1) +". "+tempSeed[i];
 
@@ -57,8 +58,8 @@ public class SaveSeedActivity extends AppCompatActivity {
     private void btnCopyPhrase(){
         if(!seed.equals("")) {
             Intent i = new Intent(SaveSeedActivity.this, ConfirmSeedActivity.class)
-                    .putExtra("seed", seed)
-                    .putExtra("restore", false);
+                    .putExtra(Constants.SEED, seed)
+                    .putExtra(Constants.RESTORE, false);
             startActivity(i);
         }else{
             Toast.makeText(SaveSeedActivity.this, R.string.error_seed_not_generated, Toast.LENGTH_SHORT).show();

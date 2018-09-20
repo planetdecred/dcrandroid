@@ -340,7 +340,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="@string/make_this_wallet_default_for_all_outgoing_and_incoming_transactions"
+                android:text="@string/default_wallet_info"
                 android:textColor="#C4CBD2"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular_family" />

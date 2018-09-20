@@ -174,7 +174,7 @@ public class Utils {
         return Math.round(totalDays * blocksPerDay * (0.95));
     }
 
-    public static String calculateTime(long seconds) {
+    public static String calculateTime(long seconds, Context context) {
         if (seconds > 59) {
 
             // convert to minutes
@@ -204,31 +204,31 @@ public class Utils {
                                 //Convert to
                                 seconds /= 12;
 
-                                return seconds +"y ago";
+                                return seconds +"y "+ context.getString(R.string.ago);
                             }
 
                             //months
-                            return seconds +"mo ago";
+                            return seconds +"mo "+ context.getString(R.string.ago);
                         }
                         //weeks
-                        return seconds + "w ago";
+                        return seconds + "w "+ context.getString(R.string.ago);
                     }
                     //days
-                    return seconds + "d ago";
+                    return seconds + "d "+ context.getString(R.string.ago);
                 }
                 //hour
-                return seconds + "h ago";
+                return seconds + "h "+ context.getString(R.string.ago);
             }
 
             //minutes
-            return seconds + "m ago";
+            return seconds + "m "+ context.getString(R.string.ago);
         }
 
         if(seconds < 0){
-            return "now";
+            return context.getString(R.string.now);
         }
         //seconds
-        return seconds + "s ago";
+        return seconds + "s "+ context.getString(R.string.ago);
     }
 
     public static String formatDecred(long dcr){

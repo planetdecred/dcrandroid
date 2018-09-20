@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 
 import java.text.SimpleDateFormat;
@@ -48,8 +49,8 @@ public class SetupWalletActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(SetupWalletActivity.this, ConfirmSeedActivity.class)
-                        .putExtra("seed", Utils.getWordList(SetupWalletActivity.this))
-                        .putExtra("restore", true);
+                        .putExtra(Constants.SEED, Utils.getWordList(SetupWalletActivity.this))
+                        .putExtra(Constants.RESTORE, true);
                 startActivity(i);
             }
         });

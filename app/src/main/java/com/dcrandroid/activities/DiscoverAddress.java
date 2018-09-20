@@ -64,14 +64,14 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
 
         final EditText passphrase = dialogView.findViewById(R.id.passphrase_input);
 
-        dialogBuilder.setMessage("Enter your passphrase");
+        dialogBuilder.setMessage(R.string.enter_your_passphrase);
         dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String pass = passphrase.getText().toString();
                 if(pass.length() > 0){
                     discover(pass);
                 }else{
-                    Toast.makeText(DiscoverAddress.this, "Invalid Passphrase", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiscoverAddress.this, R.string.invalid_passphrase, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -101,14 +101,14 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(DiscoverAddress.this, "Done", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DiscoverAddress.this, getString(R.string.done), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     });
                 }catch (Exception e){
                     e.printStackTrace();
                     Looper.prepare();
-                    Toast.makeText(DiscoverAddress.this, "ERROR: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(DiscoverAddress.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
@@ -119,7 +119,7 @@ public class DiscoverAddress extends AppCompatActivity implements Animation.Anim
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvLoading.setText("Discovering Addresses");
+                tvLoading.setText(getString(R.string.discovering_used_addresses));
             }
         });
     }

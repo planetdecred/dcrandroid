@@ -32,7 +32,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="25dp"
             android:fontFamily="@font/source_sans_pro_regular"
-            android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
+            android:text="@string/qr_code_help_text"
             android:textColor="#617386"
             android:textSize="14sp" />
 
@@ -51,10 +51,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro_regular"
                 android:gravity="end"
-                android:text="@string/from"
-                android:textColor="@color/secondaryTextColor87"
+                android:text="@string/from_colon"
+                android:textColor="#617386"
                 android:textSize="16sp"
-
                 />
 
             <LinearLayout
@@ -73,7 +72,6 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="-7dp"
                     android:layout_marginRight="-7dp"
-                    android:entries="@array/nav_item_activity_titles"
                     android:gravity="start">
 
                 </Spinner>
@@ -365,7 +363,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="center"
-                    android:text="@string/fee"
+                    android:text="@string/fee_colon"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
 
@@ -464,7 +462,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/bittrex_rate_unavailable_tap_to_retry"
+                android:text="@string/bittrex_unavailable"
                 android:textColor="#ff0004"
                 android:visibility="invisible" />
         </LinearLayout>

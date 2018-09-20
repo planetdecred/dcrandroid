@@ -47,21 +47,24 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            getActivity().setTitle("Settings");
+            if(getActivity() == null)
+                return;
+
+            getActivity().setTitle(getActivity().getString(R.string.settings));
             constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
-            pd = Utils.getProgressDialog(getActivity(),false,false,"Scanning Blocks");
+            pd = Utils.getProgressDialog(getActivity(),false,false,getActivity().getString(R.string.scanning_block));
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
-            final ListPreference networkModes = (ListPreference) findPreference("network_modes");
+            final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             Date buildTime = BuildConfig.buildTime;
             result = formatter.format(buildTime);
             buildDate.setSummary(result);
-            ListPreference currencyConversion = (ListPreference) findPreference("currency_conversion");
+            ListPreference currencyConversion = (ListPreference) findPreference(Constants.CURRENCY_CONVERSION);
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 1){
                 remoteNodeCertificate.setEnabled(true);
@@ -93,7 +96,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.NETWORK_MODES, String.valueOf(i));
-                    Toast.makeText(getActivity(), "Changes will take effect after app restarts", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.changes_after_restart, Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
@@ -113,7 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
                         return true;
                     }
 
-                    Toast.makeText(getActivity(), "Peer address is invalid", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.invalid_peer_address, Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
@@ -159,16 +162,15 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     new AlertDialog.Builder(getActivity())
-                            .setTitle("Rescan blocks")
-                            .setMessage("Are you sure? This could take some time.")
-                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            .setTitle(R.string.rescan_blocks)
+                            .setMessage(R.string.rescan_blocks_confirmation)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     pd.show();
                                     new Thread(){
                                         public void run(){
                                             try {
-                                                System.out.println("Rescanning");
                                                 constants.wallet.rescan(0, MainPreferenceFragment.this);
                                             }catch (Exception e){
                                                 e.printStackTrace();
@@ -176,7 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
                                         }
                                     }.start();
                                 }
-                            }).setNegativeButton("NO", null)
+                            }).setNegativeButton(android.R.string.no, null)
                             .show();
                     return true;
                 }
@@ -224,7 +226,7 @@ public class SettingsActivity extends AppCompatActivity {
                         pd.dismiss();
                     }
                     if(cancelled){
-                        Toast.makeText(getActivity(), "Rescan cancelled", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.rescan_cancelled, Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(getActivity(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
                     }

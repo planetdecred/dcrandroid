@@ -103,7 +103,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/copy_on_click"
+                android:text="@string/copy_on_tap"
                 android:id="@+id/tv_copy_on_tap"
                 android:gravity="center"
                 android:textColor="#C4CBD2"

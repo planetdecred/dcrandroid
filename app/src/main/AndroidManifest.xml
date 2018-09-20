@@ -96,10 +96,6 @@
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
-            android:name=".activities.WebviewActivity"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity
             android:name=".activities.SettingsActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
