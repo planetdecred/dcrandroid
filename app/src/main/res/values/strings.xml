@@ -296,13 +296,14 @@
     <string-array name="history_transaction_list">
         <item>All</item>
         <item>Regular</item>
+        <item>Sent</item>
+        <item>Received</item>
+        <!-- remove this when a functional will ready -->
         <!--<item>Ticket</item>-->
         <!--<item>Votes</item>-->
         <!--<item>Revokes</item>-->
-        <item>Sent</item>
-        <item>Received</item>
     </string-array>
-    
+
     <string name="dcr_to_usd_exchange_url">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
     <string name="copy_on_click">(copy on tap)</string>
     <string name="for_more_information_please_visit">For more information please visit</string>
