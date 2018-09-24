@@ -12,7 +12,7 @@
     <color name="Amount1Text">#333333</color>
     <color name="Amount2Text">#11161b</color>
     <color name="backgcolor">#ebefee</color>
-    <color name="backgcolorwhite">#ffffff</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="ButtonColor">#2970FF</color>
     <color name="bacgroundColor">#F3F5F6</color>
     <color name="bacgroundTxColor">#f2f6f7</color>
@@ -33,6 +33,7 @@
     <color name="secondaryTextColor87">#de617386</color>
     <color name="secondaryTextColor38">#61617386</color>
     <color name="secondaryTextColor54">#8a617386</color>
+    <color name="titleTextColor">#8997A5</color>
     <color name="auth_text_color">#091440</color>
     <color name="auth_text_color_description">#596D81</color>
     <color name="linkTxtColor">#4A92FF</color>

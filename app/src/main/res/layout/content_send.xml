@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/sending_decred"
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
+            android:layout_marginLeft="5dp"
             android:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
             android:textColor="#617386"
@@ -82,7 +84,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_margin="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:background="#D0D1D1" />
 
         <LinearLayout
@@ -125,6 +128,8 @@
             android:id="@+id/border2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:background="#D0D1D1" />
 
         <LinearLayout
@@ -135,15 +140,13 @@
 
             <RelativeLayout
                 android:id="@+id/relativeDcrAndUse"
-                android:layout_width="0dp"
-                android:layout_height="88dp"
-                android:layout_weight="1">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/llDCR"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_marginTop="15dp"
                     android:orientation="horizontal">
 
@@ -176,6 +179,7 @@
                         android:minWidth="50dp"
                         android:textColor="@color/auth_text_color"
                         android:textColorHint="@color/secondaryTextColor38"
+                        android:textSize="18sp"
                         app:fontFamily="@font/inconsolata_regular_family" />
 
                     <TextView
@@ -199,7 +203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@+id/llDCR"
+                    android:layout_marginTop="20dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
@@ -212,7 +216,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/send_dcr_all"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <TextView
                         android:id="@+id/equivalent_tv"
@@ -231,7 +237,7 @@
                     <EditText
                         android:id="@+id/send_exchange_amount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:layout_marginLeft="30dp"
                         android:layout_marginStart="30dp"
@@ -262,18 +268,22 @@
                         android:textSize="14sp"
                         android:visibility="gone"
                         tools:visibility="visible" />
+
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/border3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/send_dcr_all"
+                    android:layout_marginTop="20dp"
+                    android:background="#D0D1D1" />
 
 
             </RelativeLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/border3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D0D1D1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -288,12 +298,13 @@
                 android:id="@+id/send_error_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:gravity="center"
                 android:paddingEnd="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
                 android:paddingStart="10dp"
-                android:textColor="@color/orange" />
+                android:textColor="@color/orange"
+                tools:text="test text" />
 
             <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
@@ -332,7 +343,7 @@
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro_regular"
-                    android:gravity="start"
+                    android:gravity="center"
                     android:text="@string/fee"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
@@ -357,7 +368,7 @@
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro_regular"
-                    android:gravity="start"
+                    android:gravity="center"
                     android:text="@string/estimate_size"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
@@ -384,7 +395,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
-                    android:text="Balance Remaining:"
+                    android:text="@string/balance_remaining"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
 
@@ -404,13 +415,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="5dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="Exchange Rate:"
+                    android:gravity="center"
+                    android:text="@string/exchange_rate"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="15sp" />
 
@@ -418,8 +430,12 @@
                     android:id="@+id/send_dcr_exchange_rate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingStart="30dp"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:text="test text" />
             </LinearLayout>
 
             <TextView
@@ -427,7 +443,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Bittrex rate unavailable (tap to retry)"
+                android:text="@string/bittrex_rate_unavailable_tap_to_retry"
                 android:textColor="#ff0004"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -439,6 +455,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="25dp"
+            android:clickable="false"
             android:background="@drawable/btn_shape1"
             android:text="@string/send"
             android:textColor="@color/black38"

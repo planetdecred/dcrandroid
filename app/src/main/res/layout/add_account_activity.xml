@@ -10,7 +10,7 @@
         android:padding="8dp"
         android:text="@string/add_an_account"
         android:gravity="center"
-        android:background="@color/backgcolorwhite"
+        android:background="@color/colorWhite"
         />
     <TextView
         android:layout_width="match_parent"
@@ -19,14 +19,14 @@
         android:text="@string/input_your_new_account_name_and_enter_your_private_passphrase"
         android:gravity="center"
         android:textSize="14sp"
-        android:background="@color/backgcolorwhite"
+        android:background="@color/colorWhite"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@color/backgcolorwhite"
+        android:background="@color/colorWhite"
         >
         <EditText
             android:id="@+id/add_acc_name"
