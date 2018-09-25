@@ -824,12 +824,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, boolean finished) {
         if(finished){
-            updatePeerCount();
+//            updatePeerCount();
             return;
         }
         setConnectionStatus(getString(R.string.fetching_headers));
-        String status = String.format(Locale.getDefault() , "Fetched %d Headers", fetchedHeadersCount);
-        //Nanoseconds to seconds
+        long currentTime = System.currentTimeMillis() / 1000;
+        long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
+        float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
+        fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
+        String status = String.format(Locale.getDefault() , "%.1f%% Fetched", fetchedPercentage);
         setBestBlockTime(lastHeaderTime);
         setChainStatus(status);
     }
@@ -837,7 +840,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd, boolean finished) {
         if(finished){
-            updatePeerCount();
+            //updatePeerCount();
             return;
         }
         setConnectionStatus("Fetching Missing CFilters");
@@ -869,22 +872,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         String status = String.format(Locale.getDefault(), "Latest Block: %d(%d%%)", constants.wallet.getBestBlock(), scannedPercentage);
         float ff = (float)rescannedThrough/bestBlock;
         ff *= 100;
-        System.out.println(status +" "+ ff);
         setChainStatus(status);
     }
 
     @Override
     public void onPeerConnected(int peerCount) {
         this.peerCount = peerCount;
-        if(synced)
-        updatePeerCount();
+        if(synced) updatePeerCount();
     }
 
     @Override
     public void onPeerDisconnected(int peerCount) {
         this.peerCount = peerCount;
-        if(synced)
-        updatePeerCount();
+        if(synced) updatePeerCount();
     }
 
     private void updatePeerCount(){
