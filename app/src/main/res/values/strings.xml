@@ -239,7 +239,7 @@
     <string name="label_hash">HASH:</string>
     <string name="show_history">Show History</string>
     <string name="i_copied_the_seed_phrase">I COPIED THE SEED PHRASE</string>
-    <string name="warninf_save_seed">Failure to keep this seed can result in theft of your funds and inability to recover your wallet</string>
+    <string name="warning_save_seed">Failure to keep this seed can result in theft of your funds and inability to recover your wallet</string>
     <string name="setting_up_decred_wallet">Setting up Decred Wallet</string>
     <string name="title_general">General</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>
@@ -313,14 +313,7 @@
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
 
-    <!-- Send Fragment-->
-    <string name="setting_up_your_wallet">Setting up your wallet</string>
-    <string name="send_in_dcr">Send in DCR:</string>
-    <string name="send_in_usd">Send in USD:</string>
-    <string name="usd">USD</string>
-    <string name="_0_00_dcr">0.00 DCR</string>
-    <string name="_0_00_">0.00 </string>
-    <!--/ Send Fragment -->
+
 
     <!-- Overview Fragment -->
     <string name="recent_activity">Recent Activity</string>
@@ -365,6 +358,7 @@
     <string name="passphrase_is_empty">Passphrase is empty</string>
     <string name="signature_copied_successfully">Signature copied successfully</string>
     <string name="setting_up_your_wallet">Setting up your wallet</string>
+
     <string name="send_in_dcr">Send in DCR:</string>
     <string name="send_in_usd">Send in USD:</string>
     <string name="usd">USD</string>
