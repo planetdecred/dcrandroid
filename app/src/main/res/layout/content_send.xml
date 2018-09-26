@@ -11,15 +11,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/sending_decred"
             android:textColor="#0C1E3E"
@@ -29,8 +29,8 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginBottom="25dp"
             android:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund"
             android:textColor="#617386"
@@ -41,10 +41,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingEnd="5dp"
             android:paddingStart="5dp"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,8 +60,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -92,7 +92,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:paddingStart="2dp"
+            android:paddingLeft="2dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp">
 
             <EditText
                 android:id="@+id/send_dcr_add"
@@ -103,8 +108,8 @@
                 android:hint="@string/destination_address"
                 android:inputType="text"
                 android:maxLines="1"
-                android:paddingBottom="3dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="3dp"
                 android:textColor="@color/linkTxtColor"
                 android:textColorHint="@color/secondaryTextColor38"
                 android:textSize="14sp" />
@@ -114,15 +119,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="2dp"
                 android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
                 android:clickable="true"
                 android:contentDescription="@string/scan"
                 android:focusable="true"
                 android:padding="4dp"
                 android:src="@mipmap/icons8_qr_code" />
 
+
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvDestinationError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_regular"
+            android:paddingLeft="5dp"
+            android:textColor="@color/orange"
+            android:visibility="visible"
+            tools:text="test text" />
 
         <View
             android:id="@+id/border2"
@@ -153,7 +170,7 @@
                     <TextView
                         android:id="@+id/amount_tv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="bottom"
                         android:fontFamily="@font/source_sans_pro_regular"
                         android:gravity="center"
@@ -164,33 +181,34 @@
                     <EditText
                         android:id="@+id/send_dcr_amount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="bottom"
-                        android:layout_marginLeft="30dp"
                         android:layout_marginStart="30dp"
+                        android:layout_marginLeft="30dp"
                         android:background="@null"
                         android:digits="0123456789."
                         android:hint="@string/_0_00_"
                         android:inputType="numberDecimal"
                         android:lines="1"
+                        android:maxWidth="150dp"
                         android:maxLength="17"
                         android:maxLines="1"
-                        android:maxWidth="150dp"
                         android:minWidth="50dp"
+                        android:textSize="18sp"
                         android:textColor="@color/auth_text_color"
                         android:textColorHint="@color/secondaryTextColor38"
-                        android:textSize="18sp"
                         app:fontFamily="@font/inconsolata_regular_family" />
 
                     <TextView
                         android:id="@+id/tvDCR"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="bottom"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
                         android:fontFamily="@font/source_sans_pro_regular"
                         android:text="@string/dcr"
+                        android:gravity="center"
                         android:textColor="@color/auth_text_color"
                         android:textSize="14sp"
                         android:visibility="gone"
@@ -203,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
@@ -223,9 +241,8 @@
                     <TextView
                         android:id="@+id/equivalent_tv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="bottom"
-                        android:layout_marginTop="5dp"
                         android:fontFamily="@font/source_sans_pro_regular"
                         android:gravity="center"
                         android:text="@string/send_in_usd"
@@ -239,16 +256,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginStart="30dp"
+                        android:layout_marginStart="29dp"
+                        android:layout_marginLeft="29dp"
                         android:background="@null"
                         android:digits="0123456789."
                         android:hint="@string/_0_00_"
                         android:inputType="numberDecimal"
                         android:lines="1"
-                        android:maxLength="17"
-                        android:maxLines="1"
                         android:maxWidth="150dp"
+                        android:maxLength="17"
+                        android:textSize="18sp"
+                        android:maxLines="1"
                         android:minWidth="50dp"
                         android:textColor="@color/auth_text_color"
                         android:textColorHint="@color/secondaryTextColor38"
@@ -258,10 +276,12 @@
                     <TextView
                         android:id="@+id/send_exchange_currency"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignTop="@+id/llUSD"
                         android:layout_gravity="bottom"
-                        android:layout_marginLeft="5dp"
+                        android:gravity="center"
                         android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
                         android:fontFamily="@font/source_sans_pro_regular"
                         android:text="@string/usd"
                         android:textColor="@color/auth_text_color"
@@ -276,7 +296,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/send_dcr_all"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:background="#D0D1D1" />
 
 
@@ -289,20 +309,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp">
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp">
 
             <TextView
                 android:id="@+id/send_error_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingEnd="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="5dp"
+                android:gravity="end"
                 android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
                 android:textColor="@color/orange"
                 tools:text="test text" />
 
@@ -352,7 +372,7 @@
                     android:id="@+id/send_dcr_estimate_fee"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
@@ -377,7 +397,7 @@
                     android:id="@+id/send_dcr_estimate_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_bytes"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
@@ -403,7 +423,7 @@
                     android:id="@+id/send_dcr_balance_remain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/source_sans_pro_regular"
+                    android:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="16sp" />
@@ -430,9 +450,9 @@
                     android:id="@+id/send_dcr_exchange_rate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="30dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
-                    android:paddingStart="30dp"
                     android:textColor="@color/secondaryTextColor"
                     android:textSize="15sp"
                     tools:text="test text" />
@@ -453,10 +473,10 @@
             android:layout_width="90dp"
             android:layout_height="36dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="25dp"
-            android:clickable="false"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/btn_shape1"
+            android:clickable="false"
             android:text="@string/send"
             android:textColor="@color/black38"
             android:textSize="14sp" />
