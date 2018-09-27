@@ -1,6 +1,9 @@
 package com.dcrandroid.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dcrandroid.MainActivity;
@@ -25,7 +31,6 @@ import com.dcrandroid.R;
 
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.data.Transaction;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -52,8 +57,12 @@ import mobilewallet.GetTransactionsResponse;
 public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
     private List<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>();
+
+    private ImageView syncIndicator;
     private TextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private Animation rotateAnimation;
 
     TransactionAdapter transactionAdapter;
     TextView refresh;
@@ -85,7 +94,18 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, layoutInflater);
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
-        tvBalance.setText(CoinFormat.Companion.format("0 DCR"));
+        syncIndicator = rootView.getRootView().findViewById(R.id.iv_sync_indicator);
+
+        if(!constants.synced) {
+            rotateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_rotate);
+            rotateAnimation.setRepeatCount(-1);
+            syncIndicator.setAnimation(rotateAnimation);
+        }else{
+            getBalance();
+            syncIndicator.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.VISIBLE);
+        }
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -160,7 +180,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (getActivity() != null){
             getActivity().setTitle(getString(R.string.overview));
         }
-        getBalance();
     }
 
     private int getMaxDisplayItems(){
@@ -285,6 +304,10 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onResume() {
         super.onResume();
+        IntentFilter filter = new IntentFilter(Constants.SYNCED);
+        if(getContext() != null) {
+            getContext().registerReceiver(receiver, filter);
+        }
         isForeground = true;
         if(needsUpdate){
             needsUpdate = false;
@@ -295,6 +318,9 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onPause() {
         super.onPause();
+        if(getContext() != null){
+            getContext().unregisterReceiver(receiver);
+        }
         isForeground = false;
     }
 
@@ -391,4 +417,17 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         }
     }
+
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                getBalance();
+                syncIndicator.clearAnimation();
+                syncIndicator.setVisibility(View.GONE);
+                tvBalance.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 }

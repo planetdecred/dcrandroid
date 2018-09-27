@@ -11,6 +11,7 @@ public class DcrConstants {
         return ourInstance;
     }
     public LibWallet wallet;
+    public boolean synced = false;
 
     private DcrConstants() {
 

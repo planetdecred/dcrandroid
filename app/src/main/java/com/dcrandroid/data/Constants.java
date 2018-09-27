@@ -59,6 +59,7 @@ public class Constants {
             HIDE_WALLET = "hide_wallet",
             NULL_SCRIPT = "NullScript",
             PREVIOUS_TRANSACTION_HASH = "PreviousTransactionHash",
-            PREVIOUS_TRANSACTION_INDEX = "PreviousTransactionIndex";
+            PREVIOUS_TRANSACTION_INDEX = "PreviousTransactionIndex",
+            SYNCED = "synced";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
