@@ -88,15 +88,27 @@
                 android:textColor="#8997A5"
                 android:text="Total balance:"
                 />
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:id="@+id/tv_total_balance"
-                android:gravity="right|end"
-                android:textColor="#424F67"
-                android:text="135,459.595954"
-                />
+                android:orientation="horizontal"
+                android:gravity="end">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fontFamily="@font/inconsolata_regular_family"
+                    android:id="@+id/tv_total_balance"
+                    android:textColor="#424F67"
+                    android:text="135,459.595954"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/decred_logo"
+                    android:id="@+id/iv_sync_indicator"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
             <LinearLayout

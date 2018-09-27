@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         BlockNotificationError, SpvSyncResponse {
 
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
-    private ImageView rescanImage, stopScan;
+    private ImageView rescanImage, stopScan, syncIndicator;
 
     public int pageID, menuAdd = 0;
     public static MenuItem menuOpen;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private DcrConstants constants;
     private PreferenceUtil util;
     private NotificationManager notificationManager;
-    private Animation animRotate;
+    private Animation rotateAnimation;
     private MainApplication mainApplication;
     private SoundPool alertSound;
     private int bestBlock = 0, peerCount, blockNotificationSound;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         rescanImage = findViewById(R.id.iv_rescan_blocks);
         stopScan = findViewById(R.id.iv_stop_rescan);
         totalBalance = findViewById(R.id.tv_total_balance);
+        syncIndicator = findViewById(R.id.iv_sync_indicator);
 
         ListView mListView = findViewById(R.id.lv_nav);
 
@@ -139,8 +140,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
-        animRotate.setRepeatCount(-1);
+        rotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
+        rotateAnimation.setRepeatCount(-1);
+        syncIndicator.setAnimation(rotateAnimation);
 
         stopScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 int blockHeight = constants.wallet.getBestBlock();
                 if(rescanHeight < blockHeight){
                     constants.wallet.rescan(rescanHeight, MainActivity.this);
-                    rescanImage.startAnimation(animRotate);
+                    rescanImage.startAnimation(rotateAnimation);
                     rescanImage.setEnabled(false);
                     chainStatus.setVisibility(View.GONE);
                     stopScan.setVisibility(View.VISIBLE);
@@ -658,8 +660,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             @Override
             public void run() {
                 //rescanHeight.setText("");
-                animRotate.cancel();
-                animRotate.reset();
+                rotateAnimation.cancel();
+                rotateAnimation.reset();
                 rescanImage.setEnabled(true);
                 chainStatus.setVisibility(View.VISIBLE);
                 stopScan.setVisibility(View.GONE);
@@ -686,8 +688,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                animRotate.cancel();
-                animRotate.reset();
+                rotateAnimation.cancel();
+                rotateAnimation.reset();
                 rescanImage.setEnabled(true);
                 chainStatus.setVisibility(View.VISIBLE);
                 stopScan.setVisibility(View.GONE);
@@ -792,11 +794,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onSynced(boolean b) {
         synced = b;
+        constants.synced = b;
         if (b){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     displayBalance();
+                    syncIndicator.clearAnimation();
+                    syncIndicator.setVisibility(View.GONE);
+                    totalBalance.setVisibility(View.VISIBLE);
                     connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
                 }
             });
@@ -806,7 +812,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             setChainStatus(status);
             setBestBlockTime(bestBlockTimestamp);
 
-            System.out.println("SYNCEEED: "+fragment);
+            sendBroadcast(new Intent(Constants.SYNCED));
 
             if(fragment instanceof OverviewFragment){
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
@@ -832,7 +838,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
         float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
         fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
-        String status = String.format(Locale.getDefault() , "%.1f%% Fetched", fetchedPercentage);
+        String status = String.format(Locale.getDefault() , "%.1f%% fetched", fetchedPercentage);
         setBestBlockTime(lastHeaderTime);
         setChainStatus(status);
     }

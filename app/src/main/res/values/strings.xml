@@ -117,7 +117,7 @@
     <string name="waiting_for_dcrd">Waiting for dcrd to come online</string>
     <string name="opening_wallet">Opening wallet…</string>
     <string name="subscribe_to_block_notification">Subscribing to block notifications…</string>
-    <string name="discovering_used_addresses">Discovering used addresses</string>
+    <string name="discovering_used_addresses">Discovering used addresses…</string>
     <string name="discovering_used_accounts">Discovering used accounts</string>
     <string name="fetching_headers">Fetching Headers…</string>
     <string name="could_not_open_wallet">Could not open wallet</string>
