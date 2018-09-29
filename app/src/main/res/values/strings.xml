@@ -311,4 +311,23 @@
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <!--/Error Messages-->
+
+    <string name="invalid_address">Invalid Address</string>
+    <string name="owned_validate_address">Owned Address</string>
+    <string name="external_validate_address">Address Valid, Not Owned</string>
+    <string name="security">Security</string>
+    <string name="validate_address_hint">Enter an address to validate</string>
+    <string name="validate_address">Validate Address</string>
+    <string name="sign_message">Sign Message</string>
+    <string name="enter_an_address">Enter an address</string>
+    <string name="verify_message">Verify Message</string>
+    <string name="please_enter_a_valid_address">Please enter a valid address</string>
+    <string name="enter_your_message">Enter your message</string>
+    <string name="this_field_is_required">This field is required</string>
+    <string name="enter_your_signature">Enter your signature</string>
+    <string name="valid">Valid</string>
+    <string name="invalid">Invalid</string>
+    <string name="confirmation_required">Confirmation Required</string>
+    <string name="passphrase_is_empty">Passphrase is empty</string>
+    <string name="signature_copied_successfully">Signature copied successfully</string>
 </resources>
