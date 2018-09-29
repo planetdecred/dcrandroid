@@ -282,10 +282,11 @@
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
-        <item>Accounts</item>
+        <item>History</item>
         <item>Send</item>
         <item>Receive</item>
-        <item>History</item>
+        <item>Accounts</item>
+        <item>Security</item>
         <item>Settings</item>
         <item>Help</item>
     </string-array>
