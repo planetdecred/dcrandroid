@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 fragment = new AccountsFragment();
                 break;
             case 5:
-                fragment = new Fragment();
+                fragment = new SecurityFragment();
                 break;
             case 6:
                 fragment = new SettingsActivity.MainPreferenceFragment();
@@ -879,8 +879,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         int bestBlock = constants.wallet.getBestBlock();
         int scannedPercentage = Math.round(((float) rescannedThrough/bestBlock) * 100);
         String status = String.format(Locale.getDefault(), "Latest Block: %d(%d%%)", constants.wallet.getBestBlock(), scannedPercentage);
-        float ff = (float)rescannedThrough/bestBlock;
-        ff *= 100;
         setChainStatus(status);
     }
 
