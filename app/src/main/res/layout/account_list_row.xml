@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@drawable/accounts_activated"
+                android:background="@drawable/account_activated"
                 android:duplicateParentState="true"
                 android:id="@+id/icon"
                 android:orientation="vertical"

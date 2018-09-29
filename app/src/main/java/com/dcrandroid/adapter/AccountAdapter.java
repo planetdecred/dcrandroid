@@ -8,7 +8,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -96,7 +95,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
                     String.format(Locale.getDefault(), "%s (hidden)", account.getAccountName())
             );
             holder.view.setBackgroundColor(Color.parseColor("#F4F6F6"));
-            holder.icon.setBackgroundResource(R.drawable.accounts_disabled);
+            holder.icon.setBackgroundResource(R.drawable.account_default);
             holder.arrowRight.setBackgroundResource(R.drawable.arrow_right_disabled);
             holder.spendable.setTextColor(Color.parseColor("#C4CBD2"));
             holder.total.setTextColor(Color.parseColor("#C4CBD2"));
@@ -105,7 +104,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             holder.accountName.setText(account.getAccountName());
 
             holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.icon.setBackgroundResource(R.drawable.accounts_activated);
+            holder.icon.setBackgroundResource(R.drawable.account_activated);
             holder.arrowRight.setBackgroundResource(R.drawable.arrow_right_enabled);
             holder.spendable.setTextColor(Color.parseColor("#2DD8A3"));
             holder.total.setTextColor(Color.parseColor("#091440"));

@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         ListView mListView = findViewById(R.id.lv_nav);
 
         String[] itemTitles = getResources().getStringArray(R.array.nav_list_titles);
-        int[] itemIcons = new int[]{R.mipmap.overview, R.mipmap.accounts, R.mipmap.send,
-                R.mipmap.receive, R.mipmap.history, R.mipmap.settings, R.mipmap.help};
+        int[] itemIcons = new int[]{R.drawable.overview, R.drawable.history, R.mipmap.send,
+                R.mipmap.receive, R.drawable.account, R.drawable.security, R.drawable.settings, R.drawable.help};
         items = new ArrayList<>();
         for(int i = 0; i < itemTitles.length; i++){
             NavigationBarItem item = new NavigationBarItem(itemTitles[i], itemIcons[i]);
@@ -444,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 fragment = new OverviewFragment();
                 break;
             case 1:
-                fragment = new AccountsFragment();
+                fragment = new HistoryFragment();
                 break;
             case 2:
                 fragment = new SendFragment();
@@ -453,12 +453,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 fragment = new ReceiveFragment();
                 break;
             case 4:
-                fragment = new HistoryFragment();
+                fragment = new AccountsFragment();
                 break;
             case 5:
-                fragment = new SettingsActivity.MainPreferenceFragment();
+                fragment = new Fragment();
                 break;
             case 6:
+                fragment = new SettingsActivity.MainPreferenceFragment();
+                break;
+            case 7:
                 fragment = new HelpFragment();
                 break;
             default:
