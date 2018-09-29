@@ -91,44 +91,6 @@
             android:gravity="center"
             android:textSize="18sp"
        />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_margin="8dp"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8 Characters"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:padding="8dp"
-                android:textColor="@color/green"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="1 UpperCase"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:padding="8dp"
-                android:textColor="@color/green"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="1 Number"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:alpha="0.6"
-
-                />
-
-        </LinearLayout>
-
 
     <Button
         android:id="@+id/button_encrypt_wallet"
