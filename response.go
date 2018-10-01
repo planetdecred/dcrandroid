@@ -150,4 +150,5 @@ const (
 	ErrNotConnected        = "not_connected"
 	ErrNotExist            = "not_exists"
 	ErrEmptySeed           = "empty_seed"
+	ErrInvalidAddress      = "invalid_address"
 )
