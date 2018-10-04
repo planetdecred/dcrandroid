@@ -43,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity {
         private ProgressDialog pd;
         private DcrConstants constants;
         private int buildDateClicks = 0;
-        private long lastBuildDateClick = 0;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -216,18 +215,13 @@ public class SettingsActivity extends AppCompatActivity {
             buildDate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    long clickDifference = System.currentTimeMillis() - lastBuildDateClick;
-                    if(clickDifference <= 300){
-                        if(++buildDateClicks >= 7){
-                            buildDateClicks = 0;
-                            lastBuildDateClick = 0;
-                            StakeyDialog stakeyDialog = new StakeyDialog(getContext());
-                            stakeyDialog.show();
-                        }
-                    }else{
-                        buildDateClicks = 1;
+                    if(++buildDateClicks >= 7){
+                        buildDateClicks = 0;
+                        StakeyDialog stakeyDialog = new StakeyDialog(getContext());
+                        stakeyDialog.setCancelable(false);
+                        stakeyDialog.setCanceledOnTouchOutside(false);
+                        stakeyDialog.show();
                     }
-                    lastBuildDateClick = System.currentTimeMillis();
                     return true;
                 }
             });
