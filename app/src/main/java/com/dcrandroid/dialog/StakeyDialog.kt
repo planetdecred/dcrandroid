@@ -18,11 +18,15 @@ class StakeyDialog(context: Context?) : Dialog(context) {
                 ColorDrawable(Color.TRANSPARENT))
         val stakey = ImageView(context)
         stakey.setImageResource(R.drawable.stakey_deal_with_it)
-
-        stakey.setOnClickListener {
-            dismiss()
-        }
-
         setContentView(stakey)
+
+        Thread(Runnable {
+            try {
+                Thread.sleep(7000)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+            dismiss()
+        }).start()
     }
 }
