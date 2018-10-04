@@ -144,13 +144,13 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             needsUpdate = true;
             return;
         }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-                loadTransactions();
-            }
-        });
+
+        swipeRefreshLayout.setRefreshing(true);
+        loadTransactions();
+        if(!constants.synced){
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
 
         new Thread() {
             public void run() {

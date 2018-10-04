@@ -2,12 +2,14 @@ package com.dcrandroid.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Balance;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
+import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -36,8 +39,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView accountName, total, spendable, labelImmatureRewards, immatureRewards, labelLockedByTickets,
                 lockedByTickets, labelVotingAuthority, votingAuthority, labelImmatureStakeGeneration, immatureStakeGeneration,
-                accountNumber, hdPath, keys;
+                accountNumber, hdPath, keys, spendableLabel;
         private SwitchCompat hideWallet, defaultWallet;
+        private ImageView syncIndicator;
 
         private LinearLayout detailsLayout, icon, arrowRight;
         private View view;
@@ -61,8 +65,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             accountNumber = view.findViewById(R.id.tv_account_number);
             hdPath = view.findViewById(R.id.tv_hd_path);
             keys = view.findViewById(R.id.tv_keys);
+            spendableLabel = view.findViewById(R.id.spendable_label);
 
-            // Switch
+            // Switches
             hideWallet = view.findViewById(R.id.switch_hide_wallet);
             defaultWallet = view.findViewById(R.id.switch_default_wallet);
 
@@ -70,13 +75,16 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             detailsLayout = view.findViewById(R.id.layout_account_details);
             icon = view.findViewById(R.id.icon);
             arrowRight = view.findViewById(R.id.arrow_right);
+
+            // ImageView
+            syncIndicator = view.findViewById(R.id.account_sync_indicator);
         }
     }
 
-    public AccountAdapter(List<Account> accountListList ,LayoutInflater inflater, Context context) {
+    public AccountAdapter(List<Account> accountListList, Context context) {
         this.accountList = accountListList;
-        this.layoutInflater = inflater;
         this.context = context;
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         preferenceUtil = new PreferenceUtil(context);
     }
 
@@ -118,12 +126,39 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         }
 
         // Balance
-        holder.spendable.setText(CoinFormat.Companion.format(Utils.formatDecred(balance.getSpendable())));
-        holder.total.setText(CoinFormat.Companion.format(balance.getTotal()));
-        holder.immatureRewards.setText(CoinFormat.Companion.format(balance.getImmatureReward()));
-        holder.lockedByTickets.setText(CoinFormat.Companion.format(balance.getLockedByTickets()));
-        holder.votingAuthority.setText(CoinFormat.Companion.format(balance.getVotingAuthority()));
-        holder.immatureStakeGeneration.setText(CoinFormat.Companion.format(balance.getImmatureStakeGeneration()));
+        if(DcrConstants.getInstance().synced) {
+            holder.spendable.setText(CoinFormat.Companion.format(Utils.formatDecred(balance.getSpendable())));
+            holder.total.setText(CoinFormat.Companion.format(balance.getTotal()));
+            holder.immatureRewards.setText(CoinFormat.Companion.format(balance.getImmatureReward()));
+            holder.lockedByTickets.setText(CoinFormat.Companion.format(balance.getLockedByTickets()));
+            holder.votingAuthority.setText(CoinFormat.Companion.format(balance.getVotingAuthority()));
+            holder.immatureStakeGeneration.setText(CoinFormat.Companion.format(balance.getImmatureStakeGeneration()));
+            holder.spendableLabel.setVisibility(View.VISIBLE);
+            if(holder.syncIndicator.getBackground() != null){
+                AnimationDrawable syncAnimation = (AnimationDrawable) holder.syncIndicator.getBackground();
+                syncAnimation.stop();
+            }
+            holder.syncIndicator.setVisibility(View.GONE);
+            holder.total.setVisibility(View.VISIBLE);
+        }else{
+            holder.spendable.setText("-");
+            holder.total.setText("-");
+            holder.immatureRewards.setText("-");
+            holder.lockedByTickets.setText("-");
+            holder.votingAuthority.setText("-");
+            holder.immatureStakeGeneration.setText("-");
+            holder.spendableLabel.setVisibility(View.GONE);
+            holder.syncIndicator.setBackgroundResource(R.drawable.sync_animation);
+            holder.total.setVisibility(View.GONE);
+            holder.syncIndicator.setVisibility(View.VISIBLE);
+            holder.syncIndicator.post(new Runnable() {
+                @Override
+                public void run() {
+                    AnimationDrawable syncAnimation = (AnimationDrawable) holder.syncIndicator.getBackground();
+                    syncAnimation.start();
+                }
+            });
+        }
 
         // Account Number
         holder.accountNumber.setText(
@@ -167,9 +202,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             holder.defaultWallet.setChecked(false);
             holder.hideWallet.setEnabled(false);
             holder.defaultWallet.setEnabled(false);
-
         }else{
-
             holder.hideWallet.setEnabled(true);
 
             holder.hideWallet.setChecked(hidden);
@@ -183,12 +216,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             }
         }
 
-
         // Using OnClickListener because OnCheckedChangeListener gets called when calling setChecked
         holder.defaultWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // This listener should no longer be called
                 holder.defaultWallet.setOnClickListener(null);
                 holder.hideWallet.setOnClickListener(null);
@@ -205,7 +236,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         holder.hideWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // This listener should no longer be called
                 holder.defaultWallet.setOnClickListener(null);
                 holder.hideWallet.setOnClickListener(null);

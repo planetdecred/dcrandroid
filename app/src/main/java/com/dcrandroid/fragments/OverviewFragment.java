@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,8 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +40,9 @@ import com.dcrandroid.util.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -61,8 +62,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ImageView syncIndicator;
     private TextView tvBalance;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    private Animation rotateAnimation;
 
     TransactionAdapter transactionAdapter;
     TextView refresh;
@@ -94,11 +93,16 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         transactionAdapter = new TransactionAdapter(transactionList, getContext());
         tvBalance = rootView.getRootView().findViewById(R.id.overview_av_balance);
         syncIndicator = rootView.getRootView().findViewById(R.id.iv_sync_indicator);
+        syncIndicator.setBackgroundResource(R.drawable.sync_animation);
 
         if(!constants.synced) {
-            rotateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_rotate);
-            rotateAnimation.setRepeatCount(-1);
-            syncIndicator.setAnimation(rotateAnimation);
+            syncIndicator.post(new Runnable() {
+                @Override
+                public void run() {
+                    AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
+                    syncAnimation.start();
+                }
+            });
         }else{
             getBalance();
             syncIndicator.setVisibility(View.GONE);
@@ -173,7 +177,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         if (getActivity() != null){
@@ -190,13 +194,17 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void getBalance(){
+        if(!constants.synced){
+            return;
+        }
+
         new Thread(){
             public void run(){
                 try {
                     if(getContext() == null){
                         return;
                     }
-                    final ArrayList<Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+                    final List<Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
                     long totalBalance = 0;
                     for(int i = 0; i < accounts.size(); i++){
                         if(util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())){
@@ -237,10 +245,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
         transactionList.clear();
         loadTransactions();
+        if(!constants.synced){
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
         new Thread(){
             public void run(){
                 try {
-                    getBalance();
                     constants.wallet.getTransactions(OverviewFragment.this);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -267,7 +278,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         try {
             File path = new File(getContext().getFilesDir()+"/savedata/");
             path.mkdirs();
-            File file = new File(getContext().getFilesDir()+"/savedata/transactions");
+            File file = new File(path, "transactions");
             if(file.exists()){
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 ArrayList<TransactionsResponse.TransactionItem> temp = (ArrayList<TransactionsResponse.TransactionItem>) objectInputStream.readObject();
@@ -297,19 +308,21 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
+        getBalance();
         prepareHistoryData();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter(Constants.SYNCED);
         if(getContext() != null) {
+            IntentFilter filter = new IntentFilter(Constants.SYNCED);
             getContext().registerReceiver(receiver, filter);
         }
         isForeground = true;
         if(needsUpdate){
             needsUpdate = false;
+            getBalance();
             prepareHistoryData();
         }
     }
@@ -417,13 +430,12 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
                 getBalance();
-                syncIndicator.clearAnimation();
+                ((AnimationDrawable) syncIndicator.getBackground()).stop();
                 syncIndicator.setVisibility(View.GONE);
                 tvBalance.setVisibility(View.VISIBLE);
             }

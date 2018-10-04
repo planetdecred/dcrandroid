@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.*;
 import android.os.*;
 import android.support.annotation.Nullable;
@@ -142,7 +143,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         rotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
         rotateAnimation.setRepeatCount(-1);
-        syncIndicator.setAnimation(rotateAnimation);
+        syncIndicator.setBackgroundResource(R.drawable.sync_animation);
+        syncIndicator.post(new Runnable() {
+            @Override
+            public void run() {
+                AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
+                syncAnimation.start();
+            }
+        });
 
         stopScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -369,7 +377,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (pageID == 0 && drawer.isDrawerOpen(GravityCompat.START)){
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.exit_app_prompt_title)
+                    .setMessage(R.string.exit_app_prompt_message)
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    }).create().show();
+        } else if (pageID == 0 && !drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.openDrawer(GravityCompat.START);
+        } else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if(pageID == 0) {
             new AlertDialog.Builder(this)
@@ -382,8 +403,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                             MainActivity.super.onBackPressed();
                         }
                     }).create().show();
-        }
-        else {
+        } else {
             displayOverview();
         }
     }
@@ -647,21 +667,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             @Override
             public void run() {
                 displayBalance();
-            }
-        });
-
-        if(fragment instanceof OverviewFragment){
-            OverviewFragment overviewFragment = (OverviewFragment) fragment;
-            overviewFragment.prepareHistoryData();
-        }else if(fragment instanceof HistoryFragment){
-            HistoryFragment historyFragment = (HistoryFragment) fragment;
-            historyFragment.prepareHistoryData();
-        }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //rescanHeight.setText("");
+                if(fragment instanceof OverviewFragment){
+                    OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                    overviewFragment.prepareHistoryData();
+                }else if(fragment instanceof HistoryFragment){
+                    HistoryFragment historyFragment = (HistoryFragment) fragment;
+                    historyFragment.prepareHistoryData();
+                }
                 rotateAnimation.cancel();
                 rotateAnimation.reset();
                 rescanImage.setEnabled(true);
@@ -676,20 +688,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onError(int i, String s) {
         System.out.println("Block scan error: "+s);
 
-        if(fragment instanceof OverviewFragment){
-            OverviewFragment overviewFragment = (OverviewFragment) fragment;
-            overviewFragment.prepareHistoryData();
-        }else if(fragment instanceof HistoryFragment){
-            HistoryFragment historyFragment = (HistoryFragment) fragment;
-            historyFragment.prepareHistoryData();
-        }
-
         if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
             showText(s);
         }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(fragment instanceof OverviewFragment){
+                    OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                    overviewFragment.prepareHistoryData();
+                }else if(fragment instanceof HistoryFragment){
+                    HistoryFragment historyFragment = (HistoryFragment) fragment;
+                    historyFragment.prepareHistoryData();
+                }
                 rotateAnimation.cancel();
                 rotateAnimation.reset();
                 rescanImage.setEnabled(true);
@@ -802,7 +813,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 @Override
                 public void run() {
                     displayBalance();
-                    syncIndicator.clearAnimation();
+                    ((AnimationDrawable) syncIndicator.getBackground()).stop();
                     syncIndicator.setVisibility(View.GONE);
                     totalBalance.setVisibility(View.VISIBLE);
                     connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
@@ -816,14 +827,18 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
             sendBroadcast(new Intent(Constants.SYNCED));
 
-            if(fragment instanceof OverviewFragment){
-                OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                overviewFragment.prepareHistoryData();
-            }else if(fragment instanceof HistoryFragment){
-                System.out.println("Calling history fragment");
-                HistoryFragment historyFragment = (HistoryFragment) fragment;
-                historyFragment.prepareHistoryData();
-            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(fragment instanceof OverviewFragment){
+                        OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                        overviewFragment.prepareHistoryData();
+                    }else if(fragment instanceof HistoryFragment){
+                        HistoryFragment historyFragment = (HistoryFragment) fragment;
+                        historyFragment.prepareHistoryData();
+                    }
+                }
+            });
 
             startBlockUpdate();
         }

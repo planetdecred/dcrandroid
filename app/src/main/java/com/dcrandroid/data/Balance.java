@@ -3,7 +3,9 @@ package com.dcrandroid.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Balance {
+import java.io.Serializable;
+
+public class Balance implements Serializable{
     private long spendable, total,immatureReward, immatureStakeGeneration,lockedByTickets, votingAuthority, unConfirmed;
 
     public static Balance parse(String json) throws JSONException{

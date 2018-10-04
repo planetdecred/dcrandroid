@@ -59,14 +59,26 @@
             android:gravity="end|center_vertical"
             >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                android:textColor="#091440"
-                android:textSize="15sp"
-                android:id="@+id/total_balance"
-                />
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textColor="#091440"
+                    android:textSize="15sp"
+                    android:id="@+id/total_balance"
+                    />
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/account_sync_indicator"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -79,6 +91,7 @@
                     android:text="@string/label_spendable"
                     android:textColor="#8997A5"
                     android:textSize="12sp"
+                    android:id="@+id/spendable_label"
                     app:fontFamily="@font/source_sans_pro_regular_family"
                     />
                 <TextView
