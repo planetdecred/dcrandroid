@@ -51,16 +51,8 @@
             android:text="@string/no_transactions_n_swipe_to_refresh"
             android:textSize="21sp"
             android:gravity="center"
-            android:visibility="gone"
             />
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
-    <!--<ProgressBar style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Inverse"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/progressContainers"-->
-        <!--android:visibility="invisible"-->
-        <!--android:layout_centerInParent="true"/>-->
 
 </RelativeLayout>
