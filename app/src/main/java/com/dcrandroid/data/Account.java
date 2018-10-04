@@ -1,17 +1,17 @@
 package com.dcrandroid.data;
 
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Macsleven on 28/12/2017.
  */
 
-public class Account {
+public class Account implements Serializable{
     private String accountName;
     private Balance balance;
     private int accountNumber, externalKeyCount, internalKeyCount, importedKeyCount;

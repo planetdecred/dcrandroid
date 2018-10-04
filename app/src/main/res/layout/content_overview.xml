@@ -45,9 +45,8 @@
                     android:visibility="gone"
                     android:textSize="20sp" />
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/decred_logo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:id="@+id/iv_sync_indicator"
                     />
             </LinearLayout>

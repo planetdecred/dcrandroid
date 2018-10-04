@@ -1,6 +1,9 @@
 package com.dcrandroid.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,8 +30,9 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
+import mobilewallet.LibWallet;
 
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -36,26 +40,22 @@ import static android.app.Activity.RESULT_OK;
 
 public class AccountsFragment extends Fragment {
 
-    private List<Account> accountList = new ArrayList<>();
-    AccountAdapter accountAdapter;
+    private List<Account> accounts = new ArrayList<>();
+    private AccountAdapter accountAdapter;
+
     private PreferenceUtil util;
+
+    private LibWallet wallet;
+
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.content_account, container, false);
-        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
-        MainActivity.menuOpen.setVisible(true);
-        RecyclerView recyclerView = rootView.getRootView().findViewById(R.id.recycler_view2);
-        accountAdapter = new AccountAdapter(accountList, layoutInflater, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_divider));
-        recyclerView.addItemDecoration(itemDecoration);
-        recyclerView.setAdapter(accountAdapter);
-        registerForContextMenu(recyclerView);
-        return rootView;
+        View vi = inflater.inflate(R.layout.content_account, container, false);
+
+        recyclerView = vi.findViewById(R.id.recycler_view2);
+
+        return vi;
     }
 
     @Override
@@ -64,9 +64,9 @@ public class AccountsFragment extends Fragment {
         if (requestCode == 200 && resultCode == RESULT_OK){
             String accountName = data.getStringExtra(Constants.ACCOUNT_NAME);
             int accountNumber = data.getIntExtra(Constants.ACCOUNT_NUMBER, -1);
-            for (int i = 0; i < accountList.size(); i++){
-                if (accountList.get(i).getAccountNumber() == accountNumber){
-                    accountList.get(i).setAccountName(accountName);
+            for (int i = 0; i < accounts.size(); i++){
+                if (accounts.get(i).getAccountNumber() == accountNumber){
+                    accounts.get(i).setAccountName(accountName);
                     accountAdapter.notifyItemChanged(i);
                     return;
                 }
@@ -79,8 +79,8 @@ public class AccountsFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    accountList.clear();
-                    accountList.addAll(Account.parse(DcrConstants.getInstance().wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
+                    accounts.clear();
+                    accounts.addAll(Account.parse(wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
                     if (getActivity() == null) {
                         return;
                     }
@@ -100,14 +100,27 @@ public class AccountsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
-        if (getActivity() == null) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (getActivity() == null || getContext() == null) {
             return;
         }
         getActivity().setTitle(getString(R.string.account));
         util = new PreferenceUtil(getActivity());
+
+        MainActivity.menuOpen.setVisible(true);
+        accountAdapter = new AccountAdapter(accounts, getContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_divider));
+        recyclerView.addItemDecoration(itemDecoration);
+        recyclerView.setAdapter(accountAdapter);
+        registerForContextMenu(recyclerView);
+
+        wallet = DcrConstants.getInstance().wallet;
+
         prepareAccountData();
     }
 
@@ -116,4 +129,30 @@ public class AccountsFragment extends Fragment {
         super.onDestroyView();
         MainActivity.menuOpen.setVisible(false);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(getContext() != null){
+            getContext().unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getContext() != null){
+            IntentFilter filter = new IntentFilter(Constants.SYNCED);
+            getContext().registerReceiver(receiver, filter);
+        }
+    }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                accountAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 }
