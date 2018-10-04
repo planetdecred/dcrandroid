@@ -58,7 +58,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private DcrConstants constants;
     private Spinner spinnerHostory;
     private int latestTransactionHeight;
-    private boolean needsUpdate = false,  isForeground;
+    private boolean needsUpdate = false, isForeground;
 
     @Nullable
     @Override
@@ -198,6 +198,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if(transactionList.size() == 0){
+            recyclerView.setVisibility(View.GONE);
+        }else{
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 

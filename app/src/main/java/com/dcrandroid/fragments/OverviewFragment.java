@@ -71,7 +71,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private int recyclerViewHeight, latestTransactionHeight;
 
-    private boolean needsUpdate = false,  isForeground;
+    private boolean needsUpdate = false, isForeground;
 
     @Nullable
     @Override
@@ -249,6 +249,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             swipeRefreshLayout.setRefreshing(false);
             return;
         }
+        getBalance();
+        hideSyncIndicator();
         new Thread(){
             public void run(){
                 try {
@@ -304,6 +306,11 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }catch (Exception e){
             e.printStackTrace();
         }
+        if(transactionList.size() == 0){
+            recyclerView.setVisibility(View.GONE);
+        }else{
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -322,7 +329,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         isForeground = true;
         if(needsUpdate){
             needsUpdate = false;
-            getBalance();
             prepareHistoryData();
         }
     }
@@ -346,7 +352,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void run() {
                 TransactionsResponse response = TransactionsResponse.parse(json);
                 if(response.transactions.size() == 0){
-                    refresh.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     if(swipeRefreshLayout.isRefreshing()){
                         swipeRefreshLayout.setRefreshing(false);
@@ -364,17 +369,11 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                             transactionList.addAll(transactions);
                         }
                     }
-                    if(refresh.isShown()){
-                        refresh.setVisibility(View.INVISIBLE);
-                    }
                     recyclerView.setVisibility(View.VISIBLE);
                     if(swipeRefreshLayout.isRefreshing()){
                         swipeRefreshLayout.setRefreshing(false);
                     }
                     transactionAdapter.notifyDataSetChanged();
-                    if(refresh.isShown()){
-                        refresh.setVisibility(View.GONE);
-                    }
                     saveTransactions(transactions);
                 }
             }
@@ -430,14 +429,18 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
+    private void hideSyncIndicator(){
+        ((AnimationDrawable) syncIndicator.getBackground()).stop();
+        syncIndicator.setVisibility(View.GONE);
+        tvBalance.setVisibility(View.VISIBLE);
+    }
+
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
                 getBalance();
-                ((AnimationDrawable) syncIndicator.getBackground()).stop();
-                syncIndicator.setVisibility(View.GONE);
-                tvBalance.setVisibility(View.VISIBLE);
+                hideSyncIndicator();
             }
         }
     };

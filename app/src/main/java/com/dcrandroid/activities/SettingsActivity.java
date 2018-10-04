@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.StakeyDialog;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
@@ -38,11 +39,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class MainPreferenceFragment extends PreferenceFragmentCompat implements BlockScanResponse{
-        protected PreferenceUtil util;
-        ProgressDialog pd;
+        private PreferenceUtil util;
+        private ProgressDialog pd;
         private DcrConstants constants;
-        String result;
-        SimpleDateFormat formatter;
+        private int buildDateClicks = 0;
+        private long lastBuildDateClick = 0;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -60,10 +61,11 @@ public class SettingsActivity extends AppCompatActivity {
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
-            formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             Date buildTime = BuildConfig.buildTime;
-            result = formatter.format(buildTime);
+            String result = formatter.format(buildTime);
             buildDate.setSummary(result);
+
             ListPreference currencyConversion = (ListPreference) findPreference(Constants.CURRENCY_CONVERSION);
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 1){
@@ -77,8 +79,8 @@ public class SettingsActivity extends AppCompatActivity {
                 peerAddress.setEnabled(true);
                 rescanBlocks.setEnabled(false);
             }
-            networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.NETWORK_MODES, "0"))]);
 
+            networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.NETWORK_MODES, "0"))]);
             networkModes.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -189,7 +191,7 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     //TODO: Make this available for both testnet and mainnet
                     Intent i = new Intent(getActivity(), LogViewer.class);
-                    i.putExtra("log_path","/data/data/com.dcrandroid/files/dcrwallet/logs/testnet3/dcrwallet.log");
+                    i.putExtra("log_path", getContext().getFilesDir()+"/dcrwallet/logs/testnet3/dcrwallet.log");
                     startActivity(i);
                     return true;
                 }
@@ -207,6 +209,25 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     preference.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt((newValue.toString()))]);
+                    return true;
+                }
+            });
+
+            buildDate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    long clickDifference = System.currentTimeMillis() - lastBuildDateClick;
+                    if(clickDifference <= 300){
+                        if(++buildDateClicks >= 7){
+                            buildDateClicks = 0;
+                            lastBuildDateClick = 0;
+                            StakeyDialog stakeyDialog = new StakeyDialog(getContext());
+                            stakeyDialog.show();
+                        }
+                    }else{
+                        buildDateClicks = 1;
+                    }
+                    lastBuildDateClick = System.currentTimeMillis();
                     return true;
                 }
             });
