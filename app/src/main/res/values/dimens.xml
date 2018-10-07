@@ -13,4 +13,8 @@
     <dimen name="profile_width">75dp</dimen>
     <dimen name="profile_height">75dp</dimen>
     <dimen name="row_padding_vertical">10dp</dimen>
+
+    <!-- PinView -->
+    <dimen name="pinview_pin_size">30dp</dimen>
+    <dimen name="pinview_horizontal_spacing">10dp</dimen>
 </resources>

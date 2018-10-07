@@ -415,5 +415,6 @@
     <string name="withFeeOff">with a fee of</string>
     <string name="total">Total</string>
     <!--/Confirm Transaction Dialog-->
+    
+    <string name="erase_char">⌫</string>
 </resources>
-
