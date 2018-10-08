@@ -417,4 +417,6 @@
     <!--/Confirm Transaction Dialog-->
     
     <string name="erase_char">⌫</string>
+    <string name="title_activity_tab">Tab</string>
+    <string name="action_settings">Settings</string>
 </resources>

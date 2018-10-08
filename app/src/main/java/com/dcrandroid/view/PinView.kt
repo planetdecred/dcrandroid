@@ -20,7 +20,6 @@ class PinView : View {
         }
 
     var pinCount: Int = 0
-        get() = field
 
     private var activeColor: Int = 0
     private var inactiveColor: Int = 0
@@ -117,13 +116,13 @@ class PinView : View {
         val startY = pt + usableHeight / 2 - pinSize / 2
         val totalContentWidth = pinSize + horizontalSpacing
 
-        for (i in 1..pinCount){
+        for (i in 1..pinCount) {
             circleRect!!.left = startX
             circleRect!!.top = startY
             circleRect!!.right = startX + pinSize
             circleRect!!.bottom = startY + pinSize
 
-            if(i <= passCodeLength){
+            if (i <= passCodeLength) {
                 canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
 
                 val activePadding = pinSize * 0.15f
@@ -142,36 +141,6 @@ class PinView : View {
             canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
             startX += totalContentWidth
         }
-
-//        for (i in 0 until pinCount) {
-//
-//            circleRect!!.left = startX
-//            circleRect!!.top = startY
-//            circleRect!!.right = startX + pinSize
-//            circleRect!!.bottom = startY + pinSize
-//            if (i == 10) {
-//
-//                canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
-//
-//                val activePadding = pinSize * 0.15f
-//
-//                activeRect!!.left = circleRect!!.left + activePadding
-//                activeRect!!.top = circleRect!!.top + activePadding
-//                activeRect!!.bottom = circleRect!!.bottom - activePadding
-//                activeRect!!.right = circleRect!!.right - activePadding
-//
-//                canvas.drawArc(activeRect!!, activeRect!!.left, 360f, true, activePaint!!)
-//
-//                startX += totalContentWidth
-//                continue
-//            }
-//
-//            canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
-//            startX += totalContentWidth
-//        }
-
-
-
     }
 }
 

@@ -1,4 +1,3 @@
-
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
@@ -17,4 +16,5 @@
     <!-- PinView -->
     <dimen name="pinview_pin_size">30dp</dimen>
     <dimen name="pinview_horizontal_spacing">10dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
