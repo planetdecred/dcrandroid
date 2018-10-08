@@ -83,7 +83,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_overview, container, false);
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout2);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark2,
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimaryDark2,
                 R.color.colorPrimaryDark2,
                 R.color.colorPrimaryDark2,
                 R.color.colorPrimaryDark2);
@@ -143,7 +144,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         }));
-        TextView showHistory= rootView.findViewById(R.id.show_history);
+        TextView showHistory = rootView.findViewById(R.id.show_history);
         showHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

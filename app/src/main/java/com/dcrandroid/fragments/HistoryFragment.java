@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private DcrConstants constants;
-    private Spinner spinnerHostory;
+    private Spinner spinnerHistory;
     private int latestTransactionHeight;
     private boolean needsUpdate = false, isForeground;
 
@@ -65,13 +64,13 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         constants = DcrConstants.getInstance();
         View rootView = inflater.inflate(R.layout.content_history, container, false);
-        LayoutInflater layoutInflater = LayoutInflater.from(rootView.getContext());
-        spinnerHostory = rootView.findViewById(R.id.spinnerHistory);
+        spinnerHistory = rootView.findViewById(R.id.spinnerHistory);
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary,
-                R.color.colorPrimary);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimaryDark2,
+                R.color.colorPrimaryDark2,
+                R.color.colorPrimaryDark2,
+                R.color.colorPrimaryDark2);
         swipeRefreshLayout.setOnRefreshListener(this);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, rootView.getContext());
@@ -309,9 +308,9 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private void setupSort() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.history_transaction_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerHostory.setAdapter(adapter);
+        spinnerHistory.setAdapter(adapter);
 
-        spinnerHostory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerHistory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {

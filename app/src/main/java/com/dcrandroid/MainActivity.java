@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     public void displayHistory(){
-        switchFragment(4);
+        switchFragment(1);
     }
 
     @Override
@@ -821,7 +821,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             });
             bestBlock = constants.wallet.getBestBlock();
             bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
-            String status = String.format(Locale.getDefault(), "%s %d", constants.wallet.getBestBlock());
+            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), constants.wallet.getBestBlock());
             setChainStatus(status);
             setBestBlockTime(bestBlockTimestamp);
 
@@ -855,7 +855,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
         float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
         fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
-        String status = String.format(Locale.getDefault() , "%.1f %s", fetchedPercentage, getString(R.string.fetched));
+        String status = String.format(Locale.getDefault() , "%.1f%% %s", fetchedPercentage, getString(R.string.fetched));
         //Nanoseconds to seconds
         setBestBlockTime(lastHeaderTime);
         setChainStatus(status);
@@ -910,6 +910,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     private void updatePeerCount(){
-        setConnectionStatus((synced ? getString(R.string.synced) : getString(R.string.syncing)) + getString(R.string.with) + peerCount + " " + (peerCount == 1 ? getString(R.string.peer) :  getString(R.string.peers)));
+        setConnectionStatus((synced ? getString(R.string.synced) : getString(R.string.syncing)) + " " + getString(R.string.with) + " " +peerCount + " " + (peerCount == 1 ? getString(R.string.peer) :  getString(R.string.peers)));
     }
 }

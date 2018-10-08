@@ -74,10 +74,11 @@
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
-        <item>Accounts</item>
+        <item>History</item>
         <item>Send</item>
         <item>Receive</item>
-        <item>History</item>
+        <item>Accounts</item>
+        <item>Security</item>
         <item>Settings</item>
         <item>Help</item>
     </string-array>
@@ -380,6 +381,7 @@
     <string name="_0_dcr">0 DCR</string>
     <string name="_0_bytes">0 bytes</string>
     <string name="total_sending">Total Sending:</string>
+    <string name="balance_after">Balance After:</string>
     <!--/Send Fragment-->
 
 </resources>

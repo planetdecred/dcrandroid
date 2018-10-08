@@ -190,7 +190,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         for (int i = 0; i < usedOutput.size(); i++){
             walletOutputIndices.add(usedOutput.get(i).index);
             walletOutput.add(
-                    usedOutput.get(i).address +
+                    usedOutput.get(i).address + Constants.NBSP +
                             (txDirection == 0 ? getString(R.string.change_bracket)  + Constants.NBSP : Constants.NBSP) +
                             "("+wallet.getAccountName(usedOutput.get(i).account) +")\n" +
                             Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedOutput.get(i).amount)) + " DCR"
@@ -217,7 +217,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 boolean nullScript = output.getBoolean(Constants.NULL_SCRIPT);
 
-                walletOutput.add(address + getString(R.string.external_bracket) + (nullScript ? getString(R.string.null_data_bracket) : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong(Constants.VALUE))) + " DCR"));
+                walletOutput.add(address + Constants.NBSP + getString(R.string.external_bracket) + " \n" + (nullScript ? getString(R.string.null_data_bracket) : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong(Constants.VALUE))) + " DCR"));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
@@ -230,7 +230,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
 
                 walletInput.add(input.getString(Constants.PREVIOUS_TRANSACTION_HASH) + ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX)
-                        + Constants.NBSP + getString(R.string.external_bracket)+ Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong(Constants.AMOUNT_IN))) + " DCR");
+                        + Constants.NBSP + getString(R.string.external_bracket) + "\n" + Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong(Constants.AMOUNT_IN))) + " DCR");
             }
 
         } catch (Exception e) {

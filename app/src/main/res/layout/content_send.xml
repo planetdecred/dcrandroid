@@ -18,23 +18,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:fontFamily="@font/source_sans_pro_regular"
+            app:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/sending_decred"
             android:textColor="#0C1E3E"
-            android:textSize="18sp" />
+            android:textSize="23sp" />
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="25dp"
-            android:fontFamily="@font/source_sans_pro_regular"
+            app:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/qr_code_help_text"
             android:textColor="#617386"
-            android:textSize="14sp" />
+            android:textSize="19sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,11 +50,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/source_sans_pro_regular"
+                app:fontFamily="@font/source_sans_pro_regular"
                 android:gravity="end"
                 android:text="@string/from_colon"
                 android:textColor="#617386"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 />
 
             <LinearLayout
@@ -110,7 +111,7 @@
                 android:paddingBottom="3dp"
                 android:textColor="@color/linkTxtColor"
                 android:textColorHint="@color/secondaryTextColor38"
-                android:textSize="14sp" />
+                android:textSize="19sp" />
 
             <ImageView
                 android:id="@+id/send_dcr_scan"
@@ -325,33 +326,6 @@
                 android:textColor="@color/orange"
                 tools:text="test text" />
 
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="5dp">-->
-
-            <!--<TextView-->
-            <!--android:layout_width="160dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:fontFamily="@font/source_sans_pro_regular"-->
-            <!--android:gravity="start"-->
-            <!--android:text="@string/total_sending"-->
-            <!--android:textColor="@color/secondaryTextColor"-->
-            <!--android:textSize="16sp"-->
-            <!--android:visibility="visible" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/tvTotalSending"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:fontFamily="@font/source_sans_pro_regular"-->
-            <!--android:text="@string/_0_00_dcr"-->
-            <!--android:textColor="@color/secondaryTextColor"-->
-            <!--android:textSize="16sp" />-->
-            <!--</LinearLayout>-->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -361,20 +335,20 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/source_sans_pro_regular"
-                    android:gravity="center"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    android:gravity="start"
                     android:text="@string/fee_colon"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="21sp" />
 
                 <TextView
                     android:id="@+id/send_dcr_estimate_fee"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inconsolata_regular"
+                    app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="21sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -386,20 +360,20 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/source_sans_pro_regular"
-                    android:gravity="center"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    android:gravity="start"
                     android:text="@string/estimate_size"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="21sp" />
 
                 <TextView
                     android:id="@+id/send_dcr_estimate_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inconsolata_regular"
+                    app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_bytes"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="21sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -412,20 +386,20 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/source_sans_pro_regular"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
-                    android:text="@string/balance_remaining"
+                    android:text="@string/balance_after"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="21sp" />
 
                 <TextView
                     android:id="@+id/send_dcr_balance_remain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inconsolata_regular"
+                    app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="21sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -440,10 +414,10 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:text="@string/exchange_rate"
                     android:textColor="@color/secondaryTextColor"
-                    android:textSize="15sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/send_dcr_exchange_rate"
