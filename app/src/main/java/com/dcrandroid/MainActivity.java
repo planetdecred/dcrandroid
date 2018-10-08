@@ -78,6 +78,9 @@ import mobilewallet.BlockScanResponse;
 import mobilewallet.SpvSyncResponse;
 import mobilewallet.TransactionListener;
 
+import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+
 public class MainActivity extends AppCompatActivity implements TransactionListener, BlockScanResponse,
         BlockNotificationError, SpvSyncResponse {
 
@@ -213,6 +216,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
 
         mainApplication = (MainApplication) getApplicationContext();
 

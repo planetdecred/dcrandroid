@@ -1,8 +1,11 @@
 package com.dcrandroid.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
@@ -17,6 +20,11 @@ public class LogViewer extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
         setContentView(R.layout.activity_log_viewer);
         TextView logTextView = findViewById(R.id.log_text);
         String logPath = getIntent().getExtras().getString("log_path");

@@ -1,6 +1,7 @@
 package com.dcrandroid.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -41,6 +42,13 @@ public class ConfirmSeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
+
         setContentView(R.layout.confirm_seed_page);
         ImageView buttonSeedClear = findViewById(R.id.button_clear_seed);
         Button btnConfirmSeed = findViewById(R.id.button_confirm_seed);

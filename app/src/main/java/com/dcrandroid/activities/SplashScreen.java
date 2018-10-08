@@ -3,10 +3,12 @@ package com.dcrandroid.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +47,11 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 finish();
                 return;
             }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
         util = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);

@@ -1,9 +1,11 @@
 <resources>
     <!-- LightTheme -->
     <style name="LightTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:navigationBarColor" tools:targetApi="21">@android:color/white</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog"></style>

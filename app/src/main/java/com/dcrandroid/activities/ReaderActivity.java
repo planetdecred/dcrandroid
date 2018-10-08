@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.dcrandroid.data.Constants;
@@ -31,6 +33,11 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
         setContentView(R.layout.custom_ui_read);
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){

@@ -1,111 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:orientation="vertical"
-    android:padding="8dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F3F5F6"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="#fff"
         >
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/create_security_pass"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="@color/darkBlueTextColor"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/require_to_send_fund"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:padding="5dp"
-        />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/passview"
-        android:layout_centerInParent="true"
-        >
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:text="@string/password"
-        android:gravity="center"
-        android:textSize="15sp"
-
-        />
-        <EditText
-        android:id="@+id/passphrase"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:maxLines="1"
-            android:maxEms="8"
-            android:layout_marginLeft="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginStart="40dp"
-            android:gravity="center"
-            android:textSize="18sp"
-        android:inputType="textPassword"
-
-        />
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:text="@string/confirm_password"
+            android:layout_height="match_parent"
+            android:id="@+id/layout_password"
             android:gravity="center"
-            android:textSize="15sp"
-            android:paddingTop="16dp"
-
-            />
-
-        <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:id="@+id/verifyPassphrase"
-        android:lines="1"
-            android:maxEms="8"
-            android:layout_marginLeft="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginStart="40dp"
-
-        android:maxLines="1"
+            android:background="#F3F5F6"
+            android:layout_weight="50">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PASSWORD"
+                android:textColor="#091440"
+                android:gravity="center"
+                android:textSize="17sp"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:textSize="18sp"
-       />
-
-    <Button
-        android:id="@+id/button_encrypt_wallet"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@drawable/btn_shape"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center"
-        android:text="@string/confirm"
-        android:layout_gravity="center"
-        android:textColor="@color/white" />
-
+            android:layout_weight="50"
+            android:id="@+id/layout_pin">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PIN"
+                android:textColor="#091440"
+                android:gravity="center"
+                android:textSize="17sp"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                />
+        </LinearLayout>
     </LinearLayout>
-
-</RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container"
+        android:visibility="visible"
+        />
+</LinearLayout>

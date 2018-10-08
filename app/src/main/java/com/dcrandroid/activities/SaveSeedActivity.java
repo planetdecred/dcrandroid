@@ -1,6 +1,7 @@
 package com.dcrandroid.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,7 +19,6 @@ import com.dcrandroid.util.DcrConstants;
 
 import java.util.Arrays;
 
-
 /**
  * Created by Macsleven on 25/12/2017.
  */
@@ -31,6 +31,11 @@ public class SaveSeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
         setContentView(R.layout.activity_save_seed_page);
         Button saveSeedContBtn = findViewById(R.id.save_seed_btn_continue);
 
