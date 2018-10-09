@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -77,9 +78,6 @@ import mobilewallet.BlockNotificationError;
 import mobilewallet.BlockScanResponse;
 import mobilewallet.SpvSyncResponse;
 import mobilewallet.TransactionListener;
-
-import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener, BlockScanResponse,
         BlockNotificationError, SpvSyncResponse {
@@ -219,8 +217,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
         mainApplication = (MainApplication) getApplicationContext();

@@ -91,6 +91,9 @@ public class Constants {
             REGULAR = "REGULAR",
             VOTE_VERSION = "VoteVersion",
             VOTE_BITS = "VoteBits",
-            LAST_BLOCK_VALID = "LastBlockValid";
+            LAST_BLOCK_VALID = "LastBlockValid",
+            PASSPHRASE_TYPE = "passphrase_type",
+            PIN = "pin",
+            PASSWORD = "password";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

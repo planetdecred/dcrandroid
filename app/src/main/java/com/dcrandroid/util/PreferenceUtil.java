@@ -61,6 +61,7 @@ public class PreferenceUtil {
         editor.putFloat(key, n);
         editor.commit();
     }
+
     public void setInt(String key, int n){
         if(ctx == null){
             return;

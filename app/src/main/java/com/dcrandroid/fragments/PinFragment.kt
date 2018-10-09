@@ -15,6 +15,7 @@ import com.dcrandroid.MainActivity
 import android.content.Intent
 import com.dcrandroid.data.Constants
 import android.widget.Toast
+import com.dcrandroid.util.PreferenceUtil
 import kotlinx.android.synthetic.main.passcode.*
 
 class PinFragment : Fragment(), KeyPad.KeyPadListener {
@@ -69,6 +70,8 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                 val wallet = DcrConstants.getInstance().wallet ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 show(getString(R.string.creating_wallet))
                 wallet.createWallet(passCode, seed)
+                val util = PreferenceUtil(this@PinFragment.context!!)
+                util.set(Constants.PASSPHRASE_TYPE, Constants.PIN)
                 activity!!.runOnUiThread {
                     pd!!.dismiss()
                     val i = Intent(this@PinFragment.context, MainActivity::class.java)

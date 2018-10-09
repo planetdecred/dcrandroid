@@ -111,6 +111,11 @@
             android:exported="false"
             android:label="Wallet Syncer"
             />
+        <activity android:name=".activities.EnterPassCode"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>
