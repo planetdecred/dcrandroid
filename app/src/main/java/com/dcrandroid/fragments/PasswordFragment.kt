@@ -2,6 +2,7 @@ package com.dcrandroid.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,11 +24,22 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
         super.onActivityCreated(savedInstanceState)
         password.addTextChangedListener(passwordWatcher)
         verifyPassword.addTextChangedListener(passwordWatcher)
+
+        verifyPassword.setOnKeyListener(this)
     }
 
     override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-        System.out.println("Key Code $keyCode, Event: ${event.toString()}")
-        return true
+
+        if(keyCode == KeyEvent.KEYCODE_ENTER && event!!.action == KeyEvent.ACTION_UP){
+            return if(password.text.toString() == verifyPassword.text.toString()){
+                //Create Wallet
+                true
+            }else{
+                Snackbar.make(v!!, R.string.mismatch_password, Snackbar.LENGTH_SHORT).show()
+                false
+            }
+        }
+        return false
     }
 
     private val passwordWatcher = object : TextWatcher {
@@ -40,10 +52,10 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
                 passwordMatch.text = ""
             }else{
                 if(password.text.toString() != verifyPassword.text.toString()){
-                    passwordMatch.text = "PASSWORDS DO NOT MATCH"
+                    passwordMatch.setText(R.string.mismatch_password)
                     passwordMatch.setTextColor(Color.parseColor("#FFC84E"))
                 }else{
-                    passwordMatch.text = "PASSWORDS MATCH"
+                    passwordMatch.setText(R.string.password_match)
                     passwordMatch.setTextColor(Color.parseColor("#2DD8A3"))
                 }
             }
