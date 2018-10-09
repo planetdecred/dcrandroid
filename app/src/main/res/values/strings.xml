@@ -166,17 +166,11 @@
 
     <!--Wallet-->
     <string name="setting_up_dcrandroid">SETTING UP DECRED WALLET</string>
-    <string name="create_a_private_passphrase_to_encrypt_your_wallet">Create a private passphrase to encrypt your wallet</string>
-    <string name="passphrase">Passphrase</string>
-    <string name="verify_passphrase">Verify Passphrase</string>
-    <string name="encrypt_wallet">Encrypt Wallet</string>
     <string name="create_wallet">Create Wallet</string>
     <string name="create_a_new_wallet">Create a New Wallet</string>
     <string name="restore_existing_wallet">Restore Existing Wallet</string>
     <string name="recover_wallet">Recover Wallet</string>
     <string name="private_passphrase">Private Passphrase</string>
-    <string name="enter_a_passphrase">Enter a passphrase</string>
-    <string name="password_not_match">Passwords do not match</string>
     <string name="opening_wallet">Opening wallet…</string>
     <string name="input_private_phrase">Enter your private passphrase</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
@@ -419,4 +413,13 @@
     <string name="erase_char">⌫</string>
     <string name="title_activity_tab">Tab</string>
     <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="confirm_security_pin">Confirm Security PIN</string>
+    <string name="create_security_pin">Create Security PIN</string>
+    <string name="mismatch_passcode">PINs did not match. Try again</string>
+    <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
+    <string name="mismatch_password">PASSWORDS DO NOT MATCH</string>
+    <string name="password_match">PASSWORDS MATCH</string>
+    <string name="confirm_password">CONFIRM PASSWORD</string>
+    <string name="password">PASSWORD</string>
 </resources>

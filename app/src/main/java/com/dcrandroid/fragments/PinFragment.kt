@@ -6,23 +6,19 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.dcrandroid.R
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.KeyPad
 import com.dcrandroid.util.Utils
-import com.dcrandroid.view.PinView
 import android.support.v4.app.ActivityCompat
 import com.dcrandroid.MainActivity
 import android.content.Intent
 import com.dcrandroid.data.Constants
+import android.widget.Toast
+import kotlinx.android.synthetic.main.passcode.*
 
 class PinFragment : Fragment(), KeyPad.KeyPadListener {
 
-    private var pinView: PinView? = null
-    private var keyPadLayout: LinearLayout? = null
-    private var pinInstruction: TextView? = null
     private var keyPad: KeyPad? = null
     private var passCode: String? = null
     private var step = 0
@@ -30,25 +26,21 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
     var seed : String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val vi = inflater.inflate(R.layout.passcode, container, false)
-        pinView = vi.findViewById(R.id.keypad_pin_view)
-        pinInstruction = vi.findViewById(R.id.keypad_instruction)
-        keyPadLayout = vi.findViewById(R.id.keypad)
-        return vi
+        return inflater.inflate(R.layout.passcode, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        keyPad = KeyPad(keyPadLayout!!, pinView!!)
+        keyPad = KeyPad(keypad, keypad_pin_view)
         keyPad!!.setKeyListener(this)
     }
 
     override fun onPassCodeCompleted(passCode: String) {
         if (step == 0) {
             this.passCode = passCode
-            pinView!!.postDelayed({
-                pinInstruction!!.text = "Confirm Security PIN"
+            keypad_pin_view.postDelayed({
+                keypad_instruction.setText(R.string.confirm_security_pin)
                 keyPad!!.reset()
             }, 100)
             step++
@@ -58,9 +50,9 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                 createWallet()
             } else {
                 keyPad!!.disable()
-                pinInstruction!!.text = "PINs did not match. Try again"
-                pinView!!.postDelayed({
-                    pinInstruction!!.text = "Create Security PIN"
+                keypad_instruction.setText(R.string.mismatch_passcode)
+                keypad_pin_view.postDelayed({
+                    keypad_instruction.setText(R.string.create_security_pin)
                     keyPad!!.reset()
                     this@PinFragment.passCode = ""
                     step = 0
@@ -74,7 +66,7 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
         pd = Utils.getProgressDialog(context, false, false, "")
         Thread(Runnable {
             try{
-                val wallet = DcrConstants.getInstance().wallet ?: throw NullPointerException("Cannot create wallet, LibWallet not initialized")
+                val wallet = DcrConstants.getInstance().wallet ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 show(getString(R.string.creating_wallet))
                 wallet.createWallet(passCode, seed)
                 activity!!.runOnUiThread {
@@ -87,6 +79,12 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                 }
             }catch (e: Exception){
                 e.printStackTrace()
+                activity!!.runOnUiThread {
+                    if (pd!!.isShowing) {
+                        pd!!.dismiss()
+                    }
+                    Toast.makeText(this@PinFragment.context, Utils.translateError(this@PinFragment.context, e), Toast.LENGTH_LONG).show()
+                }
             }
         }).start()
     }
@@ -102,6 +100,4 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
             }
         }
     }
-
-
 }
