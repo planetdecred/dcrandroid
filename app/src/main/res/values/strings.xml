@@ -267,7 +267,7 @@
     <string name="your_address">Your address</string>
     <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
     <string name="generate_new_address">Generate New Address</string>
-    <string name="receive_fund_privacy_info">Each time you request a payment, a new address \nis created to protect your privacy.</string>
+    <string name="receive_fund_privacy_info">Each time you request a payment, a new address is created to protect your privacy.</string>
     <string name="error_not_decred_address">This is not a DCR wallet address</string>
     <string name="invalid_address_prefix">Invalid address prefix</string>
     <string name="wallet_addr_too_long">Wallet Address Is Too Long</string>
