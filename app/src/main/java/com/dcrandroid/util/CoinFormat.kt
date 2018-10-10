@@ -13,26 +13,21 @@ class CoinFormat{
         fun format(str: String): Spannable {
             val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d{2,}").matcher(str)
             val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d").matcher(str)
-            val wholeNumber = Pattern.compile("\\d+").matcher(str)
 
             val spannable = SpannableString(str)
 
-            val span = RelativeSizeSpan(1.2f)
+            val span = RelativeSizeSpan(0.8f)
 
             val startIndex: Int
             val endIndex: Int
             when {
                 doubleOrMoreDecimalPlaces.find() -> {
-                    startIndex = doubleOrMoreDecimalPlaces.start()
-                    endIndex = str.indexOf(".", startIndex) + 3
+                    startIndex = str.indexOf(".", doubleOrMoreDecimalPlaces.start()) + 3
+                    endIndex = str.length
                 }
                 oneDecimalPlace.find() -> {
-                    startIndex = oneDecimalPlace.start()
-                    endIndex = str.indexOf(".", startIndex) + 2
-                }
-                wholeNumber.find() -> {
-                    startIndex = wholeNumber.start()
-                    endIndex = wholeNumber.end()
+                    startIndex = str.indexOf(".", oneDecimalPlace.start()) + 2
+                    endIndex = str.length
                 }
                 else -> return spannable
             }

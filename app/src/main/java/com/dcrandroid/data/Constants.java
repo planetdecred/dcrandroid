@@ -80,7 +80,7 @@ public class Constants {
             IMPORTED_KEY_COUNT = "ImportedKeyCount",
             TESTNET_HD_PATH = "m / 44' / 11' / ",
             IMPORTED = "imported",
-            USER_AGENT = "user_agent",
+            USER_AGENT = "user-agent",
             MESSAGE = "message";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
