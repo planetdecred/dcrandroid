@@ -23,6 +23,8 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
             decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
         setContentView(R.layout.passcode)
+
+        keypad_instruction.setText(R.string.enter_security_pin)
         keyPad = KeyPad(keypad, keypad_pin_view)
         keyPad!!.setKeyListener(this)
     }

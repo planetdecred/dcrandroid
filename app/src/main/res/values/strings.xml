@@ -178,8 +178,6 @@
     <string name="invalid_passphrase">Passphrase entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password">Password</string>
     <!--/Wallet-->
 
     <!--Transaction-->
@@ -422,4 +420,5 @@
     <string name="password_match">PASSWORDS MATCH</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="password">PASSWORD</string>
+    <string name="enter_security_pin">Enter Security PIN</string>
 </resources>
