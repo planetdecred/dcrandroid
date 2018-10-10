@@ -45,7 +45,7 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         val tvFee = findViewById<TextView>(R.id.fee)
 
         val estFee = Utils.signedSizeToAtom(fee!!)
-        tvFee.text = "${format.format(Mobilewallet.amountCoin(estFee!!))} DCR ${context.getString(R.string.fee_cap)} (${format.format(fee!! / 1024F)} kB)"
+        tvFee.text = "${format.format(Mobilewallet.amountCoin(estFee))} DCR ${context.getString(R.string.fee_cap)} (${format.format(fee!! / 1024F)} kB)"
 
         val tvTotal = findViewById<TextView>(R.id.total)
 

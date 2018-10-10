@@ -104,6 +104,7 @@
                     android:textColor="#424F67"
                     android:text="135,459.595954"
                     android:visibility="gone"
+                    android:textSize="18sp"
                     />
                 <ImageView
                     android:layout_width="50dp"

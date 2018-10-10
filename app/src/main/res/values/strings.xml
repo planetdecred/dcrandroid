@@ -62,7 +62,7 @@
     <string name="changes_after_restart">Changes will take effect after app restarts</string>
     <string name="view_cap">VIEW</string>
     <string name="close_cap">CLOSE</string>
-    <string name="exchange_rate_error">Get Exchange failed with error:</string>
+    <string name="exchange_rate_error">Exchange failed with error:</string>
     <string name="exchange_rate_unavailable">%s rate unavailable (tap to retry)</string>
     <string name="ago">ago</string>
     <string name="now">now</string>
@@ -382,6 +382,10 @@
     <string name="_0_bytes">0 bytes</string>
     <string name="total_sending">Total Sending:</string>
     <string name="balance_after">Balance After:</string>
+    <string name="amount_is_empty">Amount is empty</string>
+    <string name="_8_decimal_amount_err">Amount has more then 8 decimal places</string>
+    <string name="bytes">bytes</string>
+    <string name="decred_colon">decred:</string>
     <!--/Send Fragment-->
 
 </resources>

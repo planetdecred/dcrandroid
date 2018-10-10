@@ -62,7 +62,7 @@
             android:summary="@string/summary_paste_certificate"
             android:title="@string/certificate" />
         <EditTextPreference
-            android:key="user_agent"
+            android:key="user-agent"
             android:title="User agent"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
