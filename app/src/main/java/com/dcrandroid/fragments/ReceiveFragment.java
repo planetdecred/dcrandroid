@@ -65,7 +65,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         // Spinner Drop down elements
         categories = new ArrayList<>();
 
-        dataAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter = new ArrayAdapter(getContext(), R.layout.spinner_list_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         accountSpinner.setAdapter(dataAdapter);
 
