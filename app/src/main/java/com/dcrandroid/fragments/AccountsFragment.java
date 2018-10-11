@@ -151,7 +151,7 @@ public class AccountsFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                accountAdapter.notifyDataSetChanged();
+                prepareAccountData();
             }
         }
     };
