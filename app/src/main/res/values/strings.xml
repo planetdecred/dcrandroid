@@ -179,7 +179,7 @@
     <string name="input_private_phrase">Enter your private passphrase</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="enter_your_passphrase">Enter your passphrase</string>
-    <string name="invalid_passphrase">Invalid Passphrase</string>
+    <string name="invalid_passphrase">Passphrase entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
     <!--/Wallet-->
@@ -214,8 +214,8 @@
     <string name="null_data_bracket">[null data]</string>
     <string name="raw_tx_copied">Raw transaction copied to clipboard</string>
     <string name="vote">Vote</string>
-    <string name="empty_destination_address">Destination Address can not be empty</string>
-    <string name="invalid_destination_address">Destination Address is not valid</string>
+    <string name="empty_destination_address">Destination address can not be empty.</string>
+    <string name="invalid_destination_address">Destination address is not valid.</string>
     <string name="empty_amount">Amount cannot be empty</string>
     <string name="processing_colon">Processing…</string>
     <string name="confirm_send_funds">Please confirm to send funds</string>
@@ -345,14 +345,12 @@
     <!--/ Overview Fragment -->
 
     <!--Error Messages-->
-    <string name="not_enough_funds">Not Enough Funds</string>
+    <string name="not_enough_funds">Not Enough Funds.</string>
     <string name="empty_seed">Empty Seed</string>
     <string name="not_connected">Not Connected To Decred Network</string>
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="balance_remaining">Balance Remaining:</string>
-    <string name="exchange_rate">Exchange Rate:</string>
-    <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex rate unavailable (tap to retry)</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -386,6 +384,8 @@
     <string name="_8_decimal_amount_err">Amount has more then 8 decimal places</string>
     <string name="bytes">bytes</string>
     <string name="decred_colon">decred:</string>
+    <string name="exchange_rate">Exchange Rate:</string>
+    <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex rate unavailable (tap to retry)</string>
     <!--/Send Fragment-->
 
 </resources>

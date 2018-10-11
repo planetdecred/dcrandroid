@@ -313,6 +313,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if(context == null || activity == null){
             return
         }
+
+        send_error_label.text = null
         val dialogTitle = CoinFormat.format(
                 String.format(Locale.getDefault(), "%s %s DCR", getString(R.string.send), Utils.removeTrailingZeros(Mobilewallet.amountCoin(amount)))
         )
@@ -397,25 +399,26 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
          InfoDialog(context)
-                .setDialogTitle(getString(R.string.transaction_was_successful))
-                .setMessage("${getString(R.string.hash_colon)}\n$txHash")
-                .setIcon(R.drawable.np_amount_withdrawal)
-                .setTitleTextColor(Color.parseColor("#2DD8A3"))
-                .setMessageTextColor(Color.parseColor("#2970FF"))
-                .setPositiveButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ -> run {
-                    if (activity != null && activity is MainActivity) {
-                        val mainActivity = activity as MainActivity
-                        mainActivity.displayOverview()
-                    }
-                }}).setNegativeButton(getString(R.string.close_cap), null)
-                .setMessageClickListener(View.OnClickListener {
+                 .setDialogTitle(getString(R.string.transaction_was_successful))
+                 .setMessage("${getString(R.string.hash_colon)}\n$txHash")
+                 .setIcon(R.drawable.np_amount_withdrawal)
+                 .setTitleTextColor(Color.parseColor("#2DD8A3"))
+                 .setMessageTextColor(Color.parseColor("#2970FF"))
+                 .setPositiveButton(getString(R.string.close_cap), null)
+                 .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ -> run {
+                     if (activity != null && activity is MainActivity) {
+                         val mainActivity = activity as MainActivity
+                         mainActivity.displayOverview()
+                     }
+                 }})
+                 .setMessageClickListener(View.OnClickListener {
                     Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))
-                }).show()
+                 }).show()
 
-        amount_usd.text = null
+        amount_dcr.text = null
 
         send_dcr_address.removeTextChangedListener(addressWatcher)
-        send_dcr_address.setText("")
+        send_dcr_address.text = null
         send_dcr_address.addTextChangedListener(addressWatcher)
     }
 

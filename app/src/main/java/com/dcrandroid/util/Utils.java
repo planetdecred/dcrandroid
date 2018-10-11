@@ -3,6 +3,9 @@ package com.dcrandroid.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.MainApplication;
@@ -297,9 +300,15 @@ public class Utils {
             if(clipboard != null)
                 clipboard.setPrimaryClip(clip);
         }
-        Toast toast = Toast.makeText(ctx,
-                successMessage, Toast.LENGTH_SHORT);
+
+        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vi = inflater.inflate(R.layout.toast, null);
+        TextView tv = vi.findViewById(android.R.id.message);
+        tv.setText(successMessage);
+        Toast toast = new Toast(ctx);
         toast.setGravity(Gravity.BOTTOM | Gravity.END, 50, 50);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(vi);
         toast.show();
     }
 
@@ -375,6 +384,8 @@ public class Utils {
                 return ctx.getString(R.string.passphrase_required);
             case Mobilewallet.ErrWalletNotLoaded:
                 return ctx.getString(R.string.wallet_not_loaded);
+            case Mobilewallet.ErrInvalidPassphrase:
+                return ctx.getString(R.string.invalid_passphrase);
             default:
                 return e.getMessage();
         }

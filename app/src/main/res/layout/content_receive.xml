@@ -52,7 +52,6 @@
                 android:gravity="start"
                 android:padding="5dp"
                 app:fontFamily="@font/source_sans_pro_regular"
-                android:layout_marginBottom="2dp"
                 android:textColor="#091440"
                 android:text="@string/spinner_account"
                 android:textSize="21sp" />

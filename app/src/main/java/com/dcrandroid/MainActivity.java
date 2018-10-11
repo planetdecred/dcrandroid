@@ -567,9 +567,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
 
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-                    String hash = obj.getString(Constants.HASH);
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
-                    sendNotification(format.format(amount), hash);
+                    sendNotification(format.format(amount), (int) transaction.totalInput + (int) transaction.totalOutputs + (int) transaction.timestamp);
                 }
             }
         } catch (JSONException e) {
@@ -587,20 +586,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onTransactionConfirmed(String hash, int height) {
+    public void onTransactionConfirmed(final String hash, final int height) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 displayBalance();
+                if(fragment instanceof OverviewFragment){
+                    OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                    overviewFragment.transactionConfirmed(hash, height);
+                }else if (fragment instanceof HistoryFragment){
+                    HistoryFragment historyFragment = (HistoryFragment) fragment;
+                    historyFragment.transactionConfirmed(hash, height);
+                }
             }
         });
-        if(fragment instanceof OverviewFragment){
-            OverviewFragment overviewFragment = (OverviewFragment) fragment;
-            overviewFragment.transactionConfirmed(hash, height);
-        }else if (fragment instanceof HistoryFragment){
-            HistoryFragment historyFragment = (HistoryFragment) fragment;
-            historyFragment.transactionConfirmed(hash, height);
-        }
     }
 
     @Override
@@ -631,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
     }
 
-    private void sendNotification(String amount, String hash){
+    private void sendNotification(String amount, int nonce){
         Intent launchIntent = new Intent(this,MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, "new transaction")
@@ -655,8 +654,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 .setGroupSummary(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
-        notificationManager.notify(new Random().nextInt(), notification);
+
+        //Sum ascii to prevent duplicate notifications
+        notificationManager.notify(nonce,  notification);
         notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
+    }
+
+    private int hexToInt(String hash){
+        System.out.println("Hash: "+hash+" HexInt:"+ Long.parseLong(hash, 16));
+        return  (int) Long.parseLong(hash, 16);
     }
 
     @Override
