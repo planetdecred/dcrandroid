@@ -52,7 +52,7 @@ public class ConfirmSeedActivity extends AppCompatActivity {
         btnConfirmSeed.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                String enteredSeed = "miser stupendous backward inception slowdown Capricorn uncut visitor slowdown caravan blockade hemisphere repay article necklace hazardous cobra inferno python suspicious minnow Norwegian chairlift backwater surmount impetus cement stupendous snowslide sympathy fallout embezzle afflict";
+                String enteredSeed = "";
                 Intent i = new Intent(ConfirmSeedActivity.this, EncryptWallet.class)
                         .putExtra(Constants.SEED, enteredSeed);
                 startActivity(i);

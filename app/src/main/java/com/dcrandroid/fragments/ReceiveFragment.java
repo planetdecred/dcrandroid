@@ -1,12 +1,11 @@
 package com.dcrandroid.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +22,7 @@ import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.Utils;
 import com.google.zxing.EncodeHintType;
 
 import net.glxn.qrgen.android.QRCode;
@@ -44,7 +44,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     List<Integer> accountNumbers = new ArrayList<>();
     private DcrConstants constants;
     private boolean firstTrial = true;
-    long startTime = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,45 +72,33 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                copyToClipboard(address.getText().toString());
+                Utils.copyToClipboard(getContext(), address.getText().toString(), getString(R.string.address_copy_text));
             }
         });
-        imageView.setOnClickListener(new View.OnClickListener() {
+
+        imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                copyToClipboard(address.getText().toString());
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        Utils.copyToClipboard(getContext(), address.getText().toString(), getString(R.string.address_copy_text));
+                        return true;
+                }
+                return false;
             }
         });
+
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getAddress(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
             }
         });
-        //you can set the title for your toolbar here for different fragments different titles
+
         getActivity().setTitle(getString(R.string.receive));
-        startTime = System.currentTimeMillis();
         prepareAccounts();
 
         return rootView;
-    }
-
-    public void copyToClipboard(String copyText) {
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            clipboard.setText(copyText);
-        } else {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
-                    getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData
-                    .newPlainText(getString(R.string.your_address), copyText);
-            clipboard.setPrimaryClip(clip);
-        }
-        Toast toast = Toast.makeText(getContext(),
-                R.string.address_copy_text, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, -190);
-        toast.show();
     }
 
     private void prepareAccounts(){

@@ -383,11 +383,22 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void newTransaction(TransactionsResponse.TransactionItem transaction){
         transaction.animate = true;
+
+        for(int i = 0; i < transactionList.size(); i++){
+            if(transactionList.get(i).hash.equals(transaction.hash)){
+                //Transaction is a duplicate
+                return;
+            }
+        }
         transactionList.add(0, transaction);
         if(transactionList.size() > getMaxDisplayItems()){
             transactionList.remove(transactionList.size() - 1);
         }
         latestTransactionHeight = transaction.getHeight() + 1;
+
+        if(getActivity() == null){
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
