@@ -616,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 @Override
                 public void run() {
                     displayBalance();
-                    connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
+                    connectionStatus.setBackgroundColor(getResources().getColor(R.color.greenLightTextColor));
                 }
             });
             setBestBlockTime(bestBlockTimestamp);
@@ -822,7 +822,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     ((AnimationDrawable) syncIndicator.getBackground()).stop();
                     syncIndicator.setVisibility(View.GONE);
                     totalBalance.setVisibility(View.VISIBLE);
-                    connectionStatus.setBackgroundColor(Color.parseColor("#2DD8A3"));
+                    connectionStatus.setBackgroundColor(getResources().getColor(R.color.greenLightTextColor));
                 }
             });
             bestBlock = constants.wallet.getBestBlock();

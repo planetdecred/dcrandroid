@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/greyThemeBackground"
+    android:background="@color/colorPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -15,7 +15,6 @@
         android:paddingEnd="5dp"
         android:paddingTop="10dp"
         android:orientation="vertical"
-        android:background="#fff"
         >
 
         <TextView
@@ -23,15 +22,15 @@
             android:layout_height="wrap_content"
             app:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/sending_decred"
-            android:textColor="#091440"
+            android:textColor="@color/darkBlueTextColor"
             android:textSize="23sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/blueGrayFirstTextColor"
             app:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/qr_code_help_text"
-            android:textColor="#617386"
             android:textSize="18sp"
             android:layout_marginTop="10dp"/>
 
@@ -50,7 +49,7 @@
                 app:fontFamily="@font/source_sans_pro_regular"
                 android:gravity="end"
                 android:text="@string/from_colon"
-                android:textColor="@color/secondaryTextColor87"
+                android:textColor="@color/blueGrayFirstTextColor87pc"
                 android:textSize="20sp"
 
                 />
@@ -74,7 +73,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/greyViewDivider" />
+            android:background="@color/lightGreyBackgroundColor" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,14 +89,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/colorPrimary"
                 android:hint="@string/destination_address"
-                android:background="#fff"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingTop="8dp"
                 android:paddingBottom="3dp"
-                android:textColor="@color/linkTxtColor"
-                android:textColorHint="#617386"
+                android:textColor="@color/blueLinkTextColor"
+                android:textColorHint="@color/blueGrayFirstTextColor38pc"
                 android:textSize="17sp" />
 
             <ImageView
@@ -115,7 +115,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#D0D1D1" />
+            android:background="@color/lightGreyBackgroundColor" />
 
         <TextView
             android:id="@+id/tvDestinationError"
@@ -125,7 +125,7 @@
             android:paddingStart="5dp"
             android:layout_gravity="end"
             app:fontFamily="@font/source_sans_pro_regular"
-            android:textColor="@color/orange"
+            android:textColor="@color/orangeTextColor"
             android:visibility="visible"
             tools:text="test text" />
 
@@ -150,21 +150,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/send_in_dcr"
-                        android:textColor="@color/secondaryTextColor38"
-                        android:textSize="16sp"
-                        />
+                        android:textColor="@color/blueGrayFirstTextColor38pc"
+                        android:textSize="16sp" />
+
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
-                        android:background="#fff"
                         android:digits="0123456789."
                         android:hint="@string/_0_00_"
                         android:inputType="numberDecimal"
                         android:lines="1"
-                        android:textColor="@color/auth_text_color"
+                        android:textColor="@color/darkBlueTextColor"
                         android:id="@+id/amount_dcr"
                         />
                     <TextView
@@ -174,7 +173,7 @@
                         android:layout_marginLeft="5dp"
                         app:fontFamily="@font/source_sans_pro_regular"
                         android:text="@string/dcr"
-                        android:textColor="@color/auth_text_color"
+                        android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -191,23 +190,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/send_in_usd"
-                        android:textColor="@color/secondaryTextColor38"
+                        android:textColor="@color/blueGrayFirstTextColor38pc"
                         android:textSize="16sp"
                         />
+
                     <EditText
+                        android:id="@+id/amount_usd"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
-                        android:background="#fff"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
                         android:digits="0123456789."
                         android:hint="@string/_0_00_"
                         android:inputType="numberDecimal"
                         android:lines="1"
-                        android:textColor="@color/auth_text_color"
-                        android:id="@+id/amount_usd"
-                        />
+                        android:textColor="@color/darkBlueTextColor" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -215,7 +213,7 @@
                         android:layout_marginLeft="5dp"
                         app:fontFamily="@font/source_sans_pro_regular"
                         android:text="@string/usd"
-                        android:textColor="@color/auth_text_color"
+                        android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -229,14 +227,14 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/max"
-                android:textColor="#617386"
+                android:textColor="@color/blueGrayFirstTextColor"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/greyViewDivider"
+            android:background="@color/lightGreyBackgroundColor"
             android:layout_marginTop="10dp"
             />
 
@@ -249,7 +247,7 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingRight="5dp"
-            android:textColor="@color/orange"
+            android:textColor="@color/orangeTextColor"
             tools:text="test text" />
 
         <LinearLayout
@@ -273,7 +271,7 @@
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/fee_colon"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
 
                 <TextView
@@ -282,7 +280,7 @@
                     android:layout_height="wrap_content"
                     app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -298,7 +296,7 @@
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/estimate_size"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
 
                 <TextView
@@ -307,7 +305,7 @@
                     android:layout_height="wrap_content"
                     app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_bytes"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -323,7 +321,7 @@
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/balance_after"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
 
                 <TextView
@@ -332,7 +330,7 @@
                     android:layout_height="wrap_content"
                     app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -351,14 +349,14 @@
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/exchange_rate"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/send_dcr_exchange_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/blueGrayFirstTextColor"
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp"
                     tools:text="test text" />
@@ -369,8 +367,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@color/orangeTextColor"
                 android:text="@string/bittrex_rate_unavailable_tap_to_retry"
-                android:textColor="#ff0004"
                 android:visibility="invisible"
                 tools:visibility="visible"
                 />
@@ -386,7 +384,7 @@
             android:background="@drawable/btn_blue"
             android:enabled="false"
             android:text="@string/send"
-            android:textColor="@color/black38"
+            android:textColor="@color/blackTextColor38pc"
             android:textSize="14sp" />
 
     </LinearLayout>

@@ -21,8 +21,8 @@
             android:hint="@string/private_passphrase"
             android:inputType="textPassword"
             android:textStyle="normal"
-            android:textColor="@color/primary_text"
-            android:textColorHint="@color/secondary_text"
+            android:textColor="@color/blackFirstTextColor"
+            android:textColorHint="@color/grayTextColor"
             />
 
     </android.support.design.widget.TextInputLayout>

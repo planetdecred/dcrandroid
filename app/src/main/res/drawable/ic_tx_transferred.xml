@@ -6,31 +6,31 @@
     <path
         android:pathData="M0.03,3.87c0.01,-0.04 0.01,-0.08 0.02,-0.12C0.04,3.78 0.04,3.83 0.03,3.87z"
         android:fillAlpha="0.75"
-        android:fillColor="#8997A5"
+        android:fillColor="@color/lightGrayTextColor"
         android:strokeAlpha="0.75"/>
     <path
         android:pathData="M3.43,6.6h30.85V4.32c0,-1.88 -1.54,-3.43 -3.43,-3.43H3.43c-1.69,0 -3.11,1.24 -3.38,2.86C0.32,5.36 1.74,6.6 3.43,6.6z"
         android:fillAlpha="0.5"
-        android:fillColor="#0C1E3E"
+        android:fillColor="@color/deepBlueDrawableColor"
         android:strokeAlpha="0.5"/>
     <path
         android:pathData="M0.02,4.01C0.02,3.97 0.02,3.94 0.03,3.9C0.02,3.94 0.02,3.97 0.02,4.01z"
         android:fillAlpha="0.75"
-        android:fillColor="#8997A5"
+        android:fillColor="@color/lightGrayTextColor"
         android:strokeAlpha="0.75"/>
     <path
         android:pathData="M0,4.16c0,-0.03 0,-0.05 0,-0.08C0.01,4.1 0,4.13 0,4.16z"
         android:fillAlpha="0.75"
-        android:fillColor="#8997A5"
+        android:fillColor="@color/lightGrayTextColor"
         android:strokeAlpha="0.75"/>
     <path
         android:pathData="M36.57,6.6h-2.29h-0H3.43c-1.69,0 -3.11,-1.24 -3.38,-2.86l0,0v0c-0.01,0.04 -0.01,0.08 -0.02,0.12C0.03,3.88 0.03,3.89 0.03,3.9C0.02,3.94 0.02,3.97 0.02,4.01C0.01,4.03 0.01,4.05 0.01,4.08c0,0.03 -0,0.05 -0,0.08C0,4.21 0,4.26 0,4.32v5.71v15.94v5.71c0,1.89 1.54,3.43 3.43,3.43H36.57c1.89,0 3.43,-1.54 3.43,-3.43v-3.68c-3.94,0 -7.14,-3.2 -7.14,-7.14s3.19,-7.14 7.14,-7.14v-3.69C40,8.14 38.46,6.6 36.57,6.6z"
         android:fillAlpha="0.75"
-        android:fillColor="#0C1E3E"
+        android:fillColor="@color/deepBlueDrawableColor"
         android:strokeAlpha="0.75"/>
     <path
         android:pathData="M32.86,20.86c0,3.94 3.19,7.14 7.14,7.14v-0.18v-2.86v-8.39v-2.86C36.06,13.72 32.86,16.91 32.86,20.86z"
         android:fillAlpha="0.5"
-        android:fillColor="#0C1E3E"
+        android:fillColor="@color/deepBlueDrawableColor"
         android:strokeAlpha="0.5"/>
 </vector>

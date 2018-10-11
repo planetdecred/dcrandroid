@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/greyThemeBackground">
+    android:background="@color/colorPrimary">
+
 
     <LinearLayout
         android:id="@+id/receive_container"
@@ -22,9 +23,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="@string/receive_funds"
-                android:textSize="23sp"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 app:fontFamily="@font/source_sans_pro_regular"
+                android:textSize="23sp"
                 android:alpha="1"/>
 
             <TextView
@@ -34,7 +35,7 @@
                 app:fontFamily="@font/source_sans_pro_regular"
                 android:text="@string/receive_fund_privacy_info"
                 android:textSize="18sp"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/blueGrayFirstTextColor"
                 android:alpha="1"
                 android:layout_marginTop="8dp"/>
 
@@ -53,8 +54,7 @@
                 android:gravity="start"
                 android:padding="5dp"
                 app:fontFamily="@font/source_sans_pro_regular"
-                android:layout_marginBottom="2dp"
-                android:textColor="@color/secondaryTextColor87"
+                android:textColor="@color/blueGrayFirstTextColor87pc"
                 android:text="@string/spinner_account"
                 android:textSize="21sp" />
 
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:id="@+id/border"
-            android:background="#231F20"
+            android:background="@color/deepBlackBackgroundColor"
             android:alpha="0.6"/>
 
         <LinearLayout
@@ -114,15 +114,16 @@
                 android:minEms="26"
                 app:fontFamily="@font/source_sans_pro_regular"
                 android:padding="5dp"
-                android:textColor="@color/linkTxtColor"
+                android:textColor="@color/blueLinkTextColor"
                 android:textSize="16sp"
+                tools:text="test text"
                 />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/copy_on_tap"
                 android:gravity="center"
-                android:textColor="@color/secondaryTextColor54"
+                android:textColor="@color/blueGrayFirstTextColor54pc"
                 android:layout_marginTop="3dp"/>
 
             <Button
@@ -143,7 +144,7 @@
                 app:fontFamily="@font/source_sans_pro_regular"
                 android:text="@string/generate_new_address"
                 android:textAllCaps="true"
-                android:textColor="@color/buttonWhiteText"
+                android:textColor="@color/whiteButtonTextColor"
                 android:visibility="visible" />
         </LinearLayout>
     </LinearLayout>

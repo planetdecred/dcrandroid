@@ -12,13 +12,13 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:id="@+id/get_peers_id"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/blackSecondTextColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:id="@+id/get_peers_addr"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/blackSecondTextColor"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

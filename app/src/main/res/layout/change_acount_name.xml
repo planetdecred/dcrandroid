@@ -12,8 +12,8 @@
         android:hint="@string/account_name"
         android:inputType="textPassword"
         android:textStyle="normal"
-        android:textColor="@color/primary_text"
-        android:textColorHint="@color/secondary_text"
+        android:textColor="@color/blackFirstTextColor"
+        android:textColorHint="@color/grayTextColor"
         />
 
 </LinearLayout>

@@ -2,7 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     android:textSize="18sp"
-    android:textColor="#091440"
+    android:textColor="@color/darkBlueTextColor"
     android:gravity="center_vertical"
     android:padding="5dp"
     android:singleLine="true"

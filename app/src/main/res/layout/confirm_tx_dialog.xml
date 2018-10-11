@@ -3,7 +3,7 @@
     android:layout_width="280dp"
     android:layout_height="230dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#fff"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:id="@+id/title"
             app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="18sp"
-            android:textColor="#2DD8A3"
+            android:textColor="@color/greenLightTextColor"
             android:layout_marginTop="20dp"
             />
 
@@ -30,7 +30,7 @@
             android:id="@+id/address"
             app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="14sp"
-            android:textColor="#617386"
+            android:textColor="@color/blueGrayFirstTextColor"
             android:layout_marginTop="13dp"
             />
 
@@ -40,7 +40,7 @@
             android:id="@+id/fee"
             app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="16sp"
-            android:textColor="#617386"
+            android:textColor="@color/blueGrayFirstTextColor"
             android:layout_marginTop="20dp"
             />
 
@@ -50,7 +50,7 @@
             android:id="@+id/total"
             app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="18sp"
-            android:textColor="#617386"
+            android:textColor="@color/blueGrayFirstTextColor"
             android:layout_marginTop="20dp"
             />
 
@@ -61,7 +61,7 @@
         android:layout_height="52dp"
         android:weightSum="2"
         android:id="@+id/btn_layout"
-        android:background="#F3F5F6">
+        android:background="@color/colorPrimary">
 
         <TextView
             android:layout_height="match_parent"
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:textSize="14sp"
             app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:textColor="#091440"
+            android:textColor="@color/darkBlueTextColor"
             android:text="@string/cancel"
             android:textAllCaps="true"
             android:id="@+id/btn_negative"
@@ -87,7 +87,7 @@
             android:gravity="center"
             android:textSize="14sp"
             app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:textColor="#2970FF"
+            android:textColor="@color/blue"
             android:text="@string/send"
             android:textAllCaps="true"
             android:id="@+id/btn_positive"

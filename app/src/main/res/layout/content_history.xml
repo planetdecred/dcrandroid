@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/greyThemeBackground">
-
-
+    android:background="@color/colorPrimary"
+    android:padding="16dp">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
@@ -41,7 +40,7 @@
                 android:layout_below="@id/rlSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/history_recycler_view"

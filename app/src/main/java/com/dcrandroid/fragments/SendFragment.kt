@@ -2,6 +2,7 @@ package com.dcrandroid.fragments
 
 import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -28,6 +29,7 @@ import android.widget.Toast
 import org.json.JSONObject
 import android.os.AsyncTask
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.widget.AdapterView
 import android.widget.EditText
@@ -103,13 +105,13 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        activity!!.setTitle(R.string.send)
+        requireActivity().setTitle(R.string.send)
 
-        util = PreferenceUtil(context!!)
+        util = PreferenceUtil(requireContext())
 
         accounts = ArrayList()
 
-        dataAdapter = ArrayAdapter(activity!!.applicationContext, R.layout.spinner_list_item_1, accounts)
+        dataAdapter = ArrayAdapter(requireActivity().applicationContext, R.layout.spinner_list_item_1, accounts)
         dataAdapter!!.setDropDownViewResource(R.layout.dropdown_item_1)
         send_account_spinner.adapter = dataAdapter
 
@@ -182,7 +184,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             accountNumbers.add(account.accountNumber)
         }
 
-        activity!!.runOnUiThread {
+        requireActivity().runOnUiThread {
             dataAdapter!!.notifyDataSetChanged()
         }
     }
@@ -223,7 +225,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         send_dcr_estimate_fee.setText(R.string._0_00_dcr)
         send_dcr_balance_after.setText(R.string._0_00_dcr)
         send_btn.isEnabled = false
-        send_btn.setTextColor(resources.getColor(R.color.black38))
+        send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
     }
 
     private fun constructTransaction(){
@@ -275,7 +277,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         }catch (e: Exception){
             setInvalid()
-            send_error_label.text = Utils.translateError(activity!!.applicationContext, e)
+            send_error_label.text = Utils.translateError(requireActivity().applicationContext, e)
         }
     }
 
@@ -288,10 +290,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if(returnString.startsWith(getString(R.string.decred_colon)))
                         returnString = returnString.replace(getString(R.string.decred_colon),"")
                     if(returnString.length < 25){
-                        Toast.makeText(activity!!.applicationContext, R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
                         return
                     }else if(returnString.length > 36){
-                        Toast.makeText(activity!!.applicationContext, R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
                         return
                     }
 
@@ -299,10 +301,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if(returnString.startsWith("T")){
                         send_dcr_address.setText(returnString)
                     }else{
-                        Toast.makeText(activity!!.applicationContext, R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(activity!!.applicationContext, R.string.error_not_decred_address, Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show()
                     send_dcr_address.setText("")
                 }
             }
@@ -319,8 +321,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 String.format(Locale.getDefault(), "%s %s DCR", getString(R.string.send), Utils.removeTrailingZeros(Mobilewallet.amountCoin(amount)))
         )
 
-        val dialogBuilder = AlertDialog.Builder(context!!)
-        val inflater = activity!!.layoutInflater
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        val inflater = requireActivity().layoutInflater
         val dialogView = inflater.inflate(R.layout.input_passphrase_box, null)
         dialogBuilder.setCancelable(false)
         dialogBuilder.setView(dialogView)
@@ -375,7 +377,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
                 println("Hash: $sb")
                 if(activity != null){
-                    activity!!.runOnUiThread {
+                    requireActivity().runOnUiThread {
                         if(pd!!.isShowing){ pd!!.dismiss() }
                         prepareAccounts()
                         showTxConfirmDialog(sb.toString())
@@ -384,7 +386,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }catch (e: Exception){
                 e.printStackTrace()
                 if(activity != null){
-                    activity!!.runOnUiThread {
+                    requireActivity().runOnUiThread {
                         if(pd!!.isShowing){ pd!!.dismiss() }
                         send_error_label.text = Utils.translateError(context, e)
                     }
@@ -402,8 +404,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                  .setDialogTitle(getString(R.string.transaction_was_successful))
                  .setMessage("${getString(R.string.hash_colon)}\n$txHash")
                  .setIcon(R.drawable.np_amount_withdrawal)
-                 .setTitleTextColor(Color.parseColor("#2DD8A3"))
-                 .setMessageTextColor(Color.parseColor("#2970FF"))
+                 .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
+                 .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
                  .setPositiveButton(getString(R.string.close_cap), null)
                  .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ -> run {
                      if (activity != null && activity is MainActivity) {
@@ -431,11 +433,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if (s.toString() == "") {
                 tvDestinationError.setText(R.string.empty_destination_address)
                 send_btn.isEnabled = false
-                send_btn.setTextColor(resources.getColor(R.color.black38))
+                send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
             } else if (!constants.wallet.isAddressValid(s.toString())) {
                 tvDestinationError.setText(R.string.invalid_destination_address)
                 send_btn.isEnabled = false
-                send_btn.setTextColor(resources.getColor(R.color.black38))
+                send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
             } else {
                 tvDestinationError.text = null
                 tvDestinationError.visibility = View.VISIBLE
@@ -517,7 +519,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 if(sendFragment.activity == null){
                     return null
                 }
-                val url = URL(sendFragment.activity!!.getString(R.string.dcr_to_usd_exchange_url))
+                val url = URL(sendFragment.requireActivity().getString(R.string.dcr_to_usd_exchange_url))
                 val connection = url.openConnection() as HttpURLConnection
                 connection.doInput = true
                 connection.readTimeout = 7000
@@ -546,7 +548,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 return
             }
 
-            val context = sendFragment.activity!!.applicationContext
+            val context = sendFragment.requireActivity().applicationContext
             val index = Integer.parseInt(sendFragment.util!!.get(Constants.CURRENCY_CONVERSION, "0"))
             val currency = context.resources.getStringArray(R.array.currency_conversion_abbrv)[index]
             val source = context.resources.getStringArray(R.array.currency_conversion_source)[index]

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -14,14 +13,14 @@
         android:layout_marginTop="8dp"
         android:text="@string/setting_up_dcrandroid"
         android:textSize="18sp"
-        android:textColor="#091440"
+        android:textColor="@color/darkBlueTextColor"
         android:id="@+id/header"
         android:layout_alignParentTop="true"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save_seed_instruction"
-        android:textColor="#596D81"
+        android:textColor="@color/blueGraySecondTextColor"
         android:padding="8dp"
         android:layout_below="@+id/header"
         android:textSize="14sp"
@@ -56,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/warning_save_seed"
-            android:textColor="#fd714a"
+            android:textColor="@color/deepOrangeTextColor"
             android:textSize="14sp"
 
             />
@@ -72,6 +71,5 @@
         android:layout_gravity="center"
         android:padding="8dp"
         android:layout_marginBottom="25dp"
-
-        android:textColor="@android:color/background_light" />
+        android:textColor="@color/white" />
 </RelativeLayout>

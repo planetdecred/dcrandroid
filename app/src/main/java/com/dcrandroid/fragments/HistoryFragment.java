@@ -67,10 +67,10 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         spinnerHistory = rootView.findViewById(R.id.spinnerHistory);
         swipeRefreshLayout = rootView.getRootView().findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(
-                R.color.colorPrimaryDark2,
-                R.color.colorPrimaryDark2,
-                R.color.colorPrimaryDark2,
-                R.color.colorPrimaryDark2);
+                R.color.colorPrimaryDarkBlue,
+                R.color.colorPrimaryDarkBlue,
+                R.color.colorPrimaryDarkBlue,
+                R.color.colorPrimaryDarkBlue);
         swipeRefreshLayout.setOnRefreshListener(this);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, rootView.getContext());

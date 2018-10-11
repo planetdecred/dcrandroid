@@ -9,7 +9,7 @@
         android:text="@string/coming_soon"
         android:gravity="center"
         android:textSize="26sp"
-        android:textColor="@color/colorText"
+        android:textColor="@color/blackSecondTextColor"
         android:layout_centerInParent="true"
         />
 

@@ -4,7 +4,7 @@
     android:layout_width="280dp"
     android:layout_height="259dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#fff"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
-            android:textColor="#2DD8A3"
+            android:textColor="@color/greenLightTextColor"
             android:textSize="18sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
-            android:textColor="#617386"
+            android:textColor="@color/blueGrayFirstTextColor"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
@@ -45,7 +45,7 @@
         android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:background="#F3F5F6"
+        android:background="@color/colorPrimary"
         android:weightSum="2">
 
         <TextView
@@ -55,7 +55,7 @@
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:textColor="#091440"
+            android:textColor="@color/darkBlueTextColor"
             android:textSize="14sp"
             android:visibility="invisible"
             tools:text="test text"
@@ -69,7 +69,7 @@
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:textColor="#2970FF"
+            android:textColor="@color/blue"
             android:textSize="14sp"
             android:visibility="invisible"
             tools:text="test text"

@@ -79,14 +79,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         confirmations += 1;
         if (history.getHeight() == -1) {
             //No included in block chain, therefore transaction is pending
-            holder.status.setTextColor(Color.parseColor("#3d659c"));
+            holder.status.setTextColor(context.getResources().getColor(R.color.bluePendingTextColor));
             holder.status.setText(context.getString(R.string.pending));
         }else{
             if(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1){
-                holder.status.setTextColor(Color.parseColor("#55bb97"));
+                holder.status.setTextColor(context.getResources().getColor(R.color.greenConfirmedTextColor));
                 holder.status.setText(context.getString(R.string.confirmed));
             }else{
-                holder.status.setTextColor(Color.parseColor("#3d659c"));
+                holder.status.setTextColor(context.getResources().getColor(R.color.bluePendingTextColor));
                 holder.status.setText(context.getString(R.string.pending));
             }
         }

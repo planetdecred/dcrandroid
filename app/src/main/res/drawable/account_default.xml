@@ -5,20 +5,20 @@
     android:viewportHeight="20">
   <path
       android:pathData="M1.28,3.83c0,-0.02 0,-0.04 0.01,-0.05c0,0.02 0,0.04 -0.01,0.05z"
-      android:fillColor="#8795a3"/>
+      android:fillColor="@color/grayDrawableColor"/>
   <path
       android:pathData="M2.77,6.87l13.46,-0.49v-2.35c0,-0.82 -0.67,-1.5 -1.5,-1.5h-11.96c-0.74,0 -1.36,0.54 -1.48,1.24c0.12,0.71 0.74,3.09 1.48,3.09z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M1.28,3.89c0,-0.02 0,-0.03 0,-0.05c0,0.02 0,0.04 0,0.05z"
-      android:fillColor="#8795a3"/>
+      android:fillColor="@color/grayDrawableColor"/>
   <path
       android:pathData="M1.28,3.96c0,-0.01 0,-0.02 0,-0.04c0,0.01 0,0.02 0,0.04z"
-      android:fillColor="#8795a3"/>
+      android:fillColor="@color/grayDrawableColor"/>
   <path
       android:pathData="M15.61,11.25c0,1.72 1.4,3.12 3.12,3.12v-0.08v-1.25v-3.66v-1.25c-1.72,0 -3.12,1.4 -3.12,3.12z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M17.23,5.03h-1v0h-13.47c-0.74,0 -1.36,-0.54 -1.48,-1.24v0v0c0,0.02 0,0.04 -0.01,0.05c0,0 0,0.01 0,0.01c0,0.01 0,0.03 0,0.05c0,0.01 0,0.02 0,0.03c0,0.01 0,0.02 0,0.04c0,0.02 0,0.04 0,0.07v2.49v6.96v2.49c0,0.82 0.67,1.5 1.5,1.5h14.46c0.82,0 1.5,-0.68 1.5,-1.5v-1.61c-1.72,0 -3.12,-1.4 -3.12,-3.12c0,-1.72 1.4,-3.12 3.12,-3.12v-1.61c0,-0.84 -0.68,-1.51 -1.5,-1.51z"
-      android:fillColor="#c4cbd2"/>
+      android:fillColor="@color/lightGray"/>
 </vector>

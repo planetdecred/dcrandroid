@@ -1,44 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary2">#3F51B5</color>
-    <color name="colorPrimaryDark2">#303F9F</color>
+
+    <!--Old blue theme-->
+    <color name="colorPrimaryBlue">#3F51B5</color>
+    <color name="colorPrimaryDarkBlue">#303F9F</color>
+    <!--/Old blue theme-->
+
+    <!--Light theme-->
+
+    <!--General-->
+    <color name="colorAccent">#888a8b</color>
+    <color name="lightGray">#C4CBD2</color>
     <color name="colorPrimary">#F3F5F6</color>
     <color name="colorPrimaryDark">#F3F5F6</color>
-    <color name="colorAccent">#888a8b</color>
-    <color name="secondaryTextColor">#617386</color>
-    <color name="colorText">#11161b</color>
-    <color name="buttonWhiteText">#e5fdfd</color>
-    <color name="buttonColor">#2970FF</color>
-    <color name="Amount1Text">#333333</color>
-    <color name="Amount2Text">#11161b</color>
-    <color name="backgcolor">#ebefee</color>
-    <color name="colorWhite">#ffffff</color>
-    <color name="ButtonColor">#2970FF</color>
-    <color name="bacgroundColor">#F3F5F6</color>
-    <color name="bacgroundTxColor">#f2f6f7</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#727272</color>
-    <color name="color_pendng_tx">#3d659c</color>
-    <color name="color_confirmed_tx">#55bb97</color>
-    <color name="button2Color">#FFF45845</color>
-    <color name="seedColor">#D4F0FD</color>
-    <color name="nedw">#F4F6F6</color>
+    <color name="white">#ffffff</color>
+    <color name="blue">#2970FF</color>
     <color name="green">#1dc54c</color>
-    <color name="green2">#60d982</color>
+    <!--/General-->
 
-    <color name="ic_launcher_background">#FFFFFF</color>
-    <color name="grey_button">#E6EAED</color>
-    <color name="black38">#61000000</color>
-    <color name="orange">#ED6D47</color>
-    <color name="secondaryTextColor87">#de617386</color>
-    <color name="secondaryTextColor38">#61617386</color>
-    <color name="secondaryTextColor54">#8a617386</color>
-    <color name="titleTextColor">#8997A5</color>
-    <color name="auth_text_color">#091440</color>
-    <color name="auth_text_color_description">#596D81</color>
-    <color name="linkTxtColor">#4A92FF</color>
-    <color name="greyLight">#C4CBD2</color>
-    <color name="greenBright">#2DD8A3</color>
-    <color name="greyThemeBackground">#F3F5F6</color>
-    <color name="greyViewDivider">#D6D8D8</color>
+    <!--Text-->
+    <color name="deepBlackTextColor">#000000</color>
+    <color name="blackTextColor38pc">#61000000</color>
+    <color name="blackFirstTextColor">#212121</color>
+    <color name="blackSecondTextColor">#11161b</color>
+    <color name="grayTextColor">#727272</color>
+    <color name="blueGraySecondTextColor">#596D81</color>
+    <color name="blueGrayFirstTextColor">#617386</color>
+    <color name="blueGrayFirstTextColor87pc">#de617386</color>
+    <color name="blueGrayFirstTextColor54pc">#8a617386</color>
+    <color name="blueGrayFirstTextColor38pc">#61617386</color>
+    <color name="lightGrayTextColor">#8997A5</color>
+    <color name="darkBlueGrayTextColor">#444F65</color>
+    <color name="bluePendingTextColor">#3d659c</color>
+    <color name="blueLinkTextColor">#4A92FF</color>
+    <color name="darkBlueTextColor">#091440</color>
+    <color name="orangeTextColor">#ED6D47</color>
+    <color name="deepOrangeTextColor">#fd714a</color>
+    <color name="greenTextColor">#41be53</color>
+    <color name="greenLightTextColor">#2DD8A3</color>
+    <color name="greenConfirmedTextColor">#55bb97</color>
+    <color name="whiteButtonTextColor">#e5fdfd</color>
+    <!--/Text-->
+
+    <!--Background-->
+    <color name="deepBlackBackgroundColor">#231F20</color>
+    <color name="blackBackgroundColor">#231F20</color>
+    <color name="darkBlueGrayBackgroundColor">#424F67</color>
+    <color name="lightGreyBackgroundColor">#D6D8D8</color>
+    <color name="indigoBackgroundColor">#E6EAED</color>
+    <color name="whiteFirstBackgroundColor">#F9FAFA</color>
+    <color name="whiteSecondBackgroundColor">#ebefee</color>
+    <color name="lightOrangeBackgroundColor">#FFC84E</color>
+    <!--/Background-->
+
+    <!--Drawable-->
+    <color name="blackDrawableColor25pc">#44000000</color>
+    <color name="whiteDrawableColor25pc">#33FFFFFF</color>
+    <color name="grayDrawableColor">#8795a3</color>
+    <color name="normalGrayDrawableColor">#8C8C8C</color>
+    <color name="grayDrawable85pc">#CABBBBBB</color>
+    <color name="darkBlueDrawableColor">#152337</color>
+    <color name="deepBlueDrawableColor">#0C1E3E</color>
+    <color name="blueSecondDrawableColor">#263e80</color>
+    <color name="blueFirstDrawableColor">#2954c9</color>
+    <color name="blueThirdDrawableColor">#2e63f4</color>
+    <color name="lightBlueDrawableColor">#69d5f7</color>
+    <color name="materialTealDrawableColor">#26A69A</color>
+    <color name="greenDrawableColor">#ff41bf53</color>
+    <color name="lightGreenSecondDrawableColor">#2ED8A3</color>
+    <color name="orangeDrawableColor">#fffd714b</color>
+    <color name="lightOrangeDrawableColor">#fffeb8a5</color>
+    <color name="lightGreenDrawableColor">#ffc6eccb</color>
+    <color name="transparentDrawableColor">#00000000</color>
+    <!--/Drawable-->
+
+    <!--/Light theme-->
+
+
+
 </resources>

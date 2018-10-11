@@ -20,7 +20,7 @@
         android:text="@string/create_security_pass"
         android:gravity="center"
         android:textSize="18sp"
-        android:textColor="#091440"
+        android:textColor="@color/darkBlueTextColor"
         />
     <TextView
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:text="Password"
+        android:text="@string/password"
         android:gravity="center"
         android:textSize="15sp"
 
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="Confirm Password"
+            android:text="@string/confirm_password"
             android:gravity="center"
             android:textSize="15sp"
             android:paddingTop="16dp"
@@ -102,9 +102,9 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:gravity="center"
-        android:text="Confirm "
+        android:text="@string/confirm"
         android:layout_gravity="center"
-        android:textColor="#fff" />
+        android:textColor="@color/white" />
 
     </LinearLayout>
 

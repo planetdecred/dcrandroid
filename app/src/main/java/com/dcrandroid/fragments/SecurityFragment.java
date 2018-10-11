@@ -183,14 +183,14 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
 
             if(wallet.isAddressValid(s.toString().trim())){
                 if(wallet.isAddressMine(s.toString().trim())){
-                    tvValidateAddress.setTextColor(Color.parseColor("#2970ff"));
+                    tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.blue));
                     tvValidateAddress.setText(R.string.owned_validate_address);
                     return;
                 }
-                tvValidateAddress.setTextColor(Color.parseColor("#41be53"));
+                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.greenTextColor));
                 tvValidateAddress.setText(R.string.external_validate_address);
             }else{
-                tvValidateAddress.setTextColor(Color.parseColor("#ed6d47"));
+                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.orangeTextColor));
                 tvValidateAddress.setText(R.string.invalid_address);
             }
         }
