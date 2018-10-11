@@ -33,7 +33,7 @@
                 android:paddingRight="0dp"
                 android:paddingBottom="8dp"
                 android:text="@string/date_colon"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -47,7 +47,7 @@
                 android:layout_toRightOf="@+id/label_date"
                 android:gravity="end"
                 android:padding="8dp"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular"
                 tools:text="test text" />
@@ -57,7 +57,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/label_date"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <LinearLayout
                 android:id="@+id/status_tx_cont"
@@ -73,7 +73,7 @@
                     android:layout_weight="2"
                     android:padding="8dp"
                     android:text="@string/status_colon"
-                    android:textColor="@color/auth_text_color"
+                    android:textColor="@color/darkBlueTextColor"
                     android:textSize="16sp"
                     app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -88,7 +88,7 @@
                     android:gravity="center"
                     android:padding="2dp"
                     android:text="@string/confirmed"
-                    android:textColor="@color/greenBright" />
+                    android:textColor="@color/greenLightTextColor" />
             </LinearLayout>
 
             <View
@@ -96,7 +96,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/status_tx_cont"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <TextView
                 android:id="@+id/label_amount"
@@ -105,7 +105,7 @@
                 android:layout_below="@id/separator1399"
                 android:padding="8dp"
                 android:text="@string/amount_dcr_colon"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -120,7 +120,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="@string/_0_dcr"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="14sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -129,7 +129,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/tx_dts_value"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <TextView
                 android:id="@+id/label_tx_fee"
@@ -139,7 +139,7 @@
                 android:padding="8dp"
                 android:text="@string/fee_colon"
 
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -153,7 +153,7 @@
                 android:gravity="end"
                 android:padding="8dp"
                 android:text="@string/_0_dcr"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="14sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -162,7 +162,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/tx_fee"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <TextView
                 android:id="@+id/label_txtype"
@@ -171,7 +171,7 @@
                 android:layout_below="@+id/separator21"
                 android:padding="8dp"
                 android:text="@string/type_colon"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -187,7 +187,7 @@
                 android:gravity="end"
                 android:padding="8dp"
                 android:textAllCaps="false"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular"
                 tools:text="test text" />
@@ -197,7 +197,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/txtype"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <TextView
                 android:id="@+id/label_confirmation"
@@ -206,7 +206,7 @@
                 android:layout_below="@+id/separator17"
                 android:padding="8dp"
                 android:text="@string/confirmations_colon"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -221,7 +221,7 @@
                 android:layout_toRightOf="@id/label_confirmation"
                 android:gravity="end"
                 android:padding="8dp"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular"
                 tools:text="test text" />
@@ -231,7 +231,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/tx_dts_confirmation"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
             <TextView
                 android:id="@+id/label_tx_hash"
@@ -240,7 +240,7 @@
                 android:layout_below="@id/separator1235"
                 android:padding="8dp"
                 android:text="@string/hash_lowercase_colon"
-                android:textColor="@color/auth_text_color"
+                android:textColor="@color/darkBlueTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
@@ -263,7 +263,7 @@
                 android:paddingEnd="0dp"
                 android:paddingRight="0dp"
                 android:singleLine="true"
-                android:textColor="@color/buttonColor"
+                android:textColor="@color/blueLinkTextColor"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular"
                 tools:text="fxfxffxxfxfxfxfxfxfxfxfxfxfxfxfxfx" />
@@ -273,7 +273,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/tx_hash"
-                android:background="@color/greyViewDivider" />
+                android:background="@color/lightGreyBackgroundColor" />
 
 
         </RelativeLayout>
@@ -300,7 +300,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:text="@string/inputs"
-                    android:textColor="@color/auth_text_color"
+                    android:textColor="@color/darkBlueTextColor"
                     android:textSize="16sp"
                     app:fontFamily="@font/roboto_regular" />
 
@@ -323,7 +323,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:background="@color/greyViewDivider" />
+                    android:background="@color/lightGreyBackgroundColor" />
             </LinearLayout>
 
 
@@ -343,7 +343,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:text="@string/outputs"
-                    android:textColor="@color/auth_text_color"
+                    android:textColor="@color/darkBlueTextColor"
                     android:textSize="16sp"
                     app:fontFamily="@font/roboto_regular" />
 

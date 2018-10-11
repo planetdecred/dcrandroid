@@ -26,7 +26,7 @@
             android:elevation="2dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="#F9FAFA">
+            android:background="@color/whiteFirstBackgroundColor">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#f9fafa"
+            android:background="@color/whiteFirstBackgroundColor"
             android:divider="@null"
             android:id="@+id/lv_nav"
             />
@@ -49,12 +49,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#f9fafa"
+            android:background="@color/whiteFirstBackgroundColor"
             android:clickable="true"
             android:focusable="true">
             <View
                 android:layout_width="match_parent"
-                android:background="#424F67"
+                android:background="@color/darkBlueGrayBackgroundColor"
                 android:layout_height="1dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -73,7 +73,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingEnd="10dp"
-            android:background="#F9FAFA"
+            android:background="@color/whiteFirstBackgroundColor"
             android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:textColor="#8997A5"
+                android:textColor="@color/lightGrayTextColor"
                 android:text="@string/total_balance"
                 />
             <LinearLayout
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     app:fontFamily="@font/inconsolata_regular_family"
                     android:id="@+id/tv_total_balance"
-                    android:textColor="#424F67"
+                    android:textColor="@color/darkBlueGrayBackgroundColor"
                     android:text="135,459.595954"
                     android:visibility="gone"
                     android:textSize="18sp"
@@ -134,8 +134,8 @@
                         android:textSize="13sp"
                         android:paddingStart="5dp"
                         android:paddingLeft="5dp"
-                        android:textColor="#444F65"
-                        android:background="#FFC84E"
+                        android:textColor="@color/darkBlueGrayTextColor"
+                        android:background="@color/lightOrangeBackgroundColor"
 
                         />
                 </RelativeLayout>
@@ -144,7 +144,7 @@
                     android:layout_height="48dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="#FFFFFF"
+                    android:background="@color/white"
                     android:gravity="center_vertical"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
@@ -162,7 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/chain_status"
-                        android:textColor="#8997A5"
+                        android:textColor="@color/lightGrayTextColor"
                         android:layout_weight="1"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textColor="#8997A5"
+                        android:textColor="@color/lightGrayTextColor"
                         android:layout_marginLeft="1dp"
                         android:layout_marginStart="1dp"
                         android:id="@+id/best_block_time"

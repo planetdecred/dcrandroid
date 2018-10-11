@@ -45,7 +45,7 @@ public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.
         tvInfo.setText(transactionInfoItem.getInfo());
 
         if (tvInfo.getText().toString().equals(util.get(Constants.ACCOUNT_NAME))) {
-            tvInfo.setTextColor(mContext.getResources().getColor(R.color.secondaryTextColor));
+            tvInfo.setTextColor(mContext.getResources().getColor(R.color.blueGrayFirstTextColor));
         }
 
 

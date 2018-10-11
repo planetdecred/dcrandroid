@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="@color/greyThemeBackground">
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_marginStart="45.0dip"
             android:layout_marginLeft="45.0dip"
             android:text="@string/hyphen"
-            android:textColor="@color/colorText"
+            android:textColor="@color/blackSecondTextColor"
             android:textSize="16.0sp"
             android:visibility="invisible"
             app:fontFamily="@font/inconsolata_regular_family"
@@ -41,7 +41,7 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/history_minus"
             android:layout_toRightOf="@+id/history_minus"
-            android:textColor="@color/colorText"
+            android:textColor="@color/blackSecondTextColor"
             android:textSize="19.2sp"
             app:fontFamily="@font/inconsolata_regular_family"
             tools:text="0.502342"
@@ -84,7 +84,7 @@
                 android:gravity="center"
                 android:paddingBottom="3dp"
                 android:text="@string/confirmed"
-                android:textColor="@color/color_confirmed_tx" />
+                android:textColor="@color/greenConfirmedTextColor" />
 
             <TextView
                 android:id="@+id/tvDateOfTransaction"
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:maxLines="1"
-                android:textColor="@color/titleTextColor"
+                android:textColor="@color/grayTextColor"
                 android:textSize="12sp"
                 app:fontFamily="@font/source_sans_pro_regular"
                 tools:text="test text" />

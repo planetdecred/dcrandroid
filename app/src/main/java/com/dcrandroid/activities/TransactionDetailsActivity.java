@@ -132,7 +132,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         if (height == -1) {
             //No included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
-            status.setTextColor(Color.parseColor("#3d659c"));
+            status.setTextColor(getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
             status.setText(R.string.pending);
             confirmation.setText(R.string.unconfirmed);
         } else {
@@ -141,11 +141,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             confirmation.setText(String.valueOf(confirmations));
             if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {
                 status.setBackgroundResource(R.drawable.tx_status_confirmed);
-                status.setTextColor(Color.parseColor("#55bb97"));
+                status.setTextColor(getApplicationContext().getResources().getColor(R.color.greenConfirmedTextColor));
                 status.setText(R.string.confirmed);
             } else {
                 status.setBackgroundResource(R.drawable.tx_status_pending);
-                status.setTextColor(Color.parseColor("#3d659c"));
+                status.setTextColor(getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
                 status.setText(R.string.pending);
             }
         }

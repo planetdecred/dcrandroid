@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fontFamily="@font/roboto_regular"
-        android:textColor="@color/auth_text_color"
+        android:textColor="@color/darkBlueTextColor"
         android:textSize="14sp"
         tools:text="test text" />
 
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fontFamily="@font/roboto_regular"
-        android:textColor="@color/buttonColor"
+        android:textColor="@color/blueLinkTextColor"
         android:paddingBottom="10dp"
         android:textSize="14sp"
         tools:text="test text" />

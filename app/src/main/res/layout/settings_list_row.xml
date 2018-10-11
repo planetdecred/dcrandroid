@@ -13,7 +13,7 @@
             android:layout_alignParentTop="true"
             android:padding="16dp"
             android:text="@string/connection"
-            android:textColor="@color/colorText"
+            android:textColor="@color/blackSecondTextColor"
             />
 
         <TextView

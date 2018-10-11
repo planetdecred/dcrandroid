@@ -7,7 +7,7 @@
     android:padding="16dp"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="#fff">
+    android:background="@color/white">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/https_docs_decred_org"
-        android:textColor="#2970FF"
+        android:textColor="@color/blue"
         android:textSize="17sp"
         android:layout_below="@+id/help_info"
         app:fontFamily="@font/source_sans_pro_regular_family"

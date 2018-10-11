@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#F4F6F6">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:id="@+id/headerTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bacgroundColor"
+        android:background="@color/colorPrimary"
         android:minHeight="120dp"
         android:orientation="vertical"
         android:padding="8dp">
@@ -20,21 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            android:textColor="#091440"
+            android:textColor="@color/darkBlueTextColor"
             android:text="@string/seed_phrase_verification"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingStart="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingEnd="8dp"
             android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
             android:textAllCaps="false"
-            android:textColor="#596D81"
+            android:textColor="@color/blueGraySecondTextColor"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -48,12 +47,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_your_seed"
-            android:textColor="#000000"
+            android:textColor="@color/deepBlackTextColor"
             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             android:inputType="textFilter"
             android:id="@+id/autoCompleteSeed"
             android:padding="8dp"
-            android:background="#ffff"/>
+            android:background="@color/colorPrimary"/>
 
     </RelativeLayout>
     <ScrollView
@@ -87,8 +86,8 @@
                 app:fontFamily="@font/inconsolata_regular_family"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="#F4F6F6"
-                android:textColor="#000"/>
+                android:background="@color/colorPrimary"
+                android:textColor="@color/deepBlackTextColor"/>
 
         </ScrollView>
 
@@ -101,7 +100,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_margin="15dp"
-            android:background="#F4F6F6"
+            android:background="@color/colorPrimary"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:tint="@android:color/holo_red_dark" />
 
@@ -113,7 +112,7 @@
         android:layout_below="@+id/seedViewScrollcon"
         android:layout_margin="8dp"
         android:id="@+id/border"
-        android:background="#231F20"
+        android:background="@color/blackBackgroundColor"
         android:alpha="0.16"/>
 
     <RelativeLayout
@@ -131,7 +130,7 @@
             android:layout_alignParentLeft="true"
             android:background="@drawable/btn_shape"
             android:text="@string/delete"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="14sp" />
 
         <Button
@@ -142,8 +141,7 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/btn_shape3"
             android:text="@string/confirm"
-            android:textColor="#ffffff"
-
+            android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
 

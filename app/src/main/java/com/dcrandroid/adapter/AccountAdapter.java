@@ -104,24 +104,24 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             holder.accountName.setText(
                     String.format(Locale.getDefault(), "%s (%s)", account.getAccountName(), context.getString(R.string.hidden))
             );
-            holder.view.setBackgroundColor(Color.parseColor("#F4F6F6"));
+            holder.view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
             holder.icon.setBackgroundResource(R.drawable.account_default);
             holder.arrowRight.setBackgroundResource(R.drawable.arrow_right_disabled);
-            holder.spendable.setTextColor(Color.parseColor("#C4CBD2"));
-            holder.total.setTextColor(Color.parseColor("#C4CBD2"));
-            holder.accountName.setTextColor(Color.parseColor("#C4CBD2"));
+            holder.spendable.setTextColor(context.getResources().getColor(R.color.lightGray));
+            holder.total.setTextColor(context.getResources().getColor(R.color.lightGray));
+            holder.accountName.setTextColor(context.getResources().getColor(R.color.lightGray));
         }else{
             holder.accountName.setText(account.getAccountName());
 
-            holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            holder.view.setBackgroundColor(context.getResources().getColor(R.color.white));
             holder.icon.setBackgroundResource(R.drawable.account_activated);
             holder.arrowRight.setBackgroundResource(R.drawable.arrow_right_enabled);
-            holder.spendable.setTextColor(Color.parseColor("#2DD8A3"));
-            holder.total.setTextColor(Color.parseColor("#091440"));
-            holder.accountName.setTextColor(Color.parseColor("#091440"));
+            holder.spendable.setTextColor(context.getResources().getColor(R.color.greenLightTextColor));
+            holder.total.setTextColor(context.getResources().getColor(R.color.darkBlueTextColor));
+            holder.accountName.setTextColor(context.getResources().getColor(R.color.darkBlueTextColor));
 
             if(balance.getSpendable() == 0){
-                holder.spendable.setTextColor(Color.parseColor("#8997A5"));
+                holder.spendable.setTextColor(context.getResources().getColor(R.color.lightGrayTextColor));
             }
         }
 
@@ -174,7 +174,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
                         account.getInternalKeyCount(), context.getString(R.string.internal), account.getImportedKeyCount(), context.getString(R.string.imported))
         );
 
-        int emptyColor = Color.parseColor("#C4CBD2");
+        int emptyColor = context.getResources().getColor(R.color.lightGray);
 
         if(balance.getImmatureReward() == 0){
             holder.immatureRewards.setTextColor(emptyColor);

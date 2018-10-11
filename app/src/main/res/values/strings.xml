@@ -182,6 +182,8 @@
     <string name="invalid_passphrase">Passphrase entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">Password</string>
     <!--/Wallet-->
 
     <!--Transaction-->
@@ -386,6 +388,11 @@
     <string name="decred_colon">decred:</string>
     <string name="exchange_rate">Exchange Rate:</string>
     <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex rate unavailable (tap to retry)</string>
+    <string name="fee">Fee</string>
+    <string name="estimatedFee">Estimated Fee</string>
+    <string name="link_to_dcr_data">Tab this to see details in Dcrdata</string>
+    <string name="View_on_dcrdata">View On Dcrdata</string>
+
     <!--/Send Fragment-->
 
     <!--Transaction Details View-->

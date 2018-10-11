@@ -11,5 +11,5 @@
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:id="@+id/parent_layout"
-        android:textColor="@color/secondary_text"/>
+        android:textColor="@color/grayTextColor"/>
 </LinearLayout>

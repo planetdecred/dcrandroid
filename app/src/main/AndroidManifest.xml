@@ -21,13 +21,13 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/LightTheme">
         <activity
             android:name=".activities.SplashScreen"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/LightTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,31 +39,31 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/LightTheme.NoActionBar" />
         <activity
             android:name=".activities.ConfirmSeedActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/LightTheme.NoActionBar" />
         <activity
             android:name=".activities.SetupWalletActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/LightTheme.NoActionBar" />
         <activity
             android:name=".activities.SaveSeedActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/LightTheme.NoActionBar" />
         <activity
             android:name=".activities.EncryptWallet"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/LightTheme.NoActionBar" />
         <activity
             android:name=".activities.AddAccountActivity"
             android:launchMode="singleTop"

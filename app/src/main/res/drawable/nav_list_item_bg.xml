@@ -5,22 +5,22 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="#2ED8A3"/>
+                    <solid android:color="@color/lightGreenSecondDrawableColor"/>
                 </shape>
             </item>
             <item android:left="5dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="#ffffff"/>
+                    <solid android:color="@color/white"/>
                 </shape>
             </item>
         </layer-list>
     </item>
 
     <item android:state_enabled="true">
-        <color android:color="#F9FAFA"/>
+        <color android:color="@color/whiteFirstBackgroundColor"/>
     </item>
 
     <item android:state_enabled="false">
-        <color android:color="#8C8C8C"/>
+        <color android:color="@color/normalGrayDrawableColor"/>
     </item>
 </selector>

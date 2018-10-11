@@ -13,7 +13,7 @@
             android:textSize="18sp"
             android:padding="16dp"
             android:id="@+id/connection_get_peers"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/blackSecondTextColor"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

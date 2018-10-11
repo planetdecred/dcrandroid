@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ebefee"
+    android:background="@color/whiteSecondBackgroundColor"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,14 +31,14 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/secondary_text"
+                android:textColor="@color/grayTextColor"
                 android:textSize="16sp" />
             <View
                 android:id="@+id/separator123"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/peer_view_addr"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
 
             <TextView
                 android:id="@+id/label_id"
@@ -47,7 +47,7 @@
                 android:layout_below="@+id/separator123"
                 android:padding="5dp"
                 android:text="@string/id"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
 
             <TextView
                 android:id="@+id/peer_view_id"
@@ -60,7 +60,7 @@
                 android:layout_toRightOf="@+id/label_id"
                 android:layout_below="@+id/separator123"
                 android:padding="5dp"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
 
             <View
                 android:id="@+id/separator12"
@@ -68,7 +68,7 @@
                 android:layout_height="1px"
 
                 android:layout_below="@+id/label_id"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
 
 
             <TextView
@@ -78,7 +78,7 @@
                 android:layout_below="@+id/separator12"
                 android:text="@string/address_local"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
 
             <TextView
                 android:id="@+id/peer_view_addrlocal"
@@ -91,14 +91,14 @@
                 android:layout_below="@+id/separator12"
                 android:layout_toEndOf="@+id/label_addrlocal"
                 android:layout_toRightOf="@+id/label_addrlocal"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
 
             <View
                 android:id="@+id/separator13"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_addrlocal"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
 
             <TextView
                 android:id="@+id/label_services"
@@ -107,7 +107,7 @@
                 android:layout_below="@+id/separator13"
                 android:padding="5dp"
                 android:text="@string/services"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
 
             <TextView
                 android:id="@+id/peer_view_services"
@@ -120,14 +120,14 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:gravity="end"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
 
             <View
                 android:id="@+id/separator21"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_services"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
 
             <TextView
                 android:id="@+id/label_relaytxes"
@@ -136,7 +136,7 @@
                 android:layout_below="@+id/separator21"
                 android:text="@string/relaytxes"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
 
             <TextView
                 android:id="@+id/peer_view_relaytxes"
@@ -149,20 +149,20 @@
                 android:padding="5dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
             <View
                 android:id="@+id/separator17"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/peer_view_relaytxes"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_lastsend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/last_send"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text"
+                android:textColor="@color/grayTextColor"
                 android:layout_below="@+id/separator17"/>
 
             <TextView
@@ -176,14 +176,14 @@
                 android:layout_below="@+id/separator17"
                 android:gravity="end"
                 android:padding="5dp"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
 
             <View
                 android:id="@+id/separastor1277"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/peer_view_lastsend"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
 
             <TextView
                 android:id="@+id/label_lastrecv"
@@ -192,7 +192,7 @@
                 android:layout_below="@+id/separastor1277"
                 android:padding="5dp"
                 android:text="@string/last_receive"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_lastrecv"
                 android:layout_width="wrap_content"
@@ -204,14 +204,14 @@
                 android:layout_below="@+id/separastor1277"
                 android:padding="5dp"
                 android:gravity="end"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
 
             <View
                 android:id="@+id/separastor12"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_lastrecv"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_bytessent"
                 android:layout_width="wrap_content"
@@ -219,7 +219,7 @@
                 android:layout_below="@+id/separastor12"
                 android:text="@string/bytes_sent"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_bytessent"
                 android:layout_width="wrap_content"
@@ -231,13 +231,13 @@
                 android:layout_toRightOf="@+id/label_bytessent"
                 android:gravity="end"
                 android:padding="5dp"
-                android:textColor="@color/primary_text" />
+                android:textColor="@color/blackFirstTextColor" />
             <View
                 android:id="@+id/separators12s2"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_bytessent"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_bytesrecv"
                 android:layout_width="wrap_content"
@@ -245,7 +245,7 @@
                 android:layout_below="@+id/separators12s2"
                 android:text="@string/bytes_receive"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_bytesrecv"
                 android:layout_width="wrap_content"
@@ -257,13 +257,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sd"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/peer_view_bytesrecv"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_conntime"
                 android:layout_width="wrap_content"
@@ -271,7 +271,7 @@
                 android:layout_below="@+id/separators12sd"
                 android:text="@string/conntime"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_conntime"
                 android:layout_width="wrap_content"
@@ -283,13 +283,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sr"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_conntime"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_timeoffset"
                 android:layout_width="wrap_content"
@@ -297,7 +297,7 @@
                 android:layout_below="@+id/separators12sr"
                 android:text="@string/time_offset"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_timeoffset"
                 android:layout_width="wrap_content"
@@ -309,13 +309,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12ss"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_timeoffset"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_pingtime"
                 android:layout_width="wrap_content"
@@ -323,7 +323,7 @@
                 android:layout_below="@+id/separators12ss"
                 android:text="@string/pingtime"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_pingtime"
                 android:layout_width="wrap_content"
@@ -335,13 +335,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sa"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_pingtime"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_version"
                 android:layout_width="wrap_content"
@@ -349,7 +349,7 @@
                 android:layout_below="@+id/separators12sa"
                 android:text="@string/version"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_version"
                 android:layout_width="wrap_content"
@@ -361,13 +361,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sh"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_version"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_subver"
                 android:layout_width="wrap_content"
@@ -375,7 +375,7 @@
                 android:layout_below="@+id/separators12sh"
                 android:text="@string/sub_version"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_subver"
                 android:layout_width="wrap_content"
@@ -387,13 +387,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12st"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_subver"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_inbound"
                 android:layout_width="wrap_content"
@@ -401,7 +401,7 @@
                 android:layout_below="@+id/separators12st"
                 android:text="@string/inbound"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_inbound"
                 android:layout_width="wrap_content"
@@ -413,13 +413,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12shh"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_inbound"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_startingheight"
                 android:layout_width="wrap_content"
@@ -427,7 +427,7 @@
                 android:layout_below="@+id/separators12shh"
                 android:text="@string/starting_height"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_startingheight"
                 android:layout_width="wrap_content"
@@ -439,13 +439,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sc"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_startingheight"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_currentheight"
                 android:layout_width="wrap_content"
@@ -453,7 +453,7 @@
                 android:layout_below="@+id/separators12sc"
                 android:text="@string/current_height"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_currentheight"
                 android:layout_width="wrap_content"
@@ -465,13 +465,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sdd"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_currentheight"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_banscore"
                 android:layout_width="wrap_content"
@@ -479,7 +479,7 @@
                 android:layout_below="@+id/separators12sdd"
                 android:text="@string/banscore"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_banscore"
                 android:layout_width="wrap_content"
@@ -491,13 +491,13 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
             <View
                 android:id="@+id/separators12sddd"
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:layout_below="@+id/label_banscore"
-                android:background="@color/primary_text" />
+                android:background="@color/blackFirstTextColor" />
             <TextView
                 android:id="@+id/label_syncnode"
                 android:layout_width="wrap_content"
@@ -505,7 +505,7 @@
                 android:layout_below="@+id/separators12sddd"
                 android:text="@string/syncode"
                 android:padding="5dp"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/grayTextColor" />
             <TextView
                 android:id="@+id/peer_view_syncnode"
                 android:layout_width="wrap_content"
@@ -517,7 +517,7 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/blackFirstTextColor"/>
         </RelativeLayout>
         </ScrollView>
     </LinearLayout>

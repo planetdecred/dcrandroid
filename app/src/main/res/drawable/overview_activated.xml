@@ -5,35 +5,35 @@
     android:viewportHeight="20">
   <path
       android:pathData="M1.391,1.387L18.613,1.387L18.613,16.943L1.391,16.943Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M1.391,3.618h17.222v14.996h-17.222z"
-      android:fillColor="#8997a5"/>
+      android:fillColor="@color/lightGrayTextColor"/>
   <path
       android:pathData="M15.831,15.836h0a0.556,0.556 0,0 0,0.556 -0.556h0a0.556,0.556 0,0 0,-0.556 -0.556h0a0.556,0.556 0,0 0,-0.556 0.556h0A0.556,0.556 0,0 0,15.831 15.836Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M13.613,15.836h0a0.556,0.556 0,0 0,0.556 -0.556h0a0.556,0.556 0,0 0,-0.556 -0.556h0a0.556,0.556 0,0 0,-0.556 0.556h0A0.553,0.553 0,0 0,13.613 15.836Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M11.391,15.836h0a0.556,0.556 0,0 0,0.556 -0.556h0a0.556,0.556 0,0 0,-0.556 -0.556h0a0.556,0.556 0,0 0,-0.556 0.556h0A0.553,0.553 0,0 0,11.391 15.836Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M3.613,14.725h5.556v1.111h-5.556z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M15.831,4.72L14.72,4.72v7.778h1.671L16.391,4.72Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M13.053,5.831L11.942,5.831v6.667h1.667L13.609,5.831Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M10.275,6.942L9.164,6.942v5.556h1.671L10.835,6.942Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M7.497,6.387L6.386,6.387v6.111h1.667L8.053,6.387Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
   <path
       android:pathData="M4.724,8.058L3.613,8.058v4.444h1.667L5.28,8.058Z"
-      android:fillColor="#152337"/>
+      android:fillColor="@color/darkBlueDrawableColor"/>
 </vector>

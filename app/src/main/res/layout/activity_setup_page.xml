@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="de"
-                android:textColor="#091440"
+                android:textColor="@color/darkBlueTextColor"
                 android:gravity="center"
                 android:textSize="30sp"
                 android:textStyle="normal"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CRED"
-                android:textColor="#091440"
+                android:textColor="@color/darkBlueTextColor"
                 android:gravity="center"
                 android:layout_gravity="bottom"
                 android:textSize="23sp"
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Wallet"
-            android:textColor="#091440"
+            android:textColor="@color/darkBlueTextColor"
             android:gravity="center"
             android:textSize="20sp"
             app:fontFamily="@font/source_sans_pro_semibold"
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
-        android:textColor="#596D81"
+        android:textColor="@color/blueGraySecondTextColor"
         android:layout_marginBottom="20dp"
         android:lineSpacingExtra="3sp"
         android:textSize="15sp"
@@ -78,7 +78,7 @@
             android:background="@drawable/btn_shape"
             android:layout_gravity="center"
             android:text="@string/create_wallet"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/button_retrieve_wallet"
@@ -89,7 +89,7 @@
             android:layout_gravity="center"
             android:background="@drawable/btn_shape2"
             android:text="@string/recover_wallet"
-            android:textColor="@android:color/background_light"
+            android:textColor="@color/white"
             android:layout_marginTop="16dp"/>
     </LinearLayout>
     <LinearLayout

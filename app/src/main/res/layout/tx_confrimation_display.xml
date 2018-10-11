@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/hash_colon"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/blackSecondTextColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
