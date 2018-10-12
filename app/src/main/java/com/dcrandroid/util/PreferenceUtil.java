@@ -102,4 +102,21 @@ public class PreferenceUtil {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getBoolean(key, d);
     }
+
+    public void setLong(String key, long l) {
+        if(ctx == null){
+            return;
+        }
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
+        editor.putLong(key, l);
+        editor.commit();
+    }
+
+    public long getLong(String key, long defaultValue) {
+        if(ctx == null){
+            return defaultValue;
+        }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return sp.getLong(key,defaultValue);
+    }
 }
