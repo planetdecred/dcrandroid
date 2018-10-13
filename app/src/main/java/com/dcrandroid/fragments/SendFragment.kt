@@ -109,8 +109,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         accounts = ArrayList()
 
-        dataAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_item, accounts)
-        dataAdapter!!.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        dataAdapter = ArrayAdapter(activity!!.applicationContext, R.layout.spinner_list_item_1, accounts)
+        dataAdapter!!.setDropDownViewResource(R.layout.dropdown_item_1)
         send_account_spinner.adapter = dataAdapter
 
         if(Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {

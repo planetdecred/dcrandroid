@@ -34,7 +34,7 @@ import java.util.List;
  * Created by Macsleven on 28/11/2017.
  */
 
-public class ReceiveFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener{
+public class ReceiveFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
     ImageView imageView;
     LinearLayout ReceiveContainer;
     private TextView address;
@@ -66,27 +66,12 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         categories = new ArrayList<>();
 
         dataAdapter = new ArrayAdapter(getContext(), R.layout.spinner_list_item, categories);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        dataAdapter.setDropDownViewResource(R.layout.dropdown_item_1);
         accountSpinner.setAdapter(dataAdapter);
+        
+        address.setOnTouchListener(this);
 
-        address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyToClipboard(getContext(), address.getText().toString(), getString(R.string.address_copy_text));
-            }
-        });
-
-        imageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        Utils.copyToClipboard(getContext(), address.getText().toString(), getString(R.string.address_copy_text));
-                        return true;
-                }
-                return false;
-            }
-        });
+        imageView.setOnTouchListener(this);
 
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,5 +129,15 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Utils.copyToClipboard(getContext(), address.getText().toString(), getString(R.string.address_copy_text));
+                return true;
+        }
+        return false;
     }
 }

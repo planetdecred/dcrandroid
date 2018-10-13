@@ -141,6 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
             remoteNodeCertificate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {

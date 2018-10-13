@@ -48,11 +48,6 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         PreferenceUtil util = new PreferenceUtil(this);
-        try {
-            Utils.writeDcrdCertificate(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         setNetworkMode(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")));
     }
 }

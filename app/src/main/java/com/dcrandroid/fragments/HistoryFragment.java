@@ -143,7 +143,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             needsUpdate = true;
             return;
         }
-
+        recyclerView.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(true);
         loadTransactions();
         if(!constants.synced){
@@ -151,6 +151,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             return;
         }
 
+        recyclerView.setVisibility(View.VISIBLE);
         new Thread() {
             public void run() {
                 try {
@@ -188,12 +189,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 TransactionsResponse.TransactionItem latestTx = Collections.min(temp, new TransactionComparator.MinConfirmationSort());
                 latestTransactionHeight = latestTx.getHeight() + 1;
                 transactionAdapter.notifyDataSetChanged();
-                System.out.println("Done: " + transactionList.size());
-                if(transactionList.size() == 0){
-                    if(refresh.isShown()){
-                        refresh.setVisibility(View.INVISIBLE);
-                    }
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,15 +202,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        new Thread() {
-            public void run() {
-                try {
-                    constants.wallet.getTransactions(HistoryFragment.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        prepareHistoryData();
     }
 
     public void newTransaction(TransactionsResponse.TransactionItem transaction) {
@@ -258,9 +245,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void run() {
                 TransactionsResponse response = TransactionsResponse.parse(s);
                 if (response.transactions.size() == 0) {
-                    if (!refresh.isShown()) {
-                        refresh.setVisibility(View.VISIBLE);
-                    }
                     recyclerView.setVisibility(View.GONE);
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
@@ -272,9 +256,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     latestTransactionHeight = latestTx.getHeight() + 1;
                     transactionList.clear();
                     transactionList.addAll(0, transactions);
-                    if (refresh.isShown()) {
-                        refresh.setVisibility(View.INVISIBLE);
-                    }
                     recyclerView.setVisibility(View.VISIBLE);
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
