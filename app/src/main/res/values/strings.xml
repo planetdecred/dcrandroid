@@ -200,6 +200,7 @@
     <string name="tx_hash_copy">Hash copied to clipboard</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>
     <string name="no_transactions_n_swipe_to_refresh">No transactions\nSwipe down to refresh</string>
+    <string name="no_transactions">No transactions</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
     <string name="label_hash">HASH:</string>
     <string name="transaction">Transaction</string>

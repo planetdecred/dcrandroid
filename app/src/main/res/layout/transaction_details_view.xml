@@ -40,7 +40,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
                 android:paddingTop="12dp"
-                android:textSize="16sp"
+                android:textSize="19.2sp"
                 android:paddingBottom="12dp"
                 android:text="@string/_0_dcr"
                 android:textColor="@color/primary_text" />
@@ -190,6 +190,7 @@
                 android:padding="8dp"
                 android:text="@string/_0_dcr"
                 android:textColor="@color/primary_text"
+                android:textSize="16.8sp"
                  />
             <View
                 android:id="@+id/separator1235"

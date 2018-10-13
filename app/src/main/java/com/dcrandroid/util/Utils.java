@@ -155,18 +155,6 @@ public class Utils {
         }
     }
 
-    public static void writeDcrdCertificate(Context context) throws Exception{
-        File path = new File(context.getFilesDir().getPath(),"/dcrd");
-        path.mkdirs();
-        File file = new File(path, "rpc.cert");
-        FileOutputStream fout = new FileOutputStream(file);
-        System.out.println("Cert: "+getRemoteCertificate(context));
-        byte[] buffer = getRemoteCertificate(context).getBytes();
-        fout.write(buffer, 0, buffer.length);
-        fout.flush();
-        fout.close();
-    }
-
     //TODO: Make available for both testnet and mainnet
     public static double estimatedBlocks(){
         Calendar startDate = new GregorianCalendar(2017,3,15);
@@ -306,7 +294,7 @@ public class Utils {
         TextView tv = vi.findViewById(android.R.id.message);
         tv.setText(successMessage);
         Toast toast = new Toast(ctx);
-        toast.setGravity(Gravity.BOTTOM | Gravity.END, 50, 50);
+        toast.setGravity(Gravity.TOP | Gravity.CENTER, 0, 50);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(vi);
         toast.show();

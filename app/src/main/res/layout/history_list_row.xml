@@ -34,7 +34,7 @@
 
         <TextView
             app:fontFamily="@font/inconsolata_regular_family"
-            android:textSize="16.0sp"
+            android:textSize="19.2sp"
             android:textColor="@color/colorText"
             android:id="@+id/history_amount_transferred"
             android:layout_width="wrap_content"

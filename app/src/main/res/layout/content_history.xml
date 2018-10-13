@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
@@ -21,7 +21,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:textColor="@color/auth_text_color"
-                    android:fontFamily="@font/source_sans_pro_regular"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:text="@string/recent_transactions"
                     android:layout_centerVertical="true"
                     />
@@ -32,9 +32,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true">
+                    android:layout_centerVertical="true"/>
 
-                </Spinner>
             </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/history_recycler_view"
@@ -47,8 +46,8 @@
             android:id="@+id/no_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:lines="2"
-            android:text="@string/no_transactions_n_swipe_to_refresh"
+            android:lines="1"
+            android:text="@string/no_transactions"
             android:textSize="21sp"
             android:gravity="center"
             />
