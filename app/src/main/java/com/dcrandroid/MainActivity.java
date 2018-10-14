@@ -1,12 +1,21 @@
 package com.dcrandroid;
 
-import android.app.*;
-import android.content.*;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.*;
-import android.os.*;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -31,35 +40,51 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dcrandroid.activities.*;
+import com.dcrandroid.activities.AddAccountActivity;
+import com.dcrandroid.activities.SettingsActivity;
 import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.fragments.*;
 import com.dcrandroid.service.SyncService;
-import com.dcrandroid.util.*;
+import com.dcrandroid.fragments.AccountsFragment;
+import com.dcrandroid.fragments.HelpFragment;
+import com.dcrandroid.fragments.HistoryFragment;
+import com.dcrandroid.fragments.OverviewFragment;
+import com.dcrandroid.fragments.ReceiveFragment;
+import com.dcrandroid.fragments.SecurityFragment;
+import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.util.CoinFormat;
+import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.TransactionsResponse.TransactionInput;
 import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
 
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
 
-import mobilewallet.*;
+import mobilewallet.BlockNotificationError;
+import mobilewallet.BlockScanResponse;
+import mobilewallet.SpvSyncResponse;
+import mobilewallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener, BlockScanResponse,
         BlockNotificationError, SpvSyncResponse {
 
+    public static MenuItem menuOpen;
+    public int pageID, menuAdd = 0;
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView rescanImage, stopScan, syncIndicator;
-
-    public int pageID, menuAdd = 0;
-    public static MenuItem menuOpen;
     private Fragment fragment;
     private DcrConstants constants;
     private PreferenceUtil util;
@@ -73,11 +98,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private Thread blockUpdate;
     private ArrayList<NavigationBarItem> items;
     private NavigationListAdapter listAdapter;
+    private ListView mListView;
 
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        System.out.println("Memory Trim: "+level);
+        System.out.println("Memory Trim: " + level);
     }
 
     @Override
@@ -89,12 +115,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             float x = ev.getRawX() + view.getLeft() - scrcoords[0];
             float y = ev.getRawY() + view.getTop() - scrcoords[1];
             if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
-                ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+                ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
         }
         return super.dispatchTouchEvent(ev);
     }
 
-    private void initViews(){
+    private void initViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -106,13 +132,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         totalBalance = findViewById(R.id.tv_total_balance);
         syncIndicator = findViewById(R.id.iv_sync_indicator);
 
-        ListView mListView = findViewById(R.id.lv_nav);
+        mListView = findViewById(R.id.lv_nav);
 
         String[] itemTitles = getResources().getStringArray(R.array.nav_list_titles);
         int[] itemIcons = new int[]{R.drawable.overview, R.drawable.history, R.mipmap.send,
                 R.mipmap.receive, R.drawable.account, R.drawable.security, R.drawable.settings, R.drawable.help};
         items = new ArrayList<>();
-        for(int i = 0; i < itemTitles.length; i++){
+        for (int i = 0; i < itemTitles.length; i++) {
             NavigationBarItem item = new NavigationBarItem(itemTitles[i], itemIcons[i]);
             items.add(item);
         }
@@ -130,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         mListView.setAdapter(listAdapter);
 
-        if(itemTitles.length > 0){
+        if (itemTitles.length > 0) {
             mListView.setItemChecked(0, true);
         }
 
@@ -161,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         });
     }
 
-    private void restartApp(){
+    private void restartApp() {
         PackageManager packageManager = getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
         if (intent != null) {
@@ -172,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
     }
 
-    private void registerNotificationChannel(){
+    private void registerNotificationChannel() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("new transaction", getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT);
@@ -191,28 +217,28 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         mainApplication = (MainApplication) getApplicationContext();
 
         setContentView(R.layout.activity_main);
-        
+
         initViews();
 
         registerNotificationChannel();
-        
+
         util = new PreferenceUtil(this);
         constants = DcrConstants.getInstance();
-        
-        if(constants.wallet == null){
+
+        if (constants.wallet == null) {
             System.out.println("Restarting app");
             restartApp();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             SoundPool.Builder builder = new SoundPool.Builder().setMaxStreams(3);
             AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
                     .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build();
             builder.setAudioAttributes(attributes);
             alertSound = builder.build();
-        }else{
-            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION,0);
+        } else {
+            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION, 0);
         }
 
         blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
@@ -224,11 +250,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         connectToDecredNetwork();
     }
 
-    private void displayBalance(){
+    private void displayBalance() {
         try {
             final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             long walletBalance = 0;
-            for(int i = 0; i < accounts.size(); i++){
+            for (int i = 0; i < accounts.size(); i++) {
                 walletBalance += accounts.get(i).getBalance().getTotal();
             }
             totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR"));
@@ -253,17 +279,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
     }
 
-    private void startBlockUpdate(){
+    private void startBlockUpdate() {
         if (blockUpdate != null) {
             return;
         }
         updatePeerCount();
 
-        blockUpdate = new Thread(){
-            public void run(){
-                while(!this.isInterrupted()){
+        blockUpdate = new Thread() {
+            public void run() {
+                while (!this.isInterrupted()) {
                     try {
-                        if(!scanning && synced) {
+                        if (!scanning && synced) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -279,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                                 }
                             });
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     try {
@@ -294,13 +320,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         blockUpdate.start();
     }
 
-    private void rescanBlocks(){
+    private void rescanBlocks() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0);
                 int blockHeight = constants.wallet.getBestBlock();
-                if(rescanHeight < blockHeight){
+                if (rescanHeight < blockHeight) {
                     constants.wallet.rescan(rescanHeight, MainActivity.this);
                     rescanImage.startAnimation(rotateAnimation);
                     rescanImage.setEnabled(false);
@@ -312,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         });
     }
 
-    private void setConnectionStatus(final String str){
+    private void setConnectionStatus(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -321,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         });
     }
 
-    private void setChainStatus(final String str){
+    private void setChainStatus(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -330,11 +356,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         });
     }
 
-    private void setBestBlockTime(final long seconds){
+    private void setBestBlockTime(final long seconds) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (seconds == -1){
+                if (seconds == -1) {
                     bestBlockTime.setText(null);
                     return;
                 }
@@ -343,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         });
     }
 
-    private void showText(final String str){
+    private void showText(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -355,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (pageID == 0 && drawer.isDrawerOpen(GravityCompat.START)){
+        if (pageID == 0 && drawer.isDrawerOpen(GravityCompat.START)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.exit_app_prompt_title)
                     .setMessage(R.string.exit_app_prompt_message)
@@ -366,11 +392,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                             MainActivity.super.onBackPressed();
                         }
                     }).create().show();
-        } else if (pageID == 0 && !drawer.isDrawerOpen(GravityCompat.START)){
+        } else if (pageID == 0 && !drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.openDrawer(GravityCompat.START);
         } else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(pageID == 0) {
+        } else if (pageID == 0) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.exit_app_prompt_title)
                     .setMessage(R.string.exit_app_prompt_message)
@@ -389,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(blockUpdate != null && !blockUpdate.isInterrupted()){
+        if (blockUpdate != null && !blockUpdate.isInterrupted()) {
             blockUpdate.interrupt();
         }
 
@@ -405,8 +431,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == 0){
-            if(fragment instanceof AccountsFragment){
+        if (requestCode == 1 && resultCode == 0) {
+            if (fragment instanceof AccountsFragment) {
                 AccountsFragment accountsFragment = (AccountsFragment) fragment;
                 accountsFragment.prepareAccountData();
             }
@@ -418,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_page, menu);
         super.onCreateOptionsMenu(menu);
-        if(menuAdd != 1) {
+        if (menuAdd != 1) {
             menuOpen = menu.findItem(R.id.action_add);
             menuOpen.setVisible(false);
         }
@@ -434,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
             Intent intent = new Intent(this, AddAccountActivity.class);
-            startActivityForResult(intent,1);
+            startActivityForResult(intent, 1);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -481,17 +507,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         return true;
     }
 
-    public void displayOverview(){
+    public void displayOverview() {
         switchFragment(0);
+        mListView.setItemChecked(0, true);
     }
 
-    public void displayHistory(){
+    public void displayHistory() {
         switchFragment(1);
+        mListView.setItemChecked(1, true);
     }
 
     @Override
     public void onTransaction(String s) {
-        System.out.println("Notification Received: "+s);
+        System.out.println("Notification Received: " + s);
         try {
             JSONObject obj = new JSONObject(s);
 
@@ -507,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             long totalInput = 0, totalOutput = 0;
             ArrayList<TransactionsResponse.TransactionInput> inputs = new ArrayList<>();
             JSONArray debits = obj.getJSONArray(Constants.DEBITS);
-            for(int i = 0; i < debits.length(); i++){
+            for (int i = 0; i < debits.length(); i++) {
                 JSONObject debit = debits.getJSONObject(i);
                 TransactionInput input = new TransactionInput();
                 input.index = debit.getInt(Constants.INDEX);
@@ -520,7 +548,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
             ArrayList<TransactionOutput> outputs = new ArrayList<>();
             JSONArray credits = obj.getJSONArray(Constants.CREDITS);
-            for(int i = 0; i < credits.length(); i++){
+            for (int i = 0; i < credits.length(); i++) {
                 JSONObject credit = credits.getJSONObject(i);
                 TransactionOutput output = new TransactionOutput();
                 output.account = credit.getInt(Constants.ACCOUNT);
@@ -535,15 +563,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             transaction.inputs = inputs;
             transaction.outputs = outputs;
 
-            if(fragment instanceof OverviewFragment){
+            if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
                 overviewFragment.newTransaction(transaction);
-            }else if(fragment instanceof HistoryFragment){
+            } else if (fragment instanceof HistoryFragment) {
                 HistoryFragment historyFragment = (HistoryFragment) fragment;
                 historyFragment.newTransaction(transaction);
             }
 
-            if(util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
+            if (util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
                 double fee = obj.getDouble(Constants.FEE);
                 if (fee == 0) {
                     BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
@@ -555,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
+            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
                 showText(e.getMessage());
             }
         }
@@ -588,11 +616,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onBlockAttached(int height, long timestamp) {
         this.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
-        if(util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
-        if(synced) {
-            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block),bestBlock);
+        if (synced) {
+            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
                 @Override
@@ -603,17 +631,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             });
             setBestBlockTime(bestBlockTimestamp);
         }
-        if(fragment instanceof OverviewFragment){
+        if (fragment instanceof OverviewFragment) {
             OverviewFragment overviewFragment = (OverviewFragment) fragment;
             overviewFragment.blockAttached(height);
-        } else if(fragment instanceof HistoryFragment){
+        } else if (fragment instanceof HistoryFragment) {
             HistoryFragment historyFragment = (HistoryFragment) fragment;
             historyFragment.blockAttached(height);
         }
     }
 
-    private void sendNotification(String amount, int nonce){
-        Intent launchIntent = new Intent(this,MainActivity.class);
+    private void sendNotification(String amount, int nonce) {
+        Intent launchIntent = new Intent(this, MainActivity.class);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, "new transaction")
                 .setContentTitle(getString(R.string.new_transaction))
@@ -626,7 +654,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 .setContentIntent(launchPendingIntent)
                 .build();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            System.out.println("Group: "+notification.getGroup());
+            System.out.println("Group: " + notification.getGroup());
         }
         Notification groupSummary = new NotificationCompat.Builder(this, "new transaction")
                 .setContentTitle("New Transaction")
@@ -644,16 +672,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onEnd(int i, boolean b) {
-        System.out.println("Done: "+i+"/"+constants.wallet.getBestBlock());
+        System.out.println("Done: " + i + "/" + constants.wallet.getBestBlock());
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 displayBalance();
-                if(fragment instanceof OverviewFragment){
+                if (fragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) fragment;
                     overviewFragment.prepareHistoryData();
-                }else if(fragment instanceof HistoryFragment){
+                } else if (fragment instanceof HistoryFragment) {
                     HistoryFragment historyFragment = (HistoryFragment) fragment;
                     historyFragment.prepareHistoryData();
                 }
@@ -671,16 +699,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onError(String s) {
         System.out.println("Block scan error: "+s);
 
-        if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
+        if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
             showText(s);
         }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(fragment instanceof OverviewFragment){
+                if (fragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) fragment;
                     overviewFragment.prepareHistoryData();
-                }else if(fragment instanceof HistoryFragment){
+                } else if (fragment instanceof HistoryFragment) {
                     HistoryFragment historyFragment = (HistoryFragment) fragment;
                     historyFragment.prepareHistoryData();
                 }
@@ -696,15 +724,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public boolean onScan(final int i) {
-        if(util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0) < i){
+        if (util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0) < i) {
             util.setInt(PreferenceUtil.RESCAN_HEIGHT, i);
         }
-        System.out.println("Scanning: "+i+"/"+constants.wallet.getBestBlock());
+        System.out.println("Scanning: " + i + "/" + constants.wallet.getBestBlock());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 int bestBlock = constants.wallet.getBestBlock();
-                int scannedPercentage = (i/bestBlock) * 100;
+                int scannedPercentage = (i / bestBlock) * 100;
                 String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), constants.wallet.getBestBlock(), scannedPercentage);
                 chainStatus.setText(status);
             }
@@ -714,13 +742,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onBlockNotificationError(Exception e) {
-        System.out.println("Error received: "+e.getMessage());
+        System.out.println("Error received: " + e.getMessage());
         showText(e.getMessage());
         setConnectionStatus(getString(R.string.disconnected));
         connectToRPCServer();
     }
 
-    private void connectToRPCServer(){
+    private void connectToRPCServer() {
         Thread connectionThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -767,7 +795,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     rescanBlocks();
                     synced = true;
                     startBlockUpdate();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -791,7 +819,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onSynced(boolean b) {
         synced = b;
         constants.synced = b;
-        if (b){
+        if (b) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -813,10 +841,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(fragment instanceof OverviewFragment){
+                    if (fragment instanceof OverviewFragment) {
                         OverviewFragment overviewFragment = (OverviewFragment) fragment;
                         overviewFragment.prepareHistoryData();
-                    }else if(fragment instanceof HistoryFragment){
+                    } else if (fragment instanceof HistoryFragment) {
                         HistoryFragment historyFragment = (HistoryFragment) fragment;
                         historyFragment.prepareHistoryData();
                     }
@@ -829,7 +857,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, boolean finished) {
-        if(finished){
+        if (finished) {
 //            updatePeerCount();
             return;
         }
@@ -838,7 +866,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
         float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
         fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
-        String status = String.format(Locale.getDefault() , "%.1f%% %s", fetchedPercentage, getString(R.string.fetched));
+        String status = String.format(Locale.getDefault(), "%.1f %s", fetchedPercentage, getString(R.string.fetched));
         //Nanoseconds to seconds
         setBestBlockTime(lastHeaderTime);
         setChainStatus(status);
@@ -846,13 +874,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd, boolean finished) {
-        if(finished){
+        if (finished) {
             //updatePeerCount();
             return;
         }
         setConnectionStatus(getString(R.string.fetching_missing_cfilters));
-        System.out.println("CFilters start: "+missingCFiltersStart + " CFilters end: "+ missingCFiltersEnd);
-        String status = String.format(Locale.getDefault() , "%s %d %s", getString(R.string.fetched), missingCFiltersEnd, getString(R.string.cfilters));
+        System.out.println("CFilters start: " + missingCFiltersStart + " CFilters end: " + missingCFiltersEnd);
+        String status = String.format(Locale.getDefault(), "%s %d %s", getString(R.string.fetched), missingCFiltersEnd, getString(R.string.cfilters));
         setChainStatus(status);
     }
 
@@ -869,7 +897,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onRescanProgress(int rescannedThrough, boolean finished) {
-        if(finished){
+        if (finished) {
             updatePeerCount();
             return;
         }
@@ -883,16 +911,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onPeerConnected(int peerCount) {
         this.peerCount = peerCount;
-        if(synced) updatePeerCount();
+        if (synced) updatePeerCount();
     }
 
     @Override
     public void onPeerDisconnected(int peerCount) {
         this.peerCount = peerCount;
-        if(synced) updatePeerCount();
+        if (synced) updatePeerCount();
     }
 
-    private void updatePeerCount(){
-        setConnectionStatus((synced ? getString(R.string.synced) : getString(R.string.syncing)) + " " + getString(R.string.with) + " " +peerCount + " " + (peerCount == 1 ? getString(R.string.peer) :  getString(R.string.peers)));
+    private void updatePeerCount() {
+        setConnectionStatus((synced ? getString(R.string.synced) : getString(R.string.syncing)) + " " + getString(R.string.with) + " " + peerCount + " " + (peerCount == 1 ? getString(R.string.peer) : getString(R.string.peers)));
     }
 }

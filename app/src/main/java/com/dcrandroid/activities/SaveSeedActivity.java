@@ -3,17 +3,20 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.R;
+import com.dcrandroid.adapter.SeedAdapter;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
-import com.dcrandroid.R;
-import com.dcrandroid.view.SeedLayout;
+
+import java.util.Arrays;
 
 
 /**
@@ -21,32 +24,34 @@ import com.dcrandroid.view.SeedLayout;
  */
 
 public class SaveSeedActivity extends AppCompatActivity {
-    private SeedLayout saveSeedTextView;
     String seed = "";
+    private SeedAdapter seedAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_save_seed_page);
         Button saveSeedContBtn = findViewById(R.id.save_seed_btn_continue);
-        saveSeedTextView = findViewById(R.id.seedLayout);
-        LayoutInflater layoutInflater = getLayoutInflater();
 
         DcrConstants constants = DcrConstants.getInstance();
         try {
             seed = constants.wallet.generateSeed();
             String tempSeed[] = seed.split(Constants.NBSP);
-            for(int i = 0; i <= tempSeed.length-1; i++){
-               String seed = (i+1) +". "+tempSeed[i];
 
-                View seedView = layoutInflater.inflate(R.layout.seed_layout,null,false);
-                TextView seedTexView = seedView.findViewById(R.id.seedTextView);
-                seedTexView.setText(seed);
-                saveSeedTextView.addView(seedView);
-            }
-        }catch (Exception e){
+            RecyclerView recyclerView = findViewById(R.id.seeds_recycler_view);
+            seedAdapter = new SeedAdapter(Arrays.asList(tempSeed));
+
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+            int noOfColumns = ((int) (dpWidth / 180) < 2) ? 2 : 3;
+            recyclerView.setLayoutManager(new GridLayoutManager(this, noOfColumns));
+
+            recyclerView.setAdapter(seedAdapter);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         saveSeedContBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,13 +60,13 @@ public class SaveSeedActivity extends AppCompatActivity {
         });
     }
 
-    private void btnCopyPhrase(){
-        if(!seed.equals("")) {
+    private void btnCopyPhrase() {
+        if (!seed.equals("")) {
             Intent i = new Intent(SaveSeedActivity.this, ConfirmSeedActivity.class)
                     .putExtra(Constants.SEED, seed)
                     .putExtra(Constants.RESTORE, false);
             startActivity(i);
-        }else{
+        } else {
             Toast.makeText(SaveSeedActivity.this, R.string.error_seed_not_generated, Toast.LENGTH_SHORT).show();
         }
     }
