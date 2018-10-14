@@ -123,6 +123,7 @@
 
     <!--Account-->
     <string name="account">Account</string>
+    <string name="accounts">Accounts</string>
     <string name="account_number">Account Number</string>
     <string name="edit_account_name">Edit account name</string>
     <string name="spinner_account">Account:</string>

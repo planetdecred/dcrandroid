@@ -105,7 +105,7 @@ public class AccountsFragment extends Fragment {
         if (getActivity() == null || getContext() == null) {
             return;
         }
-        getActivity().setTitle(getString(R.string.account));
+        getActivity().setTitle(getString(R.string.accounts));
         util = new PreferenceUtil(getActivity());
 
         MainActivity.menuOpen.setVisible(true);

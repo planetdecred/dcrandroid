@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:layout_marginTop="8dp"
+        android:padding="8dp"
         android:text="@string/setting_up_dcrandroid"
         android:textSize="18sp"
         android:textColor="@color/darkBlueTextColor"
@@ -29,37 +29,37 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/subheader"
         android:layout_above="@+id/warningf"
+        android:layout_below="@+id/subheader"
         android:layout_marginBottom="5dp"
-        android:fadeScrollbars="true"
-        >
-        <com.dcrandroid.view.SeedLayout
-            android:padding="8dp"
-            android:id="@+id/seedLayout"
+        android:fadeScrollbars="true">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/seeds_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="350dp"
-
-            />
+            android:padding="8dp" />
     </ScrollView>
 
     <LinearLayout
         android:id="@+id/warningf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
         android:layout_above="@+id/save_seed_btn_continue"
-        android:layout_marginBottom="18dp">
+        android:layout_marginBottom="18dp"
+        android:padding="15dp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/warning_save_seed"
             android:textColor="@color/deepOrangeTextColor"
             android:textSize="14sp"
 
             />
     </LinearLayout>
+
     <Button
         android:id="@+id/save_seed_btn_continue"
         android:layout_width="232dp"

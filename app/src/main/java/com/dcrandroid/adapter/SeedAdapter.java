@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dcrandroid.data.Seed;
 import com.dcrandroid.R;
 
 import java.util.List;
@@ -16,20 +15,12 @@ import java.util.List;
  */
 
 public class SeedAdapter extends RecyclerView.Adapter<SeedAdapter.MyViewHolder> {
-    private List<Seed> seedList;
+    private List<String> seedList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView seed;
-
-        public MyViewHolder(View view) {
-            super(view);
-            seed = view.findViewById(R.id.seed);
-
-        }
-    }
-    public SeedAdapter(List<Seed> seedListList) {
+    public SeedAdapter(List<String> seedListList) {
         this.seedList = seedListList;
     }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -40,13 +31,22 @@ public class SeedAdapter extends RecyclerView.Adapter<SeedAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Seed seed = seedList.get(position);
-        holder.seed.setText(seed.getSeed());
-
+        String seed = seedList.get(position);
+        holder.seed.setText(String.format("%s. %s", String.valueOf(position + 1), seed));
     }
 
     @Override
     public int getItemCount() {
         return seedList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView seed;
+
+        public MyViewHolder(View view) {
+            super(view);
+            seed = view.findViewById(R.id.seed);
+
+        }
     }
 }
