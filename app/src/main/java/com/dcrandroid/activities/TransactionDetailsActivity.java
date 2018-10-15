@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -163,18 +163,18 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         ArrayList<ListViewItemAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
         ArrayList<ListViewItemAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();
-        ArrayList<Integer> walletOutputIndexes = new ArrayList<>();
-        ArrayList<Integer> walletInputIndexes = new ArrayList<>();
+        ArrayList<Integer> walletInputIndices = new ArrayList<>();
+        ArrayList<Integer> walletOutputIndices = new ArrayList<>();
 
         for (int i = 0; i < usedInput.size(); i++) {
-            walletInputIndexes.add(usedInput.get(i).index);
+            walletOutputIndices.add(usedInput.get(i).index);
             walletInput.add(new ListViewItemAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedInput.get(i).previous_amount), usedInput.get(i).accountName));
             util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
 
         }
         //fix this
         for (int i = 0; i < usedOutput.size(); i++) {
-            walletOutputIndexes.add(usedOutput.get(i).index);
+            walletInputIndices.add(usedOutput.get(i).index);
             walletOutput.add(new ListViewItemAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedOutput.get(i).amount), usedOutput.get(i).address));
         for (int i = 0; i < usedOutput.size(); i++){
             walletOutputIndices.add(usedOutput.get(i).index);
@@ -196,7 +196,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             for (int i = 0; i < outputs.length(); i++) {
                 JSONObject output = outputs.getJSONObject(i);
 
-                if (walletOutputIndexes.indexOf(i) != -1) {
+                if (walletInputIndices.indexOf(i) != -1) {
                     continue;
                 }
 
@@ -215,7 +215,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 JSONObject input = inputs.getJSONObject(i);
 
-                if (walletInputIndexes.indexOf(i) != -1) {
+                if (walletOutputIndices.indexOf(i) != -1) {
                     continue;
                 }
                 //fix this
@@ -232,31 +232,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             lvOutput.setAdapter(outputItemAdapter);
             copyHashFromOutputItem(lvOutput);
 
+            setListViewHeight(lvInput);
+            setListViewHeight(lvOutput);
 
-            int lvInputItemHeight = getListItemHeight(lvInput);
-
-            if (lvInput.getCount() == 1) {
-
-                lvInputLayoutParams = lvInput.getLayoutParams();
-                lvInputLayoutParams.height = lvInputItemHeight + (lvInput.getDividerHeight() * (inputItemAdapter.getCount() - 1));
-
-            } else if (lvInput.getCount() == 2) {
-
-                int lvOutputItemHeight = getListItemHeight(lvOutput);
-                int itemHeight = lvInputItemHeight + lvInputItemHeight / 2;
-                lvInputItemHeight += itemHeight;
-
-                lvInputLayoutParams = lvInput.getLayoutParams();
-                lvInputLayoutParams.height = lvInputItemHeight + (lvInput.getDividerHeight() * (inputItemAdapter.getCount() - 1));
-
-                lvOutputLayoutParams = lvOutput.getLayoutParams();
-                lvOutputLayoutParams.height = lvOutputItemHeight + (lvOutput.getDividerHeight() * (outputItemAdapter.getCount() - 1));
-
-
-            }
-
-            lvInput.setLayoutParams(lvInputLayoutParams);
-            lvOutput.setLayoutParams(lvOutputLayoutParams);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,34 +242,42 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    private int getListItemHeight(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        View listItem = null;
-        if (listAdapter != null) {
-            listItem = listAdapter.getView(0, null, listView);
-            listItem.measure(0, 0);
-            listItem.getMeasuredHeight();
+
+    public static void setListViewHeight(ListView listView) {
+        ListAdapter mListAdapter = listView.getAdapter();
+        if (mListAdapter == null) {
+            return;
         }
-        assert listItem != null;
-        return listItem.getMeasuredHeight();
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < mListAdapter.getCount(); i++) {
+            View listItem = mListAdapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight() + 50;
+        }
+        if (mListAdapter.getCount() == 1 || mListAdapter.getCount() == 2) height -= 50;
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = height + (listView.getDividerHeight() * (mListAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
 
     private void copyHashFromOutputItem(final ListView listView) {
 
         ListAdapter listAdapter = listView.getAdapter();
-        final HashMap<Integer, String> hashStrings = new HashMap<>();
+        final SparseArray<String> walletHashAddress = new SparseArray<>();
 
         if (listAdapter != null) {
             for (int i = 0; i < listAdapter.getCount(); i++) {
                 View listItem = listAdapter.getView(i, null, listView);
                 TextView requiredHash = listItem.findViewById(R.id.tvInfo);
-                hashStrings.put(i, requiredHash.getText().toString());
+                walletHashAddress.put(i, requiredHash.getText().toString());
             }
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Utils.copyToClipboard(getApplicationContext(), hashStrings.get(position), getString(R.string.address_copy_text));
+                    Utils.copyToClipboard(getApplicationContext(), walletHashAddress.get(position), getString(R.string.address_copy_text));
                 }
             });
         }
