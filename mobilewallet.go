@@ -1,9 +1,9 @@
 package mobilewallet
 
 import (
-	"encoding/base64"
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -1210,7 +1210,7 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 	err = lw.wallet.Unlock(privPass, lock)
 	if err != nil {
 		log.Error(err)
-		return nil, err
+		return nil, errors.New(ErrInvalidPassphrase)
 	}
 
 	var additionalPkScripts map[wire.OutPoint][]byte
@@ -1477,9 +1477,9 @@ func EncodeBase64(text []byte) string {
 	return base64.StdEncoding.EncodeToString(text)
 }
 
-func DecodeBase64(base64Text string) ([]byte, error){
+func DecodeBase64(base64Text string) ([]byte, error) {
 	b, err := base64.StdEncoding.DecodeString(base64Text)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 

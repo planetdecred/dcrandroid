@@ -147,6 +147,7 @@ const (
 	ErrInvalid             = "invalid"
 	ErrWalletNotLoaded     = "wallet_not_loaded"
 	ErrPassphraseRequired  = "passphrase_required"
+	ErrInvalidPassphrase   = "invalid_passphrase"
 	ErrNotConnected        = "not_connected"
 	ErrNotExist            = "not_exists"
 	ErrEmptySeed           = "empty_seed"
