@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/greyThemeBackground"
-    android:orientation="horizontal"
-    android:weightSum="100">
+    android:layout_height="52dp"
+    android:background="@color/greyThemeBackground">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_weight="45">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/history_snd_rcv"
@@ -21,6 +18,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:background="@drawable/ic_send" />
+
         <TextView
             android:id="@+id/history_minus"
             android:layout_width="wrap_content"
@@ -32,22 +30,22 @@
             android:textColor="@color/colorText"
             android:textSize="16.0sp"
             android:visibility="invisible"
-            tools:visibility="visible"
-            app:fontFamily="@font/inconsolata_regular_family" />
+            app:fontFamily="@font/inconsolata_regular_family"
+            tools:visibility="visible" />
 
 
         <TextView
-            app:fontFamily="@font/inconsolata_regular_family"
-            android:textSize="19.2sp"
-            android:textColor="@color/colorText"
             android:id="@+id/history_amount_transferred"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/history_minus"
             android:layout_toRightOf="@+id/history_minus"
-            tools:visibility="visible"
-            tools:text="0.502342"/>
+            android:textColor="@color/colorText"
+            android:textSize="19.2sp"
+            app:fontFamily="@font/inconsolata_regular_family"
+            tools:text="0.502342"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/history_addr_transferred"
@@ -64,16 +62,15 @@
 
     <LinearLayout
         android:id="@+id/history_tx_status_cont"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_margin="2.0dp"
-        android:layout_weight="55"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/llnStatusAndDate"
-            android:layout_width="120dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
@@ -85,41 +82,28 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:gravity="center"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:paddingBottom="3dp"
                 android:text="@string/confirmed"
                 android:textColor="@color/color_confirmed_tx" />
 
             <TextView
                 android:id="@+id/tvDateOfTransaction"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fontFamily="@font/source_sans_pro_regular"
-                android:gravity="end"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:layout_gravity="end"
+                android:maxLines="1"
                 android:textColor="@color/titleTextColor"
-                android:textSize="10sp"
-                tools:ignore="SmallSp"
+                android:textSize="12sp"
+                app:fontFamily="@font/source_sans_pro_regular"
                 tools:text="test text" />
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/rlNextArrow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/arrow_drop_down"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@mipmap/arrow_drop_down" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

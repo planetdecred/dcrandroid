@@ -16,16 +16,14 @@ import com.dcrandroid.util.PreferenceUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListViewItemAdapter extends ArrayAdapter<ListViewItemAdapter.TransactionInfoItem> {
-
-    private static final String LIST_VIEW_ITEM_ADAPTER = "listViewItemAdapter";
+public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.TransactionInfoItem> {
 
     private Context mContext;
     private List<TransactionInfoItem> items;
     private TextView tvInfo;
     private PreferenceUtil util;
 
-    public ListViewItemAdapter(@NonNull Context context, ArrayList<TransactionInfoItem> list) {
+    public TransactionInfoAdapter(@NonNull Context context, ArrayList<TransactionInfoItem> list) {
         super(context, 0, list);
         mContext = context;
         items = list;

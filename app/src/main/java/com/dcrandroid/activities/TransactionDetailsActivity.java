@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
-import com.dcrandroid.adapter.ListViewItemAdapter;
+import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
@@ -43,16 +44,12 @@ import mobilewallet.LibWallet;
  */
 
 public class TransactionDetailsActivity extends AppCompatActivity {
-    public static final String TRANSACTION_DETAILS_ACTIVITY = "transactionDetails";
 
     private ListView lvInput, lvOutput;
     private PreferenceUtil util;
-    private String transactionType, txHash, rawTx;
-    private Bundle extras;
-    private ListViewItemAdapter inputItemAdapter;
-    private ListViewItemAdapter outputItemAdapter;
-    private String address;
-    private ViewGroup.LayoutParams lvInputLayoutParams, lvOutputLayoutParams;
+    private String txHash;
+    private String rawTx;
+
 
     private void restartApp() {
         PackageManager packageManager = getPackageManager();
@@ -81,7 +78,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
         util = new PreferenceUtil(this);
-        extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
         if (extras == null) {
             System.out.println("Extras is null");
             return;
@@ -90,7 +87,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         lvInput = findViewById(R.id.lvInput);
         lvOutput = findViewById(R.id.lvOutput);
 
-        transactionType = extras.getString(Constants.TYPE);
+        String transactionType = extras.getString(Constants.TYPE);
         transactionType = transactionType.substring(0, 1).toUpperCase() + transactionType.substring(1).toLowerCase();
 
         ArrayList<TransactionsResponse.TransactionInput> inputs
@@ -121,7 +118,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         txHash = extras.getString(Constants.HASH);
         tvHash.setText(txHash);
-        //DcrConstants.getInstance().wallet.getTransaction(txHash.getBytes());
 
         value.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(extras.getLong(Constants.AMOUNT, 0)) + " " + getString(R.string.dcr)));
         transactionFee.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(extras.getLong(Constants.FEE, 0)) + " " + getString(R.string.dcr)));
@@ -158,32 +154,25 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void loadInOut(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput) {
-        int txDirection = getIntent().getIntExtra(Constants.DIRECTION, -1);
         LibWallet wallet = DcrConstants.getInstance().wallet;
 
-        ArrayList<ListViewItemAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
-        ArrayList<ListViewItemAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();
-        ArrayList<Integer> walletInputIndices = new ArrayList<>();
+        ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
+        ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();
         ArrayList<Integer> walletOutputIndices = new ArrayList<>();
+        ArrayList<Integer> walletInputIndices = new ArrayList<>();
 
         for (int i = 0; i < usedInput.size(); i++) {
-            walletOutputIndices.add(usedInput.get(i).index);
-            walletInput.add(new ListViewItemAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedInput.get(i).previous_amount), usedInput.get(i).accountName));
+            walletInputIndices.add(usedInput.get(i).index);
+            walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " " + getString(R.string.dcr),
+                    usedInput.get(i).accountName));
             util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
 
         }
-        //fix this
+
         for (int i = 0; i < usedOutput.size(); i++) {
-            walletInputIndices.add(usedOutput.get(i).index);
-            walletOutput.add(new ListViewItemAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedOutput.get(i).amount), usedOutput.get(i).address));
-        for (int i = 0; i < usedOutput.size(); i++){
             walletOutputIndices.add(usedOutput.get(i).index);
-            walletOutput.add(
-                    usedOutput.get(i).address + Constants.NBSP +
-                            (txDirection == 0 ? getString(R.string.change_bracket)  + Constants.NBSP : Constants.NBSP) +
-                            "("+wallet.getAccountName(usedOutput.get(i).account) +")\n" +
-                            Utils.removeTrailingZeros(Mobilewallet.amountCoin(usedOutput.get(i).amount)) + " DCR"
-            );
+            walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr),
+                    usedOutput.get(i).address));
         }
 
         try {
@@ -196,7 +185,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             for (int i = 0; i < outputs.length(); i++) {
                 JSONObject output = outputs.getJSONObject(i);
 
-                if (walletInputIndices.indexOf(i) != -1) {
+                if (walletOutputIndices.indexOf(i) != -1) {
                     continue;
                 }
 
@@ -205,9 +194,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 String address = addresses.length() > 0 ? addresses.getString(0) : getString(R.string.script_bracket);
 
                 boolean nullScript = output.getBoolean(Constants.NULL_SCRIPT);
-                //fix this
-                walletOutput.add(new ListViewItemAdapter.TransactionInfoItem(nullScript ? "[null data]" : Utils.formatDecredWithComma(output.getLong("Value")), address));
-                walletOutput.add(address + Constants.NBSP + getString(R.string.external_bracket) + " \n" + (nullScript ? getString(R.string.null_data_bracket) : Utils.removeTrailingZeros(Mobilewallet.amountCoin(output.getLong(Constants.VALUE))) + " DCR"));
+
+                walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(nullScript ? "[null data]" : Utils.formatDecredWithComma(output.getLong("Value"))
+                        + " " + getString(R.string.dcr), address));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
@@ -215,26 +204,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 JSONObject input = inputs.getJSONObject(i);
 
-                if (walletOutputIndices.indexOf(i) != -1) {
+                if (walletInputIndices.indexOf(i) != -1) {
                     continue;
                 }
-                //fix this
-                walletInput.add(input.getString(Constants.PREVIOUS_TRANSACTION_HASH) + ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX)
-                        + Constants.NBSP + getString(R.string.external_bracket) + "\n" + Utils.removeTrailingZeros(Mobilewallet.amountCoin(input.getLong(Constants.AMOUNT_IN))) + " DCR");
-                walletInput.add(new ListViewItemAdapter.TransactionInfoItem(Utils.formatDecredWithComma(input.getLong("AmountIn")), input.getString("PreviousTransactionHash")));
+                walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(input.getLong("AmountIn"))
+                        + " " + getString(R.string.dcr), input.getString("PreviousTransactionHash")));
             }
 
-            inputItemAdapter = new ListViewItemAdapter(getApplicationContext(), walletInput);
-
+            TransactionInfoAdapter inputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletInput);
             lvInput.setAdapter(inputItemAdapter);
 
-            outputItemAdapter = new ListViewItemAdapter(getApplicationContext(), walletOutput);
+            TransactionInfoAdapter outputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletOutput);
             lvOutput.setAdapter(outputItemAdapter);
             copyHashFromOutputItem(lvOutput);
 
             setListViewHeight(lvInput);
             setListViewHeight(lvOutput);
-
+            ViewGroup.LayoutParams params = lvOutput.getLayoutParams();
+            params.height += 50;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -244,20 +231,23 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
     public static void setListViewHeight(ListView listView) {
-        ListAdapter mListAdapter = listView.getAdapter();
-        if (mListAdapter == null) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
             return;
         }
-        int height = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        for (int i = 0; i < mListAdapter.getCount(); i++) {
-            View listItem = mListAdapter.getView(i, null, listView);
-            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            height += listItem.getMeasuredHeight() + 50;
+
+        int totalHeight = 0;
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            float px = 450 * (listView.getResources().getDisplayMetrics().density);
+            listItem.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            totalHeight += listItem.getMeasuredHeight();
+
         }
-        if (mListAdapter.getCount() == 1 || mListAdapter.getCount() == 2) height -= 50;
+
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = height + (listView.getDividerHeight() * (mListAdapter.getCount() - 1));
+        params.height = totalHeight;
         listView.setLayoutParams(params);
         listView.requestLayout();
     }

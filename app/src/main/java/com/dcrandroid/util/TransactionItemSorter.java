@@ -1,5 +1,7 @@
 package com.dcrandroid.util;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +13,8 @@ public class TransactionItemSorter {
 
     public static void itemSorter(List<TransactionsResponse.TransactionItem> transactionItemList, List<TransactionsResponse.TransactionItem> temp, String type) {
 
+        mainTransactionList.clear();
         mainTransactionList.addAll(transactionItemList);
-
 
         if (mainTransactionList.size() != temp.size()) {
             mainTransactionList.clear();
@@ -27,6 +29,7 @@ public class TransactionItemSorter {
 
         transactionItemList.clear();
         transactionItemList.addAll(mainTransactionList);
+
     }
 
     private static void sortBy(String type) {
