@@ -159,7 +159,7 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
-                        android:digits="0123456789."
+                        android:background="@android:color/transparent"
                         android:hint="@string/_0_00_"
                         android:inputType="numberDecimal"
                         android:lines="1"
@@ -201,9 +201,9 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:digits="0123456789."
                         android:hint="@string/_0_00_"
                         android:inputType="numberDecimal"
+                        android:background="@android:color/transparent"
                         android:lines="1"
                         android:textColor="@color/darkBlueTextColor" />
                     <TextView
