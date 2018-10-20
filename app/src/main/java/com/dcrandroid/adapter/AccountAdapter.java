@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Balance;
@@ -166,8 +167,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         );
 
         // HD Path
-        // TODO: MAINNET
-        holder.hdPath.setText(account.getHDPath());
+
+        MainApplication application = (MainApplication) context.getApplicationContext();
+
+        holder.hdPath.setText(account.getHDPath(application.isTestNet()));
 
         holder.keys.setText(
                 String.format(Locale.getDefault(), "%d %s, %d %s, %d %s", account.getExternalKeyCount(), context.getString(R.string.external),

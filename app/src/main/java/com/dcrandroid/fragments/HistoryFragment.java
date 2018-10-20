@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
@@ -47,6 +48,8 @@ import mobilewallet.GetTransactionsResponse;
 
 public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
+    public static final String TAG = "HistoryFragment";
+
     private List<TransactionItem> transactionList = new ArrayList<>();
     private ArrayList<TransactionItem> transactions = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
@@ -71,12 +74,14 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 R.color.colorPrimaryDarkBlue,
                 R.color.colorPrimaryDarkBlue,
                 R.color.colorPrimaryDarkBlue);
-        swipeRefreshLayout.setOnRefreshListener(this);
         refresh = rootView.getRootView().findViewById(R.id.no_history);
         transactionAdapter = new TransactionAdapter(transactionList, rootView.getContext());
+
         recyclerView = rootView.getRootView().findViewById(R.id.history_recycler_view);
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
+
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
@@ -109,17 +114,24 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
-        prepareHistoryData();
         setupSort();
         return rootView;
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
+
         if (getActivity() != null)
             getActivity().setTitle(getString(R.string.history));
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -138,15 +150,24 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         isForeground = false;
     }
 
+
     public void prepareHistoryData() {
         if (!isForeground) {
             needsUpdate = true;
             return;
         }
+
         recyclerView.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(true);
+
         loadTransactions();
-        if (!constants.synced) {
+
+        if(transactionList.size() == 0){
+            recyclerView.setVisibility(View.GONE);
+        }
+        
+        if(!constants.synced){
+            refresh.setText(R.string.no_transactions_sync);
             swipeRefreshLayout.setRefreshing(false);
             return;
         }
@@ -165,10 +186,17 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public void saveTransactions() {
         try {
-            File path = new File(getContext().getFilesDir() + "/savedata/");
+            if(getActivity() == null || getContext() == null){
+                return;
+            }
+            MainApplication application = (MainApplication) getActivity().getApplication();
+            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+
+            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
-            File file = new File(getContext().getFilesDir() + "/savedata/history_transactions");
+            File file = new File(path,"history_transactions");
             file.createNewFile();
+
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
             objectOutputStream.writeObject(transactionList);
             objectOutputStream.close();
@@ -179,9 +207,15 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public void loadTransactions() {
         try {
-            File path = new File(getContext().getFilesDir() + "/savedata/");
+            if(getActivity() == null || getContext() == null){
+                return;
+            }
+            MainApplication application = (MainApplication) getActivity().getApplication();
+            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+
+            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
-            File file = new File(getContext().getFilesDir() + "/savedata/history_transactions");
+            File file = new File(path, "history_transactions");
             if (file.exists()) {
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 List<TransactionItem> temp = (List<TransactionItem>) objectInputStream.readObject();
@@ -193,11 +227,46 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (transactionList.size() == 0) {
+
+        if(transactionList.size() == 0){
+            refresh.setText(R.string.no_transactions);
             recyclerView.setVisibility(View.GONE);
         } else {
             recyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onResult(final String s) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TransactionsResponse response = TransactionsResponse.parse(s);
+                if (response.transactions.size() == 0) {
+                    refresh.setText(R.string.no_transactions);
+                    recyclerView.setVisibility(View.GONE);
+                    if (swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                } else {
+                    ArrayList<TransactionItem> transactions = response.transactions;
+                    Collections.sort(transactions, new TransactionComparator.TimestampSort());
+                    TransactionsResponse.TransactionItem latestTx = Collections.min(transactions, new TransactionComparator.MinConfirmationSort());
+                    latestTransactionHeight = latestTx.getHeight() + 1;
+                    transactionList.clear();
+                    transactionList.addAll(0, transactions);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    if (swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    transactionAdapter.notifyDataSetChanged();
+                    saveTransactions();
+                }
+            }
+        });
     }
 
     @Override
@@ -237,39 +306,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 break;
             }
         }
-    }
-
-    @Override
-    public void onResult(final String s) {
-        if (getActivity() == null) {
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TransactionsResponse response = TransactionsResponse.parse(s);
-                if (response.transactions.size() == 0) {
-                    recyclerView.setVisibility(View.GONE);
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                } else {
-                    transactions = response.transactions;
-                    Collections.sort(transactions, new TransactionComparator.TimestampSort());
-                    TransactionsResponse.TransactionItem latestTx = Collections.min(transactions, new TransactionComparator.MinConfirmationSort());
-                    latestTransactionHeight = latestTx.getHeight() + 1;
-                    transactionList.clear();
-                    transactionList.addAll(0, transactions);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                    transactionAdapter.notifyDataSetChanged();
-                    saveTransactions();
-
-                }
-            }
-        });
     }
 
     public void blockAttached(int height) {

@@ -200,8 +200,8 @@
     <string name="transaction_confirmation">Please confirm transaction for</string>
     <string name="tx_hash_copy">Hash copied to clipboard</string>
     <string name="tx_notify_title">Incoming transaction notifications</string>
-    <string name="no_transactions_n_swipe_to_refresh">No transactions\nSwipe down to refresh</string>
     <string name="no_transactions">No transactions</string>
+    <string name="no_transactions_sync">No transactions\nSync in progress</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
     <string name="label_hash">HASH:</string>
     <string name="transaction">Transaction</string>
@@ -247,7 +247,8 @@
     <string name="rescan_block">Rescan Blockchain</string>
     <string name="starting_height">starting height</string>
     <string name="current_height">Current height</string>
-    <string name="fetching_headers">Fetching Headers…</string>
+    <string name="fetching_headers_ellipsis">Fetching Headers…</string>
+    <string name="fetching_headers">Fetching Headers</string>
     <string name="blocks_scanned">blocks scanned</string>
     <string name="scanning_block">Scanning Blocks</string>
     <string name="rescan_blocks">Rescan blocks</string>
@@ -281,14 +282,12 @@
 
     <!--Preference-->
     <string name="key_connection_certificate" translatable="false">key_connection_certificate</string>
-    <string name="key_testnet" translatable="false">key_testnet</string>
     <string name="key_get_peers" translatable="false">key_get_peers</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="summary_rescan_blockchain">This will Rescan the Blockchain</string>
     <string name="title_rescan_blockchain">Rescan Blockchain</string>
     <string name="title_general">General</string>
     <string name="remote_node_address" translatable="false">remote_node_address</string>
-    <string name="use_testnet_connection">Use testnet connection</string>
     <string name="unconfirmed_funds">Spend unconfirmed funds</string>
     <string name="build_date_system" translatable="false">build_date_system</string>
     <string name="logging_level">Logging Level</string>

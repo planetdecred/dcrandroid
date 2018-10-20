@@ -11,9 +11,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dcrandroid.MainActivity;
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
@@ -74,19 +74,37 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 loadAnimation.start();
             }
         });
+
+        tvLoading = findViewById(R.id.loading_status);
         startup();
     }
 
     private void startup(){
-        tvLoading = findViewById(R.id.loading_status);
+        MainApplication application = (MainApplication) getApplication();
+
         constants = DcrConstants.getInstance();
-        String homeDir = getFilesDir()+"/dcrwallet/";
-        constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB);
+
+        String netType = application.isTestNet() ? "testnet3" : "mainnet";
+
+        String homeDir = getFilesDir()+"/wallet";
+
+        constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB, netType);
         constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
         constants.wallet.initLoader();
-        //String walletPath = Dcrwallet.getHomeDir()+"/mainnet/wallet.db";
-        File f = new File(homeDir, "/testnet3/wallet.db");
+
+        String walletDB;
+
+        if(application.isTestNet()){
+            walletDB = "/testnet3/wallet.db";
+        }else{
+            walletDB = "/mainnet/wallet.db";
+        }
+
+        System.out.println("net type: "+ netType+ " db: "+walletDB);
+
+        File f = new File(homeDir, walletDB);
         if(!f.exists()){
+            System.out.println("Doesn't exists: "+ f.getAbsolutePath());
             loadThread = new Thread(){
                 public void run(){
                     try{

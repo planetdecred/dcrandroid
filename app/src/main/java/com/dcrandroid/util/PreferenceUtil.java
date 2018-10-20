@@ -88,11 +88,7 @@ public class PreferenceUtil {
     }
 
     public boolean getBoolean(String key){
-        if(ctx == null){
-            return false;
-        }
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getBoolean(key, false);
+        return getBoolean(key, false);
     }
 
     public boolean getBoolean(String key, boolean d){

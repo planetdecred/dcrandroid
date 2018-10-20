@@ -79,8 +79,10 @@ public class Constants {
             INTERNAL_KEY_COUNT = "InternalKeyCount",
             IMPORTED_KEY_COUNT = "ImportedKeyCount",
             TESTNET_HD_PATH = "m / 44' / 11' / ",
+            MAINNET_HD_PATH = "m / 44' / 20' / ",
             IMPORTED = "imported",
             USER_AGENT = "user-agent",
-            MESSAGE = "message";
+            MESSAGE = "message",
+            KEY_TESTNET = "key_testnet";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

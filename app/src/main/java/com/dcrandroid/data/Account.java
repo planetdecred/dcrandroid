@@ -67,8 +67,8 @@ public class Account implements Serializable{
         this.accountNumber = accountNumber;
     }
 
-    public String getHDPath() {
-        return Constants.TESTNET_HD_PATH + accountNumber;
+    public String getHDPath(boolean isTestNet) {
+        return (isTestNet ? Constants.TESTNET_HD_PATH : Constants.MAINNET_HD_PATH) + accountNumber + "'";
     }
 
     public void setExternalKeyCount(int externalKeyCount) {

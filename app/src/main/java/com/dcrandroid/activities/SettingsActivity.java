@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dcrandroid.BuildConfig;
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.StakeyDialog;
@@ -189,10 +190,13 @@ public class SettingsActivity extends AppCompatActivity {
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    //TODO: Make this available for both testnet and mainnet
+                    MainApplication application = (MainApplication) getActivity().getApplication();
+                    String logDir = application.isTestNet() ? "/dcrwallet/logs/testnet3/dcrwallet.log" : "/dcrwallet/logs/mainnet/dcrwallet.log";
+
                     Intent i = new Intent(getActivity(), LogViewer.class);
-                    i.putExtra("log_path", getContext().getFilesDir()+"/dcrwallet/logs/testnet3/dcrwallet.log");
+                    i.putExtra("log_path", getContext().getFilesDir() + logDir);
                     startActivity(i);
+
                     return true;
                 }
             });
@@ -251,7 +255,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onError(int code, final String message) {
+        public void onError(final String message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dcrandroid.MainActivity;
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
@@ -142,6 +143,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         }));
+
         TextView showHistory = rootView.findViewById(R.id.show_history);
         showHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +249,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         transactionList.clear();
         loadTransactions();
         if(!constants.synced){
+            refresh.setText(R.string.no_transactions_sync);
             swipeRefreshLayout.setRefreshing(false);
             return;
         }
@@ -265,9 +268,15 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void saveTransactions(ArrayList<TransactionsResponse.TransactionItem> transactions) {
         try {
-            File path = new File(getContext().getFilesDir() + "/savedata/");
+            if(getActivity() == null || getContext() == null){
+                return;
+            }
+            MainApplication application = (MainApplication) getActivity().getApplication();
+            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+
+            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
-            File file = new File(getContext().getFilesDir() + "/savedata/transactions");
+            File file = new File(path,"transactions");
             file.createNewFile();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
             objectOutputStream.writeObject(transactions);
@@ -279,7 +288,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void loadTransactions() {
         try {
-            File path = new File(getContext().getFilesDir() + "/savedata/");
+            if(getActivity() == null || getContext() == null){
+                return;
+            }
+            MainApplication application = (MainApplication) getActivity().getApplication();
+            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+
+            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
             File file = new File(path, "transactions");
             if(file.exists()){
@@ -294,9 +309,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     TransactionsResponse.TransactionItem latestTx = Collections.min(temp, new TransactionComparator.MinConfirmationSort());
                     latestTransactionHeight = latestTx.getHeight() + 1;
                 }
-                if (getActivity() == null) {
-                    return;
-                }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -308,39 +320,11 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             e.printStackTrace();
         }
         if(transactionList.size() == 0){
+            refresh.setText(R.string.no_transactions);
             recyclerView.setVisibility(View.GONE);
         }else{
             recyclerView.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        getBalance();
-        prepareHistoryData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(getContext() != null) {
-            IntentFilter filter = new IntentFilter(Constants.SYNCED);
-            getContext().registerReceiver(receiver, filter);
-        }
-        isForeground = true;
-        if (needsUpdate) {
-            needsUpdate = false;
-            prepareHistoryData();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(getContext() != null){
-            getContext().unregisterReceiver(receiver);
-        }
-        isForeground = false;
     }
 
     @Override
@@ -353,6 +337,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void run() {
                 TransactionsResponse response = TransactionsResponse.parse(json);
                 if(response.transactions.size() == 0){
+                    refresh.setText(R.string.no_transactions_sync);
                     recyclerView.setVisibility(View.GONE);
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
@@ -381,7 +366,36 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    public void newTransaction(TransactionsResponse.TransactionItem transaction) {
+    @Override
+    public void onRefresh() {
+        getBalance();
+        prepareHistoryData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getContext() != null) {
+            IntentFilter filter = new IntentFilter(Constants.SYNCED);
+            getContext().registerReceiver(receiver, filter);
+        }
+        isForeground = true;
+        if(needsUpdate){
+            needsUpdate = false;
+            prepareHistoryData();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(getContext() != null){
+            getContext().unregisterReceiver(receiver);
+        }
+        isForeground = false;
+    }
+
+    public void newTransaction(TransactionsResponse.TransactionItem transaction){
         transaction.animate = true;
 
         for(int i = 0; i < transactionList.size(); i++){

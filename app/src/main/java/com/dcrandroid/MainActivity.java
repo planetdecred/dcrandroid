@@ -37,6 +37,7 @@ import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.fragments.*;
+import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.*;
 import com.dcrandroid.util.TransactionsResponse.TransactionInput;
 import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
@@ -237,38 +238,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     private void connectToDecredNetwork(){
-        Bundle b = getIntent().getExtras();
-        String passPhrase = null;
-        if (b != null){
-            passPhrase = b.getString(Constants.PASSPHRASE);
-        }
-        final String finalPassPhrase = passPhrase;
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0){
             setConnectionStatus(getString(R.string.connecting_to_peers));
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        constants.wallet.spvSync(MainActivity.this, Utils.getPeerAddress(util), finalPassPhrase != null, finalPassPhrase == null ? null : finalPassPhrase.getBytes());
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+            constants.wallet.addSyncResponse(this);
+            Intent syncIntent = new Intent(this, SyncService.class);
+            startService(syncIntent);
         }else{
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (finalPassPhrase != null){
-                        try {
-                            constants.wallet.unlockWallet(finalPassPhrase.getBytes());
-                        } catch (Exception e) {
-                            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                                showText(e.getMessage());
-                            }
-                            e.printStackTrace();
-                        }
-                    }
                     connectToRPCServer();
                 }
             }).start();
@@ -414,6 +392,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         if(blockUpdate != null && !blockUpdate.isInterrupted()){
             blockUpdate.interrupt();
         }
+
+        Intent syncIntent = new Intent(this, SyncService.class);
+        stopService(syncIntent);
+
         if(constants.wallet != null){
             constants.wallet.shutdown();
         }
@@ -660,11 +642,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
 
-    private int hexToInt(String hash){
-        System.out.println("Hash: "+hash+" HexInt:"+ Long.parseLong(hash, 16));
-        return  (int) Long.parseLong(hash, 16);
-    }
-
     @Override
     public void onEnd(int i, boolean b) {
         System.out.println("Done: "+i+"/"+constants.wallet.getBestBlock());
@@ -691,7 +668,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onError(int i, String s) {
+    public void onError(String s) {
         System.out.println("Block scan error: "+s);
 
         if(util.getBoolean(Constants.DEBUG_MESSAGES)) {
@@ -776,9 +753,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                     constants.wallet.discoverActiveAddresses();
                     constants.wallet.loadActiveDataFilters();
-                    setConnectionStatus(getString(R.string.fetching_headers));
+                    setConnectionStatus(getString(R.string.fetching_headers_ellipsis));
                     if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                        showText(getString(R.string.fetching_headers));
+                        showText(getString(R.string.fetching_headers_ellipsis));
                     }
                     long rescanHeight = constants.wallet.fetchHeaders();
                     if (rescanHeight != -1) {
@@ -856,7 +833,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 //            updatePeerCount();
             return;
         }
-        setConnectionStatus(getString(R.string.fetching_headers));
+        setConnectionStatus(getString(R.string.fetching_headers_ellipsis));
         long currentTime = System.currentTimeMillis() / 1000;
         long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
         float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
@@ -899,7 +876,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         setConnectionStatus(getString(R.string.rescanning_in_progress));
         int bestBlock = constants.wallet.getBestBlock();
         int scannedPercentage = Math.round(((float) rescannedThrough/bestBlock) * 100);
-        String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block),constants.wallet.getBestBlock(), scannedPercentage);
+        String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), bestBlock, scannedPercentage);
         setChainStatus(status);
     }
 
