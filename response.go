@@ -41,7 +41,7 @@ type Accounts struct {
 type BlockScanResponse interface {
 	OnScan(rescannedThrough int32) bool
 	OnEnd(height int32, cancelled bool)
-	OnError(code int32, message string)
+	OnError(err string)
 }
 
 /*
@@ -143,6 +143,7 @@ type SpvSyncResponse interface {
 }
 
 const (
+	// Error Codes
 	ErrInsufficientBalance = "insufficient_balance"
 	ErrInvalid             = "invalid"
 	ErrWalletNotLoaded     = "wallet_not_loaded"

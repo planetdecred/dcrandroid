@@ -12,7 +12,6 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"runtime/debug"
 	"strings"
 	"sync"
 	"syscall"
@@ -46,26 +45,33 @@ var shutdownSignaled = make(chan struct{})
 var signals = []os.Signal{os.Interrupt, syscall.SIGTERM}
 
 type LibWallet struct {
-	dataDir     string
-	dbDriver    string
-	wallet      *wallet.Wallet
-	rpcClient   *chain.RPCClient
-	spvSyncer   *spv.Syncer
-	loader      *loader.Loader
-	netBackend  wallet.NetworkBackend
-	mu          sync.Mutex
-	activeNet   *netparams.Params
-	chainParams *chaincfg.Params
-	lock        chan time.Time
+	dataDir   string
+	dbDriver  string
+	wallet    *wallet.Wallet
+	rpcClient *chain.RPCClient
+	spvSyncer *spv.Syncer
+	loader    *loader.Loader
+	mu        sync.Mutex
+	activeNet *netparams.Params
 }
 
-func NewLibWallet(homeDir string, dbDriver string) *LibWallet {
+func NewLibWallet(homeDir string, dbDriver string, netType string) *LibWallet {
+
+	var activeNet *netparams.Params
+
+	if netType == "mainnet" {
+		activeNet = &netparams.MainNetParams
+	} else {
+		activeNet = &netparams.TestNet3Params
+	}
+
 	lw := &LibWallet{
-		dataDir:  filepath.Join(homeDir, "testnet3/"),
-		dbDriver: dbDriver,
+		dataDir:   filepath.Join(homeDir, netType),
+		dbDriver:  dbDriver,
+		activeNet: activeNet,
 	}
 	errors.Separator = ":: "
-	initLogRotator(filepath.Join(homeDir, "/logs/testnet3/dcrwallet.log"))
+	initLogRotator(filepath.Join(homeDir, "/logs/"+netType+"/dcrwallet.log"))
 	return lw
 }
 
@@ -94,33 +100,33 @@ func NormalizeAddress(addr string, defaultPort string) (hostport string, err err
 }
 
 func (lw *LibWallet) UnlockWallet(privPass []byte) error {
-	if lw.lock != nil {
-		//Wallet is unlocked
-		return nil
-	}
+
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
 		return fmt.Errorf("Wallet has not been loaded")
 	}
+
 	defer func() {
 		for i := range privPass {
 			privPass[i] = 0
 		}
 	}()
-	lw.lock = make(chan time.Time, 1)
-	err := wallet.Unlock(privPass, lw.lock)
+
+	err := wallet.Unlock(privPass, nil)
 	return err
 }
 
 func (lw *LibWallet) LockWallet() {
-	if lw.lock == nil {
-		return
+	if lw.wallet.Locked() {
+		lw.wallet.Lock()
 	}
-	lw.lock <- time.Time{}
 }
 
 func (lw *LibWallet) Shutdown() {
 	log.Info("Shuting down mobile wallet")
+	if lw.rpcClient != nil {
+		lw.rpcClient.Stop()
+	}
 	close(shutdownSignaled)
 	if logRotator != nil {
 		log.Infof("Shutting down log rotator")
@@ -189,16 +195,15 @@ func (lw *LibWallet) InitLoader() {
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
-	l := loader.NewLoader(netparams.TestNet3Params.Params, lw.dataDir, lw.dbDriver, stakeOptions,
+	fmt.Println("Initizing Loader: ", lw.dataDir)
+	l := loader.NewLoader(lw.activeNet.Params, lw.dataDir, lw.dbDriver, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
 	lw.loader = l
-	lw.activeNet = &netparams.TestNet3Params
-	lw.chainParams = &chaincfg.TestNet3Params
 	go shutdownListener()
 }
 
 func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error {
-	fmt.Println("Creating wallet")
+	log.Info("Creating Wallet")
 	if len(seedMnemonic) == 0 {
 		return errors.New(ErrEmptySeed)
 	}
@@ -217,7 +222,7 @@ func (lw *LibWallet) CreateWallet(passphrase string, seedMnemonic string) error 
 	}
 	lw.wallet = w
 
-	fmt.Println("Created Wallet")
+	log.Info("Created Wallet")
 	return nil
 }
 
@@ -241,15 +246,6 @@ func (lw *LibWallet) VerifySeed(seedMnemonic string) bool {
 	return err == nil
 }
 
-func (lw *LibWallet) IsNetBackendNil() bool {
-	_, err := lw.wallet.NetworkBackend()
-	if err != nil {
-		log.Error(err)
-		return true
-	}
-	return false
-}
-
 func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) error {
 	fmt.Println("Connecting to rpc client")
 	ctx := contextWithShutdownCancel(context.Background())
@@ -258,7 +254,7 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 		log.Error(err)
 		return err
 	}
-	c, err := chain.NewRPCClient(netparams.TestNet3Params.Params, networkAddress,
+	c, err := chain.NewRPCClient(lw.activeNet.Params, networkAddress,
 		rpcUser, rpcPass, certs, false)
 	if err != nil {
 		log.Error(err)
@@ -271,62 +267,20 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 		return err
 	}
 
-	lw.netBackend = chain.BackendFromRPCClient(c.Client)
-	lw.wallet.SetNetworkBackend(lw.netBackend)
-	lw.loader.SetNetworkBackend(lw.netBackend)
+	netBackend := chain.BackendFromRPCClient(c.Client)
+	lw.wallet.SetNetworkBackend(netBackend)
+	lw.loader.SetNetworkBackend(netBackend)
+
 	lw.rpcClient = c
 	return nil
 }
 
-func (lw *LibWallet) StartSPVConnection(peerAddress string) {
-	go func() {
-		ctx := contextWithShutdownCancel(context.Background())
-		addr := &net.TCPAddr{IP: net.ParseIP("::1"), Port: 19108}
-		amgrDir := filepath.Join(lw.dataDir, lw.wallet.ChainParams().Name)
-		amgr := addrmgr.New(amgrDir, net.LookupIP) // TODO: be mindful of tor
-		lp := p2p.NewLocalPeer(lw.wallet.ChainParams(), addr, amgr)
-		syncer := spv.NewSyncer(lw.wallet, lp)
-		if len(peerAddress) > 0 {
-			//Seperate peer address with a semi-colon ";"
-			syncer.SetPersistantPeers(strings.Split(peerAddress, ";"))
-		}
-		lw.wallet.SetNetworkBackend(syncer)
-		lw.loader.SetNetworkBackend(syncer)
-		lw.spvSyncer = syncer
-		for {
-			err := syncer.Run(ctx)
-			if done(ctx) {
-				log.Info("Syncer Context is done")
-				return
-			}
-			log.Errorf("SPV synchronization ended: %v", err)
-		}
-	}()
-}
-
-func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string, discoverAccounts bool, privatePassphrase []byte) error {
+func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string) error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
 		return errors.New(ErrWalletNotLoaded)
 	}
 
-	if discoverAccounts && len(privatePassphrase) == 0 {
-		return errors.New(ErrPassphraseRequired)
-	}
-	var lockWallet func()
-	if discoverAccounts {
-		lock := make(chan time.Time, 1)
-		lockWallet = func() {
-			lock <- time.Time{}
-			for i := range privatePassphrase {
-				privatePassphrase[i] = 0
-			}
-		}
-		err := wallet.Unlock(privatePassphrase, lock)
-		if err != nil {
-			return err
-		}
-	}
 	addr := &net.TCPAddr{IP: net.ParseIP("::1"), Port: 0}
 	amgrDir := filepath.Join(lw.dataDir, lw.wallet.ChainParams().Name)
 	amgr := addrmgr.New(amgrDir, net.LookupIP) // TODO: be mindful of tor
@@ -353,12 +307,6 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string,
 		},
 		DiscoverAddressesFinished: func() {
 			syncResponse.OnDiscoveredAddresses(true)
-			// Lock the wallet after the first time synced while also
-			// discovering accounts.
-			if lockWallet != nil {
-				lockWallet()
-				lockWallet = nil
-			}
 		},
 		RescanProgress: func(rescannedThrough int32) {
 			syncResponse.OnRescanProgress(rescannedThrough, false)
@@ -453,8 +401,12 @@ func (lw *LibWallet) DiscoverActiveAddresses() error {
 }
 
 func (lw *LibWallet) FetchHeaders() (int32, error) {
+	netBackend, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		return 0, errors.New(ErrNotConnected)
+	}
 	fmt.Println("Fetching Headers")
-	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(contextWithShutdownCancel(context.Background()), lw.netBackend)
+	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(contextWithShutdownCancel(context.Background()), netBackend)
 	if err != nil {
 		log.Error(err)
 		return 0, err
@@ -467,8 +419,12 @@ func (lw *LibWallet) FetchHeaders() (int32, error) {
 }
 
 func (lw *LibWallet) LoadActiveDataFilters() error {
+	netBackend, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		return errors.New(ErrNotConnected)
+	}
 	fmt.Println("Loading Active Data Filters")
-	err := lw.wallet.LoadActiveDataFilters(contextWithShutdownCancel(context.Background()), lw.netBackend, false)
+	err = lw.wallet.LoadActiveDataFilters(contextWithShutdownCancel(context.Background()), netBackend, false)
 	if err != nil {
 		log.Error(err)
 	}
@@ -581,7 +537,6 @@ func (lw *LibWallet) SubscribeToBlockNotifications(listener BlockNotificationErr
 			fmt.Println("Context was cancelled")
 			return
 		}
-		lw.netBackend = nil
 		wallet.SetNetworkBackend(nil)
 		listener.OnBlockNotificationError(err)
 		log.Error(err)
@@ -603,23 +558,22 @@ func (lw *LibWallet) OpenWallet() error {
 
 func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
 	go func() {
-		if lw.netBackend == nil {
-			response.OnError(1, "No network backend")
-			return
+		netBackend, err := lw.wallet.NetworkBackend()
+		if err != nil {
+			response.OnError(ErrNotConnected)
 		}
 		if startHeight < 0 {
-			response.OnError(2, "Begin height must be non-negative")
+			response.OnError("Begin height must be non-negative")
 			return
 		}
 		progress := make(chan wallet.RescanProgress, 1)
 		ctx := contextWithShutdownCancel(context.Background())
-		n, _ := lw.wallet.NetworkBackend()
 		var totalHeight int32
-		go lw.wallet.RescanProgressFromHeight(ctx, n, startHeight, progress)
+		go lw.wallet.RescanProgressFromHeight(ctx, netBackend, startHeight, progress)
 		for p := range progress {
 			if p.Err != nil {
 				log.Error(p.Err)
-				response.OnError(-1, p.Err.Error())
+				response.OnError(p.Err.Error())
 				return
 			}
 			totalHeight += p.ScannedThrough
@@ -884,7 +838,7 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 		LockTime: int32(mtx.LockTime),
 		Expiry:   int32(mtx.Expiry),
 		Inputs:   decodeTxInputs(&mtx),
-		Outputs:  decodeTxOutputs(&mtx, lw.chainParams),
+		Outputs:  decodeTxOutputs(&mtx, lw.wallet.ChainParams()),
 	}
 	result, _ := json.Marshal(tx)
 	return string(result), nil
@@ -986,10 +940,11 @@ func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
 }
 
 func (lw *LibWallet) PublishUnminedTransactions() error {
-	if lw.netBackend == nil {
+	netBackend, err := lw.wallet.NetworkBackend()
+	if err != nil {
 		return errors.New(ErrNotConnected)
 	}
-	err := lw.wallet.PublishUnminedTransactions(contextWithShutdownCancel(context.Background()), lw.netBackend)
+	err = lw.wallet.PublishUnminedTransactions(contextWithShutdownCancel(context.Background()), netBackend)
 	return err
 }
 
@@ -1125,10 +1080,6 @@ func (lw *LibWallet) ConstructTransaction(destAddr string, amount int64, srcAcco
 		EstimatedSignedSize:       tx.EstimatedSignedSerializeSize,
 		ChangeIndex:               tx.ChangeIndex,
 	}, nil
-}
-
-func (lw *LibWallet) RunGC() {
-	debug.FreeOSMemory()
 }
 
 func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount int64, srcAccount int32, requiredConfs int32, sendAll bool) ([]byte, error) {
