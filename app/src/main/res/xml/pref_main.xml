@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:key="@string/build_date_system"
-        android:title="@string/build_date"
-        />
     <PreferenceCategory android:title="@string/general">
         <ListPreference
             android:title="@string/currency_conversion"
@@ -31,12 +27,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/connection">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:enabled="false"
-            android:key="@string/key_testnet"
-            android:summary="@string/use_testnet_connection"
-            android:title="@string/testnet" />
         <ListPreference
             android:title="@string/network_mode"
             android:defaultValue="0"
@@ -98,6 +88,10 @@
         <Preference
             android:title="@string/crash_title"
             android:key="crash"
+            />
+        <Preference
+            android:key="@string/build_date_system"
+            android:title="@string/build_date"
             />
     </PreferenceCategory>
 </PreferenceScreen>

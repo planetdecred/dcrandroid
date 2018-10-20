@@ -34,6 +34,7 @@ import android.support.v7.app.AlertDialog
 import android.widget.AdapterView
 import android.widget.EditText
 import com.dcrandroid.MainActivity
+import com.dcrandroid.MainApplication
 import com.dcrandroid.data.Account
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
@@ -297,11 +298,13 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         return
                     }
 
-                    //TODO: Make available for mainnet
-                    if(returnString.startsWith("T")){
+                    val application = activity!!.application as MainApplication
+                    if(returnString.startsWith("T") && application.isTestNet){
                         send_dcr_address.setText(returnString)
-                    }else{
-                        Toast.makeText(requireContext(), R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()
+                    }else if(returnString.startsWith("D") && !application.isTestNet){
+                        send_dcr_address.setText(returnString)
+                    } else{
+                        Toast.makeText(activity!!.applicationContext, R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show()

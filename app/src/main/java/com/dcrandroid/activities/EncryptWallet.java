@@ -11,12 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
-import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
 import mobilewallet.LibWallet;
@@ -28,7 +26,7 @@ import mobilewallet.LibWallet;
 public class EncryptWallet extends AppCompatActivity{
 
     private String seed;
-    ProgressDialog pd;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,14 +63,14 @@ public class EncryptWallet extends AppCompatActivity{
                                 }
                                 show(getString(R.string.creating_wallet));
                                 wallet.createWallet(pass, seed);
+                                wallet.unlockWallet(pass.getBytes());
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         pd.dismiss();
                                         Intent i = new Intent(EncryptWallet.this, MainActivity.class);
-                                        i.putExtra(Constants.PASSPHRASE, pass);
                                         startActivity(i);
-                                        //Finish all the activities before this
+                                        //Finish all the activities before this and finish this
                                         ActivityCompat.finishAffinity(EncryptWallet.this);
                                     }
                                 });

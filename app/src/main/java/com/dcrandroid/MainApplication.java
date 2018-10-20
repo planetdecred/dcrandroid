@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.Utils;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
@@ -14,7 +13,7 @@ import org.acra.annotation.ReportsCrashes;
 /**
  * Created by collins on 12/26/17.
  */
-@ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Decrediton",
+@ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Dcrandroid",
         mode = ReportingInteractionMode.DIALOG,
         resDialogText = R.string.crash_dialog_text,
         resDialogTheme = R.style.LightTheme
@@ -22,6 +21,12 @@ import org.acra.annotation.ReportsCrashes;
 public class MainApplication extends Application {
 
     private static int networkMode;
+
+    private static boolean TESTNET = true;
+
+    public boolean isTestNet(){
+        return TESTNET;
+    }
 
     public int getNetworkMode(){
         return networkMode;

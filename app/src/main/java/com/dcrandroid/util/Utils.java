@@ -158,16 +158,6 @@ public class Utils {
         }
     }
 
-    //TODO: Make available for both testnet and mainnet
-    public static double estimatedBlocks(){
-        Calendar startDate = new GregorianCalendar(2017,3,15);
-        Calendar today = new GregorianCalendar();
-        today.setTimeInMillis(System.currentTimeMillis());
-        long totalDays = (today.getTimeInMillis() - startDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
-        int blocksPerDay = 720;
-        return Math.round(totalDays * blocksPerDay * (0.95));
-    }
-
     public static String calculateTime(long seconds, Context context) {
         if (seconds > 59) {
 
@@ -276,11 +266,7 @@ public class Utils {
         if (ip.length() == 0){
             return "";
         }
-        if(ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:(\\d){1,5}$")){
-            return ip;
-        }else{
-            return ip+":19108";
-        }
+        return ip;
     }
 
     public static void copyToClipboard(Context ctx, String copyText, String successMessage) {

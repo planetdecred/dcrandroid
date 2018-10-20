@@ -108,6 +108,12 @@
             android:name=".activities.LogViewer"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <service
+            android:name=".service.SyncService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="Wallet Syncer" />
     </application>
 
 </manifest>

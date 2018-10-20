@@ -82,15 +82,6 @@ public class GetPeersActivity extends AppCompatActivity{
         prepareConnectionData();
     }
 
-    private String getNetworkAddress(){
-        //TODO: Make available for Mainnet
-        String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this, (MainApplication) getApplicationContext());
-        if(dcrdAddress.contains(":")){
-            return dcrdAddress.split(":")[0] + ":19109";
-        }
-        return dcrdAddress + ":19109";
-    }
-
     private void prepareConnectionData(){
         final ProgressDialog pd  = Utils.getProgressDialog(this,false,false,"Getting Peers...");
         pd.show();
@@ -98,7 +89,9 @@ public class GetPeersActivity extends AppCompatActivity{
             public void run() {
                 DcrConstants constants = DcrConstants.getInstance();
                 try {
-                    String result = constants.wallet.callJSONRPC("getpeerinfo", "",getNetworkAddress(), "dcrwallet","dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
+
+                    String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this, (MainApplication) getApplicationContext());
+                    String result = constants.wallet.callJSONRPC("getpeerinfo", "", dcrdAddress, "dcrwallet","dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
                     System.out.println("Peers: "+result);
                     JSONArray array = new JSONArray(result);
                     if(array.length() == 0){
