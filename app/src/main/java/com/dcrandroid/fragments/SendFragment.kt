@@ -466,6 +466,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         setText(formatter.format(convertedAmount.toDouble()))
                         addTextChangedListener(exchangeWatcher)
                     }
+
+                    amount_usd.setSelection(amount_usd.text.length)
                 }else{
                     amount_usd.run {
                         removeTextChangedListener(exchangeWatcher)
@@ -506,6 +508,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     setText(formatter.format(convertedAmount.toDouble()))
                     addTextChangedListener(amountWatcher)
                 }
+
+                amount_dcr.setSelection(amount_dcr.text.length)
             }
 
             constructTransaction()
