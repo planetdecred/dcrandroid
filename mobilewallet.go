@@ -45,14 +45,15 @@ var shutdownSignaled = make(chan struct{})
 var signals = []os.Signal{os.Interrupt, syscall.SIGTERM}
 
 type LibWallet struct {
-	dataDir   string
-	dbDriver  string
-	wallet    *wallet.Wallet
-	rpcClient *chain.RPCClient
-	spvSyncer *spv.Syncer
-	loader    *loader.Loader
-	mu        sync.Mutex
-	activeNet *netparams.Params
+	dataDir       string
+	dbDriver      string
+	wallet        *wallet.Wallet
+	rpcClient     *chain.RPCClient
+	spvSyncer     *spv.Syncer
+	loader        *loader.Loader
+	mu            sync.Mutex
+	activeNet     *netparams.Params
+	syncResponses []SpvSyncResponse
 }
 
 func NewLibWallet(homeDir string, dbDriver string, netType string) *LibWallet {
@@ -275,7 +276,11 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 	return nil
 }
 
-func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string) error {
+func (lw *LibWallet) AddSyncResponse(syncResponse SpvSyncResponse) {
+	lw.syncResponses = append(lw.syncResponses, syncResponse)
+}
+
+func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	wallet, ok := lw.loader.LoadedWallet()
 	if !ok {
 		return errors.New(ErrWalletNotLoaded)
@@ -288,37 +293,63 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string)
 
 	ntfns := &spv.Notifications{
 		Synced: func(sync bool) {
-			syncResponse.OnSynced(sync)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnSynced(sync)
+			}
 		},
 		FetchHeadersProgress: func(fetchedHeadersCount int32, lastHeaderTime int64) {
-			syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, false)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, false)
+			}
 		},
 		FetchHeadersFinished: func() {
-			syncResponse.OnFetchedHeaders(0, 0, true)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(0, 0, true)
+			}
 		},
 		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
-			syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, false)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, false)
+			}
 		},
 		FetchMissingCFiltersFinished: func() {
-			syncResponse.OnFetchMissingCFilters(0, 0, true)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(0, 0, true)
+			}
 		},
 		DiscoverAddressesStarted: func() {
-			syncResponse.OnDiscoveredAddresses(false)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnDiscoveredAddresses(false)
+			}
 		},
 		DiscoverAddressesFinished: func() {
-			syncResponse.OnDiscoveredAddresses(true)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnDiscoveredAddresses(true)
+			}
+
+			if !wallet.Locked() {
+				wallet.Lock()
+			}
 		},
 		RescanProgress: func(rescannedThrough int32) {
-			syncResponse.OnRescanProgress(rescannedThrough, false)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnRescanProgress(rescannedThrough, false)
+			}
 		},
 		RescanFinished: func() {
-			syncResponse.OnRescanProgress(0, true)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnRescanProgress(0, true)
+			}
 		},
 		PeerDisconnected: func(peerCount int32, addr string) {
-			syncResponse.OnPeerDisconnected(peerCount)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnPeerDisconnected(peerCount)
+			}
 		},
 		PeerConnected: func(peerCount int32, addr string) {
-			syncResponse.OnPeerConnected(peerCount)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnPeerConnected(peerCount)
+			}
 		},
 	}
 	var spvConnect []string
@@ -333,7 +364,9 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string)
 			for i := 0; i < len(spvConnect); i++ {
 				spvConnect, err := NormalizeAddress(spvConnect[i], lw.activeNet.Params.DefaultPort)
 				if err != nil {
-					syncResponse.OnSyncError(3, errors.E("SPV Connect address invalid: %v", err))
+					for _, syncResponse := range lw.syncResponses {
+						syncResponse.OnSyncError(3, errors.E("SPV Connect address invalid: %v", err))
+					}
 					return
 				}
 				spvConnects[i] = spvConnect
@@ -346,13 +379,20 @@ func (lw *LibWallet) SpvSync(syncResponse SpvSyncResponse, peerAddresses string)
 		err := syncer.Run(ctx)
 		if err != nil {
 			if err == context.Canceled {
-				syncResponse.OnSyncError(1, errors.E("SPV synchronization canceled: %v", err))
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnSyncError(1, errors.E("SPV synchronization canceled: %v", err))
+				}
+
 				return
 			} else if err == context.DeadlineExceeded {
-				syncResponse.OnSyncError(2, errors.E("SPV synchronization deadline exceeded: %v", err))
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnSyncError(2, errors.E("SPV synchronization deadline exceeded: %v", err))
+				}
 				return
 			}
-			syncResponse.OnSyncError(-1, err)
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnSyncError(-1, err)
+			}
 			return
 		}
 	}()
