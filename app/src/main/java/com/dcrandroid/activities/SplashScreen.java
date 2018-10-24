@@ -2,6 +2,7 @@ package com.dcrandroid.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,12 +29,13 @@ import mobilewallet.LibWallet;
  */
 
 public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
-    Animation animRotate;
-    ImageView imgAnim;
-    PreferenceUtil util;
-    TextView tvLoading;
-    Thread loadThread;
+
+    private ImageView imgAnim;
+    private PreferenceUtil util;
+    private TextView tvLoading;
+    private Thread loadThread;
     private DcrConstants constants;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         util = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);
         imgAnim = findViewById(R.id.splashscreen_icon);
+
         imgAnim.setOnClickListener(new DoubleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -62,9 +65,15 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 startActivityForResult(intent,2);
             }
         });
-        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate);
-        animRotate.setAnimationListener(this);
-        imgAnim.startAnimation(animRotate);
+
+        imgAnim.setBackgroundResource(R.drawable.load_animation);
+        imgAnim.post(new Runnable() {
+            @Override
+            public void run() {
+                AnimationDrawable loadAnimation = (AnimationDrawable) imgAnim.getBackground();
+                loadAnimation.start();
+            }
+        });
         startup();
     }
 
@@ -164,9 +173,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     public void onAnimationStart(Animation animation) {}
 
     @Override
-    public void onAnimationEnd(Animation animation) {
-        imgAnim.startAnimation(animRotate);
-    }
+    public void onAnimationEnd(Animation animation) {}
 
     @Override
     public void onAnimationRepeat(Animation animation) {}
