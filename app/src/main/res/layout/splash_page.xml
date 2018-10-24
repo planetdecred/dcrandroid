@@ -19,8 +19,7 @@
     <ImageView
         android:id="@+id/splashscreen_icon"
         android:layout_width="130dp"
-        android:layout_height="110dp"
-        android:src="@drawable/decred_logo"
+        android:layout_height="130dp"
         android:padding="16dp"
 
         />
