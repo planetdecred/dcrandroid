@@ -37,6 +37,8 @@
     <color name="auth_text_color">#091440</color>
     <color name="auth_text_color_description">#596D81</color>
     <color name="linkTxtColor">#4A92FF</color>
-
-
+    <color name="greyLight">#C4CBD2</color>
+    <color name="greenBright">#2DD8A3</color>
+    <color name="greyThemeBackground">#F3F5F6</color>
+    <color name="greyViewDivider">#D6D8D8</color>
 </resources>

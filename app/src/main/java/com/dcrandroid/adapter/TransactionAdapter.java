@@ -18,9 +18,12 @@ import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
-
-import mobilewallet.Mobilewallet;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Macsleven on 01/01/2018.
@@ -32,18 +35,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private PreferenceUtil util;
     private Context context;
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView Amount;
         private TextView txType;
         private TextView status;
         private TextView minus;
         private View view;
+        private TextView tvDateOfTransaction;
+
         public MyViewHolder(View view) {
             super(view);
             Amount = view.findViewById(R.id.history_amount_transferred);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
             minus = view.findViewById(R.id.history_minus);
+            tvDateOfTransaction = view.findViewById(R.id.tvDateOfTransaction);
             this.view = view;
         }
     }
@@ -57,20 +64,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView =layoutInflater.inflate(R.layout.history_list_row, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.history_list_row, parent, false);
         return new TransactionAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        if(position > historyList.size() - 1){
+        if (position > historyList.size() - 1) {
             return;
         }
         TransactionItem history = historyList.get(position);
 
         int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
         confirmations += 1;
-        if(history.getHeight() == -1){
+        if (history.getHeight() == -1) {
             //No included in block chain, therefore transaction is pending
             holder.status.setTextColor(Color.parseColor("#3d659c"));
             holder.status.setText(context.getString(R.string.pending));
@@ -84,21 +91,29 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }
         }
 
-        if(history.animate) {
+        if (history.animate) {
             Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
             holder.view.setAnimation(blinkAnim);
         }
 
-        holder.Amount.setText(CoinFormat.Companion.format(Utils.removeTrailingZeros(Mobilewallet.amountCoin(history.getAmount())) + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
+        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+        calendar.setTimeInMillis(history.timestamp * 1000);
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
+
+        holder.tvDateOfTransaction.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+
+        String strAmount = Utils.formatDecredWithComma(history.getAmount());
+
+        holder.Amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
         holder.txType.setText("");
 
-        if(history.getDirection() == 0){
+        if (history.getDirection() == 0) {
             holder.minus.setVisibility(View.VISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_send);
-        }else if(history.getDirection() == 1) {
+        } else if (history.getDirection() == 1) {
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_receive);
-        }else if(history.getDirection() == 2){
+        } else if (history.getDirection() == 2) {
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
         }

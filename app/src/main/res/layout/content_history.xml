@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp">
+    android:background="@color/greyThemeBackground">
+
+
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
+        android:layout_height="wrap_content"
+        >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/auth_text_color"
-                    app:fontFamily="@font/source_sans_pro_regular"
-                    android:text="@string/recent_transactions"
-                    android:layout_centerVertical="true"
-                    />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/rlSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                >
 
                 <Spinner
                     android:id="@+id/spinnerHistory"
@@ -35,23 +35,36 @@
                     android:layout_centerVertical="true"/>
 
             </RelativeLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/history_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:visibility="visible"
-            />
-        <TextView
-            android:id="@+id/no_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:text="@string/no_transactions"
-            android:textSize="21sp"
-            android:gravity="center"
-            />
-        </LinearLayout>
+
+            <View
+                android:id="@+id/firstViewDivider"
+                android:layout_below="@id/rlSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/greyViewDivider" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/history_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_below="@id/firstViewDivider"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="25dp"
+                android:visibility="visible" />
+
+
+
+            <TextView
+                android:id="@+id/no_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:lines="1"
+                android:text="@string/no_transactions"
+                android:textSize="21sp"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

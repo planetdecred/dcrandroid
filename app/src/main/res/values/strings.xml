@@ -188,7 +188,6 @@
     <string name="recent_transactions">Recent Transactions</string>
     <string name="receive_funds">Receive Funds</string>
     <string name="sending_decred">Sending Decred</string>
-    <string name="fee_colon">Fee:</string>
     <string name="fee_cap">FEE</string>
     <string name="from_colon">From:</string>
     <string name="confirmed">Confirmed</string>
@@ -229,7 +228,7 @@
     <string name="tap_this_to_copy_raw_transaction_hex">Tap this to copy raw transaction hex</string>
     <string name="tap_this_to_copy_transaction_hash">Tap this to copy transaction hash</string>
     <string name="copy_hash">Copy Hash</string>
-    
+
     <string-array name="history_transaction_list">
         <item>All</item>
         <item>Regular</item>
@@ -389,4 +388,16 @@
     <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex rate unavailable (tap to retry)</string>
     <!--/Send Fragment-->
 
+    <!--Transaction Details View-->
+    <string name="fee_colon">Fee:</string>
+    <string name="date_colon">Date:</string>
+    <string name="status_colon">Status:</string>
+    <string name="amount_dcr_colon">Amount:</string>
+    <string name="type_colon">Type:</string>
+    <string name="confirmations_colon">Confirmation:</string>
+    <string name="hash_lowercase_colon">Hash:</string>
+    <string name="inputs">Inputs</string>
+    <string name="outputs">Outputs</string>
+    <!--/Transaction Details View-->
 </resources>
+

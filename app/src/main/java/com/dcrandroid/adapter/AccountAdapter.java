@@ -127,8 +127,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
 
         // Balance
         if(DcrConstants.getInstance().synced) {
-            holder.spendable.setText(CoinFormat.Companion.format(balance.getSpendable()));
-            holder.total.setText(CoinFormat.Companion.format(balance.getTotal()));
+            holder.spendable.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(balance.getSpendable())));
+            holder.total.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(balance.getTotal())));
             holder.immatureRewards.setText(CoinFormat.Companion.format(balance.getImmatureReward()));
             holder.lockedByTickets.setText(CoinFormat.Companion.format(balance.getLockedByTickets()));
             holder.votingAuthority.setText(CoinFormat.Companion.format(balance.getVotingAuthority()));

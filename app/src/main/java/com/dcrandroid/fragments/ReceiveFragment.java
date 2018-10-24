@@ -68,7 +68,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         dataAdapter = new ArrayAdapter(getContext(), R.layout.spinner_list_item, categories);
         dataAdapter.setDropDownViewResource(R.layout.dropdown_item_1);
         accountSpinner.setAdapter(dataAdapter);
-        
+
         address.setOnTouchListener(this);
 
         imageView.setOnTouchListener(this);
