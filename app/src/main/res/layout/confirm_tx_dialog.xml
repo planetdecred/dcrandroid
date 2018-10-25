@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dp"
-    android:layout_height="230dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -11,87 +12,108 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/title"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:textColor="@color/greenLightTextColor"
-            android:layout_marginTop="20dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/address"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:textSize="14sp"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:layout_marginTop="13dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fee"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:textSize="16sp"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:layout_marginTop="20dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/total"
-            app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="18sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="title" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
             android:textColor="@color/blueGrayFirstTextColor"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="address" />
+
+        <TextView
+            android:id="@+id/fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            />
+            android:textColor="@color/blueGrayFirstTextColor"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="@string/transaction_fee" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/blueGrayFirstTextColor"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="@string/total_sending" />
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passphrase_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/passphrase_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_a_passphrase"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text"
+                android:textStyle="normal" />
+
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:weightSum="2"
-        android:id="@+id/btn_layout"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:weightSum="2">
 
         <TextView
-            android:layout_height="match_parent"
+            android:id="@+id/btn_negative"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:visibility="visible"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:textColor="@color/darkBlueTextColor"
             android:text="@string/cancel"
             android:textAllCaps="true"
-            android:id="@+id/btn_negative"
-            />
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:fontFamily="@font/source_sans_pro_semibold_family" />
 
         <TextView
-            android:layout_height="match_parent"
+            android:id="@+id/btn_positive"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:visibility="visible"
             android:background="?android:attr/selectableItemBackground"
+            android:enabled="false"
             android:gravity="center"
-            android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:textColor="@color/blue"
             android:text="@string/send"
             android:textAllCaps="true"
-            android:id="@+id/btn_positive"
-            />
+            android:textColor="@color/blue"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:fontFamily="@font/source_sans_pro_semibold_family" />
     </LinearLayout>
 
 </LinearLayout>
