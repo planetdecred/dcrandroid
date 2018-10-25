@@ -149,7 +149,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
 
-        send_btn.setOnClickListener {showInputPassPhraseDialog()}
+        send_btn.setOnClickListener {showConfirmTransactionDialog()}
 
         prepareAccounts()
 
@@ -314,53 +314,25 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun showInputPassPhraseDialog() {
+    private fun showConfirmTransactionDialog() {
         if(context == null || activity == null){
             return
         }
-
         send_error_label.text = null
-        val dialogTitle = CoinFormat.format(
-                String.format(Locale.getDefault(), "%s %s DCR", getString(R.string.send), Utils.removeTrailingZeros(Mobilewallet.amountCoin(amount)))
-        )
+        val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
 
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-        val inflater = requireActivity().layoutInflater
-        val dialogView = inflater.inflate(R.layout.input_passphrase_box, null)
-        dialogBuilder.setCancelable(false)
-        dialogBuilder.setView(dialogView)
+        val unsignedTransaction = wallet.constructTransaction(send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
+        val transactionDialog = ConfirmTransactionDialog(context)
+                .setAddress(send_dcr_address.text.toString())
+                .setAmount(amount)
+                .setFee(unsignedTransaction.estimatedSignedSize)
+                .setPositiveButton(DialogInterface.OnClickListener { _, _ ->
+                    val pass = util!!.get(Constants.PASSPHRASE)
+                    startTransaction(pass)
+                    })
 
-        val passphrase = dialogView.findViewById<EditText>(R.id.passphrase_input)
 
-        dialogBuilder.setView(dialogView)
-
-        dialogBuilder.setTitle(dialogTitle)
-        dialogBuilder.setMessage(String.format(Locale.getDefault(),"%s %s DCR", getString(R.string.transaction_confirmation), Utils.formatDecred(amount)))
-
-        dialogBuilder.setPositiveButton(R.string.done) { _, _ ->
-            val pass = passphrase.text.toString()
-            if (pass.isNotEmpty()) {
-                val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
-                try {
-                    val unsignedTransaction = wallet.constructTransaction(send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
-                    val transactionDialog = ConfirmTransactionDialog(context)
-                            .setAddress(send_dcr_address.text.toString())
-                            .setAmount(amount)
-                            .setFee(unsignedTransaction.estimatedSignedSize)
-                            .setPositiveButton(getString(R.string.send), DialogInterface.OnClickListener { _, _ ->
-                                startTransaction(pass)
-                            })
-                    transactionDialog.show()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        dialogBuilder.setNegativeButton(R.string.cancel, null)
-
-        val b = dialogBuilder.create()
-        b.show()
-        b.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE)
+        transactionDialog.show()
     }
 
     private fun startTransaction(passphrase: String){
