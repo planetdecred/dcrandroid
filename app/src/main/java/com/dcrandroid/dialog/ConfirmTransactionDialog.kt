@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.TextView
@@ -48,16 +49,16 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         tvTitle.text = context.getString(R.string.sending) + " ${format.format(Mobilewallet.amountCoin(amount!!))} DCR"
 
         val tvAddress = findViewById<TextView>(R.id.address)
-        tvAddress.text = address
+        tvAddress.text = "${context.getString(R.string.to)} $address"
 
         val tvFee = findViewById<TextView>(R.id.fee)
 
         val estFee = Utils.signedSizeToAtom(fee!!)
-        tvFee.text = "${format.format(Mobilewallet.amountCoin(estFee))} DCR ${context.getString(R.string.fee_cap)} (${format.format(fee!! / 1024F)} kB)"
+        tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(Mobilewallet.amountCoin(estFee))} DCR ($fee B)"
 
         val tvTotal = findViewById<TextView>(R.id.total)
 
-        tvTotal.text = "Total ${Mobilewallet.amountCoin(amount!! + estFee)} DCR"
+        tvTotal.text = "${context.getString(R.string.total)} ${Mobilewallet.amountCoin(amount!! + estFee)} DCR"
 
         passphrase_input.addTextChangedListener(passphraseTextWatcher)
 
