@@ -216,6 +216,9 @@
     <string name="null_data_bracket">[null data]</string>
     <string name="raw_tx_copied">Raw transaction copied to clipboard</string>
     <string name="vote">Vote</string>
+    <string name="confirmed_immature">Confirmed / Immature</string>
+    <string name="confirmed_live">Confirmed / Live</string>
+    <string name="ticket">Ticket</string>
     <string name="empty_destination_address">Destination address can not be empty.</string>
     <string name="invalid_destination_address">Destination address is not valid.</string>
     <string name="empty_amount">Amount cannot be empty</string>
