@@ -405,5 +405,12 @@
     <string name="inputs">Inputs</string>
     <string name="outputs">Outputs</string>
     <!--/Transaction Details View-->
+
+    <!--Confirm Transaction Dialog-->
+    <string name="toConfirmEnterYourPassword">To confirm, enter your password:</string>
+    <string name="to">to</string>
+    <string name="withFeeOff">with a fee of</string>
+    <string name="total">Total</string>
+    <!--/Confirm Transaction Dialog-->
 </resources>
 
