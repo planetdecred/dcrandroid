@@ -83,6 +83,11 @@ public class Constants {
             IMPORTED = "imported",
             USER_AGENT = "user-agent",
             MESSAGE = "message",
-            KEY_TESTNET = "key_testnet";
+            KEY_TESTNET = "key_testnet",
+            TICKET_PURCHASE = "TICKET_PURCHASE",
+            VOTE = "VOTE",
+            REVOCATION = "REVOCATION",
+            COINBASE = "COINBASE",
+            REGULAR = "REGULAR";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

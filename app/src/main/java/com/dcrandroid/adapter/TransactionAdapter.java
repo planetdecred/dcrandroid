@@ -75,8 +75,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
         TransactionItem history = historyList.get(position);
 
-        int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
-        confirmations += 1;
+        int confirmations = 0;
+        if(history.getHeight() != -1) {
+            confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
+            confirmations += 1;
+        }
         if (history.getHeight() == -1) {
             //No included in block chain, therefore transaction is pending
             holder.status.setTextColor(context.getResources().getColor(R.color.bluePendingTextColor));
@@ -102,26 +105,45 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         holder.tvDateOfTransaction.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
 
-        String strAmount = Utils.formatDecredWithComma(history.getAmount());
-
-        holder.Amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
         holder.txType.setText("");
 
-        if (history.getDirection() == 0) {
-            holder.minus.setVisibility(View.VISIBLE);
-            holder.txType.setBackgroundResource(R.drawable.ic_send);
-        } else if (history.getDirection() == 1) {
-            holder.minus.setVisibility(View.INVISIBLE);
-            holder.txType.setBackgroundResource(R.drawable.ic_receive);
-        } else if (history.getDirection() == 2) {
-            holder.minus.setVisibility(View.INVISIBLE);
-            holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
-        }
+        int requiredConfs = util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : 2;
 
-        if (history.type.equalsIgnoreCase("vote")) {
+        if(history.type.equals(Constants.REGULAR)) {
+            String strAmount = Utils.formatDecredWithComma(history.getAmount());
+
+            holder.Amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
+            if (history.getDirection() == 0) {
+                holder.minus.setVisibility(View.VISIBLE);
+                holder.txType.setBackgroundResource(R.drawable.ic_send);
+            } else if (history.getDirection() == 1) {
+                holder.minus.setVisibility(View.INVISIBLE);
+                holder.txType.setBackgroundResource(R.drawable.ic_receive);
+            } else if (history.getDirection() == 2) {
+                holder.minus.setVisibility(View.INVISIBLE);
+                holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
+            }
+        }else if(history.type.equals(Constants.TICKET_PURCHASE)){
+            holder.minus.setVisibility(View.INVISIBLE);
+            holder.Amount.setText(R.string.ticket);
+            holder.txType.setBackgroundResource(R.drawable.immature_ticket);
+            // TODO: Mainnet
+            if(confirmations < requiredConfs){
+                holder.status.setText(context.getString(R.string.pending));
+                holder.status.setTextColor(Color.parseColor("#3d659c"));
+            }else if(confirmations >= requiredConfs && confirmations < 16){
+                holder.status.setText(R.string.confirmed_immature);
+                holder.status.setTextColor(Color.parseColor("#55bb97"));
+            }else if(confirmations > 16){
+                holder.status.setText(R.string.confirmed_live);
+                holder.status.setTextColor(Color.parseColor("#55bb97"));
+                holder.txType.setBackgroundResource(R.drawable.live_ticket);
+            }
+        }else if(history.type.equals(Constants.VOTE)){holder.txType.setBackgroundResource(R.drawable.immature_ticket);
             holder.Amount.setText(R.string.vote);
+            holder.minus.setVisibility(View.INVISIBLE);
+            holder.txType.setBackgroundResource(R.drawable.vote);
         }
-
     }
 
     @Override

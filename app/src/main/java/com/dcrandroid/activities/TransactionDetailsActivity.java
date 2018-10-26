@@ -163,7 +163,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         for (int i = 0; i < usedInput.size(); i++) {
             walletInputIndices.add(usedInput.get(i).index);
-            walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " " + getString(R.string.dcr),
+            walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
+                    Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " " + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")",
                     usedInput.get(i).accountName));
             util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
 
@@ -171,7 +172,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         for (int i = 0; i < usedOutput.size(); i++) {
             walletOutputIndices.add(usedOutput.get(i).index);
-            walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr),
+            walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
+                    Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.getAccountByAddress(usedOutput.get(i).address) + ")",
                     usedOutput.get(i).address));
         }
 
@@ -196,7 +198,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 boolean nullScript = output.getBoolean(Constants.NULL_SCRIPT);
 
                 walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(nullScript ? "[null data]" : Utils.formatDecredWithComma(output.getLong("Value"))
-                        + " " + getString(R.string.dcr), address));
+                        + " " + getString(R.string.dcr) + " (external)", address));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
@@ -208,7 +210,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     continue;
                 }
                 walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(input.getLong("AmountIn"))
-                        + " " + getString(R.string.dcr), input.getString("PreviousTransactionHash")));
+                        + " " + getString(R.string.dcr) + " (external)", input.getString("PreviousTransactionHash")));
             }
 
             TransactionInfoAdapter inputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletInput);
