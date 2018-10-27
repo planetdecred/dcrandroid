@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="@string/general">
         <ListPreference
             android:title="@string/currency_conversion"
             android:key="currency_conversion"
             android:entries="@array/currency_conversion"
             android:entryValues="@array/currency_conversion_values"
-            android:defaultValue="0"
-            />
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             android:defaultValue="true"
             android:title="@string/tx_notify_title"
             android:key="transaction_notification"
+            app:iconSpaceReserved="false"
             />
         <SwitchPreference
             android:defaultValue="false"
             android:title="@string/new_block_notification"
             android:key="new_block_notification"
             android:summary="@string/new_block_notification_description"
+            app:iconSpaceReserved="false"
             />
         <SwitchPreference
             android:defaultValue="false"
             android:title="@string/unconfirmed_funds"
             android:key="spend_unconfirmed_funds"
+            app:iconSpaceReserved="false"
             />
     </PreferenceCategory>
 
@@ -33,14 +37,17 @@
             android:key="network_modes"
             android:entryValues="@array/network_modes_values"
             android:entries="@array/network_modes"
+            app:iconSpaceReserved="false"
             />
         <EditTextPreference
             android:title="@string/connect_to_peer"
             android:key="peer_ip"
+            app:iconSpaceReserved="false"
             />
         <EditTextPreference
             android:key="@string/remote_node_address"
             android:title="@string/server_address"
+            app:iconSpaceReserved="false"
             />
         <EditTextPreference
             android:key="@string/key_connection_certificate"
@@ -48,10 +55,14 @@
             android:scrollbars="vertical"
             android:gravity="top|left"
             android:summary="@string/summary_paste_certificate"
-            android:title="@string/certificate" />
+            android:title="@string/certificate"
+            app:iconSpaceReserved="false"
+            />
         <EditTextPreference
             android:key="user-agent"
-            android:title="User agent"/>
+            android:title="User agent"
+            app:iconSpaceReserved="false"
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <ListPreference
@@ -61,35 +72,42 @@
             android:summary="@string/changes_reflect_after_restart"
             android:key="logging_level"
             android:defaultValue="info"
+            app:iconSpaceReserved="false"
             />
         <Preference
             android:summary="@string/summary_peers"
             android:title="@string/peers"
             android:enabled="false"
             android:key="@string/key_get_peers"
+            app:iconSpaceReserved="false"
             />
         <Preference
             android:summary="@string/summary_rescan_blockchain"
             android:title="@string/title_rescan_blockchain"
             android:key="@string/key_rescan_block"
             android:enabled="false"
+            app:iconSpaceReserved="false"
             />
         <SwitchPreference
             android:defaultValue="false"
             android:title="Show debug messages"
             android:key="debug_messages"
+            app:iconSpaceReserved="false"
             />
         <Preference
             android:title="@string/wallet_log"
             android:key="dcrwallet_log"
+            app:iconSpaceReserved="false"
             />
         <Preference
             android:title="@string/crash_title"
             android:key="crash"
+            app:iconSpaceReserved="false"
             />
         <Preference
             android:key="@string/build_date_system"
             android:title="@string/build_date"
+            app:iconSpaceReserved="false"
             />
     </PreferenceCategory>
 </PreferenceScreen>
