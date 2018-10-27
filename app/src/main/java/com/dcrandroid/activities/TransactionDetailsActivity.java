@@ -3,11 +3,9 @@ package com.dcrandroid.activities;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +48,27 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private String txHash;
     private String rawTx;
 
+    public static void setListViewHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            float px = 450 * (listView.getResources().getDisplayMetrics().density);
+            listItem.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            totalHeight += listItem.getMeasuredHeight();
+
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 
     private void restartApp() {
         PackageManager packageManager = getPackageManager();
@@ -88,7 +107,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         lvOutput = findViewById(R.id.lvOutput);
 
         String transactionType = extras.getString(Constants.TYPE);
-        transactionType = transactionType.substring(0, 1).toUpperCase() + transactionType.substring(1).toLowerCase();
+        if (transactionType.equals(Constants.TICKET_PURCHASE)) {
+            transactionType = getString(R.string.ticket_purchase);
+        } else {
+            transactionType = transactionType.substring(0, 1).toUpperCase() + transactionType.substring(1).toLowerCase();
+        }
 
         ArrayList<TransactionsResponse.TransactionInput> inputs
                 = (ArrayList<TransactionsResponse.TransactionInput>) extras.getSerializable(Constants.INPUTS);
@@ -103,8 +126,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView txType = findViewById(R.id.txtype);
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         TextView transactionFee = findViewById(R.id.tx_fee);
-        final TextView tvHash = findViewById(R.id.tx_hash);
-
+        TextView tvHash = findViewById(R.id.tx_hash);
 
         tvHash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +134,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 Utils.copyToClipboard(TransactionDetailsActivity.this, txHash, getString(R.string.tx_hash_copy));
             }
         });
-
 
         rawTx = extras.getString(Constants.RAW);
 
@@ -127,7 +148,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
 
         date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+
         txType.setText(transactionType);
+
         int height = extras.getInt(Constants.HEIGHT, 0);
         if (height == -1) {
             //No included in block chain, therefore transaction is pending
@@ -230,30 +253,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
     }
-
-
-    public static void setListViewHeight(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-
-        int totalHeight = 0;
-
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            float px = 450 * (listView.getResources().getDisplayMetrics().density);
-            listItem.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-            totalHeight += listItem.getMeasuredHeight();
-
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
 
     private void copyHashFromOutputItem(final ListView listView) {
 

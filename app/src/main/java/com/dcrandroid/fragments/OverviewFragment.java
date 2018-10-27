@@ -55,22 +55,26 @@ import mobilewallet.GetTransactionsResponse;
 
 public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
-    public static final String OVERVIEW_FRAGMENT = "OverviewFragment";
-
-    private List<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>();
-
-    private ImageView syncIndicator;
-    private TextView tvBalance;
-    private SwipeRefreshLayout swipeRefreshLayout;
-
+    public static final String TAG = "OverviewFragment";
     TransactionAdapter transactionAdapter;
     TextView refresh;
     PreferenceUtil util;
     RecyclerView recyclerView;
     DcrConstants constants;
-
+    private ArrayList<TransactionsResponse.TransactionItem> transactionList = new ArrayList<>();
+    private ImageView syncIndicator;
+    private TextView tvBalance;
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                getBalance();
+                hideSyncIndicator();
+            }
+        }
+    };
+    private SwipeRefreshLayout swipeRefreshLayout;
     private int recyclerViewHeight, latestTransactionHeight;
-
     private boolean needsUpdate = false, isForeground;
 
     @Nullable
@@ -95,7 +99,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         syncIndicator = rootView.getRootView().findViewById(R.id.iv_sync_indicator);
         syncIndicator.setBackgroundResource(R.drawable.sync_animation);
 
-        if(!constants.synced) {
+        if (!constants.synced) {
             syncIndicator.post(new Runnable() {
                 @Override
                 public void run() {
@@ -103,7 +107,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     syncAnimation.start();
                 }
             });
-        }else{
+        } else {
             getBalance();
             syncIndicator.setVisibility(View.GONE);
             tvBalance.setVisibility(View.VISIBLE);
@@ -187,7 +191,6 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-
     private int getMaxDisplayItems() {
         if (getActivity() == null) {
             return 0;
@@ -196,13 +199,13 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         return recyclerViewHeight / px;
     }
 
-    private void getBalance(){
-        if(!constants.synced){
+    private void getBalance() {
+        if (!constants.synced) {
             return;
         }
 
-        new Thread(){
-            public void run(){
+        new Thread() {
+            public void run() {
                 try {
                     if (getContext() == null) {
                         return;
@@ -255,8 +258,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
         getBalance();
         hideSyncIndicator();
-        new Thread(){
-            public void run(){
+        new Thread() {
+            public void run() {
                 try {
                     constants.wallet.getTransactions(OverviewFragment.this);
                 } catch (Exception e) {
@@ -295,7 +298,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
             File file = new File(path, "transactions");
-            if(file.exists()){
+            if (file.exists()) {
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 ArrayList<TransactionsResponse.TransactionItem> temp = (ArrayList<TransactionsResponse.TransactionItem>) objectInputStream.readObject();
                 if (temp.size() > 0) {
@@ -320,7 +323,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         if(transactionList.size() == 0){
             refresh.setText(R.string.no_transactions);
             recyclerView.setVisibility(View.GONE);
-        }else{
+        } else {
             recyclerView.setVisibility(View.VISIBLE);
         }
     }
@@ -335,7 +338,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void run() {
                 TransactionsResponse response = TransactionsResponse.parse(json);
                 if(response.transactions.size() == 0){
-                    refresh.setText(R.string.no_transactions_sync);
+                    refresh.setText(R.string.no_transactions);
                     recyclerView.setVisibility(View.GONE);
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
@@ -396,8 +399,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void newTransaction(TransactionsResponse.TransactionItem transaction){
         transaction.animate = true;
 
-        for(int i = 0; i < transactionList.size(); i++){
-            if(transactionList.get(i).hash.equals(transaction.hash)){
+        for (int i = 0; i < transactionList.size(); i++) {
+            if (transactionList.get(i).hash.equals(transaction.hash)) {
                 //Transaction is a duplicate
                 return;
             }
@@ -408,16 +411,18 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
         latestTransactionHeight = transaction.getHeight() + 1;
 
-        if(getActivity() == null){
+        if (getActivity() == null) {
             return;
         }
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 transactionAdapter.notifyDataSetChanged();
+                saveTransactions(transactionList);
+                getBalance();
             }
         });
-        getBalance();
     }
 
     public void transactionConfirmed(String hash, int height) {
@@ -431,6 +436,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 break;
             }
         }
+
+        saveTransactions(transactionList);
         getBalance();
     }
 
@@ -447,25 +454,16 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
                     @Override
                     public void run() {
                         transactionAdapter.notifyItemChanged(finalI);
+                        saveTransactions(transactionList);
                     }
                 });
             }
         }
     }
 
-    private void hideSyncIndicator(){
+    private void hideSyncIndicator() {
         ((AnimationDrawable) syncIndicator.getBackground()).stop();
         syncIndicator.setVisibility(View.GONE);
         tvBalance.setVisibility(View.VISIBLE);
     }
-
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                getBalance();
-                hideSyncIndicator();
-            }
-        }
-    };
 }

@@ -208,7 +208,7 @@
     <string name="TxType">Type</string>
     <string name="status">Status</string>
     <string name="hash_colon">HASH:</string>
-    <string name="pending">pending</string>
+    <string name="pending">Pending</string>
     <string name="unconfirmed">unconfirmed</string>
     <string name="change_bracket">(change)</string>
     <string name="script_bracket">[script]</string>
@@ -409,6 +409,7 @@
     <string name="hash_lowercase_colon">Hash:</string>
     <string name="inputs">Inputs</string>
     <string name="outputs">Outputs</string>
+    <string name="ticket_purchase">Ticket Purchase</string>
     <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->
