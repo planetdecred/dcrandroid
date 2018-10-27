@@ -96,10 +96,6 @@ type TransactionListener interface {
 	OnBlockAttached(height int32, timestamp int64)
 }
 
-type BlockNotificationError interface {
-	OnBlockNotificationError(err error)
-}
-
 type DecodedTransaction struct {
 	Hash     string
 	Type     string
@@ -132,10 +128,10 @@ type DecodedOutput struct {
 type SpvSyncResponse interface {
 	OnPeerConnected(peerCount int32)
 	OnPeerDisconnected(peerCount int32)
-	OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd int32, finished bool)
-	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64, finished bool)
-	OnDiscoveredAddresses(finished bool)
-	OnRescanProgress(rescannedThrough int32, finished bool)
+	OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd int32, state string)
+	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64, state string)
+	OnDiscoveredAddresses(state string)
+	OnRescan(rescannedThrough int32, state string)
 	OnSynced(synced bool)
 	/*
 	* Handled Error Codes
@@ -158,4 +154,10 @@ const (
 	ErrNotExist            = "not_exists"
 	ErrEmptySeed           = "empty_seed"
 	ErrInvalidAddress      = "invalid_address"
+
+	//Sync States
+
+	START    = "start"
+	FINISH   = "finish"
+	PROGRESS = "progress"
 )

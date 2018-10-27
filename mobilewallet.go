@@ -297,29 +297,170 @@ func (lw *LibWallet) VerifySeed(seedMnemonic string) bool {
 func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) error {
 	fmt.Println("Connecting to rpc client")
 	ctx := contextWithShutdownCancel(context.Background())
-	networkAddress, err := NormalizeAddress(rpcHost, "19109")
-	if err != nil {
-		log.Error(err)
-		return err
-	}
-	c, err := chain.NewRPCClient(lw.activeNet.Params, networkAddress,
-		rpcUser, rpcPass, certs, false)
+	networkAddress, err := NormalizeAddress(rpcHost, lw.activeNet.JSONRPCClientPort)
 	if err != nil {
 		log.Error(err)
 		return err
 	}
 
-	err = c.Start(ctx, false)
-	if err != nil {
-		log.Error(err)
-		return err
-	}
+	go func() {
 
-	netBackend := chain.BackendFromRPCClient(c.Client)
-	lw.wallet.SetNetworkBackend(netBackend)
-	lw.loader.SetNetworkBackend(netBackend)
+		defer func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnSynced(false)
+			}
+		}()
 
-	lw.rpcClient = c
+		for {
+			log.Info("Debug 1")
+			c, err := chain.NewRPCClient(lw.activeNet.Params, networkAddress,
+				rpcUser, rpcPass, certs, false)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			log.Info("Debug 2")
+			err = c.Start(ctx, true)
+			log.Info("Debug 3")
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			log.Info("Debug 4")
+			netBackend := chain.BackendFromRPCClient(c.Client)
+
+			log.Info("Debug 5")
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(0, 0, START)
+			}
+
+			log.Info("Debug 6")
+			err = lw.wallet.FetchMissingCFilters(ctx, netBackend)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+			log.Info("Debug 7")
+
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(0, 0, FINISH)
+			}
+
+			log.Info("Debug 8")
+
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(0, 0, START)
+			}
+
+			
+			_, _, _, _, _, err = lw.wallet.FetchHeaders(ctx, netBackend)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(0, 0, FINISH)
+			}
+
+			rescanPoint, err := lw.wallet.RescanPoint()
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			if rescanPoint == nil {
+				err = lw.wallet.LoadActiveDataFilters(ctx, netBackend, true)
+				if err != nil {
+					log.Error(err)
+					return
+				}
+			} else {
+
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnDiscoveredAddresses(START)
+				}
+
+				err = lw.wallet.DiscoverActiveAddresses(ctx, netBackend, rescanPoint, lw.wallet.Locked())
+				if err != nil {
+					log.Error(err)
+					return
+				}
+
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnDiscoveredAddresses(FINISH)
+				}
+
+				err = lw.wallet.LoadActiveDataFilters(ctx, netBackend, true)
+				if err != nil {
+					log.Error(err)
+					return
+				}
+
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnRescan(0, START)
+				}
+
+				rescanBlock, err := lw.wallet.BlockHeader(rescanPoint)
+				if err != nil {
+					log.Error(err)
+					return
+				}
+
+				progress := make(chan wallet.RescanProgress, 1)
+				go lw.wallet.RescanProgressFromHeight(ctx, netBackend, int32(rescanBlock.Height), progress)
+
+				for p := range progress {
+					if p.Err != nil {
+						log.Error(p.Err)
+						return
+					}
+
+					for _, syncResponse := range lw.syncResponses {
+						syncResponse.OnRescan(p.ScannedThrough, PROGRESS)
+					}
+				}
+
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnRescan(0, FINISH)
+				}
+
+			}
+
+			lw.wallet.PublishUnminedTransactions(ctx, netBackend)
+
+			lw.rpcClient = c
+
+			err = lw.rpcClient.NotifyBlocks()
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			lw.wallet.SetNetworkBackend(netBackend)
+			lw.loader.SetNetworkBackend(netBackend)
+
+			syncer := chain.NewRPCSyncer(lw.wallet, lw.rpcClient)
+
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnSynced(true)
+			}
+
+			err = syncer.Run(contextWithShutdownCancel(context.Background()), false)
+			log.Infof("Syncer returned")
+			if err == context.Canceled {
+				fmt.Println("Syncer Context was cancelled")
+				return
+			}
+
+			lw.wallet.SetNetworkBackend(nil)
+			lw.loader.SetNetworkBackend(nil)
+			lw.rpcClient = nil
+		}
+	}()
+
 	return nil
 }
 
@@ -344,48 +485,63 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 				syncResponse.OnSynced(sync)
 			}
 		},
+		FetchHeadersStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(0, 0, START)
+			}
+		},
 		FetchHeadersProgress: func(fetchedHeadersCount int32, lastHeaderTime int64) {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, false)
+				syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, PROGRESS)
 			}
 		},
 		FetchHeadersFinished: func() {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchedHeaders(0, 0, true)
+				syncResponse.OnFetchedHeaders(0, 0, FINISH)
+			}
+		},
+		FetchMissingCFiltersStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(0, 0, START)
 			}
 		},
 		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, false)
+				syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, PROGRESS)
 			}
 		},
 		FetchMissingCFiltersFinished: func() {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchMissingCFilters(0, 0, true)
+				syncResponse.OnFetchMissingCFilters(0, 0, FINISH)
 			}
 		},
 		DiscoverAddressesStarted: func() {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnDiscoveredAddresses(false)
+				syncResponse.OnDiscoveredAddresses(START)
 			}
 		},
 		DiscoverAddressesFinished: func() {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnDiscoveredAddresses(true)
+				syncResponse.OnDiscoveredAddresses(FINISH)
 			}
 
 			if !wallet.Locked() {
 				wallet.Lock()
 			}
 		},
+		RescanStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnRescan(0, START)
+			}
+		},
 		RescanProgress: func(rescannedThrough int32) {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnRescanProgress(rescannedThrough, false)
+				syncResponse.OnRescan(rescannedThrough, PROGRESS)
 			}
 		},
 		RescanFinished: func() {
 			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnRescanProgress(0, true)
+				syncResponse.OnRescan(0, FINISH)
 			}
 		},
 		PeerDisconnected: func(peerCount int32, addr string) {
@@ -446,17 +602,6 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	return nil
 }
 
-func (lw *LibWallet) RescanPoint() []byte {
-	rescanPoint, err := lw.wallet.RescanPoint()
-	if err != nil {
-		fmt.Println("Couldn't get rescan point:", err)
-	}
-	if rescanPoint != nil {
-		return rescanPoint[:]
-	}
-	return nil
-}
-
 func done(ctx context.Context) bool {
 	select {
 	case <-ctx.Done():
@@ -464,58 +609,6 @@ func done(ctx context.Context) bool {
 	default:
 		return false
 	}
-}
-
-func (lw *LibWallet) DiscoverActiveAddresses() error {
-	wallet, ok := lw.loader.LoadedWallet()
-	if !ok {
-		return errors.New(ErrWalletNotLoaded)
-	}
-
-	lw.mu.Lock()
-	chainClient := lw.rpcClient
-	lw.mu.Unlock()
-	if chainClient == nil {
-		log.Error("Consensus server RPC client has not been loaded")
-		return errors.New(ErrNotConnected)
-	}
-
-	discoverAccounts := !lw.wallet.Locked()
-
-	n := chain.BackendFromRPCClient(chainClient.Client)
-	err := wallet.DiscoverActiveAddresses(contextWithShutdownCancel(context.Background()), n, wallet.ChainParams().GenesisHash, discoverAccounts)
-	return err
-}
-
-func (lw *LibWallet) FetchHeaders() (int32, error) {
-	netBackend, err := lw.wallet.NetworkBackend()
-	if err != nil {
-		return 0, errors.New(ErrNotConnected)
-	}
-	fmt.Println("Fetching Headers")
-	count, _, rescanFromHeight, _, _, err := lw.wallet.FetchHeaders(contextWithShutdownCancel(context.Background()), netBackend)
-	if err != nil {
-		log.Error(err)
-		return 0, err
-	}
-	fmt.Printf("Fetched %v New Headers", count)
-	if count > 0 {
-		return rescanFromHeight, nil
-	}
-	return -1, nil
-}
-
-func (lw *LibWallet) LoadActiveDataFilters() error {
-	netBackend, err := lw.wallet.NetworkBackend()
-	if err != nil {
-		return errors.New(ErrNotConnected)
-	}
-	fmt.Println("Loading Active Data Filters")
-	err = lw.wallet.LoadActiveDataFilters(contextWithShutdownCancel(context.Background()), netBackend, false)
-	if err != nil {
-		log.Error(err)
-	}
-	return err
 }
 
 func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
@@ -597,38 +690,6 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 			}
 		}
 	}()
-}
-
-func (lw *LibWallet) SubscribeToBlockNotifications(listener BlockNotificationError) error {
-	wallet, ok := lw.loader.LoadedWallet()
-	if !ok {
-		log.Error("Wallet has not been loaded")
-		return errors.New(ErrWalletNotLoaded)
-	}
-	if lw.rpcClient == nil {
-		log.Error("Consensus server RPC client has not been loaded")
-		return errors.New(ErrNotConnected)
-	}
-
-	err := lw.rpcClient.NotifyBlocks()
-	if err != nil {
-		log.Error(err)
-		return err
-	}
-	wallet.SetNetworkBackend(chain.BackendFromRPCClient(lw.rpcClient.Client))
-	go func() {
-		syncer := chain.NewRPCSyncer(lw.wallet, lw.rpcClient)
-		err = syncer.Run(contextWithShutdownCancel(context.Background()), false)
-		log.Infof("Syncer returned")
-		if err == context.Canceled {
-			fmt.Println("Context was cancelled")
-			return
-		}
-		wallet.SetNetworkBackend(nil)
-		listener.OnBlockNotificationError(err)
-		log.Error(err)
-	}()
-	return nil
 }
 
 func (lw *LibWallet) OpenWallet(pubPass []byte) error {
