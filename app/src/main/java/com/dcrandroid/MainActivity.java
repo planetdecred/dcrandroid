@@ -46,7 +46,6 @@ import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.service.SyncService;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
@@ -54,6 +53,7 @@ import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SecurityFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -72,13 +72,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import mobilewallet.BlockNotificationError;
-import mobilewallet.BlockScanResponse;
+import mobilewallet.Mobilewallet;
 import mobilewallet.SpvSyncResponse;
 import mobilewallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements TransactionListener, BlockScanResponse,
-        BlockNotificationError, SpvSyncResponse {
+public class MainActivity extends AppCompatActivity implements TransactionListener,
+        SpvSyncResponse {
 
     public static MenuItem addAccountMenu, generateAddressMenu;
     public int pageID;
@@ -267,25 +266,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 walletBalance += accounts.get(i).getBalance().getTotal();
             }
             totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR"));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void connectToDecredNetwork(){
-        if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0){
+    private void connectToDecredNetwork() {
+        if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(getString(R.string.connecting_to_peers));
-            constants.wallet.addSyncResponse(this);
-            Intent syncIntent = new Intent(this, SyncService.class);
-            startService(syncIntent);
-        }else{
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    connectToRPCServer();
-                }
-            }).start();
+        } else {
+            setConnectionStatus(getString(R.string.connecting_to_rpc_server));
         }
+        constants.wallet.addSyncResponse(this);
+        Intent syncIntent = new Intent(this, SyncService.class);
+        startService(syncIntent);
     }
 
     private void startBlockUpdate() {
@@ -327,24 +321,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
         };
         blockUpdate.start();
-    }
-
-    private void rescanBlocks() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int rescanHeight = util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0);
-                int blockHeight = constants.wallet.getBestBlock();
-                if (rescanHeight < blockHeight) {
-                    constants.wallet.rescan(rescanHeight, MainActivity.this);
-                    rescanImage.startAnimation(rotateAnimation);
-                    rescanImage.setEnabled(false);
-                    chainStatus.setVisibility(View.GONE);
-                    stopScan.setVisibility(View.VISIBLE);
-                    scanning = true;
-                }
-            }
-        });
     }
 
     private void setConnectionStatus(final String str) {
@@ -431,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         Intent syncIntent = new Intent(this, SyncService.class);
         stopService(syncIntent);
 
-        if(constants.wallet != null){
+        if (constants.wallet != null) {
             constants.wallet.shutdown();
         }
         finish();
@@ -610,10 +586,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             @Override
             public void run() {
                 displayBalance();
-                if(fragment instanceof OverviewFragment){
+                if (fragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) fragment;
                     overviewFragment.transactionConfirmed(hash, height);
-                }else if (fragment instanceof HistoryFragment){
+                } else if (fragment instanceof HistoryFragment) {
                     HistoryFragment historyFragment = (HistoryFragment) fragment;
                     historyFragment.transactionConfirmed(hash, height);
                 }
@@ -675,142 +651,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 .build();
 
         //Sum ascii to prevent duplicate notifications
-        notificationManager.notify(nonce,  notification);
+        notificationManager.notify(nonce, notification);
         notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
-    }
-
-    @Override
-    public void onEnd(int i, boolean b) {
-        System.out.println("Done: " + i + "/" + constants.wallet.getBestBlock());
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                displayBalance();
-                if (fragment instanceof OverviewFragment) {
-                    OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                    overviewFragment.prepareHistoryData();
-                } else if (fragment instanceof HistoryFragment) {
-                    HistoryFragment historyFragment = (HistoryFragment) fragment;
-                    historyFragment.prepareHistoryData();
-                }
-                rotateAnimation.cancel();
-                rotateAnimation.reset();
-                rescanImage.setEnabled(true);
-                chainStatus.setVisibility(View.VISIBLE);
-                stopScan.setVisibility(View.GONE);
-                scanning = false;
-            }
-        });
-    }
-
-    @Override
-    public void onError(String s) {
-        System.out.println("Block scan error: "+s);
-
-        if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-            showText(s);
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (fragment instanceof OverviewFragment) {
-                    OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                    overviewFragment.prepareHistoryData();
-                } else if (fragment instanceof HistoryFragment) {
-                    HistoryFragment historyFragment = (HistoryFragment) fragment;
-                    historyFragment.prepareHistoryData();
-                }
-                rotateAnimation.cancel();
-                rotateAnimation.reset();
-                rescanImage.setEnabled(true);
-                chainStatus.setVisibility(View.VISIBLE);
-                stopScan.setVisibility(View.GONE);
-                scanning = false;
-            }
-        });
-    }
-
-    @Override
-    public boolean onScan(final int i) {
-        if (util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0) < i) {
-            util.setInt(PreferenceUtil.RESCAN_HEIGHT, i);
-        }
-        System.out.println("Scanning: " + i + "/" + constants.wallet.getBestBlock());
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int bestBlock = constants.wallet.getBestBlock();
-                int scannedPercentage = (i / bestBlock) * 100;
-                String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), constants.wallet.getBestBlock(), scannedPercentage);
-                chainStatus.setText(status);
-            }
-        });
-        return scanning;
-    }
-
-    @Override
-    public void onBlockNotificationError(Exception e) {
-        System.out.println("Error received: " + e.getMessage());
-        showText(e.getMessage());
-        setConnectionStatus(getString(R.string.disconnected));
-        connectToRPCServer();
-    }
-
-    private void connectToRPCServer() {
-        Thread connectionThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    setConnectionStatus(getString(R.string.connecting_to_rpc_server));
-                    String dcrdAddress = Utils.getNetworkAddress(MainActivity.this, mainApplication);
-                    int i = 0;
-                    for (; ; ) {
-                        try {
-                            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                                showText(getString(R.string.connecting_attempt) + (++i));
-                            }
-                            constants.wallet.startRPCClient(dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(MainActivity.this).getBytes());
-                            break;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                                showText(getString(R.string.rpc_connection_failed) + e.getMessage());
-                            }
-                        }
-                        Thread.sleep(2500);
-                    }
-                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                        showText(getString(R.string.subscribe_to_block_notification));
-                    }
-                    constants.wallet.subscribeToBlockNotifications(MainActivity.this);
-                    setConnectionStatus(getString(R.string.discovering_used_addresses));
-                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                        showText(getString(R.string.discover_addresses));
-                    }
-                    constants.wallet.discoverActiveAddresses();
-                    constants.wallet.loadActiveDataFilters();
-                    setConnectionStatus(getString(R.string.fetching_headers_ellipsis));
-                    if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
-                        showText(getString(R.string.fetching_headers_ellipsis));
-                    }
-                    long rescanHeight = constants.wallet.fetchHeaders();
-                    if (rescanHeight != -1) {
-                        util.setInt(PreferenceUtil.RESCAN_HEIGHT, (int) rescanHeight);
-                    }
-                    setConnectionStatus(getString(R.string.publish_unmined_transaction));
-                    constants.wallet.publishUnminedTransactions();
-                    setConnectionStatus(getString(R.string.connected_to_remote_node));
-                    rescanBlocks();
-                    synced = true;
-                    startBlockUpdate();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        connectionThread.setDaemon(true);
-        connectionThread.start();
     }
 
     @Override
@@ -865,39 +707,39 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, boolean finished) {
-        if (finished) {
-//            updatePeerCount();
-            return;
+    public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
+        if (state.equals(Mobilewallet.START)) {
+            setConnectionStatus(getString(R.string.fetching_headers));
+        } else if (state.equals(Mobilewallet.PROGRESS)) {
+            setConnectionStatus(getString(R.string.fetching_headers));
+            long currentTime = System.currentTimeMillis() / 1000;
+            long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
+            float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
+            fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
+            String status = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched));
+            //Nanoseconds to seconds
+            setBestBlockTime(lastHeaderTime);
+            setChainStatus(status);
         }
-        setConnectionStatus(getString(R.string.fetching_headers_ellipsis));
-        long currentTime = System.currentTimeMillis() / 1000;
-        long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
-        float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
-        fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
-        String status = String.format(Locale.getDefault(), "%.1f %s", fetchedPercentage, getString(R.string.fetched));
-        //Nanoseconds to seconds
-        setBestBlockTime(lastHeaderTime);
-        setChainStatus(status);
     }
 
     @Override
-    public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd, boolean finished) {
-        if (finished) {
-            //updatePeerCount();
-            return;
+    public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd, String state) {
+        if (state.equals(Mobilewallet.START)) {
+            setConnectionStatus(getString(R.string.fetching_missing_cfilters));
+        } else if (state.equals(Mobilewallet.PROGRESS)) {
+            setConnectionStatus(getString(R.string.fetching_missing_cfilters));
+            System.out.println("CFilters start: " + missingCFiltersStart + " CFilters end: " + missingCFiltersEnd);
+            String status = String.format(Locale.getDefault(), "%s %d %s", getString(R.string.fetched), missingCFiltersEnd, getString(R.string.cfilters));
+            setChainStatus(status);
         }
-        setConnectionStatus(getString(R.string.fetching_missing_cfilters));
-        System.out.println("CFilters start: " + missingCFiltersStart + " CFilters end: " + missingCFiltersEnd);
-        String status = String.format(Locale.getDefault(), "%s %d %s", getString(R.string.fetched), missingCFiltersEnd, getString(R.string.cfilters));
-        setChainStatus(status);
     }
 
     @Override
-    public void onDiscoveredAddresses(boolean finished) {
+    public void onDiscoveredAddresses(String state) {
         setChainStatus(null);
         setBestBlockTime(-1);
-        if (!finished) {
+        if (state.equals(Mobilewallet.START)) {
             setConnectionStatus(getString(R.string.discovering_used_addresses));
             return;
         }
@@ -905,16 +747,18 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onRescanProgress(int rescannedThrough, boolean finished) {
-        if (finished) {
+    public void onRescan(int rescannedThrough, String state) {
+        if (state.equals(Mobilewallet.START)) {
+            setConnectionStatus(getString(R.string.rescanning_in_progress));
+        } else if (state.equals(Mobilewallet.PROGRESS)) {
+            setConnectionStatus(getString(R.string.rescanning_in_progress));
+            int bestBlock = constants.wallet.getBestBlock();
+            int scannedPercentage = Math.round(((float) rescannedThrough / bestBlock) * 100);
+            String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), constants.wallet.getBestBlock(), scannedPercentage);
+            setChainStatus(status);
+        } else {
             updatePeerCount();
-            return;
         }
-        setConnectionStatus(getString(R.string.rescanning_in_progress));
-        int bestBlock = constants.wallet.getBestBlock();
-        int scannedPercentage = Math.round(((float) rescannedThrough/bestBlock) * 100);
-        String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), bestBlock, scannedPercentage);
-        setChainStatus(status);
     }
 
     @Override

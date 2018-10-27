@@ -95,10 +95,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activities.DiscoverAddress"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".activities.LogViewer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />

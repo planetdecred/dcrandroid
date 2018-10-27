@@ -147,17 +147,11 @@ public class Utils {
         }
     }
 
-    public static String getNetworkAddress(Context context, MainApplication application){
+    public static String getNetworkAddress(Context context){
         PreferenceUtil util = new PreferenceUtil(context);
-        if(application.getNetworkMode() != 2){
-            System.out.println("Util is using local server");
-            //return Dcrwallet.isTestNet() ? context.getString(R.string.dcrd_address_testnet) : context.getString(R.string.dcrd_address);
-            return "";
-        }else{
-            String addr = util.get(Constants.REMOTE_NODE_ADDRESS);
-            System.out.println("Util is using remote server: "+addr);
-            return addr;
-        }
+        String addr = util.get(Constants.REMOTE_NODE_ADDRESS);
+        System.out.println("Util is using remote server: "+addr);
+        return addr;
     }
 
     public static String calculateTime(long seconds, Context context) {
