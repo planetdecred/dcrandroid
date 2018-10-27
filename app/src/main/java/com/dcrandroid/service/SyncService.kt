@@ -12,6 +12,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import mobilewallet.LibWallet
+import mobilewallet.Mobilewallet
 import mobilewallet.SpvSyncResponse
 import java.lang.Exception
 import java.util.*
@@ -118,30 +119,27 @@ class SyncService : Service(), SpvSyncResponse {
         println("Task Removed")
     }
 
-    override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, finished: Boolean) {
-        if(finished){
-            return
+    override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
+
+        if (state == Mobilewallet.PROGRESS) {
+            val currentTime = System.currentTimeMillis() / 1000
+            val estimatedBlocks = (currentTime - lastHeaderTime) / 120 + wallet!!.bestBlock
+            var fetchedPercentage = wallet!!.bestBlock.toFloat() / estimatedBlocks * 100
+            fetchedPercentage = if (fetchedPercentage > 100) 100F else fetchedPercentage
+
+            contentTitle = "(1/3) ${getString(R.string.fetching_headers)}"
+            contentText = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched))
+
+            showNotification()
         }
-
-        val currentTime = System.currentTimeMillis() / 1000
-        val estimatedBlocks = (currentTime - lastHeaderTime) / 120 + wallet!!.bestBlock
-        var fetchedPercentage = wallet!!.bestBlock.toFloat() / estimatedBlocks * 100
-        fetchedPercentage = if (fetchedPercentage > 100) 100F else fetchedPercentage
-
-        contentTitle = "(1/3) ${getString(R.string.fetching_headers)}"
-        contentText = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched))
-
-        showNotification()
     }
 
-    override fun onDiscoveredAddresses(finished: Boolean) {
-        if (finished) {
-            return
+    override fun onDiscoveredAddresses(state: String) {
+        if (state == Mobilewallet.START) {
+            contentTitle = "(2/3) Discovering Addresses..."
+            contentText = null
+            showNotification()
         }
-        contentTitle = "(2/3) Discovering Addresses..."
-        contentText = null
-
-        showNotification()
     }
 
     override fun onPeerConnected(peerCount: Int) {
@@ -158,12 +156,12 @@ class SyncService : Service(), SpvSyncResponse {
 
     }
 
-    override fun onFetchMissingCFilters(missingCFitlersStart: Int, missingCFitlersEnd: Int, finished: Boolean) {
+    override fun onFetchMissingCFilters(missingCFitlersStart: Int, missingCFitlersEnd: Int, state: String) {
 
     }
 
-    override fun onRescanProgress(rescannedThrough: Int, finished: Boolean) {
-        if(!finished){
+    override fun onRescan(rescannedThrough: Int, state: String) {
+        if(state == Mobilewallet.PROGRESS){
             contentTitle = "(3/3) Rescanning Blocks"
 
             val bestBlock = wallet!!.bestBlock

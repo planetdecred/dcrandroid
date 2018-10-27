@@ -25,7 +25,9 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
-import mobilewallet.BlockScanResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -42,29 +44,13 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        setResult(0);
-        finishActivity(2);
-    }
-
-    public static class MainPreferenceFragment extends PreferenceFragmentCompat implements BlockScanResponse {
+    public static class MainPreferenceFragment extends PreferenceFragmentCompat{
         private final int ENCRYPT_REQUEST_CODE = 1;
         private PreferenceUtil util;
-        private ProgressDialog pd;
-        private DcrConstants constants;
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
         private Preference changeEncryptionPass;
+        private ProgressDialog pd;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -73,14 +59,12 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
 
             getActivity().setTitle(getActivity().getString(R.string.settings));
-            constants = DcrConstants.getInstance();
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(), false, false, getActivity().getString(R.string.scanning_block));
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
             changeEncryptionPass = findPreference("change_encryption_passphrase");
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
-            final Preference rescanBlocks = findPreference(getString(R.string.key_rescan_block));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
@@ -94,12 +78,10 @@ public class SettingsActivity extends AppCompatActivity {
                 remoteNodeCertificate.setVisible(true);
                 remoteNodeAddress.setVisible(true);
                 peerAddress.setVisible(false);
-                rescanBlocks.setEnabled(true);
             } else {
                 remoteNodeCertificate.setVisible(false);
                 remoteNodeAddress.setVisible(false);
                 peerAddress.setVisible(true);
-                rescanBlocks.setEnabled(false);
             }
 
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.NETWORK_MODES, "0"))]);
@@ -111,12 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
                         peerAddress.setVisible(true);
                         remoteNodeAddress.setVisible(false);
                         remoteNodeCertificate.setVisible(false);
-                        rescanBlocks.setEnabled(false);
                     } else {
                         peerAddress.setVisible(false);
                         remoteNodeAddress.setVisible(true);
                         remoteNodeCertificate.setVisible(true);
-                        rescanBlocks.setEnabled(true);
                     }
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
                     util.set(Constants.NETWORK_MODES, String.valueOf(i));
@@ -179,32 +159,6 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(getActivity(), GetPeersActivity.class);
                     startActivity(intent);
-                    return true;
-                }
-            });
-
-            rescanBlocks.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.rescan_blocks)
-                            .setMessage(R.string.rescan_blocks_confirmation)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    pd.show();
-                                    new Thread() {
-                                        public void run() {
-                                            try {
-                                                constants.wallet.rescan(0, MainPreferenceFragment.this);
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }.start();
-                                }
-                            }).setNegativeButton(android.R.string.no, null)
-                            .show();
                     return true;
                 }
             });
@@ -346,7 +300,7 @@ public class SettingsActivity extends AppCompatActivity {
                             public void run() {
                                 try {
                                     String passphrase = data.getStringExtra(Constants.PASSPHRASE);
-                                    constants.wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
+                                    DcrConstants.getInstance().wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
                                     if (getActivity() != null) {
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
@@ -382,48 +336,6 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             setPreferencesFromResource(R.xml.pref_main, s);
-        }
-
-        @Override
-        public void onEnd(final int height, final boolean cancelled) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (pd.isShowing()) {
-                        pd.dismiss();
-                    }
-                    if (cancelled) {
-                        Toast.makeText(getActivity(), R.string.rescan_cancelled, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), height + " " + getString(R.string.blocks_scanned), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onError(final String message) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        @Override
-        public boolean onScan(final int rescanned_through) {
-            if (util.getInt(PreferenceUtil.RESCAN_HEIGHT, 0) < rescanned_through) {
-                util.setInt(PreferenceUtil.RESCAN_HEIGHT, rescanned_through);
-            }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pd.show();
-                    pd.setMessage(getString(R.string.scanning_block) + " " + rescanned_through);
-                }
-            });
-            return true;
         }
     }
 }
