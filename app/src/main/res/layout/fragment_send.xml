@@ -1,72 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="5dp"
+        android:orientation="vertical"
+        android:paddingEnd="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingEnd="5dp"
-        android:paddingTop="10dp"
-        android:orientation="vertical"
-        >
+        android:paddingStart="5dp"
+        android:paddingTop="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:fontFamily="@font/source_sans_pro_regular"
             android:text="@string/sending_decred"
             android:textColor="@color/darkBlueTextColor"
-            android:textSize="23sp" />
+            android:textSize="23sp"
+            app:fontFamily="@font/source_sans_pro_regular" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/blueGrayFirstTextColor"
             app:fontFamily="@font/source_sans_pro_regular"
-            android:text="@string/qr_code_help_text"
             android:textSize="18sp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:text="@string/qr_code_help_text" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="25dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fontFamily="@font/source_sans_pro_regular"
                 android:gravity="end"
                 android:text="@string/from_colon"
                 android:textColor="@color/blueGrayFirstTextColor87pc"
                 android:textSize="20sp"
+                app:fontFamily="@font/source_sans_pro_regular"
 
                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="1dp"
-                >
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="1dp">
+
                 <Spinner
                     android:id="@+id/send_account_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="top">
-                </Spinner>
+                    android:gravity="top" />
             </LinearLayout>
         </LinearLayout>
 
@@ -79,36 +77,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:gravity="center_vertical">
+            android:paddingTop="5dp">
 
-            <EditText
-                android:id="@+id/send_dcr_address"
+
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:hint="@string/destination_address"
-                android:inputType="text"
-                android:maxLines="1"
-                android:paddingTop="8dp"
-                android:paddingBottom="3dp"
-                android:textColor="@color/blueLinkTextColor"
-                android:textColorHint="@color/blueGrayFirstTextColor38pc"
-                android:textSize="17sp" />
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/send_dcr_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/destination_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/blueLinkTextColor"
+                    android:textColorHint="@color/blueGrayFirstTextColor38pc"
+                    android:textSize="17sp" />
+
+                <Button
+                    android:id="@+id/paste_dcr_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:drawableLeft="@drawable/ic_content_paste"
+                    android:drawableStart="@drawable/ic_content_paste"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:text="@string/tap_to_paste"
+                    android:textAllCaps="false"
+                    android:textColor="#0A153D" />
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/send_dcr_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:padding="4dp"
+                android:layout_marginStart="5dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:contentDescription="@string/scan"
+                android:focusable="true"
+                android:padding="4dp"
                 android:src="@mipmap/icons8_qr_code" />
         </LinearLayout>
 
@@ -132,20 +150,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -169,23 +188,24 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
-                        app:fontFamily="@font/source_sans_pro_regular"
+                        android:layout_marginStart="5dp"
                         android:text="@string/dcr"
+                        app:fontFamily="@font/source_sans_pro_regular"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/exchange_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/exchange_layout"
                     android:visibility="gone"
                     tools:visibility="visible">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -209,10 +229,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
-                        app:fontFamily="@font/source_sans_pro_regular"
+                        android:layout_marginStart="5dp"
                         android:text="@string/usd"
+                        app:fontFamily="@font/source_sans_pro_regular"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -235,17 +255,15 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/lightGreyBackgroundColor"
-            android:layout_marginTop="10dp"
-            />
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:id="@+id/send_error_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textColor="@color/orangeTextColor"
             tools:text="test text" />
@@ -254,10 +272,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
             android:paddingEnd="5dp"
-            android:paddingRight="5dp">
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingStart="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -278,7 +296,6 @@
                     android:id="@+id/send_dcr_estimate_fee"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
@@ -293,7 +310,6 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/estimate_size"
                     android:textColor="@color/blueGrayFirstTextColor"
@@ -303,7 +319,6 @@
                     android:id="@+id/send_dcr_estimate_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_bytes"
                     android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
@@ -318,7 +333,6 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/balance_after"
                     android:textColor="@color/blueGrayFirstTextColor"
@@ -328,7 +342,6 @@
                     android:id="@+id/send_dcr_balance_after"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/inconsolata_regular"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp" />
@@ -346,19 +359,19 @@
                 <TextView
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/source_sans_pro_regular"
                     android:gravity="start"
                     android:text="@string/exchange_rate"
                     android:textColor="@color/blueGrayFirstTextColor"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
 
                 <TextView
                     android:id="@+id/send_dcr_exchange_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blueGrayFirstTextColor"
-                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     tools:text="test text" />
             </LinearLayout>
 
@@ -370,8 +383,7 @@
                 android:textColor="@color/orangeTextColor"
                 android:text="@string/bittrex_rate_unavailable_tap_to_retry"
                 android:visibility="invisible"
-                tools:visibility="visible"
-                />
+                tools:visibility="visible" />
         </LinearLayout>
 
         <Button
@@ -379,8 +391,8 @@
             android:layout_width="90dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/btn_blue"
             android:enabled="false"
             android:text="@string/send"
