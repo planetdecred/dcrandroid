@@ -933,7 +933,7 @@ func decodeTxOutputs(mtx *wire.MsgTx, chainParams *chaincfg.Params) []DecodedOut
 			Value:      v.Value,
 			Version:    int32(v.Version),
 			Addresses:  encodedAddrs,
-			NullScript: scriptClass.String() == "nulldata",
+			ScriptType: scriptClass.String(),
 		}
 	}
 

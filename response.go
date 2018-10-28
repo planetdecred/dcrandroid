@@ -120,7 +120,7 @@ type DecodedOutput struct {
 	Index      int32
 	Value      int64
 	Version    int32
-	NullScript bool
+	ScriptType string
 	Addresses  []string
 }
 
