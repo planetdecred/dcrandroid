@@ -1,7 +1,11 @@
 package com.dcrandroid.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
@@ -33,13 +38,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private LayoutInflater layoutInflater;
     private PreferenceUtil util;
     private Context context;
-
+    private MainApplication application;
 
     public TransactionAdapter(List<TransactionItem> historyListList, Context context) {
         this.historyList = historyListList;
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.util = new PreferenceUtil(context);
+        application = (MainApplication) context.getApplicationContext();
     }
 
     @Override
@@ -55,21 +61,26 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
         TransactionItem history = historyList.get(position);
 
+        int confirmedTextColor = context.getResources().getColor(R.color.greenConfirmedTextColor);
+        int pendingTextColor = context.getResources().getColor(R.color.bluePendingTextColor);
+        int grayTextColor = context.getResources().getColor(R.color.grayTextColor);
+
         int confirmations = 0;
         if (history.getHeight() != -1) {
             confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
             confirmations += 1;
         }
+
         if (history.getHeight() == -1) {
             //No included in block chain, therefore transaction is pending
-            holder.status.setTextColor(context.getResources().getColor(R.color.bluePendingTextColor));
+            holder.status.setTextColor(pendingTextColor);
             holder.status.setText(context.getString(R.string.pending));
         } else {
             if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {
-                holder.status.setTextColor(context.getResources().getColor(R.color.greenConfirmedTextColor));
+                holder.status.setTextColor(confirmedTextColor);
                 holder.status.setText(context.getString(R.string.confirmed));
             } else {
-                holder.status.setTextColor(context.getResources().getColor(R.color.bluePendingTextColor));
+                holder.status.setTextColor(pendingTextColor);
                 holder.status.setText(context.getString(R.string.pending));
             }
         }
@@ -108,16 +119,44 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.minus.setVisibility(View.INVISIBLE);
             holder.Amount.setText(R.string.ticket);
             holder.txType.setBackgroundResource(R.drawable.immature_ticket);
-            // TODO: Mainnet
+
+            int ticketMaturity = application.isTestNet() ? 16 : 256;
+
             if (confirmations < requiredConfs) {
                 holder.status.setText(context.getString(R.string.pending));
-                holder.status.setTextColor(context.getResources().getColor(R.color.bluePendingTextColor));
-            } else if (confirmations >= requiredConfs && confirmations < 16) {
-                holder.status.setText(R.string.confirmed_immature);
-                holder.status.setTextColor(context.getResources().getColor(R.color.orangeTextColor));
-            } else if (confirmations > 16) { //TODO: Mainnet
-                holder.status.setText(R.string.confirmed_live);
-                holder.status.setTextColor(context.getResources().getColor(R.color.greenConfirmedTextColor));
+                holder.status.setTextColor(pendingTextColor);
+            } else if (confirmations >= requiredConfs && confirmations < ticketMaturity) {
+
+                SpannableString confirmedImmature = new SpannableString(context.getString(R.string.confirmed_immature));
+
+                // Confirmed text color
+                confirmedImmature.setSpan(new ForegroundColorSpan(confirmedTextColor), 0, 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                // Slash text color
+                confirmedImmature.setSpan(new ForegroundColorSpan(grayTextColor), 10, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                // Immature text color
+                confirmedImmature.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.orangeTextColor)),
+                        12, confirmedImmature.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                holder.status.setText(confirmedImmature);
+
+            } else if (confirmations > 16) {
+
+                SpannableString confirmedLive = new SpannableString(context.getString(R.string.confirmed_live));
+
+                // Confirmed text color
+                confirmedLive.setSpan(new ForegroundColorSpan(confirmedTextColor), 0, 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                // Slash text color
+                confirmedLive.setSpan(new ForegroundColorSpan(grayTextColor), 10, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                // Live text color
+                confirmedLive.setSpan(new ForegroundColorSpan(confirmedTextColor),
+                        12, confirmedLive.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                holder.status.setText(confirmedLive);
+
                 holder.txType.setBackgroundResource(R.drawable.live_ticket);
             }
         } else if (history.type.equals(Constants.VOTE)) {

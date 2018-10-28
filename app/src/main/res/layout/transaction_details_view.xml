@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,56 +13,58 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:focusableInTouchMode="true"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:orientation="vertical"
+            >
 
-            <TextView
-                android:id="@+id/label_date"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingLeft="8dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
-                android:paddingBottom="8dp"
-                android:text="@string/date_colon"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/label_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/date"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
 
-            <TextView
-                android:id="@+id/tx_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/label_date"
-                android:layout_toRightOf="@+id/label_date"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular"
-                tools:text="test text" />
+                <TextView
+                    android:id="@+id/tx_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="8dp"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    tools:text="test text" />
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator12"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/label_date"
                 android:background="@color/lightGreyBackgroundColor" />
 
             <LinearLayout
                 android:id="@+id/status_tx_cont"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separator12"
                 android:orientation="horizontal">
 
                 <TextView
@@ -72,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:padding="8dp"
-                    android:text="@string/status_colon"
+                    android:text="@string/status"
                     android:textColor="@color/darkBlueTextColor"
                     android:textSize="16sp"
                     app:fontFamily="@font/source_sans_pro_regular" />
@@ -92,192 +93,260 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/separator1399"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/status_tx_cont"
                 android:background="@color/lightGreyBackgroundColor" />
 
-            <TextView
-                android:id="@+id/label_amount"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/separator1399"
-                android:padding="8dp"
-                android:text="@string/amount_dcr_colon"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tx_dts_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator1399"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="@string/_0_dcr"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                <TextView
+                    android:id="@+id/label_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="@string/amount_dcr"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+
+                <TextView
+                    android:id="@+id/tx_dts_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="@string/_0_dcr"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16.8sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator13"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/tx_dts_value"
                 android:background="@color/lightGreyBackgroundColor" />
 
-            <TextView
-                android:id="@+id/label_tx_fee"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separator13"
-                android:padding="8dp"
-                android:text="@string/fee_colon"
+                android:orientation="horizontal">
 
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                <TextView
+                    android:id="@+id/label_tx_fee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="@string/fee"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
 
-            <TextView
-                android:id="@+id/tx_fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator13"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:padding="8dp"
-                android:text="@string/_0_dcr"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                <TextView
+                    android:id="@+id/tx_fee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="8dp"
+                    android:text="@string/_0_dcr"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16.8sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator21"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/tx_fee"
                 android:background="@color/lightGreyBackgroundColor" />
 
-            <TextView
-                android:id="@+id/label_txtype"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separator21"
-                android:padding="8dp"
-                android:text="@string/type_colon"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                android:orientation="horizontal"
+                >
 
-            <TextView
-                android:id="@+id/txtype"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator21"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/label_txtype"
-                android:layout_toRightOf="@+id/label_txtype"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textAllCaps="false"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular"
-                tools:text="test text" />
+                <TextView
+                    android:id="@+id/label_txtype"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="@string/type"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+
+                <TextView
+                    android:id="@+id/txtype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="8dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    tools:text="test text" />
+
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator17"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/txtype"
                 android:background="@color/lightGreyBackgroundColor" />
 
-            <TextView
-                android:id="@+id/label_confirmation"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/separator17"
-                android:padding="8dp"
-                android:text="@string/confirmations_colon"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tx_dts_confirmation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/separator17"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@id/label_confirmation"
-                android:layout_toRightOf="@id/label_confirmation"
-                android:gravity="end"
-                android:padding="8dp"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular"
-                tools:text="test text" />
+                <TextView
+                    android:id="@+id/label_confirmation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="@string/confirmations"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+
+                <TextView
+                    android:id="@+id/tx_dts_confirmation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:padding="8dp"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    tools:text="test text" />
+
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator1235"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/tx_dts_confirmation"
                 android:background="@color/lightGreyBackgroundColor" />
 
-            <TextView
-                android:id="@+id/label_tx_hash"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/separator1235"
-                android:padding="8dp"
-                android:text="@string/hash_lowercase_colon"
-                android:textColor="@color/darkBlueTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular" />
+                android:orientation="vertical"
+                android:id="@+id/tx_dts_vote_layout"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/tx_hash"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Last Block Valid"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/source_sans_pro_regular" />
+
+                    <TextView
+                        android:id="@+id/tx_dts_block_valid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:padding="8dp"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/source_sans_pro_regular"
+                        tools:text="test text" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGreyBackgroundColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Version"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/source_sans_pro_regular" />
+
+                    <TextView
+                        android:id="@+id/tx_dts_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:padding="8dp"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/source_sans_pro_regular"
+                        tools:text="test text" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGreyBackgroundColor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/separator1235"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
-                android:layout_toEndOf="@id/label_tx_hash"
-                android:layout_toRightOf="@id/label_tx_hash"
-                android:ellipsize="middle"
-                android:gravity="start"
-                android:padding="8dp"
-                android:paddingStart="34dp"
-                android:paddingLeft="34dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
-                android:singleLine="true"
-                android:textColor="@color/blueLinkTextColor"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular"
-                tools:text="fxfxffxxfxfxfxfxfxfxfxfxfxfxfxfxfx" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/label_tx_hash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/hash"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+
+                <TextView
+                    android:id="@+id/tx_hash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginLeft="32dp"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:textColor="@color/blueLinkTextColor"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    tools:text="fxfxffxxfxfxfxfxfhioooiionoinoxfxfxfxjjp" />
+
+            </LinearLayout>
 
             <View
-                android:id="@+id/separator12355"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/tx_hash"
                 android:background="@color/lightGreyBackgroundColor" />
 
-
-        </RelativeLayout>
-
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
