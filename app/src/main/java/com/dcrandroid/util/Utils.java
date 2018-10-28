@@ -300,6 +300,19 @@ public class Utils {
         toast.show();
     }
 
+    public static String readFromClipboard(Context context){
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if(clipboard != null) return clipboard.getText().toString();
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
+                    context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if(clipboard != null) return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+        }
+        return "";
+    }
+
     public static void backupWalletDB(final Context context){
         try {
             long startTime = System.currentTimeMillis();

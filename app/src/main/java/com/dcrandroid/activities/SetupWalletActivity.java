@@ -12,9 +12,6 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 
 /**
@@ -23,8 +20,6 @@ import java.util.Locale;
 
 public class SetupWalletActivity extends AppCompatActivity {
 
-    String result;
-    SimpleDateFormat formatter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +27,8 @@ public class SetupWalletActivity extends AppCompatActivity {
         TextView buildDate= findViewById(R.id.build_date);
         Button createWalletBtn = findViewById(R.id.button_create_wallet);
         Button retrieveWalletBtn = findViewById(R.id.button_retrieve_wallet);
-        formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date buildDated = BuildConfig.buildTime;
-        result = formatter.format(buildDated);
-        buildDate.setText(result);
+
+        buildDate.setText(BuildConfig.VERSION_NAME);
 
         createWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override

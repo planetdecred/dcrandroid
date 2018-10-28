@@ -5,47 +5,50 @@ import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.dcrandroid.R
-import com.dcrandroid.activities.ReaderActivity
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.DcrConstants
-import kotlinx.android.synthetic.main.fragment_send.*
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import android.widget.ArrayAdapter
-import com.dcrandroid.data.Constants
-import com.dcrandroid.util.PreferenceUtil
-import org.json.JSONException
-import android.widget.Toast
-import org.json.JSONObject
-import android.os.AsyncTask
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Toast
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
+import com.dcrandroid.MainApplication
+import com.dcrandroid.R
+import com.dcrandroid.activities.ReaderActivity
 import com.dcrandroid.data.Account
+import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.DcrConstants
+import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import com.journeyapps.barcodescanner.Util
+import kotlinx.android.synthetic.main.fragment_send.*
 import mobilewallet.LibWallet
 import mobilewallet.Mobilewallet
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,9 +57,9 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private val SCANNER_ACTIVITY_RESULT_CODE = 0
     private var constants: DcrConstants = DcrConstants.getInstance()
-    private var textChanged : Boolean = false
-    private var isSendAll : Boolean = false
-    private var exchangeRate : Double = -1.0
+    private var textChanged: Boolean = false
+    private var isSendAll: Boolean = false
+    private var exchangeRate: Double = -1.0
     private var exchangeDecimal: BigDecimal? = null
     private val formatter: DecimalFormat = DecimalFormat("#.########")
     private var accounts: ArrayList<String>? = null
@@ -65,7 +68,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var util: PreferenceUtil? = null
     private var pd: ProgressDialog? = null
     private val wallet: LibWallet
-        get(){
+        get() {
             return constants.wallet
         }
 
@@ -115,7 +118,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         dataAdapter!!.setDropDownViewResource(R.layout.dropdown_item_1)
         send_account_spinner.adapter = dataAdapter
 
-        if(Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
+        if (Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
             GetExchangeRate(this).execute()
         }
 
@@ -158,8 +161,21 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         send_account_spinner.onItemSelectedListener = this
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))){
+            paste_dcr_address.visibility = View.VISIBLE
+            paste_dcr_address.setOnClickListener {
+                send_dcr_address.setText(Utils.readFromClipboard(activity!!.applicationContext))
+                paste_dcr_address.visibility = View.GONE
+            }
+        }else{
+            paste_dcr_address.visibility = View.GONE
+        }
+    }
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if(isSendAll){
+        if (isSendAll) {
             send_max.performClick()
             return
         }
@@ -170,17 +186,17 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         TODO("not implemented")
     }
 
-    private fun prepareAccounts(){
+    private fun prepareAccounts() {
         val parsedAccounts = Account.parse(wallet.getAccounts(requiredConfirmations))
         accountNumbers.clear()
         accounts!!.clear()
 
         for (account in parsedAccounts) {
-            if(account.accountName.trim() == (Constants.IMPORTED)){
+            if (account.accountName.trim() == (Constants.IMPORTED)) {
                 continue
             }
 
-            accounts!!.add(account.accountName + " [" + Utils.formatDecred(account.balance.spendable)+"]")
+            accounts!!.add(account.accountName + " [" + Utils.formatDecred(account.balance.spendable) + "]")
             accountNumbers.add(account.accountNumber)
         }
 
@@ -228,16 +244,16 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
     }
 
-    private fun constructTransaction(){
+    private fun constructTransaction() {
 
-        if(!validateAmount(false)){
+        if (!validateAmount(false)) {
             setInvalid()
             return
         }
 
         try {
 
-            if(send_dcr_address.text.toString().isNotEmpty() && !wallet.isAddressValid(send_dcr_address.text.toString())){
+            if (send_dcr_address.text.toString().isNotEmpty() && !wallet.isAddressValid(send_dcr_address.text.toString())) {
                 tvDestinationError.setText(R.string.invalid_destination_address)
                 return
             }
@@ -248,21 +264,21 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             send_dcr_estimate_fee.text = CoinFormat.format(estFee)
 
-            send_dcr_estimate_size.text = String.format(Locale.getDefault(),"%d %s",transaction.estimatedSignedSize, getString(R.string.bytes))
+            send_dcr_estimate_size.text = String.format(Locale.getDefault(), "%d %s", transaction.estimatedSignedSize, getString(R.string.bytes))
 
-            if(wallet.isAddressValid(send_dcr_address.text.toString())){
+            if (wallet.isAddressValid(send_dcr_address.text.toString())) {
                 send_btn.isEnabled = true
                 send_btn.setTextColor(Color.WHITE)
             }
 
-            if(isSendAll){
+            if (isSendAll) {
                 send_dcr_balance_after.text = CoinFormat.format(getSpendableForSelectedAccount() - transaction.totalPreviousOutputAmount)
 
                 amount_dcr.removeTextChangedListener(amountWatcher)
                 amount_dcr.setText(Utils.formatDecredWithoutComma(amount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
                 amount_dcr.addTextChangedListener(amountWatcher)
 
-                if(exchangeDecimal != null) {
+                if (exchangeDecimal != null) {
                     var currentAmount = BigDecimal(Mobilewallet.amountCoin(transaction.totalPreviousOutputAmount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
@@ -271,11 +287,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     amount_usd.setText(formatter.format(convertedAmount.toDouble()))
                     amount_usd.addTextChangedListener(exchangeWatcher)
                 }
-            }else{
+            } else {
                 send_dcr_balance_after.text = CoinFormat.format(getSpendableForSelectedAccount() - amount)
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             setInvalid()
             send_error_label.text = Utils.translateError(requireActivity().applicationContext, e)
         }
@@ -284,7 +300,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SCANNER_ACTIVITY_RESULT_CODE) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 try {
                     var returnString = data!!.getStringExtra(Constants.ADDRESS)
                     if(returnString.startsWith(getString(R.string.decred_colon)))
@@ -333,34 +349,39 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         transactionDialog.show()
     }
 
-    private fun startTransaction(passphrase: String){
-        if(context == null){
+    private fun startTransaction(passphrase: String) {
+        if (context == null) {
             return
         }
-        pd = Utils.getProgressDialog(context,false,false,"Processing...")
+        pd = Utils.getProgressDialog(context, false, false, "Processing...")
         pd!!.show()
-        Thread{
+        Thread {
             try {
                 val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
                 val txHash = wallet.sendTransaction(passphrase.toByteArray(), send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
                 txHash.reverse()
                 val sb = StringBuilder()
-                for(byte in txHash){
-                    sb.append(String.format(Locale.getDefault(),"%02x", byte))
+                for (byte in txHash) {
+                    sb.append(String.format(Locale.getDefault(), "%02x", byte))
                 }
                 println("Hash: $sb")
-                if(activity != null){
-                    requireActivity().runOnUiThread {
-                        if(pd!!.isShowing){ pd!!.dismiss() }
+
+                if (activity != null) {
+                    activity!!.runOnUiThread {
+                        if (pd!!.isShowing) {
+                            pd!!.dismiss()
+                        }
                         prepareAccounts()
                         showTxConfirmDialog(sb.toString())
                     }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
-                if(activity != null){
-                    requireActivity().runOnUiThread {
-                        if(pd!!.isShowing){ pd!!.dismiss() }
+                if (activity != null) {
+                    activity!!.runOnUiThread {
+                        if (pd!!.isShowing) {
+                            pd!!.dismiss()
+                        }
                         send_error_label.text = Utils.translateError(context, e)
                     }
                 }
@@ -369,7 +390,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun showTxConfirmDialog(txHash: String) {
-        if(activity == null || context == null){
+        if (activity == null || context == null) {
             return
         }
 
@@ -388,7 +409,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                  }})
                  .setMessageClickListener(View.OnClickListener {
                     Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))
-                 }).show()
+                }).show()
 
         amount_dcr.text = null
 
@@ -428,8 +449,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             textChanged = true
             isSendAll = false
 
-            if(exchangeDecimal != null){
-                if(s.isNotEmpty()){
+            if (exchangeDecimal != null) {
+                if (s.isNotEmpty()) {
                     var currentAmount = BigDecimal(s.toString())
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
                     val convertedAmount = currentAmount.multiply(exchangeDecimal)
@@ -454,24 +475,24 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private val exchangeWatcher: TextWatcher = object :TextWatcher {
+    private val exchangeWatcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable) {
-            if (exchangeDecimal == null){
+            if (exchangeDecimal == null) {
                 return
             }
 
             isSendAll = false
-            if (s.isEmpty()){
+            if (s.isEmpty()) {
                 amount_dcr.run {
                     removeTextChangedListener(amountWatcher)
                     text = null
                     addTextChangedListener(amountWatcher)
                 }
-            }else {
+            } else {
                 var currentAmount = BigDecimal(s.toString())
                 currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
@@ -493,7 +514,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         override fun doInBackground(vararg voids: Void): String? {
             try {
-                if(sendFragment.activity == null){
+                if (sendFragment.activity == null) {
                     return null
                 }
                 val url = URL(sendFragment.requireActivity().getString(R.string.dcr_to_usd_exchange_url))
@@ -521,7 +542,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         override fun onPostExecute(s: String?) {
             super.onPostExecute(s)
-            if(sendFragment.activity == null){
+            if (sendFragment.activity == null) {
                 return
             }
 

@@ -278,6 +278,7 @@
     <string name="invalid_address">Invalid Address</string>
     <string name="owned_validate_address">Owned Address</string>
     <string name="external_validate_address">Address Valid, Not Owned</string>
+    <string name="paste_from_clipboard">Paste Address From Clipboard</string>
     <!--/Address-->
 
     <!--Preference-->
@@ -392,6 +393,7 @@
     <string name="link_to_dcr_data">Tab this to see details in Dcrdata</string>
     <string name="View_on_dcrdata">View On Dcrdata</string>
 
+    <string name="tap_to_paste">Tap to Paste</string>
     <!--/Send Fragment-->
 
     <!--Transaction Details View-->
