@@ -45,8 +45,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private ListView lvInput, lvOutput;
     private PreferenceUtil util;
-    private String txHash;
-    private String rawTx;
+    private String rawTx, transactionType, txHash;
 
     public static void setListViewHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
@@ -90,12 +89,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (DcrConstants.getInstance().wallet == null) {
             restartApp();
             return;
         }
+
         setTitle(getString(R.string.Transaction_details));
         setContentView(R.layout.transaction_details_view);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         util = new PreferenceUtil(this);
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -106,7 +110,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         lvInput = findViewById(R.id.lvInput);
         lvOutput = findViewById(R.id.lvOutput);
 
-        String transactionType = extras.getString(Constants.TYPE);
+        transactionType = extras.getString(Constants.TYPE);
         if (transactionType.equals(Constants.TICKET_PURCHASE)) {
             transactionType = getString(R.string.ticket_purchase);
         } else {
@@ -127,13 +131,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView confirmation = findViewById(R.id.tx_dts_confirmation);
         TextView transactionFee = findViewById(R.id.tx_fee);
         TextView tvHash = findViewById(R.id.tx_hash);
-
-        tvHash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.copyToClipboard(TransactionDetailsActivity.this, txHash, getString(R.string.tx_hash_copy));
-            }
-        });
 
         rawTx = extras.getString(Constants.RAW);
 
@@ -172,7 +169,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setText(R.string.pending);
             }
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        tvHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.copyToClipboard(TransactionDetailsActivity.this, txHash, getString(R.string.tx_hash_copy));
+            }
+        });
 
     }
 
@@ -187,10 +190,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         for (int i = 0; i < usedInput.size(); i++) {
             walletInputIndices.add(usedInput.get(i).index);
             walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                    Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " " + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")",
+                    Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " " + getString(R.string.dcr),
                     usedInput.get(i).accountName));
-            util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
 
+            //TODO: Preference is not the correct way of passing this data
+            util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
         }
 
         for (int i = 0; i < usedOutput.size(); i++) {
@@ -205,6 +209,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
             JSONObject parent = new JSONObject(rawJson);
 
+            if(transactionType.equalsIgnoreCase(Constants.VOTE)){
+                findViewById(R.id.tx_dts_vote_layout).setVisibility(View.VISIBLE);
+
+                TextView version = findViewById(R.id.tx_dts_version);
+
+                version.setText(
+                        String.format(Locale.getDefault(), "%d", parent.getInt("Version"))
+                );
+            }
+
             JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
 
             for (int i = 0; i < outputs.length(); i++) {
@@ -216,12 +230,22 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
 
-                String address = addresses.length() > 0 ? addresses.getString(0) : getString(R.string.script_bracket);
+                String scriptType = output.getString(Constants.SCRIPT_TYPE);
 
-                boolean nullScript = output.getBoolean(Constants.NULL_SCRIPT);
+                String address = addresses.length() > 0 ? addresses.getString(0) : "";
 
-                walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(nullScript ? "[null data]" : Utils.formatDecredWithComma(output.getLong("Value"))
-                        + " " + getString(R.string.dcr) + " (external)", address));
+                String amount = Utils.formatDecredWithComma(output.getLong("Value")) + " " + getString(R.string.dcr) + " (external)";
+
+                switch (scriptType){
+                    case "nulldata":
+                        amount = "[null data]";
+                        address = "[script]";
+                        break;
+                    case "stakegen":
+                        address = "[stakegen]";
+                }
+
+                walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, address));
             }
 
             JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
@@ -232,8 +256,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 if (walletInputIndices.indexOf(i) != -1) {
                     continue;
                 }
-                walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(Utils.formatDecredWithComma(input.getLong("AmountIn"))
-                        + " " + getString(R.string.dcr) + " (external)", input.getString("PreviousTransactionHash")));
+
+                String amount = Utils.formatDecredWithComma(input.getLong(Constants.AMOUNT_IN))
+                        + " " + getString(R.string.dcr) + " (external)";
+                String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
+
+                if(hash.equals("0000000000000000000000000000000000000000000000000000000000000000")){
+                    hash = "Stakebase: 0000";
+                }
+
+                walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, hash));
             }
 
             TransactionInfoAdapter inputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletInput);

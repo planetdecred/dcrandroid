@@ -65,7 +65,7 @@ public class Constants {
             CREDITS = "Credits",
             DEFAULT_ACCOUNT = "default_account",
             HIDE_WALLET = "hide_wallet",
-            NULL_SCRIPT = "NullScript",
+            SCRIPT_TYPE = "ScriptType",
             PREVIOUS_TRANSACTION_HASH = "PreviousTransactionHash",
             PREVIOUS_TRANSACTION_INDEX = "PreviousTransactionIndex",
             SYNCED = "synced",
