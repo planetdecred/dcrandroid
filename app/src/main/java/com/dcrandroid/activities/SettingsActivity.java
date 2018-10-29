@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dcrandroid.BuildConfig;
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.StakeyDialog;
@@ -23,9 +22,6 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import mobilewallet.BlockScanResponse;
 
@@ -61,22 +57,19 @@ public class SettingsActivity extends AppCompatActivity {
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-            Date buildTime = BuildConfig.buildTime;
-            String result = formatter.format(buildTime);
-            buildDate.setSummary(result);
+            buildDate.setSummary(BuildConfig.VERSION_NAME);
 
             ListPreference currencyConversion = (ListPreference) findPreference(Constants.CURRENCY_CONVERSION);
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
             if(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 1){
-                remoteNodeCertificate.setEnabled(true);
-                remoteNodeAddress.setEnabled(true);
-                peerAddress.setEnabled(false);
+                remoteNodeCertificate.setVisible(true);
+                remoteNodeAddress.setVisible(true);
+                peerAddress.setVisible(false);
                 rescanBlocks.setEnabled(true);
             }else {
-                remoteNodeCertificate.setEnabled(false);
-                remoteNodeAddress.setEnabled(false);
-                peerAddress.setEnabled(true);
+                remoteNodeCertificate.setVisible(false);
+                remoteNodeAddress.setVisible(false);
+                peerAddress.setVisible(true);
                 rescanBlocks.setEnabled(false);
             }
 
@@ -86,14 +79,14 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int i = Integer.valueOf((String)newValue);
                     if(i == 0){
-                        peerAddress.setEnabled(true);
-                        remoteNodeAddress.setEnabled(false);
-                        remoteNodeCertificate.setEnabled(false);
+                        peerAddress.setVisible(true);
+                        remoteNodeAddress.setVisible(false);
+                        remoteNodeCertificate.setVisible(false);
                         rescanBlocks.setEnabled(false);
                     }else{
-                        peerAddress.setEnabled(false);
-                        remoteNodeAddress.setEnabled(true);
-                        remoteNodeCertificate.setEnabled(true);
+                        peerAddress.setVisible(false);
+                        remoteNodeAddress.setVisible(true);
+                        remoteNodeCertificate.setVisible(true);
                         rescanBlocks.setEnabled(true);
                     }
                     preference.setSummary(getResources().getStringArray(R.array.network_modes)[i]);
@@ -190,8 +183,7 @@ public class SettingsActivity extends AppCompatActivity {
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    MainApplication application = (MainApplication) getActivity().getApplication();
-                    String logDir = application.isTestNet() ? "/dcrwallet/logs/testnet3/dcrwallet.log" : "/dcrwallet/logs/mainnet/dcrwallet.log";
+                    String logDir = BuildConfig.IS_TESTNET ? "/dcrwallet/logs/testnet3/dcrwallet.log" : "/dcrwallet/logs/mainnet/dcrwallet.log";
 
                     Intent i = new Intent(getActivity(), LogViewer.class);
                     i.putExtra("log_path", getContext().getFilesDir() + logDir);
@@ -201,13 +193,17 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            findPreference("crash").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    float a = 0/0;
-                    return true;
-                }
-            });
+            if(BuildConfig.IS_TESTNET) {
+                findPreference("crash").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        float a = 0 / 0;
+                        return true;
+                    }
+                });
+            }else{
+                findPreference("crash").setVisible(false);
+            }
 
             currencyConversion.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

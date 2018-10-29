@@ -3,25 +3,52 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.dcrandroid"
+        applicationId "com.decred.dcrandroid"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "alpha test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+
     lintOptions {
         abortOnError false
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "java.util.Date", "buildTime", "new java.util.Date(" + System.currentTimeMillis() + "L)"
         }
         debug {
-            buildConfigField "java.util.Date", "buildTime", "new java.util.Date(" + System.currentTimeMillis() + "L)"
+
+        }
+    }
+
+    flavorDimensions "nettype"
+    productFlavors {
+        net {
+            dimension "nettype"
+            versionName "testnet ${getDate()}"
+            applicationIdSuffix ".testnet"
+            buildConfigField("boolean", "IS_TESTNET", "true")
+            resValue "string", "app_name", "Decred Wallet Testnet"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_testnet",
+                    appIconRound: "@mipmap/ic_launcher_round_testnet"
+            ]
+        }
+
+        mainnet {
+            dimension "nettype"
+            versionName "mainnet ${getDate()}"
+            applicationIdSuffix ".mainnet"
+            buildConfigField("boolean", "IS_TESTNET", "false")
+            resValue "string", "app_name", "Decred Wallet"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_mainnet",
+                    appIconRound: "@mipmap/ic_launcher_round_mainnet"
+            ]
         }
     }
 }
@@ -54,6 +81,10 @@ dependencies {
     }
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+def getDate() {
+    return new Date().format('yyyy-MM-dd')
 }
 
 apply plugin: 'kotlin-android'

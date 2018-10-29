@@ -1,7 +1,6 @@
 package com.dcrandroid.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Balance;
@@ -168,9 +166,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
 
         // HD Path
 
-        MainApplication application = (MainApplication) context.getApplicationContext();
-
-        holder.hdPath.setText(account.getHDPath(application.isTestNet()));
+        holder.hdPath.setText(account.getHDPath());
 
         holder.keys.setText(
                 String.format(Locale.getDefault(), "%d %s, %d %s, %d %s", account.getExternalKeyCount(), context.getString(R.string.external),

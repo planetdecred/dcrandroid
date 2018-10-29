@@ -1,6 +1,5 @@
 <resources>
     <!--General-->
-    <string name="app_name" translatable="false">Decred Wallet</string>
     <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
     application to stop. Please help us fix this by sending us your device specification and app log,
