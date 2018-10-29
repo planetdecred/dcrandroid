@@ -331,7 +331,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     startTransaction(pass)
                     })
 
-
+        transactionDialog.setCancelable(true)
         transactionDialog.show()
     }
 
