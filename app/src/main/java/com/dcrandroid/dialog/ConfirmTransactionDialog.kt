@@ -101,12 +101,12 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
     private val passphraseTextWatcher: TextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            if(passphrase_input.text.isNotEmpty()) {
-                btn_positive.isEnabled = true
-                btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.ButtonColor))
-            } else {
+            if(passphrase_input.text.isNullOrEmpty()) {
                 btn_positive.isEnabled = false
-                btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.greyViewDivider))
+                btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.lightGreyBackgroundColor))
+            } else {
+                btn_positive.isEnabled = true
+                btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.blue))
             }
         }
 
