@@ -23,8 +23,8 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
@@ -271,8 +271,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(getActivity() == null || getContext() == null){
                 return;
             }
-            MainApplication application = (MainApplication) getActivity().getApplication();
-            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+            String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
             File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
@@ -291,8 +290,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(getActivity() == null || getContext() == null){
                 return;
             }
-            MainApplication application = (MainApplication) getActivity().getApplication();
-            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+            String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
             File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();

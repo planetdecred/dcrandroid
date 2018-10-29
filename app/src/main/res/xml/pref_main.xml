@@ -40,13 +40,11 @@
             />
         <EditTextPreference
             android:key="@string/remote_node_address"
-            android:enabled="false"
             android:title="@string/server_address"
             />
         <EditTextPreference
             android:key="@string/key_connection_certificate"
             android:inputType="textMultiLine"
-            android:enabled="false"
             android:scrollbars="vertical"
             android:gravity="top|left"
             android:summary="@string/summary_paste_certificate"

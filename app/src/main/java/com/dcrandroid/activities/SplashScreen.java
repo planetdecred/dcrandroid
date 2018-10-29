@@ -8,12 +8,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
@@ -80,11 +79,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     private void startup(){
-        MainApplication application = (MainApplication) getApplication();
-
         constants = DcrConstants.getInstance();
 
-        String netType = application.isTestNet() ? "testnet3" : "mainnet";
+        String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
         String homeDir = getFilesDir()+"/wallet";
 
@@ -94,17 +91,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
         String walletDB;
 
-        if(application.isTestNet()){
+        if(BuildConfig.IS_TESTNET){
             walletDB = "/testnet3/wallet.db";
         }else{
             walletDB = "/mainnet/wallet.db";
         }
 
-        System.out.println("net type: "+ netType+ " db: "+walletDB);
-
         File f = new File(homeDir, walletDB);
         if(!f.exists()){
-            System.out.println("Doesn't exists: "+ f.getAbsolutePath());
             loadThread = new Thread(){
                 public void run(){
                     try{

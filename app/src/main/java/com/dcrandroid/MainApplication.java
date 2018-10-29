@@ -22,12 +22,6 @@ public class MainApplication extends Application {
 
     private static int networkMode;
 
-    private static boolean TESTNET = true;
-
-    public boolean isTestNet(){
-        return TESTNET;
-    }
-
     public int getNetworkMode(){
         return networkMode;
     }
@@ -39,10 +33,12 @@ public class MainApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        try {
-            ACRA.init(this);
-        }catch (Exception e){
-            e.printStackTrace();
+        if (BuildConfig.IS_TESTNET) {
+            try {
+                ACRA.init(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

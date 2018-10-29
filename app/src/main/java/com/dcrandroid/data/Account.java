@@ -1,5 +1,7 @@
 package com.dcrandroid.data;
 
+import com.dcrandroid.BuildConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,8 +69,8 @@ public class Account implements Serializable{
         this.accountNumber = accountNumber;
     }
 
-    public String getHDPath(boolean isTestNet) {
-        return (isTestNet ? Constants.TESTNET_HD_PATH : Constants.MAINNET_HD_PATH) + accountNumber + "'";
+    public String getHDPath() {
+        return (BuildConfig.IS_TESTNET ? Constants.TESTNET_HD_PATH : Constants.MAINNET_HD_PATH) + accountNumber + "'";
     }
 
     public void setExternalKeyCount(int externalKeyCount) {

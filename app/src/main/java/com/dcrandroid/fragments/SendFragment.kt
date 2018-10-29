@@ -2,7 +2,6 @@ package com.dcrandroid.fragments
 
 import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -33,8 +32,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.widget.AdapterView
 import android.widget.EditText
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
-import com.dcrandroid.MainApplication
 import com.dcrandroid.data.Account
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
@@ -298,10 +297,9 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         return
                     }
 
-                    val application = activity!!.application as MainApplication
-                    if(returnString.startsWith("T") && application.isTestNet){
+                    if(returnString.startsWith("T") && BuildConfig.IS_TESTNET){
                         send_dcr_address.setText(returnString)
-                    }else if(returnString.startsWith("D") && !application.isTestNet){
+                    }else if(returnString.startsWith("D") && !BuildConfig.IS_TESTNET){
                         send_dcr_address.setText(returnString)
                     } else{
                         Toast.makeText(activity!!.applicationContext, R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()

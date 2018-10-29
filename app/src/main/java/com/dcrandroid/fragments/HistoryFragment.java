@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dcrandroid.MainApplication;
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.TransactionDetailsActivity;
 import com.dcrandroid.adapter.TransactionAdapter;
@@ -189,8 +188,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             if(getActivity() == null || getContext() == null){
                 return;
             }
-            MainApplication application = (MainApplication) getActivity().getApplication();
-            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+            String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
             File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
@@ -210,8 +208,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             if(getActivity() == null || getContext() == null){
                 return;
             }
-            MainApplication application = (MainApplication) getActivity().getApplication();
-            String netType = application.isTestNet() ? "testnet3" : "mainnet";
+            String netType =  BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
             File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
             path.mkdirs();
