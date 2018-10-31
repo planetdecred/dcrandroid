@@ -1283,7 +1283,7 @@ func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
 	return string(result), nil
 }
 
-func (lw *LibWallet) NextAccount(accountName string, privPass []byte) bool {
+func (lw *LibWallet) NextAccount(accountName string, privPass []byte) error {
 	lock := make(chan time.Time, 1)
 	defer func() {
 		for i := range privPass {
@@ -1294,15 +1294,15 @@ func (lw *LibWallet) NextAccount(accountName string, privPass []byte) bool {
 	err := lw.wallet.Unlock(privPass, lock)
 	if err != nil {
 		log.Error(err)
-		return false
+		return errors.New(ErrInvalidPassphrase)
 	}
 
 	_, err = lw.wallet.NextAccount(accountName)
 	if err != nil {
 		log.Error(err)
-		return false
+		return err
 	}
-	return true
+	return nil
 }
 
 func (lw *LibWallet) RenameAccount(accountNumber int32, newName string) error {
