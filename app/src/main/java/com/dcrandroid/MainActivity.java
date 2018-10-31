@@ -131,6 +131,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         totalBalance = findViewById(R.id.tv_total_balance);
         syncIndicator = findViewById(R.id.iv_sync_indicator);
 
+        if(BuildConfig.IS_TESTNET){
+            findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
+        }
+
         mListView = findViewById(R.id.lv_nav);
 
         String[] itemTitles = getResources().getStringArray(R.array.nav_list_titles);
