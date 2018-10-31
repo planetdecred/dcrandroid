@@ -385,6 +385,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(accounts!![destination_account_spinner.selectedItemPosition])
         transactionDialog.setCancelable(true)
+        transactionDialog.setCanceledOnTouchOutside(false)
         transactionDialog.show()
     }
 
@@ -433,24 +434,27 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             return
         }
 
-        InfoDialog(context)
-                .setDialogTitle(getString(R.string.transaction_was_successful))
-                .setMessage("${getString(R.string.hash_colon)}\n$txHash")
-                .setIcon(R.drawable.np_amount_withdrawal)
-                .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
-                .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
-                .setPositiveButton(getString(R.string.close_cap), null)
-                .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ ->
-                    run {
-                        if (activity != null && activity is MainActivity) {
-                            val mainActivity = activity as MainActivity
-                            mainActivity.displayOverview()
-                        }
-                    }
-                })
-                .setMessageClickListener(View.OnClickListener {
+         val dialog = InfoDialog(context)
+                 .setDialogTitle(getString(R.string.transaction_was_successful))
+                 .setMessage("${getString(R.string.hash_colon)}\n$txHash")
+                 .setIcon(R.drawable.np_amount_withdrawal)
+                 .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
+                 .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+                 .setPositiveButton(getString(R.string.close_cap), null)
+                 .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ -> run {
+                     if (activity != null && activity is MainActivity) {
+                         val mainActivity = activity as MainActivity
+                         mainActivity.displayOverview()
+                     }
+                 }})
+                 .setMessageClickListener(View.OnClickListener {
                     Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))
-                }).show()
+                })
+
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false)
+
+        dialog.show()
 
         amount_dcr.text = null
 
