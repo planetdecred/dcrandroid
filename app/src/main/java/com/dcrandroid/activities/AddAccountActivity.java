@@ -54,18 +54,17 @@ public class AddAccountActivity extends AppCompatActivity {
                 final String name = accountName.getText().toString().trim();
                 if (name.equals("")) {
                     Toast.makeText(AddAccountActivity.this, R.string.input_account_name, Toast.LENGTH_SHORT).show();
-                }
-
-                if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
-                    if (privatePassphrase.equals("")) {
-                        Toast.makeText(AddAccountActivity.this, R.string.input_private_phrase, Toast.LENGTH_SHORT).show();
-                        return;
+                } else{
+                    if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                        if (privatePassphrase.equals("")) {
+                            Toast.makeText(AddAccountActivity.this, R.string.input_private_phrase, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        createAccount(name, privatePassphrase.getBytes());
+                    }else{
+                        Intent enterPinIntent = new Intent(AddAccountActivity.this, EnterPassCode.class);
+                        startActivityForResult(enterPinIntent, PASSCODE_REQUEST_CODE);
                     }
-
-                    createAccount(name, privatePassphrase.getBytes());
-                } else {
-                    Intent enterPinIntent = new Intent(AddAccountActivity.this, EnterPassCode.class);
-                    startActivityForResult(enterPinIntent, PASSCODE_REQUEST_CODE);
                 }
             }
         });
