@@ -226,7 +226,17 @@ public class SettingsActivity extends AppCompatActivity {
                 findPreference("crash").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        float a = 0 / 0;
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Confirm Crash")
+                                .setMessage("Are you sure you want to proceed with crash?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        float a = 0 / 0;
+                                    }
+                                }).setNegativeButton(android.R.string.no, null)
+                                .show();
+
                         return true;
                     }
                 });
