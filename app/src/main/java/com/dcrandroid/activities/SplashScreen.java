@@ -56,6 +56,11 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
         util = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);
+
+        if(BuildConfig.IS_TESTNET){
+            findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
+        }
+
         imgAnim = findViewById(R.id.splashscreen_icon);
 
         imgAnim.setOnClickListener(new DoubleClickListener() {
