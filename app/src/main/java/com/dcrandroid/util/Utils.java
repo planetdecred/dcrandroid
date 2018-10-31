@@ -310,7 +310,7 @@ public class Utils {
         } else {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
                     context.getSystemService(Context.CLIPBOARD_SERVICE);
-            if(clipboard != null) return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+            if(clipboard != null && clipboard.hasPrimaryClip()) return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
         }
         return "";
     }

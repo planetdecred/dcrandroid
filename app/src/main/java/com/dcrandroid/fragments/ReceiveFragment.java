@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
@@ -59,7 +61,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         ReceiveContainer = rootView.findViewById(R.id.receive_container);
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
-        Button buttonGenerate = rootView.findViewById(R.id.btn_gen_new_addr);
+        //Button buttonGenerate = rootView.findViewById(R.id.btn_gen_new_addr);
         final Spinner accountSpinner = rootView.findViewById(R.id.recieve_dropdown);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
@@ -73,10 +75,20 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
 
         imageView.setOnTouchListener(this);
 
-        buttonGenerate.setOnClickListener(new View.OnClickListener() {
+        MainActivity.generateAddressMenu.setVisible(true);
+
+        MainActivity.generateAddressMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public void onClick(View view) {
-                getAddress(accountNumbers.get(accountSpinner.getSelectedItemPosition()));
+            public boolean onMenuItemClick(MenuItem item) {
+                try {
+                    int position = accountSpinner.getSelectedItemPosition();
+                    String recentAddress = constants.wallet.addressForAccount(accountSpinner.getSelectedItemPosition());
+                    preferenceUtil.set(Constants.RECENT_ADDRESS + accountNumbers.get(position), recentAddress);
+                    setAddress(recentAddress);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return true;
             }
         });
 
@@ -84,6 +96,13 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         prepareAccounts();
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.generateAddressMenu.setVisible(false);
+        MainActivity.generateAddressMenu.setOnMenuItemClickListener(null);
     }
 
     private void prepareAccounts(){
@@ -98,32 +117,38 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                 categories.add(i, accounts.get(i).getAccountName());
                 accountNumbers.add(accounts.get(i).getAccountNumber());
             }
-            getAddress(0);
             dataAdapter.notifyDataSetChanged();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private void getAddress(final int accountNumber){
+    private void setAddress(String accountAddress){
         try {
-            final String receiveAddress = constants.wallet.addressForAccount(accountNumber);
-            preferenceUtil.set(Constants.RECENT_ADDRESS,receiveAddress);
-            address.setText(receiveAddress);
-            imageView.setImageBitmap(QRCode.from("decred:"+receiveAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
+            address.setText(accountAddress);
+            imageView.setImageBitmap(QRCode.from("decred:"+accountAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
         } catch (Exception e) {
             e.printStackTrace();
             Looper.prepare();
-            Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occurred_getting_address)+accountNumber,Toast.LENGTH_SHORT).show();
+            Toast.makeText(ReceiveFragment.this.getContext(),getString(R.string.error_occurred_getting_address),Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(!firstTrial){
-            getAddress(accountNumbers.get(position));
+        String recentAddress = preferenceUtil.get(Constants.RECENT_ADDRESS + accountNumbers.get(position));
+        if (recentAddress.equals(Constants.EMPTY_STRING)){
+            try {
+                recentAddress = constants.wallet.addressForAccount( accountNumbers.get(position));
+                preferenceUtil.set(Constants.RECENT_ADDRESS + accountNumbers.get(position), recentAddress);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
-        firstTrial = false;
+
+        setAddress(recentAddress);
     }
 
     @Override

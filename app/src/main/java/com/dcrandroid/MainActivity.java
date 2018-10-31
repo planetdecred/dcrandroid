@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -72,7 +71,6 @@ import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 
 import mobilewallet.BlockNotificationError;
 import mobilewallet.BlockScanResponse;
@@ -82,8 +80,8 @@ import mobilewallet.TransactionListener;
 public class MainActivity extends AppCompatActivity implements TransactionListener, BlockScanResponse,
         BlockNotificationError, SpvSyncResponse {
 
-    public static MenuItem menuOpen;
-    public int pageID, menuAdd = 0;
+    public static MenuItem addAccountMenu, generateAddressMenu;
+    public int pageID;
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView rescanImage, stopScan, syncIndicator;
     private Fragment fragment;
@@ -451,10 +449,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_page, menu);
         super.onCreateOptionsMenu(menu);
-        if (menuAdd != 1) {
-            menuOpen = menu.findItem(R.id.action_add);
-            menuOpen.setVisible(false);
-        }
+        addAccountMenu = menu.findItem(R.id.action_add);
+        generateAddressMenu = menu.findItem(R.id.generate_address);
+        generateAddressMenu.setVisible(false);
+        addAccountMenu.setVisible(false);
         return true;
     }
 
