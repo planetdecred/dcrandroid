@@ -108,7 +108,7 @@ public class AccountsFragment extends Fragment {
         getActivity().setTitle(getString(R.string.accounts));
         util = new PreferenceUtil(getActivity());
 
-        MainActivity.menuOpen.setVisible(true);
+        MainActivity.addAccountMenu.setVisible(true);
         accountAdapter = new AccountAdapter(accounts, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -127,7 +127,7 @@ public class AccountsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        MainActivity.menuOpen.setVisible(false);
+        MainActivity.addAccountMenu.setVisible(false);
     }
 
     @Override

@@ -78,6 +78,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -115,6 +116,7 @@
                 android:textSize="16sp"
                 tools:text="test text"
                 />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,27 +124,6 @@
                 android:gravity="center"
                 android:textColor="@color/blueGrayFirstTextColor54pc"
                 android:layout_marginTop="3dp"/>
-
-            <Button
-                android:id="@+id/btn_gen_new_addr"
-                android:layout_width="209dp"
-                android:layout_height="36dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/btn_shape"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingStart="8dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular"
-                android:text="@string/generate_new_address"
-                android:textAllCaps="true"
-                android:textColor="@color/whiteButtonTextColor"
-                android:visibility="visible" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

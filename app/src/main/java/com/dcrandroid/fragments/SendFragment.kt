@@ -87,11 +87,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         get() {
             var destAddress = send_dcr_address.text.toString()
             if (destAddress == Constants.EMPTY_STRING) {
-                destAddress = util!!.get(Constants.RECENT_ADDRESS)
+                destAddress = util!!.get(Constants.RECENT_ADDRESS + accountNumbers[send_account_spinner.selectedItemPosition])
                 if (destAddress == Constants.EMPTY_STRING) {
                     try {
                         destAddress = constants.wallet.addressForAccount(0)
-                        util!!.set(Constants.RECENT_ADDRESS, destAddress)
+                        util!!.set(Constants.RECENT_ADDRESS + accountNumbers[send_account_spinner.selectedItemPosition], destAddress)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
