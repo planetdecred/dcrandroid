@@ -38,6 +38,17 @@
             tools:text="to TsVAhUwocTvXmgBmQgE2CwSLPHgjaXEbR9B" />
 
         <TextView
+            android:id="@+id/account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@color/blueGrayFirstTextColor"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="(TEST)" />
+
+        <TextView
             android:id="@+id/fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
