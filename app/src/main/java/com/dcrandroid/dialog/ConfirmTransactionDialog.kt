@@ -27,6 +27,8 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
     private var address: CharSequence? = null
 
+    private var account: CharSequence? = null
+
     private var fee: Long? = null
 
     @SuppressLint("SetTextI18n")
@@ -47,6 +49,12 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
         val tvAddress = findViewById<TextView>(R.id.address)
         tvAddress.text = "${context.getString(R.string.to)} $address"
+
+        val tvAccount = findViewById<TextView>(R.id.account)
+        if (!account.isNullOrBlank()) {
+            tvAccount.visibility = View.GONE
+            tvAccount.text = "($account)"
+        }
 
         val tvFee = findViewById<TextView>(R.id.fee)
 
@@ -79,6 +87,11 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
     fun setAddress(address: String): ConfirmTransactionDialog {
         this.address = address
+        return this
+    }
+
+    fun setAccount(account: String): ConfirmTransactionDialog {
+        this.account = account
         return this
     }
 

@@ -116,6 +116,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         dataAdapter = ArrayAdapter(requireActivity().applicationContext, R.layout.spinner_list_item_1, accounts)
         dataAdapter!!.setDropDownViewResource(R.layout.dropdown_item_1)
         send_account_spinner.adapter = dataAdapter
+        destination_account_spinner.adapter = dataAdapter
 
         if (Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
             GetExchangeRate(this).execute()
@@ -152,6 +153,20 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         send_btn.setOnClickListener { showConfirmTransactionDialog() }
 
+        destination_account_container.visibility = View.GONE
+        divider2.visibility = View.GONE
+        toggle.setOnClickListener {
+            if(destination_address_container.visibility == View.VISIBLE){
+                destination_address_container.visibility = View.GONE
+                destination_account_container.visibility = View.VISIBLE
+                tvDestinationError.text = ""
+            }else{
+                destination_address_container.visibility = View.VISIBLE
+                destination_account_container.visibility = View.GONE
+                send_dcr_address.text.clear()
+            }
+        }
+
         prepareAccounts()
 
         send_dcr_address.addTextChangedListener(addressWatcher)
@@ -159,6 +174,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         amount_usd.addTextChangedListener(exchangeWatcher)
         amount_dcr.addTextChangedListener(amountWatcher)
         send_account_spinner.onItemSelectedListener = this
+        destination_account_spinner.onItemSelectedListener = this
     }
 
     override fun onResume() {
@@ -178,6 +194,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (isSendAll) {
             send_max.performClick()
             return
+        }
+        if (destination_account_container.visibility == View.VISIBLE){
+            val receiveAddress = constants.wallet.addressForAccount(destination_account_spinner.selectedItemPosition)
+            util!!.set(Constants.RECENT_ADDRESS, receiveAddress)
+            send_dcr_address.setText(receiveAddress)
         }
         constructTransaction()
     }
@@ -355,6 +376,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         })
 
+        if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(accounts!![destination_account_spinner.selectedItemPosition])
         transactionDialog.setCancelable(true)
         transactionDialog.show()
     }

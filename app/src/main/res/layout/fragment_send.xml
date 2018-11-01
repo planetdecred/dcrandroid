@@ -31,19 +31,30 @@
             app:fontFamily="@font/source_sans_pro_regular"
             android:textSize="18sp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
             android:text="@string/qr_code_help_text" />
+
+        <ImageView
+            android:id="@+id/toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:padding="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:srcCompat="@drawable/ic_unfold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
             android:paddingTop="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="@string/from_colon"
@@ -69,12 +80,56 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGreyBackgroundColor" />
+
+        <LinearLayout
+            android:id="@+id/destination_account_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                app:fontFamily="@font/source_sans_pro_regular"
+                android:gravity="end"
+                android:text="@string/to_colon"
+                android:textColor="@color/blueGrayFirstTextColor87pc"
+                android:textSize="20sp"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="1dp"
+                >
+                <Spinner
+                    android:id="@+id/destination_account_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top">
+                </Spinner>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/lightGreyBackgroundColor" />
 
 
         <LinearLayout
+            android:id="@+id/destination_address_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

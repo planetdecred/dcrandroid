@@ -190,6 +190,7 @@
     <string name="sending_decred">Sending Decred</string>
     <string name="fee_cap">FEE</string>
     <string name="from_colon">From:</string>
+    <string name="to_colon">To:</string>
     <string name="confirmed">Confirmed</string>
     <string name="destination_address">Destination Address</string>
     <string name="estimate_size">Estimate Size:</string>
