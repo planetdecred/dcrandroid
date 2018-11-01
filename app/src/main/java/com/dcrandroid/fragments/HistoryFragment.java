@@ -47,10 +47,8 @@ import mobilewallet.GetTransactionsResponse;
 
 public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
-    public static final String TAG = "HistoryFragment";
-
     private List<TransactionItem> transactionList = new ArrayList<>();
-    private ArrayList<TransactionItem> transactions = new ArrayList<>();
+    private List<TransactionItem> fixedTransactionList = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
     private TextView refresh;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -118,7 +116,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -161,11 +158,11 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         loadTransactions();
 
-        if(transactionList.size() == 0){
+        if (transactionList.size() == 0) {
             recyclerView.setVisibility(View.GONE);
         }
-        
-        if(!constants.synced){
+
+        if (!constants.synced) {
             refresh.setText(R.string.no_transactions_sync);
             swipeRefreshLayout.setRefreshing(false);
             return;
@@ -185,14 +182,14 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public void saveTransactions() {
         try {
-            if(getActivity() == null || getContext() == null){
+            if (getActivity() == null || getContext() == null) {
                 return;
             }
             String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
+            File path = new File(getContext().getFilesDir() + File.pathSeparator + netType + File.pathSeparator + "savedata/");
             path.mkdirs();
-            File file = new File(path,"history_transactions");
+            File file = new File(path, "history_transactions");
             file.createNewFile();
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
@@ -205,12 +202,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public void loadTransactions() {
         try {
-            if(getActivity() == null || getContext() == null){
+            if (getActivity() == null || getContext() == null) {
                 return;
             }
-            String netType =  BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
+            String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
+            File path = new File(getContext().getFilesDir() + File.pathSeparator + netType + File.pathSeparator + "savedata/");
             path.mkdirs();
             File file = new File(path, "history_transactions");
             if (file.exists()) {
@@ -219,13 +216,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 transactionList.addAll(temp);
                 TransactionsResponse.TransactionItem latestTx = Collections.min(temp, new TransactionComparator.MinConfirmationSort());
                 latestTransactionHeight = latestTx.getHeight() + 1;
-                transactionAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(transactionList.size() == 0){
+        if (transactionList.size() == 0) {
             refresh.setText(R.string.no_transactions);
             recyclerView.setVisibility(View.GONE);
         } else {
@@ -249,12 +245,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 } else {
-                    ArrayList<TransactionItem> transactions = response.transactions;
-                    Collections.sort(transactions, new TransactionComparator.TimestampSort());
-                    TransactionsResponse.TransactionItem latestTx = Collections.min(transactions, new TransactionComparator.MinConfirmationSort());
+                    fixedTransactionList = response.transactions;
+                    Collections.sort(fixedTransactionList, new TransactionComparator.TimestampSort());
+                    TransactionsResponse.TransactionItem latestTx = Collections.min(fixedTransactionList, new TransactionComparator.MinConfirmationSort());
                     latestTransactionHeight = latestTx.getHeight() + 1;
                     transactionList.clear();
-                    transactionList.addAll(0, transactions);
+                    transactionList.addAll(0, fixedTransactionList);
                     recyclerView.setVisibility(View.VISIBLE);
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
@@ -268,7 +264,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        if(!transactionTypeSelected.equals("")) {
+        if(!transactionTypeSelected.equals("")){
             swipeRefreshLayout.setRefreshing(false);
         } else {
             prepareHistoryData();
@@ -335,36 +331,38 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 switch (position) {
                     case 0:
                         transactionTypeSelected = "";
+                        transactionList.clear();
                         onRefresh();
+                        transactionAdapter.notifyDataSetChanged();
                         break;
                     case 1:
                         transactionTypeSelected = "regular";
-                        TransactionItemSorter.itemSorter(transactionList, transactions, transactionTypeSelected);
+                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
                         transactionAdapter.notifyDataSetChanged();
                         break;
                     case 2:
                         transactionTypeSelected = "0";
-                        TransactionItemSorter.itemSorter(transactionList, transactions, transactionTypeSelected);
+                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
                         transactionAdapter.notifyDataSetChanged();
                         break;
                     case 3:
                         transactionTypeSelected = "1";
-                        TransactionItemSorter.itemSorter(transactionList, transactions, transactionTypeSelected);
+                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
                         transactionAdapter.notifyDataSetChanged();
                         break;
                     case 4:
                         transactionTypeSelected = "ticket";
-                        TransactionItemSorter.itemSorter(transactionList, transactions, transactionTypeSelected);
+                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
                         transactionAdapter.notifyDataSetChanged();
                         break;
                     case 5:
                         transactionTypeSelected = "vote";
-                        TransactionItemSorter.itemSorter(transactionList, transactions, transactionTypeSelected);
+                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
                         transactionAdapter.notifyDataSetChanged();
                         break;
                     case 6:
                         transactionTypeSelected = "revoke";
-                        TransactionItemSorter.itemSorter(transactionList, transactions, transactionTypeSelected);
+                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
                         transactionAdapter.notifyDataSetChanged();
                         break;
                 }

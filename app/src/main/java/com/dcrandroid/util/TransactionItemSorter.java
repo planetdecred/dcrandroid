@@ -1,7 +1,5 @@
 package com.dcrandroid.util;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +9,14 @@ public class TransactionItemSorter {
     private static int i;
     private static List<TransactionsResponse.TransactionItem> mainTransactionList = new ArrayList<>();
 
-    public static void itemSorter(List<TransactionsResponse.TransactionItem> transactionItemList, List<TransactionsResponse.TransactionItem> temp, String type) {
+    public static void itemSorter(List<TransactionsResponse.TransactionItem> sortedTransactionList, List<TransactionsResponse.TransactionItem> fixedTransactionList, String type) {
 
         mainTransactionList.clear();
-        mainTransactionList.addAll(transactionItemList);
+        mainTransactionList.addAll(sortedTransactionList);
 
-        if (mainTransactionList.size() != temp.size()) {
+        if (mainTransactionList.size() != fixedTransactionList.size()) {
             mainTransactionList.clear();
-            mainTransactionList.addAll(temp);
+            mainTransactionList.addAll(fixedTransactionList);
         }
 
 
@@ -27,12 +25,13 @@ public class TransactionItemSorter {
             sortBy(type);
         }
 
-        transactionItemList.clear();
-        transactionItemList.addAll(mainTransactionList);
+        sortedTransactionList.clear();
+        sortedTransactionList.addAll(mainTransactionList);
 
     }
 
     private static void sortBy(String type) {
+
         if (type.equalsIgnoreCase("regular")) {
             if (!itemA.type.equalsIgnoreCase(type)) {
                 mainTransactionList.remove(itemA);
