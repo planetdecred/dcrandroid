@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="280dp"
-    android:layout_height="259dp"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
@@ -13,13 +13,18 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+       >
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/icon"
             android:layout_width="60dp"
             android:visibility="visible"
-            android:layout_height="60dp" />
+            android:layout_height="60dp"
+            />
 
         <TextView
             android:id="@+id/title"
@@ -37,6 +42,7 @@
             android:layout_marginTop="13dp"
             android:textColor="@color/blueGrayFirstTextColor"
             android:textSize="16sp"
+            tools:text="HASH: TsbGZiznn5EBcQEBfjmhuFB56XBkxAcTtah"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
     </LinearLayout>
