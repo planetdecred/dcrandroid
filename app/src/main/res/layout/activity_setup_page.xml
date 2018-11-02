@@ -1,117 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:gravity="center"
-    android:background="@color/colorPrimary">
-    <LinearLayout
+    android:orientation="vertical">
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginTop="16dp"
-        android:paddingTop="32dp"
-       >
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/decred_logo"
-        />
+        android:paddingTop="32dp">
+
+        <ImageView
+            android:id="@+id/ivDecredLogo"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/decred_logo" />
+
         <LinearLayout
+            android:id="@+id/llDecredText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
+            android:layout_below="@id/ivDecredLogo"
             android:layout_marginBottom="18dp"
-            >
-            <TextView
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center"
                 android:text="de"
                 android:textColor="@color/darkBlueTextColor"
-                android:gravity="center"
                 android:textSize="30sp"
-                android:textStyle="normal"
-                android:layout_gravity="bottom"/>
+                android:textStyle="normal" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center"
                 android:text="CRED"
                 android:textColor="@color/darkBlueTextColor"
-                android:gravity="center"
-                android:layout_gravity="bottom"
                 android:textSize="23sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvWallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llDecredText"
             android:layout_margin="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wallet"
-            android:textColor="@color/darkBlueTextColor"
             android:gravity="center"
+            android:text="@string/wallet"
+            android:textColor="@color/darkBlueTextColor"
             android:textSize="20sp"
-            app:fontFamily="@font/source_sans_pro_semibold"
-            android:textStyle="normal"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
-        android:textColor="@color/blueGraySecondTextColor"
-        android:layout_marginBottom="20dp"
-        android:lineSpacingExtra="3sp"
-        android:textSize="15sp"
-        android:gravity="center"
-        />
-        <Button
-            android:layout_marginTop="24dp"
-            android:id="@+id/button_create_wallet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="80dp"
-            android:background="@drawable/btn_shape"
-            android:layout_gravity="center"
-            android:text="@string/create_wallet"
-            android:textColor="@color/white" />
+            android:textStyle="normal"
+            app:fontFamily="@font/source_sans_pro_semibold" />
 
-        <Button
-            android:id="@+id/button_retrieve_wallet"
+        <TextView
+            android:id="@+id/tvCreateOrRecoverWallet"
             android:layout_width="match_parent"
-            android:layout_marginRight="80dp"
-            android:layout_marginLeft="80dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_shape2"
-            android:text="@string/recover_wallet"
-            android:textColor="@color/white"
-            android:layout_marginTop="16dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/build_date"
-        android:layout_marginEnd="3dp"
-        android:layout_marginRight="3dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:id="@+id/build_date"
-        android:gravity="bottom"
-        />
-    </LinearLayout>
+            android:layout_below="@id/tvWallet"
+            android:gravity="center"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
+            android:textColor="@color/blueGraySecondTextColor"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/llBuildDate"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <RelativeLayout
+                android:id="@+id/button_create_wallet"
+                android:layout_width="0dp"
+                android:layout_height="130dp"
+                android:layout_weight="42.5"
+                android:background="@drawable/smoothed_corners"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <ImageView
+                    android:layout_width="54.32dp"
+                    android:layout_height="54.32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    app:srcCompat="@drawable/img_create_wallet" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/create_a_new_wallet"
+                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textSize="15sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <RelativeLayout
+                android:id="@+id/button_retrieve_wallet"
+                android:layout_width="0dp"
+                android:layout_height="130dp"
+                android:layout_weight="42.5"
+                android:background="@drawable/smoothed_corners"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <ImageView
+                    android:layout_width="54.32dp"
+                    android:layout_height="54.32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    app:srcCompat="@drawable/img_recover_wallet" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center"
+                    android:text="@string/restore_existing_wallet"
+                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textSize="15sp"
+                    app:fontFamily="@font/source_sans_pro_regular" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llBuildDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_marginRight="3dp"
+                android:text="@string/build_date" />
+
+            <TextView
+                android:id="@+id/build_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="bottom" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

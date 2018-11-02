@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dcrandroid.BuildConfig;
@@ -20,27 +21,31 @@ import com.dcrandroid.util.Utils;
 
 public class SetupWalletActivity extends AppCompatActivity {
 
+    private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_page);
         TextView buildDate= findViewById(R.id.build_date);
-        Button createWalletBtn = findViewById(R.id.button_create_wallet);
-        Button retrieveWalletBtn = findViewById(R.id.button_retrieve_wallet);
+        RelativeLayout createWalletLl = findViewById(R.id.button_create_wallet);
+        RelativeLayout retrieveWalletLl = findViewById(R.id.button_retrieve_wallet);
 
         buildDate.setText(BuildConfig.VERSION_NAME);
 
-        createWalletBtn.setOnClickListener(new View.OnClickListener() {
+        createWalletLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(buttonClick);
                 Intent i = new Intent(SetupWalletActivity.this, SaveSeedActivity.class);
                 startActivity(i);
             }
         });
 
-        retrieveWalletBtn.setOnClickListener(new View.OnClickListener() {
+        retrieveWalletLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(buttonClick);
                 Intent i = new Intent(SetupWalletActivity.this, ConfirmSeedActivity.class)
                         .putExtra(Constants.SEED, Utils.getWordList(SetupWalletActivity.this))
                         .putExtra(Constants.RESTORE, true);
@@ -48,4 +53,5 @@ public class SetupWalletActivity extends AppCompatActivity {
             }
         });
     }
+
 }
