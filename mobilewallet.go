@@ -1041,6 +1041,15 @@ func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations in
 }
 
 func (lw *LibWallet) AddressForAccount(account int32) (string, error) {
+	addr, err := lw.wallet.CurrentAddress(uint32(account))
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+	return addr.EncodeAddress(), nil
+}
+
+func (lw *LibWallet) NextAddress(account int32) (string, error) {
 	var callOpts []wallet.NextAddressCallOption
 	callOpts = append(callOpts, wallet.WithGapPolicyWrap())
 
