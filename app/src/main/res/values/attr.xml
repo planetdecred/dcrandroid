@@ -2,7 +2,6 @@
 <resources>
     <declare-styleable name="PinView">
         <attr name="pin_size" format="dimension" />
-        <attr name="pin_count" format="integer" />
         <attr name="active_color" format="color" />
         <attr name="inactive_color" format="color" />
         <attr name="auto_space" format="boolean" />

@@ -34,17 +34,26 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         password.addTextChangedListener(passwordWatcher)
+        password.addTextChangedListener(passwordStrengthWatcher)
         verifyPassword.addTextChangedListener(passwordWatcher)
 
         verifyPassword.setOnKeyListener(this)
+
+        btn_ok.setOnClickListener {
+            if (password.text.toString() == verifyPassword.text.toString()) {
+                createWallet(password.text.toString())
+            } else {
+                Snackbar.make(it, R.string.mismatch_password, Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-        if(keyCode == KeyEvent.KEYCODE_ENTER && event!!.action == KeyEvent.ACTION_UP){
-            return if(password.text.toString() == verifyPassword.text.toString()){
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event!!.action == KeyEvent.ACTION_UP) {
+            return if (password.text.toString() == verifyPassword.text.toString()) {
                 createWallet(password.text.toString())
                 true
-            }else{
+            } else {
                 Snackbar.make(v!!, R.string.mismatch_password, Snackbar.LENGTH_SHORT).show()
                 false
             }
@@ -52,11 +61,12 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
         return false
     }
 
-    private fun createWallet(password : String){
+    private fun createWallet(password: String) {
         pd = Utils.getProgressDialog(context, false, false, "")
         Thread(Runnable {
-            try{
-                val wallet = DcrConstants.getInstance().wallet ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
+            try {
+                val wallet = DcrConstants.getInstance().wallet
+                        ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 show(getString(R.string.creating_wallet))
                 wallet.createWallet(password, seed)
                 val util = PreferenceUtil(this@PasswordFragment.context!!)
@@ -69,7 +79,7 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
                     //Finish all the activities before this
                     ActivityCompat.finishAffinity(this@PasswordFragment.activity!!)
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 activity!!.runOnUiThread {
                     if (pd!!.isShowing) {
@@ -81,15 +91,32 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
         }).start()
     }
 
-    private fun show(message: String){
-        if(activity == null){
+    private fun show(message: String) {
+        if (activity == null) {
             return
         }
         activity!!.runOnUiThread {
             pd!!.setMessage(message)
-            if (!pd!!.isShowing){
+            if (!pd!!.isShowing) {
                 pd!!.show()
             }
+        }
+    }
+
+    private val passwordStrengthWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            val progress = (Utils.getShannonEntropy(s.toString()) / 4) * 100
+            if (progress > 70) {
+                password_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_strong)
+            } else {
+                password_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_weak)
+            }
+
+            password_strength.progress = progress.toInt()
         }
     }
 
@@ -99,13 +126,13 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable) {
-            if (verifyPassword.text.toString() == ""){
+            if (verifyPassword.text.toString() == "") {
                 passwordMatch.text = ""
-            }else{
-                if(password.text.toString() != verifyPassword.text.toString()){
+            } else {
+                if (password.text.toString() != verifyPassword.text.toString()) {
                     passwordMatch.setText(R.string.mismatch_password)
                     passwordMatch.setTextColor(Color.parseColor("#FFC84E"))
-                }else{
+                } else {
                     passwordMatch.setText(R.string.password_match)
                     passwordMatch.setTextColor(Color.parseColor("#2DD8A3"))
                 }

@@ -15,11 +15,9 @@ class PinView : View {
 
     var passCodeLength: Int = 0
         set(value) {
-            field = if (value > pinCount) pinCount else value
+            field = value
             invalidate()
         }
-
-    var pinCount: Int = 0
 
     private var activeColor: Int = 0
     private var inactiveColor: Int = 0
@@ -60,8 +58,6 @@ class PinView : View {
 
         try {
             pinSize = values.getDimension(R.styleable.PinView_pin_size, resources.getDimension(R.dimen.pinview_pin_size))
-
-            pinCount = values.getInteger(R.styleable.PinView_pin_count, 4)
 
             activeColor = values.getColor(R.styleable.PinView_active_color, resources.getColor(R.color.pinview_active_color))
 
@@ -106,17 +102,17 @@ class PinView : View {
         val usableWidth = width - (pl + pr)
         val usableHeight = height - (pt + pb)
 
-        val totalPinWidth = pinSize * pinCount
+        val totalPinWidth = pinSize * passCodeLength
 
         if (autoSpace) {
-            horizontalSpacing = (pl + usableWidth - totalPinWidth) / pinCount
+            horizontalSpacing = (pl + usableWidth - totalPinWidth) / passCodeLength
         }
 
         var startX = horizontalSpacing / 2
         val startY = pt + usableHeight / 2 - pinSize / 2
         val totalContentWidth = pinSize + horizontalSpacing
 
-        for (i in 1..pinCount) {
+        for (i in 1..passCodeLength) {
             circleRect!!.left = startX
             circleRect!!.top = startY
             circleRect!!.right = startX + pinSize

@@ -35,4 +35,6 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
         setResult(Activity.RESULT_OK, data)
         finish()
     }
+
+    override fun onPinEnter(pin: String?, passCode: String) {}
 }

@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.TextView
@@ -29,8 +28,6 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
     private var address: CharSequence? = null
 
     private var fee: Long? = null
-
-    private val util = PreferenceUtil(getContext())
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +57,14 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
         tvTotal.text = "${context.getString(R.string.total)} ${Mobilewallet.amountCoin(amount!! + estFee)} DCR"
 
-        passphrase_input.addTextChangedListener(passphraseTextWatcher)
-
+        val util = PreferenceUtil(context)
+        if(util.get(Constants.PASSPHRASE_TYPE) == Constants.PIN){
+            passphrase_input.visibility = View.GONE
+            btn_positive.isEnabled = true
+            btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.blue))
+        }else{
+            passphrase_input.addTextChangedListener(passphraseTextWatcher)
+        }
     }
 
     fun setPositiveButton(listener: DialogInterface.OnClickListener?): ConfirmTransactionDialog {
@@ -84,6 +87,10 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         return this
     }
 
+    fun getPassphrase(): String{
+        return passphrase_input.text.toString()
+    }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_negative -> {
@@ -92,7 +99,6 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
             R.id.btn_positive -> {
                 dismiss()
                 if (btnPositiveClick != null) {
-                    util.set(Constants.PASSPHRASE, passphrase_input.text.toString())
                     btnPositiveClick?.onClick(this, DialogInterface.BUTTON_POSITIVE)
                 }
             }

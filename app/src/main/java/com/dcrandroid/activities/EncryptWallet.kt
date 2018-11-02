@@ -15,8 +15,7 @@ import kotlinx.android.synthetic.main.activity_enter_passphrase.*
 
 class EncryptWallet : AppCompatActivity(), View.OnClickListener {
 
-    private val pinFragment = PinFragment()
-    private val passwordFragment = PasswordFragment()
+    private var seed: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +25,10 @@ class EncryptWallet : AppCompatActivity(), View.OnClickListener {
         }
         setContentView(R.layout.activity_enter_passphrase)
 
-        val seed = intent.extras.getString(Constants.SEED)
-        pinFragment.seed = seed
-        passwordFragment.seed = seed
+        seed = intent.extras.getString(Constants.SEED)
 
+        val passwordFragment = PasswordFragment()
+        passwordFragment.seed = seed
         supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
                 .commit()
 
@@ -37,18 +36,26 @@ class EncryptWallet : AppCompatActivity(), View.OnClickListener {
         layout_pin.setOnClickListener(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        seed = null
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.layout_password -> {
                 layout_password.setBackgroundColor(Color.parseColor("#F3F5F6"))
                 layout_pin.setBackgroundColor(android.R.attr.selectableItemBackground)
+                val passwordFragment = PasswordFragment()
+                passwordFragment.seed = seed
                 supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
                         .commit()
             }
             R.id.layout_pin -> {
                 layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
                 layout_password.setBackgroundColor(android.R.attr.selectableItemBackground)
-
+                val pinFragment = PinFragment()
+                pinFragment.seed = seed
                 supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
                         .commit()
             }

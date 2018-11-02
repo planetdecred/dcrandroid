@@ -101,8 +101,10 @@
             android:name=".activities.LogViewer"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.EncryptWallet"
+        <activity
+            android:name=".activities.EncryptWallet"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/LightTheme.NoActionBar"
             android:launchMode="singleTask" />
 
         <service

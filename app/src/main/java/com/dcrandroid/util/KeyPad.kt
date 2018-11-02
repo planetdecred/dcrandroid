@@ -14,6 +14,7 @@ import java.util.Arrays
 
 class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinView) : View.OnClickListener {
     private var del: TextView? = null
+    private var ok: LinearLayout? = null
     private val keys: ArrayList<TextView>
 
     private val keyIds: List<Int>
@@ -39,6 +40,9 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
 
         del = keypadLayout.findViewById(R.id.keypad_del)
         del!!.setOnClickListener(this)
+
+        ok = keypadLayout.findViewById(R.id.keypad_ok)
+        ok!!.setOnClickListener(this)
     }
 
     fun disable() {
@@ -56,20 +60,24 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
 
     override fun onClick(v: View) {
         if (keyIds.indexOf(v.id) != -1) {
-            if (pinView.passCodeLength < pinView.pinCount) {
-                val key = v as TextView
-                passCode = passCode + key.text.toString()
-                pinView.passCodeLength = passCode.length
-                if (listener != null) {
-                    if (pinView.passCodeLength == pinView.pinCount) {
-                        listener!!.onPassCodeCompleted(passCode)
-                    }
-                }
+            val key = v as TextView
+            passCode += key.text.toString()
+            pinView.passCodeLength = passCode.length
+            if(listener != null){
+                listener!!.onPinEnter(key.text.toString(), passCode)
             }
         } else if (R.id.keypad_del == v.id) {
-            if (passCode.length > 0) {
+            if (passCode.isNotEmpty()) {
                 passCode = passCode.substring(0, passCode.length - 1)
                 pinView.passCodeLength = passCode.length
+            }
+
+            if(listener != null){
+                listener!!.onPinEnter(null, passCode)
+            }
+        }else if (R.id.keypad_ok == v.id){
+            if (listener != null) {
+                listener!!.onPassCodeCompleted(passCode)
             }
         }
     }
@@ -80,6 +88,7 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
 
     interface KeyPadListener {
         fun onPassCodeCompleted(passCode: String)
+        fun onPinEnter(pin: String?, passCode: String)
     }
 
 }
