@@ -36,7 +36,6 @@ public class Constants {
             NETWORK_MODES = "network_modes",
             PEER_IP = "peer_ip",
             REMOTE_NODE_ADDRESS = "remote_node_address",
-            RECENT_ADDRESS = "recent_address",
             DEBUG_MESSAGES = "debug_messages",
             SPEND_UNCONFIRMED_FUNDS = "spend_unconfirmed_funds",
             DIRECTION = "Direction",
