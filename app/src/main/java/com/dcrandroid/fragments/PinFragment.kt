@@ -1,21 +1,21 @@
 package com.dcrandroid.fragments
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.dcrandroid.MainActivity
 import com.dcrandroid.R
+import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.KeyPad
-import com.dcrandroid.util.Utils
-import android.support.v4.app.ActivityCompat
-import com.dcrandroid.MainActivity
-import android.content.Intent
-import com.dcrandroid.data.Constants
-import android.widget.Toast
 import com.dcrandroid.util.PreferenceUtil
+import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.passcode.*
 
 class PinFragment : Fragment(), KeyPad.KeyPadListener {
@@ -24,7 +24,7 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
     private var passCode: String? = null
     private var step = 0
     private var pd: ProgressDialog? = null
-    var seed : String? = null
+    var seed: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.passcode, container, false)
@@ -38,36 +38,52 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
     }
 
     override fun onPassCodeCompleted(passCode: String) {
-        if (step == 0) {
-            this.passCode = passCode
-            keypad_pin_view.postDelayed({
-                keypad_instruction.setText(R.string.confirm_security_pin)
-                keyPad!!.reset()
-            }, 100)
-            step++
-        } else if (step == 1) {
-            if (this.passCode == passCode) {
-                keyPad!!.disable()
-                createWallet()
-            } else {
-                keyPad!!.disable()
-                keypad_instruction.setText(R.string.mismatch_passcode)
+        if (passCode.isNotEmpty()) {
+            if (step == 0) {
+                this.passCode = passCode
                 keypad_pin_view.postDelayed({
-                    keypad_instruction.setText(R.string.create_security_pin)
+                    keypad_instruction.setText(R.string.confirm_security_pin)
                     keyPad!!.reset()
-                    this@PinFragment.passCode = ""
-                    step = 0
-                    keyPad!!.enable()
-                }, 1000)
+                    pin_strength.progress = 0
+                }, 100)
+                step++
+            } else if (step == 1) {
+                if (this.passCode == passCode) {
+                    keyPad!!.disable()
+                    createWallet()
+                } else {
+                    keyPad!!.disable()
+                    keypad_instruction.setText(R.string.mismatch_passcode)
+                    keypad_pin_view.postDelayed({
+                        keypad_instruction.setText(R.string.create_security_pin)
+                        keyPad!!.reset()
+                        this@PinFragment.passCode = ""
+                        step = 0
+                        pin_strength.progress = 0
+                        keyPad!!.enable()
+                    }, 1000)
+                }
             }
         }
     }
 
-    private fun createWallet(){
+    override fun onPinEnter(pin: String?, passCode: String) {
+        val progress = (Utils.getShannonEntropy(passCode) / 4) * 100
+        if (progress > 70) {
+            pin_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_strong)
+        } else {
+            pin_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_weak)
+        }
+
+        pin_strength.progress = progress.toInt()
+    }
+
+    private fun createWallet() {
         pd = Utils.getProgressDialog(context, false, false, "")
         Thread(Runnable {
-            try{
-                val wallet = DcrConstants.getInstance().wallet ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
+            try {
+                val wallet = DcrConstants.getInstance().wallet
+                        ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 show(getString(R.string.creating_wallet))
                 wallet.createWallet(passCode, seed)
                 val util = PreferenceUtil(this@PinFragment.context!!)
@@ -80,7 +96,7 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                     //Finish all the activities before this
                     ActivityCompat.finishAffinity(this@PinFragment.activity!!)
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 activity!!.runOnUiThread {
                     if (pd!!.isShowing) {
@@ -92,13 +108,13 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
         }).start()
     }
 
-    private fun show(message: String){
-        if(activity == null){
+    private fun show(message: String) {
+        if (activity == null) {
             return
         }
         activity!!.runOnUiThread {
             pd!!.setMessage(message)
-            if (!pd!!.isShowing){
+            if (!pd!!.isShowing) {
                 pd!!.show()
             }
         }

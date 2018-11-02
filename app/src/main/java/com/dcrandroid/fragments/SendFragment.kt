@@ -6,11 +6,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -18,12 +16,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Toast
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
-import com.dcrandroid.MainApplication
 import com.dcrandroid.R
+import com.dcrandroid.activities.EnterPassCode
 import com.dcrandroid.activities.ReaderActivity
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
@@ -33,7 +30,6 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
-import com.journeyapps.barcodescanner.Util
 import kotlinx.android.synthetic.main.fragment_send.*
 import mobilewallet.LibWallet
 import mobilewallet.Mobilewallet
@@ -55,7 +51,8 @@ import kotlin.collections.ArrayList
 
 class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private val SCANNER_ACTIVITY_RESULT_CODE = 0
+    private val SCANNER_ACTIVITY_REQUEST_CODE = 0
+    private val PASSCODE_REQUEST_CODE = 1
     private var constants: DcrConstants = DcrConstants.getInstance()
     private var textChanged: Boolean = false
     private var isSendAll: Boolean = false
@@ -124,7 +121,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         send_dcr_scan.setOnClickListener {
             val intent = Intent(activity, ReaderActivity::class.java)
-            startActivityForResult(intent, SCANNER_ACTIVITY_RESULT_CODE)
+            startActivityForResult(intent, SCANNER_ACTIVITY_REQUEST_CODE)
         }
 
         send_max.setOnClickListener {
@@ -151,7 +148,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
 
-        send_btn.setOnClickListener {showConfirmTransactionDialog()}
+        send_btn.setOnClickListener { showConfirmTransactionDialog() }
 
         prepareAccounts()
 
@@ -163,13 +160,13 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))){
+        if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext)) && send_dcr_address.text.toString() == "") {
             paste_dcr_address.visibility = View.VISIBLE
             paste_dcr_address.setOnClickListener {
                 send_dcr_address.setText(Utils.readFromClipboard(activity!!.applicationContext))
                 paste_dcr_address.visibility = View.GONE
             }
-        }else{
+        } else {
             paste_dcr_address.visibility = View.GONE
         }
     }
@@ -299,25 +296,26 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SCANNER_ACTIVITY_RESULT_CODE) {
+        System.out.println("Request Code $requestCode Result $resultCode")
+        if (requestCode == SCANNER_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
                     var returnString = data!!.getStringExtra(Constants.ADDRESS)
-                    if(returnString.startsWith(getString(R.string.decred_colon)))
-                        returnString = returnString.replace(getString(R.string.decred_colon),"")
-                    if(returnString.length < 25){
+                    if (returnString.startsWith(getString(R.string.decred_colon)))
+                        returnString = returnString.replace(getString(R.string.decred_colon), "")
+                    if (returnString.length < 25) {
                         Toast.makeText(requireContext(), R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
                         return
-                    }else if(returnString.length > 36){
+                    } else if (returnString.length > 36) {
                         Toast.makeText(requireContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
                         return
                     }
 
-                    if(returnString.startsWith("T") && BuildConfig.IS_TESTNET){
+                    if (returnString.startsWith("T") && BuildConfig.IS_TESTNET) {
                         send_dcr_address.setText(returnString)
-                    }else if(returnString.startsWith("D") && !BuildConfig.IS_TESTNET){
+                    } else if (returnString.startsWith("D") && !BuildConfig.IS_TESTNET) {
                         send_dcr_address.setText(returnString)
-                    } else{
+                    } else {
                         Toast.makeText(activity!!.applicationContext, R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
@@ -325,11 +323,15 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     send_dcr_address.setText("")
                 }
             }
+        }else if(requestCode == PASSCODE_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                startTransaction(data!!.getStringExtra(Constants.PIN))
+            }
         }
     }
 
     private fun showConfirmTransactionDialog() {
-        if(context == null || activity == null){
+        if (context == null || activity == null) {
             return
         }
         send_error_label.text = null
@@ -340,10 +342,15 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 .setAddress(send_dcr_address.text.toString())
                 .setAmount(amount)
                 .setFee(unsignedTransaction.estimatedSignedSize)
-                .setPositiveButton(DialogInterface.OnClickListener { _, _ ->
-                    val pass = util!!.get(Constants.PASSPHRASE)
-                    startTransaction(pass)
-                    })
+
+        transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
+            if(util!!.get(Constants.PASSPHRASE_TYPE) == Constants.PIN) {
+                val intent = Intent(context, EnterPassCode::class.java)
+                startActivityForResult(intent, PASSCODE_REQUEST_CODE)
+            }else{
+                startTransaction(transactionDialog.getPassphrase())
+            }
+        })
 
         transactionDialog.setCancelable(true)
         transactionDialog.show()
@@ -394,20 +401,22 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             return
         }
 
-         InfoDialog(context)
-                 .setDialogTitle(getString(R.string.transaction_was_successful))
-                 .setMessage("${getString(R.string.hash_colon)}\n$txHash")
-                 .setIcon(R.drawable.np_amount_withdrawal)
-                 .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
-                 .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
-                 .setPositiveButton(getString(R.string.close_cap), null)
-                 .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ -> run {
-                     if (activity != null && activity is MainActivity) {
-                         val mainActivity = activity as MainActivity
-                         mainActivity.displayOverview()
-                     }
-                 }})
-                 .setMessageClickListener(View.OnClickListener {
+        InfoDialog(context)
+                .setDialogTitle(getString(R.string.transaction_was_successful))
+                .setMessage("${getString(R.string.hash_colon)}\n$txHash")
+                .setIcon(R.drawable.np_amount_withdrawal)
+                .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
+                .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+                .setPositiveButton(getString(R.string.close_cap), null)
+                .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ ->
+                    run {
+                        if (activity != null && activity is MainActivity) {
+                            val mainActivity = activity as MainActivity
+                            mainActivity.displayOverview()
+                        }
+                    }
+                })
+                .setMessageClickListener(View.OnClickListener {
                     Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))
                 }).show()
 
@@ -462,7 +471,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     }
 
                     amount_usd.setSelection(amount_usd.text.length)
-                }else{
+                } else {
                     amount_usd.run {
                         removeTextChangedListener(exchangeWatcher)
                         text = null
