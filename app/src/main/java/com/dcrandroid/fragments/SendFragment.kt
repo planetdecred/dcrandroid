@@ -87,14 +87,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         get() {
             var destAddress = send_dcr_address.text.toString()
             if (destAddress == Constants.EMPTY_STRING) {
-                destAddress = util!!.get(Constants.RECENT_ADDRESS + accountNumbers[send_account_spinner.selectedItemPosition])
-                if (destAddress == Constants.EMPTY_STRING) {
-                    try {
-                        destAddress = constants.wallet.addressForAccount(0)
-                        util!!.set(Constants.RECENT_ADDRESS + accountNumbers[send_account_spinner.selectedItemPosition], destAddress)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                try {
+                    destAddress = constants.wallet.addressForAccount(0)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
             return destAddress
@@ -179,7 +175,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext)) && send_dcr_address.text.toString() == "") {
+        if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))) {
             paste_dcr_address.visibility = View.VISIBLE
             paste_dcr_address.setOnClickListener {
                 send_dcr_address.setText(Utils.readFromClipboard(activity!!.applicationContext))
@@ -434,20 +430,22 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             return
         }
 
-         val dialog = InfoDialog(context)
-                 .setDialogTitle(getString(R.string.transaction_was_successful))
-                 .setMessage("${getString(R.string.hash_colon)}\n$txHash")
-                 .setIcon(R.drawable.np_amount_withdrawal)
-                 .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
-                 .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
-                 .setPositiveButton(getString(R.string.close_cap), null)
-                 .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ -> run {
-                     if (activity != null && activity is MainActivity) {
-                         val mainActivity = activity as MainActivity
-                         mainActivity.displayOverview()
-                     }
-                 }})
-                 .setMessageClickListener(View.OnClickListener {
+        val dialog = InfoDialog(context)
+                .setDialogTitle(getString(R.string.transaction_was_successful))
+                .setMessage("${getString(R.string.hash_colon)}\n$txHash")
+                .setIcon(R.drawable.np_amount_withdrawal)
+                .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
+                .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+                .setPositiveButton(getString(R.string.close_cap), null)
+                .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ ->
+                    run {
+                        if (activity != null && activity is MainActivity) {
+                            val mainActivity = activity as MainActivity
+                            mainActivity.displayOverview()
+                        }
+                    }
+                })
+                .setMessageClickListener(View.OnClickListener {
                     Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))
                 })
 
