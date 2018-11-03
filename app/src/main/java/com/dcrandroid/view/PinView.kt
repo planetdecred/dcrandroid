@@ -26,7 +26,7 @@ class PinView : View {
 
     private var autoSpace: Boolean = false
 
-    private var pinSize: Float = 0F
+    private var initialPinSize: Float = 0F
     private var horizontalSpacing: Float = 0F
 
     private var mContext: Context? = null
@@ -57,7 +57,7 @@ class PinView : View {
         val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, defStyleRes)
 
         try {
-            pinSize = values.getDimension(R.styleable.PinView_pin_size, resources.getDimension(R.dimen.pinview_pin_size))
+            initialPinSize = values.getDimension(R.styleable.PinView_pin_size, resources.getDimension(R.dimen.pinview_pin_size))
 
             activeColor = values.getColor(R.styleable.PinView_active_color, resources.getColor(R.color.pinview_active_color))
 
@@ -102,15 +102,18 @@ class PinView : View {
         val usableWidth = width - (pl + pr)
         val usableHeight = height - (pt + pb)
 
-        val totalPinWidth = pinSize * passCodeLength
+        var pinSize = initialPinSize;
 
-        if (autoSpace) {
-            horizontalSpacing = (pl + usableWidth - totalPinWidth) / passCodeLength
+        var totalPinWidth = pinSize + horizontalSpacing
+
+        while ((totalPinWidth * passCodeLength) > usableWidth) {
+            pinSize *= 0.90F
+            totalPinWidth = pinSize + horizontalSpacing
         }
 
-        var startX = horizontalSpacing / 2
-        val startY = pt + usableHeight / 2 - pinSize / 2
         val totalContentWidth = pinSize + horizontalSpacing
+        var startX = (usableWidth / 2) - ((totalContentWidth / 2) * passCodeLength)
+        val startY = pt + usableHeight - pinSize
 
         for (i in 1..passCodeLength) {
             circleRect!!.left = startX

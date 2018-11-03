@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.passcode.*
 class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
 
     private var keyPad: KeyPad? = null
+    private var isChange: Boolean? = null
+    private var isSpendingPassword: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,16 +26,45 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
         }
         setContentView(R.layout.passcode)
 
-        keypad_instruction.setText(R.string.enter_security_pin)
+        pin_strength.visibility = View.GONE
+        tv_pin_strength.visibility = View.GONE
+
+        isChange = intent.getBooleanExtra(Constants.CHANGE, false)
+        isSpendingPassword = intent.getBooleanExtra(Constants.SPENDING_PASSWORD, true)
+
+        if (isChange!!) {
+            keypad_instruction.setText(R.string.enter_current_pin)
+        } else {
+            if (isSpendingPassword!!) {
+                keypad_instruction.setText(R.string.enter_spending_pin)
+            } else {
+                keypad_instruction.setText(R.string.enter_encryption_pin)
+            }
+        }
+
         keyPad = KeyPad(keypad, keypad_pin_view)
         keyPad!!.setKeyListener(this)
     }
 
     override fun onPassCodeCompleted(passCode: String) {
-        val data = Intent()
-        data.putExtra(Constants.PIN, passCode)
-        setResult(Activity.RESULT_OK, data)
-        finish()
+        if (isChange!!) {
+            val intent = Intent(this, ChangePassphrase::class.java)
+            intent.putExtra(Constants.PASSPHRASE, passCode)
+            intent.putExtra(Constants.SPENDING_PASSWORD, isSpendingPassword)
+            startActivity(intent)
+            finish()
+        } else {
+            val data = Intent()
+            data.putExtra(Constants.PASSPHRASE, passCode)
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!intent.getBooleanExtra(Constants.NO_RETURN, false)) {
+            super.onBackPressed()
+        }
     }
 
     override fun onPinEnter(pin: String?, passCode: String) {}

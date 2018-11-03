@@ -1,15 +1,14 @@
 package com.dcrandroid.fragments
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.dcrandroid.MainActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
@@ -18,13 +17,18 @@ import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.passcode.*
 
-class PinFragment : Fragment(), KeyPad.KeyPadListener {
+class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
 
     private var keyPad: KeyPad? = null
     private var passCode: String? = null
     private var step = 0
     private var pd: ProgressDialog? = null
-    var seed: String? = null
+
+    var isSpendingPassword: Boolean? = null
+    var oldPassphrase: String? = null
+
+    private var createHint: String? = null
+    private var confirmHint: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.passcode, container, false)
@@ -32,6 +36,16 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        if (isSpendingPassword!!) {
+            confirmHint = getString(R.string.confirm_spending_pin)
+            createHint = getString(R.string.create_spending_pin)
+        } else {
+            createHint = getString(R.string.create_encryption_pin)
+            confirmHint = getString(R.string.confirm_encryption_pin)
+        }
+
+        keypad_instruction.text = createHint
 
         keyPad = KeyPad(keypad, keypad_pin_view)
         keyPad!!.setKeyListener(this)
@@ -42,7 +56,7 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
             if (step == 0) {
                 this.passCode = passCode
                 keypad_pin_view.postDelayed({
-                    keypad_instruction.setText(R.string.confirm_spending_pin)
+                    keypad_instruction.text = confirmHint
                     keyPad!!.reset()
                     pin_strength.progress = 0
                 }, 100)
@@ -50,14 +64,14 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
             } else if (step == 1) {
                 if (this.passCode == passCode) {
                     keyPad!!.disable()
-                    createWallet()
+                    changePin()
                 } else {
                     keyPad!!.disable()
                     keypad_instruction.setText(R.string.mismatch_passcode)
                     keypad_pin_view.postDelayed({
-                        keypad_instruction.setText(R.string.create_spending_pin)
+                        keypad_instruction.text = createHint
                         keyPad!!.reset()
-                        this@PinFragment.passCode = ""
+                        this@ChangePinFragment.passCode = ""
                         step = 0
                         pin_strength.progress = 0
                         keyPad!!.enable()
@@ -78,23 +92,29 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
         pin_strength.progress = progress.toInt()
     }
 
-    private fun createWallet() {
+    private fun changePin() {
         pd = Utils.getProgressDialog(context, false, false, "")
         Thread(Runnable {
             try {
                 val wallet = DcrConstants.getInstance().wallet
                         ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
-                show(getString(R.string.creating_wallet))
-                wallet.createWallet(passCode, seed)
-                val util = PreferenceUtil(this@PinFragment.context!!)
-                util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN)
+                show(getString(R.string.changing_passphrase))
+                val util = PreferenceUtil(this@ChangePinFragment.context!!)
+                if (isSpendingPassword!!) {
+                    wallet.changePrivatePassphrase(oldPassphrase!!.toByteArray(), passCode!!.toByteArray())
+                    util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN)
+                } else {
+                    wallet.changePublicPassphrase(oldPassphrase!!.toByteArray(), passCode!!.toByteArray())
+
+                    util.set(Constants.ENCRYPT_PASSPHRASE_TYPE, Constants.PIN)
+                }
+
                 activity!!.runOnUiThread {
-                    pd!!.dismiss()
-                    val i = Intent(this@PinFragment.context, MainActivity::class.java)
-                    i.putExtra(Constants.PASSPHRASE, passCode)
-                    startActivity(i)
-                    //Finish all the activities before this
-                    ActivityCompat.finishAffinity(this@PinFragment.activity!!)
+                    if (pd!!.isShowing) {
+                        pd!!.dismiss()
+                    }
+                    activity!!.setResult(Activity.RESULT_OK, Intent())
+                    activity!!.finish()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -102,7 +122,7 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()
                     }
-                    Toast.makeText(this@PinFragment.context, Utils.translateError(this@PinFragment.context, e), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ChangePinFragment.context, Utils.translateError(this@ChangePinFragment.context, e), Toast.LENGTH_LONG).show()
                 }
             }
         }).start()

@@ -118,6 +118,16 @@
             android:launchMode="singleTask"
             android:theme="@style/LightTheme.NoActionBar"
             />
+        <activity android:name=".activities.EnterPasswordActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/LightTheme.NoActionBar"
+            />
+        <activity android:name=".activities.ChangePassphrase"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/LightTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

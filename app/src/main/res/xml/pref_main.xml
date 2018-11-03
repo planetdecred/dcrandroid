@@ -3,6 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="@string/general">
+        <Preference
+            android:title="@string/change_spending_pin_password"
+            android:summary="@string/required_to_send_funds"
+            android:key="change_spending_passphrase"/>
+       <SwitchPreference
+           android:title="@string/encrypt_wallet"
+           android:key="encrypt"
+           android:summary="@string/encrypt_wallet_summary"
+           />
+        <Preference
+            android:title="@string/change_encryption_pin_password"
+            android:summary="@string/required_to_enter_app"
+            android:key="change_encryption_passphrase"/>
         <ListPreference
             android:title="@string/currency_conversion"
             android:key="currency_conversion"

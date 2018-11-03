@@ -93,7 +93,14 @@ public class Constants {
             VOTE_BITS = "VoteBits",
             LAST_BLOCK_VALID = "LastBlockValid",
             PASSPHRASE_TYPE = "passphrase_type",
+            SPENDING_PASSPHRASE_TYPE = "spending_passphrase_type",
+            ENCRYPT_PASSPHRASE_TYPE = "encrypt_passphrase_type",
             PIN = "pin",
-            PASSWORD = "password";
+            PASSWORD = "password",
+            CHANGE = "change",
+            ENCRYPT = "encrypt",
+            INSECURE_PUB_PASSPHRASE = "public",
+            NO_RETURN = "no_return",
+            SPENDING_PASSWORD = "spending_password";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

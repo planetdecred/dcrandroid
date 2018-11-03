@@ -31,6 +31,7 @@ import mobilewallet.LibWallet;
 
 public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
 
+    private final int PASSWORD_REQUEST_CODE = 1;
     private ImageView imgAnim;
     private PreferenceUtil util;
     private TextView tvLoading;
@@ -40,10 +41,10 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!isTaskRoot()){
+        if (!isTaskRoot()) {
             final Intent intent = getIntent();
             final String intentAction = intent.getAction();
-            if(intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)){
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)) {
                 finish();
                 return;
             }
@@ -62,13 +63,14 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void onSingleClick(View v) {
 
             }
+
             @Override
             public void onDoubleClick(View v) {
-                if(loadThread != null) {
+                if (loadThread != null) {
                     loadThread.interrupt();
                 }
-                Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-                startActivityForResult(intent,2);
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -85,12 +87,12 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         startup();
     }
 
-    private void startup(){
+    private void startup() {
         constants = DcrConstants.getInstance();
 
         String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-        String homeDir = getFilesDir()+"/wallet";
+        String homeDir = getFilesDir() + "/wallet";
 
         constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB, netType);
         constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
@@ -98,31 +100,31 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
         String walletDB;
 
-        if(BuildConfig.IS_TESTNET){
+        if (BuildConfig.IS_TESTNET) {
             walletDB = "/testnet3/wallet.db";
-        }else{
+        } else {
             walletDB = "/mainnet/wallet.db";
         }
 
         File f = new File(homeDir, walletDB);
-        if(!f.exists()){
-            loadThread = new Thread(){
-                public void run(){
-                    try{
+        if (!f.exists()) {
+            loadThread = new Thread() {
+                public void run() {
+                    try {
                         sleep(3000);
                         createWallet();
-                    }catch (InterruptedException e){
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             };
             loadThread.start();
-        }else{
-            load();
+        } else {
+            checkEncryption();
         }
     }
 
-    private void setText(final String str){
+    private void setText(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -131,24 +133,24 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         });
     }
 
-    private void createWallet(){
+    private void createWallet() {
         Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
         startActivity(i);
         finish();
     }
 
-    public void load(){
-        loadThread = new Thread(){
+    private void openWallet(final String publicPass) {
+        loadThread = new Thread() {
             public void run() {
                 try {
                     setText(getString(R.string.opening_wallet));
-                    constants.wallet.openWallet();
+                    constants.wallet.openWallet(publicPass.getBytes());
                     Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     //Finish all the activities before this
                     ActivityCompat.finishAffinity(SplashScreen.this);
-                }catch (final Exception e){
+                } catch (final Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -169,33 +171,57 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
                         }
                     });
-                    //System.out.println("Restoring Wallet");
-                    //Utils.restoreWalletDB(SplashScreen.this);
-                    //load();
                 }
-            }};
+            }
+        };
         loadThread.start();
+    }
+
+    public void checkEncryption() {
+        if (util.getBoolean(Constants.ENCRYPT)) {
+            Intent i;
+
+            if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                i = new Intent(this, EnterPasswordActivity.class);
+            } else {
+                i = new Intent(this, EnterPassCode.class);
+            }
+
+            i.putExtra(Constants.SPENDING_PASSWORD, false);
+            i.putExtra(Constants.NO_RETURN, true);
+            startActivityForResult(i, PASSWORD_REQUEST_CODE);
+        } else {
+            openWallet(Constants.INSECURE_PUB_PASSPHRASE);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 2){
+        if (requestCode == 2) {
             startup();
+        } else if (requestCode == PASSWORD_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                openWallet(data.getStringExtra(Constants.PASSPHRASE));
+            }
         }
     }
 
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+    }
 
     @Override
-    public void onAnimationStart(Animation animation) {}
+    public void onAnimationStart(Animation animation) {
+    }
 
     @Override
-    public void onAnimationEnd(Animation animation) {}
+    public void onAnimationEnd(Animation animation) {
+    }
 
     @Override
-    public void onAnimationRepeat(Animation animation) {}
+    public void onAnimationRepeat(Animation animation) {
+    }
 
     public abstract class DoubleClickListener implements View.OnClickListener {
 
@@ -206,7 +232,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         @Override
         public void onClick(View v) {
             long clickTime = System.currentTimeMillis();
-            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
+            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
                 onDoubleClick(v);
                 lastClickTime = 0;
             } else {
@@ -216,6 +242,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
 
         public abstract void onSingleClick(View v);
+
         public abstract void onDoubleClick(View v);
     }
 }
