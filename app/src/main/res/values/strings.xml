@@ -404,6 +404,8 @@
     <string name="inputs">Inputs</string>
     <string name="outputs">Outputs</string>
     <string name="ticket_purchase">Ticket Purchase</string>
+    <string name="vote_bits">Vote Bits</string>
+    <string name="last_block_valid">Last Block Valid</string>
     <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->

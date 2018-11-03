@@ -213,10 +213,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.tx_dts_vote_layout).setVisibility(View.VISIBLE);
 
                 TextView version = findViewById(R.id.tx_dts_version);
+                TextView lastBlockValid = findViewById(R.id.tx_dts_block_valid);
+                TextView voteBits = findViewById(R.id.tx_dts_vote_bits);
 
                 version.setText(
-                        String.format(Locale.getDefault(), "%d", parent.getInt("Version"))
+                        String.format(Locale.getDefault(), "%d", parent.getInt(Constants.VOTE_VERSION))
                 );
+
+                lastBlockValid.setText(
+                        Boolean.toString(parent.getBoolean(Constants.LAST_BLOCK_VALID))
+                );
+
+                voteBits.setText(
+                        parent.getString(Constants.VOTE_BITS)
+                );
+
             }
 
             JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
@@ -234,7 +245,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 String address = addresses.length() > 0 ? addresses.getString(0) : "";
 
-                String amount = Utils.formatDecredWithComma(output.getLong("Value")) + " " + getString(R.string.dcr) + " (external)";
+                String amount = Utils.formatDecredWithComma(output.getLong(Constants.VALUE)) + " " + getString(R.string.dcr) + " (external)";
 
                 switch (scriptType){
                     case "nulldata":

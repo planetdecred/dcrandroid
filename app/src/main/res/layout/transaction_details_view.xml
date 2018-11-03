@@ -240,7 +240,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/tx_dts_vote_layout"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -252,7 +253,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="Last Block Valid"
+                        android:text="@string/last_block_valid"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp"
                         app:fontFamily="@font/source_sans_pro_regular" />
@@ -285,13 +286,46 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="Version"
+                        android:text="@string/version"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp"
                         app:fontFamily="@font/source_sans_pro_regular" />
 
                     <TextView
                         android:id="@+id/tx_dts_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:padding="8dp"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/source_sans_pro_regular"
+                        tools:text="test text" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGreyBackgroundColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="@string/vote_bits"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/source_sans_pro_regular" />
+
+                    <TextView
+                        android:id="@+id/tx_dts_vote_bits"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"

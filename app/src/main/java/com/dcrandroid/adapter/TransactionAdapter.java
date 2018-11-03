@@ -1,7 +1,6 @@
 package com.dcrandroid.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -13,7 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.dcrandroid.MainApplication;
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
@@ -38,14 +37,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private LayoutInflater layoutInflater;
     private PreferenceUtil util;
     private Context context;
-    private MainApplication application;
 
     public TransactionAdapter(List<TransactionItem> historyListList, Context context) {
         this.historyList = historyListList;
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.util = new PreferenceUtil(context);
-        application = (MainApplication) context.getApplicationContext();
     }
 
     @Override
@@ -120,7 +117,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.Amount.setText(R.string.ticket);
             holder.txType.setBackgroundResource(R.drawable.immature_ticket);
 
-            int ticketMaturity = application.isTestNet() ? 16 : 256;
+            int ticketMaturity = BuildConfig.IS_TESTNET ? 16 : 256;
 
             if (confirmations < requiredConfs) {
                 holder.status.setText(context.getString(R.string.pending));
