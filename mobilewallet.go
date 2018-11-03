@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -44,6 +45,8 @@ import (
 var shutdownRequestChannel = make(chan struct{})
 var shutdownSignaled = make(chan struct{})
 var signals = []os.Signal{os.Interrupt, syscall.SIGTERM}
+
+const BlockValid int = 1 << 0
 
 type LibWallet struct {
 	dataDir       string
@@ -914,14 +917,24 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 		return "", err
 	}
 
+	var ssGenVersion uint32
+	var lastBlockValid bool
+	if stake.IsSSGen(&mtx) {
+		ssGenVersion = voteVersion(&mtx)
+		lastBlockValid = voteBits(&mtx)&uint16(BlockValid) != 0
+	}
+
 	var tx = DecodedTransaction{
-		Hash:     fmt.Sprintf("%02x", reverse(hash[:])),
-		Type:     transactionType(wallet.TxTransactionType(&mtx)),
-		Version:  int32(mtx.Version),
-		LockTime: int32(mtx.LockTime),
-		Expiry:   int32(mtx.Expiry),
-		Inputs:   decodeTxInputs(&mtx),
-		Outputs:  decodeTxOutputs(&mtx, lw.wallet.ChainParams()),
+		Hash:           fmt.Sprintf("%02x", reverse(hash[:])),
+		Type:           transactionType(wallet.TxTransactionType(&mtx)),
+		Version:        int32(mtx.Version),
+		LockTime:       int32(mtx.LockTime),
+		Expiry:         int32(mtx.Expiry),
+		Inputs:         decodeTxInputs(&mtx),
+		Outputs:        decodeTxOutputs(&mtx, lw.wallet.ChainParams()),
+		VoteVersion:    int32(ssGenVersion),
+		LastBlockValid: lastBlockValid,
+		VoteBits:       fmt.Sprintf("%#04x", voteBits(&mtx)),
 	}
 	result, _ := json.Marshal(tx)
 	return string(result), nil
@@ -981,6 +994,18 @@ func decodeTxOutputs(mtx *wire.MsgTx, chainParams *chaincfg.Params) []DecodedOut
 	}
 
 	return outputs
+}
+
+func voteVersion(mtx *wire.MsgTx) uint32 {
+	if len(mtx.TxOut[1].PkScript) < 8 {
+		return 0 // Consensus version absent
+	}
+
+	return binary.LittleEndian.Uint32(mtx.TxOut[1].PkScript[4:8])
+}
+
+func voteBits(mtx *wire.MsgTx) uint16 {
+	return binary.LittleEndian.Uint16(mtx.TxOut[1].PkScript[2:4])
 }
 
 func reverse(hash []byte) []byte {

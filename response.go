@@ -108,6 +108,11 @@ type DecodedTransaction struct {
 	Expiry   int32
 	Inputs   []DecodedInput
 	Outputs  []DecodedOutput
+
+	//Vote Info
+	VoteVersion    int32
+	LastBlockValid bool
+	VoteBits       string
 }
 
 type DecodedInput struct {
