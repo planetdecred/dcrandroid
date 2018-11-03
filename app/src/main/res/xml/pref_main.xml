@@ -16,6 +16,16 @@
             android:title="@string/change_encryption_pin_password"
             android:summary="@string/required_to_enter_app"
             android:key="change_encryption_passphrase"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="@string/unconfirmed_funds"
+            android:key="spend_unconfirmed_funds"
+            />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:title="@string/tx_notify_title"
+            android:key="transaction_notification"
+            />
         <ListPreference
             android:title="@string/currency_conversion"
             android:key="currency_conversion"
@@ -24,22 +34,10 @@
             app:iconSpaceReserved="false"
             android:defaultValue="0" />
         <SwitchPreference
-            android:defaultValue="true"
-            android:title="@string/tx_notify_title"
-            android:key="transaction_notification"
-            app:iconSpaceReserved="false"
-            />
-        <SwitchPreference
             android:defaultValue="false"
             android:title="@string/new_block_notification"
             android:key="new_block_notification"
             android:summary="@string/new_block_notification_description"
-            app:iconSpaceReserved="false"
-            />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:title="@string/unconfirmed_funds"
-            android:key="spend_unconfirmed_funds"
             app:iconSpaceReserved="false"
             />
     </PreferenceCategory>
@@ -74,20 +72,9 @@
             />
         <EditTextPreference
             android:key="user-agent"
-            android:title="User agent"
-            app:iconSpaceReserved="false"
-            />
+            android:title="@string/user_agent"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
-        <ListPreference
-            android:title="@string/logging_level"
-            android:entries="@array/logging_levels"
-            android:entryValues="@array/logging_levels"
-            android:summary="@string/changes_reflect_after_restart"
-            android:key="logging_level"
-            android:defaultValue="info"
-            app:iconSpaceReserved="false"
-            />
         <Preference
             android:summary="@string/summary_peers"
             android:title="@string/peers"
@@ -107,6 +94,14 @@
             android:title="Show debug messages"
             android:key="debug_messages"
             app:iconSpaceReserved="false"
+            />
+        <ListPreference
+            android:title="@string/logging_level"
+            android:entries="@array/logging_levels"
+            android:entryValues="@array/logging_levels"
+            android:summary="@string/requires_restart"
+            android:key="logging_level"
+            android:defaultValue="info"
             />
         <Preference
             android:title="@string/wallet_log"

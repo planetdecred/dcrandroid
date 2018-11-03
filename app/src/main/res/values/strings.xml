@@ -71,6 +71,7 @@
     <string name="syncing">Syncing</string>
     <string name="with">with</string>
     <string name="ok">OK</string>
+    <string name="user_agent">User Agent</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -194,7 +195,7 @@
     <string name="Transaction_details">Transaction details</string>
     <string name="transaction_confirmation">Please confirm transaction for</string>
     <string name="tx_hash_copy">Hash copied to clipboard</string>
-    <string name="tx_notify_title">Incoming transaction notifications</string>
+    <string name="tx_notify_title">Incoming Transaction Notifications</string>
     <string name="no_transactions">No transactions</string>
     <string name="no_transactions_sync">No transactions\nSync in progress</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
@@ -287,21 +288,21 @@
     <string name="title_rescan_blockchain">Rescan Blockchain</string>
     <string name="title_general">General</string>
     <string name="remote_node_address" translatable="false">remote_node_address</string>
-    <string name="unconfirmed_funds">Spend unconfirmed funds</string>
+    <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
     <string name="build_date_system" translatable="false">build_date_system</string>
     <string name="logging_level">Logging Level</string>
-    <string name="network_mode">Network mode</string>
-    <string name="connect_to_peer">Connect to peer</string>
-    <string name="server_address">Server address</string>
+    <string name="network_mode">Network Mode</string>
+    <string name="connect_to_peer">Connect to Peer</string>
+    <string name="server_address">Server Address</string>
     <string name="wallet_log">Wallet Log</string>
     <string name="crash_title">Crash</string>
     <string name="remote_address_invalid">Remote address is invalid</string>
     <string name="key_rescan_block" translatable="false">rescan_block</string>
     <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
-    <string name="new_block_notification_description">You will hear a beep if enabled</string>
-    <string name="new_block_notification">New block notification</string>
+    <string name="new_block_notification_description">Beep for new blocks.</string>
+    <string name="new_block_notification">New Block Notification</string>
     <string name="currency_conversion">Currency Conversion</string>
-    <string name="changes_reflect_after_restart">Changes reflect after restart</string>
+    <string name="requires_restart">Requires restart.</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -429,7 +430,7 @@
     <string name="enter_spending_password">Enter Spending Password</string>
     <string name="create_encryption_password">Create Encryption Password</string>
     <string name="change_spending_pin_password">Change Spending PIN/Password</string>
-    <string name="required_to_send_funds">Required to send funds</string>
+    <string name="required_to_send_funds">Required to send funds.</string>
     <string name="enter_current_pin">Enter Current PIN</string>
     <string name="confirm_encryption_password">Confirm Encryption Password</string>
     <string name="enter_current_spending_password">Enter Current Spending Password</string>
@@ -438,9 +439,9 @@
     <string name="removing_wallet_encryption">Removing wallet encryption</string>
     <string name="changing_passphrase">Changing Passphrase</string>
     <string name="encrypt_wallet">Encrypt Wallet</string>
-    <string name="encrypt_wallet_summary">A passphrase will be required to enter app</string>
+    <string name="encrypt_wallet_summary">A password will be required at startup.</string>
     <string name="change_encryption_pin_password">Change Encryption PIN/Password</string>
-    <string name="required_to_enter_app">Required to enter app</string>
+    <string name="required_to_enter_app">Required to enter app.</string>
     <!--/Security-->
 
 </resources>
