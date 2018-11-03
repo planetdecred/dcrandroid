@@ -8,7 +8,8 @@
             android:key="currency_conversion"
             android:entries="@array/currency_conversion"
             android:entryValues="@array/currency_conversion_values"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            android:defaultValue="0" />
         <SwitchPreference
             android:defaultValue="true"
             android:title="@string/tx_notify_title"

@@ -88,6 +88,9 @@ public class Constants {
             VOTE = "VOTE",
             REVOCATION = "REVOCATION",
             COINBASE = "COINBASE",
-            REGULAR = "REGULAR";
+            REGULAR = "REGULAR",
+            VOTE_VERSION = "VoteVersion",
+            VOTE_BITS = "VoteBits",
+            LAST_BLOCK_VALID = "LastBlockValid";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
