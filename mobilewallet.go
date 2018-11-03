@@ -124,6 +124,49 @@ func (lw *LibWallet) LockWallet() {
 	}
 }
 
+func (lw *LibWallet) ChangePrivatePassphrase(oldPass []byte, newPass []byte) error {
+	defer func() {
+		for i := range oldPass {
+			oldPass[i] = 0
+		}
+
+		for i := range newPass {
+			newPass[i] = 0
+		}
+	}()
+
+	err := lw.wallet.ChangePrivatePassphrase(oldPass, newPass)
+	if err != nil {
+		return translateError(err)
+	}
+	return nil
+}
+
+func (lw *LibWallet) ChangePublicPassphrase(oldPass []byte, newPass []byte) error {
+	defer func() {
+		for i := range oldPass {
+			oldPass[i] = 0
+		}
+
+		for i := range newPass {
+			newPass[i] = 0
+		}
+	}()
+
+	if len(oldPass) == 0 {
+		oldPass = []byte(wallet.InsecurePubPassphrase)
+	}
+	if len(newPass) == 0 {
+		newPass = []byte(wallet.InsecurePubPassphrase)
+	}
+
+	err := lw.wallet.ChangePublicPassphrase(oldPass, newPass)
+	if err != nil {
+		return translateError(err)
+	}
+	return nil
+}
+
 func (lw *LibWallet) Shutdown() {
 	log.Info("Shuting down mobile wallet")
 	if lw.rpcClient != nil {
@@ -585,9 +628,8 @@ func (lw *LibWallet) SubscribeToBlockNotifications(listener BlockNotificationErr
 	return nil
 }
 
-func (lw *LibWallet) OpenWallet() error {
+func (lw *LibWallet) OpenWallet(pubPass []byte) error {
 
-	pubPass := []byte(wallet.InsecurePubPassphrase)
 	w, err := lw.loader.OpenExistingWallet(pubPass)
 	if err != nil {
 		log.Error(err)
