@@ -58,7 +58,7 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         tvTotal.text = "${context.getString(R.string.total)} ${Mobilewallet.amountCoin(amount!! + estFee)} DCR"
 
         val util = PreferenceUtil(context)
-        if(util.get(Constants.PASSPHRASE_TYPE) == Constants.PIN){
+        if(util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN){
             passphrase_input.visibility = View.GONE
             btn_positive.isEnabled = true
             btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.blue))

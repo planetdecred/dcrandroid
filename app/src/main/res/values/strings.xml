@@ -8,7 +8,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="label_keys" translatable="false">Keys</string>
     <string name="label_properties">Properties</string>
-    <string name="create_security_pass">Create Security Password</string>
     <string name="require_to_send_fund">Required to send funds</string>
     <string name="add_an_account">ADD AN ACCOUNT</string>
     <string name="available_balance">AVAILABLE BALANCE</string>
@@ -412,17 +411,36 @@
 
     <!--Security-->
     <string name="erase_char">⌫</string>
-    <string name="confirm_security_pin">Confirm Security PIN</string>
-    <string name="create_security_pin">Create Security PIN</string>
+    <string name="confirm_spending_pin">Confirm Spending PIN</string>
+    <string name="create_spending_pin">Create Spending PIN</string>
+    <string name="create_security_pass">Create Spending Password</string>
     <string name="mismatch_passcode">PINs did not match. Try again</string>
     <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
     <string name="mismatch_password">PASSWORDS DO NOT MATCH</string>
     <string name="password_match">PASSWORDS MATCH</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="password">PASSWORD</string>
-    <string name="enter_security_pin">Enter Security PIN</string>
+    <string name="enter_spending_pin">Enter Spending PIN</string>
     <string name="password_strength">PASSWORD STRENGTH</string>
     <string name="pin_strength">PIN STRENGTH</string>
+    <string name="enter_encryption_pin">Enter Encryption Pin</string>
+    <string name="confirm_encryption_pin">Confirm Encryption PIN</string>
+    <string name="create_encryption_pin">Create Encryption PIN</string>
+    <string name="enter_spending_password">Enter Spending Password</string>
+    <string name="create_encryption_password">Create Encryption Password</string>
+    <string name="change_spending_pin_password">Change Spending PIN/Password</string>
+    <string name="required_to_send_funds">Required to send funds</string>
+    <string name="enter_current_pin">Enter Current PIN</string>
+    <string name="confirm_encryption_password">Confirm Encryption Password</string>
+    <string name="enter_current_spending_password">Enter Current Spending Password</string>
+    <string name="enter_current_encryption_password">Enter Current Encryption Password</string>
+    <string name="enter_encryption_password">Enter Encryption Password</string>
+    <string name="removing_wallet_encryption">Removing wallet encryption</string>
+    <string name="changing_passphrase">Changing Passphrase</string>
+    <string name="encrypt_wallet">Encrypt Wallet</string>
+    <string name="encrypt_wallet_summary">A passphrase will be required to enter app</string>
+    <string name="change_encryption_pin_password">Change Encryption PIN/Password</string>
+    <string name="required_to_enter_app">Required to enter app</string>
     <!--/Security-->
 
 </resources>

@@ -1,7 +1,6 @@
 package com.dcrandroid.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,12 +12,9 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.dialog.ConfirmTransactionDialog;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
-
-import mobilewallet.UnsignedTransaction;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -46,28 +42,28 @@ public class AddAccountActivity extends AppCompatActivity {
         final EditText passphrase = findViewById(R.id.add_acc_passphrase);
 
         util = new PreferenceUtil(this);
-        if(util.get(Constants.PASSPHRASE_TYPE).equals(Constants.PIN)){
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
             passphrase.setVisibility(View.GONE);
         }
 
-        pd = Utils.getProgressDialog(this, false, false,getString(R.string.creating_account));
+        pd = Utils.getProgressDialog(this, false, false, getString(R.string.creating_account));
         findViewById(R.id.add_acc_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String privatePassphrase = passphrase.getText().toString();
                 final String name = accountName.getText().toString().trim();
-                if(name.equals("")){
+                if (name.equals("")) {
                     Toast.makeText(AddAccountActivity.this, R.string.input_account_name, Toast.LENGTH_SHORT).show();
                 }
 
-                if(util.get(Constants.PASSPHRASE_TYPE).equals(Constants.PASSWORD)){
-                    if(privatePassphrase.equals("")){
+                if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                    if (privatePassphrase.equals("")) {
                         Toast.makeText(AddAccountActivity.this, R.string.input_private_phrase, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     createAccount(name, privatePassphrase.getBytes());
-                }else {
+                } else {
                     Intent enterPinIntent = new Intent(AddAccountActivity.this, EnterPassCode.class);
                     startActivityForResult(enterPinIntent, PASSCODE_REQUEST_CODE);
                 }
@@ -78,24 +74,24 @@ public class AddAccountActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PASSCODE_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                final String passcode = data.getStringExtra(Constants.PIN);
+        if (requestCode == PASSCODE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                final String passcode = data.getStringExtra(Constants.PASSPHRASE);
                 createAccount(accountName.getText().toString().trim(), passcode.getBytes());
             }
         }
     }
 
-    private void createAccount(final String name, final byte[] privatePassphrase){
+    private void createAccount(final String name, final byte[] privatePassphrase) {
         pd.show();
-        new Thread(){
-            public void run(){
-                if(DcrConstants.getInstance().wallet.nextAccount(name, privatePassphrase)){
+        new Thread() {
+            public void run() {
+                if (DcrConstants.getInstance().wallet.nextAccount(name, privatePassphrase)) {
                     setResult(0);
-                }else{
+                } else {
                     setResult(1);
                 }
-                if(pd.isShowing()){
+                if (pd.isShowing()) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

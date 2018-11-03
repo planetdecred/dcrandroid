@@ -325,7 +325,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }else if(requestCode == PASSCODE_REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                startTransaction(data!!.getStringExtra(Constants.PIN))
+                startTransaction(data!!.getStringExtra(Constants.PASSPHRASE))
             }
         }
     }
@@ -344,7 +344,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 .setFee(unsignedTransaction.estimatedSignedSize)
 
         transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
-            if(util!!.get(Constants.PASSPHRASE_TYPE) == Constants.PIN) {
+            if(util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
                 val intent = Intent(context, EnterPassCode::class.java)
                 startActivityForResult(intent, PASSCODE_REQUEST_CODE)
             }else{
