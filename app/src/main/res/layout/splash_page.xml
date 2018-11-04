@@ -8,17 +8,6 @@
     android:background="@color/colorPrimary"
     android:gravity="top">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/darkBlueTextColor"
-        android:text="@string/testnet"
-        android:padding="5dp"
-        android:id="@+id/tv_testnet"
-        android:visibility="gone"
-        tools:visibility="visible"
-        />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -65,6 +54,17 @@
             android:textStyle="bold"/>
 
     </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darkBlueTextColor"
+            android:text="@string/testnet"
+            android:padding="5dp"
+            android:id="@+id/tv_testnet"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
 
     <TextView
         android:layout_width="wrap_content"
