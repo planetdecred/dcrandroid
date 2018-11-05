@@ -63,13 +63,12 @@
     <Button
         android:id="@+id/save_seed_btn_continue"
         android:layout_width="232dp"
-
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/btn_shape"
         android:text="@string/i_copied_the_seed_phrase"
-        android:layout_gravity="center"
         android:padding="8dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
         android:textColor="@color/white" />
 </RelativeLayout>
