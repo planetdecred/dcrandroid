@@ -38,6 +38,7 @@ import (
 	"github.com/decred/dcrwallet/wallet/txrules"
 	walletseed "github.com/decred/dcrwallet/walletseed"
 	"github.com/decred/slog"
+	_ "github.com/raedahgroup/mobilewallet/badgerdb"
 )
 
 var shutdownRequestChannel = make(chan struct{})
@@ -196,7 +197,7 @@ func (lw *LibWallet) InitLoader() {
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
-	fmt.Println("Initizing Loader: ", lw.dataDir)
+	fmt.Println("Initizing Loader: ", lw.dataDir, "Db: ", lw.dbDriver)
 	l := loader.NewLoader(lw.activeNet.Params, lw.dataDir, lw.dbDriver, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
 	lw.loader = l
