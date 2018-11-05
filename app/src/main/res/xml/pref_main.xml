@@ -6,25 +6,30 @@
         <Preference
             android:title="@string/change_spending_pin_password"
             android:summary="@string/required_to_send_funds"
-            android:key="change_spending_passphrase"/>
+            android:key="change_spending_passphrase"
+            app:iconSpaceReserved="false"/>
        <SwitchPreference
            android:title="@string/encrypt_wallet"
            android:key="encrypt"
            android:summary="@string/encrypt_wallet_summary"
+           app:iconSpaceReserved="false"
            />
         <Preference
             android:title="@string/change_encryption_pin_password"
             android:summary="@string/required_to_enter_app"
-            android:key="change_encryption_passphrase"/>
+            android:key="change_encryption_passphrase"
+            app:iconSpaceReserved="false"/>
         <SwitchPreference
             android:defaultValue="false"
             android:title="@string/unconfirmed_funds"
             android:key="spend_unconfirmed_funds"
+            app:iconSpaceReserved="false"
             />
         <SwitchPreference
             android:defaultValue="true"
             android:title="@string/tx_notify_title"
             android:key="transaction_notification"
+            app:iconSpaceReserved="false"
             />
         <ListPreference
             android:title="@string/currency_conversion"
@@ -72,7 +77,8 @@
             />
         <EditTextPreference
             android:key="user-agent"
-            android:title="@string/user_agent"/>
+            android:title="@string/user_agent"
+            app:iconSpaceReserved="false"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <Preference
@@ -102,6 +108,7 @@
             android:summary="@string/requires_restart"
             android:key="logging_level"
             android:defaultValue="info"
+            app:iconSpaceReserved="false"
             />
         <Preference
             android:title="@string/wallet_log"
