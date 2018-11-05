@@ -72,6 +72,8 @@
     <string name="with">with</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
+    <string name="log_file_not_found">Log file not found</string>
+    <string name="dismiss">Dismiss</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
