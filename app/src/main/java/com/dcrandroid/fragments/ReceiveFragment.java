@@ -163,7 +163,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
 
             Bitmap generatedQR = MatrixToImageWriter.toBitmap(matrix, new MatrixToImageConfig(Color.BLACK, Color.TRANSPARENT));
 
-            Bitmap tempLogo = BitmapFactory.decodeResource(getResources(), R.drawable.decred_logo_white_bg);
+            Bitmap tempLogo = BitmapFactory.decodeResource(getResources(), R.drawable.decred_logo);
 
             int logoHeight = (int) (generatedQR.getHeight() * 0.30);
             int logoWidth = (int) (generatedQR.getWidth() * 0.30);
