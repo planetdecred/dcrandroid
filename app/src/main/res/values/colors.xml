@@ -71,6 +71,7 @@
     <color name="orangeDrawableColor">#fffd714b</color>
     <color name="lightOrangeDrawableColor">#fffeb8a5</color>
     <color name="lightGreenDrawableColor">#ffc6eccb</color>
+    <color name="grayBackgroundLightColor">#EDEFF1</color>
     <color name="transparentDrawableColor">#00000000</color>
     <!--/Drawable-->
 

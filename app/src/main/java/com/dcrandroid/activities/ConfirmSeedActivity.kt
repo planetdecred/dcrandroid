@@ -4,26 +4,31 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.WindowManager
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.dcrandroid.R
+import com.dcrandroid.adapter.ConfirmSeedAdapter
+import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import kotlinx.android.synthetic.main.confirm_seed_page.*
-import java.util.*
+
+private const val CLICK_THRESHOLD = 300 //millisecond
 
 class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
 
-    private var seeds: MutableList<String>? = null
-    private var tempSeeds: Set<String>? = null
     private var seed = ""
-    private var adapter: ArrayAdapter<String>? = null
-    private var restore: Boolean? = null
+    private var restore: Boolean = false
+    private var allSeeds = ArrayList<String>()
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private val seedsForInput = ArrayList<InputSeed>()
+    private val seedsFromAdapter = ArrayList<InputSeed>()
+    private var sortedList = listOf<InputSeed>()
+    private lateinit var seedAdapter: ConfirmSeedAdapter
     private var confirmClicks = 0
     private var lastConfirmClick: Long = 0
-    private val CLICK_THRESHOLD = 300 //millisecond
     private var clickThread: Thread? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,40 +39,62 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             val decorView = window.decorView
             decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
-
         setContentView(R.layout.confirm_seed_page)
 
-        autoCompleteSeed.setSingleLine(true)
-        autoCompleteSeed.completionHint = getString(R.string.tap_to_select)
+        linearLayoutManager = LinearLayoutManager(this)
+        recyclerViewSeeds.layoutManager = linearLayoutManager
+
+        button_delete_seed.setOnClickListener {
+            recyclerViewSeeds.removeAllViewsInLayout()
+            recyclerViewSeeds.adapter = null
+            sortedList = emptyList()
+            seedsFromAdapter.clear()
+            initAdapter()
+            seedAdapter.notifyDataSetChanged()
+        }
 
         button_confirm_seed.setOnClickListener(this)
 
-        button_clear_seed.setOnClickListener { seed_display_confirm.text = "" }
-
-        button_delete_seed.setOnClickListener {
-            val enteredSeed = seed_display_confirm.text.toString().trim { it <= ' ' }.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val temp = ArrayList(Arrays.asList(*enteredSeed))
-            if (temp.size > 0) {
-                //remove last seed
-                temp.removeAt(temp.size - 1)
-                val sb = StringBuilder()
-                for (i in temp.indices) {
-                    sb.append(" ")
-                    sb.append(temp[i])
-                }
-                seed_display_confirm.text = sb.toString().trim { it <= ' ' }
-            } else {
-                seed_display_confirm.text = ""
-            }
-        }
-
-        autoCompleteSeed.setOnItemClickListener { parent, _, position, _ ->
-            val s = parent.getItemAtPosition(position) as String
-            seed_display_confirm.text = String.format("%s %s", seed_display_confirm.text.toString().trim { it <= ' ' }, s)
-            autoCompleteSeed.setText("")
-        }
 
         prepareData()
+    }
+
+    private fun prepareData() {
+        val bundle = intent.extras
+        val temp = arrayOfNulls<String>(33)
+        if (!bundle.isEmpty) {
+            var inputSeed: InputSeed
+            seed = bundle.getString(Constants.SEED)
+            restore = bundle.getBoolean(Constants.RESTORE)
+            allSeeds = ArrayList(seed.split(" "))
+            if (restore) {
+                temp.forEachIndexed { number, _ ->
+                    inputSeed = InputSeed(number, " ")
+                    seedsForInput.add(inputSeed)
+                }
+            } else {
+                allSeeds.forEachIndexed { number, seed ->
+                    inputSeed = InputSeed(number, seed)
+                    seedsForInput.add(inputSeed)
+                }
+            }
+            initAdapter()
+        }
+    }
+
+    private fun initAdapter() {
+        seedAdapter = ConfirmSeedAdapter(seedsForInput.distinct(), allSeeds, applicationContext,
+                { savedSeed: InputSeed ->
+                    seedsFromAdapter.add(savedSeed)
+                    sortedList = seedsFromAdapter.sortedWith(compareBy { it.number }).distinct()
+                },
+                { removeSeed: InputSeed ->
+                    seedsFromAdapter.clear()
+                    seedsFromAdapter.addAll(sortedList)
+                    seedsFromAdapter.remove(removeSeed)
+                    sortedList = seedsFromAdapter.sortedWith(compareBy { it.number }).distinct()
+                })
+        recyclerViewSeeds.adapter = seedAdapter
     }
 
     override fun onClick(v: View?) {
@@ -92,13 +119,13 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     if (lastClick > CLICK_THRESHOLD) {
                         runOnUiThread {
-                            handleSingleTap()
+                            handleSingleTap(sortedList)
                         }
                     }
 
                     confirmClicks = 0
                     lastConfirmClick = 0
-                } catch (e: InterruptedException) {
+                } catch (e: Throwable) {
                     e.printStackTrace()
                 }
             }
@@ -116,55 +143,29 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         lastConfirmClick = System.currentTimeMillis()
     }
 
-    private fun handleSingleTap() {
-        val enteredSeed = seed_display_confirm.text.toString().trim { it <= ' ' }
-        if (!restore!!) {
-            if (seed == enteredSeed) {
-                val i = Intent(this@ConfirmSeedActivity, EncryptWallet::class.java)
-                        .putExtra(Constants.SEED, enteredSeed)
-                startActivity(i)
+    private fun handleSingleTap(sortedList: List<InputSeed>) {
+        val dcrConstants = DcrConstants.getInstance()
+        val intent = Intent(this, EncryptWallet::class.java)
+        val isAllSeeds = (sortedList.size == 33)
+
+        if (sortedList.isNotEmpty() && isAllSeeds) {
+            val finalSeedsString = sortedList.joinToString(" ", "", "", -1, "...") { it.phrase }
+            val isVerifiedFromDcrConstants = restore && dcrConstants.wallet.verifySeed(finalSeedsString)
+            val isTypedSeedsCorrect = !restore && seed == finalSeedsString
+
+            if (isTypedSeedsCorrect || isVerifiedFromDcrConstants) {
+                intent.putExtra(Constants.SEED, finalSeedsString)
+                startActivity(intent)
             } else {
-                Toast.makeText(this@ConfirmSeedActivity, R.string.incorrect_seed_input, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, R.string.incorrect_seed_input, Toast.LENGTH_SHORT).show()
             }
+
+        } else if (sortedList.isNotEmpty() && !isAllSeeds) {
+            Toast.makeText(applicationContext, getString(R.string.notAllSeedsEntered), Toast.LENGTH_SHORT).show()
         } else {
-            val constants = DcrConstants.getInstance()
-            if (constants.wallet.verifySeed(enteredSeed)) {
-                val i = Intent(this@ConfirmSeedActivity, EncryptWallet::class.java)
-                        .putExtra(Constants.SEED, enteredSeed)
-                startActivity(i)
-            } else {
-                Toast.makeText(this@ConfirmSeedActivity, R.string.incorrect_seed_input, Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(applicationContext, getString(R.string.theInputFieldIsEmpty), Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun prepareData() {
-        val i = intent
-        val b = i.extras
-        if (b != null) {
-            seed = b.getString(Constants.SEED)!!.trim { it <= ' ' }
-            restore = b.getBoolean(Constants.RESTORE)
-            seeds = ArrayList()
-            val seedsArray = seed.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            tempSeeds = HashSet(Arrays.asList(*seedsArray))
-            val list = ArrayList(tempSeeds!!)
-            seeds!!.addAll(Arrays.asList(*seedsArray))
-            if (restore!!) {
-                Collections.sort(seeds, SortIgnoreCase())
-            } else {
-                seeds!!.shuffle()
-            }
-            adapter = ArrayAdapter(this,
-                    android.R.layout.simple_dropdown_item_1line, list)
-            autoCompleteSeed.setAdapter<ArrayAdapter<String>>(adapter)
-        } else {
-            Toast.makeText(this, R.string.error_bundle_null, Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    inner class SortIgnoreCase : Comparator<String> {
-        override fun compare(s: String, t1: String): Int {
-            return s.toLowerCase().compareTo(t1.toLowerCase())
-        }
-    }
 }
