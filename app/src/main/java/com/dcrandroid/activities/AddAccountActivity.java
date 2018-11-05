@@ -85,9 +85,18 @@ public class AddAccountActivity extends AppCompatActivity {
         pd.show();
         new Thread() {
             public void run() {
-                if (DcrConstants.getInstance().wallet.nextAccount(name, privatePassphrase)) {
+                try {
+                    DcrConstants.getInstance().wallet.nextAccount(name, privatePassphrase);
                     setResult(0);
-                } else {
+                    finish();
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(AddAccountActivity.this, Utils.translateError(AddAccountActivity.this, e), Toast.LENGTH_LONG).show();
+                        }
+                    });
                     setResult(1);
                 }
                 if (pd.isShowing()) {
@@ -98,7 +107,6 @@ public class AddAccountActivity extends AppCompatActivity {
                         }
                     });
                 }
-                finish();
             }
         }.start();
     }
