@@ -12,10 +12,12 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
@@ -153,6 +155,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         prepareAccounts()
 
         send_dcr_address.addTextChangedListener(addressWatcher)
+        send_dcr_address.setupClearAction()
         amount_usd.addTextChangedListener(exchangeWatcher)
         amount_dcr.addTextChangedListener(amountWatcher)
         send_account_spinner.onItemSelectedListener = this
@@ -436,14 +439,20 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if (s.toString() == "") {
                 tvDestinationError.setText(R.string.empty_destination_address)
                 send_btn.isEnabled = false
+                if(constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))) paste_dcr_address.visibility =  View.VISIBLE
+                send_dcr_scan.visibility = View.VISIBLE
                 send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
             } else if (!constants.wallet.isAddressValid(s.toString())) {
                 tvDestinationError.setText(R.string.invalid_destination_address)
                 send_btn.isEnabled = false
+                paste_dcr_address.visibility = View.GONE
+                send_dcr_scan.visibility = View.GONE
                 send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
             } else {
                 tvDestinationError.text = null
                 tvDestinationError.visibility = View.VISIBLE
+                paste_dcr_address.visibility = View.GONE
+                send_dcr_scan.visibility = View.GONE
                 constructTransaction()
             }
         }
@@ -594,5 +603,25 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
 
         }
+    }
+
+    private fun EditText.setupClearAction() {
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.ic_clear else 0
+                setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+        })
+        setOnTouchListener(View.OnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= (this.right - this.compoundPaddingRight)) {
+                    this.setText("")
+                    return@OnTouchListener true
+                }
+            }
+            return@OnTouchListener false
+        })
     }
 }
