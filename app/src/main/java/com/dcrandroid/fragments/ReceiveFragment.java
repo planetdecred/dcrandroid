@@ -1,9 +1,18 @@
 package com.dcrandroid.fragments;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Account;
@@ -24,12 +34,26 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import net.glxn.qrgen.android.MatrixToImageConfig;
+import net.glxn.qrgen.android.MatrixToImageWriter;
 import net.glxn.qrgen.android.QRCode;
+import net.glxn.qrgen.core.image.ImageType;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -44,7 +68,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     List<Integer> accountNumbers = new ArrayList<>();
     private TextView address;
     private DcrConstants constants;
-    private boolean firstTrial = true;
+    private Map<EncodeHintType, Object> qrHints = new HashMap<>();
 
     @Nullable
     @Override
@@ -91,6 +115,10 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         });
 
         getActivity().setTitle(getString(R.string.receive));
+
+        qrHints.put(EncodeHintType.MARGIN, 0);
+        qrHints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+
         prepareAccounts();
 
         return rootView;
@@ -124,10 +152,42 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     private void setAddress(String accountAddress) {
         try {
             address.setText(accountAddress);
-            imageView.setImageBitmap(QRCode.from("decred:" + accountAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
+            QRCodeWriter qrWriter = new QRCodeWriter();
+            BitMatrix matrix = qrWriter.encode("decred:" + accountAddress,
+                    BarcodeFormat.QR_CODE,
+                    300,
+                    300,
+                    qrHints);
+
+            System.out.println("Image Width: "+ imageView.getWidth() +" Image Height: "+ imageView.getHeight());
+
+            Bitmap generatedQR = MatrixToImageWriter.toBitmap(matrix, new MatrixToImageConfig(Color.BLACK, Color.TRANSPARENT));
+
+            Bitmap tempLogo = BitmapFactory.decodeResource(getResources(), R.drawable.decred_logo_white_bg);
+
+            int logoHeight = (int) (generatedQR.getHeight() * 0.30);
+            int logoWidth = (int) (generatedQR.getWidth() * 0.30);
+
+            Bitmap decredLogo = Bitmap.createScaledBitmap(tempLogo, logoWidth, logoHeight, false);
+
+            System.out.println("Decred Logo Height: "+ decredLogo.getHeight()+ " Width: "+decredLogo.getWidth());
+
+            Bitmap bmOverlay = Bitmap.createBitmap(generatedQR.getWidth(),
+                    generatedQR.getHeight(), generatedQR.getConfig());
+
+            Canvas canvas = new Canvas(bmOverlay);
+            canvas.drawBitmap(generatedQR, new Matrix(), null);
+
+            int leftPosition = (generatedQR.getWidth() / 2) - (logoWidth / 2);
+            int topPosition = (generatedQR.getHeight() / 2) - (logoHeight / 2);
+            canvas.drawBitmap(decredLogo, leftPosition, topPosition, null);
+
+            imageView.setImageBitmap(bmOverlay);
+
+            //imageView.setImageBitmap(generatedQR);
+            //imageView.setImageBitmap(QRCode.from("decred:" + accountAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
         } catch (Exception e) {
             e.printStackTrace();
-            Looper.prepare();
             Toast.makeText(ReceiveFragment.this.getContext(), getString(R.string.error_occurred_getting_address), Toast.LENGTH_SHORT).show();
         }
     }
@@ -157,5 +217,21 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
                 return true;
         }
         return false;
+    }
+
+    public Bitmap getVectorDrawable(int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(getContext(), drawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getMinimumWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+
+        return bitmap;
     }
 }
