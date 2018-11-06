@@ -283,7 +283,14 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             val estFee = Mobilewallet.amountCoin(Utils.signedSizeToAtom(transaction.estimatedSignedSize))
 
-            send_dcr_estimate_fee.text = CoinFormat.format(estFee)
+            if (exchangeDecimal != null) {
+                var fee = BigDecimal(estFee)
+                fee = fee.setScale(9, RoundingMode.HALF_UP)
+                val convertedFee = fee.multiply(exchangeDecimal)
+                send_dcr_estimate_fee.text = "${CoinFormat.format(estFee)} (${formatter.format(convertedFee.toDouble())} USD)"
+            }else{
+                send_dcr_estimate_fee.text = CoinFormat.format(estFee)
+            }
 
             send_dcr_estimate_size.text = String.format(Locale.getDefault(), "%d %s", transaction.estimatedSignedSize, getString(R.string.bytes))
 

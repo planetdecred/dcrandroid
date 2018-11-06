@@ -62,7 +62,7 @@
     <string name="view_cap">VIEW</string>
     <string name="close_cap">CLOSE</string>
     <string name="exchange_rate_error">Exchange failed with error:</string>
-    <string name="exchange_rate_unavailable">%s rate unavailable (tap to retry)</string>
+    <string name="exchange_rate_unavailable"> rate unavailable (tap to retry)</string>
     <string name="ago">ago</string>
     <string name="now">now</string>
     <string name="you_received">You received</string>
