@@ -26,7 +26,6 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.TransactionComparator;
-import com.dcrandroid.util.TransactionItemSorter;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 
@@ -47,17 +46,23 @@ import mobilewallet.GetTransactionsResponse;
 
 public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
-    private List<TransactionItem> transactionList = new ArrayList<>();
-    private List<TransactionItem> fixedTransactionList = new ArrayList<>();
-    private TransactionAdapter transactionAdapter;
-    private TextView refresh;
+    private TextView  refresh;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private DcrConstants constants;
     private Spinner spinnerHistory;
+
     private int latestTransactionHeight;
     private boolean needsUpdate = false, isForeground;
     private String transactionTypeSelected = "";
+
+    private TransactionAdapter transactionAdapter;
+    private ArrayAdapter<String> sortSpinnerAdapter;
+
+    private List<TransactionItem> transactionList = new ArrayList<>();
+    private List<TransactionItem> fixedTransactionList = new ArrayList<>();
+    private ArrayList<String> availableTxTypes = new ArrayList<>();
+
+    private DcrConstants constants;
 
     @Nullable
     @Override
@@ -111,7 +116,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         recyclerView.setAdapter(transactionAdapter);
         registerForContextMenu(recyclerView);
-        setupSort();
+        setupSortListener();
         return rootView;
     }
 
@@ -120,14 +125,18 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getActivity() != null)
-            getActivity().setTitle(getString(R.string.history));
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (getActivity() != null)
+            getActivity().setTitle(getString(R.string.history));
+
         swipeRefreshLayout.setOnRefreshListener(this);
+        prepareHistoryData();
     }
 
     @Override
@@ -152,25 +161,33 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             return;
         }
 
-        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        refresh.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(true);
 
         loadTransactions();
 
         if (transactionList.size() == 0) {
+            refresh.setText(R.string.no_transactions);
+            refresh.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
+        } else {
+            refresh.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         if (!constants.synced) {
             refresh.setText(R.string.no_transactions_sync);
             swipeRefreshLayout.setRefreshing(false);
+            System.out.println("Not going past cached transactions");
             return;
         }
 
-        recyclerView.setVisibility(View.VISIBLE);
+        System.out.println("Loading from wallet");
         new Thread() {
             public void run() {
                 try {
+                    System.out.println("About to Load");
                     constants.wallet.getTransactions(HistoryFragment.this);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -192,7 +209,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             file.createNewFile();
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
-            objectOutputStream.writeObject(transactionList);
+            objectOutputStream.writeObject(fixedTransactionList);
             objectOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,19 +229,15 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             if (file.exists()) {
                 ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
                 List<TransactionItem> temp = (List<TransactionItem>) objectInputStream.readObject();
-                transactionList.addAll(temp);
+                fixedTransactionList.clear();
+                fixedTransactionList.addAll(temp);
+                transactionList.clear();
+                transactionList.addAll(0, fixedTransactionList);
                 TransactionsResponse.TransactionItem latestTx = Collections.min(temp, new TransactionComparator.MinConfirmationSort());
                 latestTransactionHeight = latestTx.getHeight() + 1;
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        if (transactionList.size() == 0) {
-            refresh.setText(R.string.no_transactions);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -238,7 +251,8 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void run() {
                 TransactionsResponse response = TransactionsResponse.parse(s);
                 if (response.transactions.size() == 0) {
-                    refresh.setText(R.string.no_transactions);
+                    refresh.setText(R.string.no_transactions_have_occured);
+                    refresh.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
@@ -248,13 +262,39 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     Collections.sort(fixedTransactionList, new TransactionComparator.TimestampSort());
                     TransactionsResponse.TransactionItem latestTx = Collections.min(fixedTransactionList, new TransactionComparator.MinConfirmationSort());
                     latestTransactionHeight = latestTx.getHeight() + 1;
-                    transactionList.clear();
-                    transactionList.addAll(0, fixedTransactionList);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
+
+                    availableTxTypes.clear();
+
+                    for(int i = 0; i < fixedTransactionList.size(); i++){
+                        String type = fixedTransactionList.get(i).type;
+                        if (type.equalsIgnoreCase(Constants.VOTE) || type.equalsIgnoreCase(Constants.TICKET_PURCHASE)
+                                || type.equalsIgnoreCase(Constants.REVOCATION)){
+                            type = Constants.STAKING.toUpperCase();
+                        }
+
+                        if(!availableTxTypes.contains(type)){
+                            availableTxTypes.add(type);
+                        }
+
+                        if(availableTxTypes.size() >= 3){ // There're only 3 sort types
+                            break;
+                        }
                     }
-                    transactionAdapter.notifyDataSetChanged();
+
+                    availableTxTypes.add(0, "ALL");
+
+                    if(getContext() == null){
+                        return;
+                    }
+
+                    String[] types = availableTxTypes.toArray(new String[0]);
+                    sortSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, types);
+                    sortSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerHistory.setAdapter(sortSpinnerAdapter);
+
+
+                    sortTransactions();
+
                     saveTransactions();
                 }
             }
@@ -263,11 +303,42 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        if(!transactionTypeSelected.equals("")){
-            swipeRefreshLayout.setRefreshing(false);
-        } else {
-            prepareHistoryData();
+        prepareHistoryData();
+    }
+
+    private void sortTransactions(){
+        transactionList.clear();
+        if(transactionTypeSelected.equalsIgnoreCase("ALL")){
+            transactionList.addAll(fixedTransactionList);
+            transactionAdapter.notifyDataSetChanged();
+        }else {
+            for (int i = 0; i < fixedTransactionList.size(); i++) {
+                TransactionItem item = fixedTransactionList.get(i);
+                if (transactionTypeSelected.equalsIgnoreCase(Constants.STAKING)) {
+                    if (item.type.equals(Constants.VOTE) || item.type.equals(Constants.REVOCATION)
+                            || item.type.equals(Constants.TICKET_PURCHASE)) {
+                        transactionList.add(item);
+                    }
+                } else if (transactionTypeSelected.equalsIgnoreCase(item.type)) { // Regular & coinbase transaction
+                    transactionList.add(item);
+                }
+            }
         }
+
+        if(transactionList.size() > 0){
+            recyclerView.setVisibility(View.VISIBLE);
+            refresh.setVisibility(View.GONE);
+        }else{
+            refresh.setText(R.string.no_transactions);
+            refresh.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+        transactionAdapter.notifyDataSetChanged();
     }
 
     public void newTransaction(TransactionsResponse.TransactionItem transaction) {
@@ -309,6 +380,9 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
                 tx.animate = true;
                 final int finalI = i;
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -319,61 +393,19 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    private void setupSort() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.history_transaction_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerHistory.setAdapter(adapter);
+    private void setupSortListener()  {
         spinnerHistory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                switch (position) {
-                    case 0:
-                        transactionTypeSelected = "";
-                        transactionList.clear();
-                        onRefresh();
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    case 1:
-                        transactionTypeSelected = "regular";
-                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    case 2:
-                        transactionTypeSelected = "0";
-                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    case 3:
-                        transactionTypeSelected = "1";
-                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    case 4:
-                        transactionTypeSelected = "ticket";
-                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    case 5:
-                        transactionTypeSelected = "vote";
-                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                    case 6:
-                        transactionTypeSelected = "revoke";
-                        TransactionItemSorter.itemSorter(transactionList, fixedTransactionList, transactionTypeSelected);
-                        transactionAdapter.notifyDataSetChanged();
-                        break;
-                }
+                transactionTypeSelected = availableTxTypes.get(position);
+                sortTransactions();
             }
-
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-
     }
 
 

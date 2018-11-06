@@ -235,9 +235,9 @@
 
     <string-array name="history_transaction_list">
         <item>All</item>
-        <item>Regular</item>
-        <item>Sent</item>
-        <item>Received</item>
+        <!--<item>Regular</item>-->
+        <!--<item>Sent</item>-->
+        <!--<item>Received</item>-->
         <!-- remove this when a functional will ready -->
         <!--<item>Ticket</item>-->
         <!--<item>Votes</item>-->
@@ -282,7 +282,6 @@
     <string name="key_connection_certificate" translatable="false">key_connection_certificate</string>
     <string name="key_get_peers" translatable="false">key_get_peers</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
-    <string name="summary_rescan_blockchain">This will Rescan the Blockchain</string>
     <string name="title_rescan_blockchain">Rescan Blockchain</string>
     <string name="title_general">General</string>
     <string name="remote_node_address" translatable="false">remote_node_address</string>
@@ -444,9 +443,10 @@
     <!--/Security-->
 
     <string name="confirm_crash">Confirm Crash</string>
-    <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report</string>
-    <string name="sending_transaction">Sending transaction...</string>
-    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar</string>
-    <string name="check_progress_in_navigation_bar">Check progress in navigation bar</string>
-
+    <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report.</string>
+    <string name="sending_transaction">Sending transaction…</string>
+    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar.</string>
+    <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
+    <string name="user_agent_summary">For exchange rate fetching</string>
+    <string name="no_transactions_have_occured">No transactions have occurred.</string>
 </resources>

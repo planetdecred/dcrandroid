@@ -284,8 +284,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         for (int i = 0; i < usedInput.size(); i++) {
             walletInputIndices.add(usedInput.get(i).index);
             walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                    Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " " + getString(R.string.dcr),
-                    usedInput.get(i).accountName));
+                    Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
+                            + getString(R.string.dcr) + " ("+ usedInput.get(i).accountName +")", null));
 
             //TODO: Preference is not the correct way of passing this data
             util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
