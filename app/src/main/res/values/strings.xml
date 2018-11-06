@@ -45,10 +45,10 @@
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
     <string name="details">Details</string>
-    <string name="wallet_setting">Wallet Setting</string>
-    <string name="hide_this_wallet">Hide This Wallet</string>
+    <string name="setting">Setting</string>
+    <string name="hide_this_account">Hide This Account</string>
     <string name="wallet_balance_will_be_ignored">Wallet balance will be ignored.</string>
-    <string name="default_wallet">Default Wallet</string>
+    <string name="default_account">Default Account</string>
     <string name="exit_cap">EXIT</string>
     <string name="hidden">hidden</string>
     <string name="delete">Delete</string>
@@ -137,7 +137,7 @@
     <string name="creating_account">Creating Account…</string>
     <string name="input_account_name">Enter a name for your account</string>
     <string name="hd_path">HD Path</string>
-    <string name="default_wallet_info">Make this wallet default for all outgoing and incoming transactions.</string>
+    <string name="default_account_info">Make this account default for all outgoing and incoming transactions.</string>
     <string name="external">external</string>
     <string name="internal">internal</string>
     <string name="imported">imported</string>

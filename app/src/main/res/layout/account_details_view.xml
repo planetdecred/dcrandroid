@@ -266,7 +266,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/wallet_setting"
+        android:text="@string/setting"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="18sp"
         app:fontFamily="@font/source_sans_pro_regular_family" />
@@ -287,7 +287,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/hide_this_wallet"
+                android:text="@string/hide_this_account"
                 android:textColor="@color/blueGrayFirstTextColor"
                 android:textSize="18sp"
                 app:fontFamily="@font/source_sans_pro_regular_family" />
@@ -332,7 +332,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/default_wallet"
+                android:text="@string/default_account"
                 android:textColor="@color/blueGrayFirstTextColor"
                 android:textSize="18sp"
                 app:fontFamily="@font/source_sans_pro_regular_family" />
@@ -341,7 +341,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="@string/default_wallet_info"
+                android:text="@string/default_account_info"
                 android:textColor="@color/lightGray"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular_family" />
