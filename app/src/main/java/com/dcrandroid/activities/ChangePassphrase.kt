@@ -10,6 +10,7 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.fragments.ChangePasswordFragment
 import com.dcrandroid.fragments.ChangePinFragment
+import com.dcrandroid.util.PreferenceUtil
 import kotlinx.android.synthetic.main.activity_enter_passphrase.*
 
 class ChangePassphrase : AppCompatActivity(), View.OnClickListener {
@@ -31,11 +32,24 @@ class ChangePassphrase : AppCompatActivity(), View.OnClickListener {
 
         isSpendingPassword = intent.getBooleanExtra(Constants.SPENDING_PASSWORD, true)
 
-        val passwordFragment = ChangePasswordFragment()
-        passwordFragment.oldPassphrase = oldPassPhrase
-        passwordFragment.isSpendingPassword = isSpendingPassword
-        supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
-                .commit()
+        val util = PreferenceUtil(this)
+
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PASSWORD
+                || util.get(Constants.ENCRYPT_PASSPHRASE_TYPE) == Constants.PASSWORD) {
+            val passwordFragment = ChangePasswordFragment()
+            passwordFragment.oldPassphrase = oldPassPhrase
+            passwordFragment.isSpendingPassword = isSpendingPassword
+            supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
+                    .commit()
+        } else {
+            layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
+            layout_password.setBackgroundColor(android.R.attr.selectableItemBackground)
+            val pinFragment = ChangePinFragment()
+            pinFragment.oldPassphrase = oldPassPhrase
+            pinFragment.isSpendingPassword = isSpendingPassword
+            supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
+                    .commit()
+        }
 
         layout_password.setOnClickListener(this)
         layout_pin.setOnClickListener(this)

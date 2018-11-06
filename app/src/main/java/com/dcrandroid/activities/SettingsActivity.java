@@ -29,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import mobilewallet.Mobilewallet;
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -60,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             getActivity().setTitle(getActivity().getString(R.string.settings));
             util = new PreferenceUtil(getActivity());
-            pd = Utils.getProgressDialog(getActivity(), false, false, getActivity().getString(R.string.scanning_block));
+            pd = Utils.getProgressDialog(getActivity(), false, false, "");
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
             changeEncryptionPass = findPreference("change_encryption_passphrase");
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
@@ -155,6 +157,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             // peers preference click listener
+            findPreference(getString(R.string.key_get_peers)).setVisible(false);
             findPreference(getString(R.string.key_get_peers)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(getActivity(), GetPeersActivity.class);
@@ -181,8 +184,8 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         new AlertDialog.Builder(getContext())
-                                .setTitle("Confirm Crash")
-                                .setMessage("Are you sure you want to proceed with crash?")
+                                .setTitle(R.string.confirm_crash)
+                                .setMessage(R.string.crash_confirmation_description)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -284,6 +287,33 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivityForResult(intent, ENCRYPT_REQUEST_CODE);
 
                     return false;
+                }
+            });
+
+            findPreference("rescan_block").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.rescan_block)
+                            .setMessage(R.string.rescan_blocks_confirmation)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        DcrConstants.getInstance().wallet.rescanBlocks();
+                                        Toast.makeText(getContext(), R.string.check_progress_in_navigation_bar, Toast.LENGTH_SHORT).show();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        if(e.getMessage().equals(Mobilewallet.ErrInvalid)){
+                                            Toast.makeText(getContext(), R.string.wallet_is_rescanning, Toast.LENGTH_LONG).show();
+                                        }else{
+                                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            }).setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                    return true;
                 }
             });
         }
