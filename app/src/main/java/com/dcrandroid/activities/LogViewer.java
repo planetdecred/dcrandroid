@@ -31,8 +31,6 @@ public class LogViewer extends AppCompatActivity {
         setContentView(R.layout.activity_log_viewer);
         logTextView = findViewById(R.id.log_text);
 
-        logTextView.setText("", TextView.BufferType.EDITABLE);
-
         buffer.start();
     }
 
@@ -74,11 +72,7 @@ public class LogViewer extends AppCompatActivity {
             @Override
             public void run() {
                 if(buffer != null && !buffer.isInterrupted()) {
-                    if (logTextView.getEditableText() == null) {
-                        logTextView.setText(line);
-                    } else {
-                        logTextView.getEditableText().insert(0, line);
-                    }
+                    logTextView.append(line);
                 }
             }
         });
