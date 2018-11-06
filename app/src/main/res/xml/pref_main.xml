@@ -78,7 +78,9 @@
         <EditTextPreference
             android:key="user-agent"
             android:title="@string/user_agent"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false"
+            android:summary="@string/user_agent_summary"
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <Preference
@@ -89,15 +91,8 @@
             app:iconSpaceReserved="false"
             />
         <Preference
-            android:summary="@string/summary_rescan_blockchain"
             android:title="@string/title_rescan_blockchain"
             android:key="@string/key_rescan_block"
-            app:iconSpaceReserved="false"
-            />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:title="Show debug messages"
-            android:key="debug_messages"
             app:iconSpaceReserved="false"
             />
         <ListPreference

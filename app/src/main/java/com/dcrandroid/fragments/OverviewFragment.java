@@ -276,7 +276,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
             String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
+            File path = new File(getContext().getFilesDir() + "/" + netType + "/" + "savedata/");
             path.mkdirs();
             File file = new File(path,"transactions");
             file.createNewFile();
@@ -295,7 +295,7 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
             String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + File.pathSeparator +netType + File.pathSeparator + "savedata/");
+            File path = new File(getContext().getFilesDir() + "/" +netType + "/" + "savedata/");
             path.mkdirs();
             File file = new File(path, "transactions");
             if (file.exists()) {

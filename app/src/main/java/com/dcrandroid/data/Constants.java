@@ -101,6 +101,7 @@ public class Constants {
             INSECURE_PUB_PASSPHRASE = "public",
             NO_RETURN = "no_return",
             SPENDING_PASSWORD = "spending_password",
-            NO_INFO = "no_info";
+            NO_INFO = "no_info",
+            STAKING = "staking";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

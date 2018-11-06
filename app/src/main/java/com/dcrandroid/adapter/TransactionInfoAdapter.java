@@ -48,6 +48,10 @@ public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.
             tvInfo.setTextColor(mContext.getResources().getColor(R.color.blueGrayFirstTextColor));
         }
 
+        if(transactionInfoItem.getInfo() == null){
+            tvInfo.setVisibility(View.GONE);
+        }
+
 
         return listItem;
     }
