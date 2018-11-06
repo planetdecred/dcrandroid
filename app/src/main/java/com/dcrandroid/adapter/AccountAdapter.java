@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcrandroid.data.Account;
 import com.dcrandroid.R;
@@ -42,7 +43,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         private SwitchCompat hideWallet, defaultWallet;
         private ImageView syncIndicator;
 
-        private LinearLayout detailsLayout, icon, arrowRight;
+        private LinearLayout detailsLayout, icon, arrowRight, account;
         private View view;
 
         private MyViewHolder(View view) {
@@ -74,6 +75,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             detailsLayout = view.findViewById(R.id.layout_account_details);
             icon = view.findViewById(R.id.icon);
             arrowRight = view.findViewById(R.id.arrow_right);
+            account = view.findViewById(R.id.account);
 
             // ImageView
             syncIndicator = view.findViewById(R.id.account_sync_indicator);
@@ -209,6 +211,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             if(preferenceUtil.getInt(Constants.DEFAULT_ACCOUNT, 0) == account.getAccountNumber()){
                 holder.defaultWallet.setChecked(true);
                 holder.defaultWallet.setEnabled(false); // Default account should not be unchecked. There has to be a default account.
+                holder.hideWallet.setChecked(false);
+                holder.hideWallet.setEnabled(false);
             }else{
                 holder.defaultWallet.setChecked(false);
                 holder.defaultWallet.setEnabled(true);
@@ -219,6 +223,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         holder.defaultWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.hideWallet.setChecked(false);
+                preferenceUtil.setBoolean(Constants.HIDE_WALLET + account.getAccountNumber(), holder.hideWallet.isChecked());
                 // This listener should no longer be called
                 holder.defaultWallet.setOnClickListener(null);
                 holder.hideWallet.setOnClickListener(null);
@@ -248,12 +254,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             }
         });
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
+        holder.account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.detailsLayout.getVisibility() == View.GONE){
+                    holder.arrowRight.setRotation(90);
                     holder.detailsLayout.setVisibility(View.VISIBLE);
                 }else{
+                    holder.arrowRight.setRotation(0);
                     holder.detailsLayout.setVisibility(View.GONE);
                 }
             }
