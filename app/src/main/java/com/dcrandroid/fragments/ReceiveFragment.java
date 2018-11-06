@@ -163,29 +163,27 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
 
             Bitmap generatedQR = MatrixToImageWriter.toBitmap(matrix, new MatrixToImageConfig(Color.BLACK, Color.TRANSPARENT));
 
-            Bitmap tempLogo = BitmapFactory.decodeResource(getResources(), R.drawable.decred_logo);
+            //TODO:  Requires a logo
+//            Bitmap tempLogo = BitmapFactory.decodeResource(getResources(), R.drawable.decred_logo);
+//
+//            int logoHeight = (int) (generatedQR.getHeight() * 0.30);
+//            int logoWidth = (int) (generatedQR.getWidth() * 0.30);
+//
+//            Bitmap decredLogo = Bitmap.createScaledBitmap(tempLogo, logoWidth, logoHeight, false);
+//
+//            System.out.println("Decred Logo Height: "+ decredLogo.getHeight()+ " Width: "+decredLogo.getWidth());
+//
+//            Bitmap bmOverlay = Bitmap.createBitmap(generatedQR.getWidth(),
+//                    generatedQR.getHeight(), generatedQR.getConfig());
+//
+//            Canvas canvas = new Canvas(bmOverlay);
+//            canvas.drawBitmap(generatedQR, new Matrix(), null);
+//
+//            int leftPosition = (generatedQR.getWidth() / 2) - (logoWidth / 2);
+//            int topPosition = (generatedQR.getHeight() / 2) - (logoHeight / 2);
+//            canvas.drawBitmap(decredLogo, leftPosition, topPosition, null);
 
-            int logoHeight = (int) (generatedQR.getHeight() * 0.30);
-            int logoWidth = (int) (generatedQR.getWidth() * 0.30);
-
-            Bitmap decredLogo = Bitmap.createScaledBitmap(tempLogo, logoWidth, logoHeight, false);
-
-            System.out.println("Decred Logo Height: "+ decredLogo.getHeight()+ " Width: "+decredLogo.getWidth());
-
-            Bitmap bmOverlay = Bitmap.createBitmap(generatedQR.getWidth(),
-                    generatedQR.getHeight(), generatedQR.getConfig());
-
-            Canvas canvas = new Canvas(bmOverlay);
-            canvas.drawBitmap(generatedQR, new Matrix(), null);
-
-            int leftPosition = (generatedQR.getWidth() / 2) - (logoWidth / 2);
-            int topPosition = (generatedQR.getHeight() / 2) - (logoHeight / 2);
-            canvas.drawBitmap(decredLogo, leftPosition, topPosition, null);
-
-            imageView.setImageBitmap(bmOverlay);
-
-            //imageView.setImageBitmap(generatedQR);
-            //imageView.setImageBitmap(QRCode.from("decred:" + accountAddress).withHint(EncodeHintType.MARGIN, 0).withSize(300, 300).withColor(Color.BLACK, Color.TRANSPARENT).bitmap());
+            imageView.setImageBitmap(generatedQR);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(ReceiveFragment.this.getContext(), getString(R.string.error_occurred_getting_address), Toast.LENGTH_SHORT).show();
