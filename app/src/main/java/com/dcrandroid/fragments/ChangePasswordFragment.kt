@@ -72,7 +72,7 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
             try {
                 val wallet = DcrConstants.getInstance().wallet
                         ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
-                show(getString(R.string.changing_passphrase))
+                show(getString(R.string.changing_password))
                 val util = PreferenceUtil(this@ChangePasswordFragment.context!!)
                 if (isSpendingPassword!!) {
                     wallet.changePrivatePassphrase(oldPassphrase!!.toByteArray(), password.toByteArray())

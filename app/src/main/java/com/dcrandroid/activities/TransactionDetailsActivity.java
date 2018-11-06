@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
@@ -25,6 +26,9 @@ import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse;
+import com.dcrandroid.util.TransactionsResponse.TransactionItem;
+import com.dcrandroid.util.TransactionsResponse.TransactionInput;
+import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
 
 import org.json.JSONArray;
@@ -45,9 +49,18 @@ import mobilewallet.LibWallet;
 
 public class TransactionDetailsActivity extends AppCompatActivity {
 
+    private TextView value, date, status, txType, confirmation, transactionFee, tvHash;
+
     private ListView lvInput, lvOutput;
+
     private PreferenceUtil util;
+
     private String rawTx, transactionType, txHash;
+
+    private LibWallet wallet;
+
+    private Calendar calendar;
+    private SimpleDateFormat sdf;
 
     public static void setListViewHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
@@ -107,7 +120,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.transaction_details_view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         util = new PreferenceUtil(this);
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -115,8 +127,25 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        wallet = DcrConstants.getInstance().wallet;
+
+        calendar = new GregorianCalendar(TimeZone.getDefault());
+        sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
+
         lvInput = findViewById(R.id.lvInput);
         lvOutput = findViewById(R.id.lvOutput);
+        value = findViewById(R.id.tx_dts_value);
+        date = findViewById(R.id.tx_date);
+        status = findViewById(R.id.tx_dts__status);
+        txType = findViewById(R.id.txtype);
+        confirmation = findViewById(R.id.tx_dts_confirmation);
+        transactionFee = findViewById(R.id.tx_fee);
+        tvHash = findViewById(R.id.tx_hash);
+
+        if(extras.getBoolean(Constants.NO_INFO)){
+            getTransaction();
+            return;
+        }
 
         transactionType = extras.getString(Constants.TYPE);
         if (transactionType.equals(Constants.TICKET_PURCHASE)) {
@@ -132,13 +161,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         loadInOut(inputs, outputs);
 
-        TextView value = findViewById(R.id.tx_dts_value);
-        TextView date = findViewById(R.id.tx_date);
-        TextView status = findViewById(R.id.tx_dts__status);
-        TextView txType = findViewById(R.id.txtype);
-        TextView confirmation = findViewById(R.id.tx_dts_confirmation);
-        TextView transactionFee = findViewById(R.id.tx_fee);
-        TextView tvHash = findViewById(R.id.tx_hash);
 
         rawTx = extras.getString(Constants.RAW);
 
@@ -148,9 +170,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         value.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(extras.getLong(Constants.AMOUNT, 0)) + " " + getString(R.string.dcr)));
         transactionFee.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(extras.getLong(Constants.FEE, 0)) + " " + getString(R.string.dcr)));
 
-        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
         calendar.setTimeInMillis(extras.getLong(Constants.TIMESTAMP) * 1000);
-        SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
 
         date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
 
@@ -158,7 +178,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         int height = extras.getInt(Constants.HEIGHT, 0);
         if (height == -1) {
-            //No included in block chain, therefore transaction is pending
+            //Not included in block chain, therefore transaction is pending
             status.setBackgroundResource(R.drawable.tx_status_pending);
             status.setTextColor(getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
             status.setText(R.string.pending);
@@ -187,8 +207,74 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
+    private void getTransaction(){
+        txHash = getIntent().getStringExtra(Constants.HASH);
+
+        if(txHash == null){
+            return;
+        }
+
+        try {
+            TransactionItem transaction = TransactionsResponse.parseTransaction(wallet.getTransaction(Utils.getHash(txHash)));
+
+            rawTx = transaction.raw;
+
+            tvHash.setText(txHash);
+            value.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(transaction.getAmount()) + " " + getString(R.string.dcr)));
+            transactionFee.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(transaction.getFee()) + " " + getString(R.string.dcr)));
+
+            calendar.setTimeInMillis(transaction.getTimestamp() * 1000);
+
+            date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
+
+            transactionType = transaction.type;
+            if (transactionType.equals(Constants.TICKET_PURCHASE)) {
+                transactionType = getString(R.string.ticket_purchase);
+            } else {
+                transactionType = transactionType.substring(0, 1).toUpperCase() + transactionType.substring(1).toLowerCase();
+            }
+
+            txType.setText(transactionType);
+
+            int height = transaction.getHeight();
+            if (height == -1) {
+                //Not included in block chain, therefore transaction is pending
+                status.setBackgroundResource(R.drawable.tx_status_pending);
+                status.setTextColor(getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
+                status.setText(R.string.pending);
+                confirmation.setText(R.string.unconfirmed);
+            } else {
+                int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
+                confirmations += 1; //+1 confirmation that it exist in a block. best block - height returns 0.
+                confirmation.setText(String.valueOf(confirmations));
+                if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {
+                    status.setBackgroundResource(R.drawable.tx_status_confirmed);
+                    status.setTextColor(getApplicationContext().getResources().getColor(R.color.greenConfirmedTextColor));
+                    status.setText(R.string.confirmed);
+                } else {
+                    status.setBackgroundResource(R.drawable.tx_status_pending);
+                    status.setTextColor(getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
+                    status.setText(R.string.pending);
+                }
+            }
+
+            tvHash.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.copyToClipboard(TransactionDetailsActivity.this, txHash, getString(R.string.tx_hash_copy));
+                }
+            });
+
+            loadInOut(transaction.inputs, transaction.outputs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     private void loadInOut(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput) {
-        LibWallet wallet = DcrConstants.getInstance().wallet;
 
         ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
         ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();
@@ -325,7 +411,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

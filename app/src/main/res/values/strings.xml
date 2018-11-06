@@ -249,13 +249,8 @@
     <string name="rescan_block">Rescan Blockchain</string>
     <string name="starting_height">starting height</string>
     <string name="current_height">Current height</string>
-    <string name="fetching_headers_ellipsis">Fetching Headers…</string>
     <string name="fetching_headers">Fetching Headers</string>
-    <string name="blocks_scanned">blocks scanned</string>
-    <string name="scanning_block">Scanning Blocks</string>
-    <string name="rescan_blocks">Rescan blocks</string>
     <string name="rescan_blocks_confirmation">Are you sure? This could take some time.</string>
-    <string name="rescan_cancelled">Rescan cancelled</string>
     <string name="rescanning_in_progress">Rescanning in progress…</string>
     <!--/Block chain-->
 
@@ -298,7 +293,7 @@
     <string name="connect_to_peer">Connect to Peer</string>
     <string name="server_address">Server Address</string>
     <string name="wallet_log">Wallet Log</string>
-    <string name="crash_title">Crash</string>
+    <string name="crash_title">Force Crash</string>
     <string name="remote_address_invalid">Remote address is invalid</string>
     <string name="key_rescan_block" translatable="false">rescan_block</string>
     <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
@@ -440,11 +435,18 @@
     <string name="enter_current_encryption_password">Enter Current Encryption Password</string>
     <string name="enter_encryption_password">Enter Encryption Password</string>
     <string name="removing_wallet_encryption">Removing wallet encryption</string>
-    <string name="changing_passphrase">Changing Passphrase</string>
+    <string name="changing_password">Changing Password</string>
     <string name="encrypt_wallet">Encrypt Wallet</string>
     <string name="encrypt_wallet_summary">A password will be required at startup.</string>
     <string name="change_encryption_pin_password">Change Encryption PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
+    <string name="changing_pin">Changing PIN</string>
     <!--/Security-->
+
+    <string name="confirm_crash">Confirm Crash</string>
+    <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report</string>
+    <string name="sending_transaction">Sending transaction...</string>
+    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar</string>
+    <string name="check_progress_in_navigation_bar">Check progress in navigation bar</string>
 
 </resources>

@@ -24,6 +24,7 @@ import com.dcrandroid.MainActivity
 import com.dcrandroid.R
 import com.dcrandroid.activities.EnterPassCode
 import com.dcrandroid.activities.ReaderActivity
+import com.dcrandroid.activities.TransactionDetailsActivity
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ConfirmTransactionDialog
@@ -389,7 +390,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (context == null) {
             return
         }
-        pd = Utils.getProgressDialog(context, false, false, "Processing...")
+        pd = Utils.getProgressDialog(context, false, false, getString(R.string.sending_transaction))
         pd!!.show()
         Thread {
             try {
@@ -437,13 +438,12 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
                 .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
                 .setPositiveButton(getString(R.string.close_cap), null)
-                .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { _, _ ->
-                    run {
-                        if (activity != null && activity is MainActivity) {
-                            val mainActivity = activity as MainActivity
-                            mainActivity.displayOverview()
-                        }
-                    }
+                .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { d, _ ->
+                    d.dismiss()
+                    val intent = Intent(context, TransactionDetailsActivity::class.java)
+                    intent.putExtra(Constants.HASH, txHash)
+                    intent.putExtra(Constants.NO_INFO, true)
+                    startActivity(intent)
                 })
                 .setMessageClickListener(View.OnClickListener {
                     Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))

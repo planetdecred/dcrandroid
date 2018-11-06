@@ -146,7 +146,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         isForeground = false;
     }
 
-
     public void prepareHistoryData() {
         if (!isForeground) {
             needsUpdate = true;
@@ -187,7 +186,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + File.pathSeparator + netType + File.pathSeparator + "savedata/");
+            File path = new File(getContext().getFilesDir() + "/" + netType + "/" + "savedata");
             path.mkdirs();
             File file = new File(path, "history_transactions");
             file.createNewFile();
@@ -207,7 +206,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + File.pathSeparator + netType + File.pathSeparator + "savedata/");
+            File path = new File(getContext().getFilesDir() + "/" + netType + "/" + "savedata");
             path.mkdirs();
             File file = new File(path, "history_transactions");
             if (file.exists()) {
