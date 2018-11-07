@@ -9,8 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -65,6 +64,7 @@
             android:layout_marginTop="8dp"
             android:textColor="@color/blueGrayFirstTextColor"
             android:textSize="16sp"
+            android:layout_marginBottom="10dp"
             app:fontFamily="@font/source_sans_pro_regular_family"
             tools:text="@string/total_sending" />
 
@@ -73,7 +73,6 @@
             android:id="@+id/passphrase_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="20dp">
 
             <android.support.v7.widget.AppCompatEditText

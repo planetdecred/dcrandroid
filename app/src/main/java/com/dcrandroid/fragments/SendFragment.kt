@@ -194,7 +194,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         if (destination_account_container.visibility == View.VISIBLE){
             val receiveAddress = constants.wallet.addressForAccount(destination_account_spinner.selectedItemPosition)
-            util!!.set(Constants.RECENT_ADDRESS, receiveAddress)
             send_dcr_address.setText(receiveAddress)
         }
         constructTransaction()
@@ -366,7 +365,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
 
         val unsignedTransaction = wallet.constructTransaction(send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
-        val transactionDialog = ConfirmTransactionDialog(context)
+        val transactionDialog = ConfirmTransactionDialog(context!!)
                 .setAddress(send_dcr_address.text.toString())
                 .setAmount(amount)
                 .setFee(unsignedTransaction.estimatedSignedSize)
@@ -437,7 +436,14 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 .setIcon(R.drawable.np_amount_withdrawal)
                 .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
                 .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
-                .setPositiveButton(getString(R.string.close_cap), null)
+                .setPositiveButton(getString(R.string.ok), DialogInterface.OnClickListener { _, _ ->
+                    run {
+                        if (activity != null && activity is MainActivity) {
+                            val mainActivity = activity as MainActivity
+                            mainActivity.displayOverview()
+                        }
+                    }
+                })
                 .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { d, _ ->
                     d.dismiss()
                     val intent = Intent(context, TransactionDetailsActivity::class.java)

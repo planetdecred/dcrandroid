@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.confirm_tx_dialog.*
 import mobilewallet.Mobilewallet
 import java.text.DecimalFormat
 
-class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClickListener {
+class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClickListener {
 
     private var btnPositiveClick: DialogInterface.OnClickListener? = null
 
@@ -48,7 +48,7 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
         tvTitle.text = context.getString(R.string.sending) + " ${format.format(Mobilewallet.amountCoin(amount!!))} DCR"
 
         val tvAddress = findViewById<TextView>(R.id.address)
-        tvAddress.text = "${context.getString(R.string.to)} $address"
+        tvAddress.text = "${context.getString(R.string.to)} \n $address"
 
         val tvAccount = findViewById<TextView>(R.id.account)
         if (!account.isNullOrBlank()) {
@@ -67,9 +67,9 @@ class ConfirmTransactionDialog(context: Context?) : Dialog(context), View.OnClic
 
         val util = PreferenceUtil(context)
         if(util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN){
-            passphrase_input.visibility = View.GONE
+            passphrase_input_layout.visibility = View.GONE
             btn_positive.isEnabled = true
-            btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.blue))
+            btn_positive.setTextColor(ContextCompat.getColor(context, R.color.blue))
         }else{
             passphrase_input.addTextChangedListener(passphraseTextWatcher)
         }
