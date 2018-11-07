@@ -122,13 +122,6 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -272,6 +265,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             type = Constants.STAKING.toUpperCase();
                         }
 
+                        type = firstLetterCap(type);
                         if(!availableTxTypes.contains(type)){
                             availableTxTypes.add(type);
                         }
@@ -281,7 +275,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         }
                     }
 
-                    availableTxTypes.add(0, "ALL");
+                    availableTxTypes.add(0, "All");
 
                     if(getContext() == null){
                         return;
@@ -408,5 +402,10 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
     }
 
-
+    private String firstLetterCap(String s){
+        if(s.length() > 0){
+            return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+        }
+        return s;
+    }
 }

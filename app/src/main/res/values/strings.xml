@@ -134,7 +134,7 @@
     <string name="account_name">Account Name</string>
     <string name="create_account">Create Account</string>
     <string name="add_account">Add Account</string>
-    <string name="creating_account">Creating Account…</string>
+    <string name="creating_account">Creating account…</string>
     <string name="input_account_name">Enter a name for your account</string>
     <string name="hd_path">HD Path</string>
     <string name="default_account_info">Make this account default for all outgoing and incoming transactions.</string>
@@ -433,13 +433,13 @@
     <string name="enter_current_spending_password">Enter Current Spending Password</string>
     <string name="enter_current_encryption_password">Enter Current Encryption Password</string>
     <string name="enter_encryption_password">Enter Encryption Password</string>
-    <string name="removing_wallet_encryption">Removing wallet encryption</string>
-    <string name="changing_password">Changing Password</string>
+    <string name="removing_wallet_encryption">Removing wallet encryption…</string>
+    <string name="changing_password">Changing password…</string>
     <string name="encrypt_wallet">Encrypt Wallet</string>
     <string name="encrypt_wallet_summary">A password will be required at startup.</string>
     <string name="change_encryption_pin_password">Change Encryption PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
-    <string name="changing_pin">Changing PIN</string>
+    <string name="changing_pin">Changing PIN…</string>
     <!--/Security-->
 
     <string name="confirm_crash">Confirm Crash</string>
@@ -447,6 +447,6 @@
     <string name="sending_transaction">Sending transaction…</string>
     <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar.</string>
     <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
-    <string name="user_agent_summary">For exchange rate fetching</string>
+    <string name="user_agent_summary">For exchange rate fetching.</string>
     <string name="no_transactions_have_occured">No transactions have occurred.</string>
 </resources>
