@@ -430,8 +430,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="25dp"
-            android:background="@drawable/btn_blue"
-            android:enabled="false"
+            android:background="#e6eaed"
             android:text="@string/send"
             android:textColor="@color/blackTextColor38pc"
             android:textSize="14sp" />

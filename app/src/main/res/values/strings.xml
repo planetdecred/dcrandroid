@@ -442,6 +442,7 @@
     <string name="changing_pin">Changing PIN…</string>
     <!--/Security-->
 
+    <!-- Not grouped yet -->
     <string name="confirm_crash">Confirm Crash</string>
     <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report.</string>
     <string name="sending_transaction">Sending transaction…</string>
@@ -451,4 +452,7 @@
     <string name="no_transactions_have_occured">No transactions have occurred.</string>
     <string name="send_to_account">Send to Account</string>
     <string name="send_to_address">Send to Address</string>
+    <string name="encrypting_wallet">Encrypting wallet…</string>
+    <string name="enter_an_amounnt">Enter an amount.</string>
+    <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
 </resources>
