@@ -58,6 +58,7 @@ type LibWallet struct {
 	mu            sync.Mutex
 	activeNet     *netparams.Params
 	syncResponses []SpvSyncResponse
+	rescannning   bool
 }
 
 func NewLibWallet(homeDir string, dbDriver string, netType string) *LibWallet {
@@ -354,7 +355,6 @@ func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass stri
 				syncResponse.OnFetchedHeaders(0, 0, START)
 			}
 
-			
 			_, _, _, _, _, err = lw.wallet.FetchHeaders(ctx, netBackend)
 			if err != nil {
 				log.Error(err)
@@ -703,38 +703,49 @@ func (lw *LibWallet) OpenWallet(pubPass []byte) error {
 	return nil
 }
 
-func (lw *LibWallet) Rescan(startHeight int32, response BlockScanResponse) {
+func (lw *LibWallet) RescanBlocks() error {
+	netBackend, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		return errors.E(ErrNotConnected)
+	}
+
+	if lw.rescannning{
+		return errors.E(ErrInvalid)
+	}
+
 	go func() {
-		netBackend, err := lw.wallet.NetworkBackend()
-		if err != nil {
-			response.OnError(ErrNotConnected)
-		}
-		if startHeight < 0 {
-			response.OnError("Begin height must be non-negative")
-			return
-		}
+		defer func(){
+			lw.rescannning = false
+		}()
+		lw.rescannning = true
 		progress := make(chan wallet.RescanProgress, 1)
 		ctx := contextWithShutdownCancel(context.Background())
 		var totalHeight int32
-		go lw.wallet.RescanProgressFromHeight(ctx, netBackend, startHeight, progress)
+		go lw.wallet.RescanProgressFromHeight(ctx, netBackend, 0, progress)
 		for p := range progress {
 			if p.Err != nil {
 				log.Error(p.Err)
-				response.OnError(p.Err.Error())
+
 				return
 			}
 			totalHeight += p.ScannedThrough
-			if !response.OnScan(p.ScannedThrough) {
-				break
+			for _, response := range lw.syncResponses {
+				response.OnRescan(p.ScannedThrough, PROGRESS)
 			}
 		}
 		select {
 		case <-ctx.Done():
-			response.OnEnd(totalHeight, true)
+			for _, response := range lw.syncResponses {
+				response.OnRescan(totalHeight, PROGRESS)
+			}
 		default:
-			response.OnEnd(totalHeight, false)
+			for _, response := range lw.syncResponses {
+				response.OnRescan(totalHeight, FINISH)
+			}
 		}
 	}()
+
+	return nil
 }
 
 func (lw *LibWallet) IsAddressMine(address string) bool {
@@ -773,6 +784,97 @@ func (lw *LibWallet) GetAccountByAddress(address string) string {
 	}
 	info, _ := lw.wallet.AddressInfo(addr)
 	return lw.GetAccountName(int32(info.Account()))
+}
+
+func (lw *LibWallet) GetTransaction(txHash []byte) (string, error) {
+	hash, err := chainhash.NewHash(txHash)
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+
+	txSummary, _, blockHash, err := lw.wallet.TransactionSummary(hash)
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+
+	var inputTotal int64
+	var outputTotal int64
+	var amount int64
+
+	credits := make([]TransactionCredit, len(txSummary.MyOutputs))
+	for index, credit := range txSummary.MyOutputs {
+		outputTotal += int64(credit.Amount)
+		credits[index] = TransactionCredit{
+			Index:    int32(credit.Index),
+			Account:  int32(credit.Account),
+			Internal: credit.Internal,
+			Amount:   int64(credit.Amount),
+			Address:  credit.Address.String()}
+	}
+
+	debits := make([]TransactionDebit, len(txSummary.MyInputs))
+	for index, debit := range txSummary.MyInputs {
+		inputTotal += int64(debit.PreviousAmount)
+		debits[index] = TransactionDebit{
+			Index:           int32(debit.Index),
+			PreviousAccount: int32(debit.PreviousAccount),
+			PreviousAmount:  int64(debit.PreviousAmount),
+			AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+	}
+
+	var direction int32
+	if txSummary.Type == wallet.TransactionTypeRegular {
+		amountDifference := outputTotal - inputTotal
+		if amountDifference < 0 && (float64(txSummary.Fee) == math.Abs(float64(amountDifference))) {
+			//Transfered
+			direction = 2
+			amount = int64(txSummary.Fee)
+		} else if amountDifference > 0 {
+			//Received
+			direction = 1
+			amount = outputTotal
+		} else {
+			//Sent
+			direction = 0
+			amount = inputTotal
+			amount -= outputTotal
+
+			amount -= int64(txSummary.Fee)
+		}
+	}
+
+	var height int32 = -1
+	if blockHash != nil {
+		blockIdentifier := wallet.NewBlockIdentifierFromHash(blockHash)
+		blockInfo, err := lw.wallet.BlockInfo(blockIdentifier)
+		if err != nil {
+			log.Error(err)
+		} else {
+			height = blockInfo.Height
+		}
+	}
+
+	transaction := Transaction{
+		Fee:       int64(txSummary.Fee),
+		Hash:      fmt.Sprintf("%02x", reverse(txSummary.Hash[:])),
+		Raw:       fmt.Sprintf("%02x", txSummary.Transaction[:]),
+		Timestamp: txSummary.Timestamp,
+		Type:      transactionType(txSummary.Type),
+		Credits:   &credits,
+		Amount:    amount,
+		Height:    height,
+		Direction: direction,
+		Debits:    &debits}
+
+	result, err := json.Marshal(transaction)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(result), nil
 }
 
 func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
@@ -857,106 +959,6 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 	result, _ := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Transactions: transactions})
 	response.OnResult(string(result))
 	return err
-}
-
-// GetRecentTransactions fetches recent transaction and tries to return at most maximumRecentTransactions
-func (lw *LibWallet) GetRecentTransactions(response GetTransactionsResponse, startHeight int32, maximumRecentTransactions int) error {
-	ctx := contextWithShutdownCancel(context.Background())
-	var startBlock, endBlock *wallet.BlockIdentifier
-	transactions := make([]Transaction, 0)
-
-	startBlock = wallet.NewBlockIdentifierFromHeight(startHeight)
-	//1: Fetching Backwards
-	endBlock = wallet.NewBlockIdentifierFromHeight(1)
-
-	rangeFn := func(block *wallet.Block) (bool, error) {
-		for _, transaction := range block.Transactions {
-			var inputAmounts int64
-			var outputAmounts int64
-			var amount int64
-			tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-			for index, credit := range transaction.MyOutputs {
-				outputAmounts += int64(credit.Amount)
-				tempCredits[index] = TransactionCredit{
-					Index:    int32(credit.Index),
-					Account:  int32(credit.Account),
-					Internal: credit.Internal,
-					Amount:   int64(credit.Amount),
-					Address:  credit.Address.String()}
-			}
-			tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-			for index, debit := range transaction.MyInputs {
-				inputAmounts += int64(debit.PreviousAmount)
-				tempDebits[index] = TransactionDebit{
-					Index:           int32(debit.Index),
-					PreviousAccount: int32(debit.PreviousAccount),
-					PreviousAmount:  int64(debit.PreviousAmount),
-					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-			}
-
-			var direction int32
-			if transaction.Type == wallet.TransactionTypeRegular {
-				amountDifference := outputAmounts - inputAmounts
-				if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
-					//Transfered
-					direction = 2
-					amount = int64(transaction.Fee)
-				} else if amountDifference > 0 {
-					//Received
-					direction = 1
-					for _, credit := range transaction.MyOutputs {
-						amount += int64(credit.Amount)
-					}
-				} else {
-					//Sent
-					direction = 0
-					for _, debit := range transaction.MyInputs {
-						amount += int64(debit.PreviousAmount)
-					}
-					for _, credit := range transaction.MyOutputs {
-						amount -= int64(credit.Amount)
-					}
-					amount -= int64(transaction.Fee)
-				}
-			}
-			var height int32 = -1
-			if block.Header != nil {
-				height = int32(block.Header.Height)
-			}
-			tempTransaction := Transaction{
-				Fee:       int64(transaction.Fee),
-				Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-				Raw:       fmt.Sprintf("%02x", transaction.Transaction[:]),
-				Timestamp: transaction.Timestamp,
-				Type:      transactionType(transaction.Type),
-				Credits:   &tempCredits,
-				Amount:    amount,
-				Height:    height,
-				Direction: direction,
-				Debits:    &tempDebits}
-			transactions = append(transactions, tempTransaction)
-		}
-		if len(transactions) >= maximumRecentTransactions {
-			return true, nil
-		}
-		select {
-		case <-ctx.Done():
-			return true, ctx.Err()
-		default:
-			return false, nil
-		}
-	}
-
-	err := lw.wallet.GetTransactions(rangeFn, startBlock, endBlock)
-	if err != nil {
-		return err
-	}
-	result, err := json.Marshal(getTransactionsResponse{ErrorOccurred: false, Transactions: transactions})
-	if err != nil {
-		return err
-	}
-	response.OnResult(string(result))
-	return nil
 }
 
 func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
