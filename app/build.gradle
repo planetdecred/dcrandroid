@@ -6,7 +6,7 @@ android {
         applicationId "com.decred.dcrandroid"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1
+        versionCode 3
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
