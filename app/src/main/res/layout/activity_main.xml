@@ -45,13 +45,15 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/darkBlueTextColor"
                     android:text="@string/testnet"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:padding="5dp"
                     android:id="@+id/tv_testnet"
                     android:visibility="gone"
                     tools:visibility="visible"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="-10dp"
                     />
             </LinearLayout>
 

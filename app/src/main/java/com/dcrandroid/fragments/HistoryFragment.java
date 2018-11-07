@@ -46,7 +46,7 @@ import mobilewallet.GetTransactionsResponse;
 
 public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
 
-    private TextView  refresh;
+    private TextView refresh;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private Spinner spinnerHistory;
@@ -89,6 +89,9 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                if (transactionList.size() <= position || position < 0) {
+                    return;
+                }
                 TransactionItem history = transactionList.get(position);
                 Intent i = new Intent(getContext(), TransactionDetailsActivity.class);
                 Bundle extras = new Bundle();
@@ -258,26 +261,26 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                     availableTxTypes.clear();
 
-                    for(int i = 0; i < fixedTransactionList.size(); i++){
+                    for (int i = 0; i < fixedTransactionList.size(); i++) {
                         String type = fixedTransactionList.get(i).type;
                         if (type.equalsIgnoreCase(Constants.VOTE) || type.equalsIgnoreCase(Constants.TICKET_PURCHASE)
-                                || type.equalsIgnoreCase(Constants.REVOCATION)){
+                                || type.equalsIgnoreCase(Constants.REVOCATION)) {
                             type = Constants.STAKING.toUpperCase();
                         }
 
                         type = firstLetterCap(type);
-                        if(!availableTxTypes.contains(type)){
+                        if (!availableTxTypes.contains(type)) {
                             availableTxTypes.add(type);
                         }
 
-                        if(availableTxTypes.size() >= 3){ // There're only 3 sort types
+                        if (availableTxTypes.size() >= 3) { // There're only 3 sort types
                             break;
                         }
                     }
 
                     availableTxTypes.add(0, "All");
 
-                    if(getContext() == null){
+                    if (getContext() == null) {
                         return;
                     }
 
@@ -300,12 +303,12 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         prepareHistoryData();
     }
 
-    private void sortTransactions(){
+    private void sortTransactions() {
         transactionList.clear();
-        if(transactionTypeSelected.equalsIgnoreCase("ALL")){
+        if (transactionTypeSelected.equalsIgnoreCase("ALL")) {
             transactionList.addAll(fixedTransactionList);
             transactionAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             for (int i = 0; i < fixedTransactionList.size(); i++) {
                 TransactionItem item = fixedTransactionList.get(i);
                 if (transactionTypeSelected.equalsIgnoreCase(Constants.STAKING)) {
@@ -319,10 +322,10 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         }
 
-        if(transactionList.size() > 0){
+        if (transactionList.size() > 0) {
             recyclerView.setVisibility(View.VISIBLE);
             refresh.setVisibility(View.GONE);
-        }else{
+        } else {
             refresh.setText(R.string.no_transactions);
             refresh.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -374,7 +377,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
                 tx.animate = true;
                 final int finalI = i;
-                if(getActivity() == null){
+                if (getActivity() == null) {
                     return;
                 }
                 getActivity().runOnUiThread(new Runnable() {
@@ -387,7 +390,7 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    private void setupSortListener()  {
+    private void setupSortListener() {
         spinnerHistory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -402,8 +405,8 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
     }
 
-    private String firstLetterCap(String s){
-        if(s.length() > 0){
+    private String firstLetterCap(String s) {
+        if (s.length() > 0) {
             return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
         }
         return s;

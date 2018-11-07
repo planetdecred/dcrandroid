@@ -51,8 +51,9 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         tvAddress.text = "${context.getString(R.string.to)} \n $address"
 
         val tvAccount = findViewById<TextView>(R.id.account)
+        tvAccount.visibility = View.GONE
         if (!account.isNullOrBlank()) {
-            tvAccount.visibility = View.GONE
+            tvAccount.visibility = View.VISIBLE
             tvAccount.text = "($account)"
         }
 
@@ -66,11 +67,11 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         tvTotal.text = "${context.getString(R.string.total)} ${Mobilewallet.amountCoin(amount!! + estFee)} DCR"
 
         val util = PreferenceUtil(context)
-        if(util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN){
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
             passphrase_input_layout.visibility = View.GONE
             btn_positive.isEnabled = true
             btn_positive.setTextColor(ContextCompat.getColor(context, R.color.blue))
-        }else{
+        } else {
             passphrase_input.addTextChangedListener(passphraseTextWatcher)
         }
     }
@@ -100,7 +101,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         return this
     }
 
-    fun getPassphrase(): String{
+    fun getPassphrase(): String {
         return passphrase_input.text.toString()
     }
 
@@ -120,7 +121,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
 
     private val passphraseTextWatcher: TextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            if(passphrase_input.text.isNullOrEmpty()) {
+            if (passphrase_input.text.isNullOrEmpty()) {
                 btn_positive.isEnabled = false
                 btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.lightGreyBackgroundColor))
             } else {

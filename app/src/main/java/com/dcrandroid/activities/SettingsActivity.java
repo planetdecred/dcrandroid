@@ -12,7 +12,6 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -24,10 +23,6 @@ import com.dcrandroid.dialog.StakeyDialog;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import mobilewallet.Mobilewallet;
 
@@ -46,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }
 
-    public static class MainPreferenceFragment extends PreferenceFragmentCompat{
+    public static class MainPreferenceFragment extends PreferenceFragmentCompat {
         private final int ENCRYPT_REQUEST_CODE = 1;
         private PreferenceUtil util;
         private int buildDateClicks = 0;
@@ -280,8 +275,7 @@ public class SettingsActivity extends AppCompatActivity {
                             intent = new Intent(getContext(), EnterPassCode.class);
                         }
 
-                        intent.putExtra(Constants.ENCRYPT_PASSPHRASE_TYPE, true);
-                        intent.putExtra(Constants.ENCRYPT, true);
+                        intent.putExtra(Constants.SPENDING_PASSWORD, false);
                     }
 
                     startActivityForResult(intent, ENCRYPT_REQUEST_CODE);
@@ -304,9 +298,9 @@ public class SettingsActivity extends AppCompatActivity {
                                         Toast.makeText(getContext(), R.string.check_progress_in_navigation_bar, Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
-                                        if(e.getMessage().equals(Mobilewallet.ErrInvalid)){
+                                        if (e.getMessage().equals(Mobilewallet.ErrInvalid)) {
                                             Toast.makeText(getContext(), R.string.wallet_is_rescanning, Toast.LENGTH_LONG).show();
-                                        }else{
+                                        } else {
                                             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -337,6 +331,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             public void run() {
                                                 encryptWallet.setChecked(false);
                                                 changeEncryptionPass.setVisible(false);
+                                                util.set(Constants.ENCRYPT_PASSPHRASE_TYPE, Constants.EMPTY_STRING);
                                                 pd.dismiss();
                                             }
                                         });

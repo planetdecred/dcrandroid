@@ -98,7 +98,11 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
             try {
                 val wallet = DcrConstants.getInstance().wallet
                         ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
-                show(getString(R.string.changing_pin))
+                if (isSpendingPassword!!) {
+                    show(getString(R.string.changing_pin))
+                } else {
+                    show(getString(R.string.encrypting_wallet))
+                }
                 val util = PreferenceUtil(this@ChangePinFragment.context!!)
                 if (isSpendingPassword!!) {
                     wallet.changePrivatePassphrase(oldPassphrase!!.toByteArray(), passCode!!.toByteArray())
