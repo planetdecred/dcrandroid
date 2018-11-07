@@ -47,7 +47,7 @@
     <string name="details">Details</string>
     <string name="setting">Setting</string>
     <string name="hide_this_account">Hide This Account</string>
-    <string name="wallet_balance_will_be_ignored">Wallet balance will be ignored.</string>
+    <string name="account_balance_will_be_ignored">Account balance will be ignored.</string>
     <string name="default_account">Default Account</string>
     <string name="exit_cap">EXIT</string>
     <string name="hidden">hidden</string>
@@ -449,4 +449,6 @@
     <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
     <string name="user_agent_summary">For exchange rate fetching.</string>
     <string name="no_transactions_have_occured">No transactions have occurred.</string>
+    <string name="send_to_account">Send to Account</string>
+    <string name="send_to_address">Send to Address</string>
 </resources>

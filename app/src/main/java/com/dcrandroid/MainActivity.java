@@ -79,7 +79,7 @@ import mobilewallet.TransactionListener;
 public class MainActivity extends AppCompatActivity implements TransactionListener,
         SpvSyncResponse {
 
-    public static MenuItem addAccountMenu, generateAddressMenu;
+    public static MenuItem addAccountMenu, generateAddressMenu, sendToAccountMenu;
     public int pageID;
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView rescanImage, stopScan, syncIndicator;
@@ -429,8 +429,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_page, menu);
         super.onCreateOptionsMenu(menu);
+
         addAccountMenu = menu.findItem(R.id.action_add);
         generateAddressMenu = menu.findItem(R.id.generate_address);
+        sendToAccountMenu = menu.findItem(R.id.send_to_account);
+
+        sendToAccountMenu.setVisible(false);
         generateAddressMenu.setVisible(false);
         addAccountMenu.setVisible(false);
         return true;

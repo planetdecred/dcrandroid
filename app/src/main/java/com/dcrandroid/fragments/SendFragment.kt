@@ -151,17 +151,23 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         send_btn.setOnClickListener { showConfirmTransactionDialog() }
 
         destination_account_container.visibility = View.GONE
-        divider2.visibility = View.GONE
-        toggle.setOnClickListener {
-            if(destination_address_container.visibility == View.VISIBLE){
+
+        MainActivity.sendToAccountMenu.setTitle(R.string.send_to_account)
+        MainActivity.sendToAccountMenu.isVisible = true
+
+        MainActivity.sendToAccountMenu.setOnMenuItemClickListener {
+            if (destination_address_container.visibility == View.VISIBLE) {
                 destination_address_container.visibility = View.GONE
                 destination_account_container.visibility = View.VISIBLE
                 tvDestinationError.text = ""
-            }else{
+                MainActivity.sendToAccountMenu.setTitle(R.string.send_to_address)
+            } else {
                 destination_address_container.visibility = View.VISIBLE
                 destination_account_container.visibility = View.GONE
                 send_dcr_address.text.clear()
+                MainActivity.sendToAccountMenu.setTitle(R.string.send_to_account)
             }
+            true
         }
 
         prepareAccounts()
@@ -187,12 +193,18 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        MainActivity.sendToAccountMenu.isVisible = false
+        MainActivity.sendToAccountMenu.setOnMenuItemClickListener(null)
+    }
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (isSendAll) {
             send_max.performClick()
             return
         }
-        if (destination_account_container.visibility == View.VISIBLE){
+        if (destination_account_container.visibility == View.VISIBLE) {
             val receiveAddress = constants.wallet.addressForAccount(destination_account_spinner.selectedItemPosition)
             send_dcr_address.setText(receiveAddress)
         }
@@ -284,7 +296,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 fee = fee.setScale(9, RoundingMode.HALF_UP)
                 val convertedFee = fee.multiply(exchangeDecimal)
                 send_dcr_estimate_fee.text = "${CoinFormat.format(estFee)} (${formatter.format(convertedFee.toDouble())} USD)"
-            }else{
+            } else {
                 send_dcr_estimate_fee.text = CoinFormat.format(estFee)
             }
 
@@ -350,8 +362,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     send_dcr_address.setText("")
                 }
             }
-        }else if(requestCode == PASSCODE_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == PASSCODE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 startTransaction(data!!.getStringExtra(Constants.PASSPHRASE))
             }
         }
@@ -371,10 +383,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 .setFee(unsignedTransaction.estimatedSignedSize)
 
         transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
-            if(util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
+            if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
                 val intent = Intent(context, EnterPassCode::class.java)
                 startActivityForResult(intent, PASSCODE_REQUEST_CODE)
-            }else{
+            } else {
                 startTransaction(transactionDialog.getPassphrase())
             }
         })
@@ -476,7 +488,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if (s.toString() == "") {
                 tvDestinationError.setText(R.string.empty_destination_address)
                 send_btn.isEnabled = false
-                if(constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))) paste_dcr_address.visibility =  View.VISIBLE
+                if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))) paste_dcr_address.visibility = View.VISIBLE
                 send_dcr_scan.visibility = View.VISIBLE
                 send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
             } else if (!constants.wallet.isAddressValid(s.toString())) {
@@ -648,6 +660,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.ic_clear else 0
                 setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
