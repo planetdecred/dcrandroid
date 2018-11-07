@@ -47,5 +47,6 @@ public class MainApplication extends Application {
         super.onCreate();
         PreferenceUtil util = new PreferenceUtil(this);
         setNetworkMode(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")));
+        util.setInt(Constants.APP_VERSION, BuildConfig.VERSION_CODE);
     }
 }
