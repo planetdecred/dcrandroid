@@ -95,11 +95,9 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private void startup() {
         constants = DcrConstants.getInstance();
 
-        String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
-
         String homeDir = getFilesDir() + "/wallet";
 
-        constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB, netType);
+        constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
         constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
         constants.wallet.initLoader();
 

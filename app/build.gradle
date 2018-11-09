@@ -27,11 +27,15 @@ android {
 
     flavorDimensions "nettype"
     productFlavors {
-        net {
+        tstnet {
             dimension "nettype"
             versionName "testnet ${getDate()}"
             applicationIdSuffix ".testnet"
             buildConfigField("boolean", "IS_TESTNET", "true")
+            buildConfigField("int", "TicketMaturity", "16")
+            buildConfigField("int", "TargetTimePerBlock", "120")
+            buildConfigField("String", "LogDir", "\"/wallet/logs/testnet3/dcrwallet.log\"")
+            buildConfigField("String", "NetType", "\"testnet3\"")
             resValue "string", "app_name", "Decred Wallet Testnet"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_testnet",
@@ -44,6 +48,10 @@ android {
             versionName "mainnet ${getDate()}"
             applicationIdSuffix ".mainnet"
             buildConfigField("boolean", "IS_TESTNET", "false")
+            buildConfigField("int", "TicketMaturity", "256")
+            buildConfigField("int", "TargetTimePerBlock", "300")
+            buildConfigField("String", "LogDir", "\"/wallet/logs/mainnet/dcrwallet.log\"")
+            buildConfigField("String", "NetType", "\"mainnet\"")
             resValue "string", "app_name", "Decred Wallet"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_mainnet",

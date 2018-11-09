@@ -164,10 +164,9 @@ public class SettingsActivity extends AppCompatActivity {
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    String logDir = BuildConfig.IS_TESTNET ? "/wallet/logs/testnet3/dcrwallet.log" : "/wallet/logs/mainnet/dcrwallet.log";
 
                     Intent i = new Intent(getActivity(), LogViewer.class);
-                    i.putExtra("log_path", getContext().getFilesDir() + logDir);
+                    i.putExtra("log_path", getContext().getFilesDir() + BuildConfig.LogDir);
                     startActivity(i);
 
                     return true;

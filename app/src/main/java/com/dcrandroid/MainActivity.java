@@ -717,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         } else if (state.equals(Mobilewallet.PROGRESS)) {
             setConnectionStatus(getString(R.string.fetching_headers));
             long currentTime = System.currentTimeMillis() / 1000;
-            long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + constants.wallet.getBestBlock();
+            long estimatedBlocks = ((currentTime - bestBlockTimestamp) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
             float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
             fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
             String status = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched));
