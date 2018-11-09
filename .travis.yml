@@ -14,10 +14,10 @@ before_install:
   - curl -sL -o ~/bin/gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
   - chmod +x ~/bin/gimme
   - gimme -h
-  - gimme --force 1.10
+  - gimme --force 1.11
   - echo $GOROOT
   - rm $GOROOT -R
-  - export GOROOT='/home/travis/.gimme/versions/go1.10.linux.amd64';
+  - export GOROOT='/home/travis/.gimme/versions/go1.11.linux.amd64';
   - echo $GOROOT
   - export PATH=$PATH:$GOROOT/bin
   - sudo ln -s $GOROOT/bin/go /usr/bin/go
@@ -28,13 +28,14 @@ before_install:
   - mkdir bin
   - export GOPATH=$(pwd) && echo $GOPATH
   - export PATH=$PATH:$GOPATH/bin
-  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sudo sh
   - go get -u golang.org/x/mobile/cmd/gomobile && go get -u golang.org/x/mobile/cmd/gobind
   - chmod +x $GOPATH/bin/gomobile && chmod +x $GOPATH/bin/gobind
-  - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind && sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile && sudo ln -s $GOPATH/bin/dep /usr/bin/dep
+  - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind && sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile
   - gomobile init -ndk $ANDROID_NDK_HOME
   - mkdir -p src/github.com/raedahgroup && cd src/github.com/raedahgroup
   - git clone https://github.com/raedahgroup/mobilewallet && cd mobilewallet
-  - dep ensure -v
+  - export GO111MODULE=on
+  - go mod download && go mod vendor
+  - export GO111MODULE=off
   - gomobile bind -target=android/386
   - cp mobilewallet.aar $GOPATH/../dcrandroid/app/libs/mobilewallet.aar && cd $GOPATH/../dcrandroid
