@@ -117,12 +117,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.Amount.setText(R.string.ticket);
             holder.txType.setBackgroundResource(R.drawable.immature_ticket);
 
-            int ticketMaturity = BuildConfig.IS_TESTNET ? 16 : 256;
-
             if (confirmations < requiredConfs) {
                 holder.status.setText(context.getString(R.string.pending));
                 holder.status.setTextColor(pendingTextColor);
-            } else if (confirmations >= requiredConfs && confirmations < ticketMaturity) {
+            } else if (confirmations >= requiredConfs && confirmations < BuildConfig.TicketMaturity) {
 
                 SpannableString confirmedImmature = new SpannableString(context.getString(R.string.confirmed_immature));
 

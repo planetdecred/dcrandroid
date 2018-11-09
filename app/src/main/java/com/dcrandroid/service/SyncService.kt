@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.util.Log
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
@@ -123,7 +124,7 @@ class SyncService : Service(), SpvSyncResponse {
 
         if (state == Mobilewallet.PROGRESS) {
             val currentTime = System.currentTimeMillis() / 1000
-            val estimatedBlocks = (currentTime - lastHeaderTime) / 120 + wallet!!.bestBlock
+            val estimatedBlocks = (currentTime - lastHeaderTime) / BuildConfig.TargetTimePerBlock + wallet!!.bestBlock
             var fetchedPercentage = wallet!!.bestBlock.toFloat() / estimatedBlocks * 100
             fetchedPercentage = if (fetchedPercentage > 100) 100F else fetchedPercentage
 

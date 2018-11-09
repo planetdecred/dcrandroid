@@ -274,9 +274,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(getActivity() == null || getContext() == null){
                 return;
             }
-            String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + "/" + netType + "/" + "savedata/");
+            File path = new File(getContext().getFilesDir() + "/" + BuildConfig.NetType + "/" + "savedata/");
             path.mkdirs();
             File file = new File(path,"transactions");
             file.createNewFile();
@@ -293,9 +292,8 @@ public class OverviewFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(getActivity() == null || getContext() == null){
                 return;
             }
-            String netType = BuildConfig.IS_TESTNET ? "testnet3" : "mainnet";
 
-            File path = new File(getContext().getFilesDir() + "/" +netType + "/" + "savedata/");
+            File path = new File(getContext().getFilesDir() + "/" + BuildConfig.NetType + "/" + "savedata/");
             path.mkdirs();
             File file = new File(path, "transactions");
             if (file.exists()) {

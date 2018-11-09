@@ -20,16 +20,6 @@ import org.acra.annotation.ReportsCrashes;
 )
 public class MainApplication extends Application {
 
-    private static int networkMode;
-
-    public int getNetworkMode(){
-        return networkMode;
-    }
-
-    public void setNetworkMode(int networkMode) {
-        MainApplication.networkMode = networkMode;
-    }
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -46,7 +36,6 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         PreferenceUtil util = new PreferenceUtil(this);
-        setNetworkMode(Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")));
         util.setInt(Constants.APP_VERSION, BuildConfig.VERSION_CODE);
     }
 }
