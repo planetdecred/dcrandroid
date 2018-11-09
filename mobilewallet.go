@@ -709,12 +709,12 @@ func (lw *LibWallet) RescanBlocks() error {
 		return errors.E(ErrNotConnected)
 	}
 
-	if lw.rescannning{
+	if lw.rescannning {
 		return errors.E(ErrInvalid)
 	}
 
 	go func() {
-		defer func(){
+		defer func() {
 			lw.rescannning = false
 		}()
 		lw.rescannning = true

@@ -423,7 +423,7 @@ func (c *Cursor) Prev() (key, value []byte) {
 	prefixLength := int(val[0])
 	if prefixLength == len(c.prefix) {
 		if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
-			c.ck =  item.KeyCopy(nil)
+			c.ck = item.KeyCopy(nil)
 			if item.UserMeta() == metaBucket {
 				return c.ck[prefixLength:], nil
 			}

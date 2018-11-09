@@ -270,10 +270,8 @@ func (b *Bucket) put(key []byte, value []byte) error {
 		return err
 	}
 	err = b.txn.Set(k, insertPrefixLength(value[:], len(b.prefix)))
-	if err != nil {
-		return err
-	}
-	return nil
+
+	return err
 }
 
 func (b *Bucket) delete(key []byte) error {
