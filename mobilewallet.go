@@ -1595,6 +1595,8 @@ func translateError(err error) error {
 			return errors.New(ErrInsufficientBalance)
 		case errors.NotExist:
 			return errors.New(ErrNotExist)
+		case errors.Passphrase:
+			return errors.New(ErrInvalidPassphrase)
 		}
 	}
 	return err
