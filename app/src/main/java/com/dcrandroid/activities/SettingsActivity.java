@@ -1,6 +1,7 @@
 package com.dcrandroid.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.DeleteWalletDialog;
 import com.dcrandroid.dialog.StakeyDialog;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -43,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
         private final int ENCRYPT_REQUEST_CODE = 1;
+        private final int PASSCODE_REQUEST_CODE = 2;
         private PreferenceUtil util;
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
@@ -306,6 +309,58 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
                             }).setNegativeButton(android.R.string.cancel, null)
                             .show();
+                            return true;
+                }
+            });
+        
+            findPreference(getString(R.string.delete_wallet)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final DeleteWalletDialog deleteWalletDialog = new DeleteWalletDialog(getContext());
+                    deleteWalletDialog.setTitle(getString(R.string.delete_wallet_prompt_title));
+                    deleteWalletDialog.setMessage(getString(R.string.delete_wallet_prompt_message));
+                    deleteWalletDialog.setCancelable(true);
+                    deleteWalletDialog.setPositiveButton(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
+                                startActivityForResult(new Intent(getActivity(), EnterPassCode.class), PASSCODE_REQUEST_CODE);
+                            } else {
+                                pd = Utils.getProgressDialog(getContext(), false, false, "Deleting Wallet . . .");
+                                pd.show();
+                                new Thread() {
+                                    public void run() {
+                                        try {
+                                            DcrConstants.getInstance().wallet.unlockWallet(deleteWalletDialog.getPassphrase().getBytes());
+                                            if (getActivity() != null) {
+                                                Utils.clearApplicationData(getActivity());
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        pd.dismiss();
+                                                        Utils.restartApp(getContext());
+                                                    }
+                                                });
+                                            }
+                                        } catch (final Exception e) {
+                                            e.printStackTrace();
+                                            if (getActivity() != null) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        deleteWalletDialog.dismiss();
+                                                        Toast.makeText(getActivity(), getString(R.string.invalid_passphrase), Toast.LENGTH_LONG).show();
+                                                        pd.dismiss();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                }.start();
+                            }
+                        }
+                    }).show();
+                    deleteWalletDialog.show();
                     return true;
                 }
             });
@@ -352,6 +407,21 @@ public class SettingsActivity extends AppCompatActivity {
                     } else {
                         encryptWallet.setChecked(!encryptWallet.isChecked());
                         changeEncryptionPass.setVisible(encryptWallet.isChecked());
+                    }
+                }
+            } else if (requestCode == PASSCODE_REQUEST_CODE) {
+                if (resultCode == RESULT_OK) {
+                    pd = Utils.getProgressDialog(getContext(), false, false, "Deleting Wallet . . .");
+                    pd.show();
+                    if (getActivity() != null) {
+                        Utils.clearApplicationData(getActivity());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                pd.dismiss();
+                                Utils.restartApp(getActivity());
+                            }
+                        });
                     }
                 }
             }

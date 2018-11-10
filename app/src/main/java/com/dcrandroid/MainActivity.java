@@ -187,17 +187,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         });
     }
 
-    private void restartApp() {
-        PackageManager packageManager = getPackageManager();
-        Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
-        if (intent != null) {
-            ComponentName componentName = intent.getComponent();
-            Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-            startActivity(mainIntent);
-            Runtime.getRuntime().exit(0);
-        }
-    }
-
     private void registerNotificationChannel() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -233,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         if (constants.wallet == null) {
             System.out.println("Restarting app");
-            restartApp();
+            Utils.restartApp(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

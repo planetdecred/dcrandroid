@@ -119,5 +119,10 @@
             android:title="@string/build_date"
             app:iconSpaceReserved="false"
             />
+        <Preference
+            android:key="@string/delete_wallet"
+            android:title="@string/delete_wallet_title"
+            app:iconSpaceReserved="false"
+            />
     </PreferenceCategory>
 </PreferenceScreen>
