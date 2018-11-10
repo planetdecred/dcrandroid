@@ -84,17 +84,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         listView.requestLayout();
     }
 
-    private void restartApp() {
-        PackageManager packageManager = getPackageManager();
-        Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
-        if (intent != null) {
-            ComponentName componentName = intent.getComponent();
-            Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-            startActivity(mainIntent);
-            Runtime.getRuntime().exit(0);
-        }
-    }
-
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -106,7 +95,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (DcrConstants.getInstance().wallet == null) {
-            restartApp();
+            Utils.restartApp(this);
             return;
         }
 

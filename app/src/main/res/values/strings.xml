@@ -44,6 +44,8 @@
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
     <string name="exit_app_prompt_title">Exit wallet?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
+    <string name="delete_wallet_prompt_title">Delete Wallet?</string>
+    <string name="delete_wallet_prompt_message">Are you sure you want to delete your wallet? Make sure you have your wallet seed saved or your coins moved before deleting. This will also clear all app settings to a default state.</string>
     <string name="details">Details</string>
     <string name="setting">Setting</string>
     <string name="hide_this_account">Hide This Account</string>
@@ -52,6 +54,7 @@
     <string name="exit_cap">EXIT</string>
     <string name="hidden">hidden</string>
     <string name="delete">Delete</string>
+    <string name="no">No</string>
     <string name="confirm">Confirm</string>
     <string name="usd" translatable="false">USD</string>
     <string name="hyphen">-</string>
@@ -287,6 +290,8 @@
     <string name="remote_node_address" translatable="false">remote_node_address</string>
     <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
     <string name="build_date_system" translatable="false">build_date_system</string>
+    <string name="delete_wallet" translatable="false">delete_wallet</string>
+    <string name="delete_wallet_title">Delete Wallet</string>
     <string name="logging_level">Logging Level</string>
     <string name="network_mode">Network Mode</string>
     <string name="connect_to_peer">Connect to Peer</string>
