@@ -14,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,6 +71,13 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     private TextView address;
     private DcrConstants constants;
     private Map<EncodeHintType, Object> qrHints = new HashMap<>();
+    private Spinner accountSpinner;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -84,8 +93,8 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         ReceiveContainer = rootView.findViewById(R.id.receive_container);
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
-        //Button buttonGenerate = rootView.findViewById(R.id.btn_gen_new_addr);
-        final Spinner accountSpinner = rootView.findViewById(R.id.recieve_dropdown);
+
+        accountSpinner = rootView.findViewById(R.id.recieve_dropdown);
         accountSpinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         categories = new ArrayList<>();
@@ -98,22 +107,6 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
 
         imageView.setOnTouchListener(this);
 
-        MainActivity.generateAddressMenu.setVisible(true);
-
-        MainActivity.generateAddressMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                try {
-                    int position = accountSpinner.getSelectedItemPosition();
-                    String newAddress = constants.wallet.nextAddress(accountNumbers.get(position));
-                    setAddress(newAddress);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
-
         getActivity().setTitle(getString(R.string.receive));
 
         qrHints.put(EncodeHintType.MARGIN, 0);
@@ -125,10 +118,25 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        MainActivity.generateAddressMenu.setVisible(false);
-        MainActivity.generateAddressMenu.setOnMenuItemClickListener(null);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.receive_page_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.generate_address:
+                try {
+                    int position = accountSpinner.getSelectedItemPosition();
+                    String newAddress = constants.wallet.nextAddress(accountNumbers.get(position));
+                    setAddress(newAddress);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void prepareAccounts() {

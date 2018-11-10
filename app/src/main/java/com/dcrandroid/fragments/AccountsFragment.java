@@ -14,9 +14,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.adapter.AccountAdapter;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Account;
@@ -49,6 +53,8 @@ public class AccountsFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
+    private int EDIT_ACCOUNT_REQUEST_CODE = 200, CREATE_ACCOUNT_REQUEST_CODE = 1;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vi = inflater.inflate(R.layout.content_account, container, false);
@@ -61,7 +67,7 @@ public class AccountsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 200 && resultCode == RESULT_OK){
+        if (requestCode == EDIT_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK){
             String accountName = data.getStringExtra(Constants.ACCOUNT_NAME);
             int accountNumber = data.getIntExtra(Constants.ACCOUNT_NUMBER, -1);
             for (int i = 0; i < accounts.size(); i++){
@@ -71,32 +77,30 @@ public class AccountsFragment extends Fragment {
                     return;
                 }
             }
+        }else if(requestCode == CREATE_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK){
+            prepareAccountData();
         }
     }
 
-    public void prepareAccountData() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    accounts.clear();
-                    accounts.addAll(Account.parse(wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
-                    if (getActivity() == null) {
-                        return;
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            accountAdapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+    private void prepareAccountData() {
+        try {
+            accounts.clear();
+            accounts.addAll(Account.parse(wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS)));
+            if (getActivity() == null) {
+                return;
             }
-        }).start();
+            accountAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -108,7 +112,6 @@ public class AccountsFragment extends Fragment {
         getActivity().setTitle(getString(R.string.accounts));
         util = new PreferenceUtil(getActivity());
 
-        MainActivity.addAccountMenu.setVisible(true);
         accountAdapter = new AccountAdapter(accounts, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -125,9 +128,20 @@ public class AccountsFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        MainActivity.addAccountMenu.setVisible(false);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.accounts_page_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.add_account:
+                Intent intent = new Intent(getContext(), AddAccountActivity.class);
+                startActivityForResult(intent, CREATE_ACCOUNT_REQUEST_CODE);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

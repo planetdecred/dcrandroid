@@ -87,7 +87,7 @@ public class AddAccountActivity extends AppCompatActivity {
             public void run() {
                 try {
                     DcrConstants.getInstance().wallet.nextAccount(name, privatePassphrase);
-                    setResult(0);
+                    setResult(RESULT_OK);
                     finish();
                 } catch (final Exception e) {
                     e.printStackTrace();
@@ -97,7 +97,7 @@ public class AddAccountActivity extends AppCompatActivity {
                             Toast.makeText(AddAccountActivity.this, Utils.translateError(AddAccountActivity.this, e), Toast.LENGTH_LONG).show();
                         }
                     });
-                    setResult(1);
+                    setResult(RESULT_CANCELED);
                 }
                 if (pd.isShowing()) {
                     runOnUiThread(new Runnable() {
