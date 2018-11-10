@@ -151,18 +151,23 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         send_btn.setOnClickListener {
+            var errors = 0
             val address = send_dcr_address.text.toString()
+
             if (address.isEmpty()) {
+                errors++
                 tvDestinationError.setText(R.string.empty_destination_address)
-                return@setOnClickListener
             } else if (!wallet.isAddressValid(address)) {
+                errors++
                 tvDestinationError.setText(R.string.invalid_destination_address)
-                return@setOnClickListener
-            } else if (amount_dcr.text.toString().isEmpty()) {
-                send_error_label.setText(R.string.enter_an_amounnt)
-                return@setOnClickListener
-            } else if (amount == 0L) {
-                send_error_label.setText(R.string.amount_must_be_greater_than_zero)
+            }
+
+            if (amount_dcr.text.toString().isEmpty() || amount == 0L) {
+                errors++
+                send_error_label.setText(R.string.amount_can_not_be_zero)
+            }
+
+            if(errors > 0){
                 return@setOnClickListener
             }
             showConfirmTransactionDialog()
@@ -229,10 +234,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
             R.id.clear_fields -> {
                 if (destination_address_container.visibility == View.VISIBLE) {
-                    send_dcr_address.removeTextChangedListener(addressWatcher)
                     send_dcr_address.text.clear()
-                    send_dcr_address.addTextChangedListener(addressWatcher)
                 }
+
+                tvDestinationError.text = ""
 
                 amount_dcr.text.clear()
             }

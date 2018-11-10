@@ -178,7 +178,9 @@
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingStart="5dp"
-            android:layout_gravity="end"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:layout_gravity="start"
             app:fontFamily="@font/source_sans_pro_regular"
             android:textColor="@color/orangeTextColor"
             android:visibility="visible"
@@ -298,10 +300,11 @@
             android:id="@+id/send_error_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="start"
             android:paddingEnd="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
+            android:paddingStart="5dp"
             android:textColor="@color/orangeTextColor"
             tools:text="test text" />
 
