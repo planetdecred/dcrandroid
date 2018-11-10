@@ -20,10 +20,12 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.Utils;
 
 import java.io.File;
 
 import mobilewallet.LibWallet;
+import mobilewallet.Mobilewallet;
 
 /**
  * Created by Macsleven on 24/12/2017.
@@ -160,7 +162,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                         public void run() {
                             InfoDialog infoDialog = new InfoDialog(SplashScreen.this)
                                     .setDialogTitle(getString(R.string.failed_to_open_wallet))
-                                    .setMessage(e.getMessage())
+                                    .setMessage(Utils.translateError(SplashScreen.this, e))
                                     .setIcon(R.drawable.np_amount_withdrawal) //Temporary Icon
                                     .setPositiveButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
                                         @Override
@@ -168,6 +170,34 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                                             finish();
                                         }
                                     });
+
+                                    if(e.getMessage().equals(Mobilewallet.ErrInvalidPassphrase)){
+                                        if(util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PIN)){
+                                            infoDialog.setMessage(getString(R.string.invalid_pin));
+                                        }
+                                        infoDialog.setNegativeButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                            }
+                                        }).setPositiveButton(getString(R.string.retry_caps), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent i;
+
+                                                if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                                                    i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
+                                                } else {
+                                                    i = new Intent(SplashScreen.this, EnterPassCode.class);
+                                                }
+
+                                                i.putExtra(Constants.SPENDING_PASSWORD, false);
+                                                i.putExtra(Constants.NO_RETURN, true);
+                                                startActivityForResult(i, PASSWORD_REQUEST_CODE);
+                                            }
+                                        });
+                                    }
+
                             infoDialog.setCancelable(false);
                             infoDialog.setCanceledOnTouchOutside(false);
                             infoDialog.show();
