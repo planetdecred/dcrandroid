@@ -2,14 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_add"
+        android:id="@+id/add_account"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add_account"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/generate_address"
-        android:title="@string/generate_new_address"
-        app:showAsAction="never"/>
-    <item android:id="@+id/send_to_account"
-        android:title="@string/send_to_account"
-        app:showAsAction="never"/>
 </menu>

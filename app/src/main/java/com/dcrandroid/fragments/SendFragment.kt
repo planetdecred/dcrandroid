@@ -11,10 +11,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -97,6 +94,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             return destAddress
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_send, container, false)
     }
@@ -168,37 +170,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         destination_account_container.visibility = View.GONE
 
-        MainActivity.sendToAccountMenu.setTitle(R.string.send_to_account)
-        MainActivity.sendToAccountMenu.isVisible = true
-
-        MainActivity.sendToAccountMenu.setOnMenuItemClickListener {
-            if (destination_address_container.visibility == View.VISIBLE) {
-                destination_address_container.visibility = View.GONE
-                destination_account_container.visibility = View.VISIBLE
-
-                var position = destination_account_spinner.selectedItemPosition
-                if (position < 0) {
-                    position = 0
-                }
-
-                val receiveAddress = constants.wallet.addressForAccount(position)
-                send_dcr_address.setText(receiveAddress)
-
-                tvDestinationError.text = ""
-                MainActivity.sendToAccountMenu.setTitle(R.string.send_to_address)
-            } else {
-                destination_address_container.visibility = View.VISIBLE
-                destination_account_container.visibility = View.GONE
-
-                send_dcr_address.removeTextChangedListener(addressWatcher)
-                send_dcr_address.text.clear()
-                send_dcr_address.addTextChangedListener(addressWatcher)
-
-                MainActivity.sendToAccountMenu.setTitle(R.string.send_to_account)
-            }
-            true
-        }
-
         prepareAccounts()
 
         send_dcr_address.addTextChangedListener(addressWatcher)
@@ -222,10 +193,51 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        MainActivity.sendToAccountMenu.isVisible = false
-        MainActivity.sendToAccountMenu.setOnMenuItemClickListener(null)
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater!!.inflate(R.menu.send_page_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.send_to_account ->{
+                if (destination_address_container.visibility == View.VISIBLE) {
+                    destination_address_container.visibility = View.GONE
+                    destination_account_container.visibility = View.VISIBLE
+
+                    var position = destination_account_spinner.selectedItemPosition
+                    if (position < 0) {
+                        position = 0
+                    }
+
+                    val receiveAddress = constants.wallet.addressForAccount(position)
+                    send_dcr_address.setText(receiveAddress)
+
+                    tvDestinationError.text = ""
+                    item.setTitle(R.string.send_to_address)
+                } else {
+                    destination_address_container.visibility = View.VISIBLE
+                    destination_account_container.visibility = View.GONE
+
+                    send_dcr_address.removeTextChangedListener(addressWatcher)
+                    send_dcr_address.text.clear()
+                    send_dcr_address.addTextChangedListener(addressWatcher)
+
+                    item.setTitle(R.string.send_to_account)
+                }
+                return true
+            }
+            R.id.clear_fields -> {
+                if (destination_address_container.visibility == View.VISIBLE) {
+                    send_dcr_address.removeTextChangedListener(addressWatcher)
+                    send_dcr_address.text.clear()
+                    send_dcr_address.addTextChangedListener(addressWatcher)
+                }
+
+                amount_dcr.text.clear()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

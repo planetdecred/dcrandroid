@@ -24,8 +24,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -40,7 +38,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.activities.SettingsActivity;
 import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
@@ -79,7 +76,6 @@ import mobilewallet.TransactionListener;
 public class MainActivity extends AppCompatActivity implements TransactionListener,
         SpvSyncResponse {
 
-    public static MenuItem addAccountMenu, generateAddressMenu, sendToAccountMenu;
     public int pageID;
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView rescanImage, stopScan, syncIndicator;
@@ -97,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private ArrayList<NavigationBarItem> items;
     private NavigationListAdapter listAdapter;
     private ListView mListView;
+    private SendFragment sendFragment = new SendFragment();
 
     @Override
     public void onTrimMemory(int level) {
@@ -413,47 +410,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         finish();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == 0) {
-            if (fragment instanceof AccountsFragment) {
-                AccountsFragment accountsFragment = (AccountsFragment) fragment;
-                accountsFragment.prepareAccountData();
-            }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_page, menu);
-        super.onCreateOptionsMenu(menu);
-
-        addAccountMenu = menu.findItem(R.id.action_add);
-        generateAddressMenu = menu.findItem(R.id.generate_address);
-        sendToAccountMenu = menu.findItem(R.id.send_to_account);
-
-        sendToAccountMenu.setVisible(false);
-        generateAddressMenu.setVisible(false);
-        addAccountMenu.setVisible(false);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add) {
-            Intent intent = new Intent(this, AddAccountActivity.class);
-            startActivityForResult(intent, 1);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public boolean switchFragment(int position) {
         switch (position) {
             case 0:
@@ -463,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 fragment = new HistoryFragment();
                 break;
             case 2:
-                fragment = new SendFragment();
+                fragment = sendFragment;
                 break;
             case 3:
                 fragment = new ReceiveFragment();
