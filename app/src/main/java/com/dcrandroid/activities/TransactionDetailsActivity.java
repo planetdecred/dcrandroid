@@ -294,7 +294,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         for (int i = 0; i < usedOutput.size(); i++) {
             walletOutputIndices.add(usedOutput.get(i).index);
             walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                    Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.getAccountByAddress(usedOutput.get(i).address) + ")",
+                    Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).address) + ")",
                     usedOutput.get(i).address));
         }
 

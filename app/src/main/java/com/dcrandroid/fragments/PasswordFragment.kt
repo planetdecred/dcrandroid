@@ -69,6 +69,7 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
                         ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 show(getString(R.string.creating_wallet))
                 wallet.createWallet(password, seed)
+                wallet.unlockWallet(password.toByteArray())
                 val util = PreferenceUtil(this@PasswordFragment.context!!)
                 util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PASSWORD)
                 activity!!.runOnUiThread {

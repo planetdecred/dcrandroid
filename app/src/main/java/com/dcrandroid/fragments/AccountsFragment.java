@@ -112,7 +112,7 @@ public class AccountsFragment extends Fragment {
         getActivity().setTitle(getString(R.string.accounts));
         util = new PreferenceUtil(getActivity());
 
-        accountAdapter = new AccountAdapter(accounts, getContext());
+        accountAdapter = new AccountAdapter(accounts, getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

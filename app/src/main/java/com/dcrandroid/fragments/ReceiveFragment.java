@@ -201,7 +201,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         try {
-            String address = constants.wallet.addressForAccount(accountNumbers.get(position));
+            String address = constants.wallet.currentAddress(accountNumbers.get(position));
             setAddress(address);
         } catch (Exception e) {
             e.printStackTrace();

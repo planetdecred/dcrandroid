@@ -255,11 +255,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         connectToDecredNetwork();
     }
 
-    private void displayBalance() {
+    public void displayBalance() {
         try {
             final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             long walletBalance = 0;
             for (int i = 0; i < accounts.size(); i++) {
+                if (util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {
+                    continue;
+                }
                 walletBalance += accounts.get(i).getBalance().getTotal();
             }
             totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR"));
