@@ -55,7 +55,7 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
             finish()
         } else {
             val data = Intent()
-            data.putExtra(Constants.PASSPHRASE, passCode)
+            data.putExtra(Constants.PIN, passCode)
             setResult(Activity.RESULT_OK, data)
             finish()
         }
