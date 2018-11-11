@@ -125,6 +125,8 @@
             android:launchMode="singleTask"
             android:theme="@style/LightTheme.NoActionBar"
             />
+        <activity android:name=".activities.CustomCrashReport"
+            android:launchMode="singleInstance"/>
     </application>
 
 </manifest>
