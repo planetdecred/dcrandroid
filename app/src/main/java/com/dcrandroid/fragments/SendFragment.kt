@@ -86,7 +86,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             var destAddress = send_dcr_address.text.toString()
             if (destAddress == Constants.EMPTY_STRING) {
                 try {
-                    destAddress = constants.wallet.addressForAccount(0)
+                    destAddress = constants.wallet.currentAddress(0)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -215,7 +215,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         position = 0
                     }
 
-                    val receiveAddress = constants.wallet.addressForAccount(position)
+                    val receiveAddress = constants.wallet.currentAddress(position)
                     send_dcr_address.setText(receiveAddress)
 
                     tvDestinationError.text = ""
@@ -251,7 +251,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             return
         }
         if (destination_account_container.visibility == View.VISIBLE) {
-            val receiveAddress = constants.wallet.addressForAccount(destination_account_spinner.selectedItemPosition)
+            val receiveAddress = constants.wallet.currentAddress(destination_account_spinner.selectedItemPosition)
             send_dcr_address.setText(receiveAddress)
         }
         constructTransaction()

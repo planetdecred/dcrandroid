@@ -86,6 +86,7 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                         ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 show(getString(R.string.creating_wallet))
                 wallet.createWallet(passCode, seed)
+                wallet.unlockWallet(passCode!!.toByteArray())
                 val util = PreferenceUtil(this@PinFragment.context!!)
                 util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN)
                 activity!!.runOnUiThread {

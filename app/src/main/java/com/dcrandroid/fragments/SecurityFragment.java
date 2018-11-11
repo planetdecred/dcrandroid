@@ -57,7 +57,7 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
             }
 
             if (wallet.isAddressValid(s.toString().trim())) {
-                if (wallet.isAddressMine(s.toString().trim())) {
+                if (wallet.haveAddress(s.toString().trim())) {
                     tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.blue));
                     tvValidateAddress.setText(R.string.owned_validate_address);
                     return;
