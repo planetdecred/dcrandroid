@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
+import com.dcrandroid.util.Utils;
 
 import java.io.File;
 
@@ -18,6 +21,7 @@ import java.io.File;
  */
 
 public class LogViewer extends AppCompatActivity {
+    private static final int MENU_ITEM= 1;
 
     private TextView logTextView;
     @Override
@@ -32,6 +36,7 @@ public class LogViewer extends AppCompatActivity {
         logTextView = findViewById(R.id.log_text);
 
         buffer.start();
+
     }
 
     @Override
@@ -76,5 +81,23 @@ public class LogViewer extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(Menu.NONE, MENU_ITEM, Menu.NONE, "Copy").setIcon(R.drawable.ic_copy).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_ITEM:
+                Utils.copyToClipboard(this, logTextView.getText().toString(), getString(R.string.wallet_log_copied));
+                return true;
+
+            default:
+                return false;
+        }
     }
 }

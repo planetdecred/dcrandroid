@@ -3,6 +3,7 @@ package com.dcrandroid;
 import android.app.Application;
 import android.content.Context;
 
+import com.dcrandroid.activities.CustomCrashReport;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.PreferenceUtil;
 
@@ -15,8 +16,8 @@ import org.acra.annotation.ReportsCrashes;
  */
 @ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Dcrandroid",
         mode = ReportingInteractionMode.DIALOG,
-        resDialogText = R.string.crash_dialog_text,
-        resDialogTheme = R.style.LightTheme
+        resDialogTheme = R.style.LightTheme,
+        reportDialogClass = CustomCrashReport.class
 )
 public class MainApplication extends Application {
 

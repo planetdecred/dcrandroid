@@ -73,6 +73,7 @@
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
     <string name="log_file_not_found">Log file not found</string>
+    <string name="wallet_log_copied">Wallet log copied successfully</string>
     <string name="dismiss">Dismiss</string>
 
     <string-array name="nav_list_titles">
@@ -458,4 +459,11 @@
     <string name="retry_caps">RETRY</string>
     <string name="amount_can_not_be_zero">Amount can not be zero.</string>
     <string name="clear_fields">Clear Fields</string>
+    <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
+    <string name="dont_send">Don\'t send</string>
+    <string name="send_report">Send Report</string>
+    <string name="app_crashed">App Crashed</string>
+    <string name="crash_report_copied">Crash report copied successfully</string>
+    <string name="hide_report">Hide Report</string>
+    <string name="view_report">View Report</string>
 </resources>
