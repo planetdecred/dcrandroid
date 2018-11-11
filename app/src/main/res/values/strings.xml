@@ -134,7 +134,7 @@
     <string name="input_your_new_account_name_and_enter_your_private_passphrase">Input your new account name and enter your private passphrase</string>
     <string name="account_name">Account Name</string>
     <string name="create_account">Create Account</string>
-    <string name="add_account">Add Account</string>
+    <string name="add_account">Add account</string>
     <string name="creating_account">Creating account…</string>
     <string name="input_account_name">Enter a name for your account</string>
     <string name="hd_path">HD Path</string>
@@ -182,6 +182,7 @@
     <string name="enter_your_passphrase">Enter your passphrase</string>
     <string name="invalid_passphrase">Passphrase entered was not valid.</string>
     <string name="invalid_pin">PIN entered was not valid.</string>
+    <string name="invalid_password">Password entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
     <!--/Wallet-->
@@ -230,10 +231,10 @@
     <string name="invalid_amount">Amount is not valid</string>
     <string name="new_transaction">New Transaction</string>
     <string name="latest_block">Latest Block</string>
-    <string name="copy_raw_transaction">Copy Raw Transaction</string>
+    <string name="copy_raw_transaction">Copy raw transaction</string>
     <string name="tap_this_to_copy_raw_transaction_hex">Tap this to copy raw transaction hex</string>
     <string name="tap_this_to_copy_transaction_hash">Tap this to copy transaction hash</string>
-    <string name="copy_hash">Copy Hash</string>
+    <string name="copy_hash">Copy hash</string>
 
     <string-array name="history_transaction_list">
         <item>All</item>
@@ -268,7 +269,7 @@
     <string name="address_copy_text">Address copied to clipboard</string>
     <string name="your_address">Your address</string>
     <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
-    <string name="generate_new_address">Generate New Address</string>
+    <string name="generate_new_address">Generate new address</string>
     <string name="receive_fund_privacy_info">Each time you request a payment, a new address is created to protect your privacy.</string>
     <string name="error_not_decred_address">This is not a DCR wallet address</string>
     <string name="invalid_address_prefix">Invalid address prefix</string>
@@ -452,8 +453,8 @@
     <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
     <string name="user_agent_summary">For exchange rate fetching.</string>
     <string name="no_transactions_have_occured">No transactions have occurred.</string>
-    <string name="send_to_account">Send to Account</string>
-    <string name="send_to_address">Send to Address</string>
+    <string name="send_to_account">Send to account</string>
+    <string name="send_to_address">Send to address</string>
     <string name="encrypting_wallet">Encrypting wallet…</string>
     <string name="enter_an_amounnt">Enter an amount.</string>
     <string name="retry_caps">RETRY</string>
@@ -466,4 +467,6 @@
     <string name="crash_report_copied">Crash report copied successfully</string>
     <string name="hide_report">Hide Report</string>
     <string name="view_report">View Report</string>
+    <string name="menu_view_on_dcrdata">View on Dcrdata</string>
+    <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
 </resources>

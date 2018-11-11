@@ -59,7 +59,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         util = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);
 
-        if(BuildConfig.IS_TESTNET){
+        if (BuildConfig.IS_TESTNET) {
             findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
         }
 
@@ -171,32 +171,32 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                                         }
                                     });
 
-                                    if(e.getMessage().equals(Mobilewallet.ErrInvalidPassphrase)){
-                                        if(util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PIN)){
-                                            infoDialog.setMessage(getString(R.string.invalid_pin));
-                                        }
-                                        infoDialog.setNegativeButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                finish();
-                                            }
-                                        }).setPositiveButton(getString(R.string.retry_caps), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent i;
-
-                                                if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
-                                                    i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
-                                                } else {
-                                                    i = new Intent(SplashScreen.this, EnterPassCode.class);
-                                                }
-
-                                                i.putExtra(Constants.SPENDING_PASSWORD, false);
-                                                i.putExtra(Constants.NO_RETURN, true);
-                                                startActivityForResult(i, PASSWORD_REQUEST_CODE);
-                                            }
-                                        });
+                            if (e.getMessage().equals(Mobilewallet.ErrInvalidPassphrase)) {
+                                if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PIN)) {
+                                    infoDialog.setMessage(getString(R.string.invalid_pin));
+                                }
+                                infoDialog.setNegativeButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
                                     }
+                                }).setPositiveButton(getString(R.string.retry_caps), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent i;
+
+                                        if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                                            i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
+                                        } else {
+                                            i = new Intent(SplashScreen.this, EnterPassCode.class);
+                                        }
+
+                                        i.putExtra(Constants.SPENDING_PASSWORD, false);
+                                        i.putExtra(Constants.NO_RETURN, true);
+                                        startActivityForResult(i, PASSWORD_REQUEST_CODE);
+                                    }
+                                });
+                            }
 
                             infoDialog.setCancelable(false);
                             infoDialog.setCanceledOnTouchOutside(false);
@@ -235,7 +235,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             startup();
         } else if (requestCode == PASSWORD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                openWallet(data.getStringExtra(Constants.PASSPHRASE));
+                openWallet(data.getStringExtra(Constants.PIN));
             }
         }
     }

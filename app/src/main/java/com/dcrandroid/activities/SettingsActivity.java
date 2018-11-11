@@ -322,7 +322,7 @@ public class SettingsActivity extends AppCompatActivity {
                         new Thread() {
                             public void run() {
                                 try {
-                                    String passphrase = data.getStringExtra(Constants.PASSPHRASE);
+                                    String passphrase = data.getStringExtra(Constants.PIN);
                                     DcrConstants.getInstance().wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
                                     if (getActivity() != null) {
                                         getActivity().runOnUiThread(new Runnable() {

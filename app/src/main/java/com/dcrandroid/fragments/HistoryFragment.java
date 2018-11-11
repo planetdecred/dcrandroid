@@ -337,15 +337,24 @@ public class HistoryFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     public void newTransaction(TransactionsResponse.TransactionItem transaction) {
-        transaction.animate = true;
         latestTransactionHeight = transaction.getHeight() + 1;
-        transactionList.add(0, transaction);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                transactionAdapter.notifyDataSetChanged();
-            }
-        });
+        fixedTransactionList.add(0, transaction);
+
+        if (transactionTypeSelected.equalsIgnoreCase("ALL") ||
+                transactionTypeSelected.equalsIgnoreCase(transaction.type) ||
+                (transactionTypeSelected.equalsIgnoreCase(Constants.STAKING) &&
+                        (transaction.type.equals(Constants.VOTE) ||
+                                transaction.type.equals(Constants.REVOCATION) ||
+                                transaction.type.equals(Constants.TICKET_PURCHASE)))) {
+            transaction.animate = true;
+            transactionList.add(0, transaction);
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    transactionAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     public void transactionConfirmed(String hash, int height) {

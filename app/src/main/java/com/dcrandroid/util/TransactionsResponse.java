@@ -14,37 +14,40 @@ import java.util.ArrayList;
  */
 
 public class TransactionsResponse {
-    private TransactionsResponse(){}
     public ArrayList<TransactionItem> transactions = new ArrayList<>();
     public boolean errorOccurred = true;
     public String errorMessage = "";
-    public static TransactionsResponse parse(String json){
+
+    private TransactionsResponse() {
+    }
+
+    public static TransactionsResponse parse(String json) {
         TransactionsResponse response = new TransactionsResponse();
         try {
             JSONObject object = new JSONObject(json);
             response.errorOccurred = object.getBoolean("ErrorOccurred");
-            if(response.errorOccurred){
+            if (response.errorOccurred) {
                 response.errorMessage = object.getString("ErrorMessage");
             }
             JSONArray transactions = object.getJSONArray(Constants.TRANSACTIONS);
-            for(int i = 0; i < transactions.length(); i++){
+            for (int i = 0; i < transactions.length(); i++) {
                 TransactionItem item = parseTransaction(transactions.get(i).toString());
                 response.transactions.add(item);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return response;
     }
 
-    public static TransactionItem parseTransaction(String json) throws JSONException{
+    public static TransactionItem parseTransaction(String json) throws JSONException {
         JSONObject tx = new JSONObject(json);
 
         TransactionItem transaction = new TransactionItem();
         ArrayList<TransactionOutput> outputs = new ArrayList<>();
         JSONArray cdt = tx.getJSONArray(Constants.CREDITS);
-        for(int j = 0; j < cdt.length(); j++){
+        for (int j = 0; j < cdt.length(); j++) {
             TransactionOutput output = new TransactionOutput();
             output.account = cdt.getJSONObject(j).getInt(Constants.ACCOUNT);
             output.internal = cdt.getJSONObject(j).getBoolean(Constants.INTERNAL);
@@ -56,7 +59,7 @@ public class TransactionsResponse {
         }
         ArrayList<TransactionInput> inputs = new ArrayList<>();
         JSONArray dbt = tx.getJSONArray(Constants.DEBITS);
-        for(int j = 0; j < dbt.length(); j++){
+        for (int j = 0; j < dbt.length(); j++) {
             TransactionInput input = new TransactionInput();
             input.index = dbt.getJSONObject(j).getInt(Constants.INDEX);
             input.previous_account = dbt.getJSONObject(j).getLong(Constants.PREVIOUS_ACCOUNT);
@@ -78,13 +81,12 @@ public class TransactionsResponse {
         return transaction;
     }
 
-
-    public static class TransactionItem implements Serializable{
+    public static class TransactionItem implements Serializable {
         public String hash, type, raw;
         public int height, direction;
         public long fee, amount, totalInput = 0, totalOutputs = 0;
         public long timestamp;
-        public boolean animate = false;
+        public transient boolean animate = false;
         public ArrayList<TransactionOutput> outputs;
         public ArrayList<TransactionInput> inputs;
 
@@ -109,14 +111,14 @@ public class TransactionsResponse {
         }
     }
 
-    public static class TransactionInput implements Serializable{
+    public static class TransactionInput implements Serializable {
         public long previous_account;
         public int index;
         public long previous_amount;
         public String accountName;
     }
 
-    public static class TransactionOutput implements Serializable{
+    public static class TransactionOutput implements Serializable {
         public int index, account;
         public long amount;
         public boolean internal;

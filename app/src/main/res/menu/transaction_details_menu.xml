@@ -15,8 +15,8 @@
         />
     <item
         android:id="@+id/tx_viewOnDcrData"
-        android:title="View On Dcrdata"
-        android:contentDescription="link to DCR data"
+        android:title="@string/menu_view_on_dcrdata"
+        android:contentDescription="@string/view_dcrdata_description"
         app:showAsAction="never"
         />
 </menu>

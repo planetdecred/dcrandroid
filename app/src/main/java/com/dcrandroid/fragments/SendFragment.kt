@@ -167,7 +167,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 send_error_label.setText(R.string.amount_can_not_be_zero)
             }
 
-            if(errors > 0){
+            if (errors > 0) {
                 return@setOnClickListener
             }
             showConfirmTransactionDialog()
@@ -204,8 +204,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item!!.itemId){
-            R.id.send_to_account ->{
+        when (item!!.itemId) {
+            R.id.send_to_account -> {
                 if (destination_address_container.visibility == View.VISIBLE) {
                     destination_address_container.visibility = View.GONE
                     destination_account_container.visibility = View.VISIBLE
@@ -416,7 +416,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         } else if (requestCode == PASSCODE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                startTransaction(data!!.getStringExtra(Constants.PASSPHRASE))
+                startTransaction(data!!.getStringExtra(Constants.PIN))
             }
         }
     }
