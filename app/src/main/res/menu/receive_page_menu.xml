@@ -4,4 +4,8 @@
     <item android:id="@+id/generate_address"
         android:title="@string/generate_new_address"
         app:showAsAction="never"/>
+    <item android:id="@+id/share_qr_code"
+        android:title="@string/share"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="ifRoom"/>
 </menu>
