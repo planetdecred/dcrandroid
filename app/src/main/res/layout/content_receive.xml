@@ -123,6 +123,7 @@
                 android:gravity="center"
                 android:textColor="@color/blueGrayFirstTextColor54pc"
                 android:layout_marginTop="3dp"/>
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
