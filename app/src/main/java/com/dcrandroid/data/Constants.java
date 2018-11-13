@@ -103,6 +103,7 @@ public class Constants {
             SPENDING_PASSWORD = "spending_password",
             NO_INFO = "no_info",
             APP_VERSION = "app_version",
-            STAKING = "staking";
+            STAKING = "staking",
+            RECENT_TRANSACTION_HASH = "recent_transaction_hash";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
