@@ -15,7 +15,7 @@ require (
 	github.com/decred/dcrd/txscript v1.0.1
 	github.com/decred/dcrd/wire v1.1.0
 	github.com/decred/dcrwallet v1.2.2
-	github.com/decred/dcrwallet/chain v1.0.0
+	github.com/decred/dcrwallet/chain v1.0.1-0.20181109211527-ca582da21c08
 	github.com/decred/dcrwallet/errors v1.0.0
 	github.com/decred/dcrwallet/p2p v1.0.0
 	github.com/decred/dcrwallet/spv v1.0.0
@@ -26,6 +26,8 @@ require (
 	github.com/decred/slog v1.0.0
 	github.com/dgraph-io/badger v1.5.4
 	github.com/jrick/logrotate v1.0.0
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/stretchr/testify v1.2.2 // indirect
 )
 
 replace github.com/decred/dcrwallet => github.com/raedahgroup/dcrwallet v1.1.3-0.20181104103600-e842132c9435

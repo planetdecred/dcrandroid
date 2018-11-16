@@ -26,6 +26,7 @@ import (
 	"github.com/decred/dcrd/dcrjson"
 	"github.com/decred/dcrd/dcrutil"
 	"github.com/decred/dcrd/hdkeychain"
+	"github.com/decred/dcrd/rpcclient"
 	"github.com/decred/dcrd/txscript"
 	"github.com/decred/dcrd/wire"
 	"github.com/decred/dcrwallet/chain"
@@ -295,175 +296,6 @@ func (lw *LibWallet) VerifySeed(seedMnemonic string) bool {
 	return err == nil
 }
 
-func (lw *LibWallet) StartRPCClient(rpcHost string, rpcUser string, rpcPass string, certs []byte) error {
-	fmt.Println("Connecting to rpc client")
-	ctx := contextWithShutdownCancel(context.Background())
-	networkAddress, err := NormalizeAddress(rpcHost, lw.activeNet.JSONRPCClientPort)
-	if err != nil {
-		log.Error(err)
-		return err
-	}
-
-	go func() {
-
-		defer func() {
-			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnSynced(false)
-			}
-		}()
-
-		for {
-			log.Info("Debug 1")
-			c, err := chain.NewRPCClient(lw.activeNet.Params, networkAddress,
-				rpcUser, rpcPass, certs, false)
-			if err != nil {
-				log.Error(err)
-				return
-			}
-
-			log.Info("Debug 2")
-			err = c.Start(ctx, true)
-			log.Info("Debug 3")
-			if err != nil {
-				log.Error(err)
-				return
-			}
-
-			log.Info("Debug 4")
-			netBackend := chain.BackendFromRPCClient(c.Client)
-
-			log.Info("Debug 5")
-			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchMissingCFilters(0, 0, START)
-			}
-
-			log.Info("Debug 6")
-			err = lw.wallet.FetchMissingCFilters(ctx, netBackend)
-			if err != nil {
-				log.Error(err)
-				return
-			}
-			log.Info("Debug 7")
-
-			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchMissingCFilters(0, 0, FINISH)
-			}
-
-			log.Info("Debug 8")
-
-			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchedHeaders(0, 0, START)
-			}
-
-			_, _, _, _, _, err = lw.wallet.FetchHeaders(ctx, netBackend)
-			if err != nil {
-				log.Error(err)
-				return
-			}
-
-			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnFetchedHeaders(0, 0, FINISH)
-			}
-
-			rescanPoint, err := lw.wallet.RescanPoint()
-			if err != nil {
-				log.Error(err)
-				return
-			}
-
-			if rescanPoint == nil {
-				err = lw.wallet.LoadActiveDataFilters(ctx, netBackend, true)
-				if err != nil {
-					log.Error(err)
-					return
-				}
-			} else {
-
-				for _, syncResponse := range lw.syncResponses {
-					syncResponse.OnDiscoveredAddresses(START)
-				}
-
-				err = lw.wallet.DiscoverActiveAddresses(ctx, netBackend, rescanPoint, lw.wallet.Locked())
-				if err != nil {
-					log.Error(err)
-					return
-				}
-
-				for _, syncResponse := range lw.syncResponses {
-					syncResponse.OnDiscoveredAddresses(FINISH)
-				}
-
-				err = lw.wallet.LoadActiveDataFilters(ctx, netBackend, true)
-				if err != nil {
-					log.Error(err)
-					return
-				}
-
-				for _, syncResponse := range lw.syncResponses {
-					syncResponse.OnRescan(0, START)
-				}
-
-				rescanBlock, err := lw.wallet.BlockHeader(rescanPoint)
-				if err != nil {
-					log.Error(err)
-					return
-				}
-
-				progress := make(chan wallet.RescanProgress, 1)
-				go lw.wallet.RescanProgressFromHeight(ctx, netBackend, int32(rescanBlock.Height), progress)
-
-				for p := range progress {
-					if p.Err != nil {
-						log.Error(p.Err)
-						return
-					}
-
-					for _, syncResponse := range lw.syncResponses {
-						syncResponse.OnRescan(p.ScannedThrough, PROGRESS)
-					}
-				}
-
-				for _, syncResponse := range lw.syncResponses {
-					syncResponse.OnRescan(0, FINISH)
-				}
-
-			}
-
-			lw.wallet.PublishUnminedTransactions(ctx, netBackend)
-
-			lw.rpcClient = c
-
-			err = lw.rpcClient.NotifyBlocks()
-			if err != nil {
-				log.Error(err)
-				return
-			}
-
-			lw.wallet.SetNetworkBackend(netBackend)
-			lw.loader.SetNetworkBackend(netBackend)
-
-			syncer := chain.NewRPCSyncer(lw.wallet, lw.rpcClient)
-
-			for _, syncResponse := range lw.syncResponses {
-				syncResponse.OnSynced(true)
-			}
-
-			err = syncer.Run(contextWithShutdownCancel(context.Background()), false)
-			log.Infof("Syncer returned")
-			if err == context.Canceled {
-				fmt.Println("Syncer Context was cancelled")
-				return
-			}
-
-			lw.wallet.SetNetworkBackend(nil)
-			lw.loader.SetNetworkBackend(nil)
-			lw.rpcClient = nil
-		}
-	}()
-
-	return nil
-}
-
 func (lw *LibWallet) AddSyncResponse(syncResponse SpvSyncResponse) {
 	lw.syncResponses = append(lw.syncResponses, syncResponse)
 }
@@ -602,6 +434,156 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	return nil
 }
 
+func (lw *LibWallet) RpcSync(networkAddress string, username string, password string, cert []byte) error {
+
+	// Error if the wallet is already syncing with the network.
+	wallet, walletLoaded := lw.loader.LoadedWallet()
+	if walletLoaded {
+		_, err := wallet.NetworkBackend()
+		if err == nil {
+			return errors.New(ErrFailedPrecondition)
+		}
+	}
+
+	lw.mu.Lock()
+	chainClient := lw.rpcClient
+	lw.mu.Unlock()
+
+	ctx := contextWithShutdownCancel(context.Background())
+	// If the rpcClient is already set, you can just use that instead of attempting a new connection.
+	if chainClient == nil {
+		networkAddress, err := NormalizeAddress(networkAddress, lw.activeNet.JSONRPCClientPort)
+		if err != nil {
+			return errors.New(ErrInvalidAddress)
+		}
+		chainClient, err = chain.NewRPCClient(lw.activeNet.Params, networkAddress, username,
+			password, cert, len(cert) == 0)
+		if err != nil {
+			return translateError(err)
+		}
+
+		err = chainClient.Start(ctx, false)
+		if err != nil {
+			if err == rpcclient.ErrInvalidAuth {
+				return errors.New(ErrInvalid)
+			}
+			if errors.Match(errors.E(context.Canceled), err) {
+				return errors.New(ErrContextCanceled)
+			}
+			return errors.New(ErrUnavailable)
+		}
+		lw.mu.Lock()
+		lw.rpcClient = chainClient
+		lw.mu.Unlock()
+	}
+
+	n := chain.BackendFromRPCClient(chainClient.Client)
+	lw.loader.SetNetworkBackend(n)
+	wallet.SetNetworkBackend(n)
+
+	// Disassociate the RPC client from all subsystems until reconnection
+	// occurs.
+	defer lw.wallet.SetNetworkBackend(nil)
+	defer lw.loader.SetNetworkBackend(nil)
+	defer lw.loader.StopTicketPurchase()
+
+	ntfns := &chain.Notifications{
+		Synced: func(sync bool) {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnSynced(sync)
+			}
+		},
+		FetchMissingCFiltersStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(0, 0, START)
+			}
+		},
+		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, PROGRESS)
+			}
+		},
+		FetchMissingCFiltersFinished: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchMissingCFilters(0, 0, FINISH)
+			}
+		},
+		FetchHeadersStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(0, 0, START)
+			}
+		},
+		FetchHeadersProgress: func(fetchedHeadersCount int32, lastHeaderTime int64) {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, PROGRESS)
+			}
+		},
+		FetchHeadersFinished: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnFetchedHeaders(0, 0, FINISH)
+			}
+		},
+		DiscoverAddressesStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnDiscoveredAddresses(START)
+			}
+		},
+		DiscoverAddressesFinished: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnDiscoveredAddresses(FINISH)
+			}
+
+			if !wallet.Locked() {
+				wallet.Lock()
+			}
+		},
+		RescanStarted: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnRescan(0, START)
+			}
+		},
+		RescanProgress: func(rescannedThrough int32) {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnRescan(rescannedThrough, PROGRESS)
+			}
+		},
+		RescanFinished: func() {
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnRescan(0, FINISH)
+			}
+		},
+	}
+	syncer := chain.NewRPCSyncer(wallet, chainClient)
+	syncer.SetNotifications(ntfns)
+
+	go func() {
+		// Run wallet synchronization until it is cancelled or errors.  If the
+		// context was cancelled, return immediately instead of trying to
+		// reconnect.
+		err := syncer.Run(ctx, true)
+		if err != nil {
+			if err == context.Canceled {
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnSyncError(1, errors.E("SPV synchronization canceled: %v", err))
+				}
+
+				return
+			} else if err == context.DeadlineExceeded {
+				for _, syncResponse := range lw.syncResponses {
+					syncResponse.OnSyncError(2, errors.E("SPV synchronization deadline exceeded: %v", err))
+				}
+
+				return
+			}
+			for _, syncResponse := range lw.syncResponses {
+				syncResponse.OnSyncError(-1, err)
+			}
+		}
+	}()
+
+	return nil
+}
+
 func done(ctx context.Context) bool {
 	select {
 	case <-ctx.Done():
@@ -609,87 +591,6 @@ func done(ctx context.Context) bool {
 	default:
 		return false
 	}
-}
-
-func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
-	go func() {
-		n := lw.wallet.NtfnServer.TransactionNotifications()
-		defer n.Done()
-		for {
-			v := <-n.C
-			for _, transaction := range v.UnminedTransactions {
-				var amount int64
-				var inputAmounts int64
-				var outputAmounts int64
-				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
-				for index, credit := range transaction.MyOutputs {
-					outputAmounts += int64(credit.Amount)
-					tempCredits[index] = TransactionCredit{
-						Index:    int32(credit.Index),
-						Account:  int32(credit.Account),
-						Internal: credit.Internal,
-						Amount:   int64(credit.Amount),
-						Address:  credit.Address.String()}
-				}
-				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
-				for index, debit := range transaction.MyInputs {
-					inputAmounts += int64(debit.PreviousAmount)
-					tempDebits[index] = TransactionDebit{
-						Index:           int32(debit.Index),
-						PreviousAccount: int32(debit.PreviousAccount),
-						PreviousAmount:  int64(debit.PreviousAmount),
-						AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
-				}
-				var direction int32
-				amountDifference := outputAmounts - inputAmounts
-				if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
-					//Transfered
-					direction = 2
-					amount = int64(transaction.Fee)
-				} else if amountDifference > 0 {
-					//Received
-					direction = 1
-					for _, credit := range transaction.MyOutputs {
-						amount += int64(credit.Amount)
-					}
-				} else {
-					//Sent
-					direction = 0
-					for _, debit := range transaction.MyInputs {
-						amount += int64(debit.PreviousAmount)
-					}
-					for _, credit := range transaction.MyOutputs {
-						amount -= int64(credit.Amount)
-					}
-					amount -= int64(transaction.Fee)
-				}
-				tempTransaction := Transaction{
-					Fee:       int64(transaction.Fee),
-					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
-					Raw:       fmt.Sprintf("%02x", transaction.Transaction[:]),
-					Timestamp: transaction.Timestamp,
-					Type:      transactionType(transaction.Type),
-					Credits:   &tempCredits,
-					Amount:    amount,
-					Height:    -1,
-					Direction: direction,
-					Debits:    &tempDebits}
-				fmt.Println("New Transaction")
-				result, err := json.Marshal(tempTransaction)
-				if err != nil {
-					log.Error(err)
-				} else {
-					listener.OnTransaction(string(result))
-				}
-			}
-			for _, block := range v.AttachedBlocks {
-				listener.OnBlockAttached(int32(block.Header.Height), block.Header.Timestamp.UnixNano())
-				for _, transaction := range block.Transactions {
-					listener.OnTransactionConfirmed(fmt.Sprintf("%02x", reverse(transaction.Hash[:])), int32(block.Header.Height))
-				}
-			}
-		}
-	}()
 }
 
 func (lw *LibWallet) OpenWallet(pubPass []byte) error {
@@ -748,42 +649,95 @@ func (lw *LibWallet) RescanBlocks() error {
 	return nil
 }
 
-func (lw *LibWallet) IsAddressMine(address string) bool {
-	addr, err := decodeAddress(address, lw.wallet.ChainParams())
-	if err != nil {
-		log.Error(err)
-		return false
-	}
-	_, err = lw.wallet.AddressInfo(addr)
-	return err == nil
+func (lw *LibWallet) GetBestBlock() int32 {
+	_, height := lw.wallet.MainChainTip()
+	return height
 }
 
-func (lw *LibWallet) IsAddressValid(address string) bool {
-	_, err := decodeAddress(address, lw.wallet.ChainParams())
+func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
+	_, height := lw.wallet.MainChainTip()
+	identifier := wallet.NewBlockIdentifierFromHeight(height)
+	info, err := lw.wallet.BlockInfo(identifier)
 	if err != nil {
 		log.Error(err)
-		return false
+		return 0
 	}
-	return true
+	return info.Timestamp
 }
 
-func (lw *LibWallet) GetAccountName(account int32) string {
-	name, err := lw.wallet.AccountName(uint32(account))
-	if err != nil {
-		log.Error(err)
-		return "Account not found"
-	}
-	return name
-}
-
-func (lw *LibWallet) GetAccountByAddress(address string) string {
-	addr, err := dcrutil.DecodeAddress(address)
-	if err != nil {
-		log.Error(err)
-		return "Address decode error"
-	}
-	info, _ := lw.wallet.AddressInfo(addr)
-	return lw.GetAccountName(int32(info.Account()))
+func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
+	go func() {
+		n := lw.wallet.NtfnServer.TransactionNotifications()
+		defer n.Done()
+		for {
+			v := <-n.C
+			for _, transaction := range v.UnminedTransactions {
+				var amount int64
+				var inputAmounts int64
+				var outputAmounts int64
+				tempCredits := make([]TransactionCredit, len(transaction.MyOutputs))
+				for index, credit := range transaction.MyOutputs {
+					outputAmounts += int64(credit.Amount)
+					tempCredits[index] = TransactionCredit{
+						Index:    int32(credit.Index),
+						Account:  int32(credit.Account),
+						Internal: credit.Internal,
+						Amount:   int64(credit.Amount),
+						Address:  credit.Address.String()}
+				}
+				tempDebits := make([]TransactionDebit, len(transaction.MyInputs))
+				for index, debit := range transaction.MyInputs {
+					inputAmounts += int64(debit.PreviousAmount)
+					tempDebits[index] = TransactionDebit{
+						Index:           int32(debit.Index),
+						PreviousAccount: int32(debit.PreviousAccount),
+						PreviousAmount:  int64(debit.PreviousAmount),
+						AccountName:     lw.AccountName(int32(debit.PreviousAccount))}
+				}
+				var direction int32
+				amountDifference := outputAmounts - inputAmounts
+				if amountDifference < 0 && (float64(transaction.Fee) == math.Abs(float64(amountDifference))) {
+					//Transfered
+					direction = 2
+					amount = int64(transaction.Fee)
+				} else if amountDifference > 0 {
+					//Received
+					direction = 1
+					amount = outputAmounts
+				} else {
+					//Sent
+					direction = 0
+					amount = inputAmounts
+					amount -= outputAmounts
+					amount -= int64(transaction.Fee)
+				}
+				tempTransaction := Transaction{
+					Fee:       int64(transaction.Fee),
+					Hash:      fmt.Sprintf("%02x", reverse(transaction.Hash[:])),
+					Raw:       fmt.Sprintf("%02x", transaction.Transaction[:]),
+					Timestamp: transaction.Timestamp,
+					Type:      transactionType(transaction.Type),
+					Credits:   &tempCredits,
+					Amount:    amount,
+					Height:    -1,
+					Direction: direction,
+					Debits:    &tempDebits}
+				fmt.Println("New Transaction")
+				result, err := json.Marshal(tempTransaction)
+				if err != nil {
+					log.Error(err)
+				} else {
+					listener.OnTransaction(string(result))
+				}
+			}
+			for _, block := range v.AttachedBlocks {
+				listener.OnBlockAttached(int32(block.Header.Height), block.Header.Timestamp.UnixNano())
+				for _, transaction := range block.Transactions {
+					listener.OnTransactionConfirmed(fmt.Sprintf("%02x", reverse(transaction.Hash[:])), int32(block.Header.Height))
+				}
+			}
+		}
+	}()
 }
 
 func (lw *LibWallet) GetTransaction(txHash []byte) (string, error) {
@@ -821,7 +775,7 @@ func (lw *LibWallet) GetTransaction(txHash []byte) (string, error) {
 			Index:           int32(debit.Index),
 			PreviousAccount: int32(debit.PreviousAccount),
 			PreviousAmount:  int64(debit.PreviousAmount),
-			AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+			AccountName:     lw.AccountName(int32(debit.PreviousAccount))}
 	}
 
 	var direction int32
@@ -903,7 +857,7 @@ func (lw *LibWallet) GetTransactions(response GetTransactionsResponse) error {
 					Index:           int32(debit.Index),
 					PreviousAccount: int32(debit.PreviousAccount),
 					PreviousAmount:  int64(debit.PreviousAmount),
-					AccountName:     lw.GetAccountName(int32(debit.PreviousAccount))}
+					AccountName:     lw.AccountName(int32(debit.PreviousAccount))}
 			}
 
 			var direction int32
@@ -1094,31 +1048,6 @@ func transactionType(txType wallet.TransactionType) string {
 	}
 }
 
-func (lw *LibWallet) GetBestBlock() int32 {
-	_, height := lw.wallet.MainChainTip()
-	return height
-}
-
-func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
-	_, height := lw.wallet.MainChainTip()
-	identifier := wallet.NewBlockIdentifierFromHeight(height)
-	info, err := lw.wallet.BlockInfo(identifier)
-	if err != nil {
-		log.Error(err)
-		return 0
-	}
-	return info.Timestamp
-}
-
-func (lw *LibWallet) PublishUnminedTransactions() error {
-	netBackend, err := lw.wallet.NetworkBackend()
-	if err != nil {
-		return errors.New(ErrNotConnected)
-	}
-	err = lw.wallet.PublishUnminedTransactions(contextWithShutdownCancel(context.Background()), netBackend)
-	return err
-}
-
 func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations int32) (int64, error) {
 	bals, err := lw.wallet.CalculateAccountBalance(uint32(account), requiredConfirmations)
 	if err != nil {
@@ -1126,40 +1055,6 @@ func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations in
 		return 0, err
 	}
 	return int64(bals.Spendable), nil
-}
-
-func (lw *LibWallet) AddressForAccount(account int32) (string, error) {
-	addr, err := lw.wallet.CurrentAddress(uint32(account))
-	if err != nil {
-		log.Error(err)
-		return "", err
-	}
-	return addr.EncodeAddress(), nil
-}
-
-func (lw *LibWallet) NextAddress(account int32) (string, error) {
-	var callOpts []wallet.NextAddressCallOption
-	callOpts = append(callOpts, wallet.WithGapPolicyWrap())
-
-	addr, err := lw.wallet.NewExternalAddress(uint32(account), callOpts...)
-	if err != nil {
-		log.Error(err)
-		return "", err
-	}
-	return addr.EncodeAddress(), nil
-}
-
-func AmountCoin(amount int64) float64 {
-	return dcrutil.Amount(amount).ToCoin()
-}
-
-func AmountAtom(f float64) int64 {
-	amount, err := dcrutil.NewAmount(f)
-	if err != nil {
-		log.Error(err)
-		return -1
-	}
-	return int64(amount)
 }
 
 type txChangeSource struct {
@@ -1380,6 +1275,15 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 	return txHash[:], nil
 }
 
+func (lw *LibWallet) PublishUnminedTransactions() error {
+	netBackend, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		return errors.New(ErrNotConnected)
+	}
+	err = lw.wallet.PublishUnminedTransactions(contextWithShutdownCancel(context.Background()), netBackend)
+	return err
+}
+
 func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
 	resp, err := lw.wallet.Accounts()
 	if err != nil {
@@ -1447,6 +1351,69 @@ func (lw *LibWallet) NextAccount(accountName string, privPass []byte) error {
 func (lw *LibWallet) RenameAccount(accountNumber int32, newName string) error {
 	err := lw.wallet.RenameAccount(uint32(accountNumber), newName)
 	return err
+}
+
+func (lw *LibWallet) HaveAddress(address string) bool {
+	addr, err := decodeAddress(address, lw.wallet.ChainParams())
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	have, err := lw.wallet.HaveAddress(addr)
+	if err != nil {
+		return false
+	}
+
+	return have
+}
+
+func (lw *LibWallet) IsAddressValid(address string) bool {
+	_, err := decodeAddress(address, lw.wallet.ChainParams())
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	return true
+}
+
+func (lw *LibWallet) AccountName(account int32) string {
+	name, err := lw.wallet.AccountName(uint32(account))
+	if err != nil {
+		log.Error(err)
+		return "Account not found"
+	}
+	return name
+}
+
+func (lw *LibWallet) AccountOfAddress(address string) string {
+	addr, err := dcrutil.DecodeAddress(address)
+	if err != nil {
+		log.Error(err)
+		return "Address decode error"
+	}
+	info, _ := lw.wallet.AddressInfo(addr)
+	return lw.AccountName(int32(info.Account()))
+}
+
+func (lw *LibWallet) CurrentAddress(account int32) (string, error) {
+	addr, err := lw.wallet.CurrentAddress(uint32(account))
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+	return addr.EncodeAddress(), nil
+}
+
+func (lw *LibWallet) NextAddress(account int32) (string, error) {
+	var callOpts []wallet.NextAddressCallOption
+	callOpts = append(callOpts, wallet.WithGapPolicyWrap())
+
+	addr, err := lw.wallet.NewExternalAddress(uint32(account), callOpts...)
+	if err != nil {
+		log.Error(err)
+		return "", err
+	}
+	return addr.EncodeAddress(), nil
 }
 
 func (lw *LibWallet) SignMessage(passphrase []byte, address string, message string) ([]byte, error) {
@@ -1586,6 +1553,19 @@ func (lw *LibWallet) CallJSONRPC(method string, args string, address string, use
 		return strResult, nil
 	}
 	return "", nil
+}
+
+func AmountCoin(amount int64) float64 {
+	return dcrutil.Amount(amount).ToCoin()
+}
+
+func AmountAtom(f float64) int64 {
+	amount, err := dcrutil.NewAmount(f)
+	if err != nil {
+		log.Error(err)
+		return -1
+	}
+	return int64(amount)
 }
 
 func translateError(err error) error {
