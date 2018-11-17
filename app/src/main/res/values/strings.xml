@@ -469,4 +469,5 @@
     <string name="view_report">View Report</string>
     <string name="menu_view_on_dcrdata">View on Dcrdata</string>
     <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
+    <string name="failed_to_send_transaction">Failed to send transaction</string>
 </resources>
