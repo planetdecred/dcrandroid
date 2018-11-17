@@ -464,7 +464,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 for (byte in txHash) {
                     sb.append(String.format(Locale.getDefault(), "%02x", byte))
                 }
-                println("Hash: $sb")
 
                 if (activity != null) {
                     activity!!.runOnUiThread {
@@ -482,7 +481,27 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         if (pd!!.isShowing) {
                             pd!!.dismiss()
                         }
-                        send_error_label.text = Utils.translateError(context, e)
+                        if (e.message == Mobilewallet.ErrInvalidPassphrase){
+                            val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
+                                    == Constants.PASSWORD) getString(R.string.invalid_password)
+                            else getString(R.string.invalid_pin)
+                            val retryDialog = InfoDialog(context)
+                                    .setDialogTitle(getString(R.string.failed_to_send_transaction))
+                                    .setMessage(message)
+                                    .setIcon(R.drawable.np_amount_withdrawal)
+                                    .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
+                                        showConfirmTransactionDialog()
+                                    })
+                                    .setNegativeButton(getString(R.string.cancel).toUpperCase(), DialogInterface.OnClickListener { dialog, _ ->
+                                       dialog.dismiss()
+                                    })
+
+                            retryDialog.setCancelable(true)
+                            retryDialog.setCanceledOnTouchOutside(true)
+                            retryDialog.show()
+                        }else{
+                            send_error_label.text = Utils.translateError(context, e)
+                        }
                     }
                 }
             }
