@@ -356,7 +356,6 @@
 
     <!--Security Fragment-->
     <string name="security">Security</string>
-    <string name="validate_address_hint">Enter an address to validate</string>
     <string name="validate_address">Validate Address</string>
     <string name="sign_message">Sign Message</string>
     <string name="enter_an_address">Enter an address</string>
