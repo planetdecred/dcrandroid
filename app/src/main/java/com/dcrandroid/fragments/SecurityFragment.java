@@ -30,11 +30,10 @@ import mobilewallet.Mobilewallet;
 
 import static android.app.Activity.RESULT_OK;
 
-public class SecurityFragment extends Fragment implements View.OnClickListener {
+public class SecurityFragment extends Fragment {
     private final int PASSCODE_REQUEST_CODE = 1;
-    private EditText etValidateAddress, etSignMessageAddress, etSignMessage, etVerifyAddress, etVerifySignature, etVerifyMessage;
-    private TextView tvValidateAddress, tvCopySignature, tvSignature, tvInvalidSignMessageAddress, tvRequiredSignMessage,
-            tvInvalidVerifyAddress, tvInvalidVerifySignature, tvInvalidVerifyMessage;
+    private EditText etAddress, etMessage, etSignature;
+    private TextView tvValidateAddress, tvRequiredMessage, tvRequiredSignature;
     private Button btnSignMessage, btnVerify;
     private LibWallet wallet;
     private PreferenceUtil util;
@@ -70,76 +69,21 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
-    private TextWatcher signMessageAddressWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (s.toString().trim().equals("")) {
-                tvInvalidSignMessageAddress.setVisibility(View.GONE);
-            } else if (wallet.isAddressValid(s.toString().trim())) {
-                tvInvalidSignMessageAddress.setVisibility(View.GONE);
-            } else {
-                tvInvalidSignMessageAddress.setVisibility(View.VISIBLE);
-            }
-        }
-    };
-    private TextWatcher verifyMessageAddressWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (s.toString().trim().equals("")) {
-                tvInvalidVerifyAddress.setVisibility(View.GONE);
-            } else if (wallet.isAddressValid(s.toString().trim())) {
-                tvInvalidVerifyAddress.setVisibility(View.GONE);
-            } else {
-                tvInvalidVerifyAddress.setVisibility(View.VISIBLE);
-            }
-        }
-    };
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View vi = inflater.inflate(R.layout.fragment_security, container, false);
 
-        //Validate Address
-        etValidateAddress = vi.findViewById(R.id.et_validate_address);
+        etAddress = vi.findViewById(R.id.et_address);
         tvValidateAddress = vi.findViewById(R.id.tv_validate_address);
-
-        //Sign Message
-        etSignMessageAddress = vi.findViewById(R.id.et_sign_message_address);
-        etSignMessage = vi.findViewById(R.id.et_sign_message);
-        tvCopySignature = vi.findViewById(R.id.tv_copy_on_tap);
-        tvSignature = vi.findViewById(R.id.tv_sign_message_signature);
+        etMessage = vi.findViewById(R.id.et_sign_message);
         btnSignMessage = vi.findViewById(R.id.btn_sign_message);
-        tvInvalidSignMessageAddress = vi.findViewById(R.id.tv_invalid_sign_message_address);
-        tvRequiredSignMessage = vi.findViewById(R.id.tv_required_sign_message);
+        tvRequiredMessage = vi.findViewById(R.id.tv_required_sign_message);
 
-        //Verify Message
-        etVerifyAddress = vi.findViewById(R.id.et_verify_address);
-        etVerifySignature = vi.findViewById(R.id.et_verify_signature);
-        etVerifyMessage = vi.findViewById(R.id.et_verify_message);
-        tvInvalidVerifyAddress = vi.findViewById(R.id.tv_invalid_verify_message_address);
-        tvInvalidVerifySignature = vi.findViewById(R.id.tv_required_verify_signature);
-        tvInvalidVerifyMessage = vi.findViewById(R.id.tv_required_verify_message);
+        // Verify Message
+        etSignature = vi.findViewById(R.id.et_verify_signature);
+        tvRequiredSignature = vi.findViewById(R.id.tv_required_verify_signature);
         btnVerify = vi.findViewById(R.id.btn_verify_message);
 
         return vi;
@@ -155,58 +99,54 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
 
         util = new PreferenceUtil(getContext());
         wallet = DcrConstants.getInstance().wallet;
-        etValidateAddress.addTextChangedListener(validateAddressWatcher);
-        etSignMessageAddress.addTextChangedListener(signMessageAddressWatcher);
-        etVerifyAddress.addTextChangedListener(verifyMessageAddressWatcher);
-        tvSignature.setOnClickListener(this);
+        etAddress.addTextChangedListener(validateAddressWatcher);
 
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean requiresValidation = false;
-                if (!wallet.isAddressValid(etVerifyAddress.getText().toString().trim())) {
+                if (!wallet.isAddressValid(etAddress.getText().toString().trim())) {
                     return;
                 }
-                if (etVerifySignature.getText().toString().equals("")) {
-                    tvInvalidVerifySignature.setVisibility(View.VISIBLE);
+                if (etSignature.getText().toString().equals("")) {
+                    tvRequiredSignature.setText(R.string.this_field_is_required);
                     requiresValidation = true;
                 }
 
-                if (etVerifyMessage.getText().toString().equals("")) {
-                    tvInvalidVerifyMessage.setVisibility(View.VISIBLE);
+                if (etMessage.getText().toString().equals("")) {
+                    tvRequiredMessage.setVisibility(View.VISIBLE);
                     requiresValidation = true;
                 }
 
                 if (!requiresValidation) {
-                    tvInvalidVerifyMessage.setVisibility(View.GONE);
-                    tvInvalidVerifySignature.setVisibility(View.GONE);
+                    tvRequiredMessage.setVisibility(View.INVISIBLE);
+                    tvRequiredSignature.setText(null);
                 } else {
                     return;
                 }
 
-                String address = etVerifyAddress.getText().toString().trim();
-                String signature = etVerifySignature.getText().toString();
-                String message = etVerifyMessage.getText().toString();
+                String address = etAddress.getText().toString().trim();
+                String signature = etSignature.getText().toString();
+                String message = etMessage.getText().toString();
                 try {
                     boolean valid = wallet.verifyMessage(address, message, signature);
                     Toast.makeText(SecurityFragment.this.getContext(), valid ? R.string.valid : R.string.invalid, Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
         btnSignMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!wallet.isAddressValid(etSignMessageAddress.getText().toString().trim())) {
+                if (!wallet.isAddressValid(etAddress.getText().toString().trim())) {
                     return;
-                } else if (etSignMessage.getText().toString().equals("")) {
-                    tvRequiredSignMessage.setVisibility(View.VISIBLE);
+                } else if (etMessage.getText().toString().equals("")) {
+                    tvRequiredMessage.setVisibility(View.VISIBLE);
                 }
 
-                tvRequiredSignMessage.setVisibility(View.GONE);
+                tvRequiredMessage.setVisibility(View.INVISIBLE);
 
                 if (getContext() == null) {
                     return;
@@ -235,10 +175,6 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
                             return;
                         }
 
-                        tvSignature.setText(null);
-                        tvSignature.setEnabled(false);
-                        tvCopySignature.setVisibility(View.INVISIBLE);
-
                         new Thread() {
                             public void run() {
                                 signMessage(passphrase.getText().toString().getBytes());
@@ -261,10 +197,6 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PASSCODE_REQUEST_CODE && resultCode == RESULT_OK) {
-            tvSignature.setText(null);
-            tvSignature.setEnabled(false);
-            tvCopySignature.setVisibility(View.INVISIBLE);
-
             new Thread() {
                 public void run() {
                     signMessage(data.getStringExtra(Constants.PIN).getBytes());
@@ -274,16 +206,15 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
     }
 
     private void signMessage(byte[] passphrase) {
-        final String address = etSignMessageAddress.getText().toString().trim();
-        final String message = etSignMessage.getText().toString();
+        final String address = etAddress.getText().toString().trim();
+        final String message = etMessage.getText().toString();
         try {
             final byte[] signature = wallet.signMessage(passphrase, address, message);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tvSignature.setText(Mobilewallet.encodeBase64(signature));
-                    tvSignature.setEnabled(true);
-                    tvCopySignature.setVisibility(View.VISIBLE);
+                    etSignature.setText(Mobilewallet.encodeBase64(signature));
+                    tvRequiredSignature.setText(null);
                 }
             });
         } catch (final Exception e) {
@@ -294,27 +225,16 @@ public class SecurityFragment extends Fragment implements View.OnClickListener {
                     switch (e.getMessage()) {
                         case Mobilewallet.ErrInvalidPassphrase:
                             if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
-                                tvSignature.setText(R.string.invalid_pin);
+                                tvRequiredSignature.setText(R.string.invalid_pin);
                             } else {
-                                tvSignature.setText(R.string.invalid_password);
+                                tvRequiredSignature.setText(R.string.invalid_password);
                             }
                             break;
                         default:
-                            tvSignature.setText(Utils.translateError(getContext(), e));
+                            tvRequiredSignature.setText(Utils.translateError(getContext(), e));
                     }
-                    tvSignature.setEnabled(false);
-                    tvCopySignature.setVisibility(View.INVISIBLE);
                 }
             });
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_sign_message_signature:
-                Utils.copyToClipboard(getContext(), tvSignature.getText().toString(), getString(R.string.signature_copied_successfully));
-                break;
         }
     }
 }

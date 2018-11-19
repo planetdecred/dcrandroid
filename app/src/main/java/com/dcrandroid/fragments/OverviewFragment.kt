@@ -385,7 +385,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 if (height - tx.getHeight() >= 2) {
                     continue
                 }
-                tx.animate = true
+                tx.animate = false
                 activity!!.runOnUiThread {
                     transactionAdapter!!.notifyItemChanged(i)
                     saveTransactions(transactionList)
