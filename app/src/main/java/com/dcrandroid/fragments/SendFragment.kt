@@ -316,7 +316,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun toggleSendButton(enable: Boolean) {
         if (enable) {
             send_btn.setTextColor(Color.WHITE)
-            send_btn.setBackgroundResource(R.drawable.btn_blue);
+            send_btn.setBackgroundResource(R.drawable.btn_blue)
             return
         } else {
             send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))

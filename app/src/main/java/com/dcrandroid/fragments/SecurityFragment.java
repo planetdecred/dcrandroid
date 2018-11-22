@@ -1,20 +1,30 @@
 package com.dcrandroid.fragments;
 
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,59 +44,37 @@ public class SecurityFragment extends Fragment {
     private final int PASSCODE_REQUEST_CODE = 1;
     private EditText etAddress, etMessage, etSignature;
     private TextView tvValidateAddress, tvRequiredMessage, tvRequiredSignature;
-    private Button btnSignMessage, btnVerify;
+    private Button btnSignMessage, btnCopy;
+    private LinearLayout layout;
     private LibWallet wallet;
     private PreferenceUtil util;
-    private TextWatcher validateAddressWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (s.toString().trim().equals("")) {
-                tvValidateAddress.setText(null);
-                return;
-            }
-
-            if (wallet.isAddressValid(s.toString().trim())) {
-                if (wallet.haveAddress(s.toString().trim())) {
-                    tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.blue));
-                    tvValidateAddress.setText(R.string.owned_validate_address);
-                    return;
-                }
-                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.greenTextColor));
-                tvValidateAddress.setText(R.string.external_validate_address);
-            } else {
-                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.orangeTextColor));
-                tvValidateAddress.setText(R.string.invalid_address);
-            }
-        }
-    };
+    private ProgressDialog pd;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View vi = inflater.inflate(R.layout.fragment_security, container, false);
 
-        etAddress = vi.findViewById(R.id.et_address);
-        tvValidateAddress = vi.findViewById(R.id.tv_validate_address);
-        etMessage = vi.findViewById(R.id.et_sign_message);
+        btnCopy = vi.findViewById(R.id.btn_copy);
         btnSignMessage = vi.findViewById(R.id.btn_sign_message);
-        tvRequiredMessage = vi.findViewById(R.id.tv_required_sign_message);
 
-        // Verify Message
+        etAddress = vi.findViewById(R.id.et_address);
+        etMessage = vi.findViewById(R.id.et_sign_message);
         etSignature = vi.findViewById(R.id.et_verify_signature);
+
+        tvValidateAddress = vi.findViewById(R.id.tv_validate_address);
+        tvRequiredMessage = vi.findViewById(R.id.tv_required_sign_message);
         tvRequiredSignature = vi.findViewById(R.id.tv_required_verify_signature);
-        btnVerify = vi.findViewById(R.id.btn_verify_message);
+
+        layout = vi.findViewById(R.id.security_layout);
 
         return vi;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -100,40 +88,25 @@ public class SecurityFragment extends Fragment {
         util = new PreferenceUtil(getContext());
         wallet = DcrConstants.getInstance().wallet;
         etAddress.addTextChangedListener(validateAddressWatcher);
+        etMessage.addTextChangedListener(textWatcher);
+        etSignature.addTextChangedListener(textWatcher);
 
-        btnVerify.setOnClickListener(new View.OnClickListener() {
+        btnCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean requiresValidation = false;
                 if (!wallet.isAddressValid(etAddress.getText().toString().trim())) {
                     return;
-                }
-                if (etSignature.getText().toString().equals("")) {
+                }else if (etSignature.getText().toString().equals("")) {
+                    tvRequiredSignature.setTextColor(Color.RED);
                     tvRequiredSignature.setText(R.string.this_field_is_required);
-                    requiresValidation = true;
-                }
-
-                if (etMessage.getText().toString().equals("")) {
-                    tvRequiredMessage.setVisibility(View.VISIBLE);
-                    requiresValidation = true;
-                }
-
-                if (!requiresValidation) {
-                    tvRequiredMessage.setVisibility(View.INVISIBLE);
-                    tvRequiredSignature.setText(null);
-                } else {
                     return;
                 }
 
-                String address = etAddress.getText().toString().trim();
-                String signature = etSignature.getText().toString();
-                String message = etMessage.getText().toString();
-                try {
-                    boolean valid = wallet.verifyMessage(address, message, signature);
-                    Toast.makeText(SecurityFragment.this.getContext(), valid ? R.string.valid : R.string.invalid, Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String text = getString(R.string.address_colon) + " " + etAddress.getText().toString().trim()
+                        + "\n" + getString(R.string.message_colon) + " " + etMessage.getText().toString()
+                        + "\n" + getString(R.string.signature_colon) + " " + etSignature.getText().toString();
+
+                Utils.copyToClipboard(v.getContext(), text, getString(R.string.copied_successfully));
             }
         });
 
@@ -147,6 +120,11 @@ public class SecurityFragment extends Fragment {
                 }
 
                 tvRequiredMessage.setVisibility(View.INVISIBLE);
+
+                if(!etSignature.getText().toString().trim().equals("")){
+                    verifyMessage();
+                    return;
+                }
 
                 if (getContext() == null) {
                     return;
@@ -175,6 +153,8 @@ public class SecurityFragment extends Fragment {
                             return;
                         }
 
+                        pd = Utils.getProgressDialog(getContext(), false, false, "Signing...");
+                        pd.show();
                         new Thread() {
                             public void run() {
                                 signMessage(passphrase.getText().toString().getBytes());
@@ -191,6 +171,10 @@ public class SecurityFragment extends Fragment {
                 b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
             }
         });
+
+        if(!DcrConstants.getInstance().synced){
+            layout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -205,6 +189,56 @@ public class SecurityFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.security_page_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.clear_fields){
+            etSignature.setText(null);
+            etAddress.setText(null);
+            etMessage.setText(null);
+            tvValidateAddress.setText(null);
+            tvRequiredSignature.setText(null);
+            toggleMessageButton(false);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void verifyMessage(){
+        String address = etAddress.getText().toString().trim();
+        String signature = etSignature.getText().toString();
+        String message = etMessage.getText().toString();
+
+        if(signature.equals("")){
+            tvRequiredSignature.setText(null);
+            return;
+        }
+
+        if(wallet.isAddressValid(address)) {
+            try {
+                boolean valid = wallet.verifyMessage(address, message, signature);
+                if (valid) {
+                    tvRequiredSignature.setTextColor(getContext().getResources().getColor(R.color.bluePendingTextColor));
+                    tvRequiredSignature.setText(R.string.valid_signature);
+                } else {
+                    tvRequiredSignature.setTextColor(Color.RED);
+                    tvRequiredSignature.setText(R.string.invalid_signature);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                tvRequiredSignature.setTextColor(Color.RED);
+                tvRequiredSignature.setText(R.string.invalid_signature);
+            }
+        }else{
+            tvRequiredSignature.setTextColor(Color.RED);
+            tvRequiredSignature.setText(R.string.invalid_signature);
+        }
+    }
+
     private void signMessage(byte[] passphrase) {
         final String address = etAddress.getText().toString().trim();
         final String message = etMessage.getText().toString();
@@ -215,6 +249,8 @@ public class SecurityFragment extends Fragment {
                 public void run() {
                     etSignature.setText(Mobilewallet.encodeBase64(signature));
                     tvRequiredSignature.setText(null);
+                    pd.dismiss();
+                    verifyMessage();
                 }
             });
         } catch (final Exception e) {
@@ -222,6 +258,8 @@ public class SecurityFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    pd.dismiss();
+                    tvRequiredSignature.setTextColor(Color.RED);
                     switch (e.getMessage()) {
                         case Mobilewallet.ErrInvalidPassphrase:
                             if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
@@ -237,4 +275,118 @@ public class SecurityFragment extends Fragment {
             });
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(getContext() != null){
+            getContext().unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getContext() != null){
+            IntentFilter filter = new IntentFilter(Constants.SYNCED);
+            getContext().registerReceiver(receiver, filter);
+        }
+    }
+
+    private void checkCopyButton(){
+        if (!wallet.isAddressValid(etAddress.getText().toString().trim()) || etSignature.getText().toString().equals("")) {
+            btnCopy.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc));
+            btnCopy.setBackgroundColor(Color.parseColor("#e6eaed"));
+            btnCopy.setEnabled(false);
+            return;
+        }
+
+        btnCopy.setTextColor(Color.WHITE);
+        btnCopy.setBackgroundResource(R.drawable.btn_blue);
+        btnCopy.setEnabled(true);
+    }
+
+    private void toggleMessageButton(boolean enable){
+        if(enable){
+            btnSignMessage.setTextColor(Color.WHITE);
+            btnSignMessage.setBackgroundResource(R.drawable.btn_blue);
+            btnSignMessage.setEnabled(true);
+        }else{
+            btnSignMessage.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc));
+            btnSignMessage.setBackgroundColor(Color.parseColor("#e6eaed"));
+            btnSignMessage.setEnabled(false);
+        }
+    }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                layout.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
+    private TextWatcher validateAddressWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkCopyButton();
+            verifyMessage();
+            if (s.toString().trim().equals("")) {
+                tvValidateAddress.setText(null);
+                toggleMessageButton(false);
+                return;
+            }
+
+            if (wallet.isAddressValid(s.toString().trim())) {
+                if (wallet.haveAddress(s.toString().trim())) {
+                    tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
+                    tvValidateAddress.setText(R.string.owned_validate_address);
+                    toggleMessageButton(true);
+                    return;
+                }
+                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.greenTextColor));
+                tvValidateAddress.setText(Html.fromHtml(getString(R.string.external_validate_address)));
+                toggleMessageButton(false);
+            } else {
+                tvValidateAddress.setTextColor(Color.RED);
+                tvValidateAddress.setText(R.string.invalid_address);
+                toggleMessageButton(false);
+            }
+        }
+    };
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkCopyButton();
+            verifyMessage();
+
+            if(etSignature.getText().toString().equals("") && wallet.isAddressValid(etAddress.getText().toString())){
+                toggleMessageButton(true);
+            }else {
+                toggleMessageButton(false);
+            }
+        }
+    };
 }
