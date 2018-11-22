@@ -275,9 +275,9 @@
     <string name="invalid_address_prefix">Invalid address prefix</string>
     <string name="wallet_addr_too_long">Wallet Address Is Too Long</string>
     <string name="wallet_add_too_short">Wallet Address Is Too Short</string>
-    <string name="invalid_address">Invalid Address</string>
-    <string name="owned_validate_address">Owned Address</string>
-    <string name="external_validate_address">Address Valid, Not Owned</string>
+    <string name="invalid_address">Not a valid address.</string>
+    <string name="owned_validate_address">Address is valid and you own it.</string>
+    <string name="external_validate_address"><![CDATA[<font color="red">Address is valid and you do <b>NOT</b> own it.</font>]]></string>
     <string name="paste_from_clipboard">Paste Address From Clipboard</string>
     <!--/Address-->
 
@@ -356,17 +356,14 @@
 
     <!--Security Fragment-->
     <string name="security">Security</string>
-    <string name="validate_address">Validate Address</string>
     <string name="sign_message">Sign Message</string>
-    <string name="enter_an_address">Enter an address</string>
-    <string name="verify_message">Verify Message</string>
-    <string name="please_enter_a_valid_address">Please enter a valid address</string>
-    <string name="enter_your_message">Enter your message</string>
-    <string name="this_field_is_required">This field is required</string>
-    <string name="enter_your_signature">Enter your signature</string>
-    <string name="signature_copied_successfully">Signature copied successfully</string>
-    <string name="valid">Valid</string>
-    <string name="invalid">Invalid</string>
+    <string name="address_colon">Address:</string>
+    <string name="message_colon">Message:</string>
+    <string name="this_field_is_required">This field is required.</string>
+    <string name="signature_colon">Signature:</string>
+    <string name="valid_signature">This signature verifies against the message and address.</string>
+    <string name="invalid_signature">This signature does not verify against the message and address.</string>
+    <string name="sign_message_description">Here you can verify the validity of an address, sign messages to prove your ownership of an address, and verify signatures.</string>
     <!--/Security Fragment-->
 
     <!--Send Fragment-->
@@ -469,4 +466,7 @@
     <string name="menu_view_on_dcrdata">View on Dcrdata</string>
     <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
     <string name="failed_to_send_transaction">Failed to send transaction</string>
+    <string name="copy">Copy</string>
+    <string name="copied_successfully">Copied successfully.</string>
+    <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
 </resources>

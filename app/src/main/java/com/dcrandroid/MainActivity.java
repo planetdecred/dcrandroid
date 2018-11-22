@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private NavigationListAdapter listAdapter;
     private ListView mListView;
     private SendFragment sendFragment = new SendFragment();
+    private SecurityFragment securityFragment = new SecurityFragment();
 
     @Override
     public void onTrimMemory(int level) {
@@ -431,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 fragment = new AccountsFragment();
                 break;
             case 5:
-                fragment = new SecurityFragment();
+                fragment = securityFragment;
                 break;
             case 6:
                 fragment = new SettingsActivity.MainPreferenceFragment();
