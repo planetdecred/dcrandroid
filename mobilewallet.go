@@ -936,9 +936,11 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 
 	var ssGenVersion uint32
 	var lastBlockValid bool
+	var votebits string
 	if stake.IsSSGen(&mtx) {
 		ssGenVersion = voteVersion(&mtx)
 		lastBlockValid = voteBits(&mtx)&uint16(BlockValid) != 0
+		votebits = fmt.Sprintf("%#04x", voteBits(&mtx))
 	}
 
 	var tx = DecodedTransaction{
@@ -951,7 +953,7 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 		Outputs:        decodeTxOutputs(&mtx, lw.wallet.ChainParams()),
 		VoteVersion:    int32(ssGenVersion),
 		LastBlockValid: lastBlockValid,
-		VoteBits:       fmt.Sprintf("%#04x", voteBits(&mtx)),
+		VoteBits:       votebits,
 	}
 	result, _ := json.Marshal(tx)
 	return string(result), nil
