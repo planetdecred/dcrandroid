@@ -55,6 +55,7 @@ public class Constants {
             INTERNAL = "Internal",
             LOGGING_LEVEL = "logging_level",
             NEW_BLOCK_NOTIFICATION = "new_block_notification",
+            NEW_TRANSACTION_NOTIFICATION = "new_transaction_notification",
             EMPTY_STRING = "",
             DASH = "-",
             NBSP = " ",
@@ -104,6 +105,9 @@ public class Constants {
             NO_INFO = "no_info",
             APP_VERSION = "app_version",
             STAKING = "staking",
+            SENT = "sent",
+            RECEIVED = "received",
+            TOSELF = "To Self",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }

@@ -18,7 +18,6 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
 
     private val allEnteredSeeds = ArrayList<InputSeed>()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return ViewHolder(layoutInflater.inflate(R.layout.create_wallet_list_row, parent, false))
@@ -44,17 +43,18 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
         holder.thirdSeed.text = currentMultiSeed.thirdSeed.phrase
         holder.multiSeedPosition.text = String.format("${context.getString(R.string.correctWordIs)}${holder.adapterPosition + 1}")
 
-
         holder.firstSeed.setOnClickListener {
             enableClick(holder.firstSeed)
             disableClick(holder.secondSeed, holder.thirdSeed)
             saveSeedToArray(InputSeed(position, holder.firstSeed.text.toString()))
         }
+
         holder.secondSeed.setOnClickListener {
             enableClick(holder.secondSeed)
             disableClick(holder.firstSeed, holder.thirdSeed)
             saveSeedToArray(InputSeed(position, holder.secondSeed.text.toString()))
         }
+
         holder.thirdSeed.setOnClickListener {
             enableClick(holder.thirdSeed)
             disableClick(holder.secondSeed, holder.firstSeed)
@@ -117,6 +117,4 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
         val thirdSeed = itemView.tvThirdSeed!!
         val multiSeedPosition = itemView.tvCorrectWordNumber!!
     }
-
-
 }

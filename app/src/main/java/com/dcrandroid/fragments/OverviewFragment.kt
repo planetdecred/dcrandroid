@@ -175,7 +175,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }.start()
     }
 
-    fun prepareHistoryData() {
+    private fun prepareHistoryData() {
         if (!isForeground) {
             needsUpdate = true
             return
@@ -259,7 +259,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     }
 
     override fun onResult(json: String) {
-        if (activity == null) {
+        if (activity == null || context == null) {
             return
         }
         activity!!.runOnUiThread {
@@ -276,12 +276,10 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 val latestTx = Collections.min<TransactionsResponse.TransactionItem>(transactions, TransactionComparator.MinConfirmationSort())
                 latestTransactionHeight = latestTx.getHeight() + 1
                 transactionList.clear()
-                if (transactions.size > 0) {
-                    if (transactions.size > getMaxDisplayItems()) {
-                        transactionList.addAll(transactions.subList(0, getMaxDisplayItems()))
-                    } else {
-                        transactionList.addAll(transactions)
-                    }
+                if (transactions.size > getMaxDisplayItems()) {
+                    transactionList.addAll(transactions.subList(0, getMaxDisplayItems()))
+                } else {
+                    transactionList.addAll(transactions)
                 }
                 history_recycler_view2.visibility = View.VISIBLE
                 if (swipe_refresh_layout2.isRefreshing) {
@@ -294,13 +292,14 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
                 if (recentTransactionHash.isNotEmpty()) {
                     val hashIndex = transactionList.find(recentTransactionHash)
-
                     if (hashIndex == -1) {
                         // All transactions in this list is new
                         transactionList.animateNewItems(0, transactionList.size - 1)
                     } else if (hashIndex != 0) {
                         transactionList.animateNewItems(0, hashIndex - 1)
                     }
+                } else {
+                    transactionList.animateNewItems(0, transactionList.size - 1)
                 }
 
                 util!!.set(Constants.RECENT_TRANSACTION_HASH, transactionList[0].hash)
@@ -336,14 +335,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     }
 
     fun newTransaction(transaction: TransactionsResponse.TransactionItem) {
-        transaction.animate = true
 
-        for (i in transactionList.indices) {
-            if (transactionList[i].hash == transaction.hash) {
-                //Transaction is a duplicate
-                return
-            }
+        if (transactionList.find(transaction.hash) != -1) {
+            // Transaction is a duplicate
+            return
         }
+
+        transaction.animate = true
         transactionList.add(0, transaction)
         if (transactionList.size > getMaxDisplayItems()) {
             transactionList.removeAt(transactionList.size - 1)
@@ -355,6 +353,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
 
         activity!!.runOnUiThread {
+            history_recycler_view2.visibility = View.VISIBLE
             util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
             transactionAdapter!!.notifyDataSetChanged()
             saveTransactions(transactionList)
@@ -367,6 +366,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             if (transactionList[i].hash == hash) {
                 val transaction = transactionList[i]
                 transaction.height = height
+                transaction.animate = false
                 latestTransactionHeight = transaction.getHeight() + 1
                 transactionList[i] = transaction
                 transactionAdapter!!.notifyItemChanged(i)
@@ -403,8 +403,18 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
-                getBalance()
-                hideSyncIndicator()
+                if (constants!!.synced) {
+                    getBalance()
+                    hideSyncIndicator()
+                    prepareHistoryData()
+                } else {
+                    iv_sync_indicator.visibility = View.VISIBLE
+                    overview_av_balance.visibility = View.GONE
+                    iv_sync_indicator.post {
+                        val syncAnimation = iv_sync_indicator.background as AnimationDrawable
+                        syncAnimation.start()
+                    }
+                }
             }
         }
     }
