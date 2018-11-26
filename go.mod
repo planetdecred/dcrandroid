@@ -25,13 +25,15 @@ require (
 	github.com/decred/dcrwallet/walletseed v1.0.0
 	github.com/decred/slog v1.0.0
 	github.com/dgraph-io/badger v1.5.4
+	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102 // indirect
 	github.com/jrick/logrotate v1.0.0
+	github.com/pkg/errors v0.8.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.2.2 // indirect
 )
 
-replace github.com/decred/dcrwallet => github.com/raedahgroup/dcrwallet v1.1.3-0.20181104103600-e842132c9435
+replace github.com/decred/dcrwallet/wallet => github.com/decred/dcrwallet/wallet v1.0.1-0.20181120205657-8690f1096aa7
 
-replace github.com/decred/dcrwallet/wallet => github.com/raedahgroup/dcrwallet/wallet v0.0.0-20181104103600-e842132c9435
+replace github.com/decred/dcrwallet/spv => github.com/decred/dcrwallet/spv v1.0.1-0.20181120205657-8690f1096aa7
 
-replace github.com/decred/dcrwallet/spv => github.com/raedahgroup/dcrwallet/spv v0.0.0-20181104103600-e842132c9435
+replace github.com/decred/dcrwallet => github.com/decred/dcrwallet v1.2.3-0.20181120205657-8690f1096aa7

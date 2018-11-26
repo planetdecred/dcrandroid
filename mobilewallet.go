@@ -246,8 +246,9 @@ func (lw *LibWallet) InitLoader() {
 		TicketFee:     10e8,
 	}
 	fmt.Println("Initizing Loader: ", lw.dataDir, "Db: ", lw.dbDriver)
-	l := loader.NewLoader(lw.activeNet.Params, lw.dataDir, lw.dbDriver, stakeOptions,
+	l := loader.NewLoader(lw.activeNet.Params, lw.dataDir, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
+	l.SetDatabaseDriver(lw.dbDriver)
 	lw.loader = l
 	go shutdownListener()
 }
