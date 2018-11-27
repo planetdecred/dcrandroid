@@ -154,7 +154,7 @@
     <string name="theInputFieldIsEmpty">The input fields is empty. Please, enter the seeds.</string>
     <string name="error_seed_not_generated">Error occurred, Seed was not generated</string>
     <string name="warning_save_seed">Failure to keep this seed safe can result in theft of your entire wallet or inability to recover your wallet</string>
-    <string name="tap_to_select">Tap to select Word</string>
+    <string name="tap_to_select">Tap to select the word</string>
     <string name="incorrect_seed_input">You entered an incorrect seed, please confirm your seed</string>
     <string name="i_copied_the_seed_phrase">I copied the seed phrase</string>
     <string name="seed_phrase_verification">Seed phrase verification…</string>

@@ -52,6 +52,7 @@
             android:textColor="@color/darkBlueTextColor"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular"
+            android:completionHintView="@layout/completion_hint_view"
             tools:ignore="RtlSymmetry"
             tools:text="crossover" />
 
