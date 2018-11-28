@@ -5,15 +5,19 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.dcrandroid.R
-import com.dcrandroid.adapter.ConfirmSeedAdapter
+import com.dcrandroid.adapter.CreateWalletAdapter
+import com.dcrandroid.adapter.RestoreWalletAdapter
 import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import kotlinx.android.synthetic.main.confirm_seed_page.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val CLICK_THRESHOLD = 300 //millisecond
 
@@ -26,14 +30,17 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private val seedsForInput = ArrayList<InputSeed>()
     private val seedsFromAdapter = ArrayList<InputSeed>()
     private var sortedList = listOf<InputSeed>()
-    private lateinit var seedAdapter: ConfirmSeedAdapter
+    private lateinit var restoreWalletAdapter: RestoreWalletAdapter
+    private lateinit var createWalletAdapter: CreateWalletAdapter
     private var confirmClicks = 0
     private var lastConfirmClick: Long = 0
     private var clickThread: Thread? = null
+    private lateinit var currentSeed: InputSeed
+    private val arrayOfRandomSeeds = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+//        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val decorView = window.decorView
@@ -45,12 +52,16 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         recyclerViewSeeds.layoutManager = linearLayoutManager
 
         button_delete_seed.setOnClickListener {
-            recyclerViewSeeds.removeAllViewsInLayout()
-            recyclerViewSeeds.adapter = null
-            sortedList = emptyList()
-            seedsFromAdapter.clear()
-            initAdapter()
-            seedAdapter.notifyDataSetChanged()
+            if (restore) {
+                recyclerViewSeeds.removeAllViewsInLayout()
+                recyclerViewSeeds.adapter = null
+                sortedList = emptyList()
+                seedsFromAdapter.clear()
+                initOldWalletAdapter()
+                restoreWalletAdapter.notifyDataSetChanged()
+            } else {
+                createWalletAdapter.isRemoveItem = true
+            }
         }
 
         button_confirm_seed.setOnClickListener(this)
@@ -71,21 +82,23 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                 temp.forEachIndexed { number, _ ->
                     inputSeed = InputSeed(number, " ")
                     seedsForInput.add(inputSeed)
+                    initOldWalletAdapter()
                 }
             } else {
                 allSeeds.forEachIndexed { number, seed ->
                     inputSeed = InputSeed(number, seed)
                     seedsForInput.add(inputSeed)
+                    initNewWalletAdapter()
                 }
             }
-            initAdapter()
         }
     }
 
-    private fun initAdapter() {
-        seedAdapter = ConfirmSeedAdapter(seedsForInput.distinct(), allSeeds, applicationContext,
+    private fun initOldWalletAdapter() {
+        restoreWalletAdapter = RestoreWalletAdapter(seedsForInput.distinct(), allSeeds, applicationContext,
                 { savedSeed: InputSeed ->
                     seedsFromAdapter.add(savedSeed)
+                    currentSeed = savedSeed
                     sortedList = seedsFromAdapter.sortedWith(compareBy { it.number }).distinct()
                 },
                 { removeSeed: InputSeed ->
@@ -94,8 +107,61 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                     seedsFromAdapter.remove(removeSeed)
                     sortedList = seedsFromAdapter.sortedWith(compareBy { it.number }).distinct()
                 })
-        recyclerViewSeeds.adapter = seedAdapter
+        recyclerViewSeeds.adapter = restoreWalletAdapter
     }
+
+    private fun initNewWalletAdapter() {
+        rlRandomSeeds.visibility = View.VISIBLE
+        createWalletAdapter = CreateWalletAdapter(seedsForInput.distinct(), applicationContext,
+                { seedFromAdapter: InputSeed ->
+                    currentSeed = seedFromAdapter
+                }, { seedFromUser: InputSeed ->
+
+        }, false)
+        recyclerViewSeeds.adapter = createWalletAdapter
+    }
+
+
+    private fun IntRange.random() = Random().nextInt((allSeeds.size + 1) - start)
+
+    private fun generateRandomSeeds() {
+
+        val firstRandom = (1..allSeeds.size).random()
+        val secondRandom = (1..allSeeds.size).random()
+        val currentItemPosition = (currentSeed.number)
+
+        if (firstRandom != secondRandom && firstRandom != currentItemPosition && secondRandom != currentItemPosition) {
+            for (item in allSeeds) {
+                if (item == allSeeds[firstRandom]) {
+                    arrayOfRandomSeeds.add(item)
+                }
+                if (item == allSeeds[secondRandom]) {
+                    arrayOfRandomSeeds.add(item)
+                }
+                if (item == allSeeds[currentItemPosition]) {
+                    arrayOfRandomSeeds.add(item)
+                }
+            }
+        } else {
+            generateRandomSeeds()
+        }
+        arrayOfRandomSeeds.shuffle()
+    }
+
+    private fun showRandomSeeds() {
+        tvFirstSeed.text = arrayOfRandomSeeds[0]
+        tvFirstSeed.text = arrayOfRandomSeeds[1]
+        tvFirstSeed.text = arrayOfRandomSeeds[2]
+    }
+
+    private fun textListeners() {
+        tvFirstSeed.setOnClickListener { }
+        tvSecondSeed.setOnClickListener {  }
+        tvThirdSeed.setOnClickListener {  }
+        arrayOfRandomSeeds.clear()
+    }
+
+
 
     override fun onClick(v: View?) {
         var lastClick: Long = 0

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -42,52 +43,107 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80"
+        android:layout_weight="70"
         android:padding="8dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewSeeds"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:animateLayoutChanges="false"
-            android:focusableInTouchMode="true">
+            android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_gravity="bottom"
+        android:layout_weight="30"
         android:gravity="center"
+        android:orientation="vertical"
         android:paddingLeft="8dp"
         android:paddingRight="8dp">
 
-        <Button
-            android:id="@+id/button_delete_seed"
-            android:layout_width="102dp"
-            android:layout_height="42dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/btn_shape"
-            android:text="@string/clearAll"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+        <RelativeLayout
+            android:id="@+id/rlRandomSeeds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-        <Button
-            android:id="@+id/button_confirm_seed"
-            android:layout_width="102dp"
-            android:layout_height="42dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/btn_shape3"
-            android:text="@string/confirm"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tvFirstSeed"
+                android:layout_width="102dp"
+                android:layout_height="42dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:textColor="@color/blueSecondDrawableColor"
+                android:textSize="14sp"
+                tools:text="consensus" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tvSecondSeed"
+                android:layout_width="102dp"
+                android:layout_height="42dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textColor="@color/blueSecondDrawableColor"
+                android:textSize="14sp"
+                tools:text="playhouse" />
+
+            <TextView
+                android:id="@+id/tvThirdSeed"
+                android:layout_width="102dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:textColor="@color/blueSecondDrawableColor"
+                android:textSize="14sp"
+                tools:text="klaxon" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/tvThirdSeed"
+                android:background="@color/lightGreyBackgroundColor" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/button_delete_seed"
+                android:layout_width="102dp"
+                android:layout_height="42dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/btn_shape"
+                android:text="@string/clearAll"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/button_confirm_seed"
+                android:layout_width="102dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/btn_shape3"
+                android:text="@string/confirm"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 
 </LinearLayout>
