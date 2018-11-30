@@ -4,7 +4,7 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="25dp"
-    android:background="@color/grayDrawable85pc"
+    android:background="@color/grayDrawable95pc"
     android:textColor="@color/blackFirstTextColor"
     android:textSize="16sp"
     tools:text="Hello world">

@@ -54,7 +54,7 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
             } else {
                 val filterPattern = constraint.toString()
                 for (item in suggestionList) {
-                    if (item.startsWith(filterPattern, false)) filteredList.add(item)
+                    if (item.startsWith(filterPattern, true)) filteredList.add(item)
                 }
             }
             filterResults.values = filteredList
