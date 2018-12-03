@@ -477,9 +477,8 @@
     <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
     <string name="clearAll">Clear All</string>
     <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
+    <string name="correctWordIs">Word #</string>
     <string name="share">Share</string>
     <string name="share_address_via">Share the address via:</string>
     <string name="address_not_found">The address not found.</string>
-
-    <string name="correctWordIs">Correct Word #</string>
 </resources>

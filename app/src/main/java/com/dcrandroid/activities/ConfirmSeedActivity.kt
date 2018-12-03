@@ -10,12 +10,12 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import android.widget.Toast
 import com.dcrandroid.R
 import com.dcrandroid.adapter.CreateWalletAdapter
-import com.dcrandroid.adapter.RestoreWalletAdapter
 import com.dcrandroid.adapter.InputSeed
+import com.dcrandroid.adapter.MultiSeed
+import com.dcrandroid.adapter.RestoreWalletAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import kotlinx.android.synthetic.main.confirm_seed_page.*
@@ -29,20 +29,20 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private var seed = ""
     private var restore: Boolean = false
     private var allSeeds = ArrayList<String>()
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private val seedsForInput = ArrayList<InputSeed>()
-    private val arrayOfSeedLists = ArrayList<ArrayList<InputSeed>>()
     private val confirmedSeedsArray = ArrayList<InputSeed>()
     private var sortedList = listOf<InputSeed>()
+    private val arrayOfRandomSeeds = ArrayList<InputSeed>()
+    private val arrayOfSeedLists = ArrayList<MultiSeed>()
     private val shuffledSeeds = ArrayList<InputSeed>()
-    private lateinit var restoreWalletAdapter: RestoreWalletAdapter
-    private lateinit var createWalletAdapter: CreateWalletAdapter
     private var confirmClicks = 0
     private var lastConfirmClick: Long = 0
     private var clickThread: Thread? = null
+    private var currentSeedPosition: Int = 0
+    private lateinit var restoreWalletAdapter: RestoreWalletAdapter
+    private lateinit var createWalletAdapter: CreateWalletAdapter
     private lateinit var currentSeed: InputSeed
-    private val arrayOfRandomSeeds = ArrayList<InputSeed>()
-    private var correctSeedPosition: Int = 0
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +83,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             seed = bundle.getString(Constants.SEED)
             restore = bundle.getBoolean(Constants.RESTORE)
             allSeeds = ArrayList(seed.split(" "))
+            Log.d("confirmSeed", "allSeeds: $allSeeds")
             if (restore) {
                 temp.forEachIndexed { number, _ ->
                     seedsForInput.add(InputSeed(number, " "))
@@ -121,7 +122,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private fun generateRandomSeeds() {
         val firstRandom = (1..allSeeds.size).random()
         val secondRandom = (1..allSeeds.size).random()
-        val currentItemPosition = (correctSeedPosition)
+        val currentItemPosition = (currentSeedPosition)
 
         if (firstRandom != secondRandom && firstRandom != currentItemPosition && secondRandom != currentItemPosition) {
             for (item in allSeeds) {
@@ -131,27 +132,34 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                     allSeeds[currentItemPosition] -> arrayOfRandomSeeds.add(InputSeed(currentItemPosition, item))
                 }
             }
-            showRandomSeeds()
+            addSeedsToAdapter()
         } else {
             generateRandomSeeds()
         }
     }
 
-    private fun showRandomSeeds() {
-        shuffledSeeds.addAll(arrayOfRandomSeeds.shuffled().distinct())
-//        tvCorrectWordNumber.text = String.format(getString(R.string.correctWordIs) + (correctSeedPosition + 1))
-//        tvFirstSeed.text = shuffledSeeds[0].phrase
-//        tvSecondSeed.text = shuffledSeeds[1].phrase
-//        tvThirdSeed.text = shuffledSeeds[2].phrase
-        arrayOfRandomSeeds.clear()
-        textViewClickListeners()
-    }
-
-    private fun textViewClickListeners() {
-        val clickListener = TextViewClickListener()
-//        tvFirstSeed.setOnClickListener(clickListener)
-//        tvSecondSeed.setOnClickListener(clickListener)
-//        tvThirdSeed.setOnClickListener(clickListener)
+    private fun addSeedsToAdapter() {
+        if (currentSeedPosition < 32) {
+            shuffledSeeds.addAll(arrayOfRandomSeeds.shuffled().distinct())
+            if(shuffledSeeds.size == 3) {
+                arrayOfSeedLists.add(MultiSeed(shuffledSeeds[0], shuffledSeeds[1], shuffledSeeds[2]))
+            } else {
+                shuffledSeeds.clear()
+                arrayOfRandomSeeds.clear()
+                generateRandomSeeds()
+            }
+            createWalletAdapter.notifyDataSetChanged()
+            arrayOfRandomSeeds.clear()
+            shuffledSeeds.clear()
+            currentSeedPosition++
+            generateRandomSeeds()
+        } else if (currentSeedPosition == 32) {
+            shuffledSeeds.addAll(arrayOfRandomSeeds.shuffled().distinct())
+            arrayOfSeedLists.add(MultiSeed(shuffledSeeds[0], shuffledSeeds[1], shuffledSeeds[2]))
+            createWalletAdapter.notifyDataSetChanged()
+            arrayOfRandomSeeds.clear()
+            shuffledSeeds.clear()
+        }
     }
 
     override fun onClick(v: View?) {
@@ -221,17 +229,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             Toast.makeText(applicationContext, getString(R.string.notAllSeedsEntered), Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(applicationContext, getString(R.string.theInputFieldIsEmpty), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    inner class TextViewClickListener : View.OnClickListener {
-        override fun onClick(view: View?) {
-            confirmedSeedsArray.add(InputSeed(correctSeedPosition, view.toString()))
-            arrayOfSeedLists.add(correctSeedPosition, shuffledSeeds)
-            createWalletAdapter.notifyDataSetChanged()
-            shuffledSeeds.clear()
-            correctSeedPosition++
-            generateRandomSeeds()
         }
     }
 
