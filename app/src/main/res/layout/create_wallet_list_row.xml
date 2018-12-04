@@ -14,7 +14,7 @@
         android:textColor="@color/darkBlueTextColor"
         tools:text="Correct Word #3" />
 
-    <TextView
+    <Button
         android:id="@+id/tvFirstSeed"
         android:layout_width="102dp"
         android:layout_height="42dp"
@@ -25,11 +25,12 @@
         android:layout_marginLeft="5dp"
         android:background="@drawable/btn_shape4"
         android:gravity="center"
+        android:textAllCaps="false"
         android:textColor="@color/blueSecondDrawableColor"
         android:textSize="14sp"
         tools:text="consensus" />
 
-    <TextView
+    <Button
         android:id="@+id/tvSecondSeed"
         android:layout_width="102dp"
         android:layout_height="42dp"
@@ -37,11 +38,12 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/btn_shape4"
         android:gravity="center"
+        android:textAllCaps="false"
         android:textColor="@color/blueSecondDrawableColor"
         android:textSize="14sp"
         tools:text="playhouse" />
 
-    <TextView
+    <Button
         android:id="@+id/tvThirdSeed"
         android:layout_width="102dp"
         android:layout_height="42dp"
@@ -52,6 +54,7 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/btn_shape4"
         android:gravity="center"
+        android:textAllCaps="false"
         android:textColor="@color/blueSecondDrawableColor"
         android:textSize="14sp"
         tools:text="klaxon" />
