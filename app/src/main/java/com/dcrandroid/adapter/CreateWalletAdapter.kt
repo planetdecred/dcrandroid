@@ -7,19 +7,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.create_wallet_list_row.view.*
 
 
 data class MultiSeed(val firstSeed: InputSeed, val secondSeed: InputSeed, val thirdSeed: InputSeed)
 
-class CreateWalletAdapter(val context: Context, private val allListOfSeeds: ArrayList<MultiSeed>, val saveSeed: (InputSeed) -> Unit,
-                          val changeSeed: (InputSeed) -> Unit) : RecyclerView.Adapter<CreateWalletAdapter.ViewHolder>() {
+class CreateWalletAdapter(val context: Context, private val allListOfSeeds: ArrayList<MultiSeed>, val enteredSeeds: (ArrayList<InputSeed>) -> Unit,
+                          var isAllSeedsEntered: (Boolean) -> Unit) : RecyclerView.Adapter<CreateWalletAdapter.ViewHolder>() {
 
-    private lateinit var selectedSeed: InputSeed
-
-    private var isCheckedBefore = false
+    private val allEnteredSeeds = ArrayList<InputSeed>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,52 +44,42 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
         holder.thirdSeed.text = currentMultiSeed.thirdSeed.phrase
         holder.multiSeedPosition.text = String.format("${context.getString(R.string.correctWordIs)}${holder.adapterPosition + 1}")
 
-
         holder.firstSeed.setOnClickListener {
-            if (!isCheckedBefore) {
-                selectedSeed = InputSeed(position, holder.firstSeed.text.toString())
-                transferSeed(selectedSeed)
-            } else {
-                transferSeed(InputSeed(position, holder.firstSeed.text.toString()))
-                selectedSeed = InputSeed(position, holder.firstSeed.text.toString())
-            }
             enableClick(holder.firstSeed)
             disableClick(holder.secondSeed, holder.thirdSeed)
-            isCheckedBefore = true
+            saveSeedToArray(InputSeed(position, holder.firstSeed.text.toString()))
         }
         holder.secondSeed.setOnClickListener {
-            if (!isCheckedBefore) {
-                selectedSeed = InputSeed(position, holder.secondSeed.text.toString())
-                transferSeed(selectedSeed)
-            } else {
-                transferSeed(InputSeed(position, holder.secondSeed.text.toString()))
-                selectedSeed = InputSeed(position, holder.secondSeed.text.toString())
-            }
             enableClick(holder.secondSeed)
             disableClick(holder.firstSeed, holder.thirdSeed)
-            isCheckedBefore = true
+            saveSeedToArray(InputSeed(position, holder.secondSeed.text.toString()))
         }
         holder.thirdSeed.setOnClickListener {
-            if (!isCheckedBefore) {
-                selectedSeed = InputSeed(position, holder.thirdSeed.text.toString())
-                transferSeed(selectedSeed)
-            } else {
-                transferSeed(InputSeed(position, holder.thirdSeed.text.toString()))
-                selectedSeed = InputSeed(position, holder.thirdSeed.text.toString())
-            }
             enableClick(holder.thirdSeed)
             disableClick(holder.secondSeed, holder.firstSeed)
-            isCheckedBefore = true
+            saveSeedToArray(InputSeed(position, holder.thirdSeed.text.toString()))
         }
-
     }
 
-    private fun transferSeed(seed: InputSeed) {
-        if (isCheckedBefore) {
-            changeSeed(selectedSeed)
-            saveSeed(seed)
+    private fun saveSeedToArray(seed: InputSeed) {
+        val toRemoveArray = ArrayList<InputSeed>()
+
+        if (allEnteredSeeds.isEmpty()) {
+            allEnteredSeeds.add(seed)
         } else {
-            saveSeed(seed)
+            allEnteredSeeds.forEach {
+                if (it.number == seed.number) {
+                    toRemoveArray.add(it)
+                }
+            }
+            allEnteredSeeds.add(seed)
+            allEnteredSeeds.removeAll(toRemoveArray)
+        }
+        enteredSeeds(allEnteredSeeds)
+        if(allEnteredSeeds.size == 33) {
+            isAllSeedsEntered(true)
+        } else {
+            isAllSeedsEntered(false)
         }
     }
 
@@ -108,9 +95,9 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
     private fun changeBackground(view: View, isEnableClick: Boolean) {
         if (isEnableClick) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                view.background = ContextCompat.getDrawable(context, R.drawable.btn_shape3)
+                view.background = ContextCompat.getDrawable(context, R.drawable.btn_shape2)
             } else {
-                view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.btn_shape3))
+                view.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.btn_shape2))
             }
             view.isClickable = false
         } else {

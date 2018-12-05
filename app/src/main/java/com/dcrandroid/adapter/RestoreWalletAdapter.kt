@@ -1,15 +1,18 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
+import android.database.Cursor
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
+import android.widget.CursorAdapter
 import android.widget.TextView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.recover_wallet_list_row.view.*
@@ -51,12 +54,12 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
         holder.savedSeed.setAdapter(hintAdapter)
         holder.savedSeed.imeOptions = EditorInfo.IME_ACTION_NEXT
 
-        holder.savedSeed.onItemClickListener = AdapterView.OnItemClickListener { parent, _, pos, _ ->
-            val s = parent.getItemAtPosition(pos) as String
-            currentSeed.phrase = s
-            currentText = s
+        holder.savedSeed.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
+            val enteredItem = holder.savedSeed.text.toString()
+            currentSeed.phrase = enteredItem
+            currentText = enteredItem
             saveSeed(currentSeed)
-            holder.savedSeed.setText(s)
+            holder.savedSeed.setText(enteredItem)
         }
 
 
@@ -64,16 +67,11 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
             override fun afterTextChanged(s: Editable?) {
                 val isCorrectSeed = s.toString() == currentText
                 val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
+                holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
 
                 when {
                     s!!.isNotEmpty() -> holder.ivClearText.visibility = View.VISIBLE
                     s.isNullOrEmpty() -> holder.ivClearText.visibility = View.GONE
-                }
-                if (!isCorrectSeed) {
-                    holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
-                    removeSeed(seedItems[holder.adapterPosition])
-                } else {
-                    holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
                 }
 
                 if (isCorrectSeed && holder.adapterPosition < 32 && s.toString().isNotEmpty()) {
@@ -81,8 +79,8 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
                     view.requestFocus()
                 } else {
                     holder.savedSeed.setSelection(s.toString().length)
+                    removeSeed(seedItems[holder.adapterPosition])
                 }
-
 
             }
 
@@ -100,6 +98,11 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
 
         holder.savedSeed.setOnFocusChangeListener { _, isFocused ->
             if (!isFocused) {
+                if (!allStringSeedArray.contains(holder.savedSeed.text.toString())) {
+                    holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
+                } else {
+                    holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
+                }
                 holder.ivClearText.visibility = View.GONE
             } else if (isFocused && holder.savedSeed.text.isNotEmpty()) {
                 holder.ivClearText.visibility = View.VISIBLE

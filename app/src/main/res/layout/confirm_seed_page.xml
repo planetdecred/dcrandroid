@@ -88,7 +88,7 @@
                 android:layout_height="42dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/btn_shape3"
+                android:background="@drawable/btn_shape2"
                 android:text="@string/confirm"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
