@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -41,7 +40,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private var confirmClicks = 0
     private var lastConfirmClick: Long = 0
     private var clickThread: Thread? = null
-    private var currentSeedPosition: Int = 0
+    private var currentSeedPosition = 0
     private lateinit var restoreWalletAdapter: RestoreWalletAdapter
     private lateinit var createWalletAdapter: CreateWalletAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -49,7 +48,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val decorView = window.decorView
@@ -65,11 +64,8 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             recyclerViewSeeds.adapter = null
             sortedList = emptyList()
             confirmedSeedsArray.clear()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                button_confirm_seed.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_shape2)
-            } else {
-                button_confirm_seed.setBackgroundDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.btn_shape2))
-            }
+            llButtons.visibility = View.GONE
+            currentSeedPosition = 33
             if (restore) {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(recyclerViewSeeds, InputMethodManager.SHOW_IMPLICIT)
@@ -106,18 +102,21 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         restoreWalletAdapter = RestoreWalletAdapter(seedsForInput.distinct(), allSeeds, applicationContext,
                 { savedSeed: InputSeed ->
                     confirmedSeedsArray.add(savedSeed)
-                    Log.d("confirmSeed", "savedSeed: $savedSeed")
                     sortedList = confirmedSeedsArray.sortedWith(compareBy { it.number }).distinct()
-                    Log.d("confirmSeed", "sortedList size: ${sortedList.size}")
                 },
                 { removeSeed: InputSeed ->
                     confirmedSeedsArray.clear()
                     confirmedSeedsArray.addAll(sortedList)
                     confirmedSeedsArray.remove(removeSeed)
-                    Log.d("confirmSeed", "removeSeed: $removeSeed")
-                    sortedList = confirmedSeedsArray.sortedWith(compareBy { it.number }).distinct()
-                    Log.d("confirmSeed", "sortedList size: ${sortedList.size}")
-                })
+                    sortedList = confirmedSeedsArray.sortedWith(compareBy { it.number })
+                }, { isAllEntered: Boolean ->
+            if (isAllEntered && sortedList.size == 33) {
+                llButtons.visibility = View.VISIBLE
+                handleSingleTap(sortedList)
+            } else {
+                llButtons.visibility = View.GONE
+            }
+        })
 
         recyclerViewSeeds.adapter = restoreWalletAdapter
     }
@@ -129,9 +128,9 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             sortedList = confirmedSeedsArray.sortedWith(compareBy { it.number }).distinct()
         }, { isAllEntered: Boolean ->
             if (isAllEntered && sortedList.size == 33) {
+                llButtons.visibility = View.VISIBLE
                 handleSingleTap(sortedList)
             }
-
         })
         recyclerViewSeeds.adapter = createWalletAdapter
         generateRandomSeeds()
@@ -141,7 +140,10 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private fun generateRandomSeeds() {
         val firstRandom = (1..allSeeds.size).random()
         val secondRandom = (1..allSeeds.size).random()
-        val currentItemPosition = (currentSeedPosition)
+        var currentItemPosition = 0
+        if (currentSeedPosition != 33) {
+            currentItemPosition = (currentSeedPosition)
+        }
 
         if (firstRandom != secondRandom && firstRandom != currentItemPosition && secondRandom != currentItemPosition) {
             for (item in allSeeds) {
@@ -159,7 +161,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun addSeedsToAdapter() {
         shuffledSeeds.addAll(arrayOfRandomSeeds.shuffled().distinct())
-        if(shuffledSeeds.size == 3) {
+        if (shuffledSeeds.size == 3) {
             when {
                 currentSeedPosition < 32 -> {
                     arrayOfSeedLists.add(MultiSeed(shuffledSeeds[0], shuffledSeeds[1], shuffledSeeds[2]))

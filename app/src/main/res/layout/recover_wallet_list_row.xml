@@ -62,11 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:padding="5dp"
-            android:src="@drawable/ic_action_clear_text"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:layout_marginRight="8dp" />
     </FrameLayout>
 
     <View

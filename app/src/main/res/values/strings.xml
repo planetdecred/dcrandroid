@@ -149,7 +149,8 @@
 
     <!--Seed-->
     <string name="save_seed_instruction">Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet.</string>
-    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Please confirm your seed by typing and tapping each word accordingly</string>
+    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Please, confirm your seed by typing and tapping each word accordingly</string>
+    <string name="please_select_correct_seed">Please, confirm your seed by selecting each correct word accordingly</string>
     <string name="enter_your_seed">Enter your seed…</string>
     <string name="theInputFieldIsEmpty">The input fields is empty. Please, enter the seeds.</string>
     <string name="error_seed_not_generated">Error occurred, Seed was not generated</string>

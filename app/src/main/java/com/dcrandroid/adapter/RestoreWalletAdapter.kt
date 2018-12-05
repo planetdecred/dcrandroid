@@ -22,7 +22,10 @@ import java.util.*
 data class InputSeed(val number: Int, var phrase: String)
 
 class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val allStringSeedArray: ArrayList<String>,
-                           val context: Context, val saveSeed: (InputSeed) -> Unit, val removeSeed: (InputSeed) -> Unit) : RecyclerView.Adapter<RestoreWalletAdapter.ViewHolder>() {
+                           val context: Context, val saveSeed: (InputSeed) -> Unit, val removeSeed: (InputSeed) -> Unit,
+                           var isAllSeedsEntered: (Boolean) -> Unit) : RecyclerView.Adapter<RestoreWalletAdapter.ViewHolder>() {
+
+    private var seedsCounter = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.recover_wallet_list_row, parent, false)
@@ -44,8 +47,8 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentSeed = seedItems[position]
-        var currentText = ""
         val str = "Word #${currentSeed.number + 1}"
+        var enteredSeed = ""
         val hintAdapter = SuggestionsTextAdapter(context, R.layout.dropdown_item_1line, allStringSeedArray)
         getHintView(context)
         holder.positionOfSeed.text = str
@@ -54,34 +57,33 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
         holder.savedSeed.setAdapter(hintAdapter)
         holder.savedSeed.imeOptions = EditorInfo.IME_ACTION_NEXT
 
+
         holder.savedSeed.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
-            val enteredItem = holder.savedSeed.text.toString()
-            currentSeed.phrase = enteredItem
-            currentText = enteredItem
+            val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
+            enteredSeed = holder.savedSeed.text.toString()
+            currentSeed.phrase = enteredSeed
             saveSeed(currentSeed)
-            holder.savedSeed.setText(enteredItem)
+            seedsCounter++
+            if (seedsCounter >= 33) {
+                isAllSeedsEntered(true)
+            } else {
+                view.requestFocus()
+            }
         }
 
 
         holder.savedSeed.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val isCorrectSeed = s.toString() == currentText
-                val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
                 holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
+                val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
 
                 when {
-                    s!!.isNotEmpty() -> holder.ivClearText.visibility = View.VISIBLE
-                    s.isNullOrEmpty() -> holder.ivClearText.visibility = View.GONE
+                    s!!.isNotEmpty() ->  holder.ivClearText.setImageResource(R.drawable.ic_clear)
+                    s.isNullOrEmpty() -> holder.ivClearText.setImageResource(0)
                 }
-
-                if (isCorrectSeed && holder.adapterPosition < 32 && s.toString().isNotEmpty()) {
-                    holder.savedSeed.setSelection(currentText.length)
+                if(enteredSeed.isNotEmpty() && enteredSeed == s.toString() && holder.savedSeed.isFocused && position < 32) {
                     view.requestFocus()
-                } else {
-                    holder.savedSeed.setSelection(s.toString().length)
-                    removeSeed(seedItems[holder.adapterPosition])
                 }
-
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -94,6 +96,10 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
         holder.ivClearText.setOnClickListener {
             holder.savedSeed.text.clear()
             removeSeed(seedItems[holder.adapterPosition])
+            if (seedsCounter > 0) {
+                seedsCounter--
+            }
+            isAllSeedsEntered(false)
         }
 
         holder.savedSeed.setOnFocusChangeListener { _, isFocused ->
@@ -102,10 +108,10 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
                     holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
                 } else {
                     holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
+                    holder.ivClearText.setImageResource(0)
                 }
-                holder.ivClearText.visibility = View.GONE
             } else if (isFocused && holder.savedSeed.text.isNotEmpty()) {
-                holder.ivClearText.visibility = View.VISIBLE
+                holder.ivClearText.setImageResource(R.drawable.ic_clear)
             }
         }
 
