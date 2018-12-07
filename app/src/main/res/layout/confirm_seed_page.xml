@@ -1,101 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/headerTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        android:minHeight="120dp"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/headerTop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:text="@string/seed_phrase_verification"
-            android:textColor="@color/darkBlueTextColor"
-            android:textSize="20sp" />
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <TextView
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:text="@string/seed_restore"
+                android:textColor="@color/darkBlueTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvHint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/start_typing_the_word_and_tap_correct_from_list"
+                android:textAllCaps="false"
+                android:textColor="@color/blueGraySecondTextColor"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="start"
-            android:paddingStart="8dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewSeeds"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="vertical"
             android:paddingLeft="8dp"
-            android:paddingEnd="8dp"
             android:paddingRight="8dp"
-            android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
-            android:textAllCaps="false"
-            android:textColor="@color/blueGraySecondTextColor"
-            android:textSize="14sp" />
+            android:paddingBottom="16dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:textColor="@color/orangeTextColor"
+                android:visibility="gone"
+                tools:text="The big error"
+                tools:visibility="visible" />
+
+            <RelativeLayout
+                android:id="@+id/rlButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <Button
+                    android:id="@+id/button_delete_seed"
+                    android:layout_width="102dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/btn_shape"
+                    android:text="@string/clearAll"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/button_confirm_seed"
+                    android:layout_width="102dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/btn_shape2"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewSeeds"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llButtons"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="bottom"
-        android:layout_weight="0.2"
-        android:visibility="gone"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
-
-        <RelativeLayout
-            android:id="@+id/rlButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/button_delete_seed"
-                android:layout_width="102dp"
-                android:layout_height="42dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:background="@drawable/btn_shape"
-                android:text="@string/clearAll"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/button_confirm_seed"
-                android:layout_width="102dp"
-                android:layout_height="42dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/btn_shape2"
-                android:text="@string/confirm"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </RelativeLayout>
-
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

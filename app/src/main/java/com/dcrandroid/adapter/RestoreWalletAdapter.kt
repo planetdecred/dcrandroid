@@ -46,7 +46,7 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentSeed = seedItems[position]
+        val currentSeed = seedItems[holder.adapterPosition]
         val str = "Word #${currentSeed.number + 1}"
         var enteredSeed = ""
         val hintAdapter = SuggestionsTextAdapter(context, R.layout.dropdown_item_1line, allStringSeedArray)
@@ -66,7 +66,7 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
             seedsCounter++
             if (seedsCounter >= 33) {
                 isAllSeedsEntered(true)
-            } else {
+            } else if(holder.adapterPosition < 32){
                 view.requestFocus()
             }
         }
