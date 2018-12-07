@@ -7,17 +7,18 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
-        android:paddingTop="32dp">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/ivDecredLogo"
             android:layout_width="100dp"
             android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/decred_logo" />
 
@@ -25,8 +26,6 @@
             android:id="@+id/llDecredText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivDecredLogo"
-            android:layout_marginBottom="18dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -56,7 +55,6 @@
             android:id="@+id/tvWallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/llDecredText"
             android:layout_margin="8dp"
             android:gravity="center"
             android:text="@string/wallet"
@@ -69,7 +67,6 @@
             android:id="@+id/tvCreateOrRecoverWallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvWallet"
             android:gravity="center"
             android:lineSpacingExtra="3sp"
             android:text="@string/create_or_recover_your_wallet_and_start_managing_your_decred"
@@ -78,11 +75,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/tvCreateOrRecoverWallet"
-            android:layout_above="@id/llBuildDate"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
+            android:paddingBottom="40dp"
+            android:paddingTop="40dp"
             android:weightSum="100">
 
             <RelativeLayout
@@ -154,29 +151,29 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/llBuildDate"
-            android:layout_width="match_parent"
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llBuildDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center">
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:text="@string/build" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp"
-                android:text="@string/build" />
-
-            <TextView
-                android:id="@+id/build_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:gravity="bottom" />
-        </LinearLayout>
-
-    </RelativeLayout>
-
+        <TextView
+            android:id="@+id/build_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom" />
+    </LinearLayout>
 
 </RelativeLayout>
