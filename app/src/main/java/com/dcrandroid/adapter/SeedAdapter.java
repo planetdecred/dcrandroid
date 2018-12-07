@@ -16,9 +16,11 @@ import java.util.List;
 
 public class SeedAdapter extends RecyclerView.Adapter<SeedAdapter.MyViewHolder> {
     private List<String> seedList;
+    private List<Integer> positionOfItems;
 
-    public SeedAdapter(List<String> seedListList) {
+    public SeedAdapter(List<String> seedListList, List<Integer> positionOfItems) {
         this.seedList = seedListList;
+        this.positionOfItems = positionOfItems;
     }
 
     @Override
@@ -32,7 +34,8 @@ public class SeedAdapter extends RecyclerView.Adapter<SeedAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String seed = seedList.get(position);
-        holder.seed.setText(String.format("%s. %s", String.valueOf(position + 1), seed));
+        int seedPosition = positionOfItems.get(position);
+        holder.seed.setText(String.format("%s. %s", String.valueOf(seedPosition + 1), seed));
     }
 
     @Override

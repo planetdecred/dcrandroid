@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,6 +17,7 @@ import com.dcrandroid.adapter.SeedAdapter;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -25,7 +26,6 @@ import java.util.Arrays;
 
 public class SaveSeedActivity extends AppCompatActivity {
     String seed = "";
-    private SeedAdapter seedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +44,43 @@ public class SaveSeedActivity extends AppCompatActivity {
             seed = constants.wallet.generateSeed();
             String tempSeed[] = seed.split(Constants.NBSP);
 
-            RecyclerView recyclerView = findViewById(R.id.seeds_recycler_view);
-            seedAdapter = new SeedAdapter(Arrays.asList(tempSeed));
+            ArrayList<String> firstArray = new ArrayList<>();
+            ArrayList<String> secondArray = new ArrayList<>();
+            ArrayList<String> thirdArray = new ArrayList<>();
 
-            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            int noOfColumns = ((int) (dpWidth / 180) < 2) ? 2 : 3;
-            recyclerView.setLayoutManager(new GridLayoutManager(this, noOfColumns));
+            ArrayList<Integer> firstSeedsPosition = new ArrayList<>();
+            ArrayList<Integer> secondSeedsPosition = new ArrayList<>();
+            ArrayList<Integer> thirdSeedsPosition = new ArrayList<>();
 
-            recyclerView.setAdapter(seedAdapter);
+            for (int i = 0; i < Arrays.asList(tempSeed).size(); i++) {
+                if (i <= 10) {
+                    firstArray.add(Arrays.asList(tempSeed).get(i));
+                    firstSeedsPosition.add(i);
+                } else if (i <= 21) {
+                    secondArray.add(Arrays.asList(tempSeed).get(i));
+                    secondSeedsPosition.add(i);
+                } else {
+                    thirdArray.add(Arrays.asList(tempSeed).get(i));
+                    thirdSeedsPosition.add(i);
+                }
+            }
+
+            RecyclerView firstRecyclerView = findViewById(R.id.seeds_recycler_view);
+            RecyclerView secondRecyclerView = findViewById(R.id.seeds_recycler_view1);
+            RecyclerView thirdRecyclerView = findViewById(R.id.seeds_recycler_view2);
+
+            SeedAdapter firstSeedAdapter = new SeedAdapter(firstArray, firstSeedsPosition);
+            SeedAdapter secondSeedAdapter = new SeedAdapter(secondArray, secondSeedsPosition);
+            SeedAdapter thirdSeedAdapter = new SeedAdapter(thirdArray, thirdSeedsPosition);
+
+            firstRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            secondRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            thirdRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+            firstRecyclerView.setAdapter(firstSeedAdapter);
+            secondRecyclerView.setAdapter(secondSeedAdapter);
+            thirdRecyclerView.setAdapter(thirdSeedAdapter);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

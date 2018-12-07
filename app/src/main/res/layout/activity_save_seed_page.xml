@@ -7,38 +7,64 @@
     android:padding="8dp">
 
     <TextView
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
         android:padding="8dp"
         android:text="@string/setting_up_dcrandroid"
-        android:textSize="18sp"
         android:textColor="@color/darkBlueTextColor"
-        android:id="@+id/header"
-        android:layout_alignParentTop="true"/>
+        android:textSize="18sp" />
+
     <TextView
+        android:id="@+id/subheader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:padding="8dp"
         android:text="@string/save_seed_instruction"
         android:textColor="@color/blueGraySecondTextColor"
-        android:padding="8dp"
-        android:layout_below="@+id/header"
-        android:textSize="14sp"
-        android:id="@+id/subheader"
-        />
+        android:textSize="14sp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/warningf"
         android:layout_below="@+id/subheader"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="-3dp"
         android:fadeScrollbars="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/seeds_recycler_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/seeds_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="33.3"
+                android:padding="8dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/seeds_recycler_view1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="33.3"
+                android:padding="8dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/seeds_recycler_view2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="33.3"
+                android:padding="8dp" />
+        </LinearLayout>
+
     </ScrollView>
 
     <LinearLayout
@@ -65,10 +91,10 @@
         android:layout_width="232dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/btn_shape"
-        android:text="@string/i_copied_the_seed_phrase"
-        android:padding="8dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
+        android:background="@drawable/btn_shape"
+        android:padding="8dp"
+        android:text="@string/i_copied_the_seed_phrase"
         android:textColor="@color/white" />
 </RelativeLayout>
