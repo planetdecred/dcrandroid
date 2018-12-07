@@ -30,7 +30,11 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
     }
 
     override fun getCount(): Int {
-        return filteredArray.size
+        return if(filteredArray.size >= 4) {
+            4
+        } else {
+            filteredArray.size
+        }
     }
 
     override fun getFilter(): Filter {
