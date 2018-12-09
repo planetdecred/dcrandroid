@@ -455,6 +455,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         mListView.setItemChecked(1, true);
     }
 
+    public int getPeerCount(){
+        return peerCount;
+    }
+
     @Override
     public void onTransaction(String s) {
         System.out.println("Notification Received: " + s);

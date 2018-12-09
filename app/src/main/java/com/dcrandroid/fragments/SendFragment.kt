@@ -325,6 +325,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun constructTransaction() {
+        if (activity != null && activity is MainActivity) {
+            val mainActivity = activity as MainActivity
+            if(mainActivity.peerCount < 1) return send_error_label.setText(R.string.not_connected)
+            else send_error_label.text = null
+        }
 
         if (!validateAmount()) {
             setInvalid()
