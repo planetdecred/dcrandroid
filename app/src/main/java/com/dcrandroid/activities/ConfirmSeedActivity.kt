@@ -120,6 +120,11 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                 }, { isAllEntered: Boolean ->
             if (isAllEntered && sortedList.size == 33) {
                 handleSingleTap(sortedList)
+                recyclerViewSeeds.isFocusableInTouchMode = false
+                llButtons.isFocusableInTouchMode = true
+                llButtons.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(llButtons.windowToken, 0)
             }
         })
 
