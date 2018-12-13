@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/nestedScrollView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -81,35 +83,15 @@
                 tools:text="The big error"
                 tools:visibility="visible" />
 
-            <RelativeLayout
-                android:id="@+id/rlButtons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp">
 
-                <Button
-                    android:id="@+id/button_delete_seed"
-                    android:layout_width="102dp"
-                    android:layout_height="42dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:background="@drawable/btn_shape"
-                    android:text="@string/clearAll"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-                <Button
-                    android:id="@+id/button_confirm_seed"
-                    android:layout_width="102dp"
-                    android:layout_height="42dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/btn_shape2"
-                    android:text="@string/confirm"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-            </RelativeLayout>
+            <Button
+                android:id="@+id/button_confirm_seed"
+                android:layout_width="151dp"
+                android:layout_height="42dp"
+                android:background="@drawable/btn_shape2"
+                android:text="@string/confirm"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
         </LinearLayout>
 

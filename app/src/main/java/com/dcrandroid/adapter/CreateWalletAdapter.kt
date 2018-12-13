@@ -44,6 +44,7 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
         holder.thirdSeed.text = currentMultiSeed.thirdSeed.phrase
         holder.multiSeedPosition.text = String.format("${context.getString(R.string.correctWordIs)}${holder.adapterPosition + 1}")
 
+
         holder.firstSeed.setOnClickListener {
             enableClick(holder.firstSeed)
             disableClick(holder.secondSeed, holder.thirdSeed)
@@ -76,7 +77,7 @@ class CreateWalletAdapter(val context: Context, private val allListOfSeeds: Arra
             allEnteredSeeds.removeAll(toRemoveArray)
         }
         enteredSeeds(allEnteredSeeds)
-        if(allEnteredSeeds.size == 33) {
+        if (allEnteredSeeds.size == 33) {
             isAllSeedsEntered(true)
         } else {
             isAllSeedsEntered(false)
