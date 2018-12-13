@@ -78,6 +78,7 @@
             android:id="@+id/destination_account_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="5dp"
