@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.dcrandroid.view.CustomNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
@@ -97,4 +98,4 @@
 
     </LinearLayout>
 
-</com.dcrandroid.view.CustomNestedScrollView>
+</android.support.v4.widget.NestedScrollView>

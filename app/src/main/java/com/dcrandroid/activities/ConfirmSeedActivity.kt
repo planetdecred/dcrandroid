@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
-import android.support.v7.widget.SnapHelper
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -44,8 +42,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private var lastConfirmClick: Long = 0
     private var clickThread: Thread? = null
     private var currentSeedPosition = 0
-    private var isTouched = false
-    private var lastSelectedPosition = 0
     private lateinit var restoreWalletAdapter: RestoreWalletAdapter
     private lateinit var createWalletAdapter: CreateWalletAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -75,7 +71,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             seed = bundle.getString(Constants.SEED)
             restore = bundle.getBoolean(Constants.RESTORE)
             allSeeds = ArrayList(seed.split(" "))
-            nestedScrollView.setScrollingEnabled(false)
             if (restore) {
                 temp.forEachIndexed { number, _ ->
                     seedsForInput.add(InputSeed(number, " "))
@@ -91,7 +86,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initOldWalletAdapter() {
-        nestedScrollView.setScrollingEnabled(true)
         restoreWalletAdapter = RestoreWalletAdapter(seedsForInput, allSeeds, applicationContext,
                 { savedSeed: InputSeed ->
                     confirmedSeedsArray.add(savedSeed)
@@ -131,7 +125,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         createWalletAdapter = CreateWalletAdapter(applicationContext, arrayOfSeedLists, { enteredSeeds: ArrayList<InputSeed> ->
             confirmedSeedsArray.clear()
             confirmedSeedsArray.addAll(enteredSeeds)
-            val selectedItemPosition = confirmedSeedsArray.last().number + 1
             sortedList = confirmedSeedsArray.sortedWith(compareBy { it.number }).distinct()
 
             if (sortedList.size < 33) {
@@ -140,32 +133,11 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             }
             val itemView = recyclerViewSeeds.findViewById<RelativeLayout>(R.id.rlButtons)
             val itemHeight = itemView.measuredHeight
-
-            val screenSize = nestedScrollView.getChildAt(0).bottom
-            var requiredRange = 0..32
-            var maxAllowedHeight = nestedScrollView.getChildAt(0).bottom - (itemView.measuredHeight + itemView.measuredHeight / 2)
-
-            when {
-                screenSize < 6000 -> {
-                    maxAllowedHeight = nestedScrollView.getChildAt(0).bottom - (itemView.measuredHeight * 2)
-                    requiredRange = 5..32
-                }
-                screenSize < 9000 -> {
-                    maxAllowedHeight = nestedScrollView.getChildAt(0).bottom - (itemView.measuredHeight * 2)
-                    requiredRange = 6..32
-                }
-                screenSize > 9000 -> {
-                    requiredRange = 8..32
-                }
-            }
+            val maxAllowedHeight = nestedScrollView.getChildAt(0).bottom - (itemView.measuredHeight + itemView.measuredHeight / 2)
 
             val currentHeight = (nestedScrollView.scrollY + nestedScrollView.height)
-            if (sortedList.size in requiredRange && sortedList.size == selectedItemPosition && selectedItemPosition != lastSelectedPosition) {
-                lastSelectedPosition = selectedItemPosition
-                nestedScrollView.smoothScrollBy(0, itemHeight)
-            } else if (currentHeight > maxAllowedHeight) {
+            if (currentHeight > maxAllowedHeight) {
                 nestedScrollView.smoothScrollBy(0, itemHeight * 2)
-                nestedScrollView.setScrollingEnabled(true)
             }
         }, { isAllEntered: Boolean ->
             if (isAllEntered && sortedList.size == 33) {
