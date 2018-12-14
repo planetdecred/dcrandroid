@@ -68,6 +68,9 @@ public class SaveSeedActivity extends AppCompatActivity {
             RecyclerView firstRecyclerView = findViewById(R.id.seeds_recycler_view);
             RecyclerView secondRecyclerView = findViewById(R.id.seeds_recycler_view1);
             RecyclerView thirdRecyclerView = findViewById(R.id.seeds_recycler_view2);
+            firstRecyclerView.setNestedScrollingEnabled(false);
+            secondRecyclerView.setNestedScrollingEnabled(false);
+            thirdRecyclerView.setNestedScrollingEnabled(false);
 
             SeedAdapter firstSeedAdapter = new SeedAdapter(firstArray, firstSeedsPosition);
             SeedAdapter secondSeedAdapter = new SeedAdapter(secondArray, secondSeedsPosition);

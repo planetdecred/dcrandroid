@@ -27,7 +27,7 @@
         android:textColor="@color/blueGraySecondTextColor"
         android:textSize="14sp" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/warningf"
@@ -38,8 +38,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="match_parent"
+            android:gravity="top"
             android:orientation="horizontal"
             android:weightSum="100">
 
@@ -65,7 +65,7 @@
                 android:padding="8dp" />
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/warningf"
