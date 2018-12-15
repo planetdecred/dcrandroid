@@ -59,6 +59,7 @@
     <color name="grayDrawableColor">#8795a3</color>
     <color name="normalGrayDrawableColor">#8C8C8C</color>
     <color name="grayDrawable85pc">#CABBBBBB</color>
+    <color name="grayDrawable95pc">#dcdcdc</color>
     <color name="darkBlueDrawableColor">#152337</color>
     <color name="deepBlueDrawableColor">#0C1E3E</color>
     <color name="blueSecondDrawableColor">#263e80</color>
@@ -71,6 +72,7 @@
     <color name="orangeDrawableColor">#fffd714b</color>
     <color name="lightOrangeDrawableColor">#fffeb8a5</color>
     <color name="lightGreenDrawableColor">#ffc6eccb</color>
+    <color name="grayBackgroundLightColor">#EDEFF1</color>
     <color name="transparentDrawableColor">#00000000</color>
     <!--/Drawable-->
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/smooth_corners_white"
+    android:orientation="vertical">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/suggestionText"
+        style="?android:attr/dropDownItemStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textColor="@color/darkBlueTextColor"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+        tools:text="pocketful" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGreyBackgroundColor" />
+
+</LinearLayout>

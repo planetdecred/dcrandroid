@@ -1,151 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    android:fadeScrollbars="true">
 
     <LinearLayout
-        android:id="@+id/headerTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        android:minHeight="120dp"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/headerTop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:textColor="@color/darkBlueTextColor"
-            android:text="@string/seed_phrase_verification"
-            android:textSize="20sp" />
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <TextView
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:text="@string/seed_restore"
+                android:textColor="@color/darkBlueTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvHint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/start_typing_the_word_and_tap_correct_from_list"
+                android:textAllCaps="false"
+                android:textColor="@color/blueGraySecondTextColor"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="start"
-            android:paddingStart="8dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewSeeds"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingEnd="8dp"
-            android:text="@string/please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly"
-            android:textAllCaps="false"
-            android:textColor="@color/blueGraySecondTextColor"
-            android:textSize="14sp" />
+            android:paddingBottom="16dp"
+            android:visibility="visible">
 
-    </LinearLayout>
-    <RelativeLayout
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/headerTop"
-        >
-        <android.support.v7.widget.AppCompatAutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_your_seed"
-            android:textColor="@color/deepBlackTextColor"
-            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-            android:inputType="textFilter"
-            android:id="@+id/autoCompleteSeed"
-            android:padding="8dp"
-            android:background="@color/colorPrimary"/>
-
-    </RelativeLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/confirm_seedScroll"
-        android:layout_below="@id/bottom_bar">
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       >
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/seedViewScrollcon"
-        >
-        <ScrollView
-            android:id="@+id/seedViewScroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/button_clear_seed"
-            android:layout_toStartOf="@id/button_clear_seed"
-
-
-            >
             <TextView
-                android:id="@+id/seed_display_confirm"
+                android:id="@+id/tvError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:fontFamily="@font/inconsolata_regular_family"
-                android:padding="8dp"
-                android:textSize="18sp"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/deepBlackTextColor"/>
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:textColor="@color/orangeTextColor"
+                android:visibility="gone"
+                tools:text="The big error"
+                tools:visibility="visible" />
 
-        </ScrollView>
 
-        <ImageView
-            android:id="@+id/button_clear_seed"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:layout_margin="15dp"
-            android:background="@color/colorPrimary"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:tint="@android:color/holo_red_dark" />
+            <Button
+                android:id="@+id/button_confirm_seed"
+                android:layout_width="151dp"
+                android:layout_height="42dp"
+                android:background="@drawable/btn_shape2"
+                android:text="@string/confirm"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
-    </RelativeLayout>
+        </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@+id/seedViewScrollcon"
-        android:layout_margin="8dp"
-        android:id="@+id/border"
-        android:background="@color/blackBackgroundColor"
-        android:alpha="0.16"/>
+    </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/border"
-        android:orientation="horizontal"
-        android:padding="8.0dip">
-
-        <Button
-            android:id="@+id/button_delete_seed"
-            android:layout_width="102dp"
-            android:layout_height="42dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/btn_shape"
-            android:text="@string/delete"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/button_confirm_seed"
-            android:layout_width="102dp"
-            android:layout_height="42dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/btn_shape3"
-            android:text="@string/confirm"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-    </RelativeLayout>
-
-   </RelativeLayout>
-    </ScrollView>
-
-</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
