@@ -51,6 +51,7 @@ import kotlin.collections.ArrayList
 
 class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
+    private var SEND_ACCOUNT = false
     private val SCANNER_ACTIVITY_REQUEST_CODE = 0
     private val PASSCODE_REQUEST_CODE = 1
     private var constants: DcrConstants = DcrConstants.getInstance()
@@ -173,8 +174,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             showConfirmTransactionDialog()
         }
 
-        destination_account_container.visibility = View.GONE
-
         prepareAccounts()
 
         send_dcr_address.addTextChangedListener(addressWatcher)
@@ -183,6 +182,21 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         amount_dcr.addTextChangedListener(amountWatcher)
         send_account_spinner.onItemSelectedListener = this
         destination_account_spinner.onItemSelectedListener = this
+
+        if(SEND_ACCOUNT){
+            destination_address_container.visibility = View.GONE
+            destination_account_container.visibility = View.VISIBLE
+
+            var position = destination_account_spinner.selectedItemPosition
+            if (position < 0) {
+                position = 0
+            }
+
+            val receiveAddress = constants.wallet.currentAddress(position)
+            send_dcr_address.setText(receiveAddress)
+
+            tvDestinationError.text = ""
+        }
     }
 
     override fun onResume() {
@@ -201,12 +215,16 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.send_page_menu, menu)
+        if(SEND_ACCOUNT){
+            menu!!.findItem(R.id.send_to_account).setTitle(R.string.send_to_address)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.send_to_account -> {
                 if (destination_address_container.visibility == View.VISIBLE) {
+
                     destination_address_container.visibility = View.GONE
                     destination_account_container.visibility = View.VISIBLE
 
@@ -220,6 +238,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
                     tvDestinationError.text = ""
                     item.setTitle(R.string.send_to_address)
+                    SEND_ACCOUNT = true
                 } else {
                     destination_address_container.visibility = View.VISIBLE
                     destination_account_container.visibility = View.GONE
@@ -229,6 +248,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     send_dcr_address.addTextChangedListener(addressWatcher)
 
                     item.setTitle(R.string.send_to_account)
+                    SEND_ACCOUNT = false
                 }
                 return true
             }
