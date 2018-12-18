@@ -355,7 +355,7 @@
     <!--/ Overview Fragment -->
 
     <!--Error Messages-->
-    <string name="not_enough_funds">Not Enough Funds.</string>
+    <string name="not_enough_funds">Not enough funds.</string>
     <string name="empty_seed">Empty Seed</string>
     <string name="not_connected">Not Connected To Decred Network</string>
     <string name="passphrase_required">Private Passphrase is required</string>
@@ -464,7 +464,7 @@
     <string name="enter_an_amounnt">Enter an amount.</string>
     <string name="retry_caps">RETRY</string>
     <string name="amount_can_not_be_zero">Amount can not be zero.</string>
-    <string name="clear_fields">Clear Fields</string>
+    <string name="clear_fields">Clear fields</string>
     <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
     <string name="dont_send">Don\'t send</string>
     <string name="send_report">Send Report</string>
@@ -482,6 +482,18 @@
     <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
     <string name="correctWordIs">Word #</string>
     <string name="share">Share</string>
-    <string name="share_address_via">Share the address via:</string>
+    <string name="share_address_via">Share the QR code image to</string>
     <string name="address_not_found">The address not found.</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
+    <string name="re_establishing_connection">Re-establishing connection</string>
+    <string name="all">All</string>
+    <string name="coinbase">Coinbase</string>
+    <string name="sent">Sent</string>
+    <string name="yourself">Yourself</string>
+    <string name="received">Received</string>
+    <string name="staking">Staking</string>
+    <string name="not_connected_error">Not connected to the network.</string>
+    <string name="network_synchronization">Please wait for network synchronization.</string>
+    <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
 </resources>

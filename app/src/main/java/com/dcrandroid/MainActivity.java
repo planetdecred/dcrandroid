@@ -4,17 +4,16 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -74,7 +73,7 @@ import mobilewallet.SpvSyncResponse;
 import mobilewallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener,
-        SpvSyncResponse {
+        SpvSyncResponse, View.OnClickListener {
 
     public int pageID;
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
@@ -84,17 +83,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private PreferenceUtil util;
     private NotificationManager notificationManager;
     private Animation rotateAnimation;
-    private MainApplication mainApplication;
     private SoundPool alertSound;
     private int bestBlock = 0, peerCount, blockNotificationSound;
     private long bestBlockTimestamp;
-    private boolean scanning = false, synced = false;
+    private boolean scanning = false, isForeground;
     private Thread blockUpdate;
     private ArrayList<NavigationBarItem> items;
     private NavigationListAdapter listAdapter;
     private ListView mListView;
     private SendFragment sendFragment = new SendFragment();
     private SecurityFragment securityFragment = new SecurityFragment();
+
+    private Handler handler = new Handler();
+    private Intent broadcastIntent = null;
 
     @Override
     public void onTrimMemory(int level) {
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View view = getCurrentFocus();
         if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            EditText activeText = (EditText) view;
+            activeText.clearFocus();
             int scrcoords[] = new int[2];
             view.getLocationOnScreen(scrcoords);
             float x = ev.getRawX() + view.getLeft() - scrcoords[0];
@@ -128,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         totalBalance = findViewById(R.id.tv_total_balance);
         syncIndicator = findViewById(R.id.iv_sync_indicator);
 
-        if(BuildConfig.IS_TESTNET){
+        if (BuildConfig.IS_TESTNET) {
             findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
         }
 
@@ -185,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 scanning = false;
             }
         });
+        connectionStatus.setOnClickListener(this);
     }
 
     private void registerNotificationChannel() {
@@ -208,8 +212,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
-
-        mainApplication = (MainApplication) getApplicationContext();
 
         setContentView(R.layout.activity_main);
 
@@ -242,7 +244,45 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         displayBalance();
 
+        constants.wallet.addSyncResponse(this);
+
         connectToDecredNetwork();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isForeground = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isForeground = true;
+
+        if(constants.peers == 0 && constants.synced){
+            // restart spv synchronization.
+            connectionStatus.performClick();
+        }
+
+        if (broadcastIntent != null)
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (broadcastIntent != null) {
+                        sendBroadcast(broadcastIntent);
+                    }
+                }
+            }, 1000);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getAction() != null && intent.getAction().equals(Constants.NEW_TRANSACTION_NOTIFICATION)) {
+            if (pageID != 0)
+                displayOverview();
+        }
     }
 
     public void displayBalance() {
@@ -267,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         } else {
             setConnectionStatus(getString(R.string.connecting_to_rpc_server));
         }
-        constants.wallet.addSyncResponse(this);
         Intent syncIntent = new Intent(this, SyncService.class);
         startService(syncIntent);
     }
@@ -282,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             public void run() {
                 while (!this.isInterrupted()) {
                     try {
-                        if (!scanning && synced) {
+                        if (!scanning && constants.synced) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -557,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
-        if (synced) {
+        if (constants.synced) {
             String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
@@ -580,6 +619,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     private void sendNotification(String amount, int nonce) {
         Intent launchIntent = new Intent(this, MainActivity.class);
+        launchIntent.setAction(Constants.NEW_TRANSACTION_NOTIFICATION);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, "new transaction")
                 .setContentTitle(getString(R.string.new_transaction))
@@ -591,15 +631,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(launchPendingIntent)
                 .build();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            System.out.println("Group: " + notification.getGroup());
-        }
         Notification groupSummary = new NotificationCompat.Builder(this, "new transaction")
-                .setContentTitle("New Transaction")
+                .setContentTitle(getString(R.string.new_transaction))
                 .setContentText(getString(R.string.new_transaction))
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
+                .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
 
@@ -611,17 +649,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onSyncError(long l, final Exception e) {
         e.printStackTrace();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
     public void onSynced(boolean b) {
-        synced = b;
         constants.synced = b;
         if (b) {
             runOnUiThread(new Runnable() {
@@ -632,28 +663,22 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     syncIndicator.setVisibility(View.GONE);
                     totalBalance.setVisibility(View.VISIBLE);
                     connectionStatus.setBackgroundColor(getResources().getColor(R.color.greenLightTextColor));
+                    updatePeerCount();
+
+                    bestBlock = constants.wallet.getBestBlock();
+                    bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
+                    String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), constants.wallet.getBestBlock());
+                    setChainStatus(status);
+                    setBestBlockTime(bestBlockTimestamp);
                 }
             });
-            bestBlock = constants.wallet.getBestBlock();
-            bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
-            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), constants.wallet.getBestBlock());
-            setChainStatus(status);
-            setBestBlockTime(bestBlockTimestamp);
 
-            sendBroadcast(new Intent(Constants.SYNCED));
+            broadcastIntent = new Intent(Constants.SYNCED);
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (fragment instanceof OverviewFragment) {
-                        OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                        overviewFragment.prepareHistoryData();
-                    } else if (fragment instanceof HistoryFragment) {
-                        HistoryFragment historyFragment = (HistoryFragment) fragment;
-                        historyFragment.prepareHistoryData();
-                    }
-                }
-            });
+            if (isForeground) {
+                sendBroadcast(broadcastIntent);
+                broadcastIntent = null;
+            }
 
             startBlockUpdate();
         }
@@ -673,6 +698,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             //Nanoseconds to seconds
             setBestBlockTime(lastHeaderTime);
             setChainStatus(status);
+        } else if (state.equals(Mobilewallet.FINISH)) {
+            updatePeerCount();
         }
     }
 
@@ -717,16 +744,43 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onPeerConnected(int peerCount) {
         this.peerCount = peerCount;
-        if (synced) updatePeerCount();
+        constants.peers = peerCount;
+        if (constants.synced) updatePeerCount();
     }
 
     @Override
     public void onPeerDisconnected(int peerCount) {
         this.peerCount = peerCount;
-        if (synced) updatePeerCount();
+        constants.peers = peerCount;
+        if (constants.synced) updatePeerCount();
     }
 
     private void updatePeerCount() {
-        setConnectionStatus((synced ? getString(R.string.synced) : getString(R.string.syncing)) + " " + getString(R.string.with) + " " + peerCount + " " + (peerCount == 1 ? getString(R.string.peer) : getString(R.string.peers)));
+        setConnectionStatus((constants.synced ? getString(R.string.synced) : getString(R.string.syncing)) + " " + getString(R.string.with) + " " + peerCount + " " + (peerCount == 1 ? getString(R.string.peer) : getString(R.string.peers)));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_connection_status:
+                Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
+                setConnectionStatus(getString(R.string.connecting_to_peers));
+                connectionStatus.setBackgroundColor(getResources().getColor(R.color.lightOrangeBackgroundColor));
+                constants.synced = false;
+                constants.wallet.dropSpvConnection();
+                sendBroadcast(new Intent(Constants.SYNCED));
+
+                syncIndicator.setVisibility(View.VISIBLE);
+                totalBalance.setVisibility(View.GONE);
+                syncIndicator.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
+                        syncAnimation.start();
+                    }
+                });
+                connectToDecredNetwork();
+                break;
+        }
     }
 }

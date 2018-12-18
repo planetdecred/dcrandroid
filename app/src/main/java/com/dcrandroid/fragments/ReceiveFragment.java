@@ -75,7 +75,6 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
         setHasOptionsMenu(true);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -377,6 +377,9 @@ public class Utils {
     public static String translateError(Context ctx, Exception e){
         switch (e.getMessage()){
             case Mobilewallet.ErrInsufficientBalance:
+                if(!DcrConstants.getInstance().synced){
+                    return ctx.getString(R.string.not_enought_funds_synced);
+                }
                 return ctx.getString(R.string.not_enough_funds);
             case Mobilewallet.ErrEmptySeed:
                 return ctx.getString(R.string.empty_seed);
@@ -388,6 +391,8 @@ public class Utils {
                 return ctx.getString(R.string.wallet_not_loaded);
             case Mobilewallet.ErrInvalidPassphrase:
                 return ctx.getString(R.string.invalid_passphrase);
+            case Mobilewallet.ErrNoPeers:
+                return ctx.getString(R.string.err_no_peers);
             default:
                 return e.getMessage();
         }

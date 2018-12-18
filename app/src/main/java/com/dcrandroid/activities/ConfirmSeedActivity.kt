@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.os.Handler
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -25,11 +27,11 @@ import kotlin.collections.ArrayList
 
 private const val CLICK_THRESHOLD = 300 //millisecond
 
-class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
+// TODO: Split this class into VerifySeedActivity  for old wallet and EnterSeedActivity for new wallet.
+class ConfirmSeedActivity : AppCompatActivity(), View.OnTouchListener {
 
-    private var seed = ""
     private var restore: Boolean = false
-    private var isConfirmSeed = false
+    private var verifiedSeed: Boolean = false
     private var allSeeds = ArrayList<String>()
     private val seedsForInput = ArrayList<InputSeed>()
     private val confirmedSeedsArray = ArrayList<InputSeed>()
@@ -38,14 +40,12 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
     private val arrayOfSeedLists = ArrayList<MultiSeed>()
     private val shuffledSeeds = ArrayList<InputSeed>()
     private var finalSeedsString = ""
-    private var confirmClicks = 0
     private var lastConfirmClick: Long = 0
-    private var clickThread: Thread? = null
+    private var handler: Handler? = null
     private var currentSeedPosition = 0
     private lateinit var restoreWalletAdapter: RestoreWalletAdapter
     private lateinit var createWalletAdapter: CreateWalletAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +59,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         recyclerViewSeeds.isNestedScrollingEnabled = false
         linearLayoutManager = LinearLayoutManager(this)
         recyclerViewSeeds.layoutManager = linearLayoutManager
-        button_confirm_seed.setOnClickListener(this)
-
+        button_confirm_seed.setOnTouchListener(this)
         prepareData()
     }
 
@@ -68,7 +67,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         val bundle = intent.extras
         val temp = arrayOfNulls<String>(33)
         if (!bundle.isEmpty) {
-            seed = bundle.getString(Constants.SEED)
+            val seed = bundle.getString(Constants.SEED)
             restore = bundle.getBoolean(Constants.RESTORE)
             allSeeds = ArrayList(seed.split(" "))
             if (restore) {
@@ -99,7 +98,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                     val maxAllowedHeight = nestedScrollView.getChildAt(0).bottom - itemHeight * 3
                     val currentHeight = (nestedScrollView.scrollY + nestedScrollView.height)
 
-
                     if (currentHeight > maxAllowedHeight) {
                         recyclerViewSeeds.isFocusableInTouchMode = false
                         llButtons.isFocusableInTouchMode = true
@@ -113,7 +111,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
                     sortedList = confirmedSeedsArray.sortedWith(compareBy { it.number })
                 }, { isAllEntered: Boolean ->
             if (isAllEntered && sortedList.size == 33) {
-                handleSingleTap(sortedList)
+                handleSingleTap()
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(llButtons.windowToken, 0)
             }
@@ -141,13 +139,12 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
             }
         }, { isAllEntered: Boolean ->
             if (isAllEntered && sortedList.size == 33) {
-                handleSingleTap(sortedList)
+                handleSingleTap()
             }
         })
         recyclerViewSeeds.adapter = createWalletAdapter
         generateRandomSeeds()
     }
-
 
     private fun generateRandomSeeds() {
         val firstRandom = (1..allSeeds.size).random()
@@ -197,95 +194,70 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-        var lastClick: Long = 0
-        if (lastConfirmClick != 0L) {
-            lastClick = System.currentTimeMillis() - lastConfirmClick
-        }
-
-        if (lastClick < CLICK_THRESHOLD && confirmClicks < 10) {
-            confirmClicks++
-            lastConfirmClick = System.currentTimeMillis()
-            if (clickThread != null && clickThread!!.isAlive) {
-                clickThread!!.interrupt()
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        when (event!!.action) {
+            MotionEvent.ACTION_DOWN -> {
+                lastConfirmClick = System.currentTimeMillis()
+                handler = Handler()
+                handler!!.postDelayed(longHold, 5000)
             }
-
-            clickThread = Thread {
-                try {
-                    Thread.sleep((CLICK_THRESHOLD + 5).toLong())
-                    var lastClick: Long = 0
-                    if (lastConfirmClick != 0L) {
-                        lastClick = System.currentTimeMillis() - lastConfirmClick
+            MotionEvent.ACTION_UP -> {
+                handler!!.removeCallbacks(longHold)
+                if ((System.currentTimeMillis() - lastConfirmClick) <= CLICK_THRESHOLD) {
+                    if(verifiedSeed){
+                        val intent = Intent(this, EncryptWallet::class.java)
+                        intent.putExtra(Constants.SEED, finalSeedsString)
+                        startActivity(intent)
                     }
-                    if (lastClick > CLICK_THRESHOLD) {
-                        runOnUiThread {
-                            confirmSeeds(isConfirmSeed)
-                        }
-                    }
-
-                    confirmClicks = 0
-                    lastConfirmClick = 0
-                } catch (e: Throwable) {
-                    e.printStackTrace()
                 }
             }
+        }
 
-            clickThread!!.start()
-        } else if (lastClick <= CLICK_THRESHOLD && confirmClicks == 10) {
-            confirmClicks = 0
-            lastConfirmClick = 0
-            val enteredSeed = ""
+        return false
+    }
+
+    private val longHold = Runnable {
+        val enteredSeed = ""
+        if (enteredSeed.isNotEmpty()) {
             val i = Intent(this@ConfirmSeedActivity, EncryptWallet::class.java)
                     .putExtra(Constants.SEED, enteredSeed)
             startActivity(i)
         }
-
-        lastConfirmClick = System.currentTimeMillis()
     }
 
-    private fun confirmSeeds(isCorrectSeeds: Boolean) {
-        if (isCorrectSeeds) {
-            val intent = Intent(this, EncryptWallet::class.java)
-            intent.putExtra(Constants.SEED, finalSeedsString)
-            startActivity(intent)
-        } else {
-            handleSingleTap(sortedList)
-        }
-    }
-
-    private fun handleSingleTap(sortedList: List<InputSeed>) {
+    private fun handleSingleTap() {
         val dcrConstants = DcrConstants.getInstance()
-        val isAllSeeds = (sortedList.size == 33)
-
-        if (sortedList.isNotEmpty() && isAllSeeds) {
+        
+        if (sortedList.isNotEmpty() && (sortedList.size == 33)) {
             finalSeedsString = sortedList.joinToString(" ", "", "", -1, "...") { it.phrase }
-            val isVerifiedFromDcrConstants = restore && dcrConstants.wallet.verifySeed(finalSeedsString)
-            val isTypedSeedsCorrect = !restore && seed == finalSeedsString
+            verifiedSeed = dcrConstants.wallet.verifySeed(finalSeedsString)
 
-            if (isTypedSeedsCorrect || isVerifiedFromDcrConstants) {
+            if (verifiedSeed) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     button_confirm_seed.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_shape3)
                 } else {
                     button_confirm_seed.setBackgroundDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.btn_shape3))
                 }
+
                 tvError.visibility = View.GONE
-                isConfirmSeed = true
+
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     button_confirm_seed.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_shape2)
                 } else {
                     button_confirm_seed.setBackgroundDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.btn_shape2))
                 }
+
                 tvError.visibility = View.VISIBLE
+
                 if (restore) {
                     tvError.text = getString(R.string.restore_wallet_incorrect_seed_input)
                 } else {
                     tvError.text = getString(R.string.create_wallet_incorrect_seeds_input)
                 }
-                isConfirmSeed = false
             }
 
-        } else if (sortedList.isNotEmpty() && !isAllSeeds) {
+        } else if (sortedList.isNotEmpty() && (sortedList.size != 33)) {
             tvError.text = getString(R.string.notAllSeedsEntered)
         } else {
             tvError.text = getString(R.string.theInputFieldIsEmpty)

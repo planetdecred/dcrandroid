@@ -181,6 +181,8 @@ public class SecurityFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PASSCODE_REQUEST_CODE && resultCode == RESULT_OK) {
+            pd = Utils.getProgressDialog(getContext(), false, false, "Signing...");
+            pd.show();
             new Thread() {
                 public void run() {
                     signMessage(data.getStringExtra(Constants.PIN).getBytes());
@@ -322,7 +324,11 @@ public class SecurityFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                layout.setVisibility(View.VISIBLE);
+                if(DcrConstants.getInstance().synced) {
+                    layout.setVisibility(View.VISIBLE);
+                }else {
+                    layout.setVisibility(View.GONE);
+                }
             }
         }
     };

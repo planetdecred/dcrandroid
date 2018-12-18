@@ -75,7 +75,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             float px = 450 * (listView.getResources().getDisplayMetrics().density);
             listItem.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
             totalHeight += listItem.getMeasuredHeight();
-
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
@@ -275,9 +274,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
                     Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
                             + getString(R.string.dcr) + " ("+ usedInput.get(i).accountName +")", null));
-
-            //TODO: Preference is not the correct way of passing this data
-            util.set(Constants.ACCOUNT_NAME, usedInput.get(i).accountName);
         }
 
         for (int i = 0; i < usedOutput.size(); i++) {
@@ -367,7 +363,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
             TransactionInfoAdapter outputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletOutput);
             lvOutput.setAdapter(outputItemAdapter);
-            copyHashFromOutputItem(lvOutput);
 
             setListViewHeight(lvInput);
             setListViewHeight(lvOutput);
@@ -376,27 +371,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-    }
-
-    private void copyHashFromOutputItem(final ListView listView) {
-
-        ListAdapter listAdapter = listView.getAdapter();
-        final SparseArray<String> walletHashAddress = new SparseArray<>();
-
-        if (listAdapter != null) {
-            for (int i = 0; i < listAdapter.getCount(); i++) {
-                View listItem = listAdapter.getView(i, null, listView);
-                TextView requiredHash = listItem.findViewById(R.id.tvInfo);
-                walletHashAddress.put(i, requiredHash.getText().toString());
-            }
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Utils.copyToClipboard(getApplicationContext(), walletHashAddress.get(position), getString(R.string.address_copy_text));
-                }
-            });
         }
 
     }

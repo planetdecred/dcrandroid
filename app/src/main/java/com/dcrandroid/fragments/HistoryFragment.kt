@@ -1,6 +1,9 @@
 package com.dcrandroid.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -40,6 +43,13 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private var constants: DcrConstants? = null
 
     private var util: PreferenceUtil? = null
+
+    private val ALL: String by lazy { getString(R.string.all) }
+    private val SENT: String by lazy { getString(R.string.sent) }
+    private val RECEIVED: String by lazy { getString(R.string.received) }
+    private val YOURSELF: String by lazy { getString(R.string.yourself) }
+    private val STAKING: String by lazy { getString(R.string.staking) }
+    private val COINBASE: String by lazy { getString(R.string.coinbase) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.content_history, container, false)
@@ -100,6 +110,16 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
 
         history_recycler_view.adapter = transactionAdapter
         registerForContextMenu(history_recycler_view)
+
+        availableTxTypes.add(ALL)
+
+        sortSpinnerAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
+        sortSpinnerAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerHistory.adapter = sortSpinnerAdapter
+
+        transactionTypeSelected = ALL
+        spinnerHistory.setSelection(0, false)
+
         setupSortListener()
 
         prepareHistoryData()
@@ -107,19 +127,28 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
 
     override fun onResume() {
         super.onResume()
+        if (context != null) {
+            val filter = IntentFilter(Constants.SYNCED)
+            context!!.registerReceiver(receiver, filter)
+        }
+
         isForeground = true
         if (needsUpdate) {
             needsUpdate = false
             prepareHistoryData()
         }
+
     }
 
     override fun onPause() {
         super.onPause()
+        if (context != null) {
+            context!!.unregisterReceiver(receiver)
+        }
         isForeground = false
     }
 
-    fun prepareHistoryData() {
+    private fun prepareHistoryData() {
         if (!isForeground) {
             needsUpdate = true
             return
@@ -221,54 +250,65 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                 val latestTx = Collections.min(fixedTransactionList, TransactionComparator.MinConfirmationSort())
                 latestTransactionHeight = latestTx.getHeight() + 1
 
-                val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
+                saveTransactions()
 
-                if (recentTransactionHash.isNotEmpty()) {
-                    val hashIndex = fixedTransactionList.find(recentTransactionHash)
+                if (fixedTransactionList.size > 0) {
+                    val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
+                    if (recentTransactionHash.isNotEmpty()) {
+                        val hashIndex = fixedTransactionList.find(recentTransactionHash)
 
-                    if (hashIndex == -1) {
-                        // All transactions in this list is new
-                        fixedTransactionList.animateNewItems(0, transactionList.size - 1)
-                    } else if (hashIndex != 0) {
-                        fixedTransactionList.animateNewItems(0, hashIndex - 1)
+                        if (hashIndex == -1) {
+                            // All transactions in this list is new
+                            fixedTransactionList.animateNewItems(0, fixedTransactionList.size - 1)
+                        } else if (hashIndex != 0) {
+                            fixedTransactionList.animateNewItems(0, hashIndex - 1)
+                        }
                     }
-                }
 
-                util!!.set(Constants.RECENT_TRANSACTION_HASH, latestTx.hash)
+                    util!!.set(Constants.RECENT_TRANSACTION_HASH, fixedTransactionList[0].hash)
+                }
 
                 availableTxTypes.clear()
 
+                availableTxTypes.add("$ALL (${fixedTransactionList.size})")
+                availableTxTypes.add("$SENT (" + fixedTransactionList.count {
+                    it.direction == 0 && it.type.equals(Constants.REGULAR, ignoreCase = true) }
+                        + ")")
+                availableTxTypes.add("$RECEIVED (" + fixedTransactionList.count {
+                    it.direction == 1 && it.type.equals(Constants.REGULAR, ignoreCase = true) }
+                        + ")")
+                availableTxTypes.add("$YOURSELF (" + fixedTransactionList.count {
+                    it.direction == 2 && it.type.equals(Constants.REGULAR, ignoreCase = true) }
+                        + ")")
+
                 for (i in fixedTransactionList.indices) {
                     var type = fixedTransactionList[i].type
-                    if (type.equals(Constants.VOTE, ignoreCase = true) || type.equals(Constants.TICKET_PURCHASE, ignoreCase = true)
+                    type = if (type.equals(Constants.VOTE, ignoreCase = true) || type.equals(Constants.TICKET_PURCHASE, ignoreCase = true)
                             || type.equals(Constants.REVOCATION, ignoreCase = true)) {
-                        type = Constants.STAKING.toUpperCase()
+                        "$STAKING (" +
+                                fixedTransactionList.count {
+                                    it.type.equals(Constants.VOTE, ignoreCase = true)
+                                            || it.type.equals(Constants.TICKET_PURCHASE, ignoreCase = true)
+                                            || it.type.equals(Constants.REVOCATION, ignoreCase = true)
+                                } + ")"
+                    } else if (type.equals(Constants.COINBASE, ignoreCase = true)) {
+                        "$COINBASE (" + fixedTransactionList.count { it.type.equals(Constants.COINBASE, ignoreCase = true) }
+                    }else{
+                        continue
                     }
 
-                    type = firstLetterCap(type)
                     if (!availableTxTypes.contains(type)) {
                         availableTxTypes.add(type)
                     }
 
-                    if (availableTxTypes.size >= 3) { // There're only 3 sort types
+                    if (availableTxTypes.size >= 6) { // There're only 5 sort types
                         break
                     }
                 }
 
-                availableTxTypes.add(0, "All")
-
-                if (context == null) {
-                    return@Runnable
-                }
-
-                val types = availableTxTypes.toTypedArray()
-                sortSpinnerAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, types)
-                sortSpinnerAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerHistory.adapter = sortSpinnerAdapter
+                sortSpinnerAdapter!!.notifyDataSetChanged()
 
                 sortTransactions()
-
-                saveTransactions()
             }
         })
     }
@@ -278,24 +318,29 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     }
 
     private fun sortTransactions() {
+        println("Sorting transaction ${fixedTransactionList.size}")
+        // TODO: Simplify this using a custom sublist function and a predicate
         transactionList.clear()
-        if (transactionTypeSelected.equals("ALL", ignoreCase = true)) {
+        if (transactionTypeSelected.startsWith(ALL)) {
             transactionList.addAll(fixedTransactionList)
-            transactionAdapter!!.notifyDataSetChanged()
         } else {
             for (i in fixedTransactionList.indices) {
                 val item = fixedTransactionList[i]
-                if (transactionTypeSelected.equals(Constants.STAKING, ignoreCase = true)) {
-                    if (item.type == Constants.VOTE || item.type == Constants.REVOCATION
+                when {
+                    transactionTypeSelected.startsWith(STAKING) -> if (item.type == Constants.VOTE || item.type == Constants.REVOCATION
                             || item.type == Constants.TICKET_PURCHASE) {
                         transactionList.add(item)
                     }
-                } else if (transactionTypeSelected.equals(item.type, ignoreCase = true)) { // Regular & coinbase transaction
-                    transactionList.add(item)
+                    transactionTypeSelected.startsWith(item.type) -> // Coinbase transaction
+                        transactionList.add(item)
+                    transactionTypeSelected.startsWith(SENT) && item.direction == 0 -> transactionList.add(item)
+                    transactionTypeSelected.startsWith(RECEIVED) && item.direction == 1 -> transactionList.add(item)
+                    transactionTypeSelected.startsWith(YOURSELF) && item.direction == 2 -> transactionList.add(item)
                 }
             }
         }
 
+        println("Sort Size: ${transactionList.size} Selected: $transactionTypeSelected")
         if (transactionList.size > 0) {
             history_recycler_view.visibility = View.VISIBLE
             no_history.visibility = View.GONE
@@ -313,18 +358,31 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     }
 
     fun newTransaction(transaction: TransactionsResponse.TransactionItem) {
+        if (transactionList.find(transaction.hash) != -1) {
+            // Transaction is a duplicate
+            return
+        }
+
         latestTransactionHeight = transaction.getHeight() + 1
         fixedTransactionList.add(0, transaction)
+        println("New transaction hash ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
-        if ((transactionTypeSelected.equals("ALL", ignoreCase = true) ||
-                        transactionTypeSelected.equals(transaction.type, ignoreCase = true) ||
-                        transactionTypeSelected.equals(Constants.STAKING, ignoreCase = true) && (transaction.type == Constants.VOTE ||
+        if ((transactionTypeSelected.startsWith("ALL", ignoreCase = true) ||
+                        transactionTypeSelected.startsWith(transaction.type, ignoreCase = true) ||
+                        (transactionTypeSelected.startsWith(Constants.SENT, ignoreCase = true) && transaction.direction == 0) ||
+                        (transactionTypeSelected.startsWith(Constants.RECEIVED, ignoreCase = true) && transaction.direction == 1) ||
+                        (transactionTypeSelected.startsWith(Constants.TOSELF, ignoreCase = true) && transaction.direction == 2) ||
+                        transactionTypeSelected.startsWith(Constants.STAKING, ignoreCase = true) && (transaction.type == Constants.VOTE ||
                         transaction.type == Constants.REVOCATION ||
                         transaction.type == Constants.TICKET_PURCHASE))) {
             transaction.animate = true
             transactionList.add(0, transaction)
-            history_recycler_view.post { transactionAdapter!!.notifyDataSetChanged() }
+            history_recycler_view.post {
+                history_recycler_view.visibility = View.VISIBLE
+                transactionAdapter!!.notifyDataSetChanged()
+                saveTransactions()
+            }
         }
     }
 
@@ -333,6 +391,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
             if (transactionList[i].hash == hash) {
                 val transaction = transactionList[i]
                 transaction.height = height
+                transaction.animate = false
                 latestTransactionHeight = transaction.getHeight() + 1
                 transactionList[i] = transaction
                 activity!!.runOnUiThread { transactionAdapter!!.notifyDataSetChanged() }
@@ -348,7 +407,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                 if (height - tx.getHeight() >= 2) {
                     continue
                 }
-                tx.animate = true
+                tx.animate = false
                 if (activity == null) {
                     return
                 }
@@ -360,6 +419,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private fun setupSortListener() {
         spinnerHistory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                println("onItemSelected")
                 transactionTypeSelected = availableTxTypes[position]
                 sortTransactions()
             }
@@ -370,10 +430,14 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         }
     }
 
-    private fun firstLetterCap(s: String): String {
-        return if (s.isNotEmpty()) {
-            s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase()
-        } else s
+    private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action != null && intent.action == Constants.SYNCED) {
+                if (constants!!.synced) {
+                    prepareHistoryData()
+                }
+            }
+        }
     }
 
     private fun ArrayList<TransactionsResponse.TransactionItem>.find(hash: String): Int {

@@ -84,7 +84,6 @@
                 tools:text="The big error"
                 tools:visibility="visible" />
 
-
             <Button
                 android:id="@+id/button_confirm_seed"
                 android:layout_width="151dp"

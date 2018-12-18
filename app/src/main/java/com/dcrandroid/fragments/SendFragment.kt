@@ -171,6 +171,19 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if (errors > 0) {
                 return@setOnClickListener
             }
+
+            if(!constants.synced){
+                send_main_error.setText(R.string.network_synchronization)
+                return@setOnClickListener
+            }
+
+            if(constants.peers == 0){
+                send_main_error.setText(R.string.not_connected_error)
+                return@setOnClickListener
+            }
+
+            send_main_error.text = null
+
             showConfirmTransactionDialog()
         }
 
@@ -337,7 +350,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (enable) {
             send_btn.setTextColor(Color.WHITE)
             send_btn.setBackgroundResource(R.drawable.btn_blue)
-            return
         } else {
             send_btn.setTextColor(ContextCompat.getColor(requireContext(), R.color.blackTextColor38pc))
             send_btn.setBackgroundColor(Color.parseColor("#e6eaed"))
@@ -448,25 +460,31 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         send_error_label.text = null
         val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
 
-        val unsignedTransaction = wallet.constructTransaction(send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
-        val transactionDialog = ConfirmTransactionDialog(context!!)
-                .setAddress(send_dcr_address.text.toString())
-                .setAmount(amount)
-                .setFee(unsignedTransaction.estimatedSignedSize)
+        try {
+            val unsignedTransaction = wallet.constructTransaction(send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
+            val transactionDialog = ConfirmTransactionDialog(context!!)
+                    .setAddress(send_dcr_address.text.toString())
+                    .setAmount(amount)
+                    .setFee(unsignedTransaction.estimatedSignedSize)
 
-        transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
-            if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
-                val intent = Intent(context, EnterPassCode::class.java)
-                startActivityForResult(intent, PASSCODE_REQUEST_CODE)
-            } else {
-                startTransaction(transactionDialog.getPassphrase())
+            transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
+                if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
+                    val intent = Intent(context, EnterPassCode::class.java)
+                    startActivityForResult(intent, PASSCODE_REQUEST_CODE)
+                } else {
+                    startTransaction(transactionDialog.getPassphrase())
+                }
+            })
+
+            if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(accounts!![destination_account_spinner.selectedItemPosition])
+            transactionDialog.setCancelable(true)
+            transactionDialog.setCanceledOnTouchOutside(false)
+            transactionDialog.show()
+        }catch (e: Exception){
+            if (activity != null && context != null){
+                Toast.makeText(context, Utils.translateError(context, e), Toast.LENGTH_SHORT).show()
             }
-        })
-
-        if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(accounts!![destination_account_spinner.selectedItemPosition])
-        transactionDialog.setCancelable(true)
-        transactionDialog.setCanceledOnTouchOutside(false)
-        transactionDialog.show()
+        }
     }
 
     private fun startTransaction(passphrase: String) {

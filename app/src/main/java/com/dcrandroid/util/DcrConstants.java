@@ -12,6 +12,7 @@ public class DcrConstants {
     }
     public LibWallet wallet;
     public boolean synced = false;
+    public int peers = 0;
 
     private DcrConstants() {
 

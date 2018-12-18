@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,6 @@ public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.
 
     private Context mContext;
     private List<TransactionInfoItem> items;
-    private TextView tvInfo;
-    private PreferenceUtil util;
 
     public TransactionInfoAdapter(@NonNull Context context, ArrayList<TransactionInfoItem> list) {
         super(context, 0, list);
@@ -33,21 +32,24 @@ public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
-        util = new PreferenceUtil(getContext());
         if (listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item_adapter, parent, false);
+
         TransactionInfoItem transactionInfoItem = items.get(position);
 
         TextView tvAmount = listItem.findViewById(R.id.tvAmount);
         tvAmount.setText(transactionInfoItem.getAmount());
 
-        tvInfo = listItem.findViewById(R.id.tvInfo);
-        tvInfo.setText(transactionInfoItem.getInfo());
-
-        if (tvInfo.getText().toString().equals(util.get(Constants.ACCOUNT_NAME))) {
-            tvInfo.setTextColor(mContext.getResources().getColor(R.color.blueGrayFirstTextColor));
+        if(transactionInfoItem.getInfo() != null && !transactionInfoItem.getInfo().trim().equals("")) {
+            final TextView tvInfo = listItem.findViewById(R.id.tvInfo);
+            tvInfo.setText(transactionInfoItem.getInfo());
+            tvInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.copyToClipboard(mContext, tvInfo.getText().toString(), mContext.getString(R.string.copied_to_clipboard));
+                }
+            });
         }
-
         return listItem;
     }
 
