@@ -158,6 +158,8 @@ const (
 	ErrUnavailable         = "unavailable"
 	ErrContextCanceled     = "context_canceled"
 	ErrFailedPrecondition  = "failed_precondition"
+	ErrNoPeers             = "no_peers"
+
 	//Sync States
 
 	START    = "start"

@@ -31,7 +31,6 @@ import (
 	"github.com/decred/dcrd/wire"
 	"github.com/decred/dcrwallet/chain"
 	"github.com/decred/dcrwallet/errors"
-	"github.com/decred/dcrwallet/loader"
 	"github.com/decred/dcrwallet/netparams"
 	"github.com/decred/dcrwallet/p2p"
 	"github.com/decred/dcrwallet/spv"
@@ -40,7 +39,6 @@ import (
 	"github.com/decred/dcrwallet/wallet/txrules"
 	walletseed "github.com/decred/dcrwallet/walletseed"
 	"github.com/decred/slog"
-	_ "github.com/raedahgroup/mobilewallet/badgerdb"
 )
 
 var shutdownRequestChannel = make(chan struct{})
@@ -55,7 +53,8 @@ type LibWallet struct {
 	wallet        *wallet.Wallet
 	rpcClient     *chain.RPCClient
 	spvSyncer     *spv.Syncer
-	loader        *loader.Loader
+	cancelSync    context.CancelFunc
+	loader        *Loader
 	mu            sync.Mutex
 	activeNet     *netparams.Params
 	syncResponses []SpvSyncResponse
@@ -178,6 +177,9 @@ func (lw *LibWallet) Shutdown() {
 		lw.rpcClient.Stop()
 	}
 	close(shutdownSignaled)
+	if lw.cancelSync != nil {
+		lw.cancelSync()
+	}
 	if logRotator != nil {
 		log.Infof("Shutting down log rotator")
 		logRotator.Close()
@@ -239,14 +241,14 @@ func decodeAddress(a string, params *chaincfg.Params) (dcrutil.Address, error) {
 }
 
 func (lw *LibWallet) InitLoader() {
-	stakeOptions := &loader.StakeOptions{
+	stakeOptions := &StakeOptions{
 		VotingEnabled: false,
 		AddressReuse:  false,
 		VotingAddress: nil,
 		TicketFee:     10e8,
 	}
 	fmt.Println("Initizing Loader: ", lw.dataDir, "Db: ", lw.dbDriver)
-	l := loader.NewLoader(lw.activeNet.Params, lw.dataDir, stakeOptions,
+	l := NewLoader(lw.activeNet.Params, lw.dataDir, stakeOptions,
 		20, false, 10e5, wallet.DefaultAccountGapLimit)
 	l.SetDatabaseDriver(lw.dbDriver)
 	lw.loader = l
@@ -411,7 +413,8 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 		}
 		wallet.SetNetworkBackend(syncer)
 		lw.loader.SetNetworkBackend(syncer)
-		ctx := contextWithShutdownCancel(context.Background())
+		ctx, cancel := context.WithCancel(context.Background())
+		lw.cancelSync = cancel
 		err := syncer.Run(ctx)
 		if err != nil {
 			if err == context.Canceled {
@@ -583,6 +586,12 @@ func (lw *LibWallet) RpcSync(networkAddress string, username string, password st
 	}()
 
 	return nil
+}
+
+func (lw *LibWallet) DropSpvConnection() {
+	if lw.cancelSync != nil {
+		lw.cancelSync()
+	}
 }
 
 func done(ctx context.Context) bool {
@@ -1273,7 +1282,7 @@ func (lw *LibWallet) SendTransaction(privPass []byte, destAddr string, amount in
 
 	txHash, err := lw.wallet.PublishTransaction(&msgTx, serializedTransaction.Bytes(), n)
 	if err != nil {
-		return nil, err
+		return nil, translateError(err)
 	}
 	return txHash[:], nil
 }
@@ -1580,6 +1589,8 @@ func translateError(err error) error {
 			return errors.New(ErrNotExist)
 		case errors.Passphrase:
 			return errors.New(ErrInvalidPassphrase)
+		case errors.NoPeers:
+			return errors.New(ErrNoPeers)
 		}
 	}
 	return err
