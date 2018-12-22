@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:padding="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:text="@string/setting_up_dcrandroid"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="18sp" />
@@ -22,7 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/header"
-        android:padding="8dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/save_seed_instruction"
         android:textColor="@color/blueGraySecondTextColor"
         android:textSize="14sp" />
@@ -32,8 +35,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/warningf"
         android:layout_below="@+id/subheader"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="-3dp"
+        android:layout_marginTop="10dp"
         android:fadeScrollbars="true">
 
         <LinearLayout
@@ -47,22 +49,19 @@
                 android:id="@+id/seeds_recycler_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
-                android:padding="8dp" />
+                android:layout_weight="33.3" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/seeds_recycler_view1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
-                android:padding="8dp" />
+                android:layout_weight="33.3" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/seeds_recycler_view2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
-                android:padding="8dp" />
+                android:layout_weight="33.3"/>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
@@ -72,8 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/save_seed_btn_continue"
-        android:layout_marginBottom="18dp"
-        android:padding="15dp">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -92,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/btn_shape"
         android:padding="8dp"
         android:text="@string/i_copied_the_seed_phrase"
