@@ -9,7 +9,7 @@
             android:key="change_spending_passphrase"
             app:iconSpaceReserved="false"/>
        <SwitchPreference
-           android:title="@string/encrypt_wallet"
+           android:title="@string/startup_pin_password"
            android:key="encrypt"
            android:summary="@string/encrypt_wallet_summary"
            app:iconSpaceReserved="false"

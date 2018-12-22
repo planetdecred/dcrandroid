@@ -443,8 +443,8 @@
     <string name="enter_encryption_password">Enter Encryption Password</string>
     <string name="removing_wallet_encryption">Removing wallet encryption…</string>
     <string name="changing_password">Changing password…</string>
-    <string name="encrypt_wallet">Encrypt Wallet</string>
-    <string name="encrypt_wallet_summary">A password will be required at startup.</string>
+    <string name="startup_pin_password">Startup PIN/Password</string>
+    <string name="encrypt_wallet_summary">A pin/password will be required at startup.</string>
     <string name="change_encryption_pin_password">Change Encryption PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
     <string name="changing_pin">Changing PIN…</string>
