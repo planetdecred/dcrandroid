@@ -31,6 +31,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:background="@color/whiteFirstBackgroundColor">
+
             <ImageView
                 android:id="@+id/nav_bar_logo"
                 android:layout_width="200dp"

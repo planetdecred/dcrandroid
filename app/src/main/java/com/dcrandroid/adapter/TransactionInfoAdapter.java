@@ -40,8 +40,8 @@ public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.
         TextView tvAmount = listItem.findViewById(R.id.tvAmount);
         tvAmount.setText(transactionInfoItem.getAmount());
 
+        final TextView tvInfo = listItem.findViewById(R.id.tvInfo);
         if(transactionInfoItem.getInfo() != null && !transactionInfoItem.getInfo().trim().equals("")) {
-            final TextView tvInfo = listItem.findViewById(R.id.tvInfo);
             tvInfo.setText(transactionInfoItem.getInfo());
             tvInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -49,6 +49,8 @@ public class TransactionInfoAdapter extends ArrayAdapter<TransactionInfoAdapter.
                     Utils.copyToClipboard(mContext, tvInfo.getText().toString(), mContext.getString(R.string.copied_to_clipboard));
                 }
             });
+        }else{
+            tvInfo.setVisibility(View.GONE);
         }
         return listItem;
     }
