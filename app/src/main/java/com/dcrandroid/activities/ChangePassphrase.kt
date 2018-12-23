@@ -3,9 +3,9 @@ package com.dcrandroid.activities
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.fragments.ChangePasswordFragment

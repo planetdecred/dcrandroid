@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:padding="3dp"
     android:scrollbarAlwaysDrawHorizontalTrack="true"
-
     tools:context="com.dcrandroid.activities.LogViewer">
-    <android.support.v7.widget.AppCompatTextView
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:id="@+id/log_text"
         />
+    
 </ScrollView>

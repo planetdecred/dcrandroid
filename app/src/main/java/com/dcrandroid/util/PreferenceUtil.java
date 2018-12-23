@@ -3,7 +3,8 @@ package com.dcrandroid.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by collins on 1/7/18.
@@ -12,28 +13,28 @@ import android.support.annotation.NonNull;
 public class PreferenceUtil {
     Context ctx;
 
-    public PreferenceUtil(@NonNull Context ctx){
+    public PreferenceUtil(@NonNull Context ctx) {
         this.ctx = ctx;
     }
 
-    public String get(String key){
-        if(ctx == null){
+    public String get(String key) {
+        if (ctx == null) {
             return "";
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getString(key,"");
+        return sp.getString(key, "");
     }
 
-    public String get(String key, String d){
-        if(ctx == null){
+    public String get(String key, String d) {
+        if (ctx == null) {
             return d;
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getString(key,d);
+        return sp.getString(key, d);
     }
 
-    public void set(String key,String value){
-        if(ctx == null){
+    public void set(String key, String value) {
+        if (ctx == null) {
             return;
         }
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
@@ -41,16 +42,16 @@ public class PreferenceUtil {
         editor.commit();
     }
 
-    public float getFloat(String key){
-        if(ctx == null){
+    public float getFloat(String key) {
+        if (ctx == null) {
             return 0;
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getFloat(key,0);
+        return sp.getFloat(key, 0);
     }
 
-    public void setFloat(String key, float n){
-        if(ctx == null){
+    public void setFloat(String key, float n) {
+        if (ctx == null) {
             return;
         }
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
@@ -58,8 +59,8 @@ public class PreferenceUtil {
         editor.commit();
     }
 
-    public void setInt(String key, int n){
-        if(ctx == null){
+    public void setInt(String key, int n) {
+        if (ctx == null) {
             return;
         }
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
@@ -67,16 +68,16 @@ public class PreferenceUtil {
         editor.commit();
     }
 
-    public int getInt(String key, int defaultValue){
-        if(ctx == null){
+    public int getInt(String key, int defaultValue) {
+        if (ctx == null) {
             return defaultValue;
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getInt(key,defaultValue);
+        return sp.getInt(key, defaultValue);
     }
 
-    public void setBoolean(String key, boolean n){
-        if(ctx == null){
+    public void setBoolean(String key, boolean n) {
+        if (ctx == null) {
             return;
         }
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
@@ -84,12 +85,12 @@ public class PreferenceUtil {
         editor.commit();
     }
 
-    public boolean getBoolean(String key){
+    public boolean getBoolean(String key) {
         return getBoolean(key, false);
     }
 
-    public boolean getBoolean(String key, boolean d){
-        if(ctx == null){
+    public boolean getBoolean(String key, boolean d) {
+        if (ctx == null) {
             return d;
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -97,7 +98,7 @@ public class PreferenceUtil {
     }
 
     public void setLong(String key, long l) {
-        if(ctx == null){
+        if (ctx == null) {
             return;
         }
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
@@ -106,10 +107,10 @@ public class PreferenceUtil {
     }
 
     public long getLong(String key, long defaultValue) {
-        if(ctx == null){
+        if (ctx == null) {
             return defaultValue;
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return sp.getLong(key,defaultValue);
+        return sp.getLong(key, defaultValue);
     }
 }

@@ -3,13 +3,8 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -24,6 +19,11 @@ import com.dcrandroid.util.DcrConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Macsleven on 25/12/2017.
@@ -50,16 +50,16 @@ public class SaveSeedActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(ds);
         int height = ds.heightPixels;
         Log.d("saveSeed", "display height: " + height);
-        if(height > 2000) {
+        if (height > 2000) {
 
             TextView header = findViewById(R.id.header);
             ViewGroup.MarginLayoutParams headerParams = (ViewGroup.MarginLayoutParams) header.getLayoutParams();
-            headerParams.setMargins(0, 50, 0 ,0);
+            headerParams.setMargins(0, 50, 0, 0);
             header.setLayoutParams(headerParams);
 
             TextView subHeader = findViewById(R.id.subheader);
             ViewGroup.MarginLayoutParams subHeaderParams = (ViewGroup.MarginLayoutParams) subHeader.getLayoutParams();
-            subHeaderParams.setMargins(0, 50, 0 ,0);
+            subHeaderParams.setMargins(0, 50, 0, 0);
             subHeader.setLayoutParams(subHeaderParams);
 
             NestedScrollView nestedScrollView = findViewById(R.id.nestedScrollView);
@@ -67,8 +67,6 @@ public class SaveSeedActivity extends AppCompatActivity {
             scrollViewParams.setMargins(0, 120, 0, 0);
             nestedScrollView.setLayoutParams(scrollViewParams);
         }
-
-
 
         try {
             seed = constants.wallet.generateSeed();
@@ -106,9 +104,9 @@ public class SaveSeedActivity extends AppCompatActivity {
             SeedAdapter secondSeedAdapter = new SeedAdapter(secondArray, secondSeedsPosition);
             SeedAdapter thirdSeedAdapter = new SeedAdapter(thirdArray, thirdSeedsPosition);
 
-            firstRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            secondRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            thirdRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            firstRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+            secondRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+            thirdRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
             firstRecyclerView.setAdapter(firstSeedAdapter);
             secondRecyclerView.setAdapter(secondSeedAdapter);

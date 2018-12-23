@@ -1,10 +1,11 @@
 package com.dcrandroid.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.dcrandroid.R;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by Macsleven on 06/01/2018.
@@ -18,7 +19,7 @@ public class PeersDetailsActivity extends AppCompatActivity {
         setTitle(getString(R.string.peer_details));
         setContentView(R.layout.peers_details_view);
         TextView id = findViewById(R.id.peer_view_id);
-        TextView addr= findViewById(R.id.peer_view_addr);
+        TextView addr = findViewById(R.id.peer_view_addr);
         TextView addrlocal = findViewById(R.id.peer_view_addrlocal);
         TextView services = findViewById(R.id.peer_view_services);
         TextView relaytxes = findViewById(R.id.peer_view_relaytxes);
@@ -30,7 +31,7 @@ public class PeersDetailsActivity extends AppCompatActivity {
         TextView timeoffset = findViewById(R.id.peer_view_timeoffset);
         TextView pingtime = findViewById(R.id.peer_view_pingtime);
         TextView version = findViewById(R.id.peer_view_version);
-        TextView subver  = findViewById(R.id.peer_view_subver);
+        TextView subver = findViewById(R.id.peer_view_subver);
         TextView inbound = findViewById(R.id.peer_view_inbound);
         TextView startingheight = findViewById(R.id.peer_view_startingheight);
         TextView currentheight = findViewById(R.id.peer_view_currentheight);

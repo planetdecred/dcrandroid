@@ -3,9 +3,6 @@ package com.dcrandroid.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +22,10 @@ import com.dcrandroid.util.Utils;
 
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -152,7 +153,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         }
 
         double stakeSum = balance.getImmatureReward() + balance.getLockedByTickets() + balance.getVotingAuthority() + balance.getImmatureStakeGeneration();
-        if (stakeSum != 0){
+        if (stakeSum != 0) {
             holder.staking_data.setVisibility(View.VISIBLE);
         }
 
@@ -193,7 +194,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
 
                 preferenceUtil.setInt(Constants.DEFAULT_ACCOUNT, account.getAccountNumber());
 
-                if(context instanceof MainActivity){
+                if (context instanceof MainActivity) {
                     ((MainActivity) context).displayBalance();
                 }
 
@@ -213,7 +214,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
 
                 preferenceUtil.setBoolean(Constants.HIDE_WALLET + account.getAccountNumber(), holder.hideWallet.isChecked());
 
-                if(context instanceof MainActivity){
+                if (context instanceof MainActivity) {
                     ((MainActivity) context).displayBalance();
                 }
 

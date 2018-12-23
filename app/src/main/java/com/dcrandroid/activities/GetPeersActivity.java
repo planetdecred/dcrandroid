@@ -4,22 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.dcrandroid.MainApplication;
-import com.dcrandroid.adapter.PeerAdapter;
 import com.dcrandroid.R;
+import com.dcrandroid.adapter.PeerAdapter;
+import com.dcrandroid.data.Peers;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.Utils;
-import com.dcrandroid.data.Peers;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,12 +21,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 /**
  * Created by Macsleven on 05/01/2018.
  */
 
-public class GetPeersActivity extends AppCompatActivity{
+public class GetPeersActivity extends AppCompatActivity {
 
     private List<Peers> peerList = new ArrayList<>();
     private PeerAdapter peerAdapter;
@@ -57,26 +57,26 @@ public class GetPeersActivity extends AppCompatActivity{
             @Override
             public void onClick(View view, int position) {
                 Peers peers = peerList.get(position);
-                Intent intent = new Intent(GetPeersActivity.this,PeersDetailsActivity.class);
-                intent.putExtra("id",peers.getId());
-                intent.putExtra("addr",peers.getAddr());
-                intent.putExtra("addrlocal",peers.getAddrlocal());
-                intent.putExtra("services",peers.getServices());
-                intent.putExtra("relaytxes",peers.getRelaytxes());
-                intent.putExtra("lastsend",peers.getLastsend());
-                intent.putExtra("lastrecv",peers.getLastrecv());
-                intent.putExtra("bytessent",peers.getBytessent());
-                intent.putExtra("bytesrecv",peers.getBytesrecv());
-                intent.putExtra("conntime",peers.getConntime());
-                intent.putExtra("timeoffset",peers.getTimeoffset());
-                intent.putExtra("pingtime",peers.getPingtime());
-                intent.putExtra("version",peers.getVersion());
-                intent.putExtra("subver",peers.getSubver());
-                intent.putExtra("inbound",peers.getInbound());
-                intent.putExtra("startingheight",peers.getStartingheight());
-                intent.putExtra("currentheight",peers.getCurrentheight());
-                intent.putExtra("banscore",peers.getBanscore());
-                intent.putExtra("syncnode",peers.getSyncode());
+                Intent intent = new Intent(GetPeersActivity.this, PeersDetailsActivity.class);
+                intent.putExtra("id", peers.getId());
+                intent.putExtra("addr", peers.getAddr());
+                intent.putExtra("addrlocal", peers.getAddrlocal());
+                intent.putExtra("services", peers.getServices());
+                intent.putExtra("relaytxes", peers.getRelaytxes());
+                intent.putExtra("lastsend", peers.getLastsend());
+                intent.putExtra("lastrecv", peers.getLastrecv());
+                intent.putExtra("bytessent", peers.getBytessent());
+                intent.putExtra("bytesrecv", peers.getBytesrecv());
+                intent.putExtra("conntime", peers.getConntime());
+                intent.putExtra("timeoffset", peers.getTimeoffset());
+                intent.putExtra("pingtime", peers.getPingtime());
+                intent.putExtra("version", peers.getVersion());
+                intent.putExtra("subver", peers.getSubver());
+                intent.putExtra("inbound", peers.getInbound());
+                intent.putExtra("startingheight", peers.getStartingheight());
+                intent.putExtra("currentheight", peers.getCurrentheight());
+                intent.putExtra("banscore", peers.getBanscore());
+                intent.putExtra("syncnode", peers.getSyncode());
                 startActivity(intent);
             }
 
@@ -89,32 +89,32 @@ public class GetPeersActivity extends AppCompatActivity{
         prepareConnectionData();
     }
 
-    private String getNetworkAddress(){
+    private String getNetworkAddress() {
         //TODO: Make available for Mainnet
         String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this);
-        if(dcrdAddress.contains(":")){
+        if (dcrdAddress.contains(":")) {
             return dcrdAddress.split(":")[0] + ":19109";
         }
         return dcrdAddress + ":19109";
     }
 
-    private void prepareConnectionData(){
-        final ProgressDialog pd  = Utils.getProgressDialog(this,false,false,"Getting Peers...");
+    private void prepareConnectionData() {
+        final ProgressDialog pd = Utils.getProgressDialog(this, false, false, "Getting Peers...");
         pd.show();
         new Thread() {
             public void run() {
                 DcrConstants constants = DcrConstants.getInstance();
                 try {
                     String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this);
-                    String result = constants.wallet.callJSONRPC("getpeerinfo", "", dcrdAddress, "dcrwallet","dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
-                    System.out.println("Peers: "+result);
+                    String result = constants.wallet.callJSONRPC("getpeerinfo", "", dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
+                    System.out.println("Peers: " + result);
                     JSONArray array = new JSONArray(result);
-                    if(array.length() == 0){
+                    if (array.length() == 0) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(GetPeersActivity.this, R.string.no_peer_found,Toast.LENGTH_SHORT).show();
-                                if(pd.isShowing()){
+                                Toast.makeText(GetPeersActivity.this, R.string.no_peer_found, Toast.LENGTH_SHORT).show();
+                                if (pd.isShowing()) {
                                     pd.dismiss();
                                 }
                             }
@@ -122,16 +122,16 @@ public class GetPeersActivity extends AppCompatActivity{
                         return;
                     }
                     peerList.clear();
-                    for(int i = 0; i < array.length(); i++){
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject obj = array.getJSONObject(i);
                         Peers peer = new Peers();
                         peer.setId(String.valueOf(obj.getInt("id")));
                         peer.setAddr(obj.getString("addr"));
-                        if(obj.has("addrlocal")){
+                        if (obj.has("addrlocal")) {
                             peer.setAddrlocal(obj.getString("addrlocal"));
                         }
                         peer.setServices(obj.getString("services"));
-                        if(obj.has("relaytxes")){
+                        if (obj.has("relaytxes")) {
                             peer.setRelaytxes(String.valueOf(obj.getBoolean("relaytxes")));
                         }
                         peer.setLastsend(String.valueOf(obj.getInt("lastsend")));
@@ -154,14 +154,14 @@ public class GetPeersActivity extends AppCompatActivity{
                         @Override
                         public void run() {
                             peerAdapter.notifyDataSetChanged();
-                            if(pd.isShowing()){
+                            if (pd.isShowing()) {
                                 pd.dismiss();
                             }
                         }
                     });
                 } catch (final Exception e) {
                     e.printStackTrace();
-                    if(pd.isShowing()){
+                    if (pd.isShowing()) {
                         pd.dismiss();
                     }
                     runOnUiThread(new Runnable() {
@@ -182,6 +182,7 @@ public class GetPeersActivity extends AppCompatActivity{
 
     public interface ClickListener {
         void onClick(View view, int position);
+
         void onLongClick(View view, int position);
     }
 }

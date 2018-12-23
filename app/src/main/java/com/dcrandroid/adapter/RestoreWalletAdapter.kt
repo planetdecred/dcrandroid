@@ -1,19 +1,16 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.database.Cursor
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
-import android.widget.CursorAdapter
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.recover_wallet_list_row.view.*
 import java.util.*
@@ -66,7 +63,7 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
             seedsCounter++
             if (seedsCounter >= 33) {
                 isAllSeedsEntered(true)
-            } else if(holder.adapterPosition < 32){
+            } else if (holder.adapterPosition < 32) {
                 view.requestFocus()
             }
         }
@@ -78,10 +75,10 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
                 val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
 
                 when {
-                    s!!.isNotEmpty() ->  holder.ivClearText.setImageResource(R.drawable.ic_clear)
+                    s!!.isNotEmpty() -> holder.ivClearText.setImageResource(R.drawable.ic_clear)
                     s.isNullOrEmpty() -> holder.ivClearText.setImageResource(0)
                 }
-                if(enteredSeed.isNotEmpty() && enteredSeed == s.toString() && holder.savedSeed.isFocused && position < 32) {
+                if (enteredSeed.isNotEmpty() && enteredSeed == s.toString() && holder.savedSeed.isFocused && position < 32) {
                     view.requestFocus()
                 }
             }

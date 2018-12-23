@@ -5,14 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,12 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dcrandroid.R;
 import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.adapter.AccountAdapter;
-import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Account;
-import com.dcrandroid.MainActivity;
-import com.dcrandroid.R;
+import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 
@@ -34,6 +25,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import mobilewallet.LibWallet;
 
 import static android.app.Activity.RESULT_OK;
@@ -50,9 +49,15 @@ public class AccountsFragment extends Fragment {
     private PreferenceUtil util;
 
     private LibWallet wallet;
-
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                prepareAccountData();
+            }
+        }
+    };
     private RecyclerView recyclerView;
-
     private int EDIT_ACCOUNT_REQUEST_CODE = 200, CREATE_ACCOUNT_REQUEST_CODE = 1;
 
     @Override
@@ -67,17 +72,17 @@ public class AccountsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == EDIT_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK) {
             String accountName = data.getStringExtra(Constants.ACCOUNT_NAME);
             int accountNumber = data.getIntExtra(Constants.ACCOUNT_NUMBER, -1);
-            for (int i = 0; i < accounts.size(); i++){
-                if (accounts.get(i).getAccountNumber() == accountNumber){
+            for (int i = 0; i < accounts.size(); i++) {
+                if (accounts.get(i).getAccountNumber() == accountNumber) {
                     accounts.get(i).setAccountName(accountName);
                     accountAdapter.notifyItemChanged(i);
                     return;
                 }
             }
-        }else if(requestCode == CREATE_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK){
+        } else if (requestCode == CREATE_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK) {
             prepareAccountData();
         }
     }
@@ -135,7 +140,7 @@ public class AccountsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.add_account:
                 Intent intent = new Intent(getContext(), AddAccountActivity.class);
                 startActivityForResult(intent, CREATE_ACCOUNT_REQUEST_CODE);
@@ -147,7 +152,7 @@ public class AccountsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(getContext() != null){
+        if (getContext() != null) {
             getContext().unregisterReceiver(receiver);
         }
     }
@@ -155,18 +160,9 @@ public class AccountsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(getContext() != null){
+        if (getContext() != null) {
             IntentFilter filter = new IntentFilter(Constants.SYNCED);
             getContext().registerReceiver(receiver, filter);
         }
     }
-
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                prepareAccountData();
-            }
-        }
-    };
 }

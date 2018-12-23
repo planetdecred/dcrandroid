@@ -5,16 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.activities.TransactionDetailsActivity
@@ -72,7 +72,6 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         swipe_refresh_layout.setOnRefreshListener(this)
 
         transactionAdapter = TransactionAdapter(transactionList, context)
-
 
         val mLayoutManager = LinearLayoutManager(context)
         history_recycler_view.layoutManager = mLayoutManager
@@ -235,7 +234,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         if (activity == null) {
             return
         }
-        activity!!.runOnUiThread(Runnable {
+        activity!!.runOnUiThread {
             val response = TransactionsResponse.parse(s)
             if (response.transactions.size == 0) {
                 no_history.setText(R.string.no_transactions_have_occured)
@@ -272,13 +271,16 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
 
                 availableTxTypes.add("$ALL (${fixedTransactionList.size})")
                 availableTxTypes.add("$SENT (" + fixedTransactionList.count {
-                    it.direction == 0 && it.type.equals(Constants.REGULAR, ignoreCase = true) }
+                    it.direction == 0 && it.type.equals(Constants.REGULAR, ignoreCase = true)
+                }
                         + ")")
                 availableTxTypes.add("$RECEIVED (" + fixedTransactionList.count {
-                    it.direction == 1 && it.type.equals(Constants.REGULAR, ignoreCase = true) }
+                    it.direction == 1 && it.type.equals(Constants.REGULAR, ignoreCase = true)
+                }
                         + ")")
                 availableTxTypes.add("$YOURSELF (" + fixedTransactionList.count {
-                    it.direction == 2 && it.type.equals(Constants.REGULAR, ignoreCase = true) }
+                    it.direction == 2 && it.type.equals(Constants.REGULAR, ignoreCase = true)
+                }
                         + ")")
 
                 for (i in fixedTransactionList.indices) {
@@ -293,7 +295,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                                 } + ")"
                     } else if (type.equals(Constants.COINBASE, ignoreCase = true)) {
                         "$COINBASE (" + fixedTransactionList.count { it.type.equals(Constants.COINBASE, ignoreCase = true) }
-                    }else{
+                    } else {
                         continue
                     }
 
@@ -310,7 +312,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
 
                 sortTransactions()
             }
-        })
+        }
     }
 
     override fun onRefresh() {

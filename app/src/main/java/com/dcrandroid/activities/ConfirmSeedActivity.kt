@@ -4,15 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.CreateWalletAdapter
 import com.dcrandroid.adapter.InputSeed
@@ -204,7 +204,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnTouchListener {
             MotionEvent.ACTION_UP -> {
                 handler!!.removeCallbacks(longHold)
                 if ((System.currentTimeMillis() - lastConfirmClick) <= CLICK_THRESHOLD) {
-                    if(verifiedSeed){
+                    if (verifiedSeed) {
                         val intent = Intent(this, EncryptWallet::class.java)
                         intent.putExtra(Constants.SEED, finalSeedsString)
                         startActivity(intent)
@@ -227,7 +227,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnTouchListener {
 
     private fun handleSingleTap() {
         val dcrConstants = DcrConstants.getInstance()
-        
+
         if (sortedList.isNotEmpty() && (sortedList.size == 33)) {
             finalSeedsString = sortedList.joinToString(" ", "", "", -1, "...") { it.phrase }
             verifiedSeed = dcrConstants.wallet.verifySeed(finalSeedsString)

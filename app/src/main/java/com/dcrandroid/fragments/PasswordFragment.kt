@@ -4,9 +4,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -14,12 +11,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.dcrandroid.MainActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.password.*
 
 class PasswordFragment : Fragment(), View.OnKeyListener {

@@ -1,8 +1,6 @@
 package com.dcrandroid.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -28,6 +26,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Macsleven on 01/01/2018.

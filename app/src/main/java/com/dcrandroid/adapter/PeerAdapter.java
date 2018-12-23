@@ -1,6 +1,5 @@
 package com.dcrandroid.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,30 +10,23 @@ import com.dcrandroid.data.Peers;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * Created by Macsleven on 05/01/2018.
  */
 
 public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.MyViewHolder> {
     private List<Peers> peersList;
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView peerId;
-        public TextView peerAddr;
 
-
-        public MyViewHolder(View view) {
-            super(view);
-            peerId = view.findViewById(R.id.get_peers_id);
-            peerAddr = view.findViewById(R.id.get_peers_addr);
-        }
-    }
     public PeerAdapter(List<Peers> peerListList) {
         this.peersList = peerListList;
 
     }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.get_peers_list_row,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.get_peers_list_row, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -48,6 +40,18 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return  peersList.size();
+        return peersList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView peerId;
+        public TextView peerAddr;
+
+
+        public MyViewHolder(View view) {
+            super(view);
+            peerId = view.findViewById(R.id.get_peers_id);
+            peerAddr = view.findViewById(R.id.get_peers_addr);
+        }
     }
 }

@@ -1,19 +1,14 @@
 package com.dcrandroid.activities;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,8 +22,6 @@ import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
-import com.dcrandroid.util.TransactionsResponse.TransactionInput;
-import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
 
 import org.json.JSONArray;
@@ -41,6 +34,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.appcompat.app.AppCompatActivity;
 import mobilewallet.LibWallet;
 
 /**
@@ -130,7 +124,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         transactionFee = findViewById(R.id.tx_fee);
         tvHash = findViewById(R.id.tx_hash);
 
-        if(extras.getBoolean(Constants.NO_INFO)){
+        if (extras.getBoolean(Constants.NO_INFO)) {
             getTransaction();
             return;
         }
@@ -195,10 +189,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void getTransaction(){
+    private void getTransaction() {
         txHash = getIntent().getStringExtra(Constants.HASH);
 
-        if(txHash == null){
+        if (txHash == null) {
             return;
         }
 
@@ -273,7 +267,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             walletInputIndices.add(usedInput.get(i).index);
             walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
                     Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
-                            + getString(R.string.dcr) + " ("+ usedInput.get(i).accountName +")", null));
+                            + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")", null));
         }
 
         for (int i = 0; i < usedOutput.size(); i++) {
@@ -288,7 +282,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
             JSONObject parent = new JSONObject(rawJson);
 
-            if(transactionType.equalsIgnoreCase(Constants.VOTE)){
+            if (transactionType.equalsIgnoreCase(Constants.VOTE)) {
                 findViewById(R.id.tx_dts_vote_layout).setVisibility(View.VISIBLE);
 
                 TextView version = findViewById(R.id.tx_dts_version);
@@ -326,7 +320,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 String amount = Utils.formatDecredWithComma(output.getLong(Constants.VALUE)) + " " + getString(R.string.dcr) + " (external)";
 
-                switch (scriptType){
+                switch (scriptType) {
                     case "nulldata":
                         amount = "[null data]";
                         address = "[script]";
@@ -351,7 +345,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         + " " + getString(R.string.dcr) + " (external)";
                 String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
 
-                if(hash.equals("0000000000000000000000000000000000000000000000000000000000000000")){
+                if (hash.equals("0000000000000000000000000000000000000000000000000000000000000000")) {
                     hash = "Stakebase: 0000";
                 }
 

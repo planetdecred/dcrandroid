@@ -5,10 +5,10 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Balance implements Serializable{
-    private long spendable, total,immatureReward, immatureStakeGeneration,lockedByTickets, votingAuthority, unConfirmed;
+public class Balance implements Serializable {
+    private long spendable, total, immatureReward, immatureStakeGeneration, lockedByTickets, votingAuthority, unConfirmed;
 
-    public static Balance parse(String json) throws JSONException{
+    public static Balance parse(String json) throws JSONException {
         JSONObject obj = new JSONObject(json);
         Balance balance = new Balance();
         balance.total = obj.getLong(Constants.TOTAL);
@@ -45,12 +45,12 @@ public class Balance implements Serializable{
         this.total = total;
     }
 
-    public void setImmatureStakeGeneration(long immatureStakeGeneration) {
-        this.immatureStakeGeneration = immatureStakeGeneration;
-    }
-
     public long getImmatureStakeGeneration() {
         return immatureStakeGeneration;
+    }
+
+    public void setImmatureStakeGeneration(long immatureStakeGeneration) {
+        this.immatureStakeGeneration = immatureStakeGeneration;
     }
 
     public long getLockedByTickets() {

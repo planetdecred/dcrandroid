@@ -3,19 +3,20 @@ package com.dcrandroid.view;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.Display;
-
 
 
 public class SeedLayout extends ViewGroup {
     int deviceWidth;
+
     public SeedLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
+
     public SeedLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -34,15 +35,15 @@ public class SeedLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int count = getChildCount();
-        int currentWidth, currentHeight,currentTop, currentLeft,  maxHeight;
+        int currentWidth, currentHeight, currentTop, currentLeft, maxHeight;
 
         //get the available size of subview
-         int TopSubview = this.getPaddingTop();
-         int LeftSubview = this.getPaddingLeft();
-         int RightSubview = this.getMeasuredWidth() - this.getPaddingRight();
-         int BottomSubview = this.getMeasuredHeight() - this.getPaddingBottom();
-         int SubviewWidth = RightSubview - LeftSubview;
-         int SubviewHeight = BottomSubview - TopSubview;
+        int TopSubview = this.getPaddingTop();
+        int LeftSubview = this.getPaddingLeft();
+        int RightSubview = this.getMeasuredWidth() - this.getPaddingRight();
+        int BottomSubview = this.getMeasuredHeight() - this.getPaddingBottom();
+        int SubviewWidth = RightSubview - LeftSubview;
+        int SubviewHeight = BottomSubview - TopSubview;
 
         maxHeight = 0;
         currentLeft = LeftSubview;

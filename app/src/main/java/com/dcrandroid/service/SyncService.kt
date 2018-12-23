@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
@@ -15,7 +15,6 @@ import com.dcrandroid.util.PreferenceUtil
 import mobilewallet.LibWallet
 import mobilewallet.Mobilewallet
 import mobilewallet.SpvSyncResponse
-import java.lang.Exception
 import java.util.*
 
 const val NOTIFICATION_ID = 4
@@ -78,7 +77,7 @@ class SyncService : Service(), SpvSyncResponse {
         val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
         val launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val subText: String = when(peerCount){
+        val subText: String = when (peerCount) {
             0 -> "Syncing"
             1 -> "Connected to a peer"
             else -> "Connected to $peerCount peers"
@@ -162,7 +161,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if(state == Mobilewallet.PROGRESS){
+        if (state == Mobilewallet.PROGRESS) {
             contentTitle = "(3/3) Rescanning Blocks"
 
             val bestBlock = wallet!!.bestBlock

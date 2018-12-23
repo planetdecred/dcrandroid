@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_activated="true" android:drawable="@drawable/help_activated"/>
-    <item android:state_enabled="true" android:drawable="@drawable/help_default"/>
+    <item android:drawable="@drawable/help_activated" android:state_activated="true" />
+    <item android:drawable="@drawable/help_default" android:state_enabled="true" />
 </selector>

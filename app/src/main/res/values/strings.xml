@@ -159,7 +159,7 @@
     <string name="restore_wallet_incorrect_seed_input">You entered an incorrect seed. Please check your words.</string>
     <string name="create_wallet_incorrect_seeds_input">You selected an incorrect word. Please recheck.</string>
     <string name="i_copied_the_seed_phrase">I copied the seed phrase</string>
-    <string name="seed_phrase_verification">Seed phrase verification</string>
+    <string name="seed_phrase_verification">Seed Phrase Verification</string>
     <string name="seed_restore">Seed Restore</string>
     <!--/Seed-->
 
@@ -177,7 +177,7 @@
     <!--/Balance-->
 
     <!--Wallet-->
-    <string name="setting_up_dcrandroid">SETTING UP DECRED WALLET</string>
+    <string name="setting_up_dcrandroid">Setting Up Decred Wallet</string>
     <string name="create_wallet">Create Wallet</string>
     <string name="create_a_new_wallet">Create a New Wallet</string>
     <string name="restore_existing_wallet">Restore Existing Wallet</string>

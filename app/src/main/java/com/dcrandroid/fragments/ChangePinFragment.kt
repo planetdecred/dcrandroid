@@ -4,11 +4,11 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
@@ -130,13 +130,13 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()
                     }
-                    if(e.message == Mobilewallet.ErrInvalidPassphrase){
+                    if (e.message == Mobilewallet.ErrInvalidPassphrase) {
                         val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                 == Constants.PASSWORD) getString(R.string.invalid_current_password)
                         else getString(R.string.invalid_current_pin)
 
                         Toast.makeText(this@ChangePinFragment.context, message, Toast.LENGTH_LONG).show()
-                    }else {
+                    } else {
                         Toast.makeText(this@ChangePinFragment.context, Utils.translateError(this@ChangePinFragment.context, e), Toast.LENGTH_LONG).show()
                     }
                 }

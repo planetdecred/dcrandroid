@@ -5,10 +5,10 @@ package com.dcrandroid.data;
  */
 
 public class Peers {
-    private String id,addr,addrlocal,services,relaytxes,
-            lastsend,lastrecv,bytessent,bytesrecv,conntime,
-            timeoffset,pingtime,version,subver,inbound,startingheight,
-            currentheight,banscore,syncode;
+    private String id, addr, addrlocal, services, relaytxes,
+            lastsend, lastrecv, bytessent, bytesrecv, conntime,
+            timeoffset, pingtime, version, subver, inbound, startingheight,
+            currentheight, banscore, syncode;
 
     public Peers(String id, String addr, String addrlocal, String services, String relaytxes, String lastsend, String lastrecv, String bytessent, String bytesrecv, String conntime, String timeoffset, String pingtime, String version, String subver, String inbound, String startingheight, String currentheight, String banscore, String syncode) {
         this.id = id;
@@ -32,7 +32,8 @@ public class Peers {
         this.syncode = syncode;
     }
 
-    public Peers(){}
+    public Peers() {
+    }
 
     public String getTimeoffset() {
         return timeoffset;

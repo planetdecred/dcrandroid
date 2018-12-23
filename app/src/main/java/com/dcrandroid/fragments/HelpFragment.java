@@ -3,8 +3,6 @@ package com.dcrandroid.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +10,16 @@ import android.widget.TextView;
 
 import com.dcrandroid.R;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 /**
  * Created by Macsleven on 28/11/2017.
  */
 
 public class HelpFragment extends Fragment {
     TextView websiteLink;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

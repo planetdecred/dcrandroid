@@ -15,7 +15,8 @@ public class DecredInputFilter implements InputFilter {
             float input = Float.parseFloat(dest.toString() + source.toString());
             if (isInRange(input))
                 return null;
-        } catch (NumberFormatException ignored) { }
+        } catch (NumberFormatException ignored) {
+        }
         return "";
     }
 

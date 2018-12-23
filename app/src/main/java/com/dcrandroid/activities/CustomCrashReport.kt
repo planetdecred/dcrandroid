@@ -2,8 +2,8 @@ package com.dcrandroid.activities
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.annotation.CallSuper
 import android.view.View
+import androidx.annotation.CallSuper
 import com.dcrandroid.R
 import com.dcrandroid.dialog.CrashDialog
 import com.dcrandroid.util.Utils

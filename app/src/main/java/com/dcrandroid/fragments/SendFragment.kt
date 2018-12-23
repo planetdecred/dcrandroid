@@ -7,8 +7,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -16,6 +14,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
 import com.dcrandroid.R
@@ -172,12 +172,12 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 return@setOnClickListener
             }
 
-            if(!constants.synced){
+            if (!constants.synced) {
                 send_main_error.setText(R.string.network_synchronization)
                 return@setOnClickListener
             }
 
-            if(constants.peers == 0){
+            if (constants.peers == 0) {
                 send_main_error.setText(R.string.not_connected_error)
                 return@setOnClickListener
             }
@@ -196,7 +196,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         send_account_spinner.onItemSelectedListener = this
         destination_account_spinner.onItemSelectedListener = this
 
-        if(SEND_ACCOUNT){
+        if (SEND_ACCOUNT) {
             destination_address_container.visibility = View.GONE
             destination_account_container.visibility = View.VISIBLE
 
@@ -228,7 +228,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.send_page_menu, menu)
-        if(SEND_ACCOUNT){
+        if (SEND_ACCOUNT) {
             menu!!.findItem(R.id.send_to_account).setTitle(R.string.send_to_address)
         }
     }
@@ -480,8 +480,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             transactionDialog.setCancelable(true)
             transactionDialog.setCanceledOnTouchOutside(false)
             transactionDialog.show()
-        }catch (e: Exception){
-            if (activity != null && context != null){
+        } catch (e: Exception) {
+            if (activity != null && context != null) {
                 Toast.makeText(context, Utils.translateError(context, e), Toast.LENGTH_SHORT).show()
             }
         }
@@ -519,7 +519,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         if (pd!!.isShowing) {
                             pd!!.dismiss()
                         }
-                        if (e.message == Mobilewallet.ErrInvalidPassphrase){
+                        if (e.message == Mobilewallet.ErrInvalidPassphrase) {
                             val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                     == Constants.PASSWORD) getString(R.string.invalid_password)
                             else getString(R.string.invalid_pin)
@@ -531,13 +531,13 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                         showConfirmTransactionDialog()
                                     })
                                     .setNegativeButton(getString(R.string.cancel).toUpperCase(), DialogInterface.OnClickListener { dialog, _ ->
-                                       dialog.dismiss()
+                                        dialog.dismiss()
                                     })
 
                             retryDialog.setCancelable(true)
                             retryDialog.setCanceledOnTouchOutside(true)
                             retryDialog.show()
-                        }else{
+                        } else {
                             send_error_label.text = Utils.translateError(context, e)
                         }
                     }
@@ -610,7 +610,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 paste_dcr_address.visibility = View.GONE
                 send_dcr_scan.visibility = View.GONE
                 toggleSendButton(false)
-            } else if (constants.wallet.isAddressValid(s.toString())){
+            } else if (constants.wallet.isAddressValid(s.toString())) {
                 tvDestinationError.text = null
                 tvDestinationError.visibility = View.VISIBLE
                 paste_dcr_address.visibility = View.GONE
