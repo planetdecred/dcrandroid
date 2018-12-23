@@ -610,11 +610,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 paste_dcr_address.visibility = View.GONE
                 send_dcr_scan.visibility = View.GONE
                 toggleSendButton(false)
-            } else {
+            } else if (constants.wallet.isAddressValid(s.toString())){
                 tvDestinationError.text = null
                 tvDestinationError.visibility = View.VISIBLE
                 paste_dcr_address.visibility = View.GONE
-                send_dcr_scan.visibility = View.GONE
+                send_dcr_scan.visibility = View.VISIBLE
                 constructTransaction()
             }
         }
