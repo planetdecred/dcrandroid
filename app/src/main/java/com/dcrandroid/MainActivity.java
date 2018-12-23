@@ -329,9 +329,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                                     long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + bestBlock;
 
                                     setBestBlockTime(bestBlockTimestamp);
-                                    //6 Minutes
-                                    if ((currentTime - bestBlockTimestamp) > 360) {
-                                        String status = String.format(Locale.getDefault(), "Latest Block: %d of %d", bestBlock, estimatedBlocks);
+                                    //20 Minutes
+                                    if ((currentTime - bestBlockTimestamp) > 1200) {
+                                        String status = String.format(Locale.getDefault(), "%s: %d of %d", getString(R.string.latest_block), bestBlock, estimatedBlocks);
                                         chainStatus.setText(status);
                                     }
                                 }
