@@ -502,4 +502,6 @@
     <string name="network_synchronization">Please wait for network synchronization.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="deleting_wallet">Deleting Wallet…</string>
+    <string name="notice">Notice</string>
+    <string name="first_run_notice">First run, initial synchronization with the network takes about 15 minutes.\nNote that wallet db is stored locally on internal storage.</string>
 </resources>

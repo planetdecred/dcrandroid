@@ -308,6 +308,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     private void connectToDecredNetwork() {
+
+        // One-time notice
+        if(util.getBoolean(Constants.FIRST_RUN, true)){
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.notice)
+                    .setMessage(R.string.first_run_notice)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+            util.setBoolean(Constants.FIRST_RUN, false);
+        }
+
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(getString(R.string.connecting_to_peers));
         } else {
