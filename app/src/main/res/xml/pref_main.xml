@@ -70,6 +70,11 @@
             android:key="user-agent"
             android:summary="@string/user_agent_summary"
             android:title="@string/user_agent"
+            />
+        <SwitchPreference
+            android:key="wifi_sync"
+            android:title="@string/mobile_data_sync_title"
+            android:defaultValue="true"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">

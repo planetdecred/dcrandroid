@@ -528,4 +528,7 @@
     <string name="hide_report">Hide Report</string>
     <string name="view_report">View Report</string>
     <!--/Crash Report-->
+
+    <string name="mobile_data_sync_title">Sync only on Wi-Fi</string>
+    <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
 </resources>

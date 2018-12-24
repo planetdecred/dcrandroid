@@ -4,13 +4,18 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -263,12 +268,18 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     protected void onPause() {
         super.onPause();
         isForeground = false;
+        unregisterReceiver(connectivityReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isForeground = true;
+
+        IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        registerReceiver(connectivityReceiver, filter);
 
         if (constants.peers == 0 && constants.synced) {
             // restart spv synchronization.
@@ -321,6 +332,22 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     .setPositiveButton(R.string.ok, null)
                     .show();
             util.setBoolean(Constants.FIRST_RUN, false);
+        }
+
+        if (util.getBoolean(Constants.WIFI_SYNC, true)) {
+            // Check if wifi is connected
+            ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectionManager != null) {
+                NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
+                        setConnectionStatus(getString(R.string.connect_to_wifi));
+                        return;
+                    }
+                } else {
+                    setConnectionStatus(getString(R.string.connect_to_wifi));
+                }
+            }
         }
 
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
@@ -1033,8 +1060,34 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                         syncAnimation.start();
                     }
                 });
+                Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
                 connectToDecredNetwork();
                 break;
         }
     }
+
+    private BroadcastReceiver connectivityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (util.getBoolean(Constants.WIFI_SYNC, true)) {
+                // Disconnect if wifi is not in use.
+                ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectionManager != null) {
+                    NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+                    if (networkInfo != null) {
+                        if(networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
+                            connectionStatus.setBackgroundColor(getResources().getColor(R.color.lightOrangeBackgroundColor));
+                            constants.synced = false;
+                            constants.wallet.dropSpvConnection();
+                            sendBroadcast(new Intent(Constants.SYNCED));
+                        }else{
+                            if(!constants.synced){
+                                connectionStatus.performClick();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
 }
