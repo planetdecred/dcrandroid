@@ -108,6 +108,7 @@ public class Constants {
             RECEIVED = "received",
             TOSELF = "To Self",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash",
-            FIRST_RUN = "first_run";
+            FIRST_RUN = "first_run",
+            TX_NOTIFICATION_HASH = "tx_notification_hash";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 }
