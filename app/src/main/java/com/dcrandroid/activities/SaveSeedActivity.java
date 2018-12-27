@@ -3,13 +3,18 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcrandroid.R;
@@ -40,6 +45,31 @@ public class SaveSeedActivity extends AppCompatActivity {
         Button saveSeedContBtn = findViewById(R.id.save_seed_btn_continue);
 
         DcrConstants constants = DcrConstants.getInstance();
+
+        DisplayMetrics ds = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(ds);
+        int height = ds.heightPixels;
+        Log.d("saveSeed", "display height: " + height);
+        if(height > 2000) {
+
+            TextView header = findViewById(R.id.header);
+            ViewGroup.MarginLayoutParams headerParams = (ViewGroup.MarginLayoutParams) header.getLayoutParams();
+            headerParams.setMargins(0, 50, 0 ,0);
+            header.setLayoutParams(headerParams);
+
+            TextView subHeader = findViewById(R.id.subheader);
+            ViewGroup.MarginLayoutParams subHeaderParams = (ViewGroup.MarginLayoutParams) subHeader.getLayoutParams();
+            subHeaderParams.setMargins(0, 50, 0 ,0);
+            subHeader.setLayoutParams(subHeaderParams);
+
+            NestedScrollView nestedScrollView = findViewById(R.id.nestedScrollView);
+            ViewGroup.MarginLayoutParams scrollViewParams = (ViewGroup.MarginLayoutParams) nestedScrollView.getLayoutParams();
+            scrollViewParams.setMargins(0, 120, 0, 0);
+            nestedScrollView.setLayoutParams(scrollViewParams);
+        }
+
+
+
         try {
             seed = constants.wallet.generateSeed();
             String tempSeed[] = seed.split(Constants.NBSP);
