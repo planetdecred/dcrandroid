@@ -189,7 +189,9 @@
     <string name="enter_your_passphrase">Enter your passphrase</string>
     <string name="invalid_passphrase">Passphrase entered was not valid.</string>
     <string name="invalid_pin">PIN entered was not valid.</string>
+    <string name="invalid_current_pin">Current PIN entered was not valid.</string>
     <string name="invalid_password">Password entered was not valid.</string>
+    <string name="invalid_current_password">Current password entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
     <!--/Wallet-->
@@ -429,23 +431,24 @@
     <string name="enter_spending_pin">Enter Spending PIN</string>
     <string name="password_strength">PASSWORD STRENGTH</string>
     <string name="pin_strength">PIN STRENGTH</string>
-    <string name="enter_encryption_pin">Enter Encryption Pin</string>
-    <string name="confirm_encryption_pin">Confirm Encryption PIN</string>
-    <string name="create_encryption_pin">Create Encryption PIN</string>
+    <string name="enter_startup_pin">Enter Startup Pin</string>
+    <string name="confirm_startup_pin">Confirm Startup PIN</string>
+    <string name="create_startup_pin">Create Startup PIN</string>
     <string name="enter_spending_password">Enter Spending Password</string>
-    <string name="create_encryption_password">Create Encryption Password</string>
+    <string name="create_startup_password">Create Startup Password</string>
     <string name="change_spending_pin_password">Change Spending PIN/Password</string>
     <string name="required_to_send_funds">Required to send funds.</string>
     <string name="enter_current_pin">Enter Current PIN</string>
-    <string name="confirm_encryption_password">Confirm Encryption Password</string>
+    <string name="confirm_startup_password">Confirm Startup Password</string>
     <string name="enter_current_spending_password">Enter Current Spending Password</string>
-    <string name="enter_current_encryption_password">Enter Current Encryption Password</string>
-    <string name="enter_encryption_password">Enter Encryption Password</string>
-    <string name="removing_wallet_encryption">Removing wallet encryption…</string>
+    <string name="enter_current_startup_password">Enter Current Startup Password</string>
+    <string name="enter_startup_password">Enter Startup Password</string>
+    <string name="removing_startup_pass">Removing startup password…</string>
+    <string name="removing_startup_pin">Removing startup pin…</string>
     <string name="changing_password">Changing password…</string>
     <string name="startup_pin_password">Startup PIN/Password</string>
     <string name="encrypt_wallet_summary">A pin/password will be required at startup.</string>
-    <string name="change_encryption_pin_password">Change Encryption PIN/Password</string>
+    <string name="change_startup_pin_password">Change Startup PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
     <string name="changing_pin">Changing PIN…</string>
     <!--/Security-->
@@ -460,7 +463,9 @@
     <string name="no_transactions_have_occured">No transactions have occurred.</string>
     <string name="send_to_account">Send to account</string>
     <string name="send_to_address">Send to address</string>
-    <string name="encrypting_wallet">Encrypting wallet…</string>
+    <string name="changing">Changing…</string>
+    <string name="setting_startup_pin">Setting startup PIN…</string>
+    <string name="setting_startup_password">Setting startup password…</string>
     <string name="enter_an_amounnt">Enter an amount.</string>
     <string name="retry_caps">RETRY</string>
     <string name="amount_can_not_be_zero">Amount can not be zero.</string>
@@ -496,4 +501,5 @@
     <string name="not_connected_error">Not connected to the network.</string>
     <string name="network_synchronization">Please wait for network synchronization.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
+    <string name="deleting_wallet">Deleting Wallet…</string>
 </resources>

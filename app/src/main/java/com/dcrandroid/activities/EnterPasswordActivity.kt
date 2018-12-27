@@ -23,13 +23,13 @@ class EnterPasswordActivity : AppCompatActivity() {
             if (isSpendingPassword) {
                 tv_prompt.text = getString(R.string.enter_current_spending_password)
             } else {
-                tv_prompt.text = getString(R.string.enter_current_encryption_password)
+                tv_prompt.text = getString(R.string.enter_current_startup_password)
             }
         } else {
             if (isSpendingPassword) {
                 tv_prompt.text = getString(R.string.enter_spending_password)
             } else {
-                tv_prompt.text = getString(R.string.enter_encryption_password)
+                tv_prompt.text = getString(R.string.enter_startup_password)
             }
         }
 

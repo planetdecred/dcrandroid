@@ -35,7 +35,7 @@ class ChangePassphrase : AppCompatActivity(), View.OnClickListener {
         val util = PreferenceUtil(this)
 
         if ((util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN && isSpendingPassword!!)
-                || (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE) == Constants.PIN && !isSpendingPassword!!)) {
+                || (util.get(Constants.STARTUP_PASSPHRASE_TYPE) == Constants.PIN && !isSpendingPassword!!)) {
             layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
             layout_password.setBackgroundColor(android.R.attr.selectableItemBackground)
             val pinFragment = ChangePinFragment()

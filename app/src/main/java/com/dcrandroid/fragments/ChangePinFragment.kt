@@ -16,6 +16,7 @@ import com.dcrandroid.util.KeyPad
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.passcode.*
+import mobilewallet.Mobilewallet
 
 class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
 
@@ -23,6 +24,8 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
     private var passCode: String? = null
     private var step = 0
     private var pd: ProgressDialog? = null
+
+    private var util: PreferenceUtil? = null
 
     var isSpendingPassword: Boolean? = null
     var oldPassphrase: String? = null
@@ -37,12 +40,13 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        util = PreferenceUtil(context!!)
         if (isSpendingPassword!!) {
             confirmHint = getString(R.string.confirm_spending_pin)
             createHint = getString(R.string.create_spending_pin)
         } else {
-            createHint = getString(R.string.create_encryption_pin)
-            confirmHint = getString(R.string.confirm_encryption_pin)
+            createHint = getString(R.string.create_startup_pin)
+            confirmHint = getString(R.string.confirm_startup_pin)
         }
 
         keypad_instruction.text = createHint
@@ -101,7 +105,7 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
                 if (isSpendingPassword!!) {
                     show(getString(R.string.changing_pin))
                 } else {
-                    show(getString(R.string.encrypting_wallet))
+                    show(getString(R.string.setting_startup_pin))
                 }
                 val util = PreferenceUtil(this@ChangePinFragment.context!!)
                 if (isSpendingPassword!!) {
@@ -110,7 +114,7 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
                 } else {
                     wallet.changePublicPassphrase(oldPassphrase!!.toByteArray(), passCode!!.toByteArray())
 
-                    util.set(Constants.ENCRYPT_PASSPHRASE_TYPE, Constants.PIN)
+                    util.set(Constants.STARTUP_PASSPHRASE_TYPE, Constants.PIN)
                 }
 
                 activity!!.runOnUiThread {
@@ -126,7 +130,15 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()
                     }
-                    Toast.makeText(this@ChangePinFragment.context, Utils.translateError(this@ChangePinFragment.context, e), Toast.LENGTH_LONG).show()
+                    if(e.message == Mobilewallet.ErrInvalidPassphrase){
+                        val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
+                                == Constants.PASSWORD) getString(R.string.invalid_current_password)
+                        else getString(R.string.invalid_current_pin)
+
+                        Toast.makeText(this@ChangePinFragment.context, message, Toast.LENGTH_LONG).show()
+                    }else {
+                        Toast.makeText(this@ChangePinFragment.context, Utils.translateError(this@ChangePinFragment.context, e), Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }).start()

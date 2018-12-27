@@ -172,7 +172,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                                     });
 
                             if (e.getMessage().equals(Mobilewallet.ErrInvalidPassphrase)) {
-                                if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PIN)) {
+                                if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PIN)) {
                                     infoDialog.setMessage(getString(R.string.invalid_pin));
                                 }
                                 infoDialog.setNegativeButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
@@ -185,7 +185,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent i;
 
-                                        if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                                        if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                                             i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
                                         } else {
                                             i = new Intent(SplashScreen.this, EnterPassCode.class);
@@ -214,7 +214,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         if (util.getBoolean(Constants.ENCRYPT)) {
             Intent i;
 
-            if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+            if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                 i = new Intent(this, EnterPasswordActivity.class);
             } else {
                 i = new Intent(this, EnterPassCode.class);
@@ -235,7 +235,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             startup();
         } else if (requestCode == PASSWORD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                openWallet(data.getStringExtra(Constants.PIN));
+                openWallet(data.getStringExtra(Constants.PASSPHRASE));
             }
         }
     }

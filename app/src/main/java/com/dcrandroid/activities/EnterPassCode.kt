@@ -38,7 +38,7 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
             if (isSpendingPassword!!) {
                 keypad_instruction.setText(R.string.enter_spending_pin)
             } else {
-                keypad_instruction.setText(R.string.enter_encryption_pin)
+                keypad_instruction.setText(R.string.enter_startup_pin)
             }
         }
 
@@ -55,7 +55,7 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
             finish()
         } else {
             val data = Intent()
-            data.putExtra(Constants.PIN, passCode)
+            data.putExtra(Constants.PASSPHRASE, passCode)
             setResult(Activity.RESULT_OK, data)
             finish()
         }

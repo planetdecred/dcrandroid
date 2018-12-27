@@ -1,7 +1,6 @@
 package com.dcrandroid.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -49,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
         private PreferenceUtil util;
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
-        private Preference changeEncryptionPass;
+        private Preference changeStartupPass;
         private ProgressDialog pd;
 
         @Override
@@ -62,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(), false, false, "");
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
-            changeEncryptionPass = findPreference("change_encryption_passphrase");
+            changeStartupPass = findPreference("change_startup_passphrase");
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
@@ -70,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             buildDate.setSummary(BuildConfig.VERSION_NAME);
 
-            changeEncryptionPass.setVisible(encryptWallet.isChecked());
+            changeStartupPass.setVisible(encryptWallet.isChecked());
 
             ListPreference currencyConversion = (ListPreference) findPreference(Constants.CURRENCY_CONVERSION);
             currencyConversion.setSummary(getResources().getStringArray(R.array.currency_conversion)[Integer.parseInt(currencyConversion.getValue())]);
@@ -240,10 +239,10 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            changeEncryptionPass.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            changeStartupPass.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    boolean isPin = util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PIN);
+                    boolean isPin = util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PIN);
                     Intent intent;
                     if (isPin) {
                         intent = new Intent(getContext(), EnterPassCode.class);
@@ -271,7 +270,7 @@ public class SettingsActivity extends AppCompatActivity {
                         intent.putExtra(Constants.SPENDING_PASSWORD, false);
 
                     } else {
-                        if (util.get(Constants.ENCRYPT_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                        if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                             intent = new Intent(getContext(), EnterPasswordActivity.class);
                         } else {
                             intent = new Intent(getContext(), EnterPassCode.class);
@@ -372,20 +371,21 @@ public class SettingsActivity extends AppCompatActivity {
             if (requestCode == ENCRYPT_REQUEST_CODE) {
                 if (resultCode == RESULT_OK) {
                     if (encryptWallet.isChecked()) {
-                        pd = Utils.getProgressDialog(getContext(), false, false, getString(R.string.removing_wallet_encryption));
+                        String message = util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD) ? getString(R.string.removing_startup_pass) : getString(R.string.removing_startup_pin);
+                        pd = Utils.getProgressDialog(getContext(), false, false, message);
                         pd.show();
                         new Thread() {
                             public void run() {
                                 try {
-                                    String passphrase = data.getStringExtra(Constants.PIN);
+                                    String passphrase = data.getStringExtra(Constants.PASSPHRASE);
                                     DcrConstants.getInstance().wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
                                     if (getActivity() != null) {
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 encryptWallet.setChecked(false);
-                                                changeEncryptionPass.setVisible(false);
-                                                util.set(Constants.ENCRYPT_PASSPHRASE_TYPE, Constants.EMPTY_STRING);
+                                                changeStartupPass.setVisible(false);
+                                                util.set(Constants.STARTUP_PASSPHRASE_TYPE, Constants.EMPTY_STRING);
                                                 pd.dismiss();
                                             }
                                         });
@@ -406,12 +406,12 @@ public class SettingsActivity extends AppCompatActivity {
                         }.start();
                     } else {
                         encryptWallet.setChecked(!encryptWallet.isChecked());
-                        changeEncryptionPass.setVisible(encryptWallet.isChecked());
+                        changeStartupPass.setVisible(encryptWallet.isChecked());
                     }
                 }
             } else if (requestCode == PASSCODE_REQUEST_CODE) {
                 if (resultCode == RESULT_OK) {
-                    pd = Utils.getProgressDialog(getContext(), false, false, "Deleting Wallet . . .");
+                    pd = Utils.getProgressDialog(getContext(), false, false, getString(R.string.deleting_wallet));
                     pd.show();
                     if (getActivity() != null) {
                         Utils.clearApplicationData(getActivity());

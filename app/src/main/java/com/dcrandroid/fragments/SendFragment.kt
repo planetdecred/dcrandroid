@@ -448,7 +448,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         } else if (requestCode == PASSCODE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                startTransaction(data!!.getStringExtra(Constants.PIN))
+                startTransaction(data!!.getStringExtra(Constants.PASSPHRASE))
             }
         }
     }
