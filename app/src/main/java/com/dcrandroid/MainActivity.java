@@ -717,8 +717,18 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             //Nanoseconds to seconds
             setBestBlockTime(lastHeaderTime);
             setChainStatus(status);
-        } else if (state.equals(Dcrlibwallet.FINISH)) {
+
+            if (fragment instanceof OverviewFragment) {
+                OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                overviewFragment.publishProgress(state, constants.wallet.getBestBlock(), (int) estimatedBlocks);
+            }
+        } else if (state.equals(Mobilewallet.FINISH)) {
             updatePeerCount();
+
+            if (fragment instanceof OverviewFragment) {
+                OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                overviewFragment.publishProgress(state, 0, 0);
+            }
         }
     }
 
@@ -755,8 +765,18 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             int scannedPercentage = Math.round(((float) rescannedThrough / bestBlock) * 100);
             String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), constants.wallet.getBestBlock(), scannedPercentage);
             setChainStatus(status);
+
+            if (fragment instanceof OverviewFragment) {
+                OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                overviewFragment.publishProgress(state, rescannedThrough, bestBlock);
+            }
         } else {
             updatePeerCount();
+
+            if (fragment instanceof OverviewFragment) {
+                OverviewFragment overviewFragment = (OverviewFragment) fragment;
+                overviewFragment.publishProgress(state, 0, 0);
+            }
         }
     }
 

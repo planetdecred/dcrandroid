@@ -17,9 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="2dp"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:paddingStart="18dp"
             android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingEnd="18dp"
             android:paddingTop="18dp">
 
             <LinearLayout
@@ -99,10 +102,29 @@
                         android:id="@+id/no_history"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:lines="2"
                         android:text="@string/no_transactions"
                         android:textAlignment="center"
                         android:textSize="21sp" />
+
+                    <ProgressBar
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progressDrawable="@drawable/sync_progress_bar"
+                        android:id="@+id/pb_sync_progress"
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp"
+                        android:progress="30"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pb_percent_complete"
+                        android:layout_gravity="end"
+                        android:visibility="gone"
+                        />
+
                 </LinearLayout>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>

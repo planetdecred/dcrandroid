@@ -143,6 +143,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="20dp">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -154,8 +155,8 @@
                         android:paddingLeft="5dp"
                         android:textColor="@color/darkBlueGrayTextColor"
                         android:background="@color/lightOrangeBackgroundColor"
-
                         />
+
                 </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

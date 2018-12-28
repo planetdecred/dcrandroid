@@ -408,6 +408,28 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
     }
 
+    fun publishProgress(state: String, height: Int, bestBlock: Int){
+        activity!!.runOnUiThread {
+            when (state) {
+                Mobilewallet.PROGRESS -> {
+                    pb_sync_progress.visibility = View.VISIBLE
+                    pb_percent_complete.visibility = View.VISIBLE
+
+                    val percent = height.toFloat() / bestBlock * 100
+
+                    pb_sync_progress.progress = percent.toInt()
+                    pb_sync_progress.max = 100
+
+                    pb_percent_complete.text = getString(R.string.percentage_completed, percent)
+                }
+                Mobilewallet.FINISH -> {
+                    pb_sync_progress.visibility = View.GONE
+                    pb_percent_complete.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     private fun hideSyncIndicator() {
         (iv_sync_indicator.background as AnimationDrawable).stop()
         iv_sync_indicator.visibility = View.GONE
