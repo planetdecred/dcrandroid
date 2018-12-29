@@ -1,17 +1,17 @@
-# mobilewallet - Dcrwallet Mobile
+# dcrlibwallet
 
-[![Build Status](https://travis-ci.org/raedahgroup/mobilewallet.svg?branch=master)](https://travis-ci.org/raedahgroup/mobilewallet)
+[![Build Status](https://travis-ci.org/raedahgroup/dcrlibwallet.svg?branch=master)](https://travis-ci.org/raedahgroup/dcrlibwallet)
 
-A Decred wallet library for mobile devices built from [dcrwallet](https://github.com/decred/dcrwallet)
+A Decred wallet library written in golang for [dcrwallet](https://github.com/decred/dcrwallet)
 
 ## Build Dependencies
 
 [Go( >= 1.11 )](http://golang.org/doc/install)  
 [Gomobile](https://github.com/golang/go/wiki/Mobile#tools) (correctly init'd with gomobile init)  
 
-## Build Instructions
+## Build Instructions for Gomobile
 
-To build this libary, clone the project and run the following commands in mobilewallet directory.
+To build this libary, clone the project and run the following commands in dcrlibwallet directory.
 
 ```bash
 export GO111MODULE=on
@@ -21,6 +21,6 @@ export GO111MODULE=off
 gomobile bind -target=android # -target=ios for iOS
 ```
 
-Mobilewallet library can also be built targeting different architectures of android which can be configured using the `-target` command line argument Ex. `gomobile bind -target=android/arm`, `gomobile bind -target=android/386`...
+dcrlibwallet can be built targeting different architectures of android which can be configured using the `-target` command line argument Ex. `gomobile bind -target=android/arm`, `gomobile bind -target=android/386`...
 
-Copy the generated library (mobilewallet.aar for android or Mobilewallet.framewok in the case of iOS) into `libs` directory(`Frameworks` for iOS)
+Copy the generated library (dcrlibwallet.aar for android or dcrlibwallet.framewok in the case of iOS) into `libs` directory(`Frameworks` for iOS)
