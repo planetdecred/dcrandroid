@@ -325,15 +325,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    long currentTime = System.currentTimeMillis() / 1000;
-                                    long estimatedBlocks = ((currentTime - bestBlockTimestamp) / 120) + bestBlock;
-
                                     setBestBlockTime(bestBlockTimestamp);
-                                    //6 Minutes
-                                    if ((currentTime - bestBlockTimestamp) > 360) {
-                                        String status = String.format(Locale.getDefault(), "Latest Block: %d of %d", bestBlock, estimatedBlocks);
-                                        chainStatus.setText(status);
-                                    }
                                 }
                             });
                         }
