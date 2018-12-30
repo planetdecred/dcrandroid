@@ -11,6 +11,10 @@ public class DcrConstants {
     public LibWallet wallet;
     public boolean synced = false;
     public int peers = 0;
+
+    public int syncStartPoint = -1, syncCurrentPoint = -1, syncEndPoint = -1;
+    public long syncStartTime;
+
     private DcrConstants() {
 
     }

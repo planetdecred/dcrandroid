@@ -63,6 +63,10 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         iv_sync_indicator.setBackgroundResource(R.drawable.sync_animation)
 
         if (!constants!!.synced) {
+
+            tv_recent_activity.visibility = View.INVISIBLE
+            show_history.visibility = View.INVISIBLE
+
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
@@ -201,7 +205,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         transactionList.clear()
         loadTransactions()
         if (!constants!!.synced) {
-            no_history.setText(R.string.no_transactions_sync)
+            no_history.setText(R.string.sync_in_progress)
             swipe_refresh_layout2.isRefreshing = false
             return
         }
@@ -408,23 +412,43 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
     }
 
-    fun publishProgress(state: String, height: Int, bestBlock: Int){
+    fun publishProgress(state: String, progress: Int){
         activity!!.runOnUiThread {
+
+            no_history.text = if(BuildConfig.IS_TESTNET){
+                getString(R.string.overview_sync_status_testnet)
+            }else{
+                getString(R.string.overview_sync_status_mainnet)
+            }
+
             when (state) {
                 Mobilewallet.PROGRESS -> {
+
+                    swipe_refresh_layout2.isEnabled = false
                     pb_sync_progress.visibility = View.VISIBLE
-                    pb_percent_complete.visibility = View.VISIBLE
 
-                    val percent = height.toFloat() / bestBlock * 100
+                    pb_sync_progress.progress = progress
+                    pb_sync_progress.max = constants!!.syncEndPoint
 
-                    pb_sync_progress.progress = percent.toInt()
-                    pb_sync_progress.max = 100
+                    if(constants!!.syncStartTime > 0){
+                        val percent = (progress.toFloat() / constants!!.syncEndPoint) * 100
+                        val timeTaken = System.currentTimeMillis() - constants!!.syncStartTime
+                        val avgTime = timeTaken / (progress / 2000)
+                        val remainingTime = ((constants!!.syncEndPoint/ 2000) * avgTime) / 60000
+                        if (remainingTime > 0) {
+                            pb_percent_complete.text = resources.getString(R.string.percentage_completed, percent, remainingTime.toString())
+                        }else{
+                            pb_percent_complete.text = resources.getString(R.string.percentage_completed,  percent, "<1")
+                        }
 
-                    pb_percent_complete.text = getString(R.string.percentage_completed, percent)
+                        pb_percent_complete.visibility = View.VISIBLE
+                    }
+
                 }
                 Mobilewallet.FINISH -> {
                     pb_sync_progress.visibility = View.GONE
                     pb_percent_complete.visibility = View.GONE
+                    swipe_refresh_layout2.isEnabled = true
                 }
             }
         }
@@ -443,6 +467,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                     getBalance()
                     hideSyncIndicator()
                     prepareHistoryData()
+                    tv_recent_activity.visibility = View.VISIBLE
+                    show_history.visibility = View.VISIBLE
                 } else {
                     iv_sync_indicator.visibility = View.VISIBLE
                     overview_av_balance.visibility = View.GONE

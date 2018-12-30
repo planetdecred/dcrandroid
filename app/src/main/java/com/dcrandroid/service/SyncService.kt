@@ -24,6 +24,7 @@ class SyncService : Service(), SpvSyncResponse {
     private var TAG: String = "SyncService"
     private var notification: Notification? = null
     private var wallet: LibWallet? = null
+    private var constants: DcrConstants? = null
     private var preferenceUtil: PreferenceUtil? = null
 
     private var contentTitle: String? = null
@@ -38,7 +39,8 @@ class SyncService : Service(), SpvSyncResponse {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "Service is Started")
 
-        wallet = DcrConstants.getInstance().wallet
+        constants = DcrConstants.getInstance()
+        wallet = constants!!.wallet
 
         if (wallet == null) {
             Log.d(TAG, "Wallet is null")
@@ -121,10 +123,15 @@ class SyncService : Service(), SpvSyncResponse {
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
 
-        if (state == Dcrlibwallet.PROGRESS) {
-            val currentTime = System.currentTimeMillis() / 1000
-            val estimatedBlocks = (currentTime - lastHeaderTime) / BuildConfig.TargetTimePerBlock + wallet!!.bestBlock
-            var fetchedPercentage = wallet!!.bestBlock.toFloat() / estimatedBlocks * 100
+        if (state == Mobilewallet.PROGRESS) {
+
+            var count = constants!!.syncCurrentPoint
+
+            if (constants!!.syncStartPoint > 0) {
+                count -= constants!!.syncStartPoint
+            }
+
+            var fetchedPercentage = count.toFloat() / constants!!.syncEndPoint * 100
             fetchedPercentage = if (fetchedPercentage > 100) 100F else fetchedPercentage
 
             contentTitle = "(1/3) ${getString(R.string.fetching_headers)}"

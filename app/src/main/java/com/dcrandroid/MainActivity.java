@@ -705,13 +705,30 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
-        if (state.equals(Dcrlibwallet.START)) {
+
+        if (state.equals(Mobilewallet.START)) {
             setConnectionStatus(getString(R.string.fetching_headers));
-        } else if (state.equals(Dcrlibwallet.PROGRESS)) {
-            setConnectionStatus(getString(R.string.fetching_headers));
+
             long currentTime = System.currentTimeMillis() / 1000;
-            long estimatedBlocks = ((currentTime - bestBlockTimestamp) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
-            float fetchedPercentage = (float) constants.wallet.getBestBlock() / estimatedBlocks * 100;
+            long estimatedBlocks = ((currentTime - constants.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
+
+            constants.syncStartPoint = constants.wallet.getBestBlock();
+            constants.syncEndPoint = (int) estimatedBlocks - constants.syncStartPoint;
+            constants.syncCurrentPoint = constants.syncStartPoint;
+            constants.syncStartTime = System.currentTimeMillis();
+
+        } else if (state.equals(Mobilewallet.PROGRESS)) {
+            setConnectionStatus(getString(R.string.fetching_headers));
+
+            constants.syncCurrentPoint += fetchedHeadersCount;
+
+            int count = constants.syncCurrentPoint;
+
+            if(constants.syncStartPoint > 0){
+                count -= constants.syncStartPoint;
+            }
+
+            float fetchedPercentage = (float) count / constants.syncEndPoint * 100;
             fetchedPercentage = fetchedPercentage > 100 ? 100 : fetchedPercentage;
             String status = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched));
             //Nanoseconds to seconds
@@ -720,14 +737,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
             if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                overviewFragment.publishProgress(state, constants.wallet.getBestBlock(), (int) estimatedBlocks);
+                overviewFragment.publishProgress(state, count);
             }
         } else if (state.equals(Mobilewallet.FINISH)) {
             updatePeerCount();
+            constants.syncStartTime = -1;
 
             if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                overviewFragment.publishProgress(state, 0, 0);
+                overviewFragment.publishProgress(state, 0);
             }
         }
     }
@@ -759,23 +777,25 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onRescan(int rescannedThrough, String state) {
         if (state.equals(Dcrlibwallet.START)) {
             setConnectionStatus(getString(R.string.rescanning_in_progress));
+            constants.syncStartPoint = 0;
+            constants.syncEndPoint = constants.wallet.getBestBlock();
         } else if (state.equals(Dcrlibwallet.PROGRESS)) {
             setConnectionStatus(getString(R.string.rescanning_in_progress));
-            int bestBlock = constants.wallet.getBestBlock();
-            int scannedPercentage = Math.round(((float) rescannedThrough / bestBlock) * 100);
-            String status = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), constants.wallet.getBestBlock(), scannedPercentage);
+
+            float scannedPercentage = ((float) rescannedThrough / constants.syncEndPoint) * 100;
+            String status = String.format(Locale.getDefault(), "%s: %d(%.1f%%)", getString(R.string.latest_block), constants.wallet.getBestBlock(), scannedPercentage);
             setChainStatus(status);
 
             if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                overviewFragment.publishProgress(state, rescannedThrough, bestBlock);
+                overviewFragment.publishProgress(state, rescannedThrough);
             }
         } else {
             updatePeerCount();
 
             if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
-                overviewFragment.publishProgress(state, 0, 0);
+                overviewFragment.publishProgress(state, 0);
             }
         }
     }

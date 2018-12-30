@@ -63,6 +63,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tv_recent_activity"
             android:layout_gravity="bottom"
             android:paddingStart="18dp"
             android:paddingLeft="18dp"
@@ -96,6 +97,7 @@
                         android:id="@+id/history_recycler_view2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="visible"
                         android:scrollbars="vertical" />
 
                     <TextView
@@ -106,25 +108,26 @@
                         android:textAlignment="center"
                         android:textSize="21sp" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pb_percent_complete"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        />
+
                     <ProgressBar
                         android:layout_width="match_parent"
-                        android:layout_height="4dp"
+                        android:layout_height="12dp"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:progressDrawable="@drawable/sync_progress_bar"
                         android:id="@+id/pb_sync_progress"
                         android:visibility="gone"
                         android:layout_marginTop="10dp"
-                        android:progress="30"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginRight="18dp"
                         />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/pb_percent_complete"
-                        android:layout_gravity="end"
-                        android:visibility="gone"
-                        />
-
                 </LinearLayout>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
