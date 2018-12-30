@@ -97,7 +97,6 @@
                         android:id="@+id/history_recycler_view2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="visible"
                         android:scrollbars="vertical" />
 
                     <TextView
@@ -107,15 +106,6 @@
                         android:text="@string/no_transactions"
                         android:textAlignment="center"
                         android:textSize="21sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/pb_percent_complete"
-                        android:textAlignment="center"
-                        android:textSize="18sp"
-                        android:visibility="gone"
-                        />
 
                     <ProgressBar
                         android:layout_width="match_parent"
@@ -127,6 +117,17 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginLeft="18dp"
                         android:layout_marginRight="18dp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pb_percent_complete"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="22mm"
                         />
                 </LinearLayout>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

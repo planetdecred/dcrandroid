@@ -706,11 +706,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
 
-        if (state.equals(Mobilewallet.START)) {
-            setConnectionStatus(getString(R.string.fetching_headers));
+        long currentTime = System.currentTimeMillis() / 1000;
+        long estimatedBlocks = ((currentTime - constants.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
 
-            long currentTime = System.currentTimeMillis() / 1000;
-            long estimatedBlocks = ((currentTime - constants.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
+        if (state.equals(Mobilewallet.START)) {
+            if (constants.syncEndPoint != -1){
+                return;
+            }
+
+            setConnectionStatus(getString(R.string.fetching_headers));
 
             constants.syncStartPoint = constants.wallet.getBestBlock();
             constants.syncEndPoint = (int) estimatedBlocks - constants.syncStartPoint;
@@ -742,6 +746,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         } else if (state.equals(Mobilewallet.FINISH)) {
             updatePeerCount();
             constants.syncStartTime = -1;
+            constants.syncStartPoint = -1;
+            constants.syncEndPoint = -1;
+            constants.syncCurrentPoint = -1;
 
             if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
@@ -775,7 +782,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onRescan(int rescannedThrough, String state) {
-        if (state.equals(Dcrlibwallet.START)) {
+        if (state.equals(Mobilewallet.START)) {
+            if (constants.syncEndPoint != -1){
+                return;
+            }
+
             setConnectionStatus(getString(R.string.rescanning_in_progress));
             constants.syncStartPoint = 0;
             constants.syncEndPoint = constants.wallet.getBestBlock();
@@ -792,7 +803,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
         } else {
             updatePeerCount();
-
+            constants.syncStartTime = -1;
+            constants.syncStartPoint = -1;
+            constants.syncEndPoint = -1;
+            constants.syncCurrentPoint = -1;
             if (fragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) fragment;
                 overviewFragment.publishProgress(state, 0);

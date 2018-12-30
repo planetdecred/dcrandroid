@@ -504,7 +504,7 @@
     <string name="network_synchronization">Please wait for network synchronization.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="deleting_wallet">Deleting Wallet…</string>
-    <string name="percentage_completed">\n%1$.1f\%% completed, %2$s min remaining</string>
+    <string name="percentage_completed">%1$.1f\%% completed, %2$s min remaining.\nBlock height %3$d of %4$d.</string>
     <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
     <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
 </resources>

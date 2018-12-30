@@ -64,8 +64,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
         if (!constants!!.synced) {
 
-            tv_recent_activity.visibility = View.INVISIBLE
-            show_history.visibility = View.INVISIBLE
+            tv_recent_activity.visibility = View.GONE
+            show_history.visibility = View.GONE
 
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
@@ -436,12 +436,14 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                         val avgTime = timeTaken / (progress / 2000)
                         val remainingTime = ((constants!!.syncEndPoint/ 2000) * avgTime) / 60000
                         if (remainingTime > 0) {
-                            pb_percent_complete.text = resources.getString(R.string.percentage_completed, percent, remainingTime.toString())
+                            pb_percent_complete.text = resources.getString(R.string.percentage_completed, percent, remainingTime.toString(), constants!!.wallet.bestBlock, constants!!.syncEndPoint)
                         }else{
-                            pb_percent_complete.text = resources.getString(R.string.percentage_completed,  percent, "<1")
+                            pb_percent_complete.text = resources.getString(R.string.percentage_completed,  percent, "<1", constants!!.wallet.bestBlock, constants!!.syncEndPoint)
                         }
 
                         pb_percent_complete.visibility = View.VISIBLE
+                    }else{
+                        pb_percent_complete.visibility = View.INVISIBLE
                     }
 
                 }
