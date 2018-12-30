@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
@@ -229,7 +230,7 @@ public class ReceiveFragment extends android.support.v4.app.Fragment implements 
             image.compress(Bitmap.CompressFormat.PNG, 100, stream);
             stream.flush();
             stream.close();
-            uri = FileProvider.getUriForFile(getActivity().getApplicationContext(), "com.decred.dcrandroid.fileprovider", cachePath);
+            uri = FileProvider.getUriForFile(getActivity().getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileprovider", cachePath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
