@@ -114,6 +114,20 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             }
         }
 
+        send.setOnClickListener {
+            if (activity != null && activity is MainActivity) {
+                val mainActivity = activity as MainActivity?
+                mainActivity!!.displaySend()
+            }
+        }
+
+        receive.setOnClickListener {
+            if (activity != null && activity is MainActivity) {
+                val mainActivity = activity as MainActivity?
+                mainActivity!!.displayReceive()
+            }
+        }
+
         val vto = history_recycler_view2.viewTreeObserver
         if (vto.isAlive) {
             vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
