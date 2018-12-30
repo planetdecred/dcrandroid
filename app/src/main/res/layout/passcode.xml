@@ -240,6 +240,7 @@
                         android:textColor="#48566E"
                         android:textSize="25sp"
                         android:textStyle="bold"
+                        android:background="@drawable/circular_transparent_ripple"
                         app:fontFamily="@font/source_sans_pro_regular_family" />
 
                     <TextView
