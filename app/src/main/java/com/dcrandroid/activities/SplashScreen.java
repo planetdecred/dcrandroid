@@ -24,8 +24,8 @@ import java.io.File;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import mobilewallet.LibWallet;
-import mobilewallet.Mobilewallet;
+import dcrlibwallet.LibWallet;
+import dcrlibwallet.Dcrlibwallet;
 
 /**
  * Created by Macsleven on 24/12/2017.
@@ -171,7 +171,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                                         }
                                     });
 
-                            if (e.getMessage().equals(Mobilewallet.ErrInvalidPassphrase)) {
+                            if (e.getMessage().equals(Dcrlibwallet.ErrInvalidPassphrase)) {
                                 if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PIN)) {
                                     infoDialog.setMessage(getString(R.string.invalid_pin));
                                 }

@@ -12,9 +12,10 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
-import mobilewallet.LibWallet
-import mobilewallet.Mobilewallet
-import mobilewallet.SpvSyncResponse
+import dcrlibwallet.LibWallet
+import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.SpvSyncResponse
+import java.lang.Exception
 import java.util.*
 
 const val NOTIFICATION_ID = 4
@@ -121,7 +122,7 @@ class SyncService : Service(), SpvSyncResponse {
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
 
-        if (state == Mobilewallet.PROGRESS) {
+        if (state == Dcrlibwallet.PROGRESS) {
             val currentTime = System.currentTimeMillis() / 1000
             val estimatedBlocks = (currentTime - lastHeaderTime) / BuildConfig.TargetTimePerBlock + wallet!!.bestBlock
             var fetchedPercentage = wallet!!.bestBlock.toFloat() / estimatedBlocks * 100
@@ -135,7 +136,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onDiscoveredAddresses(state: String) {
-        if (state == Mobilewallet.START) {
+        if (state == Dcrlibwallet.START) {
             contentTitle = "(2/3) Discovering Addresses..."
             contentText = null
             showNotification()
@@ -161,7 +162,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if (state == Mobilewallet.PROGRESS) {
+        if(state == Dcrlibwallet.PROGRESS){
             contentTitle = "(3/3) Rescanning Blocks"
 
             val bestBlock = wallet!!.bestBlock

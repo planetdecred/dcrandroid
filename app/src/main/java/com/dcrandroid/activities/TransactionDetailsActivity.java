@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import androidx.appcompat.app.AppCompatActivity;
-import mobilewallet.LibWallet;
+import dcrlibwallet.LibWallet;
 
 /**
  * Created by Macsleven on 02/01/2018.

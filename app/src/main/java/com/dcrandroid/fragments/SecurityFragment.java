@@ -36,8 +36,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import mobilewallet.LibWallet;
-import mobilewallet.Mobilewallet;
+import dcrlibwallet.LibWallet;
+import dcrlibwallet.Dcrlibwallet;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -324,7 +324,7 @@ public class SecurityFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    etSignature.setText(Mobilewallet.encodeBase64(signature));
+                    etSignature.setText(Dcrlibwallet.encodeBase64(signature));
                     tvRequiredSignature.setText(null);
                     pd.dismiss();
                     verifyMessage();
@@ -338,7 +338,7 @@ public class SecurityFragment extends Fragment {
                     pd.dismiss();
                     tvRequiredSignature.setTextColor(Color.RED);
                     switch (e.getMessage()) {
-                        case Mobilewallet.ErrInvalidPassphrase:
+                        case Dcrlibwallet.ErrInvalidPassphrase:
                             if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
                                 tvRequiredSignature.setText(R.string.invalid_pin);
                             } else {

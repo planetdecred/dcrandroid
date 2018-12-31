@@ -33,7 +33,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import mobilewallet.LibWallet;
+import dcrlibwallet.LibWallet;
 
 import static android.app.Activity.RESULT_OK;
 

@@ -19,8 +19,8 @@ import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.google.android.material.snackbar.Snackbar
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.password.*
-import mobilewallet.Mobilewallet
 
 class ChangePasswordFragment : Fragment(), View.OnKeyListener {
 
@@ -103,7 +103,7 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
                         pd!!.dismiss()
                     }
 
-                    if (e.message == Mobilewallet.ErrInvalidPassphrase) {
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                         val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                 == Constants.PASSWORD) getString(R.string.invalid_current_password)
                         else getString(R.string.invalid_current_pin)

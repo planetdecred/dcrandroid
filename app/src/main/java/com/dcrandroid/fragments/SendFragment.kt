@@ -31,8 +31,8 @@ import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.fragment_send.*
-import mobilewallet.LibWallet
-import mobilewallet.Mobilewallet
+import dcrlibwallet.LibWallet
+import dcrlibwallet.Dcrlibwallet
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -79,7 +79,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private val amount: Long
         get() {
-            return Mobilewallet.amountAtom(amount_dcr.text.toString().toDouble())
+            return Dcrlibwallet.amountAtom(amount_dcr.text.toString().toDouble())
         }
 
     private val destinationAddress: String
@@ -136,7 +136,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 amount_dcr.addTextChangedListener(amountWatcher)
 
                 if (exchangeDecimal != null) {
-                    var currentAmount = BigDecimal(Mobilewallet.amountCoin(spendableBalance))
+                    var currentAmount = BigDecimal(Dcrlibwallet.amountCoin(spendableBalance))
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
                     val convertedAmount = currentAmount.multiply(exchangeDecimal, MathContext.DECIMAL128)
@@ -372,7 +372,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             val transaction = wallet.constructTransaction(destinationAddress, amount, accountNumbers[send_account_spinner.selectedItemPosition], requiredConfirmations, isSendAll)
 
-            val estFee = Mobilewallet.amountCoin(Utils.signedSizeToAtom(transaction.estimatedSignedSize))
+            val estFee = Dcrlibwallet.amountCoin(Utils.signedSizeToAtom(transaction.estimatedSignedSize))
 
             if (exchangeDecimal != null) {
                 var fee = BigDecimal(estFee)
@@ -399,7 +399,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 amount_dcr.addTextChangedListener(amountWatcher)
 
                 if (exchangeDecimal != null) {
-                    var currentAmount = BigDecimal(Mobilewallet.amountCoin(transaction.totalPreviousOutputAmount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
+                    var currentAmount = BigDecimal(Dcrlibwallet.amountCoin(transaction.totalPreviousOutputAmount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
                     val convertedAmount = currentAmount.multiply(exchangeDecimal)
@@ -519,7 +519,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         if (pd!!.isShowing) {
                             pd!!.dismiss()
                         }
-                        if (e.message == Mobilewallet.ErrInvalidPassphrase) {
+                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase){
                             val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                     == Constants.PASSWORD) getString(R.string.invalid_password)
                             else getString(R.string.invalid_pin)

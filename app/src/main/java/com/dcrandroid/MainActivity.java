@@ -69,9 +69,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import mobilewallet.Mobilewallet;
-import mobilewallet.SpvSyncResponse;
-import mobilewallet.TransactionListener;
+import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.SpvSyncResponse;
+import dcrlibwallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener,
         SpvSyncResponse, View.OnClickListener {
@@ -694,9 +694,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
-        if (state.equals(Mobilewallet.START)) {
+        if (state.equals(Dcrlibwallet.START)) {
             setConnectionStatus(getString(R.string.fetching_headers));
-        } else if (state.equals(Mobilewallet.PROGRESS)) {
+        } else if (state.equals(Dcrlibwallet.PROGRESS)) {
             setConnectionStatus(getString(R.string.fetching_headers));
             long currentTime = System.currentTimeMillis() / 1000;
             long estimatedBlocks = ((currentTime - bestBlockTimestamp) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
@@ -706,16 +706,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             //Nanoseconds to seconds
             setBestBlockTime(lastHeaderTime);
             setChainStatus(status);
-        } else if (state.equals(Mobilewallet.FINISH)) {
+        } else if (state.equals(Dcrlibwallet.FINISH)) {
             updatePeerCount();
         }
     }
 
     @Override
     public void onFetchMissingCFilters(int missingCFiltersStart, int missingCFiltersEnd, String state) {
-        if (state.equals(Mobilewallet.START)) {
+        if (state.equals(Dcrlibwallet.START)) {
             setConnectionStatus(getString(R.string.fetching_missing_cfilters));
-        } else if (state.equals(Mobilewallet.PROGRESS)) {
+        } else if (state.equals(Dcrlibwallet.PROGRESS)) {
             setConnectionStatus(getString(R.string.fetching_missing_cfilters));
             System.out.println("CFilters start: " + missingCFiltersStart + " CFilters end: " + missingCFiltersEnd);
             String status = String.format(Locale.getDefault(), "%s %d %s", getString(R.string.fetched), missingCFiltersEnd, getString(R.string.cfilters));
@@ -727,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onDiscoveredAddresses(String state) {
         setChainStatus(null);
         setBestBlockTime(-1);
-        if (state.equals(Mobilewallet.START)) {
+        if (state.equals(Dcrlibwallet.START)) {
             setConnectionStatus(getString(R.string.discovering_used_addresses));
             return;
         }
@@ -736,9 +736,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onRescan(int rescannedThrough, String state) {
-        if (state.equals(Mobilewallet.START)) {
+        if (state.equals(Dcrlibwallet.START)) {
             setConnectionStatus(getString(R.string.rescanning_in_progress));
-        } else if (state.equals(Mobilewallet.PROGRESS)) {
+        } else if (state.equals(Dcrlibwallet.PROGRESS)) {
             setConnectionStatus(getString(R.string.rescanning_in_progress));
             int bestBlock = constants.wallet.getBestBlock();
             int scannedPercentage = Math.round(((float) rescannedThrough / bestBlock) * 100);

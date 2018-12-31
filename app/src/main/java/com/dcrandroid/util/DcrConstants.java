@@ -1,6 +1,6 @@
 package com.dcrandroid.util;
 
-import mobilewallet.LibWallet;
+import dcrlibwallet.LibWallet;
 
 /**
  * Created by collins on 2/24/18.
