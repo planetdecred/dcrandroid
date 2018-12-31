@@ -486,6 +486,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         mListView.setItemChecked(1, true);
     }
 
+    public void displaySend() {
+        switchFragment(2);
+        mListView.setItemChecked(2, true);
+    }
+
+    public void displayReceive() {
+        switchFragment(3);
+        mListView.setItemChecked(3, true);
+    }
+
     @Override
     public void onTransaction(String s) {
         System.out.println("Notification Received: " + s);

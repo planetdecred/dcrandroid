@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -106,16 +106,49 @@
                 </LinearLayout>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
+
         <TextView
             android:id="@+id/show_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="10dp"
             android:padding="2dp"
             android:text="@string/show_all_transactions"
             android:textColor="@color/blueGraySecondTextColor"
             android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <Button
+                android:id="@+id/send"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:drawableStart="@mipmap/send"
+                android:drawableLeft="@mipmap/send"
+                android:drawablePadding="-25dp"
+                android:text="@string/send"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/receive"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:drawableStart="@mipmap/receive"
+                android:drawableLeft="@mipmap/receive"
+                android:drawablePadding="-25dp"
+                android:text="@string/receive"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
