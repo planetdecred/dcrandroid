@@ -8,10 +8,12 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.dcrandroid.R
+import android.text.TextPaint
 
 class PinView : View {
     private var activePaint: Paint? = null
     private var emptyPaint: Paint? = null
+    private var mTextPaint: TextPaint? = null
 
     var passCodeLength: Int = 0
         set(value) {
@@ -81,6 +83,12 @@ class PinView : View {
         emptyPaint!!.style = Paint.Style.FILL
         emptyPaint!!.color = inactiveColor
 
+        mTextPaint = TextPaint()
+        mTextPaint!!.isAntiAlias = true
+        mTextPaint!!.textSize = 21 * resources.displayMetrics.density
+        mTextPaint!!.textAlign = Paint.Align.CENTER
+        mTextPaint!!.color = activeColor
+
         circleRect = RectF()
         activeRect = RectF()
     }
@@ -102,43 +110,45 @@ class PinView : View {
         val usableWidth = width - (pl + pr)
         val usableHeight = height - (pt + pb)
 
-        var pinSize = initialPinSize;
+        val pinSize = initialPinSize
 
-        var totalPinWidth = pinSize + horizontalSpacing
+        val totalPinWidth = pinSize + horizontalSpacing
 
-        while ((totalPinWidth * passCodeLength) > usableWidth) {
-            pinSize *= 0.90F
-            totalPinWidth = pinSize + horizontalSpacing
-        }
+        if ((totalPinWidth * passCodeLength) > usableWidth) {
+            val xPos = usableWidth.toFloat() / 2
+            val yPos = (usableHeight / 2 - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2)
+            canvas.drawText(passCodeLength.toString(), xPos, yPos, mTextPaint)
+        }else {
 
-        val totalContentWidth = pinSize + horizontalSpacing
-        var startX = (usableWidth / 2) - ((totalContentWidth / 2) * passCodeLength)
-        val startY = pt + usableHeight - pinSize
+            val totalContentWidth = pinSize + horizontalSpacing
+            var startX = (usableWidth / 2) - ((totalContentWidth / 2) * passCodeLength)
+            val startY = pt + usableHeight - pinSize
 
-        for (i in 1..passCodeLength) {
-            circleRect!!.left = startX
-            circleRect!!.top = startY
-            circleRect!!.right = startX + pinSize
-            circleRect!!.bottom = startY + pinSize
+            for (i in 1..passCodeLength) {
+                circleRect!!.left = startX
+                circleRect!!.top = startY
+                circleRect!!.right = startX + pinSize
+                circleRect!!.bottom = startY + pinSize
 
-            if (i <= passCodeLength) {
+                if (i <= passCodeLength) {
+                    canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
+
+                    val activePadding = pinSize * 0.15f
+
+                    activeRect!!.left = circleRect!!.left + activePadding
+                    activeRect!!.top = circleRect!!.top + activePadding
+                    activeRect!!.bottom = circleRect!!.bottom - activePadding
+                    activeRect!!.right = circleRect!!.right - activePadding
+
+                    canvas.drawArc(activeRect!!, activeRect!!.left, 360f, true, activePaint!!)
+
+                    startX += totalContentWidth
+                    continue
+                }
+
                 canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
-
-                val activePadding = pinSize * 0.15f
-
-                activeRect!!.left = circleRect!!.left + activePadding
-                activeRect!!.top = circleRect!!.top + activePadding
-                activeRect!!.bottom = circleRect!!.bottom - activePadding
-                activeRect!!.right = circleRect!!.right - activePadding
-
-                canvas.drawArc(activeRect!!, activeRect!!.left, 360f, true, activePaint!!)
-
                 startX += totalContentWidth
-                continue
             }
-
-            canvas.drawArc(circleRect!!, startX, 360f, true, emptyPaint!!)
-            startX += totalContentWidth
         }
     }
 }

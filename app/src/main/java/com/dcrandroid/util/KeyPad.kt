@@ -1,6 +1,7 @@
 package com.dcrandroid.util
 
 
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -23,7 +24,6 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
     private var listener: KeyPadListener? = null
 
     init {
-
         val temp = arrayOf(R.id.keypad_0, R.id.keypad_1, R.id.keypad_2, R.id.keypad_3, R.id.keypad_4, R.id.keypad_5, R.id.keypad_6, R.id.keypad_7, R.id.keypad_8, R.id.keypad_9)
         this.keyIds = Arrays.asList(*temp)
         keys = ArrayList(keyIds.size)
