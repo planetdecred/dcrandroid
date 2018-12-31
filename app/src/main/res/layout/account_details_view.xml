@@ -2,165 +2,173 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_account_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_account_details"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical"
-    android:paddingEnd="10dp"
     android:paddingStart="10dp"
     android:paddingTop="10dp"
-    android:layout_marginBottom="10dp"
+    android:paddingEnd="10dp"
     android:visibility="gone"
-    tools:visibility="visible"
-    tools:showIn="@layout/account_list_row">
+    tools:showIn="@layout/account_list_row"
+    tools:visibility="visible">
+
+    <LinearLayout
+        android:id="@+id/account_staking_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/details"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="18sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_immature_rewards_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_immature_rewards"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            <TextView
+                android:id="@+id/tv_immature_rewards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="19sp"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_locked_by_tickets_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_locked_by_tickets"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            <TextView
+                android:id="@+id/tv_locked_by_tickets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="19sp"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_voting_authority_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_voting_authority"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            <TextView
+                android:id="@+id/tv_voting_authority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="19sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_immature_stake_generation_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/immature_stake_generation"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            <TextView
+                android:id="@+id/tv_immature_stake_generation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/blueGrayFirstTextColor"
+                android:textSize="19sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightGray" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/details"
-        android:textSize="18sp"
-        android:textColor="@color/darkBlueTextColor"
-        app:fontFamily="@font/source_sans_pro_regular_family"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightGray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_immature_rewards"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            android:id="@+id/tv_immature_rewards_label"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="19sp"
-            android:id="@+id/tv_immature_rewards"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-
-            />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightGray" />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_locked_by_tickets"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            android:id="@+id/tv_locked_by_tickets_label"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="19sp"
-            android:id="@+id/tv_locked_by_tickets"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-
-            />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightGray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_voting_authority"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            android:id="@+id/tv_voting_authority_label"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="19sp"
-            android:id="@+id/tv_voting_authority"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightGray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/immature_stake_generation"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            android:id="@+id/tv_immature_stake_generation_label"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="19sp"
-            android:id="@+id/tv_immature_stake_generation"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightGray" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="@string/label_properties"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="18sp"
@@ -187,12 +195,12 @@
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <TextView
+            android:id="@+id/tv_account_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:textColor="@color/lightGray"
             android:textSize="16sp"
-            android:id="@+id/tv_account_number"
             app:fontFamily="@font/source_sans_pro_regular_family" />
     </LinearLayout>
 
@@ -217,12 +225,12 @@
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <TextView
+            android:id="@+id/tv_hd_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:textColor="@color/blueGrayFirstTextColor"
             android:textSize="16sp"
-            android:id="@+id/tv_hd_path"
             app:fontFamily="@font/source_sans_pro_regular_family" />
     </LinearLayout>
 
@@ -247,12 +255,12 @@
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <TextView
+            android:id="@+id/tv_keys"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:textColor="@color/blueGrayFirstTextColor"
             android:textSize="16sp"
-            android:id="@+id/tv_keys"
             app:fontFamily="@font/source_sans_pro_regular_family" />
     </LinearLayout>
 
@@ -308,10 +316,9 @@
             android:gravity="end">
 
             <android.support.v7.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/switch_hide_wallet"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </LinearLayout>
@@ -353,9 +360,9 @@
             android:gravity="end">
 
             <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch_default_wallet"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/switch_default_wallet"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </LinearLayout>

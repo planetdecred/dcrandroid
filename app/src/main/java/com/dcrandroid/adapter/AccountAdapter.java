@@ -151,6 +151,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             holder.labelImmatureStakeGeneration.setTextColor(emptyColor);
         }
 
+        double stakeSum = balance.getImmatureReward() + balance.getLockedByTickets() + balance.getVotingAuthority() + balance.getImmatureStakeGeneration();
+        if (stakeSum != 0){
+            holder.staking_data.setVisibility(View.VISIBLE);
+        }
+
         if (account.getAccountNumber() == Integer.MAX_VALUE) {
             // Imported Account
             holder.hideWallet.setChecked(false);
@@ -242,7 +247,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         private SwitchCompat hideWallet, defaultWallet;
         private ImageView syncIndicator;
 
-        private LinearLayout detailsLayout, icon, arrowRight, account;
+        private LinearLayout detailsLayout, icon, arrowRight, account, staking_data;
         private View view;
 
         private MyViewHolder(View view) {
@@ -275,6 +280,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
             icon = view.findViewById(R.id.icon);
             arrowRight = view.findViewById(R.id.arrow_right);
             account = view.findViewById(R.id.account);
+            staking_data = view.findViewById(R.id.account_staking_data);
 
             // ImageView
             syncIndicator = view.findViewById(R.id.account_sync_indicator);
