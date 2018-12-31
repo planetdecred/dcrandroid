@@ -33,6 +33,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         if (BuildConfig.IS_TESTNET) {
             findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
+        }else{
+            ImageView decredSymbol = findViewById(R.id.nav_bar_logo);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) decredSymbol.getLayoutParams();
+            params.bottomMargin = (int) getResources().getDimension(R.dimen.mainnet_logo_bottom_margin);
+            decredSymbol.setLayoutParams(params);
         }
 
         mListView = findViewById(R.id.lv_nav);
