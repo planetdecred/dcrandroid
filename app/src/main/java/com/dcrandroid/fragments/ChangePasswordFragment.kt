@@ -5,8 +5,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -14,11 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.password.*
 import mobilewallet.Mobilewallet
 
@@ -103,13 +103,13 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
                         pd!!.dismiss()
                     }
 
-                    if(e.message == Mobilewallet.ErrInvalidPassphrase){
+                    if (e.message == Mobilewallet.ErrInvalidPassphrase) {
                         val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                 == Constants.PASSWORD) getString(R.string.invalid_current_password)
                         else getString(R.string.invalid_current_pin)
 
                         Toast.makeText(this@ChangePasswordFragment.context, message, Toast.LENGTH_LONG).show()
-                    }else {
+                    } else {
                         Toast.makeText(this@ChangePasswordFragment.context, Utils.translateError(this@ChangePasswordFragment.context, e), Toast.LENGTH_LONG).show()
                     }
                 }

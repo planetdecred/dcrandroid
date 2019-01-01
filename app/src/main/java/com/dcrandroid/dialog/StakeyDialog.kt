@@ -23,7 +23,7 @@ class StakeyDialog(context: Context?) : Dialog(context) {
         Thread(Runnable {
             try {
                 Thread.sleep(7000)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
             dismiss()

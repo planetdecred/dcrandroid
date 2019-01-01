@@ -5,10 +5,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import com.dcrandroid.R
-import android.text.TextPaint
 
 class PinView : View {
     private var activePaint: Paint? = null
@@ -118,7 +118,7 @@ class PinView : View {
             val xPos = usableWidth.toFloat() / 2
             val yPos = (usableHeight / 2 - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2)
             canvas.drawText(passCodeLength.toString(), xPos, yPos, mTextPaint)
-        }else {
+        } else {
 
             val totalContentWidth = pinSize + horizontalSpacing
             var startX = (usableWidth / 2) - ((totalContentWidth / 2) * passCodeLength)

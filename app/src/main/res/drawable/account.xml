@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_activated="true" android:drawable="@drawable/account_activated"/>
-    <item android:state_enabled="true" android:drawable="@drawable/account_default"/>
+    <item android:drawable="@drawable/account_activated" android:state_activated="true" />
+    <item android:drawable="@drawable/account_default" android:state_enabled="true" />
 </selector>

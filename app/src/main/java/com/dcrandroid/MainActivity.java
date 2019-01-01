@@ -14,15 +14,6 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -69,6 +60,15 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import mobilewallet.Mobilewallet;
 import mobilewallet.SpvSyncResponse;
 import mobilewallet.TransactionListener;
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         if (BuildConfig.IS_TESTNET) {
             findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ImageView decredSymbol = findViewById(R.id.nav_bar_logo);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) decredSymbol.getLayoutParams();
             params.bottomMargin = (int) getResources().getDimension(R.dimen.mainnet_logo_bottom_margin);
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         super.onResume();
         isForeground = true;
 
-        if(constants.peers == 0 && constants.synced){
+        if (constants.peers == 0 && constants.synced) {
             // restart spv synchronization.
             connectionStatus.performClick();
         }

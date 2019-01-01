@@ -13,12 +13,12 @@ import java.util.ArrayList;
  * Created by Macsleven on 28/12/2017.
  */
 
-public class Account implements Serializable{
+public class Account implements Serializable {
     private String accountName;
     private Balance balance;
     private int accountNumber, externalKeyCount, internalKeyCount, importedKeyCount;
 
-    public static ArrayList<Account> parse(String json) throws JSONException{
+    public static ArrayList<Account> parse(String json) throws JSONException {
         JSONObject obj = new JSONObject(json);
         JSONArray acc = obj.getJSONArray("Acc");
         ArrayList<Account> items = new ArrayList<>();
@@ -30,7 +30,7 @@ public class Account implements Serializable{
             account.setExternalKeyCount(accJSONObject.getInt(Constants.EXTERNAL_KEY_COUNT));
             account.setInternalKeyCount(accJSONObject.getInt(Constants.INTERNAL_KEY_COUNT));
             account.setImportedKeyCount(accJSONObject.getInt(Constants.IMPORTED_KEY_COUNT));
-            JSONObject balanceObj = accJSONObject.getJSONObject(Constants.BALANCE );
+            JSONObject balanceObj = accJSONObject.getJSONObject(Constants.BALANCE);
             Balance balance = new Balance();
             balance.setTotal(balanceObj.getLong(Constants.TOTAL));
             balance.setSpendable(balanceObj.getLong(Constants.SPENDABLE));
@@ -53,11 +53,11 @@ public class Account implements Serializable{
         this.balance = balance;
     }
 
-    public String getAccountName(){
-        return  accountName;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setAccountName(String accountName){
+    public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
 
@@ -73,27 +73,27 @@ public class Account implements Serializable{
         return (BuildConfig.IS_TESTNET ? Constants.TESTNET_HD_PATH : Constants.MAINNET_HD_PATH) + accountNumber + "'";
     }
 
-    public void setExternalKeyCount(int externalKeyCount) {
-        this.externalKeyCount = externalKeyCount;
-    }
-
     public int getExternalKeyCount() {
         return externalKeyCount;
     }
 
-    public void setImportedKeyCount(int importedKeyCount) {
-        this.importedKeyCount = importedKeyCount;
+    public void setExternalKeyCount(int externalKeyCount) {
+        this.externalKeyCount = externalKeyCount;
     }
 
     public int getImportedKeyCount() {
         return importedKeyCount;
     }
 
-    public void setInternalKeyCount(int internalKeyCount) {
-        this.internalKeyCount = internalKeyCount;
+    public void setImportedKeyCount(int importedKeyCount) {
+        this.importedKeyCount = importedKeyCount;
     }
 
     public int getInternalKeyCount() {
         return internalKeyCount;
+    }
+
+    public void setInternalKeyCount(int internalKeyCount) {
+        this.internalKeyCount = internalKeyCount;
     }
 }

@@ -2,9 +2,6 @@ package com.dcrandroid.activities;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,17 +10,46 @@ import android.widget.TextView;
 
 import com.dcrandroid.R;
 import com.dcrandroid.util.Utils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by collins on 2/17/18.
  */
 
 public class LogViewer extends AppCompatActivity {
-    private static final int MENU_ITEM= 1;
+    private static final int MENU_ITEM = 1;
 
     private TextView logTextView;
+    Thread buffer = new Thread() {
+        public void run() {
+            try {
+                String logPath = getIntent().getExtras().getString("log_path");
+                if (logPath == null) {
+                    return;
+                }
+                File file = new File(logPath);
+                if (!file.exists()) {
+                    Snackbar.make(logTextView, R.string.log_file_not_found, Snackbar.LENGTH_LONG).setAction(R.string.dismiss, null).show();
+                    return;
+                }
+
+                Process p = Runtime.getRuntime().exec("tail -f -n500 " + file);
+                java.io.BufferedReader input = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream()));
+                String line;
+                while ((line = input.readLine()) != null && !interrupted()) {
+                    addLine("\n" + line);
+                }
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,41 +68,16 @@ public class LogViewer extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(buffer != null && !buffer.isInterrupted()){
+        if (buffer != null && !buffer.isInterrupted()) {
             buffer.interrupt();
         }
     }
 
-    Thread buffer = new Thread(){
-        public void run(){
-            try {
-                String logPath = getIntent().getExtras().getString("log_path");
-                if(logPath == null){
-                    return;
-                }
-                File file = new File(logPath);
-                if(!file.exists()){
-                    Snackbar.make(logTextView, R.string.log_file_not_found, Snackbar.LENGTH_LONG).setAction(R.string.dismiss, null).show();
-                    return;
-                }
-
-                Process p = Runtime.getRuntime().exec("tail -f -n500 "+file);
-                java.io.BufferedReader input = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream()));
-                String line;
-                while((line = input.readLine()) != null && !interrupted()){
-                    addLine("\n" + line);
-                }
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    private void addLine(final String line){
+    private void addLine(final String line) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(buffer != null && !buffer.isInterrupted()) {
+                if (buffer != null && !buffer.isInterrupted()) {
                     logTextView.append(line);
                 }
             }

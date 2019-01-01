@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -24,6 +22,8 @@ import com.dcrandroid.util.Utils;
 
 import java.io.File;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import mobilewallet.LibWallet;
 import mobilewallet.Mobilewallet;
 

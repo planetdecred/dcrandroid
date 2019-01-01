@@ -1,12 +1,12 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import androidx.annotation.LayoutRes
 import kotlinx.android.synthetic.main.dropdown_item_1line.view.*
 
 class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val suggestions: ArrayList<String>) :
@@ -30,7 +30,7 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
     }
 
     override fun getCount(): Int {
-        return if(filteredArray.size >= 4) {
+        return if (filteredArray.size >= 4) {
             4
         } else {
             filteredArray.size

@@ -3,29 +3,31 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.dcrandroid.adapter.ConnectionAdapter;
 import com.dcrandroid.R;
-import com.dcrandroid.util.RecyclerTouchListener;
+import com.dcrandroid.adapter.ConnectionAdapter;
 import com.dcrandroid.data.Connection;
+import com.dcrandroid.util.RecyclerTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Macsleven on 05/01/2018.
  */
 
-public class ConnectionActivity extends AppCompatActivity{
+public class ConnectionActivity extends AppCompatActivity {
     private List<Connection> connectionList = new ArrayList<>();
     private ConnectionAdapter connectionAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ public class ConnectionActivity extends AppCompatActivity{
         }
         setContentView(R.layout.activity_connection_page);
         setTitle(getString(R.string.connection));
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.connection_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.connection_recycler_view);
         connectionAdapter = new ConnectionAdapter(connectionList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -58,24 +60,26 @@ public class ConnectionActivity extends AppCompatActivity{
         prepareConnectionData();
     }
 
-   public void prepareConnectionData(){
-       Connection connection= new Connection(getString(R.string.get_peer_info));
-       connectionList.add(connection);
+    public void prepareConnectionData() {
+        Connection connection = new Connection(getString(R.string.get_peer_info));
+        connectionList.add(connection);
     }
 
     @Override
-   public void onBackPressed() {
-       super.onBackPressed();
-   }
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
-   public interface ClickListener {
-       void onClick(View view, int position);
-       void onLongClick(View view, int position);
-   }
-    private void ConnectionFunction(String connection){
-        if(connection.equals("Get Peers Info")){
-            Intent intent = new Intent(ConnectionActivity.this,GetPeersActivity.class);
+    private void ConnectionFunction(String connection) {
+        if (connection.equals("Get Peers Info")) {
+            Intent intent = new Intent(ConnectionActivity.this, GetPeersActivity.class);
             startActivity(intent);
         }
+    }
+
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
     }
 }

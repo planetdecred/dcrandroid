@@ -3,20 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/tx_details_tx_hash"
-        android:title="@string/copy_hash"
         android:contentDescription="@string/tap_this_to_copy_transaction_hash"
-        app:showAsAction="never"
-        />
+        android:title="@string/copy_hash"
+        app:showAsAction="never" />
     <item
         android:id="@+id/tx_details_raw_tx"
-        android:title="@string/copy_raw_transaction"
         android:contentDescription="@string/tap_this_to_copy_raw_transaction_hex"
-        app:showAsAction="never"
-        />
+        android:title="@string/copy_raw_transaction"
+        app:showAsAction="never" />
     <item
         android:id="@+id/tx_viewOnDcrData"
-        android:title="@string/menu_view_on_dcrdata"
         android:contentDescription="@string/view_dcrdata_description"
-        app:showAsAction="never"
-        />
+        android:title="@string/menu_view_on_dcrdata"
+        app:showAsAction="never" />
 </menu>

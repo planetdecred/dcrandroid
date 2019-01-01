@@ -3,11 +3,10 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.dcrandroid.BuildConfig;
@@ -15,6 +14,7 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.Utils;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 
 /**
@@ -34,7 +34,7 @@ public class SetupWalletActivity extends AppCompatActivity {
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
         setContentView(R.layout.activity_setup_page);
-        TextView buildDate= findViewById(R.id.build_date);
+        TextView buildDate = findViewById(R.id.build_date);
         RelativeLayout createWalletLl = findViewById(R.id.button_create_wallet);
         RelativeLayout retrieveWalletLl = findViewById(R.id.button_retrieve_wallet);
 

@@ -1,16 +1,12 @@
 package com.dcrandroid.util
 
 
-import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-
 import com.dcrandroid.R
 import com.dcrandroid.view.PinView
-
-import java.util.ArrayList
-import java.util.Arrays
+import java.util.*
 
 
 class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinView) : View.OnClickListener {
@@ -63,7 +59,7 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
             val key = v as TextView
             passCode += key.text.toString()
             pinView.passCodeLength = passCode.length
-            if(listener != null){
+            if (listener != null) {
                 listener!!.onPinEnter(key.text.toString(), passCode)
             }
         } else if (R.id.keypad_del == v.id) {
@@ -72,10 +68,10 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
                 pinView.passCodeLength = passCode.length
             }
 
-            if(listener != null){
+            if (listener != null) {
                 listener!!.onPinEnter(null, passCode)
             }
-        }else if (R.id.keypad_ok == v.id){
+        } else if (R.id.keypad_ok == v.id) {
             if (listener != null) {
                 listener!!.onPassCodeCompleted(passCode)
             }

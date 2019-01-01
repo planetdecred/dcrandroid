@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:navigationBarColor" tools:targetApi="21">@android:color/white</item>
+        <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog"></style>

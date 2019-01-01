@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dcrandroid.MainApplication;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 
@@ -28,16 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -46,8 +40,8 @@ import java.util.Map;
 import mobilewallet.Mobilewallet;
 
 public class Utils {
-    public static ProgressDialog getProgressDialog(Context context,boolean cancelable, boolean cancelOnTouchOutside,
-                                                   String message){
+    public static ProgressDialog getProgressDialog(Context context, boolean cancelable, boolean cancelOnTouchOutside,
+                                                   String message) {
         ProgressDialog pd = new ProgressDialog(context);
         pd.setCancelable(cancelable);
         pd.setCanceledOnTouchOutside(cancelOnTouchOutside);
@@ -55,7 +49,7 @@ public class Utils {
         return pd;
     }
 
-    public static String getWordList(Context context){
+    public static String getWordList(Context context) {
         try {
             InputStream fin = context.getAssets().open("wordlist.txt");
             StringBuilder wordsList = new StringBuilder();
@@ -67,26 +61,26 @@ public class Utils {
             }
             fin.close();
             return wordsList.toString().trim();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
 
-    public static byte[] getHash(String hash){
+    public static byte[] getHash(String hash) {
         List<String> hashList = new ArrayList<>();
         String[] split = hash.split("");
-        if((split.length-1)%2 == 0) {
+        if ((split.length - 1) % 2 == 0) {
             String d = "";
-            for(int i = 0; i <  split.length -1; i += 2){
-                d = d.concat(split[(split.length - 1)  - (i+1)]
+            for (int i = 0; i < split.length - 1; i += 2) {
+                d = d.concat(split[(split.length - 1) - (i + 1)]
                         + split[(split.length - 1) - i]);
-                hashList.add(split[(split.length - 1)  - (i+1)]
+                hashList.add(split[(split.length - 1) - (i + 1)]
                         + split[(split.length - 1) - i]);
             }
             return hexStringToByteArray(d);
-        }else {
+        } else {
             System.err.println("Invalid Hash");
         }
         return null;
@@ -97,24 +91,24 @@ public class Utils {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }
 
-    public static String getRemoteCertificate(Context context){
+    public static String getRemoteCertificate(Context context) {
         try {
-            File path = new File(context.getFilesDir()+"/savedata");
-            if(!path.exists()){
+            File path = new File(context.getFilesDir() + "/savedata");
+            if (!path.exists()) {
                 path.mkdirs();
             }
-            File file = new File(path,"remote rpc.cert");
-            if(file.exists()){
+            File file = new File(path, "remote rpc.cert");
+            if (file.exists()) {
                 FileInputStream fin = new FileInputStream(file);
                 StringBuilder sb = new StringBuilder();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
                 String s;
-                while ((s = reader.readLine()) != null){
+                while ((s = reader.readLine()) != null) {
                     sb.append(s);
                     sb.append("\n");
                 }
@@ -130,17 +124,17 @@ public class Utils {
         return "";
     }
 
-    public static void setRemoteCetificate(Context context, String certificate){
+    public static void setRemoteCetificate(Context context, String certificate) {
         try {
-            File path = new File(context.getFilesDir()+"/savedata");
-            if(!path.exists()){
+            File path = new File(context.getFilesDir() + "/savedata");
+            if (!path.exists()) {
                 path.mkdirs();
             }
-            File file = new File(path,"remote rpc.cert");
-            if(file.exists()){
+            File file = new File(path, "remote rpc.cert");
+            if (file.exists()) {
                 file.delete();
             }
-            FileOutputStream fout  = new FileOutputStream(file);
+            FileOutputStream fout = new FileOutputStream(file);
             byte[] buff = certificate.getBytes();
             fout.write(buff, 0, buff.length);
             fout.flush();
@@ -152,10 +146,10 @@ public class Utils {
         }
     }
 
-    public static String getNetworkAddress(Context context){
+    public static String getNetworkAddress(Context context) {
         PreferenceUtil util = new PreferenceUtil(context);
         String addr = util.get(Constants.REMOTE_NODE_ADDRESS);
-        System.out.println("Util is using remote server: "+addr);
+        System.out.println("Util is using remote server: " + addr);
         return addr;
     }
 
@@ -175,48 +169,48 @@ public class Utils {
                     // convert to days
                     seconds /= 24;
 
-                    if(seconds > 6){
+                    if (seconds > 6) {
 
                         // convert to weeks
                         seconds /= 7;
-                        if(seconds > 3){
+                        if (seconds > 3) {
 
                             // convert to month
                             seconds /= 4;
 
-                            if(seconds > 11){
+                            if (seconds > 11) {
 
                                 //Convert to
                                 seconds /= 12;
 
-                                return seconds +"y "+ context.getString(R.string.ago);
+                                return seconds + "y " + context.getString(R.string.ago);
                             }
 
                             //months
-                            return seconds +"mo "+ context.getString(R.string.ago);
+                            return seconds + "mo " + context.getString(R.string.ago);
                         }
                         //weeks
-                        return seconds + "w "+ context.getString(R.string.ago);
+                        return seconds + "w " + context.getString(R.string.ago);
                     }
                     //days
-                    return seconds + "d "+ context.getString(R.string.ago);
+                    return seconds + "d " + context.getString(R.string.ago);
                 }
                 //hour
-                return seconds + "h "+ context.getString(R.string.ago);
+                return seconds + "h " + context.getString(R.string.ago);
             }
 
             //minutes
-            return seconds + "m "+ context.getString(R.string.ago);
+            return seconds + "m " + context.getString(R.string.ago);
         }
 
-        if(seconds < 0){
+        if (seconds < 0) {
             return context.getString(R.string.now);
         }
         //seconds
-        return seconds + "s "+ context.getString(R.string.ago);
+        return seconds + "s " + context.getString(R.string.ago);
     }
 
-    public static String formatDecred(long dcr){
+    public static String formatDecred(long dcr) {
         BigDecimal satoshi = BigDecimal.valueOf(dcr);
         BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         DecimalFormat format = new DecimalFormat();
@@ -224,11 +218,12 @@ public class Utils {
         return format.format(amount);
     }
 
-    public static String removeTrailingZeros(double dcr){
+    public static String removeTrailingZeros(double dcr) {
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#,###,###,##0.########");
         return format.format(dcr);
     }
+
     public static String formatDecredWithComma(long dcr) {
         double convertedDcr = Mobilewallet.amountCoin(dcr);
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -237,20 +232,21 @@ public class Utils {
         return df.format(convertedDcr);
     }
 
-    public static String formatDecredWithoutComma(long dcr){
+    public static String formatDecredWithoutComma(long dcr) {
         BigDecimal atom = new BigDecimal(dcr);
         BigDecimal amount = atom.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         DecimalFormat format = new DecimalFormat();
         format.applyPattern("#########0.########");
         return format.format(amount);
     }
-    public static double formatDecredToDobule(long dcr){
+
+    public static double formatDecredToDobule(long dcr) {
         BigDecimal satoshi = BigDecimal.valueOf(dcr);
         BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
         return amount.doubleValue();
     }
 
-    public static long signedSizeToAtom(long signedSize){
+    public static long signedSizeToAtom(long signedSize) {
         BigDecimal signed = new BigDecimal(signedSize);
         signed = signed.setScale(9, RoundingMode.HALF_UP);
 
@@ -262,9 +258,9 @@ public class Utils {
         return signed.longValue();
     }
 
-    public static String getPeerAddress(PreferenceUtil util){
+    public static String getPeerAddress(PreferenceUtil util) {
         String ip = util.get("peer_ip");
-        if (ip.length() == 0){
+        if (ip.length() == 0) {
             return "";
         }
         return ip;
@@ -278,7 +274,7 @@ public class Utils {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.text.ClipboardManager clipboard = (android.text.ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
-            if(clipboard != null) {
+            if (clipboard != null) {
                 clipboard.setText(copyText);
             }
         } else {
@@ -286,7 +282,7 @@ public class Utils {
                     ctx.getSystemService(Context.CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData
                     .newPlainText(ctx.getString(R.string.your_address), copyText);
-            if(clipboard != null)
+            if (clipboard != null)
                 clipboard.setPrimaryClip(clip);
         }
 
@@ -301,20 +297,21 @@ public class Utils {
         toast.show();
     }
 
-    public static String readFromClipboard(Context context){
+    public static String readFromClipboard(Context context) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            if(clipboard != null) return clipboard.getText().toString();
+            if (clipboard != null) return clipboard.getText().toString();
         } else {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
                     context.getSystemService(Context.CLIPBOARD_SERVICE);
-            if(clipboard != null && clipboard.hasPrimaryClip()) return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+            if (clipboard != null && clipboard.hasPrimaryClip())
+                return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
         }
         return "";
     }
 
-    public static void backupWalletDB(final Context context){
+    public static void backupWalletDB(final Context context) {
         try {
             long startTime = System.currentTimeMillis();
             //TODO: Mainnet support
@@ -323,7 +320,7 @@ public class Utils {
             if (backup.exists()) {
                 backup.delete();
             }
-            if(walletDb.exists() && walletDb.isFile()) {
+            if (walletDb.exists() && walletDb.isFile()) {
                 FileOutputStream out = new FileOutputStream(backup);
                 FileInputStream in = new FileInputStream(walletDb);
 
@@ -338,13 +335,13 @@ public class Utils {
                 in.close();
                 System.out.println("Backup took " + (System.currentTimeMillis() - startTime) + " ms");
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Backup Failed");
             e.printStackTrace();
         }
     }
 
-    public static void restoreWalletDB(final Context context){
+    public static void restoreWalletDB(final Context context) {
         try {
             long startTime = System.currentTimeMillis();
             //TODO: Mainnet support
@@ -368,16 +365,16 @@ public class Utils {
                 in.close();
                 System.out.println("Restore took " + (System.currentTimeMillis() - startTime) + " ms");
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Restore Failed");
             e.printStackTrace();
         }
     }
 
-    public static String translateError(Context ctx, Exception e){
-        switch (e.getMessage()){
+    public static String translateError(Context ctx, Exception e) {
+        switch (e.getMessage()) {
             case Mobilewallet.ErrInsufficientBalance:
-                if(!DcrConstants.getInstance().synced){
+                if (!DcrConstants.getInstance().synced) {
                     return ctx.getString(R.string.not_enought_funds_synced);
                 }
                 return ctx.getString(R.string.not_enough_funds);

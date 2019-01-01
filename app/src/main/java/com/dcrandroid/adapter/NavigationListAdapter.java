@@ -18,33 +18,7 @@ public class NavigationListAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
 
-    public static class NavigationBarItem{
-        private String title;
-        private int icon;
-
-        public NavigationBarItem(String title, int icon){
-            this.title = title;
-            this.icon = icon;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setIcon(int icon) {
-            this.icon = icon;
-        }
-
-        public int getIcon() {
-            return icon;
-        }
-    }
-
-    public NavigationListAdapter(Context ctx, List<NavigationBarItem> items){
+    public NavigationListAdapter(Context ctx, List<NavigationBarItem> items) {
         this.items = items;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -66,7 +40,7 @@ public class NavigationListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View vi, ViewGroup parent) {
-        if(vi == null){
+        if (vi == null) {
             vi = inflater.inflate(R.layout.nav_bar_list_item, parent, false);
         }
 
@@ -79,5 +53,31 @@ public class NavigationListAdapter extends BaseAdapter {
         icon.setImageResource(item.getIcon());
 
         return vi;
+    }
+
+    public static class NavigationBarItem {
+        private String title;
+        private int icon;
+
+        public NavigationBarItem(String title, int icon) {
+            this.title = title;
+            this.icon = icon;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public int getIcon() {
+            return icon;
+        }
+
+        public void setIcon(int icon) {
+            this.icon = icon;
+        }
     }
 }

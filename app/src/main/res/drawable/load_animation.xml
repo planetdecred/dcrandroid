@@ -2,40 +2,110 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:oneshot="false">
 
-    <item android:drawable="@drawable/load_animation_frame_01" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_02" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_03" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_04" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_05" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_06" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_07" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_08" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_09" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_10" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_11" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_12" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_13" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_14" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_15" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_16" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_17" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_18" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_19" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_20" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_21" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_22" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_23" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_24" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_25" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_26" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_27" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_28" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_29" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_30" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_31" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_32" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_33" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_34" android:duration="30" />
-    <item android:drawable="@drawable/load_animation_frame_35" android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_01"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_02"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_03"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_04"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_05"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_06"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_07"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_08"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_09"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_10"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_11"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_12"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_13"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_14"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_15"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_16"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_17"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_18"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_19"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_20"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_21"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_22"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_23"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_24"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_25"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_26"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_27"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_28"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_29"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_30"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_31"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_32"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_33"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_34"
+        android:duration="30" />
+    <item
+        android:drawable="@drawable/load_animation_frame_35"
+        android:duration="30" />
 
 </animation-list>

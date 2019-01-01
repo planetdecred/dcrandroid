@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -15,6 +14,8 @@ import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.DcrConstants;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -54,14 +55,14 @@ public class AddAccountActivity extends AppCompatActivity {
                 final String name = accountName.getText().toString().trim();
                 if (name.equals("")) {
                     Toast.makeText(AddAccountActivity.this, R.string.input_account_name, Toast.LENGTH_SHORT).show();
-                } else{
+                } else {
                     if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                         if (privatePassphrase.equals("")) {
                             Toast.makeText(AddAccountActivity.this, R.string.input_private_phrase, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         createAccount(name, privatePassphrase.getBytes());
-                    }else{
+                    } else {
                         Intent enterPinIntent = new Intent(AddAccountActivity.this, EnterPassCode.class);
                         startActivityForResult(enterPinIntent, PASSCODE_REQUEST_CODE);
                     }

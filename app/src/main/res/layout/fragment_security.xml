@@ -1,124 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@color/colorPrimary">
+
     <LinearLayout
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_width="0px"
         android:layout_height="0px"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/security_layout"
         >
+
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_message_description"
-        android:layout_marginBottom="15dp"
-        android:textSize="18sp"
-        android:textColor="@color/blueGrayFirstTextColor"
-        />
-        <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-            <EditText
-            android:id="@+id/et_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_message_description"
+            android:layout_marginBottom="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/blueGrayFirstTextColor"
+            />
+        
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address_colon"
+                android:maxLines="1"
+                android:inputType="text"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_validate_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_sign_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/message_colon"
+                android:inputType="text"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_required_sign_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/this_field_is_required"
+            android:textColor="@color/orangeTextColor"
+            android:textSize="14sp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:visibility="invisible" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:paddingLeft="0dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_verify_signature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/signature_colon"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_required_verify_signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orangeTextColor"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:textSize="14sp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/address_colon"
-            android:maxLines="1"
-                android:layout_marginLeft="-4dp"
-                android:layout_marginStart="-4dp"
-            android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
-        <TextView
-        android:id="@+id/tv_validate_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-        <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-            <EditText
-        android:id="@+id/et_sign_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-                android:layout_marginLeft="-4dp"
-                android:layout_marginStart="-4dp"
-        android:hint="@string/message_colon" />
-        </android.support.design.widget.TextInputLayout>
-        <TextView
-        android:id="@+id/tv_required_sign_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/this_field_is_required"
-        android:textColor="@color/orangeTextColor"
-        android:textSize="14sp"
-        android:visibility="invisible" />
-        <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-            android:paddingLeft="0dp"
-        android:layout_height="wrap_content">
-            <EditText
-        android:id="@+id/et_verify_signature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-                android:layout_marginLeft="-4dp"
-                android:layout_marginStart="-4dp"
-        android:hint="@string/signature_colon" />
-        </android.support.design.widget.TextInputLayout>
-        <TextView
-        android:id="@+id/tv_required_verify_signature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/orangeTextColor"
-        android:textSize="14sp" />
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="end">
+            android:layout_marginTop="5dp"
+            android:gravity="end">
+
             <Button
-            android:id="@+id/btn_sign_message"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="25dp"
+                android:id="@+id/btn_sign_message"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="25dp"
                 android:background="#e6eaed"
-            android:padding="5dp"
-            android:text="@string/sign_message"
-            android:textAllCaps="false"
+                android:padding="5dp"
+                android:text="@string/sign_message"
+                android:textAllCaps="false"
                 android:textColor="@color/blackTextColor38pc"
                 android:enabled="false"
-            android:textSize="14sp" />
+                android:textSize="14sp" />
+
             <Button
-            android:id="@+id/btn_copy"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="25dp"
-            android:background="#e6eaed"
-            android:padding="5dp"
-            android:text="@string/copy"
-            android:textAllCaps="false"
-            android:textColor="@color/blackTextColor38pc"
+                android:id="@+id/btn_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="25dp"
+                android:background="#e6eaed"
+                android:padding="5dp"
+                android:text="@string/copy"
+                android:textAllCaps="false"
+                android:textColor="@color/blackTextColor38pc"
                 android:enabled="false"
-            android:textSize="14sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/security_page_wallet_sync"
-        />
+        android:text="@string/security_page_wallet_sync" />
+
 </LinearLayout>

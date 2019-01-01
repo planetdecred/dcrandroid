@@ -8,8 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,10 +50,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 /**
  * Created by Macsleven on 28/11/2017.
  */
-public class ReceiveFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
+public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
     ImageView imageView;
     LinearLayout ReceiveContainer;

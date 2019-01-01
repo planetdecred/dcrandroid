@@ -6,19 +6,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.dcrandroid.R;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Macsleven on 11/15/2015.
@@ -40,9 +41,9 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
         }
         setContentView(R.layout.custom_ui_read);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             requestCameraPermission();
-        }else {
+        } else {
             startCamera();
         }
     }
@@ -56,7 +57,7 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
                 intent.putExtra(Constants.ADDRESS, address);
                 setResult(RESULT_OK, intent);
                 finish();
-            }else{
+            } else {
                 finish();
             }
         }
@@ -76,8 +77,7 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
                             }
                         }).setCancelable(false)
                         .show();
-            }
-            else {
+            } else {
                 startCamera();
             }
         }
@@ -86,11 +86,11 @@ public class ReaderActivity extends AppCompatActivity implements ActivityCompat.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 200){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 200) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //permission granted
                 startCamera();
-            }else{
+            } else {
                 Toast.makeText(this, R.string.denied_permission, Toast.LENGTH_SHORT).show();
                 finish();
             }
