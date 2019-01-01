@@ -9,15 +9,15 @@
             android:key="change_spending_passphrase"
             app:iconSpaceReserved="false"/>
        <SwitchPreference
-           android:title="@string/encrypt_wallet"
+           android:title="@string/startup_pin_password"
            android:key="encrypt"
            android:summary="@string/encrypt_wallet_summary"
            app:iconSpaceReserved="false"
            />
         <Preference
-            android:title="@string/change_encryption_pin_password"
+            android:title="@string/change_startup_pin_password"
             android:summary="@string/required_to_enter_app"
-            android:key="change_encryption_passphrase"
+            android:key="change_startup_passphrase"
             app:iconSpaceReserved="false"/>
         <SwitchPreference
             android:defaultValue="false"

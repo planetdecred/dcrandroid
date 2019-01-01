@@ -75,7 +75,7 @@ public class AddAccountActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PASSCODE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                final String passcode = data.getStringExtra(Constants.PIN);
+                final String passcode = data.getStringExtra(Constants.PASSPHRASE);
                 createAccount(accountName.getText().toString().trim(), passcode.getBytes());
             }
         }

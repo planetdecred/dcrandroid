@@ -20,12 +20,14 @@ import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.password.*
+import mobilewallet.Mobilewallet
 
 class ChangePasswordFragment : Fragment(), View.OnKeyListener {
 
     var oldPassphrase: String? = null
     var isSpendingPassword: Boolean? = null
     private var pd: ProgressDialog? = null
+    private var util: PreferenceUtil? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.password, container, false)
@@ -34,8 +36,9 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        util = PreferenceUtil(context!!)
         if (!isSpendingPassword!!) {
-            tv_prompt.setText(R.string.create_encryption_password)
+            tv_prompt.setText(R.string.create_startup_password)
         }
 
         password.addTextChangedListener(passwordWatcher)
@@ -75,7 +78,7 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
                 if (isSpendingPassword!!) {
                     show(getString(R.string.changing_password))
                 } else {
-                    show(getString(R.string.encrypting_wallet))
+                    show(getString(R.string.setting_startup_password))
                 }
                 val util = PreferenceUtil(this@ChangePasswordFragment.context!!)
                 if (isSpendingPassword!!) {
@@ -83,7 +86,7 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
                     util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PASSWORD)
                 } else {
                     wallet.changePublicPassphrase(oldPassphrase!!.toByteArray(), password.toByteArray())
-                    util.set(Constants.ENCRYPT_PASSPHRASE_TYPE, Constants.PASSWORD)
+                    util.set(Constants.STARTUP_PASSPHRASE_TYPE, Constants.PASSWORD)
                 }
 
                 activity!!.runOnUiThread {
@@ -99,7 +102,16 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()
                     }
-                    Toast.makeText(this@ChangePasswordFragment.context, Utils.translateError(this@ChangePasswordFragment.context, e), Toast.LENGTH_LONG).show()
+
+                    if(e.message == Mobilewallet.ErrInvalidPassphrase){
+                        val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
+                                == Constants.PASSWORD) getString(R.string.invalid_current_password)
+                        else getString(R.string.invalid_current_pin)
+
+                        Toast.makeText(this@ChangePasswordFragment.context, message, Toast.LENGTH_LONG).show()
+                    }else {
+                        Toast.makeText(this@ChangePasswordFragment.context, Utils.translateError(this@ChangePasswordFragment.context, e), Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }).start()

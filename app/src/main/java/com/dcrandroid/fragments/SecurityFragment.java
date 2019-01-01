@@ -185,7 +185,7 @@ public class SecurityFragment extends Fragment {
             pd.show();
             new Thread() {
                 public void run() {
-                    signMessage(data.getStringExtra(Constants.PIN).getBytes());
+                    signMessage(data.getStringExtra(Constants.PASSPHRASE).getBytes());
                 }
             }.start();
         }
