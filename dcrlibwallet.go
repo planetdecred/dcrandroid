@@ -1,4 +1,4 @@
-package mobilewallet
+package dcrlibwallet
 
 import (
 	"bytes"

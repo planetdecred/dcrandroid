@@ -1,4 +1,4 @@
-module github.com/raedahgroup/mobilewallet
+module github.com/raedahgroup/dcrlibwallet
 
 require (
 	github.com/AndreasBriese/bbloom v0.0.0-20180913140656-343706a395b7 // indirect
@@ -31,3 +31,5 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.2.2 // indirect
 )
+
+replace github.com/raedahgroup/dcrlibwallet => ./

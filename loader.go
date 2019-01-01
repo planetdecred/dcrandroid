@@ -2,7 +2,7 @@
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
-package mobilewallet
+package dcrlibwallet
 
 import (
 	"os"
@@ -16,7 +16,7 @@ import (
 	"github.com/decred/dcrwallet/ticketbuyer"
 	"github.com/decred/dcrwallet/wallet"
 	_ "github.com/decred/dcrwallet/wallet/drivers/bdb" // driver loaded during init
-	_ "github.com/raedahgroup/mobilewallet/badgerdb"   // initialize badger driver
+	_ "github.com/raedahgroup/dcrlibwallet/badgerdb"   // initialize badger driver
 )
 
 const (

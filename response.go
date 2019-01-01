@@ -1,4 +1,4 @@
-package mobilewallet
+package dcrlibwallet
 
 type UnsignedTransaction struct {
 	UnsignedTransaction       []byte
