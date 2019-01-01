@@ -24,10 +24,12 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.data.TransactionResponse.Transaction;
+import com.dcrandroid.data.TransactionResponse.Transaction.TransactionInput;
+import com.dcrandroid.data.TransactionResponse.Transaction.TransactionOutput;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.TransactionsResponse;
-import com.dcrandroid.util.TransactionsResponse.TransactionItem;
+import com.dcrandroid.util.TransactionsParser;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
@@ -142,10 +144,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             transactionType = transactionType.substring(0, 1).toUpperCase() + transactionType.substring(1).toLowerCase();
         }
 
-        ArrayList<TransactionsResponse.TransactionInput> inputs
-                = (ArrayList<TransactionsResponse.TransactionInput>) extras.getSerializable(Constants.INPUTS);
-        ArrayList<TransactionsResponse.TransactionOutput> outputs
-                = (ArrayList<TransactionsResponse.TransactionOutput>) extras.getSerializable(Constants.OUTPUTS);
+        ArrayList<TransactionInput> inputs
+                = (ArrayList<TransactionInput>) extras.getSerializable(Constants.INPUTS);
+        ArrayList<TransactionOutput> outputs
+                = (ArrayList<TransactionOutput>) extras.getSerializable(Constants.OUTPUTS);
 
         loadInOut(inputs, outputs);
 
@@ -203,9 +205,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         try {
-            TransactionItem transaction = TransactionsResponse.parseTransaction(wallet.getTransaction(Utils.getHash(txHash)));
+            Transaction transaction = TransactionsParser.parseTransaction(wallet.getTransaction(Utils.getHash(txHash)));
 
-            rawTx = transaction.raw;
+            rawTx = transaction.getRaw();
 
             tvHash.setText(txHash);
             value.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(transaction.getAmount()) + " " + getString(R.string.dcr)));
@@ -215,7 +217,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
             date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
 
-            transactionType = transaction.type;
+            transactionType = transaction.getType();
             if (transactionType.equals(Constants.TICKET_PURCHASE)) {
                 transactionType = getString(R.string.ticket_purchase);
             } else {
@@ -253,7 +255,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
             });
 
-            loadInOut(transaction.inputs, transaction.outputs);
+            loadInOut(transaction.getInputs(), transaction.getOutputs());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,7 +264,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void loadInOut(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput) {
+    private void loadInOut(ArrayList<TransactionInput> usedInput, ArrayList<TransactionOutput> usedOutput) {
 
         ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
         ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();

@@ -26,6 +26,7 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.TransactionDetailsActivity
 import com.dcrandroid.adapter.TransactionAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.TransactionResponse.Transaction
 import com.dcrandroid.util.*
 import dcrlibwallet.GetTransactionsResponse
 import kotlinx.android.synthetic.main.content_history.*
@@ -42,8 +43,8 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private var transactionAdapter: TransactionAdapter? = null
     private var sortSpinnerAdapter: ArrayAdapter<String>? = null
 
-    private val transactionList = ArrayList<TransactionsResponse.TransactionItem>()
-    private var fixedTransactionList: ArrayList<TransactionsResponse.TransactionItem> = ArrayList()
+    private val transactionList = ArrayList<Transaction>()
+    private var fixedTransactionList: ArrayList<Transaction> = ArrayList()
     private val availableTxTypes = ArrayList<String>()
 
     private var constants: WalletData? = null
@@ -92,16 +93,16 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                 val history = transactionList[position]
                 val i = Intent(context, TransactionDetailsActivity::class.java)
                 val extras = Bundle()
-                extras.putLong(Constants.AMOUNT, history.getAmount())
-                extras.putLong(Constants.FEE, history.getFee())
-                extras.putLong(Constants.TIMESTAMP, history.getTimestamp())
-                extras.putInt(Constants.HEIGHT, history.getHeight())
+                extras.putLong(Constants.AMOUNT, history.amount)
+                extras.putLong(Constants.FEE, history.fee)
+                extras.putLong(Constants.TIMESTAMP, history.timestamp)
+                extras.putInt(Constants.HEIGHT, history.height)
                 extras.putLong(Constants.TOTAL_INPUT, history.totalInput)
-                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutputs)
+                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutput)
                 extras.putString(Constants.TYPE, history.type)
                 extras.putString(Constants.HASH, history.hash)
                 extras.putString(Constants.RAW, history.raw)
-                extras.putInt(Constants.DIRECTION, history.getDirection())
+                extras.putInt(Constants.DIRECTION, history.direction)
                 extras.putSerializable(Constants.INPUTS, history.inputs)
                 extras.putSerializable(Constants.OUTPUTS, history.outputs)
                 i.putExtras(extras)
@@ -223,13 +224,13 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
             val file = File(path, "history_transactions")
             if (file.exists()) {
                 val objectInputStream = ObjectInputStream(FileInputStream(file))
-                val temp = objectInputStream.readObject() as List<TransactionsResponse.TransactionItem>
+                val temp = objectInputStream.readObject() as List<Transaction>
                 fixedTransactionList.clear()
                 fixedTransactionList.addAll(temp)
                 transactionList.clear()
                 transactionList.addAll(0, fixedTransactionList)
                 val latestTx = Collections.min(temp, TransactionComparator.MinConfirmationSort())
-                latestTransactionHeight = latestTx.getHeight() + 1
+                latestTransactionHeight = latestTx.height + 1
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -240,20 +241,32 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         if (activity == null) {
             return
         }
+
         activity!!.runOnUiThread {
-            val response = TransactionsResponse.parse(s)
-            if (response.transactions.size == 0) {
-                no_history.setText(R.string.no_transactions_have_occurred)
+            val response = TransactionsParser.parseTransactions(s)
+            if (response.minedTransactions.size == 0 && response.unminedTransactions.size == 0) {
+                no_history.setText(R.string.no_transactions_have_occured)
                 no_history.visibility = View.VISIBLE
                 history_recycler_view.visibility = View.GONE
                 if (swipe_refresh_layout.isRefreshing) {
                     swipe_refresh_layout.isRefreshing = false
                 }
             } else {
-                fixedTransactionList = response.transactions
-                Collections.sort(fixedTransactionList, TransactionComparator.TimestampSort())
+                val minedTransactions = response.minedTransactions
+                val unminedTransactions = response.unminedTransactions
+
+                Collections.sort<Transaction>(minedTransactions, TransactionComparator.TimestampSort())
+                Collections.sort<Transaction>(unminedTransactions, TransactionComparator.TimestampSort())
+
+                fixedTransactionList.removeDuplicates(minedTransactions)
+
+                fixedTransactionList.addAll(0, minedTransactions.reversed())
+                fixedTransactionList.addAll(0, unminedTransactions.reversed())
+
+                saveTransactions()
+
                 val latestTx = Collections.min(fixedTransactionList, TransactionComparator.MinConfirmationSort())
-                latestTransactionHeight = latestTx.getHeight() + 1
+                latestTransactionHeight = latestTx.height + 1
 
                 saveTransactions()
 
@@ -365,13 +378,13 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         transactionAdapter!!.notifyDataSetChanged()
     }
 
-    fun newTransaction(transaction: TransactionsResponse.TransactionItem) {
+    fun newTransaction(transaction: Transaction) {
         if (transactionList.find(transaction.hash) != -1) {
             // Transaction is a duplicate
             return
         }
 
-        latestTransactionHeight = transaction.getHeight() + 1
+        latestTransactionHeight = transaction.height + 1
         fixedTransactionList.add(0, transaction)
         println("New transaction hash ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
@@ -400,7 +413,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                 val transaction = transactionList[i]
                 transaction.height = height
                 transaction.animate = false
-                latestTransactionHeight = transaction.getHeight() + 1
+                latestTransactionHeight = transaction.height + 1
                 transactionList[i] = transaction
                 activity!!.runOnUiThread { transactionAdapter!!.notifyDataSetChanged() }
                 break
@@ -412,7 +425,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         if (height - latestTransactionHeight < 2) {
             for (i in transactionList.indices) {
                 val tx = transactionList[i]
-                if (height - tx.getHeight() >= 2) {
+                if (height - tx.height >= 2) {
                     continue
                 }
                 tx.animate = false
@@ -448,7 +461,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         }
     }
 
-    private fun ArrayList<TransactionsResponse.TransactionItem>.find(hash: String): Int {
+    private fun ArrayList<Transaction>.find(hash: String): Int {
         for (i in this.indices) {
             val item = this[i]
             if (item.hash == hash) {
@@ -458,10 +471,19 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         return -1
     }
 
-    private fun ArrayList<TransactionsResponse.TransactionItem>.animateNewItems(start: Int, count: Int) {
+    private fun ArrayList<Transaction>.animateNewItems(start: Int, count: Int) {
         for (i: Int in start..count) {
             val item = this[i]
             item.animate = true
+        }
+    }
+
+    private fun ArrayList<Transaction>.removeDuplicates(txList: ArrayList<Transaction>) {
+        for (transaction in txList) {
+            val index = this.find(transaction.hash)
+            if (index != -1) {
+                this.removeAt(index)
+            }
         }
     }
 }

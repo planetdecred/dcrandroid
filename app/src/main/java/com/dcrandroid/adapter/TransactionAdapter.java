@@ -20,9 +20,9 @@ import android.widget.TextView;
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.data.TransactionResponse.Transaction;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
@@ -40,12 +40,12 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
-    private List<TransactionItem> historyList;
+    private List<Transaction> historyList;
     private LayoutInflater layoutInflater;
     private PreferenceUtil util;
     private Context context;
 
-    public TransactionAdapter(List<TransactionItem> historyListList, Context context) {
+    public TransactionAdapter(List<Transaction> historyListList, Context context) {
         this.historyList = historyListList;
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,7 +63,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (position > historyList.size() - 1) {
             return;
         }
-        TransactionItem history = historyList.get(position);
+        Transaction history = historyList.get(position);
 
         int confirmedTextColor = context.getResources().getColor(R.color.greenConfirmedTextColor);
         int pendingTextColor = context.getResources().getColor(R.color.bluePendingTextColor);
@@ -89,14 +89,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }
         }
 
-        if (history.animate) {
+        if (history.getAnimate()) {
             Animation blinkAnim = AnimationUtils.loadAnimation(holder.view.getContext(), R.anim.anim_blink);
             holder.view.setAnimation(blinkAnim);
-            history.animate = false;
+            history.setAnimate(false);
         }
 
         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
-        calendar.setTimeInMillis(history.timestamp * 1000);
+        calendar.setTimeInMillis(history.getTimestamp() * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
 
         holder.tvDateOfTransaction.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
@@ -105,7 +105,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         int requiredConfs = util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : 2;
 
-        if (history.type.equals(Constants.REGULAR)) {
+        if (history.getType().equals(Constants.REGULAR)) {
             String strAmount = Utils.formatDecredWithComma(history.getAmount());
 
             holder.Amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
@@ -119,7 +119,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 holder.minus.setVisibility(View.INVISIBLE);
                 holder.txType.setBackgroundResource(R.drawable.ic_tx_transferred);
             }
-        } else if (history.type.equals(Constants.TICKET_PURCHASE)) {
+        } else if (history.getType().equals(Constants.TICKET_PURCHASE)) {
             holder.minus.setVisibility(View.INVISIBLE);
             holder.Amount.setText(R.string.ticket);
             holder.txType.setBackgroundResource(R.drawable.immature_ticket);
@@ -171,7 +171,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
                 holder.txType.setBackgroundResource(R.drawable.live_ticket);
             }
-        } else if (history.type.equals(Constants.VOTE)) {
+        } else if (history.getType().equals(Constants.VOTE)) {
             holder.Amount.setText(R.string.vote);
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.vote);
