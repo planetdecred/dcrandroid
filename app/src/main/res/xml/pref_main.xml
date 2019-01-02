@@ -70,6 +70,7 @@
             android:key="user-agent"
             android:summary="@string/user_agent_summary"
             android:title="@string/user_agent"
+            app:iconSpaceReserved="false"
             />
         <SwitchPreference
             android:key="wifi_sync"

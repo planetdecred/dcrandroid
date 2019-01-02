@@ -342,19 +342,24 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 if (networkInfo != null && networkInfo.isConnected()) {
                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
                         setConnectionStatus(getString(R.string.connect_to_wifi));
+                        constants.wallet.dropSpvConnection();
                         return;
                     }
                 } else {
                     setConnectionStatus(getString(R.string.connect_to_wifi));
+                    constants.wallet.dropSpvConnection();
+                    return;
                 }
             }
         }
 
+        constants.syncing = true;
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
         } else {
             setConnectionStatus(R.string.connecting_to_rpc_server);
         }
+
         Intent syncIntent = new Intent(this, SyncService.class);
         startService(syncIntent);
     }
@@ -974,6 +979,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onSynced(boolean b) {
         constants.synced = b;
+        constants.syncing = false;
         if (b) {
             constants.syncStartPoint = -1;
             constants.syncEndPoint = -1;
@@ -1009,6 +1015,28 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
 
             startBlockUpdate();
+        }else{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    connectionStatus.setBackgroundColor(getResources().getColor(R.color.lightOrangeBackgroundColor));
+                    updatePeerCount();
+                    setBestBlockTime(-1);
+                    setChainStatus(null);
+
+                    sendBroadcast(new Intent(Constants.SYNCED));
+
+                    syncIndicator.setVisibility(View.VISIBLE);
+                    totalBalance.setVisibility(View.GONE);
+                    syncIndicator.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
+                            syncAnimation.start();
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -1044,22 +1072,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
-                setConnectionStatus(R.string.connecting_to_peers);
-                connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-                constants.synced = false;
                 constants.wallet.dropSpvConnection();
-                sendBroadcast(new Intent(Constants.SYNCED));
-
-                syncIndicator.setVisibility(View.VISIBLE);
-                totalBalance.setVisibility(View.GONE);
-                syncIndicator.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
-                        syncAnimation.start();
-                    }
-                });
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
                 connectToDecredNetwork();
                 break;
@@ -1076,13 +1089,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                     if (networkInfo != null) {
                         if(networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                            connectionStatus.setBackgroundColor(getResources().getColor(R.color.lightOrangeBackgroundColor));
-                            constants.synced = false;
                             constants.wallet.dropSpvConnection();
-                            sendBroadcast(new Intent(Constants.SYNCED));
+                            setConnectionStatus(getString(R.string.connect_to_wifi));
                         }else{
-                            if(!constants.synced){
-                                connectionStatus.performClick();
+                            if(!constants.synced && !constants.syncing){
+                                connectToDecredNetwork();
                             }
                         }
                     }

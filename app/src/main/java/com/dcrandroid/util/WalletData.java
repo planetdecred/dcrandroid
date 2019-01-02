@@ -9,7 +9,7 @@ import dcrlibwallet.LibWallet;
 public class WalletData {
     private static final WalletData ourInstance = new WalletData();
     public LibWallet wallet;
-    public boolean synced = false;
+    public boolean synced = false, syncing = false;
     public int peers = 0;
 
     public int syncStartPoint = -1, syncCurrentPoint = -1, syncEndPoint = -1;
