@@ -120,7 +120,6 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
-
         if (state == Mobilewallet.PROGRESS) {
             val currentTime = System.currentTimeMillis() / 1000
             val estimatedBlocks = (currentTime - lastHeaderTime) / BuildConfig.TargetTimePerBlock + wallet!!.bestBlock
@@ -131,12 +130,20 @@ class SyncService : Service(), SpvSyncResponse {
             contentText = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched))
 
             showNotification()
+        }else if(state == Mobilewallet.FINISH){
+            contentTitle = null
+            contentText = null
+            showNotification()
         }
     }
 
     override fun onDiscoveredAddresses(state: String) {
         if (state == Mobilewallet.START) {
             contentTitle = "(2/3) Discovering Addresses..."
+            contentText = null
+            showNotification()
+        }else if (state == Mobilewallet.FINISH){
+            contentTitle = null
             contentText = null
             showNotification()
         }
@@ -174,11 +181,8 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onSynced(synced: Boolean) {
-        if (synced) {
-            println("Service is Synced")
-            stopForeground(true)
-            stopSelf()
-        }
+        stopForeground(true)
+        stopSelf()
     }
 
 }
