@@ -36,8 +36,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import dcrlibwallet.LibWallet;
 import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.LibWallet;
 
 import static android.app.Activity.RESULT_OK;
 

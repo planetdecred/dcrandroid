@@ -36,7 +36,7 @@ class CoinFormat {
             return spannable
         }
 
-        fun format(amount: Long): Spannable{
+        fun format(amount: Long): Spannable {
             return format(Dcrlibwallet.amountCoin(amount))
         }
 

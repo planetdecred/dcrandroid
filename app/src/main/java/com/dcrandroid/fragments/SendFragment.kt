@@ -30,9 +30,9 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
-import kotlinx.android.synthetic.main.fragment_send.*
-import dcrlibwallet.LibWallet
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.LibWallet
+import kotlinx.android.synthetic.main.fragment_send.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -519,7 +519,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         if (pd!!.isShowing) {
                             pd!!.dismiss()
                         }
-                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase){
+                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                             val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                     == Constants.PASSWORD) getString(R.string.invalid_password)
                             else getString(R.string.invalid_pin)

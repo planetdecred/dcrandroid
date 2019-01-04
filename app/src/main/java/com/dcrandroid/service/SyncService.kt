@@ -12,10 +12,9 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
-import dcrlibwallet.LibWallet
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.LibWallet
 import dcrlibwallet.SpvSyncResponse
-import java.lang.Exception
 import java.util.*
 
 const val NOTIFICATION_ID = 4
@@ -162,7 +161,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if(state == Dcrlibwallet.PROGRESS){
+        if (state == Dcrlibwallet.PROGRESS) {
             contentTitle = "(3/3) Rescanning Blocks"
 
             val bestBlock = wallet!!.bestBlock

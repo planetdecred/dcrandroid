@@ -24,8 +24,8 @@ import java.io.File;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import dcrlibwallet.LibWallet;
 import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.LibWallet;
 
 /**
  * Created by Macsleven on 24/12/2017.

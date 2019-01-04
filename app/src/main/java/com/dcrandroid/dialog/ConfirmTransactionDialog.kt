@@ -15,8 +15,8 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
-import kotlinx.android.synthetic.main.confirm_tx_dialog.*
 import dcrlibwallet.Dcrlibwallet
+import kotlinx.android.synthetic.main.confirm_tx_dialog.*
 import java.text.DecimalFormat
 
 class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClickListener {

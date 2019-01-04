@@ -33,9 +33,9 @@ before_install:
   - sudo ln -s $GOPATH/bin/gobind /usr/bin/gobind && sudo ln -s $GOPATH/bin/gomobile /usr/bin/gomobile
   - gomobile init -ndk $ANDROID_NDK_HOME
   - mkdir -p src/github.com/raedahgroup && cd src/github.com/raedahgroup
-  - git clone https://github.com/raedahgroup/mobilewallet && cd mobilewallet
+  - git clone https://github.com/raedahgroup/dcrlibwallet && cd dcrlibwallet
   - export GO111MODULE=on
   - go mod download && go mod vendor
   - export GO111MODULE=off
   - gomobile bind -target=android/386
-  - cp mobilewallet.aar $GOPATH/../dcrandroid/app/libs/mobilewallet.aar && cd $GOPATH/../dcrandroid
+  - cp dcrlibwallet.aar $GOPATH/../dcrandroid/app/libs/dcrlibwallet.aar && cd $GOPATH/../dcrandroid
