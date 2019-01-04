@@ -169,7 +169,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         }
 
         if (!constants!!.synced) {
-            no_history.setText(R.string.sync_in_progress)
+            no_history.setText(R.string.synchronizing)
             swipe_refresh_layout.isRefreshing = false
             return
         }

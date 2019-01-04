@@ -123,7 +123,10 @@ class SyncService : Service(), SpvSyncResponse {
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
 
-        if (state == Mobilewallet.PROGRESS) {
+        if(state == Dcrlibwallet.START){
+            contentTitle = getString(R.string.fetching_headers)
+            contentText = null
+        }else if (state == Dcrlibwallet.PROGRESS) {
 
             var count = constants!!.syncCurrentPoint
 
@@ -134,16 +137,16 @@ class SyncService : Service(), SpvSyncResponse {
             var fetchedPercentage = count.toFloat() / constants!!.syncEndPoint * 100
             fetchedPercentage = if (fetchedPercentage > 100) 100F else fetchedPercentage
 
-            contentTitle = "(1/3) ${getString(R.string.fetching_headers)}"
+            contentTitle = getString(R.string.fetching_headers)
             contentText = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched))
-
-            showNotification()
         }
+
+        showNotification()
     }
 
     override fun onDiscoveredAddresses(state: String) {
         if (state == Dcrlibwallet.START) {
-            contentTitle = "(2/3) Discovering Addresses..."
+            contentTitle = getString(R.string.notification_discovering_used_addresses)
             contentText = null
             showNotification()
         }
@@ -168,13 +171,14 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if (state == Dcrlibwallet.PROGRESS) {
+        if (state == Dcrlibwallet.START){
+            contentTitle = getString(R.string.scanning_blocks)
+            contentText = null
+        }else if (state == Dcrlibwallet.PROGRESS) {
             contentTitle = "(3/3) Rescanning Blocks"
 
             val bestBlock = wallet!!.bestBlock
-            val scannedPercentage = Math.round(rescannedThrough.toFloat() / bestBlock * 100)
-
-            contentText = String.format(Locale.getDefault(), "%s: %d(%d%%)", getString(R.string.latest_block), bestBlock, scannedPercentage)
+            contentText = getString(R.string.notification_rescan_height_format, rescannedThrough, bestBlock)
 
             showNotification()
         }

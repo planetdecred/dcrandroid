@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--General-->
     <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
@@ -80,6 +80,12 @@
     <string name="dismiss">Dismiss</string>
     <string name="welcome_title">Welcome to Decred Wallet.</string>
     <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
+    <string name="less_than_one_day">&lt;1 day</string>
+    <string name="less_than_one_day_ago">&lt;1 day ago</string>
+    <string name="one_day">1 day</string>
+    <string name="one_day_ago">1 day ago</string>
+    <string name="multiple_days">%1$d days</string>
+    <string name="multiple_days_ago">%1$d days ago</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -214,7 +220,6 @@
     <string name="tx_hash_copy">Hash copied to clipboard</string>
     <string name="tx_notify_title">Incoming Transaction Notifications</string>
     <string name="no_transactions">No transactions</string>
-    <string name="sync_in_progress">Sync in Progress</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
     <string name="label_hash">HASH:</string>
     <string name="transaction">Transaction</string>
@@ -263,9 +268,11 @@
     <string name="rescan_block">Rescan Blockchain</string>
     <string name="starting_height">starting height</string>
     <string name="current_height">Current height</string>
-    <string name="fetching_headers">Fetching Headers</string>
+    <string name="fetching_headers">(1/3) Fetching Headers</string>
+    <string name="fetching_headers_format">%1$.1f%% (1/3) Fetching Headers</string>
     <string name="rescan_blocks_confirmation">Are you sure? This could take some time.</string>
     <string name="rescanning_in_progress">Rescanning in progress…</string>
+    <string name="rescanning_in_progress_format">%1$.1f%% (3/3) Rescanning in progress…</string>
     <!--/Block chain-->
 
     <!--QR Code-->
@@ -276,7 +283,8 @@
     <!--/QR Code-->
 
     <!--Address-->
-    <string name="discovering_used_addresses">Discovering used addresses</string>
+    <string name="discovering_used_addresses_format">%1$.1f%% (2/3) Discovering used addresses</string>
+    <string name="notification_discovering_used_addresses">(2/3) Discovering used addresses…</string>
     <string name="address_copy_text">Address copied to clipboard</string>
     <string name="your_address">Your address</string>
     <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
@@ -504,7 +512,16 @@
     <string name="network_synchronization">Please wait for network synchronization.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="deleting_wallet">Deleting Wallet…</string>
-    <string name="percentage_completed">%1$.1f\%% completed, %2$s min remaining.\nBlock height %3$d of %4$d.</string>
+    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.\n</string>
+    <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
+    <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
+    <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
+    <string name="scanning_blocks">(3/3) Scanning blocks…</string>
+    <string name="overview_rescan_height_format">Scanning %1$d of %2$d.\n%3$.1f%% through step 3 of 3.</string>
+    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$.1f%% through step 1 of 3.\nYour wallet is %4$s days behind.</string>
+    <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
+    <string name="discovering_used_addresses">Discovering used addresses.\n%1$.1f%% through step 2 of 3.</string>
     <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
     <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
+    <string name="synchronizing">Synchronizing</string>
 </resources>

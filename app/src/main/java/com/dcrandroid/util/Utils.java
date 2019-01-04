@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import dcrlibwallet.Dcrlibwallet;
 
@@ -151,6 +152,28 @@ public class Utils {
         String addr = util.get(Constants.REMOTE_NODE_ADDRESS);
         System.out.println("Util is using remote server: " + addr);
         return addr;
+    }
+
+    public static String calculateDays(long seconds, Context context){
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        if (days == 0){
+            return context.getString(R.string.less_than_one_day);
+        }else if(days == 1){
+            return context.getString(R.string.one_day);
+        }
+
+        return context.getString(R.string.multiple_days, days);
+    }
+
+    public static String calculateDaysAgo(long seconds, Context context){
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        if (days == 0){
+            return context.getString(R.string.less_than_one_day_ago);
+        }else if(days == 1){
+            return context.getString(R.string.one_day_ago);
+        }
+
+        return context.getString(R.string.multiple_days_ago, days);
     }
 
     public static String calculateTime(long seconds, Context context) {
