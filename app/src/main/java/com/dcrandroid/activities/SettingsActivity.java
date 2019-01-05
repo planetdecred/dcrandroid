@@ -25,7 +25,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
-import mobilewallet.Mobilewallet;
+import dcrlibwallet.Dcrlibwallet;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -299,7 +299,7 @@ public class SettingsActivity extends AppCompatActivity {
                                         Toast.makeText(getContext(), R.string.check_progress_in_navigation_bar, Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
-                                        if (e.getMessage().equals(Mobilewallet.ErrInvalid)) {
+                                        if (e.getMessage().equals(Dcrlibwallet.ErrInvalid)) {
                                             Toast.makeText(getContext(), R.string.wallet_is_rescanning, Toast.LENGTH_LONG).show();
                                         } else {
                                             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -4,7 +4,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
-import mobilewallet.Mobilewallet
+import dcrlibwallet.Dcrlibwallet
 import java.util.regex.Pattern
 
 class CoinFormat {
@@ -37,7 +37,7 @@ class CoinFormat {
         }
 
         fun format(amount: Long): Spannable {
-            return format(Mobilewallet.amountCoin(amount))
+            return format(Dcrlibwallet.amountCoin(amount))
         }
 
         fun format(amount: Double): Spannable {

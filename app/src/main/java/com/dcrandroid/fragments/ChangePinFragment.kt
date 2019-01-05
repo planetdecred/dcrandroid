@@ -15,8 +15,8 @@ import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.KeyPad
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.passcode.*
-import mobilewallet.Mobilewallet
 
 class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
 
@@ -130,7 +130,7 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()
                     }
-                    if (e.message == Mobilewallet.ErrInvalidPassphrase) {
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                         val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                 == Constants.PASSWORD) getString(R.string.invalid_current_password)
                         else getString(R.string.invalid_current_pin)

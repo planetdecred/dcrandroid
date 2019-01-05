@@ -15,8 +15,8 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.confirm_tx_dialog.*
-import mobilewallet.Mobilewallet
 import java.text.DecimalFormat
 
 class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClickListener {
@@ -45,7 +45,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
 
         val tvTitle = findViewById<TextView>(R.id.title)
 
-        tvTitle.text = context.getString(R.string.sending) + " ${format.format(Mobilewallet.amountCoin(amount!!))} DCR"
+        tvTitle.text = context.getString(R.string.sending) + " ${format.format(Dcrlibwallet.amountCoin(amount!!))} DCR"
 
         val tvAddress = findViewById<TextView>(R.id.address)
         tvAddress.text = "${context.getString(R.string.to)} \n $address"
@@ -60,11 +60,11 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         val tvFee = findViewById<TextView>(R.id.fee)
 
         val estFee = Utils.signedSizeToAtom(fee!!)
-        tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(Mobilewallet.amountCoin(estFee))} DCR ($fee B)"
+        tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(Dcrlibwallet.amountCoin(estFee))} DCR ($fee B)"
 
         val tvTotal = findViewById<TextView>(R.id.total)
 
-        tvTotal.text = "${context.getString(R.string.total)} ${Mobilewallet.amountCoin(amount!! + estFee)} DCR"
+        tvTotal.text = "${context.getString(R.string.total)} ${Dcrlibwallet.amountCoin(amount!! + estFee)} DCR"
 
         val util = PreferenceUtil(context)
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {

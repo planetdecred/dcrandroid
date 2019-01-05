@@ -25,8 +25,8 @@ import com.dcrandroid.adapter.TransactionAdapter
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.*
+import dcrlibwallet.GetTransactionsResponse
 import kotlinx.android.synthetic.main.content_overview.*
-import mobilewallet.GetTransactionsResponse
 import java.io.*
 import java.util.*
 

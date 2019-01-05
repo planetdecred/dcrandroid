@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import mobilewallet.Mobilewallet;
+import dcrlibwallet.Dcrlibwallet;
 
 public class Utils {
     public static ProgressDialog getProgressDialog(Context context, boolean cancelable, boolean cancelOnTouchOutside,
@@ -225,7 +225,7 @@ public class Utils {
     }
 
     public static String formatDecredWithComma(long dcr) {
-        double convertedDcr = Mobilewallet.amountCoin(dcr);
+        double convertedDcr = Dcrlibwallet.amountCoin(dcr);
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
         DecimalFormat df = (DecimalFormat) nf;
         df.applyPattern("#,###,###,##0.########");
@@ -373,22 +373,22 @@ public class Utils {
 
     public static String translateError(Context ctx, Exception e) {
         switch (e.getMessage()) {
-            case Mobilewallet.ErrInsufficientBalance:
+            case Dcrlibwallet.ErrInsufficientBalance:
                 if (!DcrConstants.getInstance().synced) {
                     return ctx.getString(R.string.not_enought_funds_synced);
                 }
                 return ctx.getString(R.string.not_enough_funds);
-            case Mobilewallet.ErrEmptySeed:
+            case Dcrlibwallet.ErrEmptySeed:
                 return ctx.getString(R.string.empty_seed);
-            case Mobilewallet.ErrNotConnected:
+            case Dcrlibwallet.ErrNotConnected:
                 return ctx.getString(R.string.not_connected);
-            case Mobilewallet.ErrPassphraseRequired:
+            case Dcrlibwallet.ErrPassphraseRequired:
                 return ctx.getString(R.string.passphrase_required);
-            case Mobilewallet.ErrWalletNotLoaded:
+            case Dcrlibwallet.ErrWalletNotLoaded:
                 return ctx.getString(R.string.wallet_not_loaded);
-            case Mobilewallet.ErrInvalidPassphrase:
+            case Dcrlibwallet.ErrInvalidPassphrase:
                 return ctx.getString(R.string.invalid_passphrase);
-            case Mobilewallet.ErrNoPeers:
+            case Dcrlibwallet.ErrNoPeers:
                 return ctx.getString(R.string.err_no_peers);
             default:
                 return e.getMessage();
