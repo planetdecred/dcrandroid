@@ -503,5 +503,5 @@
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="deleting_wallet">Deleting Wallet…</string>
     <string name="notice">Notice</string>
-    <string name="first_run_notice">First run, initial synchronization with the network takes about 15 minutes.\nNote that wallet db is stored locally on internal storage.</string>
+    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\nThe first run synchronizing of your wallet with the network will take longer than normal. Initial synchronization may take up to 15 minutes.</string>
 </resources>
