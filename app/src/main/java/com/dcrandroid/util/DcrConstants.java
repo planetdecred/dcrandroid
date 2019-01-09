@@ -13,7 +13,8 @@ public class DcrConstants {
     public int peers = 0;
 
     public int syncStartPoint = -1, syncCurrentPoint = -1, syncEndPoint = -1;
-    public long fetchHeaderTime, rescanTime;
+    public double syncProgress = 0;
+    public long fetchHeaderTime, rescanTime, syncRemainingTime;
 
     private DcrConstants() {
 

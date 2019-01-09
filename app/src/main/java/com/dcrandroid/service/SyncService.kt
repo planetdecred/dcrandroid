@@ -7,15 +7,14 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.DcrConstants
 import com.dcrandroid.util.PreferenceUtil
+import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 import dcrlibwallet.SpvSyncResponse
-import java.util.*
 
 const val NOTIFICATION_ID = 4
 
@@ -31,6 +30,8 @@ class SyncService : Service(), SpvSyncResponse {
     private var contentText: String? = null
 
     private var peerCount: Int = 0
+
+    private var addressDiscoveryThread: Thread? = null
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -122,23 +123,12 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
-
+        contentTitle = getString(R.string.synchronizing)
         if(state == Dcrlibwallet.START){
-            contentTitle = getString(R.string.fetching_headers)
             contentText = null
         }else if (state == Dcrlibwallet.PROGRESS) {
-
-            var count = constants!!.syncCurrentPoint
-
-            if (constants!!.syncStartPoint > 0) {
-                count -= constants!!.syncStartPoint
-            }
-
-            var fetchedPercentage = count.toFloat() / constants!!.syncEndPoint * 100
-            fetchedPercentage = if (fetchedPercentage > 100) 100F else fetchedPercentage
-
-            contentTitle = getString(R.string.fetching_headers)
-            contentText = String.format(Locale.getDefault(), "%.1f%% %s", fetchedPercentage, getString(R.string.fetched))
+            println("Service: Progress: "+ constants!!.syncProgress.toInt() +" Normal Progress: "+ constants!!.syncProgress+" Remaining Time: "+ constants!!.syncRemainingTime)
+            contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
         }
 
         showNotification()
@@ -146,9 +136,26 @@ class SyncService : Service(), SpvSyncResponse {
 
     override fun onDiscoveredAddresses(state: String) {
         if (state == Dcrlibwallet.START) {
-            contentTitle = getString(R.string.notification_discovering_used_addresses)
             contentText = null
             showNotification()
+
+            addressDiscoveryThread = Thread {
+                try {
+                    while (!Thread.interrupted()) {
+                        Thread.sleep(1000)
+
+                        contentText = null
+                        contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
+                        showNotification()
+                    }
+                }catch (_: InterruptedException){}
+            }
+
+            addressDiscoveryThread!!.start()
+        }else{
+            if (addressDiscoveryThread != null && addressDiscoveryThread!!.isAlive){
+                addressDiscoveryThread!!.interrupt()
+            }
         }
     }
 
@@ -171,15 +178,8 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if (state == Dcrlibwallet.START){
-            contentTitle = getString(R.string.scanning_blocks)
-            contentText = null
-        }else if (state == Dcrlibwallet.PROGRESS) {
-            contentTitle = "(3/3) Rescanning Blocks"
-
-            val bestBlock = wallet!!.bestBlock
-            contentText = getString(R.string.notification_rescan_height_format, rescannedThrough, bestBlock)
-
+        if (state == Dcrlibwallet.PROGRESS) {
+            contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
             showNotification()
         }
     }

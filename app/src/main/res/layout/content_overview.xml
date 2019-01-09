@@ -51,6 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/current_total_balance"
                 android:paddingTop="5dp"
                 android:paddingBottom="15dp"
                 android:text="@string/current_total_balance"

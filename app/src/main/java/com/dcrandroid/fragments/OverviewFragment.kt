@@ -67,10 +67,16 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             show_history.visibility = View.GONE
             send_receive_layout.visibility = View.GONE
             no_history_padding.visibility = View.VISIBLE
+            current_total_balance.visibility = View.INVISIBLE
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
             }
+
+            pb_percent_complete.visibility = View.VISIBLE
+            no_history.text = getString(R.string.synchronizing)
+            pb_sync_progress.progress = 0
+
         } else {
             getBalance()
             iv_sync_indicator.visibility = View.GONE
@@ -452,11 +458,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                     no_history_padding.visibility = View.GONE
                     pb_sync_progress.visibility = View.GONE
                     pb_percent_complete.visibility = View.GONE
+                    current_total_balance.visibility = View.VISIBLE
                 } else {
                     iv_sync_indicator.visibility = View.VISIBLE
                     overview_av_balance.visibility = View.GONE
                     send_receive_layout.visibility = View.GONE
                     no_history_padding.visibility = View.VISIBLE
+                    current_total_balance.visibility = View.INVISIBLE
                     iv_sync_indicator.post {
                         val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                         syncAnimation.start()
