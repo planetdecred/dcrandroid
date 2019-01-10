@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:animateLayoutChanges="true"
+    android:id="@+id/overview_sync_layout"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/synchronizing"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="21sp" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/sync_progress_bar"
+        android:id="@+id/pb_sync_progress"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_percent_complete"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textColor="@color/blue"
+        android:id="@+id/tap_for_more_info"
+        android:text="Tap for more information."
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_status"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:text="rkfjd"
+        android:visibility="gone"
+        />
+
+</LinearLayout>

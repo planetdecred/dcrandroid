@@ -123,7 +123,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
-        contentTitle = getString(R.string.synchronizing)
+        contentTitle = getString(R.string.synchronizing_period)
         if(state == Dcrlibwallet.START){
             contentText = null
         }else if (state == Dcrlibwallet.PROGRESS) {

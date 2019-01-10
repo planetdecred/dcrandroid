@@ -752,6 +752,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 Dcrlibwallet.log("Elapsed Fetch Time: " + (totalFetchTime - remainingFetchTime) + "ms Remaining Fetch Time: " + remainingFetchTime + "ms Total Fetch Time: " + totalFetchTime + " Overall Progress: " + constants.syncProgress);
 
                 setConnectionStatus(getString(R.string.fetching_headers));
+                setBestBlockTime(lastHeaderTime);
 
                 if (currentFragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) currentFragment;

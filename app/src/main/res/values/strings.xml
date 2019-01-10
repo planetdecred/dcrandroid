@@ -522,15 +522,16 @@
     <string name="network_synchronization">Please wait for network synchronization.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="deleting_wallet">Deleting Wallet…</string>
-    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.\n</string>
+    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.</string>
     <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
     <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
     <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
     <string name="overview_rescan_height_format">Scanning %1$d of %2$d.\n%3$.1f%% through step 3 of 3.</string>
-    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$.1f%% through step 1 of 3.\nYour wallet is %4$s days behind.</string>
+    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$.1f%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
     <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
     <string name="overview_discovering_used_addresses">Discovering used addresses.\n%1$.1f%% through step 2 of 3.</string>
     <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
     <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
-    <string name="synchronizing">Synchronizing.</string>
+    <string name="synchronizing">Synchronizing</string>
+    <string name="synchronizing_period">Synchronizing.</string>
 </resources>
