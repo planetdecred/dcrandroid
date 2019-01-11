@@ -469,7 +469,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
                 if (constants!!.synced) {
-                    println("Hiding sync layout")
                     overview_sync_layout.visibility = View.GONE
                     getBalance()
                     hideSyncIndicator()

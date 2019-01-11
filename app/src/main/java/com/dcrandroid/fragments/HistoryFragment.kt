@@ -237,7 +237,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         activity!!.runOnUiThread {
             val response = TransactionsResponse.parse(s)
             if (response.transactions.size == 0) {
-                no_history.setText(R.string.no_transactions_have_occured)
+                no_history.setText(R.string.no_transactions_have_occurred)
                 no_history.visibility = View.VISIBLE
                 history_recycler_view.visibility = View.GONE
                 if (swipe_refresh_layout.isRefreshing) {

@@ -63,9 +63,6 @@
     <string name="now">bây giờ</string>
     <string name="you_received">Bạn đã nhận</string>
     <string name="disconnected">Đã ngắt kết nối</string>
-    <string name="synced">Đã đồng bộ hóa</string>
-    <string name="syncing">Đang đồng bộ hoá</string>
-    <string name="with">với</string>
     <string name="ok">OK</string>
     <string name="user_agent">Đại lý người dùng</string>
     <string name="log_file_not_found">Không tìm thấy tệp nhật ký</string>
@@ -109,10 +106,6 @@
     <string name="connecting_to_rpc_server">Kết nối với máy chủ RPC</string>
     <string name="connecting_attempt">Đang cố gắng kết nối</string>
     <string name="rpc_connection_failed">Kết nối RPC không thành công:</string>
-    <string name="peer">peer</string>
-    <string name="fetched">Đã lấy</string>
-    <string name="fetching_missing_cfilters">Tìm nạp CFilters bị thiếu</string>
-    <string name="cfilters">CFilters</string>
     <!--/Peers-->
 
     <!--Account-->
@@ -197,7 +190,6 @@
     <string name="tx_hash_copy">Hàm băm được sao chép vào nơi kẹp dữ liệu (clipboard)</string>
     <string name="tx_notify_title">Thông báo giao dịch đến</string>
     <string name="no_transactions">Không có giao dịch</string>
-    <string name="no_transactions_sync">Không có giao dịch nào đang diễn ra</string>
     <string name="publish_unmined_transaction">Công khai các giao dịch chưa được xử lý</string>
     <string name="label_hash">HÀM BĂM:</string>
     <string name="transaction">Giao dịch</string>
@@ -377,23 +369,13 @@
     <string name="enter_spending_pin">Nhập mã PIN chi tiêu</string>
     <string name="password_strength">MẬT KHẨU MẠNH</string>
     <string name="pin_strength">PIN MẠNH</string>
-    <string name="enter_encryption_pin">Nhập mã hoá Pin</string>
-    <string name="confirm_encryption_pin">Xác nhận mã hoá PIN</string>
-    <string name="create_encryption_pin">Tạo mã PIN</string>
     <string name="enter_spending_password">Nhập mật khẩu chi tiêu</string>
-    <string name="create_encryption_password">Tạo mật khẩu mã hóa</string>
     <string name="change_spending_pin_password">Thay đổi chi tiêu PIN / Mật khẩu</string>
     <string name="required_to_send_funds">Yêu cầu gửi tiền.</string>
     <string name="enter_current_pin">Nhập mã PIN hiện tại</string>
-    <string name="confirm_encryption_password">Xác nhận mật khẩu mã hóa</string>
     <string name="enter_current_spending_password">Nhập mật khẩu chi tiêu hiện tại</string>
-    <string name="enter_current_encryption_password">Nhập mật khẩu mã hóa hiện tại</string>
-    <string name="enter_encryption_password">Nhập mật khẩu mã hóa</string>
-    <string name="removing_wallet_encryption">Đang xóa mã hóa ví …</string>
     <string name="changing_password">Đang thay đổi mật khẩu …</string>
-    <string name="encrypt_wallet">Ví tiền mã hóa</string>
     <string name="encrypt_wallet_summary">Mật khẩu sẽ được yêu cầu khi khởi động.</string>
-    <string name="change_encryption_pin_password">Thay đổi mã PIN / mật khẩu</string>
     <string name="required_to_enter_app">Cần thiết để truy cập vào ứng dụng.</string>
     <string name="changing_pin">Đang thay đổi PIN…</string>
     <!--/Security-->
@@ -405,11 +387,10 @@
     <string name="wallet_is_rescanning">Ví đang được quét lại, kiểm tra tiến trình trong thanh điều hướng.</string>
     <string name="check_progress_in_navigation_bar">Kiểm tra tiến độ trong thanh điều hướng.</string>
     <string name="user_agent_summary">Để tìm nạp tỷ giá hối đoái.</string>
-    <string name="no_transactions_have_occured">Không có giao dịch đã xảy ra.</string>
+    <string name="no_transactions_have_occurred">Không có giao dịch đã xảy ra.</string>
     <string name="send_to_account">Gửi tới tài khoản</string>
     <string name="send_to_address">Gửi đến địa chỉ</string>
-    <string name="encrypting_wallet">Đang mã hóa ví …</string>
-    <string name="enter_an_amounnt">Nhập một số tiền.</string>
+    <string name="enter_an_amount">Nhập một số tiền.</string>
     <string name="retry_caps">THỬ LẠI</string>
     <string name="amount_can_not_be_zero">Số tiền không thể bằng không.</string>
     <string name="clear_fields">Xoá các miền</string>

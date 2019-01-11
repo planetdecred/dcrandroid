@@ -127,7 +127,6 @@ class SyncService : Service(), SpvSyncResponse {
         if(state == Dcrlibwallet.START){
             contentText = null
         }else if (state == Dcrlibwallet.PROGRESS) {
-            println("Service: Progress: "+ constants!!.syncProgress.toInt() +" Normal Progress: "+ constants!!.syncProgress+" Remaining Time: "+ constants!!.syncRemainingTime)
             contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
         }
 
