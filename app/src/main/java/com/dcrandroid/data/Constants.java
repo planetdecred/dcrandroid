@@ -111,5 +111,5 @@ public class Constants {
             FIRST_RUN = "first_run";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 
-    public static final long ESTIMATED_ACCT_DISCOVERY = 69219;
+    public static final long ESTIMATED_ACCT_DISCOVERY = 300000;
 }

@@ -16,7 +16,7 @@ import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -38,7 +38,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private PreferenceUtil util;
     private TextView tvLoading;
     private Thread loadThread;
-    private DcrConstants constants;
+    private WalletData constants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     private void startup() {
-        constants = DcrConstants.getInstance();
+        constants = WalletData.getInstance();
 
         String homeDir = getFilesDir() + "/wallet";
 

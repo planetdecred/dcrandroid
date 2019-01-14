@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.SeedAdapter;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class SaveSeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_save_seed_page);
         Button saveSeedContBtn = findViewById(R.id.save_seed_btn_continue);
 
-        DcrConstants constants = DcrConstants.getInstance();
+        WalletData constants = WalletData.getInstance();
 
         DisplayMetrics ds = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(ds);

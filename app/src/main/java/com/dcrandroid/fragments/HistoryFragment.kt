@@ -40,7 +40,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private var fixedTransactionList: ArrayList<TransactionsResponse.TransactionItem> = ArrayList()
     private val availableTxTypes = ArrayList<String>()
 
-    private var constants: DcrConstants? = null
+    private var constants: WalletData? = null
 
     private var util: PreferenceUtil? = null
 
@@ -62,7 +62,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
             activity!!.title = getString(R.string.history)
 
         util = PreferenceUtil(context!!)
-        constants = DcrConstants.getInstance()
+        constants = WalletData.getInstance()
 
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.colorPrimaryDarkBlue,

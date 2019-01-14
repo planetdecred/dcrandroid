@@ -14,7 +14,7 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.DeleteWalletDialog;
 import com.dcrandroid.dialog.StakeyDialog;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -295,7 +295,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     try {
-                                        DcrConstants.getInstance().wallet.rescanBlocks();
+                                        WalletData.getInstance().wallet.rescanBlocks();
                                         Toast.makeText(getContext(), R.string.check_progress_in_navigation_bar, Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -330,7 +330,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 new Thread() {
                                     public void run() {
                                         try {
-                                            DcrConstants.getInstance().wallet.unlockWallet(deleteWalletDialog.getPassphrase().getBytes());
+                                            WalletData.getInstance().wallet.unlockWallet(deleteWalletDialog.getPassphrase().getBytes());
                                             if (getActivity() != null) {
                                                 Utils.clearApplicationData(getActivity());
                                                 getActivity().runOnUiThread(new Runnable() {
@@ -378,7 +378,7 @@ public class SettingsActivity extends AppCompatActivity {
                             public void run() {
                                 try {
                                     String passphrase = data.getStringExtra(Constants.PASSPHRASE);
-                                    DcrConstants.getInstance().wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
+                                    WalletData.getInstance().wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
                                     if (getActivity() != null) {
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override

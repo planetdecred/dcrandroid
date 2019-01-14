@@ -296,17 +296,20 @@
     <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
     <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
     <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
-    <string name="overview_rescan_height_format">Scanning %1$d of %2$d.\n%3$.1f%% through step 3 of 3.</string>
-    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$.1f%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
+    <string name="overview_rescan_height_format">Scanning %1$d of %2$d block headers.\n%3$d%% through step 3 of 3.</string>
+    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$d%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
     <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
-    <string name="overview_discovering_used_addresses">Discovering used addresses.\n%1$.1f%% through step 2 of 3.</string>
+    <string name="overview_discovering_used_addresses">Discovering used addresses.\n~%1$d%% through step 2 of 3.</string>
     <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
     <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
     <string name="synchronizing">Synchronizing</string>
-    <string name="synchronizing_period">Synchronizing.</string>
     <string name="rescanning_in_progress">Rescanning in progress…</string>
     <string name="scanning_blocks">Scanning blocks.</string>
     <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
+    <string name="syncing_peers_testnet">Syncing with %1$d peers on testnet.</string>
+    <string name="one_syncing_peer_testnet">Syncing with 1 peer on testnet.</string>
+    <string name="syncing_peers_mainnet">Syncing with %1$d peers on mainnet.</string>
+    <string name="one_syncing_peer_mainnet">Syncing with 1 peer on mainnet.</string>
     <!--/Sync Messages-->
 
     <!--QR Code-->
@@ -401,6 +404,7 @@
     <!-- Overview Fragment -->
     <string name="recent_activity">Recent Activity</string>
     <string name="show_all_transactions">Show All Transactions</string>
+    <string name="tap_for_more_information">Tap for more information.</string>
     <!--/ Overview Fragment -->
 
     <!--History Fragment -->

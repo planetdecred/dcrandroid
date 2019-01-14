@@ -411,7 +411,7 @@ public class Utils {
     public static String translateError(Context ctx, Exception e) {
         switch (e.getMessage()) {
             case Dcrlibwallet.ErrInsufficientBalance:
-                if (!DcrConstants.getInstance().synced) {
+                if (!WalletData.getInstance().synced) {
                     return ctx.getString(R.string.not_enought_funds_synced);
                 }
                 return ctx.getString(R.string.not_enough_funds);

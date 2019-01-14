@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.util.DcrConstants
+import com.dcrandroid.util.WalletData
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
@@ -23,7 +23,7 @@ class SyncService : Service(), SpvSyncResponse {
     private var TAG: String = "SyncService"
     private var notification: Notification? = null
     private var wallet: LibWallet? = null
-    private var constants: DcrConstants? = null
+    private var constants: WalletData? = null
     private var preferenceUtil: PreferenceUtil? = null
 
     private var contentTitle: String? = null
@@ -40,7 +40,7 @@ class SyncService : Service(), SpvSyncResponse {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "Service is Started")
 
-        constants = DcrConstants.getInstance()
+        constants = WalletData.getInstance()
         wallet = constants!!.wallet
 
         if (wallet == null) {
@@ -123,7 +123,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
-        contentTitle = getString(R.string.synchronizing_period)
+        contentTitle = getString(R.string.synchronizing)
         if(state == Dcrlibwallet.START){
             contentText = null
         }else if (state == Dcrlibwallet.PROGRESS) {

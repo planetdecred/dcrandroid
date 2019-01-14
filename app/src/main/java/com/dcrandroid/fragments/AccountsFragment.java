@@ -17,7 +17,7 @@ import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.adapter.AccountAdapter;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 
 import org.json.JSONException;
@@ -127,7 +127,7 @@ public class AccountsFragment extends Fragment {
         recyclerView.setAdapter(accountAdapter);
         registerForContextMenu(recyclerView);
 
-        wallet = DcrConstants.getInstance().wallet;
+        wallet = WalletData.getInstance().wallet;
 
         prepareAccountData();
     }

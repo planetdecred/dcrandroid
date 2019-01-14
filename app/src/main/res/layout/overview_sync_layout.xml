@@ -24,6 +24,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="18dp"
         android:layout_marginRight="18dp"
+        android:visibility="gone"
         />
 
     <TextView
@@ -31,8 +32,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/pb_percent_complete"
         android:textAlignment="center"
-        android:textSize="18sp"
         android:layout_marginTop="10dp"
+        android:textSize="18sp"
         />
 
     <TextView
@@ -42,7 +43,9 @@
         android:textSize="18sp"
         android:textColor="@color/blue"
         android:id="@+id/tap_for_more_info"
-        android:text="Tap for more information."
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:text="@string/tap_for_more_information"
         />
 
     <TextView
@@ -51,8 +54,18 @@
         android:id="@+id/pb_status"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:text="rkfjd"
         android:visibility="gone"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/syncing_peers"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
         />
 
 </LinearLayout>

@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.util.DcrConstants
+import com.dcrandroid.util.WalletData
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.google.android.material.snackbar.Snackbar
@@ -73,7 +73,7 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
         pd = Utils.getProgressDialog(context, false, false, "")
         Thread(Runnable {
             try {
-                val wallet = DcrConstants.getInstance().wallet
+                val wallet = WalletData.getInstance().wallet
                         ?: throw NullPointerException(getString(R.string.create_wallet_uninitialized))
                 if (isSpendingPassword!!) {
                     show(getString(R.string.changing_password))

@@ -35,7 +35,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
-    private var constants: DcrConstants? = null
+    private var constants: WalletData? = null
     private val transactionList = ArrayList<TransactionsResponse.TransactionItem>()
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
@@ -52,7 +52,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
 
         util = PreferenceUtil(context!!)
-        constants = DcrConstants.getInstance()
+        constants = WalletData.getInstance()
 
         swipe_refresh_layout2.setColorSchemeResources(R.color.colorPrimaryDarkBlue,
                 R.color.colorPrimaryDarkBlue,
@@ -70,6 +70,9 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
             pb_sync_progress.progress = 0
             overview_sync_layout.visibility = View.VISIBLE
+            if(constants!!.syncStatus != null){
+                publishProgress()
+            }
 
         } else {
             getBalance()
@@ -135,10 +138,18 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         tap_for_more_info.setOnClickListener {
             it.visibility = View.GONE
             pb_status.visibility = View.VISIBLE
+            syncing_peers.visibility = View.VISIBLE
         }
 
         pb_status.setOnClickListener {
             it.visibility = View.GONE
+            syncing_peers.visibility = View.GONE
+            tap_for_more_info.visibility = View.VISIBLE
+        }
+
+        syncing_peers.setOnClickListener {
+            it.visibility = View.GONE
+            pb_status.visibility = View.GONE
             tap_for_more_info.visibility = View.VISIBLE
         }
 
@@ -253,7 +264,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }.start()
     }
 
-
     private fun saveTransactions(transactions: ArrayList<TransactionsResponse.TransactionItem>) {
         try {
             if (activity == null || context == null) {
@@ -367,6 +377,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             val filter = IntentFilter(Constants.SYNCED)
             context!!.registerReceiver(receiver, filter)
         }
+
+        if (!constants!!.synced) {
+            overview_sync_layout.visibility = View.VISIBLE
+        } else {
+            overview_sync_layout.visibility = View.GONE
+        }
+
         isForeground = true
         if (needsUpdate) {
             needsUpdate = false
@@ -448,20 +465,35 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         overview_av_balance.visibility = View.VISIBLE
     }
 
-    fun publishProgress(percentage :Double, minRemaining: Int, status: String){
-        activity!!.runOnUiThread{
-            pb_sync_progress.visibility = View.VISIBLE
-            pb_percent_complete.visibility = View.VISIBLE
+    fun publishProgress(){
+        if(activity != null) {
+            activity!!.runOnUiThread {
+                pb_sync_progress.visibility = View.VISIBLE
+                pb_percent_complete.visibility = View.VISIBLE
+                if (pb_status.visibility == View.GONE) {
+                    tap_for_more_info.visibility = View.VISIBLE
+                }
 
-            pb_sync_progress.progress = percentage.toInt()
+                pb_sync_progress.progress = constants!!.syncProgress.toInt()
 
-            pb_percent_complete.text = if(minRemaining > 0){
-                getString(R.string.percentage_completed, percentage, minRemaining.toString())
-            }else{
-                getString(R.string.percentage_completed, percentage, "<1")
+                pb_percent_complete.text = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, context)
+
+                pb_status.text = constants!!.syncStatus
+
+                if (BuildConfig.IS_TESTNET) {
+                    if (constants!!.peers == 1) {
+                        syncing_peers.text = getString(R.string.one_syncing_peer_testnet)
+                    } else {
+                        syncing_peers.text = getString(R.string.syncing_peers_testnet, constants!!.peers)
+                    }
+                } else {
+                    if (constants!!.peers == 1) {
+                        syncing_peers.text = getString(R.string.one_syncing_peer_mainnet)
+                    } else {
+                        syncing_peers.text = getString(R.string.syncing_peers_mainnet, constants!!.peers)
+                    }
+                }
             }
-
-            pb_status.text = status
         }
     }
 

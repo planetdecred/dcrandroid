@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.EnterPassCode;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -51,7 +51,7 @@ public class SecurityFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                if (DcrConstants.getInstance().synced) {
+                if (WalletData.getInstance().synced) {
                     layout.setVisibility(View.VISIBLE);
                 } else {
                     layout.setVisibility(View.GONE);
@@ -161,7 +161,7 @@ public class SecurityFragment extends Fragment {
         getActivity().setTitle(R.string.security);
 
         util = new PreferenceUtil(getContext());
-        wallet = DcrConstants.getInstance().wallet;
+        wallet = WalletData.getInstance().wallet;
         etAddress.addTextChangedListener(validateAddressWatcher);
         etMessage.addTextChangedListener(textWatcher);
         etSignature.addTextChangedListener(textWatcher);
@@ -247,7 +247,7 @@ public class SecurityFragment extends Fragment {
             }
         });
 
-        if (!DcrConstants.getInstance().synced) {
+        if (!WalletData.getInstance().synced) {
             layout.setVisibility(View.GONE);
         }
     }
