@@ -107,16 +107,22 @@
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
 
-        <TextView
+
+        <Button
             android:id="@+id/show_history"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/send_receive_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
             android:text="@string/show_all_transactions"
+            android:textAllCaps="false"
             android:textColor="@color/blueGraySecondTextColor"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,27 +132,39 @@
             <Button
                 android:id="@+id/send"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
+                android:background="@drawable/send_receive_button"
+                android:clickable="true"
                 android:drawableStart="@mipmap/send"
                 android:drawableLeft="@mipmap/send"
                 android:drawablePadding="-25dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:padding="10dp"
                 android:text="@string/send"
                 android:textAllCaps="false"
+                android:textColor="@color/blueGraySecondTextColor"
                 android:textSize="18sp" />
 
             <Button
                 android:id="@+id/receive"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
+                android:background="@drawable/send_receive_button"
+                android:clickable="true"
                 android:drawableStart="@mipmap/receive"
                 android:drawableLeft="@mipmap/receive"
                 android:drawablePadding="-25dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:padding="10dp"
                 android:text="@string/receive"
                 android:textAllCaps="false"
+                android:textColor="@color/blueGraySecondTextColor"
                 android:textSize="18sp" />
         </LinearLayout>
 
