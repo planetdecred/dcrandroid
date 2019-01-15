@@ -15,7 +15,7 @@ To build this libary, clone the project
 
 ```bash
 go get -t github.com/raedahgroup/dcrlibwallet
-cd $HOME/go/src/github.com/raedahgroup/dcrlibwallet/
+cd $GOPATH/src/github.com/raedahgroup/dcrlibwallet/
 ```
 and run the following commands in dcrlibwallet directory.
 
