@@ -909,17 +909,24 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                 break;
             default:
+                double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
+                double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) -1;
+                percentageDifference *= 100;
+
+                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "",  percentageDifference);
+                Dcrlibwallet.log(log);
+
                 double rescanTime = (System.currentTimeMillis() - constants.rescanTime);
                 double fetchTime = constants.totalFetchTime * 0.75;
 
                 double estimatePercent = (rescanTime / constants.totalFetchTime) * 100;
-                double percentageDifference = (rescanTime / fetchTime) - 1;
+                percentageDifference = (rescanTime / fetchTime) - 1;
                 percentageDifference *= 100;
 
-                String log = String.format(Locale.getDefault(), "Scan, assumed: 75%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)",  Math.round((constants.totalFetchTime * 0.75) / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+                log = String.format(Locale.getDefault(), "Scan, assumed: 75%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)",  Math.round((constants.totalFetchTime * 0.75) / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
-                double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
+                discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
 
                 Dcrlibwallet.log("Sync, Initial Estimate: "+ Math.round(constants.initialSyncEstimate / 1000) +"s Actual: "+Math.round((rescanTime + constants.totalFetchTime + discoveryTime) / 1000) +"s");
 

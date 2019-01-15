@@ -70,6 +70,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
             pb_sync_progress.progress = 0
             overview_sync_layout.visibility = View.VISIBLE
+            tv_synchronizing.setText(R.string.starting_synchronization)
             if(constants!!.syncStatus != null){
                 publishProgress()
             }
@@ -468,6 +469,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     fun publishProgress(){
         if(activity != null) {
             activity!!.runOnUiThread {
+                tv_synchronizing.setText(R.string.synchronizing)
                 pb_sync_progress.visibility = View.VISIBLE
                 pb_percent_complete.visibility = View.VISIBLE
                 if (pb_status.visibility == View.GONE) {

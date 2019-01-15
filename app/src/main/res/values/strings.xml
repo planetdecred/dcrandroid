@@ -303,6 +303,7 @@
     <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
     <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
     <string name="synchronizing">Synchronizing</string>
+    <string name="starting_synchronization">Starting Synchronization…</string>
     <string name="rescanning_in_progress">Rescanning in progress…</string>
     <string name="scanning_blocks">Scanning blocks.</string>
     <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
