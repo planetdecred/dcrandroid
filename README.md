@@ -9,9 +9,15 @@ A Decred wallet library written in golang for [dcrwallet](https://github.com/dec
 [Go( >= 1.11 )](http://golang.org/doc/install)  
 [Gomobile](https://github.com/golang/go/wiki/Mobile#tools) (correctly init'd with gomobile init)  
 
-## Build Instructions for Gomobile
+## Build Instructions using Gomobile
 
-To build this libary, clone the project and run the following commands in dcrlibwallet directory.
+To build this libary, clone the project 
+
+```bash
+go get -t github.com/raedahgroup/dcrlibwallet
+cd $HOME/go/src/github.com/raedahgroup/dcrlibwallet/
+```
+and run the following commands in dcrlibwallet directory.
 
 ```bash
 export GO111MODULE=on
