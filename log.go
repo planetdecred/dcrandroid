@@ -130,3 +130,7 @@ func setLogLevels(logLevel string) {
 		setLogLevel(subsystemID, logLevel)
 	}
 }
+
+func Log(m string) {
+	log.Info(m)
+}

@@ -19,9 +19,9 @@ import (
 	"time"
 
 	"github.com/decred/dcrd/addrmgr"
-	stake "github.com/decred/dcrd/blockchain/stake"
+	"github.com/decred/dcrd/blockchain/stake"
 	"github.com/decred/dcrd/chaincfg"
-	chainhash "github.com/decred/dcrd/chaincfg/chainhash"
+	"github.com/decred/dcrd/chaincfg/chainhash"
 	"github.com/decred/dcrd/dcrec"
 	"github.com/decred/dcrd/dcrjson"
 	"github.com/decred/dcrd/dcrutil"
@@ -37,7 +37,7 @@ import (
 	"github.com/decred/dcrwallet/wallet"
 	"github.com/decred/dcrwallet/wallet/txauthor"
 	"github.com/decred/dcrwallet/wallet/txrules"
-	walletseed "github.com/decred/dcrwallet/walletseed"
+	"github.com/decred/dcrwallet/walletseed"
 	"github.com/decred/slog"
 )
 
@@ -61,24 +61,28 @@ type LibWallet struct {
 	rescannning   bool
 }
 
-func NewLibWallet(homeDir string, dbDriver string, netType string) *LibWallet {
-
+func NewLibWallet(homeDir string, dbDriver string, netType string) (*LibWallet, error) {
 	var activeNet *netparams.Params
 
-	if netType == "mainnet" {
+	switch strings.ToLower(netType) {
+	case strings.ToLower(netparams.MainNetParams.Name):
 		activeNet = &netparams.MainNetParams
-	} else {
+	case strings.ToLower(netparams.TestNet3Params.Name):
 		activeNet = &netparams.TestNet3Params
+	default:
+		return nil, fmt.Errorf("Unsupported network type: %s", netType)
 	}
 
 	lw := &LibWallet{
-		dataDir:   filepath.Join(homeDir, netType),
+		dataDir:   filepath.Join(homeDir, activeNet.Name),
 		dbDriver:  dbDriver,
 		activeNet: activeNet,
 	}
+
 	errors.Separator = ":: "
-	initLogRotator(filepath.Join(homeDir, "/logs/"+netType+"/dcrwallet.log"))
-	return lw
+	initLogRotator(filepath.Join(homeDir, "/logs/"+netType+"/dcrlibwallet.log"))
+
+	return lw, nil
 }
 
 func (lw *LibWallet) SetLogLevel(loglevel string) {
@@ -592,14 +596,8 @@ func (lw *LibWallet) DropSpvConnection() {
 	if lw.cancelSync != nil {
 		lw.cancelSync()
 	}
-}
-
-func done(ctx context.Context) bool {
-	select {
-	case <-ctx.Done():
-		return true
-	default:
-		return false
+	for _, syncResponse := range lw.syncResponses {
+		syncResponse.OnSynced(false)
 	}
 }
 
@@ -612,6 +610,10 @@ func (lw *LibWallet) OpenWallet(pubPass []byte) error {
 	}
 	lw.wallet = w
 	return nil
+}
+
+func (lw *LibWallet) WalletOpened() bool {
+	return lw.wallet != nil
 }
 
 func (lw *LibWallet) RescanBlocks() error {
