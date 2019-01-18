@@ -263,24 +263,40 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         ArrayList<Integer> walletOutputIndices = new ArrayList<>();
         ArrayList<Integer> walletInputIndices = new ArrayList<>();
 
-        for (int i = 0; i < usedInput.size(); i++) {
-            walletInputIndices.add(usedInput.get(i).index);
-            walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                    Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
-                            + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")", null));
-        }
 
-        for (int i = 0; i < usedOutput.size(); i++) {
-            walletOutputIndices.add(usedOutput.get(i).index);
-            walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                    Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).address) + ")",
-                    usedOutput.get(i).address));
-        }
+
+
 
         try {
             Bundle b = getIntent().getExtras();
             String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
             JSONObject parent = new JSONObject(rawJson);
+            JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
+            JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
+
+            for (int i = 0; i < usedInput.size(); i++) {
+                JSONObject input = inputs.getJSONObject(usedInput.get(i).index);
+                walletInputIndices.add(usedInput.get(i).index);
+
+                String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
+
+                if (hash.equals("0000000000000000000000000000000000000000000000000000000000000000")) {
+                    hash = "Stakebase: 0000";
+                }
+
+                hash += ":"+input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
+
+                walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
+                        Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
+                                + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")", hash));
+            }
+
+            for (int i = 0; i < usedOutput.size(); i++) {
+                walletOutputIndices.add(usedOutput.get(i).index);
+                walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
+                        Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).address) + ")",
+                        usedOutput.get(i).address));
+            }
 
             if (transactionType.equalsIgnoreCase(Constants.VOTE)) {
                 findViewById(R.id.tx_dts_vote_layout).setVisibility(View.VISIBLE);
@@ -303,7 +319,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
             }
 
-            JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
 
             for (int i = 0; i < outputs.length(); i++) {
                 JSONObject output = outputs.getJSONObject(i);
@@ -332,7 +347,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, address));
             }
 
-            JSONArray inputs = parent.getJSONArray(Constants.INPUTS);
             for (int i = 0; i < inputs.length(); i++) {
 
                 JSONObject input = inputs.getJSONObject(i);
@@ -348,6 +362,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 if (hash.equals("0000000000000000000000000000000000000000000000000000000000000000")) {
                     hash = "Stakebase: 0000";
                 }
+
+                hash += ":"+input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
 
                 walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, hash));
             }
