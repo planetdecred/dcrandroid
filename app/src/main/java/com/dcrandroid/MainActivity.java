@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         // One-time notice
         if(util.getBoolean(Constants.FIRST_RUN, true)){
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.notice)
+                    .setTitle(R.string.welcome_title)
                     .setMessage(R.string.first_run_notice)
                     .setPositiveButton(R.string.ok, null)
                     .show();
