@@ -1,5 +1,8 @@
 package com.dcrandroid.util;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 
@@ -37,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.core.app.NotificationCompat;
 import dcrlibwallet.Dcrlibwallet;
 
 public class Utils {
@@ -460,5 +465,33 @@ public class Utils {
             context.startActivity(mainIntent);
             Runtime.getRuntime().exit(0);
         }
+    }
+
+    public static void sendTransactionNotification(Context context, NotificationManager manager, String amount, int nonce) {
+        Intent launchIntent = new Intent(context, MainActivity.class);
+        launchIntent.setAction(Constants.NEW_TRANSACTION_NOTIFICATION);
+        PendingIntent launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new NotificationCompat.Builder(context, "new transaction")
+                .setContentTitle(context.getString(R.string.new_transaction))
+                .setContentText(amount)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+                .build();
+        Notification groupSummary = new NotificationCompat.Builder(context, "new transaction")
+                .setContentTitle(context.getString(R.string.new_transaction))
+                .setContentText(context.getString(R.string.new_transaction))
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+                .setGroupSummary(true)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build();
+
+        manager.notify(nonce, notification);
+        manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
 }

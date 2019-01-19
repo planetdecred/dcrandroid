@@ -1,5 +1,8 @@
 package com.dcrandroid.fragments
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +31,9 @@ import com.dcrandroid.util.*
 import dcrlibwallet.GetTransactionsResponse
 import kotlinx.android.synthetic.main.content_overview.*
 import java.io.*
+import java.math.BigDecimal
+import java.math.MathContext
+import java.text.DecimalFormat
 import java.util.*
 
 class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
@@ -40,6 +46,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
     private var isForeground: Boolean = false
+    private var notificationManager: NotificationManager? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.content_overview, container, false)
@@ -50,6 +57,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         if (activity != null) {
             activity!!.title = getString(R.string.overview)
         }
+
+        registerNotificationChannel()
 
         util = PreferenceUtil(context!!)
         constants = DcrConstants.getInstance()
@@ -146,7 +155,19 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
         history_recycler_view2.adapter = transactionAdapter
         registerForContextMenu(history_recycler_view2)
+    }
 
+
+    private fun registerNotificationChannel() {
+        notificationManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("new transaction", getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.importance = NotificationManager.IMPORTANCE_LOW
+            notificationManager!!.createNotificationChannel(channel)
+        }
     }
 
     private fun getMaxDisplayItems(): Int {
@@ -317,6 +338,45 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 }
 
                 util!!.set(Constants.RECENT_TRANSACTION_HASH, transactionList[0].hash)
+
+
+                val txNotificationHash = util!!.get(Constants.TX_NOTIFICATION_HASH)
+                println("Hash $txNotificationHash")
+
+                if (txNotificationHash.isNotEmpty() && txNotificationHash != transactions[0].hash){
+                    val hashIndex = transactions.find(txNotificationHash)
+                    val format = DecimalFormat(getString(R.string.you_received) + " #.######## DCR")
+
+                    if (hashIndex > 0){
+                        println("Hash is $hashIndex")
+                        val subList = transactions.subList(0, hashIndex)
+                        subList.forEach {
+                            if(it.direction == 1) {
+                                val satoshi = BigDecimal.valueOf(it.amount)
+
+                                val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
+                                println("Sending Notifications for ${it.hash}")
+                                Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutputs.toInt() + it.timestamp.toInt())
+                            }else{
+                                println("Not Sending Notifications for ${it.hash}")
+                            }
+                        }
+                    }else if (hashIndex < 0){
+                        println("Hash is less $hashIndex")
+                        val subList = transactions.subList(0, transactions.size - 1)
+                        subList.forEach {
+                            if (it.direction == 1) {
+                                val satoshi = BigDecimal.valueOf(it.amount)
+
+                                val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
+                                Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutputs.toInt() + it.timestamp.toInt())
+                            }
+                        }
+                    }
+                }
+
+                println("First Hash: "+ transactions[0].hash)
+                util!!.set(Constants.TX_NOTIFICATION_HASH, transactions[0].hash)
 
             }
         }

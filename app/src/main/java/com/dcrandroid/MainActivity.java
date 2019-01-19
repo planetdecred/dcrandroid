@@ -574,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
+                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.hash);
                     sendNotification(format.format(amount), (int) transaction.totalInput + (int) transaction.totalOutputs + (int) transaction.timestamp);
                 }
             }
@@ -660,9 +661,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build();
 
-        //Sum ascii to prevent duplicate notifications
         notificationManager.notify(nonce, notification);
         notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
+
     }
 
     @Override
