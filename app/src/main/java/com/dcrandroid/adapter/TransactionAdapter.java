@@ -15,7 +15,7 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
@@ -65,7 +65,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         int confirmations = 0;
         if (history.getHeight() != -1) {
-            confirmations = DcrConstants.getInstance().wallet.getBestBlock() - history.getHeight();
+            confirmations = WalletData.getInstance().wallet.getBestBlock() - history.getHeight();
             confirmations += 1;
         }
 

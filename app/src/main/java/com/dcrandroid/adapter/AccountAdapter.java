@@ -16,7 +16,7 @@ import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Balance;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -83,7 +83,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         }
 
         // Balance
-        if (DcrConstants.getInstance().synced) {
+        if (WalletData.getInstance().synced) {
             holder.spendable.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(balance.getSpendable())));
             holder.total.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(balance.getTotal())));
             holder.immatureRewards.setText(CoinFormat.Companion.format(balance.getImmatureReward()));

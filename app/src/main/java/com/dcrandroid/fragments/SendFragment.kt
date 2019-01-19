@@ -27,7 +27,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.DcrConstants
+import com.dcrandroid.util.WalletData
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
@@ -54,7 +54,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var SEND_ACCOUNT = false
     private val SCANNER_ACTIVITY_REQUEST_CODE = 0
     private val PASSCODE_REQUEST_CODE = 1
-    private var constants: DcrConstants = DcrConstants.getInstance()
+    private var constants: WalletData = WalletData.getInstance()
     private var textChanged: Boolean = false
     private var isSendAll: Boolean = false
     private var exchangeRate: Double = -1.0

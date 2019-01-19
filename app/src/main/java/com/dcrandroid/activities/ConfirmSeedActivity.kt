@@ -19,7 +19,7 @@ import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.adapter.MultiSeed
 import com.dcrandroid.adapter.RestoreWalletAdapter
 import com.dcrandroid.data.Constants
-import com.dcrandroid.util.DcrConstants
+import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.confirm_seed_page.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -226,7 +226,7 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnTouchListener {
     }
 
     private fun handleSingleTap() {
-        val dcrConstants = DcrConstants.getInstance()
+        val dcrConstants = WalletData.getInstance()
 
         if (sortedList.isNotEmpty() && (sortedList.size == 33)) {
             finalSeedsString = sortedList.joinToString(" ", "", "", -1, "...") { it.phrase }

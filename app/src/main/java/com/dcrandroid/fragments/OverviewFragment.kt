@@ -30,6 +30,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.util.*
 import dcrlibwallet.GetTransactionsResponse
 import kotlinx.android.synthetic.main.content_overview.*
+import kotlinx.android.synthetic.main.overview_sync_layout.*
 import java.io.*
 import java.math.BigDecimal
 import java.math.MathContext
@@ -40,9 +41,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
-    private var constants: DcrConstants? = null
+    private var constants: WalletData? = null
     private val transactionList = ArrayList<TransactionsResponse.TransactionItem>()
-    private var recyclerViewHeight: Int = 0
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
     private var isForeground: Boolean = false
@@ -61,7 +61,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         registerNotificationChannel()
 
         util = PreferenceUtil(context!!)
-        constants = DcrConstants.getInstance()
+        constants = WalletData.getInstance()
 
         swipe_refresh_layout2.setColorSchemeResources(R.color.colorPrimaryDarkBlue,
                 R.color.colorPrimaryDarkBlue,
@@ -76,6 +76,14 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
             }
+
+            pb_sync_progress.progress = 0
+            overview_sync_layout.visibility = View.VISIBLE
+            tv_synchronizing.setText(R.string.starting_synchronization)
+            if(constants!!.syncStatus != null){
+                publishProgress()
+            }
+
         } else {
             getBalance()
             iv_sync_indicator.visibility = View.GONE
@@ -137,11 +145,31 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             }
         }
 
+        tap_for_more_info.setOnClickListener {
+            it.visibility = View.GONE
+            pb_status.visibility = View.VISIBLE
+            syncing_peers.visibility = View.VISIBLE
+        }
+
+        pb_status.setOnClickListener {
+            it.visibility = View.GONE
+            syncing_peers.visibility = View.GONE
+            tap_for_more_info.visibility = View.VISIBLE
+        }
+
+        syncing_peers.setOnClickListener {
+            it.visibility = View.GONE
+            pb_status.visibility = View.GONE
+            tap_for_more_info.visibility = View.VISIBLE
+        }
+
+
         val vto = history_recycler_view2.viewTreeObserver
         if (vto.isAlive) {
             vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-                    recyclerViewHeight = history_recycler_view2.height
+                    val recyclerViewHeight = history_recycler_view2.height
+                    println("Recycler View Height: ${history_recycler_view2.height}")
                     if (recyclerViewHeight != 0)
                         prepareHistoryData()
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -175,7 +203,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             return 0
         }
         val px = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52f, activity!!.resources.displayMetrics))
-        return recyclerViewHeight / px
+        val max = history_recycler_view2.height / px
+        if (max < 1){
+            return 5
+        }
+
+
+        return max
     }
 
     private fun getBalance() {
@@ -215,14 +249,25 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             needsUpdate = true
             return
         }
+
         if (activity == null) {
             return
         }
+
+        if (swipe_refresh_layout2.isRefreshing) {
+            return
+        }
+
+        getTransactions()
+    }
+
+    private fun getTransactions(){
         activity!!.runOnUiThread { swipe_refresh_layout2.isRefreshing = true }
         transactionList.clear()
         loadTransactions()
         if (!constants!!.synced) {
-            no_history.setText(R.string.no_transactions_sync)
+            no_history.setText(R.string.synchronizing)
+            println("Going back, Hiding swipe to refresh")
             swipe_refresh_layout2.isRefreshing = false
             return
         }
@@ -231,6 +276,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         object : Thread() {
             override fun run() {
                 try {
+                    println("Getting transactions")
                     constants!!.wallet.getTransactions(this@OverviewFragment)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -298,13 +344,15 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             return
         }
         activity!!.runOnUiThread {
+            println("Got response")
+            if (swipe_refresh_layout2.isRefreshing) {
+                println("Hiding Layout")
+                swipe_refresh_layout2.isRefreshing = false
+            }
             val response = TransactionsResponse.parse(json)
             if (response.transactions.size == 0) {
                 no_history.setText(R.string.no_transactions)
                 history_recycler_view2.visibility = View.GONE
-                if (swipe_refresh_layout2.isRefreshing) {
-                    swipe_refresh_layout2.isRefreshing = false
-                }
             } else {
                 val transactions = response.transactions
                 Collections.sort<TransactionsResponse.TransactionItem>(transactions, TransactionComparator.TimestampSort())
@@ -317,9 +365,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                     transactionList.addAll(transactions)
                 }
                 history_recycler_view2.visibility = View.VISIBLE
-                if (swipe_refresh_layout2.isRefreshing) {
-                    swipe_refresh_layout2.isRefreshing = false
-                }
+
                 transactionAdapter!!.notifyDataSetChanged()
                 saveTransactions(transactions)
 
@@ -383,8 +429,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     }
 
     override fun onRefresh() {
-        getBalance()
-        prepareHistoryData()
+        getTransactions()
     }
 
     override fun onResume() {
@@ -393,6 +438,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             val filter = IntentFilter(Constants.SYNCED)
             context!!.registerReceiver(receiver, filter)
         }
+
+        if (!constants!!.synced) {
+            overview_sync_layout.visibility = View.VISIBLE
+        } else {
+            overview_sync_layout.visibility = View.GONE
+        }
+
         isForeground = true
         if (needsUpdate) {
             needsUpdate = false
@@ -474,13 +526,49 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         overview_av_balance.visibility = View.VISIBLE
     }
 
+    fun publishProgress(){
+        if(activity != null) {
+            activity!!.runOnUiThread {
+                tv_synchronizing.setText(R.string.synchronizing)
+                pb_sync_progress.visibility = View.VISIBLE
+                pb_percent_complete.visibility = View.VISIBLE
+                if (pb_status.visibility == View.GONE) {
+                    tap_for_more_info.visibility = View.VISIBLE
+                }
+
+                pb_sync_progress.progress = constants!!.syncProgress.toInt()
+
+                pb_percent_complete.text = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, context)
+
+                pb_status.text = constants!!.syncStatus
+
+                if (BuildConfig.IS_TESTNET) {
+                    if (constants!!.peers == 1) {
+                        syncing_peers.text = getString(R.string.one_syncing_peer_testnet)
+                    } else {
+                        syncing_peers.text = getString(R.string.syncing_peers_testnet, constants!!.peers)
+                    }
+                } else {
+                    if (constants!!.peers == 1) {
+                        syncing_peers.text = getString(R.string.one_syncing_peer_mainnet)
+                    } else {
+                        syncing_peers.text = getString(R.string.syncing_peers_mainnet, constants!!.peers)
+                    }
+                }
+            }
+        }
+    }
+
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
                 if (constants!!.synced) {
+                    overview_sync_layout.visibility = View.GONE
                     getBalance()
                     hideSyncIndicator()
                     prepareHistoryData()
+                    pb_sync_progress.visibility = View.GONE
+                    pb_percent_complete.visibility = View.GONE
                 } else {
                     iv_sync_indicator.visibility = View.VISIBLE
                     overview_av_balance.visibility = View.GONE

@@ -18,7 +18,7 @@ import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
@@ -87,7 +87,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (DcrConstants.getInstance().wallet == null) {
+        if (WalletData.getInstance().wallet == null) {
             Utils.restartApp(this);
             return;
         }
@@ -109,7 +109,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        wallet = DcrConstants.getInstance().wallet;
+        wallet = WalletData.getInstance().wallet;
 
         calendar = new GregorianCalendar(TimeZone.getDefault());
         sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
@@ -166,7 +166,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             status.setText(R.string.pending);
             confirmation.setText(R.string.unconfirmed);
         } else {
-            int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
+            int confirmations = WalletData.getInstance().wallet.getBestBlock() - height;
             confirmations += 1; //+1 confirmation that it exist in a block. best block - height returns 0.
             confirmation.setText(String.valueOf(confirmations));
             if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {
@@ -226,7 +226,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setText(R.string.pending);
                 confirmation.setText(R.string.unconfirmed);
             } else {
-                int confirmations = DcrConstants.getInstance().wallet.getBestBlock() - height;
+                int confirmations = WalletData.getInstance().wallet.getBestBlock() - height;
                 confirmations += 1; //+1 confirmation that it exist in a block. best block - height returns 0.
                 confirmation.setText(String.valueOf(confirmations));
                 if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {

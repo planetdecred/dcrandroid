@@ -140,23 +140,36 @@
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="20dp"
                         android:id="@+id/tv_connection_status"
                         android:text="@string/connecting_to_peers"
                         android:gravity="start"
                         android:textSize="13sp"
                         android:paddingStart="5dp"
                         android:paddingLeft="5dp"
-                        android:textColor="@color/darkBlueGrayTextColor"
-                        android:background="@color/lightOrangeBackgroundColor"
-
+                        android:textColor="@color/white"
+                        android:background="@android:color/darker_gray"
                         />
-                </RelativeLayout>
+
+                    <ProgressBar
+                        android:layout_width="match_parent"
+                        android:layout_height="6.7dp"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progressDrawable="@drawable/sync_progress_bar"
+                        android:max="100"
+                        android:id="@+id/pb_sync_progress"
+                        android:visibility="gone"
+                        />
+
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -167,14 +180,6 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        app:srcCompat="@drawable/ic_refresh"
-                        android:id="@+id/iv_rescan_blocks"
-                        android:visibility="gone"
-                        />
 
                     <TextView
                         android:layout_width="match_parent"

@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.NotificationCompat;
 import dcrlibwallet.Dcrlibwallet;
@@ -158,7 +159,30 @@ public class Utils {
         return addr;
     }
 
+    public static String calculateDays(long seconds, Context context){
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        if (days == 0){
+            return context.getString(R.string.less_than_one_day);
+        }else if(days == 1){
+            return context.getString(R.string.one_day);
+        }
+
+        return context.getString(R.string.multiple_days, days);
+    }
+
+    public static String calculateDaysAgo(long seconds, Context context){
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        if (days == 0){
+            return context.getString(R.string.less_than_one_day_ago);
+        }else if(days == 1){
+            return context.getString(R.string.one_day_ago);
+        }
+
+        return context.getString(R.string.multiple_days_ago, days);
+    }
+
     public static String calculateTime(long seconds, Context context) {
+        String ago = context.getString(R.string.ago);
         if (seconds > 59) {
 
             // convert to minutes
@@ -185,34 +209,61 @@ public class Utils {
 
                             if (seconds > 11) {
 
-                                //Convert to
+                                // convert to year
                                 seconds /= 12;
 
-                                return seconds + "y " + context.getString(R.string.ago);
+                                return seconds + "y " + ago;
                             }
 
                             //months
-                            return seconds + "mo " + context.getString(R.string.ago);
+                            return seconds + "mo " + ago;
                         }
                         //weeks
-                        return seconds + "w " + context.getString(R.string.ago);
+                        return seconds + "w " + ago;
                     }
                     //days
-                    return seconds + "d " + context.getString(R.string.ago);
+                    return seconds + "d " + ago;
                 }
                 //hour
-                return seconds + "h " + context.getString(R.string.ago);
+                return seconds + "h " + ago;
             }
 
             //minutes
-            return seconds + "m " + context.getString(R.string.ago);
+            return seconds + "m " + ago;
         }
 
         if (seconds < 0) {
             return context.getString(R.string.now);
         }
         //seconds
-        return seconds + "s " + context.getString(R.string.ago);
+        return seconds + "s " + ago;
+    }
+
+    public static String getTimeRemaining(long millis, int percentageCompleted, boolean useLeft, Context ctx){
+        if (millis > 1000){
+            long seconds = millis / 1000;
+
+            if(seconds > 60){
+                long minutes = seconds / 60;
+                if (useLeft){
+                    return ctx.getString(R.string.left_minute_sync_eta, percentageCompleted, minutes);
+                }
+
+                return ctx.getString(R.string.remaining_minute_sync_eta, percentageCompleted, minutes);
+            }
+
+            if (useLeft){
+                return ctx.getString(R.string.left_seconds_sync_eta, percentageCompleted, seconds);
+            }
+
+            return ctx.getString(R.string.remaining_seconds_sync_eta, percentageCompleted, seconds);
+        }
+
+        if (useLeft){
+            return ctx.getString(R.string.left_sync_eta_less_than_seconds, percentageCompleted);
+        }
+
+        return ctx.getString(R.string.remaining_sync_eta_less_than_seconds, percentageCompleted);
     }
 
     public static String formatDecred(long dcr) {
@@ -245,12 +296,6 @@ public class Utils {
         return format.format(amount);
     }
 
-    public static double formatDecredToDobule(long dcr) {
-        BigDecimal satoshi = BigDecimal.valueOf(dcr);
-        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-        return amount.doubleValue();
-    }
-
     public static long signedSizeToAtom(long signedSize) {
         BigDecimal signed = new BigDecimal(signedSize);
         signed = signed.setScale(9, RoundingMode.HALF_UP);
@@ -261,14 +306,6 @@ public class Utils {
         signed = signed.divide(feePerKb, MathContext.DECIMAL128);
 
         return signed.longValue();
-    }
-
-    public static String getPeerAddress(PreferenceUtil util) {
-        String ip = util.get("peer_ip");
-        if (ip.length() == 0) {
-            return "";
-        }
-        return ip;
     }
 
     public static void copyToClipboard(Context ctx, String copyText, String successMessage) {
@@ -379,7 +416,7 @@ public class Utils {
     public static String translateError(Context ctx, Exception e) {
         switch (e.getMessage()) {
             case Dcrlibwallet.ErrInsufficientBalance:
-                if (!DcrConstants.getInstance().synced) {
+                if (!WalletData.getInstance().synced) {
                     return ctx.getString(R.string.not_enought_funds_synced);
                 }
                 return ctx.getString(R.string.not_enough_funds);

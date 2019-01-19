@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--General-->
     <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
@@ -70,14 +70,35 @@
     <string name="now">now</string>
     <string name="you_received">You received</string>
     <string name="disconnected">Disconnected</string>
-    <string name="synced">Synced</string>
-    <string name="syncing">Syncing</string>
-    <string name="with">with</string>
+    <string name="synced_with_one_peer">Synced with 1 peer</string>
+    <string name="syncing_with_one_peer">Syncing with 1 peer</string>
+    <string name="synced_with_multiple_peer">Synced with %1$d peers</string>
+    <string name="syncing_with_multiple_peer">Syncing with %1$d peers</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
     <string name="log_file_not_found">Log file not found</string>
     <string name="wallet_log_copied">Wallet log copied successfully</string>
     <string name="dismiss">Dismiss</string>
+    <string name="welcome_title">Welcome to Decred Wallet.</string>
+    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
+    <string name="less_than_one_day">&lt;1 day</string>
+    <string name="less_than_one_day_ago">&lt;1 day ago</string>
+    <string name="one_day">1 day</string>
+    <string name="one_day_ago">1 day ago</string>
+    <string name="multiple_days">%1$d days</string>
+    <string name="multiple_days_ago">%1$d days ago</string>
+    <string name="copy">Copy</string>
+    <string name="copied_successfully">Copied successfully.</string>
+    <string name="all">All</string>
+    <string name="re_establishing_connection">Re-establishing connection</string>
+    <string name="address_not_found">The address not found.</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="clearAll">Clear All</string>
+    <string name="share">Share</string>
+    <string name="clear_fields">Clear fields</string>
+    <string name="deleting_wallet">Deleting Wallet…</string>
+    <string name="retry_caps">RETRY</string>
+    <string name="share_address_via">Share the QR code image to</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -122,10 +143,6 @@
     <string name="connecting_to_rpc_server">Connecting to RPC Server</string>
     <string name="connecting_attempt">Connecting attempt</string>
     <string name="rpc_connection_failed">RPC Connection Failed:</string>
-    <string name="peer">peer</string>
-    <string name="fetched">fetched</string>
-    <string name="fetching_missing_cfilters">Fetching Missing CFilters</string>
-    <string name="cfilters">CFilters</string>
     <!--/Peers-->
 
     <!--Account-->
@@ -161,6 +178,8 @@
     <string name="i_copied_the_seed_phrase">I copied the seed phrase</string>
     <string name="seed_phrase_verification">Seed Phrase Verification</string>
     <string name="seed_restore">Seed Restore</string>
+    <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
+    <string name="correctWordIs">Word #</string>
     <!--/Seed-->
 
     <!--Balance-->
@@ -212,7 +231,6 @@
     <string name="tx_hash_copy">Hash copied to clipboard</string>
     <string name="tx_notify_title">Incoming Transaction Notifications</string>
     <string name="no_transactions">No transactions</string>
-    <string name="no_transactions_sync">No transactions\nSync in progress</string>
     <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
     <string name="label_hash">HASH:</string>
     <string name="transaction">Transaction</string>
@@ -261,10 +279,39 @@
     <string name="rescan_block">Rescan Blockchain</string>
     <string name="starting_height">starting height</string>
     <string name="current_height">Current height</string>
-    <string name="fetching_headers">Fetching Headers</string>
     <string name="rescan_blocks_confirmation">Are you sure? This could take some time.</string>
-    <string name="rescanning_in_progress">Rescanning in progress…</string>
     <!--/Block chain-->
+
+    <!--Sync Messages-->
+    <string name="fetching_headers">Fetching block headers.</string>
+    <string name="blocks_behind">%1$d blocks behind.</string>
+    <string name="discovering_used_addresses">Discovering used addresses.</string>
+    <string name="remaining_minute_sync_eta">%1$d%% completed, %2$d min remaining.</string>
+    <string name="remaining_seconds_sync_eta">%1$d%% completed, %2$d sec remaining.</string>
+    <string name="remaining_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds remaining.</string>
+    <string name="left_minute_sync_eta">%1$d%% completed, %2$d min left.</string>
+    <string name="left_seconds_sync_eta">%1$d%% completed, %2$d sec left.</string>
+    <string name="left_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds left.</string>
+    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.</string>
+    <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
+    <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
+    <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
+    <string name="overview_rescan_height_format">Scanning %1$d of %2$d block headers.\n%3$d%% through step 3 of 3.</string>
+    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$d%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
+    <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
+    <string name="overview_discovering_used_addresses">Discovering used addresses.\n~%1$d%% through step 2 of 3.</string>
+    <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
+    <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
+    <string name="synchronizing">Synchronizing</string>
+    <string name="starting_synchronization">Starting Synchronization…</string>
+    <string name="rescanning_in_progress">Rescanning in progress…</string>
+    <string name="scanning_blocks">Scanning blocks.</string>
+    <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
+    <string name="syncing_peers_testnet">Syncing with %1$d peers on testnet.</string>
+    <string name="one_syncing_peer_testnet">Syncing with 1 peer on testnet.</string>
+    <string name="syncing_peers_mainnet">Syncing with %1$d peers on mainnet.</string>
+    <string name="one_syncing_peer_mainnet">Syncing with 1 peer on mainnet.</string>
+    <!--/Sync Messages-->
 
     <!--QR Code-->
     <string name="camera_permission_scan">This application needs camera permission to scan QRCode for a wallet address , Please allow the permissions in the next dialog.</string>
@@ -274,7 +321,7 @@
     <!--/QR Code-->
 
     <!--Address-->
-    <string name="discovering_used_addresses">Discovering used addresses</string>
+    <string name="notification_discovering_used_addresses">(2/3) Discovering used addresses…</string>
     <string name="address_copy_text">Address copied to clipboard</string>
     <string name="your_address">Your address</string>
     <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
@@ -314,6 +361,10 @@
     <string name="new_block_notification">New Block Notification</string>
     <string name="currency_conversion">Currency Conversion</string>
     <string name="requires_restart">Requires restart.</string>
+    <string name="user_agent_summary">For exchange rate fetching.</string>
+    <string name="changing">Changing…</string>
+    <string name="setting_startup_pin">Setting startup PIN…</string>
+    <string name="setting_startup_password">Setting startup password…</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -329,7 +380,7 @@
         <item>USD (bittrex)</item>
     </string-array>
     <string-array name="currency_conversion_source" translatable="false">
-        <item></item>
+        <item />
         <item>bittrex</item>
     </string-array>
     <string-array name="currency_conversion_values">
@@ -337,7 +388,7 @@
         <item>1</item>
     </string-array>
     <string-array name="currency_conversion_abbrv" translatable="false">
-        <item></item>
+        <item />
         <item>USD</item>
     </string-array>
 
@@ -354,7 +405,18 @@
     <!-- Overview Fragment -->
     <string name="recent_activity">Recent Activity</string>
     <string name="show_all_transactions">Show All Transactions</string>
+    <string name="tap_for_more_information">Tap for more information.</string>
     <!--/ Overview Fragment -->
+
+    <!--History Fragment -->
+    <string name="coinbase" translatable="false">Coinbase</string>
+    <string name="sent">Sent</string>
+    <string name="yourself">Yourself</string>
+    <string name="received">Received</string>
+    <string name="staking">Staking</string>
+    <string name="no_transactions_have_occurred">No transactions have occurred.</string>
+    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar.</string>
+    <!--/History Fragment -->
 
     <!--Error Messages-->
     <string name="not_enough_funds">Not enough funds.</string>
@@ -363,6 +425,10 @@
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="balance_remaining">Balance Remaining:</string>
+    <string name="failed_to_send_transaction">Failed to send transaction</string>
+    <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
+    <string name="not_connected_error">Not connected to the network.</string>
+    <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -399,6 +465,12 @@
     <string name="link_to_dcr_data">Tab this to see details in Dcrdata</string>
     <string name="View_on_dcrdata">View On Dcrdata</string>
     <string name="tap_to_paste">Tap to Paste</string>
+    <string name="sending_transaction">Sending transaction…</string>
+    <string name="send_to_account">Send to account</string>
+    <string name="send_to_address">Send to address</string>
+    <string name="amount_can_not_be_zero">Amount can not be zero.</string>
+    <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
+    <string name="network_synchronization">Please wait for network synchronization.</string>
     <!--/Send Fragment-->
 
     <!--Transaction Details View-->
@@ -408,6 +480,8 @@
     <string name="ticket_purchase">Ticket Purchase</string>
     <string name="vote_bits">Vote Bits</string>
     <string name="last_block_valid">Last Block Valid</string>
+    <string name="menu_view_on_dcrdata">View on Dcrdata</string>
+    <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
     <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->
@@ -451,57 +525,17 @@
     <string name="change_startup_pin_password">Change Startup PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
     <string name="changing_pin">Changing PIN…</string>
+    <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
     <!--/Security-->
 
-    <!-- Not grouped yet -->
+    <!--Crash Report-->
     <string name="confirm_crash">Confirm Crash</string>
     <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report.</string>
-    <string name="sending_transaction">Sending transaction…</string>
-    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar.</string>
-    <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
-    <string name="user_agent_summary">For exchange rate fetching.</string>
-    <string name="no_transactions_have_occured">No transactions have occurred.</string>
-    <string name="send_to_account">Send to account</string>
-    <string name="send_to_address">Send to address</string>
-    <string name="changing">Changing…</string>
-    <string name="setting_startup_pin">Setting startup PIN…</string>
-    <string name="setting_startup_password">Setting startup password…</string>
-    <string name="enter_an_amounnt">Enter an amount.</string>
-    <string name="retry_caps">RETRY</string>
-    <string name="amount_can_not_be_zero">Amount can not be zero.</string>
-    <string name="clear_fields">Clear fields</string>
-    <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
     <string name="dont_send">Don\'t send</string>
     <string name="send_report">Send Report</string>
     <string name="app_crashed">App Crashed</string>
     <string name="crash_report_copied">Crash report copied successfully</string>
     <string name="hide_report">Hide Report</string>
     <string name="view_report">View Report</string>
-    <string name="menu_view_on_dcrdata">View on Dcrdata</string>
-    <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
-    <string name="failed_to_send_transaction">Failed to send transaction</string>
-    <string name="copy">Copy</string>
-    <string name="copied_successfully">Copied successfully.</string>
-    <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
-    <string name="clearAll">Clear All</string>
-    <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
-    <string name="correctWordIs">Word #</string>
-    <string name="share">Share</string>
-    <string name="share_address_via">Share the QR code image to</string>
-    <string name="address_not_found">The address not found.</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
-    <string name="re_establishing_connection">Re-establishing connection</string>
-    <string name="all">All</string>
-    <string name="coinbase" translatable="false">Coinbase</string>
-    <string name="sent">Sent</string>
-    <string name="yourself">Yourself</string>
-    <string name="received">Received</string>
-    <string name="staking">Staking</string>
-    <string name="not_connected_error">Not connected to the network.</string>
-    <string name="network_synchronization">Please wait for network synchronization.</string>
-    <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
-    <string name="deleting_wallet">Deleting Wallet…</string>
-    <string name="welcome_title">Welcome to Decred Wallet.</string>
-    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
+    <!--/Crash Report-->
 </resources>

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.PeerAdapter;
 import com.dcrandroid.data.Peers;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.Utils;
 
@@ -103,7 +103,7 @@ public class GetPeersActivity extends AppCompatActivity {
         pd.show();
         new Thread() {
             public void run() {
-                DcrConstants constants = DcrConstants.getInstance();
+                WalletData constants = WalletData.getInstance();
                 try {
                     String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this);
                     String result = constants.wallet.callJSONRPC("getpeerinfo", "", dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));

@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
@@ -87,7 +87,7 @@ public class AddAccountActivity extends AppCompatActivity {
         new Thread() {
             public void run() {
                 try {
-                    DcrConstants.getInstance().wallet.nextAccount(name, privatePassphrase);
+                    WalletData.getInstance().wallet.nextAccount(name, privatePassphrase);
                     setResult(RESULT_OK);
                     finish();
                 } catch (final Exception e) {

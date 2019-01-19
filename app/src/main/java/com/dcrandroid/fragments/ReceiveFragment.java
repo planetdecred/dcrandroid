@@ -27,7 +27,7 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.DcrConstants;
+import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.google.zxing.BarcodeFormat;
@@ -66,7 +66,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
     PreferenceUtil preferenceUtil;
     List<Integer> accountNumbers = new ArrayList<>();
     private TextView address;
-    private DcrConstants constants;
+    private WalletData constants;
     private Map<EncodeHintType, Object> qrHints = new HashMap<>();
     private Spinner accountSpinner;
     private Bitmap generatedQR;
@@ -84,7 +84,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         if (getContext() == null) {
             return null;
         }
-        constants = DcrConstants.getInstance();
+        constants = WalletData.getInstance();
         preferenceUtil = new PreferenceUtil(getContext());
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
 

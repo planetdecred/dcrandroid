@@ -40,7 +40,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private var fixedTransactionList: ArrayList<TransactionsResponse.TransactionItem> = ArrayList()
     private val availableTxTypes = ArrayList<String>()
 
-    private var constants: DcrConstants? = null
+    private var constants: WalletData? = null
 
     private var util: PreferenceUtil? = null
 
@@ -62,7 +62,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
             activity!!.title = getString(R.string.history)
 
         util = PreferenceUtil(context!!)
-        constants = DcrConstants.getInstance()
+        constants = WalletData.getInstance()
 
         swipe_refresh_layout.setColorSchemeResources(
                 R.color.colorPrimaryDarkBlue,
@@ -169,7 +169,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         }
 
         if (!constants!!.synced) {
-            no_history.setText(R.string.no_transactions_sync)
+            no_history.setText(R.string.synchronizing)
             swipe_refresh_layout.isRefreshing = false
             return
         }
@@ -237,7 +237,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
         activity!!.runOnUiThread {
             val response = TransactionsResponse.parse(s)
             if (response.transactions.size == 0) {
-                no_history.setText(R.string.no_transactions_have_occured)
+                no_history.setText(R.string.no_transactions_have_occurred)
                 no_history.visibility = View.VISIBLE
                 history_recycler_view.visibility = View.GONE
                 if (swipe_refresh_layout.isRefreshing) {
