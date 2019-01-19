@@ -27,9 +27,9 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.WalletData
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.fragment_send.*
@@ -427,10 +427,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if (returnString.startsWith(getString(R.string.decred_colon)))
                         returnString = returnString.replace(getString(R.string.decred_colon), "")
                     if (returnString.length < 25) {
-                        Toast.makeText(requireContext(), R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
                         return
                     } else if (returnString.length > 36) {
-                        Toast.makeText(requireContext(), R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
                         return
                     }
 
@@ -439,7 +439,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     } else if (returnString.startsWith("D") && !BuildConfig.IS_TESTNET) {
                         send_dcr_address.setText(returnString)
                     } else {
-                        Toast.makeText(activity!!.applicationContext, R.string.invalid_address_prefix, Toast.LENGTH_SHORT).show()
+                        if (BuildConfig.IS_TESTNET) {
+                            Toast.makeText(context, R.string.invalid_testnet_address, Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, R.string.invalid_mainnett_address, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), R.string.error_not_decred_address, Toast.LENGTH_LONG).show()

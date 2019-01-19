@@ -328,7 +328,6 @@
     <string name="generate_new_address">Generate new address</string>
     <string name="receive_fund_privacy_info">Each time you request a payment, a new address is created to protect your privacy.</string>
     <string name="error_not_decred_address">This is not a DCR wallet address</string>
-    <string name="invalid_address_prefix">Invalid address prefix</string>
     <string name="wallet_addr_too_long">Wallet Address Is Too Long</string>
     <string name="wallet_add_too_short">Wallet Address Is Too Short</string>
     <string name="invalid_address">Not a valid address.</string>
@@ -429,6 +428,8 @@
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
     <string name="not_connected_error">Not connected to the network.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
+    <string name="invalid_testnet_address">This is not a valid Decred testnet3 address.</string>
+    <string name="invalid_mainnett_address">This is not a valid Decred mainnet address.</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
