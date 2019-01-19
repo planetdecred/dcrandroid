@@ -27,9 +27,9 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.BitMatrix;
@@ -127,7 +127,11 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
             case R.id.generate_address:
                 try {
                     int position = accountSpinner.getSelectedItemPosition();
+                    String oldAddress = address.getText().toString();
                     String newAddress = constants.wallet.nextAddress(accountNumbers.get(position));
+                    if (oldAddress.equals(newAddress)) {
+                        newAddress = constants.wallet.nextAddress(accountNumbers.get(position));
+                    }
                     setAddress(newAddress);
                 } catch (Exception e) {
                     e.printStackTrace();
