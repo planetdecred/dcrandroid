@@ -19,7 +19,6 @@
     <string name="overview">Обзор</string>
     <string name="permission">Разрешение</string>
     <string name="denied_permission">Вы отклонили разрешение!!!</string>
-    <string name="error_bundle_null">Произошла ошибка, бандл не определён</string>
     <string name="receive">Получить</string>
     <string name="tickets">Тикеты</string>
     <string name="amount_dcr">Сумма</string>
@@ -123,12 +122,12 @@
     <string name="account_number">Номер аккаунта</string>
     <string name="edit_account_name">Редактировать имя аккаунта</string>
     <string name="spinner_account">Аккаунт:</string>
-    <string name="input_your_new_account_name_and_enter_your_private_passphrase">Введите имя вашего аккаунта и вашу личную парольную фразу</string>
-    <string name="account_name">Имя аккаунта</string>
+    <string name="input_your_new_account_name_and_enter_your_private_passphrase">Введите название аккаунта затем укажите вашу парольную фразу или PIN</string>
+    <string name="account_name">Название аккаунта</string>
     <string name="create_account">Создать аккаунт</string>
     <string name="add_account">Добавить аккаунт</string>
     <string name="creating_account">Создаётся аккаунт…</string>
-    <string name="input_account_name">Введите имя для вашего эккаунта</string>
+    <string name="input_account_name">Введите название для вашего аккаунта</string>
     <string name="hd_path">Путь HD</string>
     <string name="default_account_info">Сделать так, чтобы этот аккаунт использовался по умолчанию для всех исходящих и входящих транзакций</string>
     <string name="external">внешние</string>
@@ -149,7 +148,7 @@
 
     <!--Balance-->
     <string name="label_spendable">Расходуемый</string>
-    <string name="immature_stake_generation">Незрелое генерирование стейка</string>
+    <string name="immature_stake_generation">Несформированная генерация ставки</string>
     <string name="label_immature_rewards">Незрелые вознаграждения</string>
     <string name="label_locked_by_tickets">Заблокировано тикетами</string>
     <string name="label_voting_authority">Право голоса</string>
@@ -207,7 +206,7 @@
     <string name="script_bracket">[скрипт]</string>
     <string name="external_bracket">(внешние)</string>
     <string name="null_data_bracket">[нет данных]</string>
-    <string name="raw_tx_copied">Сырая транзакция скопирована в буфер обмена</string>
+    <string name="raw_tx_copied">Необработанная транзакция скопирована в буфер обмена</string>
     <string name="vote">Голосовать</string>
     <string name="confirmed_immature">Подтвержденные / Незрелые</string>
     <string name="confirmed_live">Подтвержденные / Активные</string>
@@ -222,8 +221,8 @@
     <string name="invalid_amount">Сумма недействительна</string>
     <string name="new_transaction">Новая транзакция</string>
     <string name="latest_block">Последний блок</string>
-    <string name="copy_raw_transaction">Копировать сырую транзакцию</string>
-    <string name="tap_this_to_copy_raw_transaction_hex">Нажмите тут, чтобы скопировать хекс сырой транзакции</string>
+    <string name="copy_raw_transaction">Скопировать необработанную транзакцию</string>
+    <string name="tap_this_to_copy_raw_transaction_hex">Нажмите тут, чтобы скопировать хекс необработанной транзакции</string>
     <string name="tap_this_to_copy_transaction_hash">Нvжмите тут, чтобы скопировать хеш транзакции</string>
     <string name="copy_hash">Копировать хеш</string>
     <!--/Transaction-->
@@ -249,7 +248,7 @@
     <string name="address_copy_text">Адрес скопирован в буфер обмена</string>
     <string name="your_address">Ваш адрес</string>
     <string name="error_occurred_getting_address">Произошла ошибка во время получения адреса для аккаунта:</string>
-    <string name="generate_new_address">Генерировать новый адрес</string>
+    <string name="generate_new_address">Сгенерировать новый адрес</string>
     <string name="receive_fund_privacy_info">Каждый раз, когда вы запрашиваете платёж, создаётся новый адрес в целях защиты ваших персональных данных.</string>
     <string name="error_not_decred_address">Этот адрес не является адресом кошелька DCR</string>
     <string name="invalid_address_prefix">Недействительная приставка в адресе</string>
@@ -272,7 +271,7 @@
     <string name="connect_to_peer">Подсоединиться к узлу</string>
     <string name="server_address">Адрес сервера</string>
     <string name="wallet_log">Лог кошелька</string>
-    <string name="crash_title">Принудительный краш</string>
+    <string name="crash_title">Спровоцировать сбой</string>
     <string name="remote_address_invalid">Удалённый адрес недействителен</string>
     <string name="new_block_notification_description">Звуковой сигнал для новых блоков.</string>
     <string name="new_block_notification">Уведомление о новом блоке</string>
@@ -392,8 +391,8 @@
     <!--/Security-->
 
     <!-- Not grouped yet -->
-    <string name="confirm_crash">Подтвердите краш</string>
-    <string name="crash_confirmation_description">Это приведёт к принудительному крашу приложения, и будет запрошен отчёт о краше.</string>
+    <string name="confirm_crash">Подтвердите сбой</string>
+    <string name="crash_confirmation_description">Это приведёт к принудительному сбою приложения, и будет запрошен отчёт о краше.</string>
     <string name="sending_transaction">Осуществляется транзакция…</string>
     <string name="wallet_is_rescanning">Осуществляется повторное сканирование кошелька, проверяйте статус в navigation bar.</string>
     <string name="check_progress_in_navigation_bar">Проверяйте статус в navigation bar.</string>
@@ -409,8 +408,8 @@
     <string name="amount_must_be_greater_than_zero">Сумма должна быть больше нуля</string>
     <string name="dont_send">Не отправляйте</string>
     <string name="send_report">Отправить отчёт</string>
-    <string name="app_crashed">Краш приложения</string>
-    <string name="crash_report_copied">Отчёт о краше был скопирован.</string>
+    <string name="app_crashed">Сбой приложения</string>
+    <string name="crash_report_copied">Отчёт о сбое был скопирован.</string>
     <string name="hide_report">Скрыть отчёт</string>
     <string name="view_report">Просмотреть отчёт</string>
     <string name="menu_view_on_dcrdata">Просмотреть на Dcrdata</string>
