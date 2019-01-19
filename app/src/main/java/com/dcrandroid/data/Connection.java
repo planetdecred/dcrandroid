@@ -18,7 +18,7 @@ public class Connection {
         return connection;
     }
 
-    public void setConnection(String seed) {
+    public void setConnection(String connection) {
         this.connection = connection;
     }
 }
