@@ -502,4 +502,6 @@
     <string name="network_synchronization">Please wait for network synchronization.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="deleting_wallet">Deleting Wallet…</string>
+    <string name="welcome_title">Welcome to Decred Wallet.</string>
+    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
 </resources>
