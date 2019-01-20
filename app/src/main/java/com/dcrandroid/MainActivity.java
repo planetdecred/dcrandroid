@@ -834,7 +834,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         setChainStatus(Utils.getSyncTimeRemaining(report.getGeneralSyncProgress().getTotalTimeRemainingSeconds(),
                 report.getGeneralSyncProgress().getTotalSyncProgress(), true, MainActivity.this));
         setBestBlockTime(-1);
-
         syncProgressBar.post(new Runnable() {
             @Override
             public void run() {

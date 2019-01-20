@@ -157,6 +157,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/change_wallet_dir_button"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:text="@string/wallet_dir_change_button"/>
+
 
     </LinearLayout>
 

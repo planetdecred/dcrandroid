@@ -6,6 +6,8 @@
 
 package com.dcrandroid.util;
 
+
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -47,10 +50,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import dcrlibwallet.Dcrlibwallet;
 
 public class Utils {
@@ -171,7 +174,6 @@ public class Utils {
         if(context == null){
             return "";
         }
-
         long days = TimeUnit.SECONDS.toDays(seconds);
         if (days == 0) {
             return context.getString(R.string.less_than_one_day);
@@ -253,7 +255,6 @@ public class Utils {
 
     public static String getSyncTimeRemaining(long seconds, int percentageCompleted, boolean useLeft, Context ctx) {
         if (seconds > 1) {
-
             if (seconds > 60) {
                 long minutes = seconds / 60;
                 if (useLeft) {
@@ -563,5 +564,34 @@ public class Utils {
 
         manager.notify(nonce, notification);
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
+    }
+
+    @TargetApi(19)
+    public static String getWalletDir(final Context context, boolean getCommonName) {
+
+        PreferenceUtil util = new PreferenceUtil(context);
+
+        String dirType = util.get(context.getString(R.string.key_wallet_dir_type));
+        String dir;
+
+        if (dirType.equals(context.getString(R.string.wallet_dir_external))) {
+            dir = context.getExternalFilesDir(null) + "/wallet";
+        } else if (dirType.equals(context.getString(R.string.wallet_dir_external_removable))) {
+            File[] externalDirs =
+                    (Build.VERSION.SDK_INT >= 19) ?
+                            context.getExternalFilesDirs(null) :
+                            ContextCompat.getExternalFilesDirs(context, null);
+            try {
+                dir = externalDirs[1] + "/wallet";
+            } catch (Exception e) {
+                Toast.makeText(context, R.string.wallet_dir_external_removed, Toast.LENGTH_LONG).show();
+                dir = context.getFilesDir() + context.getApplicationContext().getPackageName() + "/wallet";
+                util.set(context.getString(R.string.key_wallet_dir_type), context.getString(R.string.wallet_dir_internal));
+            }
+        } else {
+            dir = getCommonName ? context.getString(R.string.hidden) : context.getFilesDir() + "/wallet";
+        }
+
+        return dir;
     }
 }

@@ -228,6 +228,13 @@
     <string name="invalid_current_password">Current password entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
+    <string name="wallet_dir_change_dialoge_title">Choose Wallet Directory Type</string>
+    <string name="wallet_dir_change_button">Choose Wallet Directory</string>
+    <string name="wallet_dir_change_dialogue_internal">Private Storage on Device</string>
+    <string name="wallet_dir_change_dialogue_external">Public Storage on Device</string>
+    <string name="wallet_dir_change_dialogue_external_removable">Public Storage on Removable Drive</string>
+    <string name="wallet_dir_change_restart_dialoge_title">Save changes and restart app?</string>
+    <string name="wallet_dir_external_removed">It appears your external drive has been removed. Using Private on Device wallet directory.</string>
     <!--/Wallet-->
 
     <!--Transaction-->
@@ -346,6 +353,11 @@
     <!--Preference-->
     <string name="key_connection_certificate" translatable="false">key_connection_certificate</string>
     <string name="key_get_peers" translatable="false">key_get_peers</string>
+    <string name="key_change_startup_passphrase" translatable="false">change_startup_passphrase</string>
+    <string name="key_wallet_dir_type" translatable="false">wallet_dir_type</string>
+    <string name="wallet_dir_internal" translatable="false">dir_internal</string>
+    <string name="wallet_dir_external" translatable="false">dir_external</string>
+    <string name="wallet_dir_external_removable" translatable="false">dir_external_removable</string>
     <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
     <string name="title_rescan_blockchain">Rescan Blockchain</string>
     <string name="title_general">General</string>
@@ -371,6 +383,7 @@
     <string name="changing">Changing…</string>
     <string name="setting_startup_pin">Setting startup PIN…</string>
     <string name="setting_startup_password">Setting startup password…</string>
+    <string name="change_wallet_dir_summary">Change wallet directory</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -540,7 +553,6 @@
     <string name="field_cannot_be_empty">Field cannot be empty</string>
     <!--/Security-->
 
-    <!--Crash Report-->
     <string name="confirm_crash">Confirm Crash</string>
     <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report.</string>
     <string name="dont_send">Don\'t send</string>

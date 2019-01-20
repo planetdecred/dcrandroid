@@ -23,6 +23,10 @@
             android:summary="@string/required_to_enter_app"
             android:title="@string/change_startup_pin_password"
             app:iconSpaceReserved="false" />
+        <Preference
+            android:key="@string/key_wallet_dir_type"
+            android:title="@string/change_wallet_dir_summary"
+            app:iconSpaceReserved="false" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="spend_unconfirmed_funds"

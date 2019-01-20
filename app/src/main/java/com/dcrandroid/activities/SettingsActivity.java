@@ -22,6 +22,7 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.ChooseWalletDirDialog;
 import com.dcrandroid.dialog.DeleteWalletDialog;
 import com.dcrandroid.dialog.StakeyDialog;
 import com.dcrandroid.util.PreferenceUtil;
@@ -60,6 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
         private Preference changeStartupPass;
+        private Preference changeWalletDir;
         private ProgressDialog pd;
 
         private LibWallet wallet;
@@ -77,13 +79,15 @@ public class SettingsActivity extends AppCompatActivity {
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(), false, false, "");
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
-            changeStartupPass = findPreference("change_startup_passphrase");
+            changeStartupPass = findPreference(getString(R.string.key_change_startup_passphrase));
+            changeWalletDir = findPreference(getString(R.string.key_wallet_dir_type));
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             buildDate.setSummary(BuildConfig.VERSION_NAME);
+            changeWalletDir.setSummary(Utils.getWalletDir(getActivity(), true));
 
             changeStartupPass.setVisible(encryptWallet.isChecked());
 
@@ -271,6 +275,14 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivity(intent);
 
                     return true;
+                }
+            });
+
+            changeWalletDir.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ChooseWalletDirDialog.INSTANCE.diplayDialogue(getActivity());
+                    return false;
                 }
             });
 

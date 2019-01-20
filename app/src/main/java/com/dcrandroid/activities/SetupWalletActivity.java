@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.ChooseWalletDirDialog;
 import com.dcrandroid.util.Utils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,7 @@ public class SetupWalletActivity extends AppCompatActivity {
         TextView buildDate = findViewById(R.id.build_date);
         RelativeLayout createWalletLl = findViewById(R.id.button_create_wallet);
         RelativeLayout retrieveWalletLl = findViewById(R.id.button_retrieve_wallet);
+        Button changeWalletDir = findViewById(R.id.change_wallet_dir_button);
 
         buildDate.setText(BuildConfig.VERSION_NAME);
 
@@ -63,6 +66,13 @@ public class SetupWalletActivity extends AppCompatActivity {
                         .putExtra(Constants.SEED, Utils.getWordList(SetupWalletActivity.this))
                         .putExtra(Constants.RESTORE, true);
                 startActivity(i);
+            }
+        });
+
+        changeWalletDir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChooseWalletDirDialog.INSTANCE.diplayDialogue(SetupWalletActivity.this);
             }
         });
     }
