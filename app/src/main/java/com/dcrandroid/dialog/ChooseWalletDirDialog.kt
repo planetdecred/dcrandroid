@@ -43,7 +43,7 @@ public fun diplayDialogue(context : Context) {
     if (externalDirs.size > 1) {
         dirTypes.add(context.getString(R.string.wallet_dir_external_removable))
         dirTypeCommonNames.add(context.getString(R.string.wallet_dir_change_dialogue_external_removable))
-        dirCommonNames.add(externalDirs[1].toString() + context.getApplicationContext().getPackageName() + "/wallet")
+        dirCommonNames.add(externalDirs[1].toString() + "/dcrandroid/wallet")
     }
 
         val dirTypeCommonNamesOutArray  = Array(dirTypeCommonNames.size) {

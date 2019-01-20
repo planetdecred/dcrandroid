@@ -582,10 +582,10 @@ public class Utils {
                             context.getExternalFilesDirs(null) :
                             ContextCompat.getExternalFilesDirs(context, null);
             try {
-                dir = externalDirs[1] + "/wallet";
+                dir = externalDirs[1] + "/dcrandroid/wallet";
             } catch (Exception e) {
                 Toast.makeText(context, R.string.wallet_dir_external_removed, Toast.LENGTH_LONG).show();
-                dir = context.getFilesDir() + context.getApplicationContext().getPackageName() + "/wallet";
+                dir = context.getFilesDir() + "/wallet";
                 util.set(context.getString(R.string.key_wallet_dir_type), context.getString(R.string.wallet_dir_internal));
             }
         } else {
