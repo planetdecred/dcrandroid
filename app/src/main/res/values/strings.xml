@@ -529,6 +529,9 @@
     <string name="view_report">View Report</string>
     <!--/Crash Report-->
 
-    <string name="mobile_data_sync_title">Sync only on Wi-Fi</string>
+    <string name="wifi_data_sync_title">Sync when not on Wi-Fi</string>
     <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
+    <string name="remember_this">Remember this</string>
+    <string name="no_wifi">No Wi-Fi</string>
+    <string name="wifi_sync_notice">You are not currently connected to Wifi. Would you like to sync anyways?</string>
 </resources>

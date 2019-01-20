@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -261,25 +262,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         constants.wallet.addSyncResponse(this);
 
-        connectToDecredNetwork();
+        checkWifiSync();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isForeground = false;
-        unregisterReceiver(connectivityReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isForeground = true;
-
-        IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-
-        registerReceiver(connectivityReceiver, filter);
 
         if (constants.peers == 0 && constants.synced) {
             // restart spv synchronization.
@@ -322,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
     }
 
-    private void connectToDecredNetwork() {
+    private void checkWifiSync() {
 
         // One-time notice
         if(util.getBoolean(Constants.FIRST_RUN, true)){
@@ -334,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             util.setBoolean(Constants.FIRST_RUN, false);
         }
 
-        if (util.getBoolean(Constants.WIFI_SYNC, true)) {
+        if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
             // Check if wifi is connected
             ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectionManager != null) {
@@ -342,17 +337,41 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 if (networkInfo != null && networkInfo.isConnected()) {
                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
                         setConnectionStatus(getString(R.string.connect_to_wifi));
-                        constants.wallet.dropSpvConnection();
+                        showWifiNotice();
                         return;
                     }
                 } else {
                     setConnectionStatus(getString(R.string.connect_to_wifi));
-                    constants.wallet.dropSpvConnection();
+                    showWifiNotice();
                     return;
                 }
             }
         }
 
+        startSyncing();
+    }
+
+    private void showWifiNotice(){
+        View mView = getLayoutInflater().inflate(R.layout.dialog_checkbox, null);
+        final CheckBox rememberCheck = mView.findViewById(R.id.checkbox);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.no_wifi)
+                .setMessage(R.string.wifi_sync_notice)
+                .setView(mView)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startSyncing();
+                        System.out.println("Is Checked: "+ rememberCheck.isChecked());
+                        util.setBoolean(Constants.WIFI_SYNC, rememberCheck.isChecked());
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+    private void startSyncing(){
         constants.syncing = true;
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
@@ -1019,7 +1038,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    connectionStatus.setBackgroundColor(getResources().getColor(R.color.lightOrangeBackgroundColor));
+                    connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
                     updatePeerCount();
                     setBestBlockTime(-1);
                     setChainStatus(null);
@@ -1074,31 +1093,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             case R.id.tv_connection_status:
                 constants.wallet.dropSpvConnection();
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
-                connectToDecredNetwork();
+                checkWifiSync();
                 break;
         }
     }
-
-    private BroadcastReceiver connectivityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (util.getBoolean(Constants.WIFI_SYNC, true)) {
-                // Disconnect if wifi is not in use.
-                ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                if (connectionManager != null) {
-                    NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
-                    if (networkInfo != null) {
-                        if(networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                            constants.wallet.dropSpvConnection();
-                            setConnectionStatus(getString(R.string.connect_to_wifi));
-                        }else{
-                            if(!constants.synced && !constants.syncing){
-                                connectToDecredNetwork();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
 }
