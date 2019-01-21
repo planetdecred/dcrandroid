@@ -572,26 +572,30 @@ public class Utils {
         PreferenceUtil util = new PreferenceUtil(context);
 
         String dirType = util.get(context.getString(R.string.key_wallet_dir_type));
-        String dir;
+        String dir = getCommonName ? context.getString(R.string.hidden) : context.getFilesDir() + "/wallet";
+        Boolean error = false;
+        File[] externalDirs =
+                (Build.VERSION.SDK_INT >= 19) ?
+                        context.getExternalFilesDirs(null) :
+                        ContextCompat.getExternalFilesDirs(context, null);
 
         if (dirType.equals(context.getString(R.string.wallet_dir_external))) {
-            dir = context.getExternalFilesDir(null) + "/wallet";
-        } else if (dirType.equals(context.getString(R.string.wallet_dir_external_removable))) {
-            File[] externalDirs =
-                    (Build.VERSION.SDK_INT >= 19) ?
-                            context.getExternalFilesDirs(null) :
-                            ContextCompat.getExternalFilesDirs(context, null);
-            try {
-                dir = externalDirs[1] + "/dcrandroid/wallet";
-            } catch (Exception e) {
-                Toast.makeText(context, R.string.wallet_dir_external_removed, Toast.LENGTH_LONG).show();
-                dir = context.getFilesDir() + "/wallet";
-                util.set(context.getString(R.string.key_wallet_dir_type), context.getString(R.string.wallet_dir_internal));
+            if (externalDirs.length < 1 || externalDirs[0] == null){
+                error = true;
+            } else {
+                dir = externalDirs[0] + "/wallet";
             }
-        } else {
-            dir = getCommonName ? context.getString(R.string.hidden) : context.getFilesDir() + "/wallet";
+        } else if (dirType.equals(context.getString(R.string.wallet_dir_external_removable))) {
+            if (externalDirs.length < 2 || externalDirs[1] == null){
+                error = true;
+            } else {
+                dir = externalDirs[1] + "/wallet";
+            }
         }
-
+        if(error) {
+            Toast.makeText(context, R.string.wallet_dir_external_removed, Toast.LENGTH_LONG).show();
+            util.set(context.getString(R.string.key_wallet_dir_type), context.getString(R.string.wallet_dir_internal));
+        }
         return dir;
     }
 }
