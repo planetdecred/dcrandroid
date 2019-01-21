@@ -247,7 +247,6 @@
     <string name="generate_new_address">Tạo địa chỉ mới</string>
     <string name="receive_fund_privacy_info">Mỗi khi bạn yêu cầu thanh toán, một địa chỉ mới sẽ được tạo để bảo vệ quyền riêng tư của bạn.</string>
     <string name="error_not_decred_address">Đây không phải là địa chỉ ví DCR</string>
-    <string name="invalid_address_prefix">Tiền tố địa chỉ không hợp lệ</string>
     <string name="wallet_addr_too_long">Địa chỉ ví quá dài</string>
     <string name="wallet_add_too_short">Địa chỉ ví quá ngắn</string>
     <string name="invalid_address">Không phải là một địa chỉ hợp lệ.</string>
@@ -390,7 +389,6 @@
     <string name="no_transactions_have_occurred">Không có giao dịch đã xảy ra.</string>
     <string name="send_to_account">Gửi tới tài khoản</string>
     <string name="send_to_address">Gửi đến địa chỉ</string>
-    <string name="enter_an_amount">Nhập một số tiền.</string>
     <string name="retry_caps">THỬ LẠI</string>
     <string name="amount_can_not_be_zero">Số tiền không thể bằng không.</string>
     <string name="clear_fields">Xoá các miền</string>
