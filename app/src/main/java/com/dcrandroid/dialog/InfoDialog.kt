@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.dcrandroid.R
+import kotlinx.android.synthetic.main.info_dialog.*
 
 class InfoDialog(context: Context?) : Dialog(context), View.OnClickListener {
 
@@ -28,6 +29,8 @@ class InfoDialog(context: Context?) : Dialog(context), View.OnClickListener {
     private var messageTextColor: Int? = null
     private var btnPositiveTextColor: Int? = null
     private var btnNegativeTextColor: Int? = null
+
+    private var mView: View? = null
 
     private var iconResId: Int? = null
 
@@ -60,7 +63,12 @@ class InfoDialog(context: Context?) : Dialog(context), View.OnClickListener {
         }
 
         if (iconResId != null) {
+            ivIcon.visibility = View.VISIBLE
             ivIcon.setImageResource(iconResId!!)
+        }
+
+        if (mView != null) {
+            view_layout.addView(mView)
         }
 
         if (btnPositiveText != null) {
@@ -137,6 +145,11 @@ class InfoDialog(context: Context?) : Dialog(context), View.OnClickListener {
 
     fun setIcon(resId: Int): InfoDialog {
         this.iconResId = resId
+        return this
+    }
+
+    fun setView(view: View): InfoDialog {
+        this.mView = view
         return this
     }
 

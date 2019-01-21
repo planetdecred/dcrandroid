@@ -4,18 +4,15 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +24,6 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +37,7 @@ import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.WiFiSyncDialog;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
@@ -50,12 +47,12 @@ import com.dcrandroid.fragments.SecurityFragment;
 import com.dcrandroid.fragments.SendFragment;
 import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.TransactionsResponse.TransactionInput;
 import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -320,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private void checkWifiSync() {
 
         // One-time notice
-        if(util.getBoolean(Constants.FIRST_RUN, true)){
+        if (util.getBoolean(Constants.FIRST_RUN, true)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.welcome_title)
                     .setMessage(R.string.first_run_notice)
@@ -351,27 +348,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         startSyncing();
     }
 
-    private void showWifiNotice(){
-        View mView = getLayoutInflater().inflate(R.layout.dialog_checkbox, null);
-        final CheckBox rememberCheck = mView.findViewById(R.id.checkbox);
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.no_wifi)
-                .setMessage(R.string.wifi_sync_notice)
-                .setView(mView)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+    private void showWifiNotice() {
+        new WiFiSyncDialog(this)
+                .setPositiveButton(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startSyncing();
-                        System.out.println("Is Checked: "+ rememberCheck.isChecked());
-                        util.setBoolean(Constants.WIFI_SYNC, rememberCheck.isChecked());
+                        WiFiSyncDialog syncDialog = (WiFiSyncDialog) dialog;
+                        util.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
                     }
                 })
-                .setNegativeButton(android.R.string.no, null)
                 .show();
     }
 
-    private void startSyncing(){
+    private void startSyncing() {
         constants.syncing = true;
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
@@ -451,9 +441,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     bestBlockTime.setText(null);
                     return;
                 }
-                if(constants.synced) {
+                if (constants.synced) {
                     bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
-                }else{
+                } else {
                     bestBlockTime.setText(Utils.calculateDaysAgo((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
                 }
             }
@@ -739,11 +729,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
-        if(constants.synced){
+        if (constants.synced) {
             // Ignore this call because this function gets called for each peer and
             // we'd want to ignore those calls as far as the wallet is synced.
             return;
-        }else if(constants.totalFetchTime != -1){
+        } else if (constants.totalFetchTime != -1) {
             return;
         }
 
@@ -816,7 +806,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                 });
 
-                if(constants.initialSyncEstimate == -1){
+                if (constants.initialSyncEstimate == -1) {
                     constants.initialSyncEstimate = constants.syncRemainingTime;
                 }
 
@@ -829,7 +819,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                 });
                 constants.totalFetchTime = System.currentTimeMillis() - constants.fetchHeaderTime;
-                System.out.println("Fetch Time: "+ constants.totalFetchTime);
+                System.out.println("Fetch Time: " + constants.totalFetchTime);
                 updatePeerCount();
                 constants.syncStartPoint = -1;
                 constants.syncEndPoint = -1;
@@ -848,8 +838,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         setChainStatus(null);
         setBestBlockTime(-1);
         if (state.equals(Dcrlibwallet.START)) {
-            accountDiscoveryProgress = new Thread(){
-                public void run(){
+            accountDiscoveryProgress = new Thread() {
+                public void run() {
                     try {
                         constants.accountDiscoveryTime = System.currentTimeMillis();
                         long estimatedRescanTime = Math.round(constants.totalFetchTime * 0.75);
@@ -858,9 +848,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                             double accountDiscoveryTime = System.currentTimeMillis() - constants.accountDiscoveryTime;
 
                             double totalSyncTime;
-                            if(accountDiscoveryTime > Constants.ESTIMATED_ACCT_DISCOVERY){
+                            if (accountDiscoveryTime > Constants.ESTIMATED_ACCT_DISCOVERY) {
                                 totalSyncTime = constants.totalFetchTime + accountDiscoveryTime + estimatedRescanTime;
-                            }else{
+                            } else {
                                 totalSyncTime = constants.totalFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + estimatedRescanTime;
                             }
 
@@ -876,7 +866,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                             });
 
                             long remainingAccountDiscoveryTime = Math.round(Constants.ESTIMATED_ACCT_DISCOVERY - accountDiscoveryTime);
-                            if(remainingAccountDiscoveryTime < 0){
+                            if (remainingAccountDiscoveryTime < 0) {
                                 remainingAccountDiscoveryTime = 0;
                             }
 
@@ -893,21 +883,22 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                             sleep(1000);
                         }
-                    }catch (InterruptedException ignored){}
+                    } catch (InterruptedException ignored) {
+                    }
                 }
             };
 
             accountDiscoveryProgress.start();
-        }else{
-            if(accountDiscoveryProgress != null && accountDiscoveryProgress.isAlive()){
+        } else {
+            if (accountDiscoveryProgress != null && accountDiscoveryProgress.isAlive()) {
                 accountDiscoveryProgress.interrupt();
             }
 
             double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
-            double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) -1;
+            double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
             percentageDifference *= 100;
 
-            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "",  percentageDifference);
+            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
             Dcrlibwallet.log(log);
 
             updatePeerCount();
@@ -916,7 +907,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onRescan(int rescannedThrough, String state) {
-        if(constants.syncEndPoint == -1){
+        if (constants.syncEndPoint == -1) {
             constants.syncEndPoint = constants.wallet.getBestBlock();
         }
 
@@ -962,10 +953,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 break;
             default:
                 double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
-                double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) -1;
+                double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
                 percentageDifference *= 100;
 
-                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "",  percentageDifference);
+                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
                 double rescanTime = (System.currentTimeMillis() - constants.rescanTime);
@@ -975,12 +966,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 percentageDifference = (rescanTime / fetchTime) - 1;
                 percentageDifference *= 100;
 
-                log = String.format(Locale.getDefault(), "Scan, assumed: 75%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)",  Math.round((constants.totalFetchTime * 0.75) / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+                log = String.format(Locale.getDefault(), "Scan, assumed: 75%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)", Math.round((constants.totalFetchTime * 0.75) / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
                 discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
 
-                Dcrlibwallet.log("Sync, Initial Estimate: "+ Math.round(constants.initialSyncEstimate / 1000) +"s Actual: "+Math.round((rescanTime + constants.totalFetchTime + discoveryTime) / 1000) +"s");
+                Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(constants.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + constants.totalFetchTime + discoveryTime) / 1000) + "s");
 
                 updatePeerCount();
 
@@ -1034,7 +1025,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
 
             startBlockUpdate();
-        }else{
+        } else {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -1072,16 +1063,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     private void updatePeerCount() {
-        if(constants.synced){
-            if(constants.peers == 1){
+        if (constants.synced) {
+            if (constants.peers == 1) {
                 setConnectionStatus(R.string.synced_with_one_peer);
-            }else{
+            } else {
                 setConnectionStatus(getString(R.string.synced_with_multiple_peer, constants.peers));
             }
-        }else{
-            if(constants.peers == 1){
+        } else {
+            if (constants.peers == 1) {
                 setConnectionStatus(R.string.syncing_with_one_peer);
-            }else{
+            } else {
                 setConnectionStatus(getString(R.string.syncing_with_multiple_peer, constants.peers));
             }
         }
