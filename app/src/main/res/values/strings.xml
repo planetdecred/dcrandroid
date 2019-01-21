@@ -229,7 +229,7 @@
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
     <string name="wallet_dir_change_dialoge_title">Choose Wallet Directory Type</string>
-    <string name="wallet_dir_change_button">Choose Wallet Directory</string>
+    <string name="wallet_dir_change_setting">Choose Wallet Directory</string>
     <string name="wallet_dir_change_dialogue_internal">Private Storage on Device</string>
     <string name="wallet_dir_change_dialogue_external">Public Storage on Device</string>
     <string name="wallet_dir_change_dialogue_external_removable">Public Storage on Removable Drive</string>

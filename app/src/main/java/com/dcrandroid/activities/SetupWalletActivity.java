@@ -9,10 +9,13 @@ package com.dcrandroid.activities;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,13 +26,14 @@ import com.dcrandroid.dialog.ChooseWalletDirDialog;
 import com.dcrandroid.util.Utils;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 
 /**
  * Created by Macsleven on 25/12/2017.
  */
 
-public class SetupWalletActivity extends AppCompatActivity {
+public class SetupWalletActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
 
@@ -45,8 +49,7 @@ public class SetupWalletActivity extends AppCompatActivity {
         TextView buildDate = findViewById(R.id.build_date);
         RelativeLayout createWalletLl = findViewById(R.id.button_create_wallet);
         RelativeLayout retrieveWalletLl = findViewById(R.id.button_retrieve_wallet);
-        Button changeWalletDir = findViewById(R.id.change_wallet_dir_button);
-
+        ImageButton settingsPopup = findViewById(R.id.setup_menu_popup);
         buildDate.setText(BuildConfig.VERSION_NAME);
 
         createWalletLl.setOnClickListener(new View.OnClickListener() {
@@ -69,12 +72,31 @@ public class SetupWalletActivity extends AppCompatActivity {
             }
         });
 
-        changeWalletDir.setOnClickListener(new View.OnClickListener() {
+        settingsPopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChooseWalletDirDialog.INSTANCE.diplayDialogue(SetupWalletActivity.this);
+                showPopup(view);
             }
         });
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.change_wallet_menu_setting:
+                ChooseWalletDirDialog.INSTANCE.diplayDialogue(SetupWalletActivity.this);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(SetupWalletActivity.this);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.statup_menu, popup.getMenu());
+        popup.show();
     }
 
 }
