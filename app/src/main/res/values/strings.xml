@@ -15,6 +15,7 @@
     <string name="max">SEND MAX</string>
     <string name="type">Type</string>
     <string name="loading">Loading</string>
+    <string name="loading_ellipsis">Loading…</string>
     <string name="date">Date</string>
     <string name="dcr" translatable="false">DCR</string>
     <string name="help">Help</string>
@@ -536,6 +537,5 @@
     <string name="no_wifi">No Wi-Fi</string>
     <string name="wifi_sync_notice">Would you like to sync anyways?</string>
     <string name="not_connected_to_wifi">Not connected to WiFi.</string>
-    <string name="starting_up">Starting up…</string>
     <string name="not_synced">Not Synced</string>
 </resources>

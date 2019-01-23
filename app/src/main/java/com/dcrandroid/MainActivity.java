@@ -796,7 +796,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 float fetchedPercentage = ((float) count / constants.syncEndPoint * 100);
 
                 constants.syncProgress = ((float) elapsedFetchTime / totalSyncTime) * 100;
-                //constants.syncProgress = (fetchedPercentage * 0.40);
 
                 setConnectionStatus(getString(R.string.fetching_headers));
                 setBestBlockTime(lastHeaderTime);
@@ -829,7 +828,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                 });
                 constants.totalFetchTime = System.currentTimeMillis() - constants.fetchHeaderTime;
-                System.out.println("Fetch Time: " + constants.totalFetchTime);
                 updatePeerCount();
                 constants.syncStartPoint = -1;
                 constants.syncEndPoint = -1;
@@ -904,11 +902,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 accountDiscoveryProgress.interrupt();
             }
 
-            double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
-            double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
+            constants.totalDiscoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
+
+            double percentageDifference = (constants.totalDiscoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
             percentageDifference *= 100;
 
-            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(constants.totalDiscoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
             Dcrlibwallet.log(log);
 
             updatePeerCount();
@@ -942,8 +941,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                 constants.syncProgress = (elapsedTime / (float) totalSyncTime) * 100;
 
-                //constants.syncProgress = (scannedPercentage * 0.40) + 60;
-
                 setConnectionStatus(R.string.scanning_blocks);
                 setChainStatus(Utils.getTimeRemaining(constants.syncRemainingTime, (int) constants.syncProgress, true, MainActivity.this));
 
@@ -962,7 +959,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                 break;
             default:
-                double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
+                double discoveryTime = constants.totalDiscoveryTime;
                 double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
                 percentageDifference *= 100;
 
@@ -970,20 +967,23 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 Dcrlibwallet.log(log);
 
                 double rescanTime = (System.currentTimeMillis() - constants.rescanTime);
-                double fetchTime = constants.totalFetchTime * 0.75;
+                double estimatedScanTime = constants.totalFetchTime * 0.75;
 
                 double estimatePercent = (rescanTime / constants.totalFetchTime) * 100;
-                percentageDifference = (rescanTime / fetchTime) - 1;
+                percentageDifference = (rescanTime / estimatedScanTime) - 1;
                 percentageDifference *= 100;
 
                 log = String.format(Locale.getDefault(), "Scan, assumed: 75%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)", Math.round((constants.totalFetchTime * 0.75) / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
-                discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
 
                 Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(constants.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + constants.totalFetchTime + discoveryTime) / 1000) + "s");
 
                 updatePeerCount();
+
+                double totalSync = constants.totalFetchTime + discoveryTime + rescanTime;
+                log = String.format(Locale.getDefault(), "Fetch: %.2f%%, Discovery: %.2f%%, Rescan %.2f%%", constants.totalFetchTime / totalSync * 100, discoveryTime / totalSync * 100, rescanTime / totalSync * 100);
+                Dcrlibwallet.log(log);
 
                 syncProgressBar.post(new Runnable() {
                     @Override

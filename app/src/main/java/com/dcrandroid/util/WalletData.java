@@ -13,8 +13,8 @@ public class WalletData {
     public int peers = 0;
 
     public int syncStartPoint = -1, syncCurrentPoint = -1, syncEndPoint = -1;
-    public double syncProgress = 0, accountDiscoveryTime;
-    public long fetchHeaderTime = -1, totalFetchTime = -1, rescanTime, syncRemainingTime, initialSyncEstimate = -1, syncStartTime;
+    public double syncProgress = 0, accountDiscoveryTime, totalDiscoveryTime;
+    public long fetchHeaderTime = -1, totalFetchTime = -1, rescanTime, syncRemainingTime, initialSyncEstimate = -1;
     public String syncStatus;
 
     private WalletData() {

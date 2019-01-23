@@ -48,7 +48,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         tvTitle.text = context.getString(R.string.sending) + " ${format.format(Dcrlibwallet.amountCoin(amount!!))} DCR"
 
         val tvAddress = findViewById<TextView>(R.id.address)
-        tvAddress.text = "${context.getString(R.string.to)} \n $address"
+        tvAddress.text = address
 
         val tvAccount = findViewById<TextView>(R.id.account)
         tvAccount.visibility = View.GONE

@@ -125,24 +125,30 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }))
 
         show_history.setOnClickListener {
-            if (activity != null && activity is MainActivity) {
-                val mainActivity = activity as MainActivity?
-                mainActivity!!.displayHistory()
-            }
+            it.postDelayed({
+                if (activity != null && activity is MainActivity) {
+                    val mainActivity = activity as MainActivity?
+                    mainActivity!!.displayHistory()
+                }
+            }, 200)
         }
 
         send.setOnClickListener {
-            if (activity != null && activity is MainActivity) {
-                val mainActivity = activity as MainActivity?
-                mainActivity!!.displaySend()
-            }
+            it.postDelayed({
+                if (activity != null && activity is MainActivity) {
+                    val mainActivity = activity as MainActivity?
+                    mainActivity!!.displaySend()
+                }
+            }, 200)
         }
 
         receive.setOnClickListener {
-            if (activity != null && activity is MainActivity) {
-                val mainActivity = activity as MainActivity?
-                mainActivity!!.displayReceive()
-            }
+            it.postDelayed({
+                if (activity != null && activity is MainActivity) {
+                    val mainActivity = activity as MainActivity?
+                    mainActivity!!.displayReceive()
+                }
+            }, 200)
         }
 
         tap_for_more_info.setOnClickListener {
