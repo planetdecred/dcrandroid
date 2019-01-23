@@ -790,8 +790,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 double totalFetchTime = (System.currentTimeMillis() - constants.fetchHeaderTime) / percent;
                 long remainingFetchTime = Math.round(totalFetchTime) - (System.currentTimeMillis() - constants.fetchHeaderTime);
                 long elapsedFetchTime = System.currentTimeMillis() - constants.fetchHeaderTime;
-                constants.syncRemainingTime = Math.round(remainingFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + (totalFetchTime * 0.75));
-                double totalSyncTime = totalFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + (totalFetchTime * 0.75);
+                constants.syncRemainingTime = Math.round(remainingFetchTime + totalFetchTime); //total fetch time used here is for rescan + discovery estimate(both are estimated to be 50% of fetch time)
+                double totalSyncTime = totalFetchTime * 2; // total fetch time + estimated rescan(50% of totalFetchTime) + estimated discovery(50% of totalFetchTime)
 
                 float fetchedPercentage = ((float) count / constants.syncEndPoint * 100);
 
@@ -850,16 +850,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 public void run() {
                     try {
                         constants.accountDiscoveryTime = System.currentTimeMillis();
-                        long estimatedRescanTime = Math.round(constants.totalFetchTime * 0.75);
+                        long estimatedRescanTime = Math.round(constants.totalFetchTime * 0.5);
 
                         while (!interrupted()) {
                             double accountDiscoveryTime = System.currentTimeMillis() - constants.accountDiscoveryTime;
 
                             double totalSyncTime;
-                            if (accountDiscoveryTime > Constants.ESTIMATED_ACCT_DISCOVERY) {
+                            if (accountDiscoveryTime > (constants.totalFetchTime * 0.5)) {
                                 totalSyncTime = constants.totalFetchTime + accountDiscoveryTime + estimatedRescanTime;
                             } else {
-                                totalSyncTime = constants.totalFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + estimatedRescanTime;
+                                totalSyncTime = constants.totalFetchTime * 2;
                             }
 
                             double elapsedTime = constants.totalFetchTime + accountDiscoveryTime;
@@ -873,7 +873,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                                 }
                             });
 
-                            long remainingAccountDiscoveryTime = Math.round(Constants.ESTIMATED_ACCT_DISCOVERY - accountDiscoveryTime);
+                            long remainingAccountDiscoveryTime = Math.round((constants.totalFetchTime * 0.5) - accountDiscoveryTime);
                             if (remainingAccountDiscoveryTime < 0) {
                                 remainingAccountDiscoveryTime = 0;
                             }
@@ -885,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                             if (currentFragment instanceof OverviewFragment) {
                                 OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
-                                constants.syncStatus = getString(R.string.overview_discovering_used_addresses, Math.round((accountDiscoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) * 100));
+                                constants.syncStatus = getString(R.string.overview_discovering_used_addresses, Math.round((accountDiscoveryTime / constants.totalFetchTime * 0.5) * 100));
                                 overviewFragment.publishProgress();
                             }
 
@@ -904,10 +904,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
             constants.totalDiscoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
 
-            double percentageDifference = (constants.totalDiscoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
+            double percentageDifference = (constants.totalDiscoveryTime / (constants.totalFetchTime * 0.5)) - 1;
             percentageDifference *= 100;
 
-            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(constants.totalDiscoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", Math.round((constants.totalFetchTime * 0.5) / 1000), Math.round(constants.totalDiscoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
             Dcrlibwallet.log(log);
 
             updatePeerCount();
@@ -960,10 +960,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 break;
             default:
                 double discoveryTime = constants.totalDiscoveryTime;
-                double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
+                double percentageDifference = (discoveryTime / (constants.totalFetchTime * 0.5)) - 1;
                 percentageDifference *= 100;
 
-                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", Math.round((constants.totalFetchTime * 0.5) / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
                 double rescanTime = (System.currentTimeMillis() - constants.rescanTime);

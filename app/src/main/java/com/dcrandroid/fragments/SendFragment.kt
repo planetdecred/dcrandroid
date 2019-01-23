@@ -261,6 +261,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     send_dcr_address.text.clear()
                     send_dcr_address.addTextChangedListener(addressWatcher)
 
+                    if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))) paste_dcr_address.visibility = View.VISIBLE
+                    send_dcr_scan.visibility = View.VISIBLE
+                    toggleSendButton(false)
+
                     item.setTitle(R.string.send_to_account)
                     SEND_ACCOUNT = false
                 }
