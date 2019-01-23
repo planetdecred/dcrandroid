@@ -184,11 +184,8 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onSynced(synced: Boolean) {
-        if (synced) {
-            println("Service is Synced")
-            stopForeground(true)
-            stopSelf()
-        }
+        stopForeground(true)
+        stopSelf()
     }
 
 }

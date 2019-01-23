@@ -71,7 +71,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         transactionAdapter = TransactionAdapter(transactionList, context!!)
         iv_sync_indicator.setBackgroundResource(R.drawable.sync_animation)
 
-        if (!constants!!.synced) {
+        if (!constants!!.syncing) {
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
@@ -163,7 +163,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             tap_for_more_info.visibility = View.VISIBLE
         }
 
-
         val vto = history_recycler_view2.viewTreeObserver
         if (vto.isAlive) {
             vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -213,7 +212,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     }
 
     private fun getBalance() {
-        if (!constants!!.synced) {
+        if (constants!!.syncing) {
             return
         }
 
@@ -265,7 +264,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         activity!!.runOnUiThread { swipe_refresh_layout2.isRefreshing = true }
         transactionList.clear()
         loadTransactions()
-        if (!constants!!.synced) {
+        if (constants!!.syncing) {
             no_history.setText(R.string.synchronizing)
             println("Going back, Hiding swipe to refresh")
             swipe_refresh_layout2.isRefreshing = false
@@ -439,7 +438,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             context!!.registerReceiver(receiver, filter)
         }
 
-        if (!constants!!.synced) {
+        if (constants!!.syncing) {
             overview_sync_layout.visibility = View.VISIBLE
         } else {
             overview_sync_layout.visibility = View.GONE
@@ -562,20 +561,28 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
-                if (constants!!.synced) {
-                    overview_sync_layout.visibility = View.GONE
-                    getBalance()
-                    hideSyncIndicator()
-                    prepareHistoryData()
-                    pb_sync_progress.visibility = View.GONE
-                    pb_percent_complete.visibility = View.GONE
-                } else {
+                if (constants!!.syncing) {
+                    overview_sync_layout.visibility = View.VISIBLE
                     iv_sync_indicator.visibility = View.VISIBLE
                     overview_av_balance.visibility = View.GONE
                     iv_sync_indicator.post {
                         val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                         syncAnimation.start()
                     }
+
+                    tv_synchronizing.setText(R.string.starting_synchronization)
+
+                    if(constants!!.syncStatus != null){
+                        publishProgress()
+                    }
+                }else {
+                    overview_sync_layout.visibility = View.GONE
+                    pb_sync_progress.visibility = View.GONE
+                    pb_percent_complete.visibility = View.GONE
+
+                    getBalance()
+                    hideSyncIndicator()
+                    prepareHistoryData()
                 }
             }
         }

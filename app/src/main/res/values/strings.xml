@@ -55,6 +55,7 @@
     <string name="hidden">hidden</string>
     <string name="delete">Delete</string>
     <string name="no">No</string>
+    <string name="yes">Yes</string>
     <string name="confirm">Confirm</string>
     <string name="usd" translatable="false">USD</string>
     <string name="hyphen" translatable="false">-</string>
@@ -528,4 +529,13 @@
     <string name="hide_report">Hide Report</string>
     <string name="view_report">View Report</string>
     <!--/Crash Report-->
+
+    <string name="wifi_data_sync_title">Sync when not on WiFi</string>
+    <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
+    <string name="always">Always</string>
+    <string name="no_wifi">No Wi-Fi</string>
+    <string name="wifi_sync_notice">Would you like to sync anyways?</string>
+    <string name="not_connected_to_wifi">Not connected to WiFi.</string>
+    <string name="starting_up">Starting up…</string>
+    <string name="not_synced">Not Synced</string>
 </resources>

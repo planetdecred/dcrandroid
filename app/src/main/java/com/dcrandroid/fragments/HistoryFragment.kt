@@ -168,7 +168,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
             history_recycler_view.visibility = View.VISIBLE
         }
 
-        if (!constants!!.synced) {
+        if (constants!!.syncing) {
             no_history.setText(R.string.synchronizing)
             swipe_refresh_layout.isRefreshing = false
             return
@@ -435,7 +435,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
-                if (constants!!.synced) {
+                if (!constants!!.syncing) {
                     prepareHistoryData()
                 }
             }

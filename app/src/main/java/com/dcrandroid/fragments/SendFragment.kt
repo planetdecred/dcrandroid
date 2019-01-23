@@ -381,7 +381,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val convertedFee = fee.multiply(exchangeDecimal)
                 val format = DecimalFormat("#.####")
                 val formattedFee = format.format(convertedFee.toDouble())
-                send_dcr_estimate_fee.text = "${CoinFormat.format(estFee)} ($formattedFee USD)"
+                send_dcr_estimate_fee.text = "${CoinFormat.format(estFee)}\n($formattedFee USD)"
             } else {
                 send_dcr_estimate_fee.text = CoinFormat.format(estFee)
             }

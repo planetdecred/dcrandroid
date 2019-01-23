@@ -1,8 +1,11 @@
 package com.dcrandroid.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.dcrandroid.BuildConfig;
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.DeleteWalletDialog;
@@ -360,6 +364,33 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     }).show();
                     deleteWalletDialog.show();
+                    return true;
+                }
+            });
+
+            findPreference(Constants.WIFI_SYNC).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean wifiSync = (Boolean) newValue;
+                    if (getActivity() instanceof MainActivity) {
+                        if(wifiSync){
+                            if(!WalletData.getInstance().synced) {
+                                ((MainActivity) getActivity()).startSyncing();
+                            }
+                        }else{
+                            ConnectivityManager connectionManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                            if (connectionManager != null) {
+                                NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+                                if (networkInfo != null && networkInfo.isConnected()) {
+                                    if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
+                                        WalletData.getInstance().wallet.dropSpvConnection();
+                                    }
+                                } else {
+                                    WalletData.getInstance().wallet.dropSpvConnection();
+                                }
+                            }
+                        }
+                    }
                     return true;
                 }
             });
