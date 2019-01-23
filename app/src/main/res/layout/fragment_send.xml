@@ -325,12 +325,14 @@
                 android:padding="5dp">
 
                 <TextView
-                    android:layout_width="160dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
-                    app:fontFamily="@font/source_sans_pro_regular"
-                    android:gravity="start"
+                    android:gravity="end"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
                     android:text="@string/fee_colon"
                     android:textColor="@color/blueGrayFirstTextColor"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp" />
 
                 <TextView
@@ -339,6 +341,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/blueGrayFirstTextColor"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -349,11 +352,14 @@
                 android:padding="5dp">
 
                 <TextView
-                    android:layout_width="160dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:gravity="end"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
                     android:text="@string/estimate_size"
                     android:textColor="@color/blueGrayFirstTextColor"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp" />
 
                 <TextView
@@ -362,6 +368,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/_0_bytes"
                     android:textColor="@color/blueGrayFirstTextColor"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -372,11 +379,14 @@
                 android:padding="5dp">
 
                 <TextView
-                    android:layout_width="160dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:gravity="end"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
                     android:text="@string/balance_after"
                     android:textColor="@color/blueGrayFirstTextColor"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp" />
 
                 <TextView
@@ -385,6 +395,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/_0_00_dcr"
                     android:textColor="@color/blueGrayFirstTextColor"
+                    app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -398,9 +409,11 @@
                 tools:visibility="visible">
 
                 <TextView
-                    android:layout_width="160dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:gravity="end"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
                     android:text="@string/exchange_rate"
                     android:textColor="@color/blueGrayFirstTextColor"
                     android:textSize="20sp"

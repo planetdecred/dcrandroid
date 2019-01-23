@@ -333,12 +333,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                        setConnectionStatus(getString(R.string.connect_to_wifi));
+                        setConnectionStatus(R.string.connect_to_wifi);
                         showWifiNotice();
                         return;
                     }
                 } else {
-                    setConnectionStatus(getString(R.string.connect_to_wifi));
+                    setConnectionStatus(R.string.connect_to_wifi);
                     showWifiNotice();
                     return;
                 }
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     private void showWifiNotice() {
-        new WiFiSyncDialog(this)
+        WiFiSyncDialog wifiSyncDialog =  new WiFiSyncDialog(this)
                 .setPositiveButton(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -357,11 +357,22 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                         WiFiSyncDialog syncDialog = (WiFiSyncDialog) dialog;
                         util.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
                     }
-                })
-                .show();
+                });
+        wifiSyncDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                constants.syncing = false;
+                setupSyncedLayout();
+                sendBroadcast(new Intent(Constants.SYNCED));
+                setConnectionStatus(R.string.connect_to_wifi);
+                connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+            }
+        });
+
+        wifiSyncDialog.show();
     }
 
-    private void startSyncing() {
+    public void startSyncing() {
         constants.syncing = true;
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
@@ -377,13 +388,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         if (blockUpdate != null) {
             return;
         }
-        updatePeerCount();
 
         blockUpdate = new Thread() {
             public void run() {
                 while (!this.isInterrupted()) {
                     try {
-                        if (!scanning && constants.synced) {
+                        if (!scanning && !constants.syncing) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -441,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     bestBlockTime.setText(null);
                     return;
                 }
-                if (constants.synced) {
+                if (!constants.syncing) {
                     bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
                 } else {
                     bestBlockTime.setText(Utils.calculateDaysAgo((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
@@ -672,7 +682,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
-        if (constants.synced) {
+        if (!constants.syncing) {
             String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
@@ -729,7 +739,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
-        if (constants.synced) {
+        if (!constants.syncing) {
             // Ignore this call because this function gets called for each peer and
             // we'd want to ignore those calls as far as the wallet is synced.
             return;
@@ -986,6 +996,21 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
     }
 
+    private void setupSyncedLayout(){
+        syncProgressBar.setProgress(0);
+        syncProgressBar.setVisibility(View.GONE);
+        displayBalance();
+        ((AnimationDrawable) syncIndicator.getBackground()).stop();
+        syncIndicator.setVisibility(View.GONE);
+        totalBalance.setVisibility(View.VISIBLE);
+
+        bestBlock = constants.wallet.getBestBlock();
+        bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
+        String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), constants.wallet.getBestBlock());
+        setChainStatus(status);
+        setBestBlockTime(bestBlockTimestamp);
+    }
+
     @Override
     public void onSynced(boolean b) {
         constants.synced = b;
@@ -997,25 +1022,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             constants.syncRemainingTime = -1;
             constants.fetchHeaderTime = -1;
             constants.syncStatus = null;
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    syncProgressBar.setProgress(0);
-                    syncProgressBar.setVisibility(View.GONE);
-                    displayBalance();
-                    ((AnimationDrawable) syncIndicator.getBackground()).stop();
-                    syncIndicator.setVisibility(View.GONE);
-                    totalBalance.setVisibility(View.VISIBLE);
                     connectionStatus.setBackgroundColor(getResources().getColor(R.color.greenLightTextColor));
                     updatePeerCount();
-
-                    bestBlock = constants.wallet.getBestBlock();
-                    bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
-                    String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), constants.wallet.getBestBlock());
-                    setChainStatus(status);
-                    setBestBlockTime(bestBlockTimestamp);
+                    setupSyncedLayout();
                 }
             });
+
+            startBlockUpdate();
 
             broadcastIntent = new Intent(Constants.SYNCED);
 
@@ -1023,8 +1040,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 sendBroadcast(broadcastIntent);
                 broadcastIntent = null;
             }
-
-            startBlockUpdate();
         } else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -1033,6 +1048,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     updatePeerCount();
                     setBestBlockTime(-1);
                     setChainStatus(null);
+
+                    if(blockUpdate != null && !blockUpdate.isInterrupted()){
+                        System.out.println("Interrupting Block Update");
+                        blockUpdate.interrupt();
+                    }
 
                     sendBroadcast(new Intent(Constants.SYNCED));
 
@@ -1053,17 +1073,21 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onPeerConnected(int peerCount) {
         constants.peers = peerCount;
-        if (constants.synced) updatePeerCount();
+        if (!constants.syncing) updatePeerCount();
     }
 
     @Override
     public void onPeerDisconnected(int peerCount) {
         constants.peers = peerCount;
-        if (constants.synced) updatePeerCount();
+        if (!constants.syncing) updatePeerCount();
     }
 
     private void updatePeerCount() {
-        if (constants.synced) {
+        if(!constants.synced){
+            setConnectionStatus(R.string.not_synced);
+            return;
+        }
+        if (!constants.syncing) {
             if (constants.peers == 1) {
                 setConnectionStatus(R.string.synced_with_one_peer);
             } else {
