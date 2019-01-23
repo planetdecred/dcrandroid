@@ -120,7 +120,7 @@ public class SplashScreen extends AppCompatActivity {
             walletData.wallet.shutdown(false);
         }
 
-        String homeDir = Utils.getWalletDir(this, false);
+        String homeDir = Utils.getAppFilesDirWithExtension(this, "/wallet",false);
 
         walletData.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
         Dcrlibwallet.setLogLevels(util.get(Constants.LOGGING_LEVEL));

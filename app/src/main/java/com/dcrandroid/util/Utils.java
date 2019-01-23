@@ -115,7 +115,7 @@ public class Utils {
 
     public static String getRemoteCertificate(Context context) {
         try {
-            File path = new File(context.getFilesDir() + "/savedata");
+            File path = new File(getAppFilesDirWithExtension(context, "/savedata", false));
             if (!path.exists()) {
                 path.mkdirs();
             }
@@ -143,7 +143,7 @@ public class Utils {
 
     public static void setRemoteCetificate(Context context, String certificate) {
         try {
-            File path = new File(context.getFilesDir() + "/savedata");
+            File path = new File(getAppFilesDirWithExtension(context, "/savedata", false));
             if (!path.exists()) {
                 path.mkdirs();
             }
@@ -391,8 +391,8 @@ public class Utils {
         try {
             long startTime = System.currentTimeMillis();
             //TODO: Mainnet support
-            File walletDb = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db");
-            File backup = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db.bak");
+            File walletDb = new File(getAppFilesDirWithExtension(context, "/dcrwallet/testnet2/wallet.db", false));
+            File backup = new File(getAppFilesDirWithExtension(context, "/dcrwallet/testnet2/wallet.db.bak", false));
             if (backup.exists()) {
                 backup.delete();
             }
@@ -421,8 +421,8 @@ public class Utils {
         try {
             long startTime = System.currentTimeMillis();
             //TODO: Mainnet support
-            File walletDb = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db");
-            File backup = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db.bak");
+            File walletDb = new File(getAppFilesDirWithExtension(context, "/dcrwallet/testnet2/wallet.db", false));
+            File backup = new File(getAppFilesDirWithExtension(context, "/dcrwallet/testnet2/wallet.db.bak",false));
             if (walletDb.exists()) {
                 walletDb.delete();
             }
@@ -567,12 +567,12 @@ public class Utils {
     }
 
     @TargetApi(19)
-    public static String getWalletDir(final Context context, boolean getCommonName) {
+    public static String getAppFilesDirWithExtension(final Context context, String extension, boolean getCommonName) {
 
         PreferenceUtil util = new PreferenceUtil(context);
 
         String dirType = util.get(context.getString(R.string.key_wallet_dir_type));
-        String dir = getCommonName ? context.getString(R.string.hidden) : context.getFilesDir() + "/wallet";
+        String dir = getCommonName ? context.getString(R.string.hidden) : context.getFilesDir() + extension;
         Boolean error = false;
         File[] externalDirs =
                 (Build.VERSION.SDK_INT >= 19) ?
@@ -583,13 +583,13 @@ public class Utils {
             if (externalDirs.length < 1 || externalDirs[0] == null){
                 error = true;
             } else {
-                dir = externalDirs[0] + "/wallet";
+                dir = externalDirs[0] + extension;
             }
         } else if (dirType.equals(context.getString(R.string.wallet_dir_external_removable))) {
             if (externalDirs.length < 2 || externalDirs[1] == null){
                 error = true;
             } else {
-                dir = externalDirs[1] + "/wallet";
+                dir = externalDirs[1] + extension;
             }
         }
         if(error) {

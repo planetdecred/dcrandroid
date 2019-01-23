@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,7 +83,7 @@ public class SetupWalletActivity extends AppCompatActivity implements PopupMenu.
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.change_wallet_menu_setting:
-                ChooseWalletDirDialog.INSTANCE.diplayDialogue(SetupWalletActivity.this);
+                ChooseWalletDirDialog.INSTANCE.displayDialogue(SetupWalletActivity.this);
                 return true;
             default:
                 return false;

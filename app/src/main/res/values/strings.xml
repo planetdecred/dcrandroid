@@ -234,7 +234,7 @@
     <string name="wallet_dir_change_dialogue_external">Public Storage on Device</string>
     <string name="wallet_dir_change_dialogue_external_removable">Public Storage on Removable Drive</string>
     <string name="wallet_dir_change_restart_dialoge_title">Save changes and restart app?</string>
-    <string name="wallet_dir_external_removed">It appears your external drive has been removed. Using Private on Device wallet directory.</string>
+    <string name="wallet_dir_external_removed">It appears that your external drive has been removed. Using Private on Device wallet directory.</string>
     <!--/Wallet-->
 
     <!--Transaction-->

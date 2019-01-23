@@ -14,13 +14,11 @@ import com.dcrandroid.util.Utils
 object ChooseWalletDirDialog {
 
     @TargetApi(19)
-    fun diplayDialogue(context: Context) {
+    fun displayDialogue(context: Context) {
         val builder = AlertDialog.Builder(context)
         val dirTypes = mutableListOf<String>()
         val dirCommonNames = mutableListOf<String>()
         val dirTypeCommonNames = mutableListOf<String>()
-        var currentDirIndex = 0
-
 
         val externalDirs = if (Build.VERSION.SDK_INT >= 19) {
             context.getExternalFilesDirs(null)
@@ -52,10 +50,7 @@ object ChooseWalletDirDialog {
             dirTypeCommonNames[it]
         }
 
-        for (index in 0 until dirTypes.size) {
-            if (dirTypes[index] == initialDirType)
-                currentDirIndex = index
-        }
+        var currentDirIndex = dirTypes.indexOf(initialDirType)
 
         builder
                 .setTitle(R.string.wallet_dir_change_dialoge_title)
@@ -84,7 +79,7 @@ object ChooseWalletDirDialog {
                 .setTitle(context.getString(R.string.wallet_dir_change_restart_dialoge_title))
                 .setMessage(dirTypeCommon + "\n" + dirNameCommon)
                 .setNegativeButton(R.string.cancel) { _ , _ ->
-                    diplayDialogue(context)
+                    displayDialogue(context)
                 }
                 .setPositiveButton(R.string.ok) { _ , _ ->
                     prefs.set(context.getString(R.string.key_wallet_dir_type), dirType)

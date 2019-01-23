@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             buildDate.setSummary(BuildConfig.VERSION_NAME);
-            changeWalletDir.setSummary(Utils.getWalletDir(getActivity(), true));
+            changeWalletDir.setSummary(Utils.getAppFilesDirWithExtension(getActivity(), "/wallet", true));
 
             changeStartupPass.setVisible(encryptWallet.isChecked());
 
@@ -188,6 +188,7 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
 
                     Intent i = new Intent(getActivity(), LogViewer.class);
+                    i.putExtra("log_path", Utils.getAppFilesDirWithExtension(getContext(), BuildConfig.LogDir, false));
                     startActivity(i);
 
                     return true;
@@ -281,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity {
             changeWalletDir.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    ChooseWalletDirDialog.INSTANCE.diplayDialogue(getActivity());
+                    ChooseWalletDirDialog.INSTANCE.displayDialogue(getActivity());
                     return false;
                 }
             });
