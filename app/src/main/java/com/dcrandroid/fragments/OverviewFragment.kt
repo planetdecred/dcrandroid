@@ -153,19 +153,28 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
         tap_for_more_info.setOnClickListener {
             it.visibility = View.GONE
-            pb_status.visibility = View.VISIBLE
+            pb_status_layout.visibility = View.VISIBLE
             syncing_peers.visibility = View.VISIBLE
         }
 
-        pb_status.setOnClickListener {
+        pb_status_layout.setOnClickListener {
             it.visibility = View.GONE
             syncing_peers.visibility = View.GONE
             tap_for_more_info.visibility = View.VISIBLE
         }
 
+        pb_status_layout.setOnLongClickListener {
+            if(pb_verbose_status.visibility == View.VISIBLE){
+                pb_verbose_status.visibility = View.GONE
+            }else{
+                pb_verbose_status.visibility = View.VISIBLE
+            }
+            return@setOnLongClickListener true
+        }
+
         syncing_peers.setOnClickListener {
             it.visibility = View.GONE
-            pb_status.visibility = View.GONE
+            pb_status_layout.visibility = View.GONE
             tap_for_more_info.visibility = View.VISIBLE
         }
 
@@ -537,15 +546,17 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 tv_synchronizing.setText(R.string.synchronizing)
                 pb_sync_progress.visibility = View.VISIBLE
                 pb_percent_complete.visibility = View.VISIBLE
-                if (pb_status.visibility == View.GONE) {
+                if (pb_status_layout.visibility == View.GONE) {
                     tap_for_more_info.visibility = View.VISIBLE
                 }
 
                 pb_sync_progress.progress = constants!!.syncProgress.toInt()
 
-                pb_percent_complete.text = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, context)
+                pb_percent_complete.text = Utils.getSyncTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, context)
 
                 pb_status.text = constants!!.syncStatus
+
+                pb_verbose_status.text = constants!!.syncVerbose
 
                 if (BuildConfig.IS_TESTNET) {
                     if (constants!!.peers == 1) {

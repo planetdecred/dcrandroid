@@ -239,7 +239,7 @@ public class Utils {
         return seconds + "s " + ago;
     }
 
-    public static String getTimeRemaining(long millis, int percentageCompleted, boolean useLeft, Context ctx){
+    public static String getSyncTimeRemaining(long millis, int percentageCompleted, boolean useLeft, Context ctx){
         if (millis > 1000){
             long seconds = millis / 1000;
 
@@ -264,6 +264,17 @@ public class Utils {
         }
 
         return ctx.getString(R.string.remaining_sync_eta_less_than_seconds, percentageCompleted);
+    }
+
+    public static String getTime(long millis){
+        long seconds = millis / 1000;
+        if (seconds > 60){
+            long minutes = seconds / 60;
+            seconds = seconds%60;
+            return minutes + "m" + seconds + "s";
+        }
+
+        return seconds + "s";
     }
 
     public static String formatDecred(long dcr) {

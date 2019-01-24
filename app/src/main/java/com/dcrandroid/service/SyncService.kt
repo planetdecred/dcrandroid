@@ -127,7 +127,7 @@ class SyncService : Service(), SpvSyncResponse {
         if(state == Dcrlibwallet.START){
             contentText = null
         }else if (state == Dcrlibwallet.PROGRESS) {
-            contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
+            contentText = Utils.getSyncTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
         }
 
         showNotification()
@@ -144,7 +144,7 @@ class SyncService : Service(), SpvSyncResponse {
                         Thread.sleep(1000)
 
                         contentText = null
-                        contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
+                        contentText = Utils.getSyncTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
                         showNotification()
                     }
                 }catch (_: InterruptedException){}
@@ -178,7 +178,7 @@ class SyncService : Service(), SpvSyncResponse {
 
     override fun onRescan(rescannedThrough: Int, state: String) {
         if (state == Dcrlibwallet.PROGRESS) {
-            contentText = Utils.getTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
+            contentText = Utils.getSyncTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, this)
             showNotification()
         }
     }

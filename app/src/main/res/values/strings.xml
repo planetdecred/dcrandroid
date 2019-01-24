@@ -291,6 +291,7 @@
     <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$d%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
     <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
     <string name="overview_discovering_used_addresses">Discovering used addresses.\n~%1$d%% through step 2 of 3.</string>
+    <string name="overview_discovering_used_addresses_over">Discovering used addresses.\n~%1$d%% (over) through step 2 of 3.</string>
     <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
     <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
     <string name="synchronizing">Synchronizing</string>
@@ -302,6 +303,7 @@
     <string name="one_syncing_peer_testnet">Syncing with 1 peer on testnet.</string>
     <string name="syncing_peers_mainnet">Syncing with %1$d peers on mainnet.</string>
     <string name="one_syncing_peer_mainnet">Syncing with 1 peer on mainnet.</string>
+    <string name="sync_status_verbose">All Times\nelapsed: %1$s, remain: %2$s, total: %3$s\n\nStage Times\nelapsed: %4$s, remain: %5$s, total: %6$s</string>
     <!--/Sync Messages-->
 
     <!--QR Code-->
