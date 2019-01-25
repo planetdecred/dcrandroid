@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,5 +11,5 @@
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:id="@+id/parent_layout"
-        android:textColor="@color/grayTextColor"/>
+        android:textColor="@color/grayTextColor" />
 </LinearLayout>

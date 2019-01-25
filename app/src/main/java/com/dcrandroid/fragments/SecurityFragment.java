@@ -26,9 +26,9 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.EnterPassCode;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import org.jetbrains.annotations.Nullable;
 

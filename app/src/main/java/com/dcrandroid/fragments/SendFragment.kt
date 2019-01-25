@@ -433,10 +433,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if (returnString.startsWith(getString(R.string.decred_colon)))
                         returnString = returnString.replace(getString(R.string.decred_colon), "")
                     if (returnString.length < 25) {
-                        Toast.makeText(context, R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.wallet_add_too_short, Toast.LENGTH_LONG).show()
                         return
                     } else if (returnString.length > 36) {
-                        Toast.makeText(context, R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.wallet_addr_too_long, Toast.LENGTH_LONG).show()
                         return
                     }
 
@@ -446,9 +446,9 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         send_dcr_address.setText(returnString)
                     } else {
                         if (BuildConfig.IS_TESTNET) {
-                            Toast.makeText(context, R.string.invalid_testnet_address, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, R.string.invalid_testnet_address, Toast.LENGTH_LONG).show()
                         } else {
-                            Toast.makeText(context, R.string.invalid_mainnett_address, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, R.string.invalid_mainnett_address, Toast.LENGTH_LONG).show()
                         }
                     }
                 } catch (e: Exception) {

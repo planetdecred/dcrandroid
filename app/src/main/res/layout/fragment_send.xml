@@ -100,14 +100,13 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="1dp"
-                >
+                android:layout_marginTop="1dp">
+
                 <Spinner
                     android:id="@+id/destination_account_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="top">
-                </Spinner>
+                    android:gravity="top"></Spinner>
             </LinearLayout>
         </LinearLayout>
 
@@ -223,8 +222,8 @@
                         android:inputType="numberDecimal"
                         android:lines="1"
                         android:textColor="@color/darkBlueTextColor"
-                        android:id="@+id/amount_dcr"
-                        />
+                        android:id="@+id/amount_dcr" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -251,8 +250,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/send_in_usd"
                         android:textColor="@color/blueGrayFirstTextColor38pc"
-                        android:textSize="16sp"
-                        />
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/amount_usd"
@@ -266,6 +264,7 @@
                         android:background="@android:color/transparent"
                         android:lines="1"
                         android:textColor="@color/darkBlueTextColor" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -17,8 +17,8 @@ import com.dcrandroid.activities.AddAccountActivity;
 import com.dcrandroid.adapter.AccountAdapter;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.WalletData;
 
 import org.json.JSONException;
 

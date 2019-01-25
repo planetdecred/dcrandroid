@@ -41,7 +41,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
-    private var constants: WalletData? = null
+    private var walletData: WalletData? = null
     private val transactionList = ArrayList<TransactionsResponse.TransactionItem>()
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
@@ -61,7 +61,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         registerNotificationChannel()
 
         util = PreferenceUtil(context!!)
-        constants = WalletData.getInstance()
+        walletData = WalletData.getInstance()
 
         swipe_refresh_layout2.setColorSchemeResources(R.color.colorPrimaryDarkBlue,
                 R.color.colorPrimaryDarkBlue,
@@ -71,7 +71,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         transactionAdapter = TransactionAdapter(transactionList, context!!)
         iv_sync_indicator.setBackgroundResource(R.drawable.sync_animation)
 
-        if (!constants!!.syncing) {
+        if (!walletData!!.syncing) {
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
@@ -80,7 +80,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             pb_sync_progress.progress = 0
             overview_sync_layout.visibility = View.VISIBLE
             tv_synchronizing.setText(R.string.starting_synchronization)
-            if(constants!!.syncStatus != null){
+            if (walletData!!.syncStatus != null) {
                 publishProgress()
             }
 
@@ -164,9 +164,9 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
 
         pb_status_layout.setOnLongClickListener {
-            if(pb_verbose_status.visibility == View.VISIBLE){
+            if (pb_verbose_status.visibility == View.VISIBLE) {
                 pb_verbose_status.visibility = View.GONE
-            }else{
+            } else {
                 pb_verbose_status.visibility = View.VISIBLE
             }
             return@setOnLongClickListener true
@@ -218,7 +218,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
         val px = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52f, activity!!.resources.displayMetrics))
         val max = history_recycler_view2.height / px
-        if (max < 1){
+        if (max < 1) {
             return 5
         }
 
@@ -227,7 +227,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     }
 
     private fun getBalance() {
-        if (constants!!.syncing) {
+        if (walletData!!.syncing) {
             return
         }
 
@@ -237,7 +237,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                     if (context == null) {
                         return
                     }
-                    val accounts = Account.parse(constants!!.wallet.getAccounts(if (util!!.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS))
+                    val accounts = Account.parse(walletData!!.wallet.getAccounts(if (util!!.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS))
                     var totalBalance: Long = 0
                     for (i in accounts.indices) {
                         if (util!!.getBoolean(Constants.HIDE_WALLET + accounts[i].accountNumber)) {
@@ -275,11 +275,11 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         getTransactions()
     }
 
-    private fun getTransactions(){
+    private fun getTransactions() {
         activity!!.runOnUiThread { swipe_refresh_layout2.isRefreshing = true }
         transactionList.clear()
         loadTransactions()
-        if (constants!!.syncing) {
+        if (walletData!!.syncing) {
             no_history.setText(R.string.synchronizing)
             println("Going back, Hiding swipe to refresh")
             swipe_refresh_layout2.isRefreshing = false
@@ -291,7 +291,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             override fun run() {
                 try {
                     println("Getting transactions")
-                    constants!!.wallet.getTransactions(this@OverviewFragment)
+                    walletData!!.wallet.getTransactions(this@OverviewFragment)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -403,25 +403,25 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 val txNotificationHash = util!!.get(Constants.TX_NOTIFICATION_HASH)
                 println("Hash $txNotificationHash")
 
-                if (txNotificationHash.isNotEmpty() && txNotificationHash != transactions[0].hash){
+                if (txNotificationHash.isNotEmpty() && txNotificationHash != transactions[0].hash) {
                     val hashIndex = transactions.find(txNotificationHash)
                     val format = DecimalFormat(getString(R.string.you_received) + " #.######## DCR")
 
-                    if (hashIndex > 0){
+                    if (hashIndex > 0) {
                         println("Hash is $hashIndex")
                         val subList = transactions.subList(0, hashIndex)
                         subList.forEach {
-                            if(it.direction == 1) {
+                            if (it.direction == 1) {
                                 val satoshi = BigDecimal.valueOf(it.amount)
 
                                 val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
                                 println("Sending Notifications for ${it.hash}")
                                 Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutputs.toInt() + it.timestamp.toInt())
-                            }else{
+                            } else {
                                 println("Not Sending Notifications for ${it.hash}")
                             }
                         }
-                    }else if (hashIndex < 0){
+                    } else if (hashIndex < 0) {
                         println("Hash is less $hashIndex")
                         val subList = transactions.subList(0, transactions.size - 1)
                         subList.forEach {
@@ -435,7 +435,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                     }
                 }
 
-                println("First Hash: "+ transactions[0].hash)
+                println("First Hash: " + transactions[0].hash)
                 util!!.set(Constants.TX_NOTIFICATION_HASH, transactions[0].hash)
 
             }
@@ -453,7 +453,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             context!!.registerReceiver(receiver, filter)
         }
 
-        if (constants!!.syncing) {
+        if (walletData!!.syncing) {
             overview_sync_layout.visibility = View.VISIBLE
         } else {
             overview_sync_layout.visibility = View.GONE
@@ -540,8 +540,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         overview_av_balance.visibility = View.VISIBLE
     }
 
-    fun publishProgress(){
-        if(activity != null) {
+    fun publishProgress() {
+        if (activity != null) {
             activity!!.runOnUiThread {
                 tv_synchronizing.setText(R.string.synchronizing)
                 pb_sync_progress.visibility = View.VISIBLE
@@ -550,25 +550,25 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                     tap_for_more_info.visibility = View.VISIBLE
                 }
 
-                pb_sync_progress.progress = constants!!.syncProgress.toInt()
+                pb_sync_progress.progress = walletData!!.syncProgress.toInt()
 
-                pb_percent_complete.text = Utils.getSyncTimeRemaining(constants!!.syncRemainingTime, constants!!.syncProgress.toInt(), false, context)
+                pb_percent_complete.text = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, context)
 
-                pb_status.text = constants!!.syncStatus
+                pb_status.text = walletData!!.syncStatus
 
-                pb_verbose_status.text = constants!!.syncVerbose
+                pb_verbose_status.text = walletData!!.syncVerbose
 
                 if (BuildConfig.IS_TESTNET) {
-                    if (constants!!.peers == 1) {
+                    if (walletData!!.peers == 1) {
                         syncing_peers.text = getString(R.string.one_syncing_peer_testnet)
                     } else {
-                        syncing_peers.text = getString(R.string.syncing_peers_testnet, constants!!.peers)
+                        syncing_peers.text = getString(R.string.syncing_peers_testnet, walletData!!.peers)
                     }
                 } else {
-                    if (constants!!.peers == 1) {
+                    if (walletData!!.peers == 1) {
                         syncing_peers.text = getString(R.string.one_syncing_peer_mainnet)
                     } else {
-                        syncing_peers.text = getString(R.string.syncing_peers_mainnet, constants!!.peers)
+                        syncing_peers.text = getString(R.string.syncing_peers_mainnet, walletData!!.peers)
                     }
                 }
             }
@@ -578,7 +578,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
-                if (constants!!.syncing) {
+                if (walletData!!.syncing) {
                     overview_sync_layout.visibility = View.VISIBLE
                     iv_sync_indicator.visibility = View.VISIBLE
                     overview_av_balance.visibility = View.GONE
@@ -589,10 +589,10 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
                     tv_synchronizing.setText(R.string.starting_synchronization)
 
-                    if(constants!!.syncStatus != null){
+                    if (walletData!!.syncStatus != null) {
                         publishProgress()
                     }
-                }else {
+                } else {
                     overview_sync_layout.visibility = View.GONE
                     pb_sync_progress.visibility = View.GONE
                     pb_percent_complete.visibility = View.GONE

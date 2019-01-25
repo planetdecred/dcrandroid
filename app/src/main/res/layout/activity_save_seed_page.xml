@@ -62,7 +62,7 @@
                 android:id="@+id/seeds_recycler_view2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"/>
+                android:layout_weight="33.3" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

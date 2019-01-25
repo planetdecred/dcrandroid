@@ -16,9 +16,9 @@ import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import java.io.File;
 
@@ -38,7 +38,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     private PreferenceUtil util;
     private TextView tvLoading;
     private Thread loadThread;
-    private WalletData constants;
+    private WalletData walletData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +95,13 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     }
 
     private void startup() {
-        constants = WalletData.getInstance();
+        walletData = WalletData.getInstance();
 
         String homeDir = getFilesDir() + "/wallet";
 
-        constants.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
-        constants.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
-        constants.wallet.initLoader();
+        walletData.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
+        walletData.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
+        walletData.wallet.initLoader();
 
         String walletDB;
 
@@ -149,7 +149,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void run() {
                 try {
                     setText(getString(R.string.opening_wallet));
-                    constants.wallet.openWallet(publicPass.getBytes());
+                    walletData.wallet.openWallet(publicPass.getBytes());
                     Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);

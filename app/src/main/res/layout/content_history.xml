@@ -4,14 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    >
+    android:paddingRight="16dp">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,8 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                >
+                android:paddingBottom="16dp">
 
                 <Spinner
                     android:id="@+id/spinnerHistory"
@@ -31,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true" />
 
             </RelativeLayout>
 
@@ -56,8 +53,7 @@
                 android:gravity="center"
                 android:text="@string/no_transactions"
                 android:textSize="21sp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
         </RelativeLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

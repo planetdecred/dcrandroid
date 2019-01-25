@@ -15,10 +15,10 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

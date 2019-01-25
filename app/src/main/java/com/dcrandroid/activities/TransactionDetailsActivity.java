@@ -18,11 +18,11 @@ import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsResponse;
 import com.dcrandroid.util.TransactionsResponse.TransactionItem;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,7 +44,6 @@ import dcrlibwallet.LibWallet;
 public class TransactionDetailsActivity extends AppCompatActivity {
 
     private TextView value, date, status, txType, confirmation, transactionFee, tvHash;
-
     private ListView lvInput, lvOutput;
 
     private PreferenceUtil util;
@@ -264,9 +263,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         ArrayList<Integer> walletInputIndices = new ArrayList<>();
 
 
-
-
-
         try {
             Bundle b = getIntent().getExtras();
             String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
@@ -284,7 +280,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     hash = "Stakebase: 0000";
                 }
 
-                hash += ":"+input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
+                hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
 
                 walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
                         Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
@@ -363,7 +359,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     hash = "Stakebase: 0000";
                 }
 
-                hash += ":"+input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
+                hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
 
                 walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, hash));
             }
