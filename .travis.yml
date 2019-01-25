@@ -11,6 +11,6 @@ before_install:
  - export GO111MODULE=off
  - go get -u github.com/alecthomas/gometalinter
  - gometalinter --install
- - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=gosimple --enable=ineffassign ./...
+ - gometalinter --vendor --disable-all --deadline=10m --enable=gofmt --enable=staticcheck --enable=ineffassign ./...
  - export GO111MODULE=on
  - go build -v
