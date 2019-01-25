@@ -16,8 +16,8 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="start"
-        >
+        android:layout_gravity="start">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,8 +50,7 @@
                 tools:visibility="gone"
                 android:layout_gravity="center"
                 android:layout_marginLeft="-18dp"
-                android:layout_marginTop="-7dp"
-                />
+                android:layout_marginTop="-7dp" />
         </LinearLayout>
 
         <ListView
@@ -60,8 +59,7 @@
             android:layout_weight="1"
             android:background="@color/whiteFirstBackgroundColor"
             android:divider="@null"
-            android:id="@+id/lv_nav"
-            />
+            android:id="@+id/lv_nav" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,6 +68,7 @@
             android:background="@color/whiteFirstBackgroundColor"
             android:clickable="true"
             android:focusable="true">
+
             <View
                 android:layout_width="match_parent"
                 android:background="@color/darkBlueGrayBackgroundColor"
@@ -78,8 +77,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                />
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
 
@@ -94,26 +92,27 @@
             android:background="@color/whiteFirstBackgroundColor"
             android:gravity="center_vertical"
             android:clickable="true"
-            android:focusable="true"
-            >
+            android:focusable="true">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/accounts"
-                />
+                app:srcCompat="@mipmap/accounts" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:textColor="@color/lightGrayTextColor"
-                android:text="@string/total_balance"
-                />
+                android:text="@string/total_balance" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="end">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,93 +121,88 @@
                     android:textColor="@color/darkBlueGrayBackgroundColor"
                     android:text="135,459.595954"
                     android:visibility="gone"
-                    android:textSize="18sp"
-                    />
+                    android:textSize="18sp" />
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:id="@+id/iv_sync_indicator"
-                    />
+                    android:id="@+id/iv_sync_indicator" />
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_gravity="bottom"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:id="@+id/tv_connection_status"
-                        android:text="@string/connecting_to_peers"
-                        android:gravity="start"
-                        android:textSize="13sp"
-                        android:paddingStart="5dp"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/white"
-                        android:background="@android:color/darker_gray"
-                        />
-
-                    <ProgressBar
-                        android:layout_width="match_parent"
-                        android:layout_height="6.7dp"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:progressDrawable="@drawable/sync_progress_bar"
-                        android:max="100"
-                        android:id="@+id/pb_sync_progress"
-                        android:visibility="gone"
-                        />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
+                    android:layout_height="20dp"
+                    android:id="@+id/tv_connection_status"
+                    android:text="@string/connecting_to_peers"
+                    android:gravity="start"
+                    android:textSize="13sp"
                     android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:orientation="horizontal">
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/white"
+                    android:background="@android:color/darker_gray" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chain_status"
-                        android:textColor="@color/lightGrayTextColor"
-                        android:layout_weight="1"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
-                        />
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="6.7dp"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:progressDrawable="@drawable/sync_progress_bar"
+                    android:max="100"
+                    android:id="@+id/pb_sync_progress"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="@color/lightGrayTextColor"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginStart="1dp"
-                        android:id="@+id/best_block_time"
-                        />
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        app:srcCompat="@drawable/ic_close"
-                        android:id="@+id/iv_stop_rescan"
-                        android:visibility="gone"
-                        />
-                </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chain_status"
+                    android:textColor="@color/lightGrayTextColor"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/lightGrayTextColor"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginStart="1dp"
+                    android:id="@+id/best_block_time" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    app:srcCompat="@drawable/ic_close"
+                    android:id="@+id/iv_stop_rescan"
+                    android:visibility="gone" />
+            </LinearLayout>
         </LinearLayout>
+
+    </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

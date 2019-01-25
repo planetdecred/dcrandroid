@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,8 +11,8 @@
         android:text="@string/add_account"
         android:textAllCaps="true"
         android:gravity="center"
-        android:background="@color/white"
-        />
+        android:background="@color/white" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,15 +20,15 @@
         android:text="@string/input_your_new_account_name_and_enter_your_private_passphrase"
         android:gravity="center"
         android:textSize="14sp"
-        android:background="@color/white"
-        />
+        android:background="@color/white" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
+
         <EditText
             android:id="@+id/add_acc_name"
             android:layout_width="match_parent"
@@ -36,8 +36,7 @@
             android:layout_margin="8dp"
             android:hint="@string/account_name"
             android:maxLines="1"
-            android:inputType="textPersonName"
-            />
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/add_acc_passphrase"
@@ -46,8 +45,7 @@
             android:layout_margin="8dp"
             android:hint="@string/private_passphrase"
             android:maxLines="1"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/add_acc_button"

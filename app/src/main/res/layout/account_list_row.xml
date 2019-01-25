@@ -13,14 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        >
+        android:gravity="center_vertical">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            >
+            android:gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="30dp"
@@ -28,8 +27,7 @@
                 android:background="@drawable/account_activated"
                 android:duplicateParentState="true"
                 android:id="@+id/icon"
-                android:orientation="vertical"
-                />
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -39,8 +37,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/arrow_right"
-                android:orientation="vertical"
-                />
+                android:orientation="vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,8 +45,7 @@
                 android:textColor="@color/darkBlueTextColor"
                 app:fontFamily="@font/source_sans_pro_regular_family"
                 android:textSize="18sp"
-                android:id="@+id/account_name"
-                />
+                android:id="@+id/account_name" />
 
         </LinearLayout>
 
@@ -57,35 +53,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="end|center_vertical"
-            >
+            android:gravity="end|center_vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:fontFamily="@font/source_sans_pro_regular_family"
                     android:textColor="@color/darkBlueTextColor"
                     android:textSize="17sp"
-                    android:id="@+id/total_balance"
-                    />
+                    android:id="@+id/total_balance" />
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:id="@+id/account_sync_indicator"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,8 +88,8 @@
                     android:textColor="@color/lightGrayTextColor"
                     android:textSize="12sp"
                     android:id="@+id/spendable_label"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
-                    />
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,13 +98,11 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:id="@+id/spendable_balance"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
-                    />
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
             </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
 
-    <include
-        layout="@layout/account_details_view"/>
+    <include layout="@layout/account_details_view" />
 </LinearLayout>

@@ -8,16 +8,13 @@
     android:orientation="vertical">
 
     <!--Sync layout where current syncing messages are added-->
-    <include
-        layout="@layout/overview_sync_layout"
-        />
+    <include layout="@layout/overview_sync_layout" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/overview_layout"
-        >
+        android:id="@+id/overview_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,7 +119,7 @@
                         <Space
                             android:layout_width="wrap_content"
                             android:visibility="gone"
-                            android:layout_height="50dp"/>
+                            android:layout_height="50dp" />
 
                     </LinearLayout>
 

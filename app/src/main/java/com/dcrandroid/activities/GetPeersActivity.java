@@ -11,9 +11,9 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.PeerAdapter;
 import com.dcrandroid.data.Peers;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.RecyclerTouchListener;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -89,24 +89,14 @@ public class GetPeersActivity extends AppCompatActivity {
         prepareConnectionData();
     }
 
-    private String getNetworkAddress() {
-        //TODO: Make available for Mainnet
-        String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this);
-        if (dcrdAddress.contains(":")) {
-            return dcrdAddress.split(":")[0] + ":19109";
-        }
-        return dcrdAddress + ":19109";
-    }
-
     private void prepareConnectionData() {
         final ProgressDialog pd = Utils.getProgressDialog(this, false, false, "Getting Peers...");
         pd.show();
         new Thread() {
             public void run() {
-                WalletData constants = WalletData.getInstance();
                 try {
                     String dcrdAddress = Utils.getNetworkAddress(GetPeersActivity.this);
-                    String result = constants.wallet.callJSONRPC("getpeerinfo", "", dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
+                    String result = WalletData.getInstance().wallet.callJSONRPC("getpeerinfo", "", dcrdAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(GetPeersActivity.this));
                     System.out.println("Peers: " + result);
                     JSONArray array = new JSONArray(result);
                     if (array.length() == 0) {
@@ -178,11 +168,5 @@ public class GetPeersActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
     }
 }

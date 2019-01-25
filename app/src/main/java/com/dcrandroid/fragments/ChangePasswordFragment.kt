@@ -15,9 +15,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.util.WalletData
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import com.dcrandroid.util.WalletData
 import com.google.android.material.snackbar.Snackbar
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.password.*

@@ -81,6 +81,9 @@ import dcrlibwallet.TransactionListener;
 public class MainActivity extends AppCompatActivity implements TransactionListener,
         SpvSyncResponse, View.OnClickListener {
 
+    private final double RESCAN_PERCENTAGE = 0.1;
+    private final double DISCOVERY_PERCENTAGE = 0.8;
+
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView stopScan, syncIndicator;
     private ProgressBar syncProgressBar;
@@ -90,20 +93,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private SendFragment sendFragment = new SendFragment();
     private SecurityFragment securityFragment = new SecurityFragment();
 
-    private WalletData constants;
+    private WalletData walletData;
     private PreferenceUtil util;
     private NotificationManager notificationManager;
     private Animation rotateAnimation;
     private SoundPool alertSound;
-    private int bestBlock = 0, blockNotificationSound, pageID;
-    private long bestBlockTimestamp;
-    private boolean scanning = false, isForeground;
     private Thread blockUpdate, accountDiscoveryProgress;
-    private ArrayList<NavigationBarItem> items;
-    private NavigationListAdapter listAdapter;
 
     private Handler handler = new Handler();
     private Intent broadcastIntent = null;
+
+    private int bestBlock = 0, blockNotificationSound, pageID;
+    private long bestBlockTimestamp;
+    private boolean scanning = false, isForeground;
 
     @Override
     public void onTrimMemory(int level) {
@@ -138,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         totalBalance = findViewById(R.id.tv_total_balance);
         syncIndicator = findViewById(R.id.iv_sync_indicator);
         syncProgressBar = findViewById(R.id.pb_sync_progress);
+        mListView = findViewById(R.id.lv_nav);
+
+        connectionStatus.setOnClickListener(this);
 
         if (BuildConfig.IS_TESTNET) {
             findViewById(R.id.tv_testnet).setVisibility(View.VISIBLE);
@@ -148,17 +153,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             decredSymbol.setLayoutParams(params);
         }
 
-        mListView = findViewById(R.id.lv_nav);
-
         String[] itemTitles = getResources().getStringArray(R.array.nav_list_titles);
         int[] itemIcons = new int[]{R.drawable.overview, R.drawable.history, R.mipmap.send,
                 R.mipmap.receive, R.drawable.account, R.drawable.security, R.drawable.settings, R.drawable.help};
-        items = new ArrayList<>();
+        ArrayList<NavigationBarItem> items = new ArrayList<>();
         for (int i = 0; i < itemTitles.length; i++) {
             NavigationBarItem item = new NavigationBarItem(itemTitles[i], itemIcons[i]);
             items.add(item);
         }
 
+        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -166,10 +170,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             }
         });
 
-        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-
-        listAdapter = new NavigationListAdapter(this, items);
-
+        NavigationListAdapter listAdapter = new NavigationListAdapter(this, items);
         mListView.setAdapter(listAdapter);
 
         if (itemTitles.length > 0) {
@@ -201,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 scanning = false;
             }
         });
-        connectionStatus.setOnClickListener(this);
     }
 
     private void registerNotificationChannel() {
@@ -233,9 +233,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         registerNotificationChannel();
 
         util = new PreferenceUtil(this);
-        constants = WalletData.getInstance();
+        walletData = WalletData.getInstance();
 
-        if (constants.wallet == null) {
+        if (walletData.wallet == null) {
             System.out.println("Restarting app");
             Utils.restartApp(this);
         }
@@ -253,13 +253,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
 
-        constants.wallet.transactionNotification(this);
+        walletData.wallet.transactionNotification(this);
+        walletData.wallet.addSyncResponse(this);
 
         displayBalance();
 
-        constants.wallet.addSyncResponse(this);
-
         checkWifiSync();
+
+        startBlockUpdate();
     }
 
     @Override
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         super.onResume();
         isForeground = true;
 
-        if (constants.peers == 0 && constants.synced) {
+        if (walletData.peers == 0 && walletData.synced) {
             // restart spv synchronization.
             connectionStatus.performClick();
         }
@@ -300,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     public void displayBalance() {
         try {
-            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(constants.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(walletData.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             long walletBalance = 0;
             for (int i = 0; i < accounts.size(); i++) {
                 if (util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {
@@ -308,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 }
                 walletBalance += accounts.get(i).getBalance().getTotal();
             }
+
             totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -323,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     .setMessage(R.string.first_run_notice)
                     .setPositiveButton(R.string.ok, null)
                     .show();
+
             util.setBoolean(Constants.FIRST_RUN, false);
         }
 
@@ -349,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     private void showWifiNotice() {
-        WiFiSyncDialog wifiSyncDialog =  new WiFiSyncDialog(this)
+        WiFiSyncDialog wifiSyncDialog = new WiFiSyncDialog(this)
                 .setPositiveButton(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -358,10 +361,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                         util.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
                     }
                 });
+
         wifiSyncDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                constants.syncing = false;
+                walletData.syncing = false;
                 setupSyncedLayout();
                 sendBroadcast(new Intent(Constants.SYNCED));
                 setConnectionStatus(R.string.connect_to_wifi);
@@ -373,7 +377,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     public void startSyncing() {
-        constants.syncing = true;
+        walletData.syncing = true;
+
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
         } else {
@@ -393,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             public void run() {
                 while (!this.isInterrupted()) {
                     try {
-                        if (!scanning && !constants.syncing) {
+                        if (!scanning && !walletData.syncing) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -451,7 +456,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     bestBlockTime.setText(null);
                     return;
                 }
-                if (!constants.syncing) {
+
+                if (!walletData.syncing) {
                     bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
                 } else {
                     bestBlockTime.setText(Utils.calculateDaysAgo((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
@@ -513,9 +519,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         Intent syncIntent = new Intent(this, SyncService.class);
         stopService(syncIntent);
 
-        if (constants.wallet != null) {
-            constants.wallet.shutdown();
+        if (walletData.wallet != null) {
+            walletData.wallet.shutdown();
         }
+
         finish();
     }
 
@@ -594,11 +601,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             transaction.height = obj.getInt(Constants.HEIGHT);
             transaction.amount = obj.getLong(Constants.AMOUNT);
             transaction.direction = obj.getInt(Constants.DIRECTION);
+
             long totalInput = 0, totalOutput = 0;
+
             ArrayList<TransactionsResponse.TransactionInput> inputs = new ArrayList<>();
             JSONArray debits = obj.getJSONArray(Constants.DEBITS);
             for (int i = 0; i < debits.length(); i++) {
                 JSONObject debit = debits.getJSONObject(i);
+
                 TransactionInput input = new TransactionInput();
                 input.index = debit.getInt(Constants.INDEX);
                 input.previous_account = debit.getLong(Constants.PREVIOUS_ACCOUNT);
@@ -608,6 +618,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                 inputs.add(input);
             }
+
             ArrayList<TransactionOutput> outputs = new ArrayList<>();
             JSONArray credits = obj.getJSONArray(Constants.CREDITS);
             for (int i = 0; i < credits.length(); i++) {
@@ -620,6 +631,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 output.amount = credit.getLong(Constants.AMOUNT);
                 totalOutput += credit.getLong(Constants.AMOUNT);
             }
+
             transaction.totalInput = totalInput;
             transaction.totalOutputs = totalOutput;
             transaction.inputs = inputs;
@@ -650,6 +662,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 showText(e.getMessage());
             }
         }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -663,7 +676,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 displayBalance();
+
                 if (currentFragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
                     overviewFragment.transactionConfirmed(hash, height);
@@ -682,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
-        if (!constants.syncing) {
+        if (!walletData.syncing) {
             String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
@@ -739,29 +754,29 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
-        if (!constants.syncing) {
+        if (!walletData.syncing) {
             // Ignore this call because this function gets called for each peer and
             // we'd want to ignore those calls as far as the wallet is synced.
             return;
-        } else if (constants.totalFetchTime != -1) {
+        } else if (walletData.totalFetchTime != -1) {
             return;
         }
 
         long currentTime = System.currentTimeMillis() / 1000;
-        long estimatedBlocks = ((currentTime - constants.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + constants.wallet.getBestBlock();
+        long estimatedBlocks = ((currentTime - walletData.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + walletData.wallet.getBestBlock();
 
         switch (state) {
             case Dcrlibwallet.START:
-                if (constants.fetchHeaderTime != -1) {
+                if (walletData.fetchHeaderTime != -1) {
                     return;
                 }
 
                 setConnectionStatus(R.string.fetching_headers);
 
-                constants.syncStartPoint = constants.wallet.getBestBlock();
-                constants.syncEndPoint = (int) estimatedBlocks - constants.syncStartPoint;
-                constants.syncCurrentPoint = constants.syncStartPoint;
-                constants.fetchHeaderTime = System.currentTimeMillis();
+                walletData.syncStartPoint = walletData.wallet.getBestBlock();
+                walletData.syncEndPoint = (int) estimatedBlocks - walletData.syncStartPoint;
+                walletData.syncCurrentPoint = walletData.syncStartPoint;
+                walletData.fetchHeaderTime = System.currentTimeMillis();
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -773,67 +788,60 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                 break;
             case Dcrlibwallet.PROGRESS:
-                constants.syncEndPoint = (int) estimatedBlocks - constants.syncStartPoint;
 
-                constants.syncCurrentPoint += fetchedHeadersCount;
+                walletData.syncEndPoint = (int) estimatedBlocks - walletData.syncStartPoint;
+                walletData.syncCurrentPoint += fetchedHeadersCount;
 
-                int count = constants.syncCurrentPoint;
-
-                if (constants.syncStartPoint > 0) {
-                    count -= constants.syncStartPoint;
+                int count = walletData.syncCurrentPoint;
+                if (walletData.syncStartPoint > 0) {
+                    count -= walletData.syncStartPoint;
                 }
 
-                setBestBlockTime(-1);
-                setChainStatus(getString(R.string.blocks_behind, constants.syncEndPoint - count));
+                float percent = (float) count / walletData.syncEndPoint;
+                double totalFetchTime = (System.currentTimeMillis() - walletData.fetchHeaderTime) / percent;
+                long remainingFetchTime = Math.round(totalFetchTime) - (System.currentTimeMillis() - walletData.fetchHeaderTime);
+                long elapsedFetchTime = System.currentTimeMillis() - walletData.fetchHeaderTime;
 
-                float percent = (float) count / constants.syncEndPoint;
-                double totalFetchTime = (System.currentTimeMillis() - constants.fetchHeaderTime) / percent;
-                long remainingFetchTime = Math.round(totalFetchTime) - (System.currentTimeMillis() - constants.fetchHeaderTime);
-                long elapsedFetchTime = System.currentTimeMillis() - constants.fetchHeaderTime;
-                constants.syncRemainingTime = Math.round(remainingFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + (totalFetchTime * 0.75));
-                double totalSyncTime = totalFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + (totalFetchTime * 0.75);
+                //10% of fetch time is used for estimating both rescan while 80% is used for address discovery time
+                double estimatedRescanTime = totalFetchTime * RESCAN_PERCENTAGE;
+                double estimatedDiscoveryTime = totalFetchTime * DISCOVERY_PERCENTAGE;
+                double totalSyncTime = totalFetchTime + estimatedRescanTime + estimatedDiscoveryTime;
 
-                float fetchedPercentage = ((float) count / constants.syncEndPoint * 100);
-
-                constants.syncProgress = ((float) elapsedFetchTime / totalSyncTime) * 100;
-                //constants.syncProgress = (fetchedPercentage * 0.40);
+                walletData.syncRemainingTime = Math.round(remainingFetchTime + estimatedRescanTime + estimatedDiscoveryTime);
+                walletData.syncProgress = ((float) elapsedFetchTime / totalSyncTime) * 100;
+                walletData.syncVerbose = getString(R.string.sync_status_verbose, Utils.getTime(elapsedFetchTime), Utils.getTime(walletData.syncRemainingTime),
+                        Utils.getTime(Math.round(totalSyncTime)), Utils.getTime(elapsedFetchTime), Utils.getTime(remainingFetchTime), Utils.getTime(Math.round(totalFetchTime)));
 
                 setConnectionStatus(getString(R.string.fetching_headers));
                 setBestBlockTime(lastHeaderTime);
+                setChainStatus(getString(R.string.blocks_behind, walletData.syncEndPoint - count));
 
                 if (currentFragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
 
                     String daysBehind = Utils.calculateDays((System.currentTimeMillis() / 1000) - lastHeaderTime, MainActivity.this);
-                    constants.syncStatus = getString(R.string.fetched_header_format, count, constants.syncEndPoint, Math.round(fetchedPercentage), daysBehind);
+                    walletData.syncStatus = getString(R.string.fetched_header_format, count, walletData.syncEndPoint, Math.round(percent * 100), daysBehind);
                     overviewFragment.publishProgress();
                 }
 
                 syncProgressBar.post(new Runnable() {
                     @Override
                     public void run() {
-                        syncProgressBar.setProgress((int) constants.syncProgress);
+                        syncProgressBar.setProgress((int) walletData.syncProgress);
                     }
                 });
 
-                if (constants.initialSyncEstimate == -1) {
-                    constants.initialSyncEstimate = constants.syncRemainingTime;
+                if (walletData.initialSyncEstimate == -1) {
+                    walletData.initialSyncEstimate = walletData.syncRemainingTime;
                 }
 
                 break;
             case Dcrlibwallet.FINISH:
-                syncProgressBar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        syncProgressBar.setProgress(40);
-                    }
-                });
-                constants.totalFetchTime = System.currentTimeMillis() - constants.fetchHeaderTime;
-                System.out.println("Fetch Time: " + constants.totalFetchTime);
                 updatePeerCount();
-                constants.syncStartPoint = -1;
-                constants.syncEndPoint = -1;
-                constants.syncCurrentPoint = -1;
+                walletData.totalFetchTime = System.currentTimeMillis() - walletData.fetchHeaderTime;
+                walletData.syncStartPoint = -1;
+                walletData.syncEndPoint = -1;
+                walletData.syncCurrentPoint = -1;
                 break;
         }
     }
@@ -851,45 +859,54 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             accountDiscoveryProgress = new Thread() {
                 public void run() {
                     try {
-                        constants.accountDiscoveryTime = System.currentTimeMillis();
-                        long estimatedRescanTime = Math.round(constants.totalFetchTime * 0.75);
+                        walletData.accountDiscoveryStartTime = System.currentTimeMillis();
+                        long estimatedRescanTime = Math.round(walletData.totalFetchTime * RESCAN_PERCENTAGE);
+                        long estimatedDiscoveryTime = Math.round(walletData.totalFetchTime * DISCOVERY_PERCENTAGE);
 
                         while (!interrupted()) {
-                            double accountDiscoveryTime = System.currentTimeMillis() - constants.accountDiscoveryTime;
+                            double elapsedDiscoveryTime = System.currentTimeMillis() - walletData.accountDiscoveryStartTime;
 
                             double totalSyncTime;
-                            if (accountDiscoveryTime > Constants.ESTIMATED_ACCT_DISCOVERY) {
-                                totalSyncTime = constants.totalFetchTime + accountDiscoveryTime + estimatedRescanTime;
+                            if (elapsedDiscoveryTime > estimatedDiscoveryTime) {
+                                totalSyncTime = walletData.totalFetchTime + elapsedDiscoveryTime + estimatedRescanTime;
                             } else {
-                                totalSyncTime = constants.totalFetchTime + Constants.ESTIMATED_ACCT_DISCOVERY + estimatedRescanTime;
+                                totalSyncTime = walletData.totalFetchTime + estimatedDiscoveryTime + estimatedRescanTime;
                             }
 
-                            double elapsedTime = constants.totalFetchTime + accountDiscoveryTime;
+                            double elapsedTime = walletData.totalFetchTime + elapsedDiscoveryTime;
 
-                            constants.syncProgress = (elapsedTime / (float) totalSyncTime) * 100;
-
-                            syncProgressBar.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    syncProgressBar.setProgress((int) constants.syncProgress);
-                                }
-                            });
-
-                            long remainingAccountDiscoveryTime = Math.round(Constants.ESTIMATED_ACCT_DISCOVERY - accountDiscoveryTime);
+                            long remainingAccountDiscoveryTime = Math.round(estimatedDiscoveryTime - elapsedDiscoveryTime);
                             if (remainingAccountDiscoveryTime < 0) {
                                 remainingAccountDiscoveryTime = 0;
                             }
 
-                            constants.syncRemainingTime = (remainingAccountDiscoveryTime + estimatedRescanTime);
+                            walletData.syncProgress = (elapsedTime / (float) totalSyncTime) * 100;
+                            walletData.syncRemainingTime = (remainingAccountDiscoveryTime + estimatedRescanTime);
+                            walletData.syncVerbose = getString(R.string.sync_status_verbose, Utils.getTime(Math.round(elapsedTime)), Utils.getTime(walletData.syncRemainingTime),
+                                    Utils.getTime(Math.round(totalSyncTime)), Utils.getTime(Math.round(elapsedDiscoveryTime)),
+                                    Utils.getTime(remainingAccountDiscoveryTime), Utils.getTime(estimatedDiscoveryTime));
 
                             setConnectionStatus(R.string.discovering_used_addresses);
-                            setChainStatus(Utils.getTimeRemaining(constants.syncRemainingTime, (int) constants.syncProgress, true, MainActivity.this));
+                            setChainStatus(Utils.getSyncTimeRemaining(walletData.syncRemainingTime, (int) walletData.syncProgress, true, MainActivity.this));
 
                             if (currentFragment instanceof OverviewFragment) {
                                 OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
-                                constants.syncStatus = getString(R.string.overview_discovering_used_addresses, Math.round((accountDiscoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) * 100));
-                                overviewFragment.publishProgress();
+                                long discoveryProgress = Math.round((elapsedDiscoveryTime / estimatedDiscoveryTime) * 100);
+                                if (discoveryProgress > 100) {
+                                    walletData.syncStatus = getString(R.string.overview_discovering_used_addresses_over, discoveryProgress);
+                                    overviewFragment.publishProgress();
+                                } else {
+                                    walletData.syncStatus = getString(R.string.overview_discovering_used_addresses, discoveryProgress);
+                                    overviewFragment.publishProgress();
+                                }
                             }
+
+                            syncProgressBar.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    syncProgressBar.setProgress((int) walletData.syncProgress);
+                                }
+                            });
 
                             sleep(1000);
                         }
@@ -904,11 +921,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 accountDiscoveryProgress.interrupt();
             }
 
-            double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
-            double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
+            walletData.totalDiscoveryTime = (System.currentTimeMillis() - walletData.accountDiscoveryStartTime);
+            long estimatedDiscoveryTime = Math.round((walletData.totalFetchTime * DISCOVERY_PERCENTAGE) / 1000);
+
+            double percentageDifference = (walletData.totalDiscoveryTime / estimatedDiscoveryTime) - 1;
             percentageDifference *= 100;
 
-            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+            String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)",
+                    estimatedDiscoveryTime, Math.round(walletData.totalDiscoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
             Dcrlibwallet.log(log);
 
             updatePeerCount();
@@ -917,73 +937,76 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onRescan(int rescannedThrough, String state) {
-        if (constants.syncEndPoint == -1) {
-            constants.syncEndPoint = constants.wallet.getBestBlock();
+        if (walletData.syncEndPoint == -1) {
+            walletData.syncEndPoint = walletData.wallet.getBestBlock();
         }
 
         switch (state) {
             case Dcrlibwallet.START:
                 setConnectionStatus(R.string.scanning_blocks);
-                constants.syncStartPoint = 0;
-                constants.syncCurrentPoint = 0;
-                constants.syncEndPoint = constants.wallet.getBestBlock();
-                constants.rescanTime = System.currentTimeMillis();
+                walletData.syncStartPoint = 0;
+                walletData.syncCurrentPoint = 0;
+                walletData.syncEndPoint = walletData.wallet.getBestBlock();
+                walletData.rescanTime = System.currentTimeMillis();
                 break;
             case Dcrlibwallet.PROGRESS:
-                float scannedPercentage = ((float) rescannedThrough / constants.syncEndPoint) * 100;
-                long elapsedRescanTime = System.currentTimeMillis() - constants.rescanTime;
-                double totalScanTime = elapsedRescanTime / ((float) rescannedThrough / constants.syncEndPoint);
 
-                double totalSyncTime = constants.totalFetchTime + (System.currentTimeMillis() - constants.accountDiscoveryTime) + totalScanTime;
+                float scannedPercentage = ((float) rescannedThrough / walletData.syncEndPoint) * 100;
 
-                double elapsedTime = constants.totalFetchTime + (System.currentTimeMillis() - constants.accountDiscoveryTime) + elapsedRescanTime;
+                long elapsedRescanTime = System.currentTimeMillis() - walletData.rescanTime;
+                double totalScanTime = elapsedRescanTime / ((float) rescannedThrough / walletData.syncEndPoint);
+                double totalSyncTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + totalScanTime;
+                double elapsedTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + elapsedRescanTime;
 
-                constants.syncRemainingTime = Math.round(totalScanTime) - elapsedRescanTime;
-
-                constants.syncProgress = (elapsedTime / (float) totalSyncTime) * 100;
-
-                //constants.syncProgress = (scannedPercentage * 0.40) + 60;
+                walletData.syncRemainingTime = Math.round(totalScanTime) - elapsedRescanTime;
+                walletData.syncProgress = (elapsedTime / (float) totalSyncTime) * 100;
+                walletData.syncVerbose = getString(R.string.sync_status_verbose, Utils.getTime(Math.round(elapsedTime)), Utils.getTime(walletData.syncRemainingTime),
+                        Utils.getTime(Math.round(totalSyncTime)), Utils.getTime(Math.round(elapsedRescanTime)),
+                        Utils.getTime(walletData.syncRemainingTime), Utils.getTime(Math.round(totalScanTime)));
 
                 setConnectionStatus(R.string.scanning_blocks);
-                setChainStatus(Utils.getTimeRemaining(constants.syncRemainingTime, (int) constants.syncProgress, true, MainActivity.this));
+                setChainStatus(Utils.getSyncTimeRemaining(walletData.syncRemainingTime, (int) walletData.syncProgress, true, MainActivity.this));
 
                 syncProgressBar.post(new Runnable() {
                     @Override
                     public void run() {
-                        syncProgressBar.setProgress((int) constants.syncProgress);
+                        syncProgressBar.setProgress((int) walletData.syncProgress);
                     }
                 });
 
                 if (currentFragment instanceof OverviewFragment) {
                     OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
-                    constants.syncStatus = getString(R.string.overview_rescan_height_format, rescannedThrough, constants.syncEndPoint, Math.round(scannedPercentage));
+                    walletData.syncStatus = getString(R.string.overview_rescan_height_format, rescannedThrough, walletData.syncEndPoint, Math.round(scannedPercentage));
                     overviewFragment.publishProgress();
                 }
 
                 break;
             default:
-                double discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
-                double percentageDifference = (discoveryTime / Constants.ESTIMATED_ACCT_DISCOVERY) - 1;
+                double discoveryTime = walletData.totalDiscoveryTime;
+                double estimatedDiscoveryTime = walletData.totalFetchTime * DISCOVERY_PERCENTAGE;
+                double percentageDifference = (discoveryTime / estimatedDiscoveryTime) - 1;
                 percentageDifference *= 100;
 
-                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", (Constants.ESTIMATED_ACCT_DISCOVERY / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+                String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", Math.round(estimatedDiscoveryTime / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
-                double rescanTime = (System.currentTimeMillis() - constants.rescanTime);
-                double fetchTime = constants.totalFetchTime * 0.75;
+                double rescanTime = (System.currentTimeMillis() - walletData.rescanTime);
+                double estimatedScanTime = walletData.totalFetchTime * RESCAN_PERCENTAGE;
 
-                double estimatePercent = (rescanTime / constants.totalFetchTime) * 100;
-                percentageDifference = (rescanTime / fetchTime) - 1;
+                double estimatePercent = (rescanTime / walletData.totalFetchTime) * 100;
+                percentageDifference = (rescanTime / estimatedScanTime) - 1;
                 percentageDifference *= 100;
 
-                log = String.format(Locale.getDefault(), "Scan, assumed: 75%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)", Math.round((constants.totalFetchTime * 0.75) / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
+                log = String.format(Locale.getDefault(), "Scan, assumed: 50%%(%ds), actual: %.2f%%(%ds) (%s%.2f%%)", Math.round(estimatedScanTime / 1000), estimatePercent, Math.round(rescanTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
-                discoveryTime = (System.currentTimeMillis() - constants.accountDiscoveryTime);
+                Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(walletData.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + walletData.totalFetchTime + discoveryTime) / 1000) + "s");
 
-                Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(constants.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + constants.totalFetchTime + discoveryTime) / 1000) + "s");
 
-                updatePeerCount();
+
+                double totalSync = walletData.totalFetchTime + discoveryTime + rescanTime;
+                log = String.format(Locale.getDefault(), "Fetch: %.2f%%, Discovery: %.2f%%, Rescan %.2f%%", walletData.totalFetchTime / totalSync * 100, discoveryTime / totalSync * 100, rescanTime / totalSync * 100);
+                Dcrlibwallet.log(log);
 
                 syncProgressBar.post(new Runnable() {
                     @Override
@@ -992,36 +1015,40 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                         syncProgressBar.setVisibility(View.GONE);
                     }
                 });
+
+                updatePeerCount();
                 break;
         }
     }
 
-    private void setupSyncedLayout(){
+    private void setupSyncedLayout() {
         syncProgressBar.setProgress(0);
         syncProgressBar.setVisibility(View.GONE);
-        displayBalance();
+
         ((AnimationDrawable) syncIndicator.getBackground()).stop();
         syncIndicator.setVisibility(View.GONE);
-        totalBalance.setVisibility(View.VISIBLE);
 
-        bestBlock = constants.wallet.getBestBlock();
-        bestBlockTimestamp = constants.wallet.getBestBlockTimeStamp();
-        String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), constants.wallet.getBestBlock());
+        bestBlock = walletData.wallet.getBestBlock();
+        bestBlockTimestamp = walletData.wallet.getBestBlockTimeStamp();
+        String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
         setChainStatus(status);
         setBestBlockTime(bestBlockTimestamp);
+
+        displayBalance();
+        totalBalance.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onSynced(boolean b) {
-        constants.synced = b;
-        constants.syncing = false;
+        walletData.synced = b;
+        walletData.syncing = false;
         if (b) {
-            constants.syncStartPoint = -1;
-            constants.syncEndPoint = -1;
-            constants.syncCurrentPoint = -1;
-            constants.syncRemainingTime = -1;
-            constants.fetchHeaderTime = -1;
-            constants.syncStatus = null;
+            walletData.syncStartPoint = -1;
+            walletData.syncEndPoint = -1;
+            walletData.syncCurrentPoint = -1;
+            walletData.syncRemainingTime = -1;
+            walletData.fetchHeaderTime = -1;
+            walletData.syncStatus = null;
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -1032,10 +1059,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 }
             });
 
-            startBlockUpdate();
-
             broadcastIntent = new Intent(Constants.SYNCED);
-
             if (isForeground) {
                 sendBroadcast(broadcastIntent);
                 broadcastIntent = null;
@@ -1045,26 +1069,23 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 @Override
                 public void run() {
                     connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-                    updatePeerCount();
-                    setBestBlockTime(-1);
-                    setChainStatus(null);
 
-                    if(blockUpdate != null && !blockUpdate.isInterrupted()){
-                        System.out.println("Interrupting Block Update");
-                        blockUpdate.interrupt();
+                    String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.wallet.getBestBlock());
+                    setChainStatus(status);
+
+                    updatePeerCount();
+
+                    broadcastIntent = new Intent(Constants.SYNCED);
+                    if (isForeground) {
+                        sendBroadcast(broadcastIntent);
+                        broadcastIntent = null;
                     }
 
-                    sendBroadcast(new Intent(Constants.SYNCED));
+                    ((AnimationDrawable) syncIndicator.getBackground()).stop();
+                    syncIndicator.setVisibility(View.GONE);
 
-                    syncIndicator.setVisibility(View.VISIBLE);
-                    totalBalance.setVisibility(View.GONE);
-                    syncIndicator.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
-                            syncAnimation.start();
-                        }
-                    });
+                    displayBalance();
+                    totalBalance.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -1072,32 +1093,33 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onPeerConnected(int peerCount) {
-        constants.peers = peerCount;
-        if (!constants.syncing) updatePeerCount();
+        walletData.peers = peerCount;
+        if (!walletData.syncing) updatePeerCount();
     }
 
     @Override
     public void onPeerDisconnected(int peerCount) {
-        constants.peers = peerCount;
-        if (!constants.syncing) updatePeerCount();
+        walletData.peers = peerCount;
+        if (!walletData.syncing) updatePeerCount();
     }
 
     private void updatePeerCount() {
-        if(!constants.synced){
+        if (!walletData.synced && !walletData.syncing) {
             setConnectionStatus(R.string.not_synced);
             return;
         }
-        if (!constants.syncing) {
-            if (constants.peers == 1) {
+
+        if (!walletData.syncing) {
+            if (walletData.peers == 1) {
                 setConnectionStatus(R.string.synced_with_one_peer);
             } else {
-                setConnectionStatus(getString(R.string.synced_with_multiple_peer, constants.peers));
+                setConnectionStatus(getString(R.string.synced_with_multiple_peer, walletData.peers));
             }
         } else {
-            if (constants.peers == 1) {
+            if (walletData.peers == 1) {
                 setConnectionStatus(R.string.syncing_with_one_peer);
             } else {
-                setConnectionStatus(getString(R.string.syncing_with_multiple_peer, constants.peers));
+                setConnectionStatus(getString(R.string.syncing_with_multiple_peer, walletData.peers));
             }
         }
     }
@@ -1106,7 +1128,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                constants.wallet.dropSpvConnection();
+                walletData.wallet.dropSpvConnection();
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
                 checkWifiSync();
                 break;

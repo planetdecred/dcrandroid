@@ -210,16 +210,17 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             tvDestinationError.text = ""
         }
+
+        paste_dcr_address.setOnClickListener {
+            send_dcr_address.setText(Utils.readFromClipboard(activity!!.applicationContext))
+            paste_dcr_address.visibility = View.GONE
+        }
     }
 
     override fun onResume() {
         super.onResume()
         if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext)) && send_dcr_address.text.isEmpty()) {
             paste_dcr_address.visibility = View.VISIBLE
-            paste_dcr_address.setOnClickListener {
-                send_dcr_address.setText(Utils.readFromClipboard(activity!!.applicationContext))
-                paste_dcr_address.visibility = View.GONE
-            }
         } else {
             paste_dcr_address.visibility = View.GONE
         }
@@ -259,6 +260,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     send_dcr_address.removeTextChangedListener(addressWatcher)
                     send_dcr_address.text.clear()
                     send_dcr_address.addTextChangedListener(addressWatcher)
+
+                    if (constants.wallet.isAddressValid(Utils.readFromClipboard(activity!!.applicationContext))) paste_dcr_address.visibility = View.VISIBLE
+                    send_dcr_scan.visibility = View.VISIBLE
+                    toggleSendButton(false)
 
                     item.setTitle(R.string.send_to_account)
                     SEND_ACCOUNT = false
@@ -428,10 +433,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     if (returnString.startsWith(getString(R.string.decred_colon)))
                         returnString = returnString.replace(getString(R.string.decred_colon), "")
                     if (returnString.length < 25) {
-                        Toast.makeText(context, R.string.wallet_add_too_short, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.wallet_add_too_short, Toast.LENGTH_LONG).show()
                         return
                     } else if (returnString.length > 36) {
-                        Toast.makeText(context, R.string.wallet_addr_too_long, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.wallet_addr_too_long, Toast.LENGTH_LONG).show()
                         return
                     }
 
@@ -441,9 +446,9 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         send_dcr_address.setText(returnString)
                     } else {
                         if (BuildConfig.IS_TESTNET) {
-                            Toast.makeText(context, R.string.invalid_testnet_address, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, R.string.invalid_testnet_address, Toast.LENGTH_LONG).show()
                         } else {
-                            Toast.makeText(context, R.string.invalid_mainnett_address, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, R.string.invalid_mainnett_address, Toast.LENGTH_LONG).show()
                         }
                     }
                 } catch (e: Exception) {
@@ -481,7 +486,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             })
 
-            if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(accounts!![destination_account_spinner.selectedItemPosition])
+            if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(wallet.accountName(srcAccount))
             transactionDialog.setCancelable(true)
             transactionDialog.setCanceledOnTouchOutside(false)
             transactionDialog.show()
@@ -619,7 +624,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 tvDestinationError.text = null
                 tvDestinationError.visibility = View.VISIBLE
                 paste_dcr_address.visibility = View.GONE
-                send_dcr_scan.visibility = View.VISIBLE
+                send_dcr_scan.visibility = View.GONE
                 constructTransaction()
             }
         }

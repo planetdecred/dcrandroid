@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/settings_connection"
             android:layout_width="wrap_content"
@@ -13,8 +15,7 @@
             android:layout_alignParentTop="true"
             android:padding="16dp"
             android:text="@string/connection"
-            android:textColor="@color/blackSecondTextColor"
-            />
+            android:textColor="@color/blackSecondTextColor" />
 
         <TextView
             android:id="@+id/settings_right_value"
@@ -22,8 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:padding="16dp"
-           />
+            android:padding="16dp" />
     </RelativeLayout>
 
 </androidx.constraintlayout.ConstraintLayout>

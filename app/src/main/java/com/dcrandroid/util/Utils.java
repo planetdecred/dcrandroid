@@ -159,22 +159,22 @@ public class Utils {
         return addr;
     }
 
-    public static String calculateDays(long seconds, Context context){
+    public static String calculateDays(long seconds, Context context) {
         long days = TimeUnit.SECONDS.toDays(seconds);
-        if (days == 0){
+        if (days == 0) {
             return context.getString(R.string.less_than_one_day);
-        }else if(days == 1){
+        } else if (days == 1) {
             return context.getString(R.string.one_day);
         }
 
         return context.getString(R.string.multiple_days, days);
     }
 
-    public static String calculateDaysAgo(long seconds, Context context){
+    public static String calculateDaysAgo(long seconds, Context context) {
         long days = TimeUnit.SECONDS.toDays(seconds);
-        if (days == 0){
+        if (days == 0) {
             return context.getString(R.string.less_than_one_day_ago);
-        }else if(days == 1){
+        } else if (days == 1) {
             return context.getString(R.string.one_day_ago);
         }
 
@@ -239,31 +239,42 @@ public class Utils {
         return seconds + "s " + ago;
     }
 
-    public static String getTimeRemaining(long millis, int percentageCompleted, boolean useLeft, Context ctx){
-        if (millis > 1000){
+    public static String getSyncTimeRemaining(long millis, int percentageCompleted, boolean useLeft, Context ctx) {
+        if (millis > 1000) {
             long seconds = millis / 1000;
 
-            if(seconds > 60){
+            if (seconds > 60) {
                 long minutes = seconds / 60;
-                if (useLeft){
+                if (useLeft) {
                     return ctx.getString(R.string.left_minute_sync_eta, percentageCompleted, minutes);
                 }
 
                 return ctx.getString(R.string.remaining_minute_sync_eta, percentageCompleted, minutes);
             }
 
-            if (useLeft){
+            if (useLeft) {
                 return ctx.getString(R.string.left_seconds_sync_eta, percentageCompleted, seconds);
             }
 
             return ctx.getString(R.string.remaining_seconds_sync_eta, percentageCompleted, seconds);
         }
 
-        if (useLeft){
+        if (useLeft) {
             return ctx.getString(R.string.left_sync_eta_less_than_seconds, percentageCompleted);
         }
 
         return ctx.getString(R.string.remaining_sync_eta_less_than_seconds, percentageCompleted);
+    }
+
+    public static String getTime(long millis) {
+        long seconds = millis / 1000;
+        if (seconds > 60) {
+            long minutes = seconds / 60;
+            seconds = seconds % 60;
+            return minutes + "m" + seconds + "s";
+        }
+
+        return seconds + "s";
     }
 
     public static String formatDecred(long dcr) {

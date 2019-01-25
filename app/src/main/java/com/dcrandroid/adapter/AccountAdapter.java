@@ -16,9 +16,9 @@ import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Balance;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.CoinFormat;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import java.util.List;
 import java.util.Locale;

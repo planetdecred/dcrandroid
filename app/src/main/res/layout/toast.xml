@@ -16,7 +16,6 @@
         android:layout_gravity="center_horizontal"
         app:fontFamily="sans-serif"
         android:textSize="14sp"
-        android:textColor="@color/white"
-        />
+        android:textColor="@color/white" />
 
 </LinearLayout>

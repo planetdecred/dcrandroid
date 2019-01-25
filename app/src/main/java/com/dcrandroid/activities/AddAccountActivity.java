@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +25,7 @@ public class AddAccountActivity extends AppCompatActivity {
 
     private ProgressDialog pd;
     private PreferenceUtil util;
-    private int PASSCODE_REQUEST_CODE = 2;
+    private final int PASSCODE_REQUEST_CODE = 2;
     private EditText accountName;
 
     @Override

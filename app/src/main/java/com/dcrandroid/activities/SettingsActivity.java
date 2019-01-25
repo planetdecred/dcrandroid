@@ -18,9 +18,9 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.DeleteWalletDialog;
 import com.dcrandroid.dialog.StakeyDialog;
-import com.dcrandroid.util.WalletData;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +30,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.LibWallet;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -55,6 +56,8 @@ public class SettingsActivity extends AppCompatActivity {
         private Preference changeStartupPass;
         private ProgressDialog pd;
 
+        private LibWallet wallet;
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -62,6 +65,9 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
 
             getActivity().setTitle(getActivity().getString(R.string.settings));
+
+            wallet = WalletData.getInstance().wallet;
+
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(), false, false, "");
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
@@ -299,7 +305,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     try {
-                                        WalletData.getInstance().wallet.rescanBlocks();
+                                        wallet.rescanBlocks();
                                         Toast.makeText(getContext(), R.string.check_progress_in_navigation_bar, Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -334,7 +340,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 new Thread() {
                                     public void run() {
                                         try {
-                                            WalletData.getInstance().wallet.unlockWallet(deleteWalletDialog.getPassphrase().getBytes());
+                                            wallet.unlockWallet(deleteWalletDialog.getPassphrase().getBytes());
                                             if (getActivity() != null) {
                                                 Utils.clearApplicationData(getActivity());
                                                 getActivity().runOnUiThread(new Runnable() {
@@ -373,20 +379,20 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean wifiSync = (Boolean) newValue;
                     if (getActivity() instanceof MainActivity) {
-                        if(wifiSync){
-                            if(!WalletData.getInstance().synced) {
+                        if (wifiSync) {
+                            if (!WalletData.getInstance().synced) {
                                 ((MainActivity) getActivity()).startSyncing();
                             }
-                        }else{
+                        } else {
                             ConnectivityManager connectionManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                             if (connectionManager != null) {
                                 NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                                 if (networkInfo != null && networkInfo.isConnected()) {
                                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                                        WalletData.getInstance().wallet.dropSpvConnection();
+                                        wallet.dropSpvConnection();
                                     }
                                 } else {
-                                    WalletData.getInstance().wallet.dropSpvConnection();
+                                    wallet.dropSpvConnection();
                                 }
                             }
                         }
@@ -409,7 +415,7 @@ public class SettingsActivity extends AppCompatActivity {
                             public void run() {
                                 try {
                                     String passphrase = data.getStringExtra(Constants.PASSPHRASE);
-                                    WalletData.getInstance().wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
+                                    wallet.changePublicPassphrase(passphrase.getBytes(), Constants.INSECURE_PUB_PASSPHRASE.getBytes());
                                     if (getActivity() != null) {
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override

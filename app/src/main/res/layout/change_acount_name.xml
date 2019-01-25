@@ -13,7 +13,6 @@
         android:inputType="textPassword"
         android:textStyle="normal"
         android:textColor="@color/blackFirstTextColor"
-        android:textColorHint="@color/grayTextColor"
-        />
+        android:textColorHint="@color/grayTextColor" />
 
 </LinearLayout>

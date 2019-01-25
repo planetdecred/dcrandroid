@@ -25,7 +25,7 @@
                 android:textColor="@color/darkBlueTextColor"
                 app:fontFamily="@font/source_sans_pro_regular"
                 android:textSize="23sp"
-                android:alpha="1"/>
+                android:alpha="1" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/blueGrayFirstTextColor"
                 android:alpha="1"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
         </LinearLayout>
 
@@ -83,14 +83,13 @@
             android:layout_height="1px"
             android:id="@+id/border"
             android:background="@color/deepBlackBackgroundColor"
-            android:alpha="0.6"/>
+            android:alpha="0.6" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="2dp"
-            >
+            android:padding="2dp">
 
             <ImageView
                 android:id="@+id/bitm"
@@ -100,8 +99,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/barcode_address"
@@ -113,8 +111,7 @@
                 android:padding="5dp"
                 android:textColor="@color/blueLinkTextColor"
                 android:textSize="16sp"
-                tools:text="test text"
-                />
+                tools:text="test text" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -122,7 +119,7 @@
                 android:text="@string/copy_on_tap"
                 android:gravity="center"
                 android:textColor="@color/blueGrayFirstTextColor54pc"
-                android:layout_marginTop="3dp"/>
+                android:layout_marginTop="3dp" />
 
         </LinearLayout>
     </LinearLayout>
