@@ -2,12 +2,11 @@ package com.dcrandroid.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +23,8 @@ import java.io.File;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import dcrlibwallet.Dcrlibwallet;
 import dcrlibwallet.LibWallet;
 
@@ -31,7 +32,7 @@ import dcrlibwallet.LibWallet;
  * Created by Macsleven on 24/12/2017.
  */
 
-public class SplashScreen extends AppCompatActivity implements Animation.AnimationListener {
+public class SplashScreen extends AppCompatActivity {
 
     private final int PASSWORD_REQUEST_CODE = 1;
     private ImageView imgAnim;
@@ -64,7 +65,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
         }
 
         imgAnim = findViewById(R.id.splashscreen_icon);
-
         imgAnim.setOnClickListener(new DoubleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -81,12 +81,25 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             }
         });
 
-        imgAnim.setBackgroundResource(R.drawable.load_animation);
         imgAnim.post(new Runnable() {
             @Override
             public void run() {
-                AnimationDrawable loadAnimation = (AnimationDrawable) imgAnim.getBackground();
-                loadAnimation.start();
+
+                final AnimatedVectorDrawableCompat anim = AnimatedVectorDrawableCompat.create(getApplicationContext(), R.drawable.avd_anim);
+                anim.registerAnimationCallback(new Animatable2Compat.AnimationCallback() {
+                    @Override
+                    public void onAnimationEnd(Drawable drawable) {
+                        super.onAnimationEnd(drawable);
+                        imgAnim.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                anim.start();
+                            }
+                        }, 750);
+                    }
+                });
+                imgAnim.setImageDrawable(anim);
+                anim.start();
             }
         });
 
@@ -238,22 +251,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
                 openWallet(data.getStringExtra(Constants.PASSPHRASE));
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
     }
 
     public abstract class DoubleClickListener implements View.OnClickListener {
