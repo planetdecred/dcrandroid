@@ -79,14 +79,12 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
         <Preference
-            android:enabled="false"
-            android:key="@string/key_get_peers"
-            android:summary="@string/summary_peers"
-            android:title="@string/peers"
+            android:key="@string/build_date_system"
+            android:title="@string/build_date"
             app:iconSpaceReserved="false" />
         <Preference
-            android:key="@string/key_rescan_block"
-            android:title="@string/title_rescan_blockchain"
+            android:key="dcrwallet_log"
+            android:title="@string/wallet_log"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="info"
@@ -97,20 +95,22 @@
             android:title="@string/logging_level"
             app:iconSpaceReserved="false" />
         <Preference
-            android:key="dcrwallet_log"
-            android:title="@string/wallet_log"
+            android:key="@string/key_rescan_block"
+            android:title="@string/title_rescan_blockchain"
             app:iconSpaceReserved="false" />
         <Preference
             android:key="crash"
             android:title="@string/crash_title"
             app:iconSpaceReserved="false" />
         <Preference
-            android:key="@string/build_date_system"
-            android:title="@string/build_date"
-            app:iconSpaceReserved="false" />
-        <Preference
             android:key="@string/delete_wallet"
             android:title="@string/delete_wallet_title"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:enabled="false"
+            android:key="@string/key_get_peers"
+            android:summary="@string/summary_peers"
+            android:title="@string/peers"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

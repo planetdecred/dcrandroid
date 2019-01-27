@@ -226,16 +226,16 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.send_page_menu, menu)
+        inflater.inflate(R.menu.send_page_menu, menu)
         if (SEND_ACCOUNT) {
-            menu!!.findItem(R.id.send_to_account).setTitle(R.string.send_to_address)
+            menu.findItem(R.id.send_to_account).setTitle(R.string.send_to_address)
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.send_to_account -> {
                 if (destination_address_container.visibility == View.VISIBLE) {
 
