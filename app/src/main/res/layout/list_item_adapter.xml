@@ -6,33 +6,33 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     android:paddingStart="8dp"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingTop="10dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="10dp">
 
     <TextView
-        android:id="@+id/tvAmount"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_amount"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:fontFamily="@font/roboto_regular"
         android:textColor="@color/darkBlueTextColor"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        app:fontFamily="@font/source_sans_pro_regular_family"
         tools:text="test text" />
 
     <TextView
-        android:id="@+id/tvInfo"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:fontFamily="@font/roboto_regular"
         android:textColor="@color/blueLinkTextColor"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        app:fontFamily="@font/source_sans_pro_regular_family"
         tools:text="test text" />
 
 </LinearLayout>

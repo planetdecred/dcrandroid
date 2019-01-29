@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +23,8 @@ import android.widget.Toast;
 
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
-import com.dcrandroid.adapter.TransactionInfoAdapter;
+import com.dcrandroid.adapter.TransactionDetailsAdapter;
+import com.dcrandroid.adapter.TransactionDetailsAdapter.TransactionDebitCredit;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.data.Transaction.TransactionInput;
@@ -53,7 +55,7 @@ import dcrlibwallet.LibWallet;
 public class TransactionDetailsActivity extends AppCompatActivity {
 
     private TextView value, date, status, txType, confirmation, transactionFee, tvHash;
-    private ListView lvInput, lvOutput;
+    private ListView mListView;
 
     private PreferenceUtil util;
 
@@ -64,8 +66,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private Calendar calendar;
     private SimpleDateFormat sdf;
 
-    public static void setListViewHeight(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
+    private ArrayList<TransactionDebitCredit> items;
+
+    public void setListViewHeight() {
+        ListAdapter listAdapter = mListView.getAdapter();
         if (listAdapter == null) {
             return;
         }
@@ -73,16 +77,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         int totalHeight = 0;
 
         for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            float px = 450 * (listView.getResources().getDisplayMetrics().density);
+            View listItem = listAdapter.getView(i, null, mListView);
+            float px = 450 * (mListView.getResources().getDisplayMetrics().density);
             listItem.measure(View.MeasureSpec.makeMeasureSpec((int) px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
             totalHeight += listItem.getMeasuredHeight();
         }
 
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        ViewGroup.LayoutParams params = mListView.getLayoutParams();
         params.height = totalHeight;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
+        mListView.setLayoutParams(params);
+        mListView.requestLayout();
     }
 
     @Override
@@ -122,11 +126,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         calendar = new GregorianCalendar(TimeZone.getDefault());
         sdf = new SimpleDateFormat(" dd yyyy, hh:mma", Locale.getDefault());
 
-        lvInput = findViewById(R.id.lvInput);
-        lvOutput = findViewById(R.id.lvOutput);
+        mListView = findViewById(R.id.lv_tx_details);
         value = findViewById(R.id.tx_dts_value);
         date = findViewById(R.id.tx_date);
-        status = findViewById(R.id.tx_dts__status);
+        status = findViewById(R.id.tx_dts_status);
         txType = findViewById(R.id.txtype);
         confirmation = findViewById(R.id.tx_dts_confirmation);
         transactionFee = findViewById(R.id.tx_fee);
@@ -265,10 +268,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private void loadInOut(ArrayList<TransactionInput> usedInput, ArrayList<TransactionOutput> usedOutput) {
 
-        ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
-        ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();
         ArrayList<Integer> walletOutputIndices = new ArrayList<>();
         ArrayList<Integer> walletInputIndices = new ArrayList<>();
+
+        items = new ArrayList<>();
+        // Inputs header
+        items.add(new TransactionDebitCredit(getString(R.string.inputs), TransactionDebitCredit.ItemType.HEADER));
 
         try {
             Bundle b = getIntent().getExtras();
@@ -290,16 +295,67 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
 
-                walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                        Utils.formatDecredWithComma(usedInput.get(i).getPreviousAmount()) + " "
-                                + getString(R.string.dcr) + " (" + usedInput.get(i).getAccountName() + ")", hash));
+                String amount = getString(R.string.external_output_account, Utils.formatDecredWithComma(usedInput.get(i).getPreviousAmount()), usedInput.get(i).getAccountName());
+
+                TransactionDebitCredit debit = new TransactionDebitCredit(amount, hash, TransactionDebitCredit.ItemType.ITEM, TransactionDebitCredit.Direction.DEBIT);
+                items.add(debit);
             }
+
+            for (int i = 0; i < inputs.length(); i++) {
+
+                JSONObject input = inputs.getJSONObject(i);
+
+                if (walletInputIndices.indexOf(i) != -1) {
+                    continue;
+                }
+
+                String amount = getString(R.string.external_output_amount, Utils.formatDecredWithComma(input.getLong(Constants.AMOUNT_IN)));
+
+                String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
+
+                if (hash.equals("0000000000000000000000000000000000000000000000000000000000000000")) {
+                    hash = "Stakebase: 0000";
+                }
+                hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
+
+                items.add(new TransactionDebitCredit(amount, hash, TransactionDebitCredit.ItemType.ITEM, TransactionDebitCredit.Direction.DEBIT));
+            }
+
+            // Outputs header
+            items.add(new TransactionDebitCredit(getString(R.string.outputs), TransactionDebitCredit.ItemType.HEADER));
 
             for (int i = 0; i < usedOutput.size(); i++) {
                 walletOutputIndices.add(usedOutput.get(i).getIndex());
-                walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                        Utils.formatDecredWithComma(usedOutput.get(i).getAmount()) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).getAddress()) + ")",
-                        usedOutput.get(i).getAddress()));
+                String amount = getString(R.string.external_output_account, Utils.formatDecredWithComma(usedOutput.get(i).getAmount()), wallet.accountOfAddress(usedOutput.get(i).getAddress()));
+                String address = usedOutput.get(i).getAddress();
+                items.add(new TransactionDebitCredit(amount, address, TransactionDebitCredit.ItemType.ITEM, TransactionDebitCredit.Direction.CREDIT));
+            }
+
+            for (int i = 0; i < outputs.length(); i++) {
+                JSONObject output = outputs.getJSONObject(i);
+
+                if (walletOutputIndices.indexOf(i) != -1) {
+                    continue;
+                }
+
+                JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
+
+                String scriptType = output.getString(Constants.SCRIPT_TYPE);
+
+                String address = addresses.length() > 0 ? addresses.getString(0) : "";
+
+                String amount = getString(R.string.external_output_amount, Utils.formatDecredWithComma(output.getLong(Constants.VALUE)));
+
+                switch (scriptType) {
+                    case "nulldata":
+                        amount = "[null data]";
+                        address = "[script]";
+                        break;
+                    case "stakegen":
+                        address = "[stakegen]";
+                }
+
+                items.add(new TransactionDebitCredit(amount, address, TransactionDebitCredit.ItemType.ITEM, TransactionDebitCredit.Direction.CREDIT));
             }
 
             if (transactionType.equalsIgnoreCase(Constants.VOTE)) {
@@ -320,73 +376,32 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 voteBits.setText(
                         parent.getString(Constants.VOTE_BITS)
                 );
-
             }
 
+            final TransactionDetailsAdapter adp = new TransactionDetailsAdapter(this, items);
+            mListView.setAdapter(adp);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TransactionDebitCredit item = items.get(position);
+                    if (item.getType() == TransactionDebitCredit.ItemType.HEADER || item.getInfo() == null || item.getInfo().trim().equals("")) {
+                        return;
+                    }
 
-            for (int i = 0; i < outputs.length(); i++) {
-                JSONObject output = outputs.getJSONObject(i);
+                    if (item.getDirection() == TransactionDebitCredit.Direction.DEBIT) {
+                        Utils.copyToClipboard(TransactionDetailsActivity.this, item.getInfo(), getString(R.string.tx_hash_copy));
+                    } else {
+                        Utils.copyToClipboard(TransactionDetailsActivity.this, item.getInfo(), getString(R.string.address_copy_text));
+                    }
 
-                if (walletOutputIndices.indexOf(i) != -1) {
-                    continue;
+
                 }
+            });
 
-                JSONArray addresses = output.getJSONArray(Constants.ADDRESSES);
-
-                String scriptType = output.getString(Constants.SCRIPT_TYPE);
-
-                String address = addresses.length() > 0 ? addresses.getString(0) : "";
-
-                String amount = Utils.formatDecredWithComma(output.getLong(Constants.VALUE)) + " " + getString(R.string.dcr) + " (external)";
-
-                switch (scriptType) {
-                    case "nulldata":
-                        amount = "[null data]";
-                        address = "[script]";
-                        break;
-                    case "stakegen":
-                        address = "[stakegen]";
-                }
-
-                walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, address));
-            }
-
-            for (int i = 0; i < inputs.length(); i++) {
-
-                JSONObject input = inputs.getJSONObject(i);
-
-                if (walletInputIndices.indexOf(i) != -1) {
-                    continue;
-                }
-
-                String amount = Utils.formatDecredWithComma(input.getLong(Constants.AMOUNT_IN))
-                        + " " + getString(R.string.dcr) + " (external)";
-                String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
-
-                if (hash.equals("0000000000000000000000000000000000000000000000000000000000000000")) {
-                    hash = "Stakebase: 0000";
-                }
-
-                hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
-
-                walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(amount, hash));
-            }
-
-            TransactionInfoAdapter inputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletInput);
-            lvInput.setAdapter(inputItemAdapter);
-
-            TransactionInfoAdapter outputItemAdapter = new TransactionInfoAdapter(getApplicationContext(), walletOutput);
-            lvOutput.setAdapter(outputItemAdapter);
-
-            setListViewHeight(lvInput);
-            setListViewHeight(lvOutput);
-            ViewGroup.LayoutParams params = lvOutput.getLayoutParams();
-            params.height += 50;
-
+            setListViewHeight();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
