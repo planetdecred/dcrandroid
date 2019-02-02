@@ -346,8 +346,7 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	}
 
 	addr := &net.TCPAddr{IP: net.ParseIP("::1"), Port: 0}
-	amgrDir := filepath.Join(lw.dataDir, lw.wallet.ChainParams().Name)
-	amgr := addrmgr.New(amgrDir, net.LookupIP) // TODO: be mindful of tor
+	amgr := addrmgr.New(lw.dataDir, net.LookupIP) // TODO: be mindful of tor
 	lp := p2p.NewLocalPeer(wallet.ChainParams(), addr, amgr)
 
 	ntfns := &spv.Notifications{

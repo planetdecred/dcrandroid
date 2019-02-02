@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 
 	"github.com/decred/dcrd/connmgr"
+	"github.com/decred/dcrd/addrmgr"
 	dcrrpcclient "github.com/decred/dcrd/rpcclient"
 	"github.com/decred/dcrwallet/chain"
 	"github.com/decred/dcrwallet/loader"
@@ -60,6 +61,7 @@ var (
 	grpcLog      = backendLog.Logger("GRPC")
 	legacyRPCLog = backendLog.Logger("RPCS")
 	cmgrLog      = backendLog.Logger("CMGR")
+	amgrLog      = backendLog.Logger("AMGR")
 )
 
 // Initialize package-global logger variables.
@@ -75,6 +77,7 @@ func init() {
 	spv.UseLogger(syncLog)
 	p2p.UseLogger(syncLog)
 	connmgr.UseLogger(cmgrLog)
+	addrmgr.UseLogger(amgrLog)
 }
 
 // subsystemLoggers maps each subsystem identifier to its associated logger.
@@ -87,6 +90,7 @@ var subsystemLoggers = map[string]slog.Logger{
 	"GRPC": grpcLog,
 	"RPCS": legacyRPCLog,
 	"CMGR": cmgrLog,
+	"AMGR": amgrLog,
 }
 
 // initLogRotator initializes the logging rotater to write logs to logFile and
