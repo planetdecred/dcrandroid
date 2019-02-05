@@ -33,6 +33,7 @@ public class AddAccountActivity extends AppCompatActivity {
     private PreferenceUtil util;
     private final int PASSCODE_REQUEST_CODE = 2;
     private EditText accountName;
+    private EditText passphrase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class AddAccountActivity extends AppCompatActivity {
         setContentView(R.layout.add_account_activity);
 
         accountName = findViewById(R.id.add_acc_name);
-        final EditText passphrase = findViewById(R.id.add_acc_passphrase);
+        passphrase = findViewById(R.id.add_acc_passphrase);
 
         util = new PreferenceUtil(this);
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
@@ -101,7 +102,7 @@ public class AddAccountActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(AddAccountActivity.this, Utils.translateError(AddAccountActivity.this, e), Toast.LENGTH_LONG).show();
+                            passphrase.setError(Utils.translateError(AddAccountActivity.this, e));
                         }
                     });
                     setResult(RESULT_CANCELED);
