@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
 package com.dcrandroid.adapter
 
 import android.content.Context
@@ -14,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.recover_wallet_list_row.view.*
 import java.util.*
-
 
 data class InputSeed(val number: Int, var phrase: String)
 

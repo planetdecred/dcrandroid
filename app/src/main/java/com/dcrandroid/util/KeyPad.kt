@@ -1,5 +1,10 @@
-package com.dcrandroid.util
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
 
+package com.dcrandroid.util
 
 import android.view.View
 import android.widget.LinearLayout
@@ -7,7 +12,6 @@ import android.widget.TextView
 import com.dcrandroid.R
 import com.dcrandroid.view.PinView
 import java.util.*
-
 
 class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinView) : View.OnClickListener {
     private var del: TextView? = null
