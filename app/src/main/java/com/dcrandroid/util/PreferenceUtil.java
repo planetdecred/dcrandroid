@@ -9,6 +9,10 @@ package com.dcrandroid.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 
@@ -118,5 +122,20 @@ public class PreferenceUtil {
         }
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getLong(key, defaultValue);
+    }
+
+    public void setStringList(String key, ArrayList<String> stringList) {
+        if (ctx == null) {
+            return;
+        }
+        String[] myStringList = stringList.toArray(new String[stringList.size()]);
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
+        editor.putString(key, TextUtils.join("‚‗‚", myStringList));
+        editor.commit();
+    }
+
+    public ArrayList<String> getStringList(String key) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return new ArrayList<>(Arrays.asList(TextUtils.split(sp.getString(key, ""), "‚‗‚")));
     }
 }

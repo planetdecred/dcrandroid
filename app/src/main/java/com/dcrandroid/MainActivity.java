@@ -6,13 +6,16 @@
 
 package com.dcrandroid;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -62,9 +65,11 @@ import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
+import com.dcrandroid.fragments.PoliteiaFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SecurityFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.service.AlarmReceiver;
 import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         String[] itemTitles = getResources().getStringArray(R.array.nav_list_titles);
         int[] itemIcons = new int[]{R.drawable.overview, R.drawable.history, R.mipmap.send,
-                R.mipmap.receive, R.drawable.account, R.drawable.security, R.drawable.settings, R.drawable.help};
+                R.mipmap.receive, R.drawable.account, R.drawable.security, R.drawable.politeia2, R.drawable.settings, R.drawable.help};
         ArrayList<NavigationBarItem> items = new ArrayList<>();
         for (int i = 0; i < itemTitles.length; i++) {
             NavigationBarItem item = new NavigationBarItem(itemTitles[i], itemIcons[i]);
@@ -305,6 +310,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         if (intent.getAction() != null && intent.getAction().equals(Constants.NEW_TRANSACTION_NOTIFICATION)) {
             if (pageID != 0)
                 displayOverview();
+        }
+        if (intent.getAction() != null && intent.getAction().equals(Constants.NEW_POLITEIA_PROPOSAL_NOTIFICATION)) {
+            if (pageID != 5) {
+                displayPoliteia();
+            }
         }
     }
 
@@ -560,9 +570,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 currentFragment = securityFragment;
                 break;
             case 6:
-                currentFragment = new SettingsActivity.MainPreferenceFragment();
+                currentFragment = new PoliteiaFragment();
                 break;
             case 7:
+                currentFragment = new SettingsActivity.MainPreferenceFragment();
+                break;
+            case 8:
                 currentFragment = new HelpFragment();
                 break;
             default:
@@ -597,6 +610,45 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void displayReceive() {
         switchFragment(3);
         mListView.setItemChecked(3, true);
+    }
+
+    public void displayPoliteia() {
+        switchFragment(6);
+        mListView.setItemChecked(6, true);
+    }
+
+    public void enablePoliteiaNotifs() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 12, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long currentTime = System.currentTimeMillis();
+        long twelve_hrs = 12 * 60 * 60 * 1000;
+        if (alarmManager == null) return;
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                currentTime,
+                twelve_hrs,
+                pendingIntent);
+        setBootReceiverEnabled(PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+    }
+
+    public void disablePoliteiaNotifs() {
+        setBootReceiverEnabled(PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 12, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+        pendingIntent.cancel();
+    }
+
+    private void setBootReceiverEnabled(int componentEnabledState) {
+        ComponentName componentName = new ComponentName(this, AlarmReceiver.class);
+        PackageManager packageManager = getPackageManager();
+        packageManager.setComponentEnabledSetting(componentName,
+                componentEnabledState,
+                PackageManager.DONT_KILL_APP);
     }
 
     @Override

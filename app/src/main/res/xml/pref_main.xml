@@ -83,6 +83,24 @@
             android:defaultValue="false"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/politeia">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="@string/enable_politeia_proposals_notifications"
+            android:key="voting_start_notifications"
+            android:summary="Receive notifications when voting starts."
+            app:iconSpaceReserved="false"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="@string/enable_politeia_proposals_notifications"
+            android:key="voting_end_notifications"
+            android:summary="Receive notifications when voting finishes."
+            app:iconSpaceReserved="false"
+            />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="About">
         <Preference
             android:key="@string/build_date_system"

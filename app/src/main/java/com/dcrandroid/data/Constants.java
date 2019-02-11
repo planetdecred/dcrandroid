@@ -52,6 +52,7 @@ public class Constants {
             LOGGING_LEVEL = "logging_level",
             NEW_BLOCK_NOTIFICATION = "new_block_notification",
             NEW_TRANSACTION_NOTIFICATION = "new_transaction_notification",
+            NEW_POLITEIA_PROPOSAL_NOTIFICATION = "new_politeia_proposal_notification",
             EMPTY_STRING = "",
             DASH = "-",
             NBSP = " ",

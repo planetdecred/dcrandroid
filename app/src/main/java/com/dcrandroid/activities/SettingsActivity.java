@@ -179,6 +179,34 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            findPreference("voting_start_notifications").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (getActivity() instanceof MainActivity) {
+                        if (util.getBoolean("voting_start_notifications", false) || util.getBoolean("voting_end_notifications", false)) {
+                            ((MainActivity) getActivity()).enablePoliteiaNotifs();
+                        } else {
+                            ((MainActivity) getActivity()).disablePoliteiaNotifs();
+                        }
+                    }
+                    return true;
+                }
+            });
+
+            findPreference("voting_end_notifications").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (getActivity() instanceof MainActivity) {
+                        if (util.getBoolean("voting_start_notifications", false) || util.getBoolean("voting_end_notifications", false)) {
+                            ((MainActivity) getActivity()).enablePoliteiaNotifs();
+                        } else {
+                            ((MainActivity) getActivity()).disablePoliteiaNotifs();
+                        }
+                    }
+                    return true;
+                }
+            });
+
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

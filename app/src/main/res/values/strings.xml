@@ -122,6 +122,7 @@
         <item>Receive</item>
         <item>Accounts</item>
         <item>Security</item>
+        <item>Proposals</item>
         <item>Settings</item>
         <item>Help</item>
     </string-array>
@@ -363,8 +364,16 @@
     <string name="remote_address_invalid">Remote address is invalid</string>
     <string name="key_rescan_block" translatable="false">rescan_block</string>
     <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
+    <string name="politeia_proposals_url" translatable="false">https://proposals.decred.org/api/v1/proposals/vetted</string>
+
     <string name="new_block_notification_description">Beep for new blocks.</string>
     <string name="new_block_notification">New Block Notification</string>
+    <string name="new_politeia_proposals">New Proposals</string>
+    <string name="politeia">Politeia</string>
+    <string name="proposals">Proposals</string>
+    <string name="enable_politeia_description">Access Politeia Proposals</string>
+    <string name="enable_politeia_proposals_notifications">Politeia Proposal Notifications</string>
+    <string name="enable_politeia_proposals_notifications_description">Receive Politeia Proposal Notifications</string>
     <string name="currency_conversion">Currency Conversion</string>
     <string name="requires_restart">Requires restart.</string>
     <string name="user_agent_summary">For exchange rate fetching.</string>
