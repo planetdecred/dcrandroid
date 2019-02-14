@@ -45,31 +45,11 @@
         android:layout_marginTop="10dp"
         android:fadeScrollbars="true">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/seeds_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="top"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/seeds_recycler_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="33.3" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/seeds_recycler_view1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="33.3" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/seeds_recycler_view2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="33.3" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            />
 
     </androidx.core.widget.NestedScrollView>
 
@@ -86,9 +66,8 @@
             android:gravity="center"
             android:text="@string/warning_save_seed"
             android:textColor="@color/deepOrangeTextColor"
-            android:textSize="14sp"
+            android:textSize="14sp" />
 
-            />
     </LinearLayout>
 
     <Button
