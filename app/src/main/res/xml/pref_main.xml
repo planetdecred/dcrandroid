@@ -83,11 +83,17 @@
             android:defaultValue="false"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Debug">
+    <PreferenceCategory android:title="About">
         <Preference
             android:key="@string/build_date_system"
             android:title="@string/build_date"
             app:iconSpaceReserved="false" />
+        <Preference
+            android:key="@string/key_license"
+            android:title="@string/open_source_license"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Debug">
         <Preference
             android:key="dcrwallet_log"
             android:title="@string/wallet_log"

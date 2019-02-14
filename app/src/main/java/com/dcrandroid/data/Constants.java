@@ -116,7 +116,8 @@ public class Constants {
             RECENT_TRANSACTION_HASH = "recent_transaction_hash",
             FIRST_RUN = "first_run",
             TX_NOTIFICATION_HASH = "tx_notification_hash",
-            WIFI_SYNC = "wifi_sync";
+            WIFI_SYNC = "wifi_sync",
+            LICENSE = "license";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 
     public static final long ESTIMATED_ACCT_DISCOVERY = 300000;
