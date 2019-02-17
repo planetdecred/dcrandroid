@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
 package com.dcrandroid.adapter
 
 import android.content.Context
@@ -9,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.create_wallet_list_row.view.*
-
 
 data class MultiSeed(val firstSeed: InputSeed, val secondSeed: InputSeed, val thirdSeed: InputSeed)
 

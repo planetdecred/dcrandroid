@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
 package com.dcrandroid.fragments
 
 import android.app.Activity.RESULT_OK
@@ -47,7 +53,6 @@ import java.net.URL
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 

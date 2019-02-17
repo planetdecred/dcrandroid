@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
 package com.dcrandroid.activities;
 
 import android.Manifest;
@@ -24,6 +30,7 @@ import androidx.core.content.ContextCompat;
 /**
  * Created by Macsleven on 11/15/2015.
  */
+
 public class ReaderActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     String address;

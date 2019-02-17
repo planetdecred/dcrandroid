@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
 package com.dcrandroid;
 
 import android.app.Application;
@@ -11,9 +17,6 @@ import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
-/**
- * Created by collins on 12/26/17.
- */
 @ReportsCrashes(formUri = "https://decred-widget-crash.herokuapp.com/logs/Dcrandroid",
         mode = ReportingInteractionMode.DIALOG,
         resDialogTheme = R.style.LightTheme,
