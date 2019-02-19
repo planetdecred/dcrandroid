@@ -190,7 +190,10 @@ class SyncService : Service(), SpvSyncResponse {
         }
     }
 
+    override fun onIndexTransactions(p0: Int) {}
+
     override fun onSynced(synced: Boolean) {
+        println("Synced, destroying service")
         stopForeground(true)
         stopSelf()
     }

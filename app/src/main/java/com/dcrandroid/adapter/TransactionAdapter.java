@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.data.TransactionResponse.Transaction;
+import com.dcrandroid.data.Transaction;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;

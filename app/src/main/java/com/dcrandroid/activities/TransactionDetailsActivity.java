@@ -24,9 +24,9 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.data.TransactionResponse.Transaction;
-import com.dcrandroid.data.TransactionResponse.Transaction.TransactionInput;
-import com.dcrandroid.data.TransactionResponse.Transaction.TransactionOutput;
+import com.dcrandroid.data.Transaction;
+import com.dcrandroid.data.Transaction.TransactionInput;
+import com.dcrandroid.data.Transaction.TransactionOutput;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.TransactionsParser;
@@ -151,7 +151,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         loadInOut(inputs, outputs);
 
-
         rawTx = extras.getString(Constants.RAW);
 
         txHash = extras.getString(Constants.HASH);
@@ -271,7 +270,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         ArrayList<Integer> walletOutputIndices = new ArrayList<>();
         ArrayList<Integer> walletInputIndices = new ArrayList<>();
 
-
         try {
             Bundle b = getIntent().getExtras();
             String rawJson = wallet.decodeTransaction(Utils.getHash(b.getString(Constants.HASH)));
@@ -280,8 +278,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
 
             for (int i = 0; i < usedInput.size(); i++) {
-                JSONObject input = inputs.getJSONObject(usedInput.get(i).index);
-                walletInputIndices.add(usedInput.get(i).index);
+                System.out.println("Object: " + usedInput.get(i));
+                JSONObject input = inputs.getJSONObject(usedInput.get(i).getIndex());
+                walletInputIndices.add(usedInput.get(i).getIndex());
 
                 String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
 
@@ -292,15 +291,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
 
                 walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                        Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
-                                + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")", hash));
+                        Utils.formatDecredWithComma(usedInput.get(i).getPreviousAmount()) + " "
+                                + getString(R.string.dcr) + " (" + usedInput.get(i).getAccountName() + ")", hash));
             }
 
             for (int i = 0; i < usedOutput.size(); i++) {
-                walletOutputIndices.add(usedOutput.get(i).index);
+                walletOutputIndices.add(usedOutput.get(i).getIndex());
                 walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                        Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).address) + ")",
-                        usedOutput.get(i).address));
+                        Utils.formatDecredWithComma(usedOutput.get(i).getAmount()) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).getAddress()) + ")",
+                        usedOutput.get(i).getAddress()));
             }
 
             if (transactionType.equalsIgnoreCase(Constants.VOTE)) {

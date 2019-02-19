@@ -1,10 +1,9 @@
 package com.dcrandroid.util;
 
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.data.TransactionResponse;
-import com.dcrandroid.data.TransactionResponse.Transaction;
-import com.dcrandroid.data.TransactionResponse.Transaction.TransactionInput;
-import com.dcrandroid.data.TransactionResponse.Transaction.TransactionOutput;
+import com.dcrandroid.data.Transaction;
+import com.dcrandroid.data.Transaction.TransactionInput;
+import com.dcrandroid.data.Transaction.TransactionOutput;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,38 +18,6 @@ import java.util.ArrayList;
 public class TransactionsParser {
 
     private TransactionsParser() {
-    }
-
-    public static TransactionResponse parseTransactions(String json) {
-        TransactionResponse response = new TransactionResponse();
-
-        try {
-            JSONObject transactions = new JSONObject(json);
-            JSONArray minedTransactionsArray = transactions.getJSONArray(Constants.MINED_TRANSACTIONS);
-            JSONArray unminedTransactionsArray = transactions.getJSONArray(Constants.UNMINED_TRANSACTIONS);
-
-            ArrayList<Transaction> tempList = new ArrayList<>();
-            for (int i = 0; i < minedTransactionsArray.length(); i++) {
-                Transaction item = parseTransaction(minedTransactionsArray.get(i).toString());
-                tempList.add(item);
-            }
-
-            response.getMinedTransactions().addAll(tempList);
-            tempList.clear();
-
-            for (int i = 0; i < unminedTransactionsArray.length(); i++) {
-                Transaction item = parseTransaction(unminedTransactionsArray.get(i).toString());
-                tempList.add(item);
-            }
-
-            response.getUnminedTransactions().addAll(tempList);
-            tempList.clear();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return response;
     }
 
     public static Transaction parseTransaction(String json) throws JSONException {

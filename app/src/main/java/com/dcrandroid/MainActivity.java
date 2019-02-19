@@ -43,9 +43,10 @@ import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.data.TransactionResponse.Transaction;
-import com.dcrandroid.data.TransactionResponse.Transaction.TransactionInput;
-import com.dcrandroid.data.TransactionResponse.Transaction.TransactionOutput;
+import com.dcrandroid.data.Transaction;
+import com.dcrandroid.data.Transaction.TransactionInput;
+import com.dcrandroid.data.Transaction.TransactionOutput;
+import com.dcrandroid.dialog.WiFiSyncDialog;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
@@ -525,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         stopService(syncIntent);
 
         if (walletData.wallet != null) {
-            walletData.wallet.shutdown();
+            walletData.wallet.shutdown(true);
         }
 
         finish();
@@ -606,7 +607,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             transaction.setHeight(obj.getInt(Constants.HEIGHT));
             transaction.setAmount(obj.getLong(Constants.AMOUNT));
             transaction.setDirection(obj.getInt(Constants.DIRECTION));
+
             long totalInput = 0, totalOutput = 0;
+
             ArrayList<TransactionInput> inputs = new ArrayList<>();
             JSONArray debits = obj.getJSONArray(Constants.DEBITS);
             for (int i = 0; i < debits.length(); i++) {
@@ -634,6 +637,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 output.setAmount(credit.getLong(Constants.AMOUNT));
                 totalOutput += credit.getLong(Constants.AMOUNT);
             }
+
             transaction.setTotalInput(totalInput);
             transaction.setTotalOutput(totalOutput);
             transaction.setInputs(inputs);
@@ -654,8 +658,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
-                    
-                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.hash);
+                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
                     sendNotification(format.format(amount), (int) totalInput + (int) totalOutput + (int) transaction.getTimestamp());
                 }
             }
@@ -679,7 +682,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                
                 util.setInt(Constants.TRANSACTION_HEIGHT, height);
                 displayBalance();
 
@@ -1011,7 +1013,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(walletData.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + walletData.totalFetchTime + discoveryTime) / 1000) + "s");
 
 
-
                 double totalSync = walletData.totalFetchTime + discoveryTime + rescanTime;
                 log = String.format(Locale.getDefault(), "Fetch: %.2f%%, Discovery: %.2f%%, Rescan %.2f%%", walletData.totalFetchTime / totalSync * 100, discoveryTime / totalSync * 100, rescanTime / totalSync * 100);
                 Dcrlibwallet.log(log);
@@ -1044,6 +1045,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         displayBalance();
         totalBalance.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onIndexTransactions(int i) {
+        System.out.printf("Index %d transactions\n", i);
     }
 
     @Override
