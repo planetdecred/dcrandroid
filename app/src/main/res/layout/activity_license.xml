@@ -5,18 +5,18 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
     android:scrollbarAlwaysDrawHorizontalTrack="true"
     tools:context="com.dcrandroid.activities.License">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:id="@+id/license_text" />
 
-</HorizontalScrollView>
+</LinearLayout>

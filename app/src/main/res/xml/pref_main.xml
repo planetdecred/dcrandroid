@@ -90,7 +90,7 @@
             app:iconSpaceReserved="false" />
         <Preference
             android:key="@string/key_license"
-            android:title="@string/open_source_license"
+            android:title="@string/license"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Debug">
