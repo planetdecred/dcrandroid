@@ -358,8 +358,8 @@ public class Utils {
         TextView tv = vi.findViewById(android.R.id.message);
         tv.setText(successMessage);
         Toast toast = new Toast(ctx);
-        toast.setGravity(Gravity.TOP | Gravity.CENTER, 0, 50);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 50);
+        toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(vi);
         toast.show();
     }
