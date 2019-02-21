@@ -39,7 +39,10 @@
             android:id="@+id/add_acc_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:hint="@string/account_name"
             android:maxLines="1"
             android:inputType="textPersonName" />

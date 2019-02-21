@@ -61,11 +61,11 @@ public class AddAccountActivity extends AppCompatActivity {
                 final String privatePassphrase = passphrase.getText().toString();
                 final String name = accountName.getText().toString().trim();
                 if (name.equals("")) {
-                    Toast.makeText(AddAccountActivity.this, R.string.input_account_name, Toast.LENGTH_SHORT).show();
+                    accountName.setError(getString(R.string.input_account_name));
                 } else {
                     if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                         if (privatePassphrase.equals("")) {
-                            Toast.makeText(AddAccountActivity.this, R.string.input_private_phrase, Toast.LENGTH_SHORT).show();
+                            passphrase.setError(getString(R.string.input_private_phrase));
                             return;
                         }
                         createAccount(name, privatePassphrase.getBytes());
