@@ -55,7 +55,7 @@ class EnterPasswordActivity : AppCompatActivity() {
                     finish()
                 }
             } else {
-                password.error = "Field cannot be empty"
+                password.error = getString(R.string.field_cannot_be_empty)
             }
         }
     }

@@ -560,4 +560,5 @@
 
     <string name="external_output_amount">%1$s DCR (external)</string>
     <string name="external_output_account">%1$s DCR (%2$s)</string>
+    <string name="field_cannot_be_empty">Field cannot be empty</string>
 </resources>
