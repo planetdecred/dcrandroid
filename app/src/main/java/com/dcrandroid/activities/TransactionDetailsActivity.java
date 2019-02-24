@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
@@ -403,7 +404,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 Utils.copyToClipboard(this, rawTx, getString(R.string.raw_tx_copied));
                 break;
             case R.id.tx_viewOnDcrData:
-                String url = "https://testnet.dcrdata.org/tx/" + txHash;
+                String url;
+                if (BuildConfig.IS_TESTNET){
+                    url = "https://testnet.dcrdata.org/tx/" + txHash;
+                }else{
+                    url = "https://mainnet.dcrdata.org/tx/" +txHash;
+                }
+
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
                 break;
