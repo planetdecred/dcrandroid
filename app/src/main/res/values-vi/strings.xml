@@ -10,6 +10,7 @@
     <string name="crash_dialog_text">Đã xảy ra lỗi không mong muốn buộc ứng dụng dừng lại. Vui lòng giúp chúng tôi khắc phục điều này bằng cách gửi cho chúng tôi thông số kỹ thuật và nhật ký ứng dụng của bạn, tất cả những gì bạn phải làm là nhấp vào OK. Điều này sẽ giúp chúng tôi ngăn chặn lỗi xảy ra lần nữa</string>
     <string name="navigation_drawer_open">mở ngăn kéo hiển thị</string>
     <string name="navigation_drawer_close">đóng ngăn kéo hiển thị</string>
+    <string name="label_keys">Chìa khóa</string>
     <string name="label_properties">những tài sản (hoặc – những tính chất)</string>
     <string name="require_to_send_fund">Yêu cầu gửi tiền</string>
     <string name="add_an_account">THÊM MỘT TÀI KHOẢN</string>
