@@ -54,6 +54,14 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
         verifyPassword.setOnKeyListener(this)
 
         btn_ok.setOnClickListener {
+            if (password.text.isBlank()) {
+                password.error = getString(R.string.field_cannot_be_empty)
+                return@setOnClickListener
+            }
+            if (verifyPassword.text.isBlank()) {
+                verifyPassword.error = getString(R.string.field_cannot_be_empty)
+                return@setOnClickListener
+            }
             if (password.text.toString() == verifyPassword.text.toString()) {
                 changePassword(password.text.toString())
             } else {
