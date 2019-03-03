@@ -10,8 +10,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/decred/dcrd/connmgr"
 	"github.com/decred/dcrd/addrmgr"
+	"github.com/decred/dcrd/connmgr"
 	dcrrpcclient "github.com/decred/dcrd/rpcclient"
 	"github.com/decred/dcrwallet/chain"
 	"github.com/decred/dcrwallet/loader"
