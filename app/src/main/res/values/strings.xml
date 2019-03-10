@@ -437,6 +437,7 @@
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
     <string name="invalid_testnet_address">This is not a valid Decred testnet3 address.</string>
     <string name="invalid_mainnett_address">This is not a valid Decred mainnet address.</string>
+    <string name="biometric_auth_failed">Authentication failed, try again</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->

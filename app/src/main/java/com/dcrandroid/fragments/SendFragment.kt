@@ -6,12 +6,15 @@
 
 package com.dcrandroid.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.hardware.biometrics.BiometricPrompt
 import android.os.Bundle
+import android.os.CancellationSignal
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -19,6 +22,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.fragment.app.Fragment
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
@@ -29,6 +33,7 @@ import com.dcrandroid.activities.TransactionDetailsActivity
 import com.dcrandroid.adapter.AccountSpinnerAdapter
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.BiometricDialogV23
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.util.*
@@ -46,6 +51,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchangeRate.ExchangeRateCallback {
+
+    private var biometricDialogV23: BiometricDialogV23? = null
 
     private var SEND_ACCOUNT = false
     private val SCANNER_ACTIVITY_REQUEST_CODE = 0
@@ -179,7 +186,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
 
             send_main_error.text = null
 
-            showConfirmTransactionDialog()
+            if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
+                showConfirmTransactionDialog()
+            }else{
+                checkBiometric()
+            }
         }
 
         prepareAccounts()
@@ -540,7 +551,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                                     .setMessage(message)
                                     .setIcon(R.drawable.np_amount_withdrawal)
                                     .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
-                                        showConfirmTransactionDialog()
+                                        if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
+                                            showConfirmTransactionDialog()
+                                        }else{
+                                            checkBiometric()
+                                        }
                                     })
                                     .setNegativeButton(getString(R.string.cancel).toUpperCase(), DialogInterface.OnClickListener { dialog, _ ->
                                         dialog.dismiss()
@@ -604,6 +619,132 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         send_dcr_address.removeTextChangedListener(addressWatcher)
         send_dcr_address.text = null
         send_dcr_address.addTextChangedListener(addressWatcher)
+    }
+
+    private fun checkBiometric(){
+        if (!util!!.getBoolean(Constants.USE_BIOMETRIC, false)) {
+            println("Biometric not enabled in settings")
+            showConfirmTransactionDialog()
+            return
+        }
+
+        when {
+            Utils.Biometric.isSupportBiometricPrompt(context) -> displayBiometricPrompt(Constants.SPENDING_PASSPHRASE_TYPE)
+            Utils.Biometric.isSupportFingerprint(context) -> {
+                println("Device does support biometric prompt")
+                showFingerprintDialog(Constants.SPENDING_PASSPHRASE_TYPE)
+            }
+            else -> showConfirmTransactionDialog()
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun displayBiometricPrompt(keyName: String){
+        try {
+            Utils.Biometric.generateKeyPair(keyName, true)
+            val signature = Utils.Biometric.initSignature(keyName)
+
+            if (signature != null) {
+
+                val biometricPrompt = BiometricPrompt.Builder(context)
+                        .setTitle(getString(R.string.app_name))
+                        .setNegativeButton("Cancel", activity!!.mainExecutor, DialogInterface.OnClickListener { _, _ ->
+
+                        })
+                        .build()
+
+                biometricPrompt.authenticate(BiometricPrompt.CryptoObject(signature), getBiometricCancellationSignal(), activity!!.mainExecutor, biometricAuthenticationCallback)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun showFingerprintDialog(keyName: String){
+        val fingerprintManager = FingerprintManagerCompat.from(context!!)
+        if(fingerprintManager.hasEnrolledFingerprints()){
+
+            Utils.Biometric.generateKeyPair(keyName, true)
+            val signature = Utils.Biometric.initSignature(keyName)
+
+            fingerprintManager.authenticate(FingerprintManagerCompat.CryptoObject(signature!!), 0,
+                    getFingerprintCancellationSignal(),  fingerprintAuthCallback, null)
+
+            activity!!.runOnUiThread{
+
+                biometricDialogV23 = BiometricDialogV23(context!!)
+                biometricDialogV23!!.setTitle(getString(R.string.app_name))
+                biometricDialogV23!!.show()
+            }
+        }else{
+            showConfirmTransactionDialog()
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun getBiometricCancellationSignal(): CancellationSignal {
+        // With this cancel signal, we can cancel biometric prompt operation
+        val cancellationSignal = CancellationSignal()
+        cancellationSignal.setOnCancelListener {
+            println("Cancel result, signal triggered")
+        }
+
+        return cancellationSignal
+    }
+
+    @SuppressLint("NewApi")
+    private fun getFingerprintCancellationSignal(): androidx.core.os.CancellationSignal {
+        // With this cancel signal, we can cancel biometric prompt operation
+        val cancellationSignal = androidx.core.os.CancellationSignal()
+        cancellationSignal.setOnCancelListener {
+            println("Cancel result, signal triggered")
+        }
+
+        return cancellationSignal
+    }
+
+    @SuppressLint("NewApi")
+    private val biometricAuthenticationCallback = object: BiometricPrompt.AuthenticationCallback() {
+
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+            super.onAuthenticationError(errorCode, errString)
+            Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
+        }
+
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+            super.onAuthenticationSucceeded(result)
+            showConfirmTransactionDialog()
+        }
+    }
+
+    private val fingerprintAuthCallback = object : FingerprintManagerCompat.AuthenticationCallback(){
+
+        override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
+            super.onAuthenticationError(errMsgId, errString)
+            Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
+            if(biometricDialogV23 != null){
+                biometricDialogV23!!.dismiss()
+            }
+        }
+
+        override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence?) {
+            super.onAuthenticationHelp(helpMsgId, helpString)
+            Toast.makeText(context, helpString, Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
+            super.onAuthenticationSucceeded(result)
+            if(biometricDialogV23 != null){
+                biometricDialogV23!!.dismiss()
+            }
+
+            showConfirmTransactionDialog()
+        }
+
+        override fun onAuthenticationFailed() {
+            super.onAuthenticationFailed()
+            Toast.makeText(context, R.string.biometric_auth_failed, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private val addressWatcher: TextWatcher = object : TextWatcher {

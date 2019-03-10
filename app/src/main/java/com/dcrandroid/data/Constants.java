@@ -104,6 +104,7 @@ public class Constants {
             FIRST_RUN = "first_run",
             TX_NOTIFICATION_HASH = "tx_notification_hash",
             WIFI_SYNC = "wifi_sync",
+            USE_BIOMETRIC = "use_biometric",
             LICENSE = "license",
             STAKE_BASE_HASH = "0000000000000000000000000000000000000000000000000000000000000000",
             TRANSACTION_HEIGHT = "transaction_height",
@@ -113,7 +114,6 @@ public class Constants {
             SYNC_STATE_PROGRESS = "progress",
             SYNC_STATE_FINISH = "finish",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
-
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 
     public static final long ESTIMATED_ACCT_DISCOVERY = 300000;

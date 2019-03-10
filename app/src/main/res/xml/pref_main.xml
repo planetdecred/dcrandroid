@@ -24,6 +24,11 @@
             android:title="@string/change_startup_pin_password"
             app:iconSpaceReserved="false" />
         <SwitchPreference
+            android:key="use_biometric"
+            android:title="Use biometric authentication"
+            app:iconSpaceReserved="false"
+            />
+        <SwitchPreference
             android:defaultValue="false"
             android:key="spend_unconfirmed_funds"
             android:title="@string/unconfirmed_funds"

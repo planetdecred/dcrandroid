@@ -6,6 +6,7 @@
 
 package com.dcrandroid.util;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,7 +17,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -39,6 +43,13 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.ECGenParameterSpec;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -48,9 +59,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import dcrlibwallet.Dcrlibwallet;
 
 public class Utils {
@@ -563,5 +575,84 @@ public class Utils {
 
         manager.notify(nonce, notification);
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
+    }
+
+    public static class Biometric {
+
+        public static boolean isHardwareSupported(Context context) {
+            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(context);
+            return fingerprintManager.isHardwareDetected();
+        }
+
+        public static boolean isSupportBiometricPrompt(Context context) {
+            PackageManager packageManager = context.getPackageManager();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT);
+            }
+
+            return false;
+        }
+
+        public static boolean isSupportFingerprint(Context context) {
+            PackageManager packageManager = context.getPackageManager();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT);
+            }
+
+            return false;
+        }
+
+        public static boolean isFingerprintAvailable(Context context) {
+            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(context);
+            return fingerprintManager.hasEnrolledFingerprints();
+        }
+
+        @TargetApi(Build.VERSION_CODES.N)
+        public static KeyPair generateKeyPair(String keyName, boolean invalidatedByBiometricEnrollment) throws Exception {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+
+            KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(keyName,
+                    KeyProperties.PURPOSE_SIGN)
+                    .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
+                    .setDigests(KeyProperties.DIGEST_SHA256,
+                            KeyProperties.DIGEST_SHA384,
+                            KeyProperties.DIGEST_SHA512)
+                    // Require the user to authenticate with a biometric to authorize every use of the key
+                    .setUserAuthenticationRequired(true)
+                    // Generated keys will be invalidated if the biometric templates are added more to user device
+                    .setInvalidatedByBiometricEnrollment(invalidatedByBiometricEnrollment);
+
+            keyPairGenerator.initialize(builder.build());
+
+            return keyPairGenerator.generateKeyPair();
+        }
+
+        @Nullable
+        public static KeyPair getKeyPair(String keyName) throws Exception {
+            KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+            keyStore.load(null);
+            if (keyStore.containsAlias(keyName)) {
+                // Get public key
+                PublicKey publicKey = keyStore.getCertificate(keyName).getPublicKey();
+                // Get private key
+                PrivateKey privateKey = (PrivateKey) keyStore.getKey(keyName, null);
+                // Return a key pair
+                return new KeyPair(publicKey, privateKey);
+            }
+            return null;
+        }
+
+        @Nullable
+        public static Signature initSignature(String keyName) throws Exception {
+            KeyPair keyPair = getKeyPair(keyName);
+
+            if (keyPair != null) {
+                Signature signature = Signature.getInstance("SHA256withECDSA");
+                signature.initSign(keyPair.getPrivate());
+                return signature;
+            }
+
+            return null;
+        }
     }
 }
