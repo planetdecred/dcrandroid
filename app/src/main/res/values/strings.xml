@@ -438,6 +438,8 @@
     <string name="invalid_testnet_address">This is not a valid Decred testnet3 address.</string>
     <string name="invalid_mainnett_address">This is not a valid Decred mainnet address.</string>
     <string name="biometric_auth_failed">Authentication failed, try again</string>
+    <string name="no_fingerprint_enrolled">Ensure you have at least one fingerprint enrolled</string>
+    <string name="no_biometric_support">Your device does not support biometric authentication</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->

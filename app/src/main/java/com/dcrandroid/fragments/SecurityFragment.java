@@ -6,6 +6,7 @@
 
 package com.dcrandroid.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +14,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.hardware.biometrics.BiometricPrompt;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -32,15 +35,19 @@ import android.widget.Toast;
 import com.dcrandroid.R;
 import com.dcrandroid.activities.EnterPassCode;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.BiometricDialogV23;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.security.Signature;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.fragment.app.Fragment;
 import dcrlibwallet.Dcrlibwallet;
 import dcrlibwallet.LibWallet;
@@ -53,6 +60,7 @@ public class SecurityFragment extends Fragment {
     private TextView tvValidateAddress, tvRequiredMessage, tvRequiredSignature;
     private Button btnSignMessage, btnCopy;
     private LinearLayout layout;
+    private BiometricDialogV23 biometricDialogV23;
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -217,45 +225,52 @@ public class SecurityFragment extends Fragment {
                     return;
                 }
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.input_passphrase_box, null);
-                dialogBuilder.setCancelable(false);
-                dialogBuilder.setView(dialogView);
-                dialogBuilder.setTitle(R.string.confirmation_required);
-
-                final EditText passphrase = dialogView.findViewById(R.id.passphrase_input);
-
-                dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (passphrase.getText().toString().equals("")) {
-                            Toast.makeText(SecurityFragment.this.getContext(), R.string.passphrase_is_empty, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        pd = Utils.getProgressDialog(getContext(), false, false, "Signing...");
-                        pd.show();
-                        new Thread() {
-                            public void run() {
-                                signMessage(passphrase.getText().toString().getBytes());
-                            }
-                        }.start();
-
-                    }
-                });
-
-                dialogBuilder.setNegativeButton(android.R.string.cancel, null);
-
-                AlertDialog b = dialogBuilder.create();
-                b.show();
-                b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                checkBiometric();
             }
         });
 
         if (WalletData.getInstance().syncing) {
             layout.setVisibility(View.GONE);
         }
+    }
+
+    private void showPasswordDialog(){
+        if(getActivity() == null || getContext() == null){
+            return;
+        }
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.input_passphrase_box, null);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setTitle(R.string.confirmation_required);
+
+        final EditText passphrase = dialogView.findViewById(R.id.passphrase_input);
+
+        dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (passphrase.getText().toString().equals("")) {
+                    Toast.makeText(SecurityFragment.this.getContext(), R.string.passphrase_is_empty, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                pd = Utils.getProgressDialog(getContext(), false, false, "Signing...");
+                pd.show();
+                new Thread() {
+                    public void run() {
+                        signMessage(passphrase.getText().toString().getBytes());
+                    }
+                }.start();
+
+            }
+        });
+
+        dialogBuilder.setNegativeButton(android.R.string.cancel, null);
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+        b.getButton(b.BUTTON_POSITIVE).setTextColor(Color.BLUE);
     }
 
     @Override
@@ -400,4 +415,165 @@ public class SecurityFragment extends Fragment {
             btnSignMessage.setEnabled(false);
         }
     }
+
+    private void checkBiometric(){
+        if(getActivity() == null || getContext() == null){
+            return;
+        }
+
+        if (!util.getBoolean(Constants.USE_BIOMETRIC, false)) {
+            System.out.println("Biometric not enabled in settings");
+            showPasswordDialog();
+            return;
+        }
+
+        if (Utils.Biometric.isSupportBiometricPrompt(getContext())) {
+            displayBiometricPrompt();
+        }else if (Utils.Biometric.isSupportFingerprint(getContext())){
+            System.out.println("Device does support biometric prompt");
+            showFingerprintDialog();
+        }else{
+            showPasswordDialog();
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void displayBiometricPrompt(){
+        if(getActivity() == null || getContext() == null){
+            return;
+        }
+
+        try {
+            Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
+            Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
+
+            if (signature != null) {
+
+                BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(getContext())
+                        .setTitle(getString(R.string.app_name))
+                        .setNegativeButton("Cancel", getActivity().getMainExecutor(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .build();
+
+                biometricPrompt.authenticate(new BiometricPrompt.CryptoObject(signature), getBiometricCancellationSignal(), getActivity().getMainExecutor(), biometricAuthenticationCallback);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showFingerprintDialog(){
+        if(getContext() == null || getActivity() == null){
+            return;
+        }
+
+        FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getContext());
+        if(fingerprintManager.hasEnrolledFingerprints()){
+            try {
+                Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
+                Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
+
+                if (signature != null) {
+
+                    fingerprintManager.authenticate(new FingerprintManagerCompat.CryptoObject(signature), 0,
+                            getFingerprintCancellationSignal(), fingerprintAuthCallback, null);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                biometricDialogV23 = new BiometricDialogV23(getContext());
+                                biometricDialogV23.setTitle(getString(R.string.app_name));
+                                biometricDialogV23.show();
+                            }
+                        });
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            showPasswordDialog();
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private CancellationSignal getBiometricCancellationSignal() {
+        // With this cancel signal, we can cancel biometric prompt operation
+        CancellationSignal cancellationSignal = new CancellationSignal();
+        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+            @Override
+            public void onCancel() {
+                System.out.println("Cancel result, signal triggered");
+            }
+        });
+
+        return cancellationSignal;
+    }
+
+    @SuppressLint("NewApi")
+    private androidx.core.os.CancellationSignal getFingerprintCancellationSignal() {
+        // With this cancel signal, we can cancel biometric prompt operation
+        androidx.core.os.CancellationSignal cancellationSignal = new androidx.core.os.CancellationSignal();
+        cancellationSignal.setOnCancelListener(new androidx.core.os.CancellationSignal.OnCancelListener() {
+            @Override
+            public void onCancel() {
+                System.out.println("Cancel result, signal triggered");
+            }
+        });
+
+        return cancellationSignal;
+    }
+
+    @SuppressLint("NewApi")
+    private BiometricPrompt.AuthenticationCallback biometricAuthenticationCallback = new BiometricPrompt.AuthenticationCallback() {
+
+        @Override
+        public void onAuthenticationError(int errorCode, CharSequence errString) {
+            super.onAuthenticationError(errorCode, errString);
+            Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+            super.onAuthenticationSucceeded(result);
+            showPasswordDialog();
+        }
+    };
+
+    private FingerprintManagerCompat.AuthenticationCallback fingerprintAuthCallback = new FingerprintManagerCompat.AuthenticationCallback() {
+        @Override
+        public void onAuthenticationError(int errMsgId, CharSequence errString) {
+            super.onAuthenticationError(errMsgId, errString);
+            Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
+            if(biometricDialogV23 != null){
+                biometricDialogV23.dismiss();
+            }
+        }
+
+        @Override
+        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+            super.onAuthenticationHelp(helpMsgId, helpString);
+            Toast.makeText(getContext(), helpString, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
+            super.onAuthenticationSucceeded(result);
+            if(biometricDialogV23 != null){
+                biometricDialogV23.dismiss();
+            }
+
+            showPasswordDialog();
+        }
+
+        @Override
+        public void onAuthenticationFailed() {
+            super.onAuthenticationFailed();
+            Toast.makeText(getContext(), R.string.biometric_auth_failed, Toast.LENGTH_SHORT).show();
+        }
+    };
 }

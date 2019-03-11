@@ -579,11 +579,6 @@ public class Utils {
 
     public static class Biometric {
 
-        public static boolean isHardwareSupported(Context context) {
-            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(context);
-            return fingerprintManager.isHardwareDetected();
-        }
-
         public static boolean isSupportBiometricPrompt(Context context) {
             PackageManager packageManager = context.getPackageManager();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -602,7 +597,7 @@ public class Utils {
             return false;
         }
 
-        public static boolean isFingerprintAvailable(Context context) {
+        public static boolean isFingerprintEnrolled(Context context) {
             FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(context);
             return fingerprintManager.hasEnrolledFingerprints();
         }

@@ -6,14 +6,17 @@
 
 package com.dcrandroid.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.biometrics.BiometricPrompt;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -22,14 +25,18 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.BiometricDialogV23;
 import com.dcrandroid.dialog.DeleteWalletDialog;
 import com.dcrandroid.dialog.StakeyDialog;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
+import java.security.Signature;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -58,11 +65,13 @@ public class SettingsActivity extends AppCompatActivity {
         private final int PASSCODE_REQUEST_CODE = 2;
         private PreferenceUtil util;
         private int buildDateClicks = 0;
-        private SwitchPreference encryptWallet;
+        private SwitchPreference encryptWallet, useBiometric;
         private Preference changeStartupPass;
         private ProgressDialog pd;
 
         private LibWallet wallet;
+
+        private BiometricDialogV23 biometricDialogV23;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -78,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
             pd = Utils.getProgressDialog(getActivity(), false, false, "");
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
             changeStartupPass = findPreference("change_startup_passphrase");
+            useBiometric = (SwitchPreference) findPreference(Constants.USE_BIOMETRIC);
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
@@ -414,6 +424,31 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            if(Utils.Biometric.isFingerprintEnrolled(getContext())){
+                useBiometric.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                        if(!Utils.Biometric.isFingerprintEnrolled(getContext())){
+                            // This is not supposed to come up because the switch preference is hidden
+                            // for unsupported devices, but be paranoid.
+                            Toast.makeText(getContext(), R.string.no_biometric_support, Toast.LENGTH_SHORT).show();
+                            return false;
+                        }else if(!Utils.Biometric.isFingerprintEnrolled(getContext())){
+                            //TODO: Check if other biometric options are enrolled
+                            Toast.makeText(getContext(), R.string.no_fingerprint_enrolled, Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+                        checkBiometric();
+
+                        return false;
+                    }
+                });
+            }else{
+                useBiometric.setVisible(false);
+            }
         }
 
         @Override
@@ -482,5 +517,156 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle bundle, String s) {
             setPreferencesFromResource(R.xml.pref_main, s);
         }
+
+        private void checkBiometric(){
+            if(getActivity() == null || getContext() == null){
+                return;
+            }
+
+            if (Utils.Biometric.isSupportBiometricPrompt(getContext())) {
+                displayBiometricPrompt();
+            }else if (Utils.Biometric.isSupportFingerprint(getContext())){
+                System.out.println("Device does support biometric prompt");
+                showFingerprintDialog();
+            }
+        }
+
+        @SuppressLint("NewApi")
+        private void displayBiometricPrompt(){
+            if(getActivity() == null || getContext() == null){
+                return;
+            }
+
+            try {
+                Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
+                Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
+
+                if (signature != null) {
+
+                    BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(getContext())
+                            .setTitle(getString(R.string.app_name))
+                            .setNegativeButton("Cancel", getActivity().getMainExecutor(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .build();
+
+                    biometricPrompt.authenticate(new BiometricPrompt.CryptoObject(signature), getBiometricCancellationSignal(), getActivity().getMainExecutor(), biometricAuthenticationCallback);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void showFingerprintDialog(){
+            if(getContext() == null || getActivity() == null){
+                return;
+            }
+
+            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getContext());
+            if(fingerprintManager.hasEnrolledFingerprints()){
+                try {
+                    Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
+                    Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
+
+                    if (signature != null) {
+
+                        fingerprintManager.authenticate(new FingerprintManagerCompat.CryptoObject(signature), 0,
+                                getFingerprintCancellationSignal(), fingerprintAuthCallback, null);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                biometricDialogV23 = new BiometricDialogV23(getContext());
+                                biometricDialogV23.setTitle(getString(R.string.app_name));
+                                biometricDialogV23.show();
+                            }
+                        });
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @SuppressLint("NewApi")
+        private CancellationSignal getBiometricCancellationSignal() {
+            // With this cancel signal, we can cancel biometric prompt operation
+            CancellationSignal cancellationSignal = new CancellationSignal();
+            cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+                @Override
+                public void onCancel() {
+                    System.out.println("Cancel result, signal triggered");
+                }
+            });
+
+            return cancellationSignal;
+        }
+
+        @SuppressLint("NewApi")
+        private androidx.core.os.CancellationSignal getFingerprintCancellationSignal() {
+            // With this cancel signal, we can cancel biometric prompt operation
+            androidx.core.os.CancellationSignal cancellationSignal = new androidx.core.os.CancellationSignal();
+            cancellationSignal.setOnCancelListener(new androidx.core.os.CancellationSignal.OnCancelListener() {
+                @Override
+                public void onCancel() {
+                    System.out.println("Cancel result, signal triggered");
+                }
+            });
+
+            return cancellationSignal;
+        }
+
+        @SuppressLint("NewApi")
+        private BiometricPrompt.AuthenticationCallback biometricAuthenticationCallback = new BiometricPrompt.AuthenticationCallback() {
+
+            @Override
+            public void onAuthenticationError(int errorCode, CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                useBiometric.setChecked(!useBiometric.isChecked());
+            }
+        };
+
+        private FingerprintManagerCompat.AuthenticationCallback fingerprintAuthCallback = new FingerprintManagerCompat.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errMsgId, CharSequence errString) {
+                super.onAuthenticationError(errMsgId, errString);
+                Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
+                if(biometricDialogV23 != null){
+                    biometricDialogV23.dismiss();
+                }
+            }
+
+            @Override
+            public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+                super.onAuthenticationHelp(helpMsgId, helpString);
+                Toast.makeText(getContext(), helpString, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                if(biometricDialogV23 != null){
+                    biometricDialogV23.dismiss();
+                }
+
+                useBiometric.setChecked(!useBiometric.isChecked());
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getContext(), R.string.biometric_auth_failed, Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 }
