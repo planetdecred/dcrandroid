@@ -329,7 +329,6 @@
     <string name="passphrase_is_empty">Cụm mật khẩu trống</string>
     <string name="_0_dcr">0 DCR</string>
     <string name="_0_bytes">0 bytes</string>
-    <string name="total_sending">Tổng số gửi:</string>
     <string name="balance_after">Số dư sau:</string>
     <string name="amount_is_empty">Số tiền trống</string>
     <string name="_8_decimal_amount_err">Số tiền có nhiều hơn 8 chữ số thập phân</string>
@@ -354,7 +353,7 @@
     <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->
-    <string name="toConfirmEnterYourPassword">Để xác nhận, nhập mật khẩu của bạn:</string>
+    <string name="enter_your_password">Để xác nhận, nhập mật khẩu của bạn:</string>
     <string name="to">đến</string>
     <string name="withFeeOff">với một khoản phí</string>
     <string name="total">Toàn bộ</string>

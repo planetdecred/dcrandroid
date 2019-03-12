@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
@@ -70,7 +71,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
 
         val tvTotal = findViewById<TextView>(R.id.total)
 
-        tvTotal.text = "${context.getString(R.string.total)} ${Dcrlibwallet.amountCoin(amount!! + estFee)} DCR"
+        tvTotal.text = CoinFormat.format("${context.getString(R.string.total)} ${CoinFormat.format(amount!! + estFee)}")
 
         val util = PreferenceUtil(context)
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {

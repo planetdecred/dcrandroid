@@ -52,7 +52,7 @@
                 android:id="@+id/passphrase_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/toConfirmEnterYourPassword"
+                android:hint="@string/enter_your_password"
                 android:inputType="textPassword"
                 android:singleLine="true"
                 android:textColor="@color/blackFirstTextColor"
