@@ -25,7 +25,8 @@
             app:iconSpaceReserved="false" />
         <SwitchPreference
             android:key="use_biometric"
-            android:title="Use biometric authentication"
+            android:title="@string/use_biometric_auth"
+            android:summary="@string/biometric_pref_summary"
             app:iconSpaceReserved="false"
             />
         <SwitchPreference
