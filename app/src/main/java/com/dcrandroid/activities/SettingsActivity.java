@@ -406,6 +406,15 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            findPreference(Constants.LICENSE).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(getContext(), License.class);
+                    startActivity(i);
+                    return true;
+                }
+            });
         }
 
         @Override
