@@ -128,7 +128,7 @@ public class AddAccountActivity extends AppCompatActivity {
         }.start();
     }
 
-    private void checkBiometric(){
+    private void checkBiometric() {
         if (!util.getBoolean(Constants.USE_BIOMETRIC, false)) {
             System.out.println("Biometric not enabled in settings");
             createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
@@ -137,23 +137,23 @@ public class AddAccountActivity extends AppCompatActivity {
 
         if (Utils.Biometric.isSupportBiometricPrompt(this)) {
             displayBiometricPrompt();
-        }else if (Utils.Biometric.isSupportFingerprint(this)){
+        } else if (Utils.Biometric.isSupportFingerprint(this)) {
             System.out.println("Device does support biometric prompt");
             showFingerprintDialog();
-        }else{
+        } else {
             createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
         }
     }
 
     @SuppressLint("NewApi")
-    private void displayBiometricPrompt(){
+    private void displayBiometricPrompt() {
         try {
             Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
             Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
 
             if (signature != null) {
 
-                 BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(this)
+                BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(this)
                         .setTitle(getString(R.string.app_name))
                         .setNegativeButton("Cancel", getMainExecutor(), new DialogInterface.OnClickListener() {
                             @Override
@@ -170,9 +170,9 @@ public class AddAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void showFingerprintDialog(){
+    private void showFingerprintDialog() {
         FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(this);
-        if(fingerprintManager.hasEnrolledFingerprints()){
+        if (fingerprintManager.hasEnrolledFingerprints()) {
             try {
                 Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
                 Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
@@ -192,10 +192,10 @@ public class AddAccountActivity extends AppCompatActivity {
                     });
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
         }
     }
@@ -249,7 +249,7 @@ public class AddAccountActivity extends AppCompatActivity {
         public void onAuthenticationError(int errMsgId, CharSequence errString) {
             super.onAuthenticationError(errMsgId, errString);
             Toast.makeText(AddAccountActivity.this, errString, Toast.LENGTH_LONG).show();
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23.dismiss();
             }
         }
@@ -263,7 +263,7 @@ public class AddAccountActivity extends AppCompatActivity {
         @Override
         public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23.dismiss();
             }
 

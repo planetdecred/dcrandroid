@@ -425,17 +425,17 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            if(Utils.Biometric.isFingerprintEnrolled(getContext())){
+            if (Utils.Biometric.isFingerprintEnrolled(getContext())) {
                 useBiometric.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                        if(!Utils.Biometric.isFingerprintEnrolled(getContext())){
+                        if (!Utils.Biometric.isFingerprintEnrolled(getContext())) {
                             // This is not supposed to come up because the switch preference is hidden
                             // for unsupported devices, but be paranoid.
                             Toast.makeText(getContext(), R.string.no_biometric_support, Toast.LENGTH_SHORT).show();
                             return false;
-                        }else if(!Utils.Biometric.isFingerprintEnrolled(getContext())){
+                        } else if (!Utils.Biometric.isFingerprintEnrolled(getContext())) {
                             //TODO: Check if other biometric options are enrolled
                             Toast.makeText(getContext(), R.string.no_fingerprint_enrolled, Toast.LENGTH_SHORT).show();
                             return false;
@@ -446,7 +446,7 @@ public class SettingsActivity extends AppCompatActivity {
                         return false;
                     }
                 });
-            }else{
+            } else {
                 useBiometric.setVisible(false);
             }
         }
@@ -518,22 +518,22 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.pref_main, s);
         }
 
-        private void checkBiometric(){
-            if(getActivity() == null || getContext() == null){
+        private void checkBiometric() {
+            if (getActivity() == null || getContext() == null) {
                 return;
             }
 
             if (Utils.Biometric.isSupportBiometricPrompt(getContext())) {
                 displayBiometricPrompt();
-            }else if (Utils.Biometric.isSupportFingerprint(getContext())){
+            } else if (Utils.Biometric.isSupportFingerprint(getContext())) {
                 System.out.println("Device does support biometric prompt");
                 showFingerprintDialog();
             }
         }
 
         @SuppressLint("NewApi")
-        private void displayBiometricPrompt(){
-            if(getActivity() == null || getContext() == null){
+        private void displayBiometricPrompt() {
+            if (getActivity() == null || getContext() == null) {
                 return;
             }
 
@@ -560,13 +560,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        private void showFingerprintDialog(){
-            if(getContext() == null || getActivity() == null){
+        private void showFingerprintDialog() {
+            if (getContext() == null || getActivity() == null) {
                 return;
             }
 
             FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getContext());
-            if(fingerprintManager.hasEnrolledFingerprints()){
+            if (fingerprintManager.hasEnrolledFingerprints()) {
                 try {
                     Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
                     Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
@@ -586,7 +586,7 @@ public class SettingsActivity extends AppCompatActivity {
                         });
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -641,7 +641,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onAuthenticationError(int errMsgId, CharSequence errString) {
                 super.onAuthenticationError(errMsgId, errString);
                 Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
-                if(biometricDialogV23 != null){
+                if (biometricDialogV23 != null) {
                     biometricDialogV23.dismiss();
                 }
             }
@@ -655,7 +655,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                if(biometricDialogV23 != null){
+                if (biometricDialogV23 != null) {
                     biometricDialogV23.dismiss();
                 }
 

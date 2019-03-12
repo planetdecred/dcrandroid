@@ -188,7 +188,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
 
             if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
                 showConfirmTransactionDialog()
-            }else{
+            } else {
                 checkBiometric()
             }
         }
@@ -553,7 +553,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                                     .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
                                         if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
                                             showConfirmTransactionDialog()
-                                        }else{
+                                        } else {
                                             checkBiometric()
                                         }
                                     })
@@ -621,7 +621,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         send_dcr_address.addTextChangedListener(addressWatcher)
     }
 
-    private fun checkBiometric(){
+    private fun checkBiometric() {
         if (!util!!.getBoolean(Constants.USE_BIOMETRIC, false)) {
             println("Biometric not enabled in settings")
             showConfirmTransactionDialog()
@@ -639,7 +639,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     }
 
     @SuppressLint("NewApi")
-    private fun displayBiometricPrompt(keyName: String){
+    private fun displayBiometricPrompt(keyName: String) {
         try {
             Utils.Biometric.generateKeyPair(keyName, true)
             val signature = Utils.Biometric.initSignature(keyName)
@@ -660,23 +660,23 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         }
     }
 
-    private fun showFingerprintDialog(keyName: String){
+    private fun showFingerprintDialog(keyName: String) {
         val fingerprintManager = FingerprintManagerCompat.from(context!!)
-        if(fingerprintManager.hasEnrolledFingerprints()){
+        if (fingerprintManager.hasEnrolledFingerprints()) {
 
             Utils.Biometric.generateKeyPair(keyName, true)
             val signature = Utils.Biometric.initSignature(keyName)
 
             fingerprintManager.authenticate(FingerprintManagerCompat.CryptoObject(signature!!), 0,
-                    getFingerprintCancellationSignal(),  fingerprintAuthCallback, null)
+                    getFingerprintCancellationSignal(), fingerprintAuthCallback, null)
 
-            activity!!.runOnUiThread{
+            activity!!.runOnUiThread {
 
                 biometricDialogV23 = BiometricDialogV23(context!!)
                 biometricDialogV23!!.setTitle(getString(R.string.app_name))
                 biometricDialogV23!!.show()
             }
-        }else{
+        } else {
             showConfirmTransactionDialog()
         }
     }
@@ -704,7 +704,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     }
 
     @SuppressLint("NewApi")
-    private val biometricAuthenticationCallback = object: BiometricPrompt.AuthenticationCallback() {
+    private val biometricAuthenticationCallback = object : BiometricPrompt.AuthenticationCallback() {
 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
             super.onAuthenticationError(errorCode, errString)
@@ -717,12 +717,12 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         }
     }
 
-    private val fingerprintAuthCallback = object : FingerprintManagerCompat.AuthenticationCallback(){
+    private val fingerprintAuthCallback = object : FingerprintManagerCompat.AuthenticationCallback() {
 
         override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
             super.onAuthenticationError(errMsgId, errString)
             Toast.makeText(context, errString, Toast.LENGTH_LONG).show()
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23!!.dismiss()
             }
         }
@@ -734,7 +734,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
 
         override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
             super.onAuthenticationSucceeded(result)
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23!!.dismiss()
             }
 

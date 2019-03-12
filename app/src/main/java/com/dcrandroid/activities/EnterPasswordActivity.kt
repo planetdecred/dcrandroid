@@ -86,24 +86,24 @@ class EnterPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkBiometric(){
+    private fun checkBiometric() {
         if (!util!!.getBoolean(Constants.USE_BIOMETRIC, false)) {
             println("Biometric not enabled in settings")
             return
         }
 
-        val keyName = if(isSpendingPassword!!) Constants.SPENDING_PASSPHRASE_TYPE else Constants.STARTUP_PASSPHRASE_TYPE
+        val keyName = if (isSpendingPassword!!) Constants.SPENDING_PASSPHRASE_TYPE else Constants.STARTUP_PASSPHRASE_TYPE
 
         if (Utils.Biometric.isSupportBiometricPrompt(this)) {
             displayBiometricPrompt(keyName)
-        }else if (Utils.Biometric.isSupportFingerprint(this)){
+        } else if (Utils.Biometric.isSupportFingerprint(this)) {
             println("Device does support biometric prompt")
             showFingerprintDialog(keyName)
         }
     }
 
     @SuppressLint("NewApi")
-    private fun displayBiometricPrompt(keyName: String){
+    private fun displayBiometricPrompt(keyName: String) {
         try {
             Utils.Biometric.generateKeyPair(keyName, true)
             val signature = Utils.Biometric.initSignature(keyName)
@@ -124,20 +124,20 @@ class EnterPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun showFingerprintDialog(keyName: String){
+    private fun showFingerprintDialog(keyName: String) {
         val fingerprintManager = FingerprintManagerCompat.from(this)
-        if(fingerprintManager.hasEnrolledFingerprints()){
+        if (fingerprintManager.hasEnrolledFingerprints()) {
 
             Utils.Biometric.generateKeyPair(keyName, true)
             val signature = Utils.Biometric.initSignature(keyName)
 
             fingerprintManager.authenticate(FingerprintManagerCompat.CryptoObject(signature!!), 0,
-                    getFingerprintCancellationSignal(),  fingerprintAuthCallback, null)
+                    getFingerprintCancellationSignal(), fingerprintAuthCallback, null)
 
-            runOnUiThread{
+            runOnUiThread {
 
                 biometricDialogV23 = BiometricDialogV23(this)
-                val cancelListener = object : BiometricDialogV23.CancelListener{
+                val cancelListener = object : BiometricDialogV23.CancelListener {
                     override fun onCancel() {
                         finishActivity()
                     }
@@ -173,7 +173,7 @@ class EnterPasswordActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NewApi")
-    private val biometricAuthenticationCallback = object: BiometricPrompt.AuthenticationCallback() {
+    private val biometricAuthenticationCallback = object : BiometricPrompt.AuthenticationCallback() {
 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
             super.onAuthenticationError(errorCode, errString)
@@ -182,12 +182,12 @@ class EnterPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private val fingerprintAuthCallback = object : FingerprintManagerCompat.AuthenticationCallback(){
+    private val fingerprintAuthCallback = object : FingerprintManagerCompat.AuthenticationCallback() {
 
         override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
             super.onAuthenticationError(errMsgId, errString)
             Toast.makeText(this@EnterPasswordActivity, errString, Toast.LENGTH_LONG).show()
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23!!.dismiss()
             }
             finishActivity()
@@ -200,7 +200,7 @@ class EnterPasswordActivity : AppCompatActivity() {
 
         override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
             super.onAuthenticationSucceeded(result)
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23!!.dismiss()
             }
         }
@@ -211,10 +211,10 @@ class EnterPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishActivity(){
-        if(intent.getBooleanExtra(Constants.NO_RETURN, false)){
+    private fun finishActivity() {
+        if (intent.getBooleanExtra(Constants.NO_RETURN, false)) {
             ActivityCompat.finishAffinity(this)
-        }else{
+        } else {
             finish()
         }
     }

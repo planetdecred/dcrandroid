@@ -28,7 +28,7 @@ class BiometricDialogV23(context: Context) : BottomSheetDialog(context) {
         cancel = bottomSheetView.findViewById(R.id.btn_cancel)
         cancel!!.setOnClickListener {
             dismiss()
-            if(listener != null){
+            if (listener != null) {
                 listener!!.onCancel()
             }
         }
@@ -48,11 +48,11 @@ class BiometricDialogV23(context: Context) : BottomSheetDialog(context) {
         tvTitle!!.text = title
     }
 
-    fun setCancelListener(listener: CancelListener){
+    fun setCancelListener(listener: CancelListener) {
         this.listener = listener
     }
 
-    public interface CancelListener{
+    public interface CancelListener {
         abstract fun onCancel()
     }
 }

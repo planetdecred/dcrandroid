@@ -234,8 +234,8 @@ public class SecurityFragment extends Fragment {
         }
     }
 
-    private void showPasswordDialog(){
-        if(getActivity() == null || getContext() == null){
+    private void showPasswordDialog() {
+        if (getActivity() == null || getContext() == null) {
             return;
         }
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
@@ -416,8 +416,8 @@ public class SecurityFragment extends Fragment {
         }
     }
 
-    private void checkBiometric(){
-        if(getActivity() == null || getContext() == null){
+    private void checkBiometric() {
+        if (getActivity() == null || getContext() == null) {
             return;
         }
 
@@ -429,17 +429,17 @@ public class SecurityFragment extends Fragment {
 
         if (Utils.Biometric.isSupportBiometricPrompt(getContext())) {
             displayBiometricPrompt();
-        }else if (Utils.Biometric.isSupportFingerprint(getContext())){
+        } else if (Utils.Biometric.isSupportFingerprint(getContext())) {
             System.out.println("Device does support biometric prompt");
             showFingerprintDialog();
-        }else{
+        } else {
             showPasswordDialog();
         }
     }
 
     @SuppressLint("NewApi")
-    private void displayBiometricPrompt(){
-        if(getActivity() == null || getContext() == null){
+    private void displayBiometricPrompt() {
+        if (getActivity() == null || getContext() == null) {
             return;
         }
 
@@ -466,13 +466,13 @@ public class SecurityFragment extends Fragment {
         }
     }
 
-    private void showFingerprintDialog(){
-        if(getContext() == null || getActivity() == null){
+    private void showFingerprintDialog() {
+        if (getContext() == null || getActivity() == null) {
             return;
         }
 
         FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getContext());
-        if(fingerprintManager.hasEnrolledFingerprints()){
+        if (fingerprintManager.hasEnrolledFingerprints()) {
             try {
                 Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
                 Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
@@ -482,20 +482,20 @@ public class SecurityFragment extends Fragment {
                     fingerprintManager.authenticate(new FingerprintManagerCompat.CryptoObject(signature), 0,
                             getFingerprintCancellationSignal(), fingerprintAuthCallback, null);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                biometricDialogV23 = new BiometricDialogV23(getContext());
-                                biometricDialogV23.setTitle(getString(R.string.app_name));
-                                biometricDialogV23.show();
-                            }
-                        });
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            biometricDialogV23 = new BiometricDialogV23(getContext());
+                            biometricDialogV23.setTitle(getString(R.string.app_name));
+                            biometricDialogV23.show();
+                        }
+                    });
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             showPasswordDialog();
         }
     }
@@ -549,7 +549,7 @@ public class SecurityFragment extends Fragment {
         public void onAuthenticationError(int errMsgId, CharSequence errString) {
             super.onAuthenticationError(errMsgId, errString);
             Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23.dismiss();
             }
         }
@@ -563,7 +563,7 @@ public class SecurityFragment extends Fragment {
         @Override
         public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
-            if(biometricDialogV23 != null){
+            if (biometricDialogV23 != null) {
                 biometricDialogV23.dismiss();
             }
 
