@@ -947,6 +947,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             walletData.syncEndPoint = walletData.wallet.getBestBlock();
         }
 
+        if (accountDiscoveryProgress != null && accountDiscoveryProgress.isAlive()) {
+            accountDiscoveryProgress.interrupt();
+        }
+
         switch (state) {
             case Dcrlibwallet.START:
                 setConnectionStatus(R.string.scanning_blocks);
