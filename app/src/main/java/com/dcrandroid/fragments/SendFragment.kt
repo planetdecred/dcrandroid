@@ -51,6 +51,7 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -64,7 +65,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var isSendAll: Boolean = false
     private var exchangeRate: Double = -1.0
     private var exchangeDecimal: BigDecimal? = null
-    private val formatter: DecimalFormat = DecimalFormat("#.########")
+    private val formatter: DecimalFormat = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
     private var accounts: ArrayList<String>? = null
     private val accountNumbers: ArrayList<Int> = ArrayList()
     private var dataAdapter: ArrayAdapter<String>? = null
@@ -102,6 +103,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        formatter.applyPattern("#.########")
         setHasOptionsMenu(true)
     }
 
@@ -136,7 +138,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             isSendAll = true
             try {
                 val spendableBalance = getSpendableForSelectedAccount()
-                val amount = Utils.formatDecredWithoutComma(spendableBalance).replace(",", ".")
+                val amount = Utils.formatDecredWithoutComma(spendableBalance)
                 amount_dcr.removeTextChangedListener(amountWatcher)
                 amount_dcr.setText(amount)
                 amount_dcr.addTextChangedListener(amountWatcher)
@@ -147,7 +149,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     val convertedAmount = currentAmount.multiply(exchangeDecimal, MathContext.DECIMAL128)
 
                     amount_usd.removeTextChangedListener(exchangeWatcher)
-                    amount_usd.setText(formatter.format(convertedAmount.toDouble()).replace(",", "."))
+                    amount_usd.setText(formatter.format(convertedAmount.toDouble()))
                     amount_usd.addTextChangedListener(exchangeWatcher)
                 }
                 constructTransaction()
@@ -294,7 +296,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             return
         }
         if (destination_account_container.visibility == View.VISIBLE) {
-            val receiveAddress = constants.wallet.currentAddress(destination_account_spinner.selectedItemPosition).replace(",", ".")
+            val receiveAddress = constants.wallet.currentAddress(destination_account_spinner.selectedItemPosition)
             send_dcr_address.setText(receiveAddress)
         }
         constructTransaction()
@@ -314,7 +316,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 continue
             }
 
-            accounts!!.add(account.accountName + " [" + Utils.formatDecred(account.balance.spendable).replace(",", ".") + "]")
+            accounts!!.add(account.accountName + " [" + Utils.formatDecred(account.balance.spendable) + "]")
             accountNumbers.add(account.accountNumber)
         }
 
@@ -329,7 +331,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun validateAmount(): Boolean {
-        val s = amount_dcr.text.toString().replace(",", ".")
+        val s = amount_dcr.text.toString()
 
         if (s.isEmpty()) {
             return false
@@ -406,7 +408,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 send_dcr_balance_after.text = CoinFormat.format(getSpendableForSelectedAccount() - transaction.totalPreviousOutputAmount)
 
                 amount_dcr.removeTextChangedListener(amountWatcher)
-                amount_dcr.setText(Utils.formatDecredWithoutComma(amount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)).replace(",", "."))
+                amount_dcr.setText(Utils.formatDecredWithoutComma(amount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
                 amount_dcr.addTextChangedListener(amountWatcher)
 
                 if (exchangeDecimal != null) {
@@ -415,7 +417,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
                     val convertedAmount = currentAmount.multiply(exchangeDecimal)
                     amount_usd.removeTextChangedListener(exchangeWatcher)
-                    amount_usd.setText(formatter.format(convertedAmount.toDouble()).replace(",", "."))
+                    amount_usd.setText(formatter.format(convertedAmount.toDouble()))
                     amount_usd.addTextChangedListener(exchangeWatcher)
                 }
             } else {
@@ -644,6 +646,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             textChanged = true
             isSendAll = false
 
+            if(s.toString() == "."){
+                return
+            }
+
             if (exchangeDecimal != null) {
                 if (s.isNotEmpty()) {
                     var currentAmount = BigDecimal(s.toString())
@@ -652,7 +658,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
                     amount_usd.run {
                         removeTextChangedListener(exchangeWatcher)
-                        setText(formatter.format(convertedAmount.toDouble()).replace(",", "."))
+                        setText(formatter.format(convertedAmount.toDouble()))
                         addTextChangedListener(exchangeWatcher)
                     }
 
@@ -694,7 +700,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val convertedAmount = currentAmount.divide(exchangeDecimal, MathContext.DECIMAL128)
                 amount_dcr.run {
                     removeTextChangedListener(amountWatcher)
-                    setText(formatter.format(convertedAmount.toDouble()).replace(",", "."))
+                    setText(formatter.format(convertedAmount.toDouble()))
                     addTextChangedListener(amountWatcher)
                 }
 
@@ -762,12 +768,12 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     sendFragment.send_dcr_exchange_rate.text = String.format(Locale.getDefault(), "%.2f %s/DCR (%s)", result.getDouble("Last"), currency, source)
                     sendFragment.exchange_details.visibility = View.VISIBLE
                     if (sendFragment.amount_dcr.text.isNotEmpty()) {
-                        var currentAmount = BigDecimal(sendFragment.amount_dcr.text.toString().replace(",", "."))
+                        var currentAmount = BigDecimal(sendFragment.amount_dcr.text.toString())
                         currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
                         val convertedAmount = currentAmount.multiply(sendFragment.exchangeDecimal)
                         sendFragment.amount_usd.removeTextChangedListener(sendFragment.exchangeWatcher)
-                        sendFragment.amount_usd.setText(sendFragment.formatter.format(convertedAmount.toDouble()).replace(",", "."))
+                        sendFragment.amount_usd.setText(sendFragment.formatter.format(convertedAmount.toDouble()))
                         sendFragment.amount_usd.addTextChangedListener(sendFragment.exchangeWatcher)
                     }
 
