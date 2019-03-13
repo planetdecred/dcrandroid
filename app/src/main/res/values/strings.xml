@@ -12,7 +12,7 @@
     all you have to do is click OK. This will help us prevent the error from occurring again</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="label_keys" translatable="false">Keys</string>
+    <string name="label_keys">Keys</string>
     <string name="label_properties">Properties</string>
     <string name="require_to_send_fund">Required to send funds</string>
     <string name="add_an_account">ADD AN ACCOUNT</string>
