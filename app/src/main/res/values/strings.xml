@@ -113,7 +113,6 @@
     <string name="license">License</string>
     <string name="key_license" translatable="false">license</string>
     <string name="always">Always</string>
-    <string name="not_synced">Not Synced</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -537,6 +536,7 @@
     <string name="required_to_enter_app">Required to enter app.</string>
     <string name="changing_pin">Changing PIN…</string>
     <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
+    <string name="field_cannot_be_empty">Field cannot be empty</string>
     <!--/Security-->
 
     <!--Crash Report-->
