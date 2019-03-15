@@ -22,32 +22,25 @@
         android:paddingRight="8dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:textColor="@color/greenLightTextColor"
+            android:textSize="16sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            android:layout_marginTop="20dp"
+            tools:text="title" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/greenLightTextColor"
-                android:textSize="18sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                tools:text="title" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/greenLightTextColor"
-                android:textSize="18sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                android:text="@string/to" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/blueGrayFirstTextColor"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="@string/transaction_fee" />
 
         <TextView
             android:id="@+id/address"
@@ -57,8 +50,7 @@
             android:gravity="center"
             android:textColor="@color/blueGrayFirstTextColor"
             android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="to TsVAhUwocTvXmgBmQgE2CwSLPHgjaXEbR9B" />
+            app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <TextView
             android:id="@+id/account"
@@ -70,16 +62,6 @@
             android:textSize="14sp"
             app:fontFamily="@font/source_sans_pro_regular_family"
             tools:text="(TEST)" />
-
-        <TextView
-            android:id="@+id/fee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="@string/transaction_fee" />
 
         <TextView
             android:id="@+id/total"
