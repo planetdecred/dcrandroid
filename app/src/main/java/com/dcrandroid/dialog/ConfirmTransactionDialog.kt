@@ -26,7 +26,8 @@ import kotlinx.android.synthetic.main.confirm_tx_dialog.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.util.*
+import java.math.MathContext
+
 
 class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClickListener {
 
@@ -49,8 +50,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         findViewById<TextView>(R.id.btn_positive).setOnClickListener(this)
         findViewById<TextView>(R.id.btn_negative).setOnClickListener(this)
 
-        val format = DecimalFormat()
-        format.applyPattern("#.########")
+        val format = DecimalFormat("#.########")
 
         val util = PreferenceUtil(context)
 
@@ -89,10 +89,10 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         // display conversion if enabled and exchange rate has been fetched
         if(exchangeDecimal != null && Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0")) != 0){
             val amountUSD = dcrToUSD(amountCoin)
-            tvTitle.text = "${tvTitle.text} ($${String.format(Locale.getDefault(), "%.2f", amountUSD)})"
+            tvTitle.text = "${tvTitle.text} ($${format.format(amountUSD)})"
 
             val feeUSD = dcrToUSD(feeCoin)
-            tvFee.text = "${tvFee.text} ($${String.format(Locale.getDefault(), "%.2f", feeUSD)})"
+            tvFee.text = "${tvFee.text} ($${format.format(feeUSD)})"
         }
     }
 
@@ -100,9 +100,20 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         var currentAmount = BigDecimal(dcr)
         currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
-        val convertedAmount = currentAmount.multiply(exchangeDecimal)
+        var convertedAmount = currentAmount.multiply(exchangeDecimal)
 
-        return convertedAmount.toDouble()
+        // USD is displayed in 2 decimal places by default.
+        // If the converted amount is less than two significant figures,
+        // it would be rounded to the nearest significant figure.
+        if(convertedAmount.toDouble() < 0.01){
+
+            convertedAmount = convertedAmount.round(MathContext(1))
+
+            return convertedAmount.toDouble()
+        }else{
+            //round to 2 decimal places
+            return Math.round(convertedAmount.toDouble() * 100.0) / 100.0
+        }
     }
 
     fun setExchangeDecimal(exchangeDecimal: BigDecimal?): ConfirmTransactionDialog{
