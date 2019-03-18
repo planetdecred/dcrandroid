@@ -66,7 +66,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         tvAccount.visibility = View.GONE
         if (!account.isNullOrBlank()) {
             tvAccount.visibility = View.VISIBLE
-            tvAccount.text = "($account)"
+            tvAccount.text = context.getString(R.string.to_account, account)
         }
 
         val tvFee = findViewById<TextView>(R.id.fee)
@@ -74,9 +74,6 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         val estFee = Utils.signedSizeToAtom(fee!!)
         val feeCoin = Dcrlibwallet.amountCoin(estFee)
         tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(feeCoin)} DCR"
-
-        val tvTotal = findViewById<TextView>(R.id.total)
-        tvTotal.text = "${context.getString(R.string.total)} ${Dcrlibwallet.amountCoin(amount!! + estFee)} DCR"
 
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
             passphrase_input_layout.visibility = View.GONE
