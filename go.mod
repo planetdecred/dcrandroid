@@ -2,6 +2,7 @@ module github.com/raedahgroup/dcrlibwallet
 
 require (
 	github.com/AndreasBriese/bbloom v0.0.0-20180913140656-343706a395b7 // indirect
+	github.com/asdine/storm v0.0.0-20190216191021-fe89819f6282
 	github.com/decred/dcrd/addrmgr v1.0.2
 	github.com/decred/dcrd/blockchain/stake v1.1.0
 	github.com/decred/dcrd/chaincfg v1.2.0
@@ -28,8 +29,6 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20180109070241-2de33835d102 // indirect
 	github.com/jrick/logrotate v1.0.0
 	github.com/pkg/errors v0.8.0 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.2.2 // indirect
 )
 
 replace github.com/raedahgroup/dcrlibwallet => ./
