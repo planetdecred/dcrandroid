@@ -116,11 +116,14 @@ public class SplashScreen extends AppCompatActivity {
     private void startup() {
         walletData = WalletData.getInstance();
 
+        if (walletData.wallet != null) {
+            walletData.wallet.shutdown(false);
+        }
+
         String homeDir = getFilesDir() + "/wallet";
 
         walletData.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
         walletData.wallet.setLogLevel(util.get(Constants.LOGGING_LEVEL));
-        walletData.wallet.initLoader();
 
         String walletDB;
 

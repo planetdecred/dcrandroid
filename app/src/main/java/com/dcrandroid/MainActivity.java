@@ -43,6 +43,9 @@ import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.data.Transaction;
+import com.dcrandroid.data.Transaction.TransactionInput;
+import com.dcrandroid.data.Transaction.TransactionOutput;
 import com.dcrandroid.dialog.WiFiSyncDialog;
 import com.dcrandroid.fragments.AccountsFragment;
 import com.dcrandroid.fragments.HelpFragment;
@@ -54,9 +57,6 @@ import com.dcrandroid.fragments.SendFragment;
 import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.TransactionsResponse;
-import com.dcrandroid.util.TransactionsResponse.TransactionInput;
-import com.dcrandroid.util.TransactionsResponse.TransactionOutput;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         stopService(syncIntent);
 
         if (walletData.wallet != null) {
-            walletData.wallet.shutdown();
+            walletData.wallet.shutdown(true);
         }
 
         finish();
@@ -598,28 +598,28 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         try {
             JSONObject obj = new JSONObject(s);
 
-            TransactionsResponse.TransactionItem transaction = new TransactionsResponse.TransactionItem();
+            Transaction transaction = new Transaction();
 
-            transaction.timestamp = obj.getLong(Constants.TIMESTAMP);
-            transaction.fee = obj.getLong(Constants.FEE);
-            transaction.type = obj.getString(Constants.TYPE);
-            transaction.hash = obj.getString(Constants.HASH);
-            transaction.height = obj.getInt(Constants.HEIGHT);
-            transaction.amount = obj.getLong(Constants.AMOUNT);
-            transaction.direction = obj.getInt(Constants.DIRECTION);
+            transaction.setTimestamp(obj.getLong(Constants.TIMESTAMP));
+            transaction.setFee(obj.getLong(Constants.FEE));
+            transaction.setType(obj.getString(Constants.TYPE));
+            transaction.setHash(obj.getString(Constants.HASH));
+            transaction.setHeight(obj.getInt(Constants.HEIGHT));
+            transaction.setAmount(obj.getLong(Constants.AMOUNT));
+            transaction.setDirection(obj.getInt(Constants.DIRECTION));
 
             long totalInput = 0, totalOutput = 0;
 
-            ArrayList<TransactionsResponse.TransactionInput> inputs = new ArrayList<>();
+            ArrayList<TransactionInput> inputs = new ArrayList<>();
             JSONArray debits = obj.getJSONArray(Constants.DEBITS);
             for (int i = 0; i < debits.length(); i++) {
                 JSONObject debit = debits.getJSONObject(i);
 
                 TransactionInput input = new TransactionInput();
-                input.index = debit.getInt(Constants.INDEX);
-                input.previous_account = debit.getLong(Constants.PREVIOUS_ACCOUNT);
-                input.previous_amount = debit.getLong(Constants.PREVIOUS_AMOUNT);
-                input.accountName = debit.getString(Constants.ACCOUNT_NAME);
+                input.setIndex(debit.getInt(Constants.INDEX));
+                input.setPreviousAccount(debit.getLong(Constants.PREVIOUS_ACCOUNT));
+                input.setPreviousAmount(debit.getLong(Constants.PREVIOUS_AMOUNT));
+                input.setAccountName(debit.getString(Constants.ACCOUNT_NAME));
                 totalInput += debit.getLong(Constants.PREVIOUS_ACCOUNT);
 
                 inputs.add(input);
@@ -630,18 +630,18 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             for (int i = 0; i < credits.length(); i++) {
                 JSONObject credit = credits.getJSONObject(i);
                 TransactionOutput output = new TransactionOutput();
-                output.account = credit.getInt(Constants.ACCOUNT);
-                output.internal = credit.getBoolean(Constants.INTERNAL);
-                output.address = credit.getString(Constants.ADDRESS);
-                output.index = credit.getInt(Constants.INDEX);
-                output.amount = credit.getLong(Constants.AMOUNT);
+                output.setAccount(credit.getInt(Constants.ACCOUNT));
+                output.setInternal(credit.getBoolean(Constants.INTERNAL));
+                output.setAddress(credit.getString(Constants.ADDRESS));
+                output.setIndex(credit.getInt(Constants.INDEX));
+                output.setAmount(credit.getLong(Constants.AMOUNT));
                 totalOutput += credit.getLong(Constants.AMOUNT);
             }
 
-            transaction.totalInput = totalInput;
-            transaction.totalOutputs = totalOutput;
-            transaction.inputs = inputs;
-            transaction.outputs = outputs;
+            transaction.setTotalInput(totalInput);
+            transaction.setTotalOutput(totalOutput);
+            transaction.setInputs(inputs);
+            transaction.setOutputs(outputs);
 
             if (currentFragment instanceof OverviewFragment) {
                 OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
@@ -658,8 +658,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
-                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.hash);
-                    sendNotification(format.format(amount), (int) transaction.totalInput + (int) transaction.totalOutputs + (int) transaction.timestamp);
+                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
+                    sendNotification(format.format(amount), (int) totalInput + (int) totalOutput + (int) transaction.getTimestamp());
                 }
             }
         } catch (JSONException e) {
@@ -682,7 +682,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
+                util.setInt(Constants.TRANSACTION_HEIGHT, height);
                 displayBalance();
 
                 if (currentFragment instanceof OverviewFragment) {
@@ -1013,7 +1013,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(walletData.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + walletData.totalFetchTime + discoveryTime) / 1000) + "s");
 
 
-
                 double totalSync = walletData.totalFetchTime + discoveryTime + rescanTime;
                 log = String.format(Locale.getDefault(), "Fetch: %.2f%%, Discovery: %.2f%%, Rescan %.2f%%", walletData.totalFetchTime / totalSync * 100, discoveryTime / totalSync * 100, rescanTime / totalSync * 100);
                 Dcrlibwallet.log(log);
@@ -1046,6 +1045,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         displayBalance();
         totalBalance.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onIndexTransactions(int i) {
+        System.out.printf("Index %d transactions\n", i);
     }
 
     @Override

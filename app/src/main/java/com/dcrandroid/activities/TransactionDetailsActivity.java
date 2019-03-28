@@ -24,10 +24,12 @@ import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.TransactionInfoAdapter;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.data.Transaction;
+import com.dcrandroid.data.Transaction.TransactionInput;
+import com.dcrandroid.data.Transaction.TransactionOutput;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.TransactionsResponse;
-import com.dcrandroid.util.TransactionsResponse.TransactionItem;
+import com.dcrandroid.util.TransactionsParser;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
@@ -142,13 +144,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             transactionType = transactionType.substring(0, 1).toUpperCase() + transactionType.substring(1).toLowerCase();
         }
 
-        ArrayList<TransactionsResponse.TransactionInput> inputs
-                = (ArrayList<TransactionsResponse.TransactionInput>) extras.getSerializable(Constants.INPUTS);
-        ArrayList<TransactionsResponse.TransactionOutput> outputs
-                = (ArrayList<TransactionsResponse.TransactionOutput>) extras.getSerializable(Constants.OUTPUTS);
+        ArrayList<TransactionInput> inputs
+                = (ArrayList<TransactionInput>) extras.getSerializable(Constants.INPUTS);
+        ArrayList<TransactionOutput> outputs
+                = (ArrayList<TransactionOutput>) extras.getSerializable(Constants.OUTPUTS);
 
         loadInOut(inputs, outputs);
-
 
         rawTx = extras.getString(Constants.RAW);
 
@@ -203,9 +204,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         try {
-            TransactionItem transaction = TransactionsResponse.parseTransaction(wallet.getTransaction(Utils.getHash(txHash)));
+            Transaction transaction = TransactionsParser.parseTransaction(wallet.getTransaction(Utils.getHash(txHash)));
 
-            rawTx = transaction.raw;
+            rawTx = transaction.getRaw();
 
             tvHash.setText(txHash);
             value.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(transaction.getAmount()) + " " + getString(R.string.dcr)));
@@ -215,7 +216,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
             date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + sdf.format(calendar.getTime()).toLowerCase());
 
-            transactionType = transaction.type;
+            transactionType = transaction.getType();
             if (transactionType.equals(Constants.TICKET_PURCHASE)) {
                 transactionType = getString(R.string.ticket_purchase);
             } else {
@@ -253,7 +254,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
             });
 
-            loadInOut(transaction.inputs, transaction.outputs);
+            loadInOut(transaction.getInputs(), transaction.getOutputs());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,13 +263,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void loadInOut(ArrayList<TransactionsResponse.TransactionInput> usedInput, ArrayList<TransactionsResponse.TransactionOutput> usedOutput) {
+    private void loadInOut(ArrayList<TransactionInput> usedInput, ArrayList<TransactionOutput> usedOutput) {
 
         ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletInput = new ArrayList<>();
         ArrayList<TransactionInfoAdapter.TransactionInfoItem> walletOutput = new ArrayList<>();
         ArrayList<Integer> walletOutputIndices = new ArrayList<>();
         ArrayList<Integer> walletInputIndices = new ArrayList<>();
-
 
         try {
             Bundle b = getIntent().getExtras();
@@ -278,8 +278,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             JSONArray outputs = parent.getJSONArray(Constants.OUTPUTS);
 
             for (int i = 0; i < usedInput.size(); i++) {
-                JSONObject input = inputs.getJSONObject(usedInput.get(i).index);
-                walletInputIndices.add(usedInput.get(i).index);
+                System.out.println("Object: " + usedInput.get(i));
+                JSONObject input = inputs.getJSONObject(usedInput.get(i).getIndex());
+                walletInputIndices.add(usedInput.get(i).getIndex());
 
                 String hash = input.getString(Constants.PREVIOUS_TRANSACTION_HASH);
 
@@ -290,15 +291,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX);
 
                 walletInput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                        Utils.formatDecredWithComma(usedInput.get(i).previous_amount) + " "
-                                + getString(R.string.dcr) + " (" + usedInput.get(i).accountName + ")", hash));
+                        Utils.formatDecredWithComma(usedInput.get(i).getPreviousAmount()) + " "
+                                + getString(R.string.dcr) + " (" + usedInput.get(i).getAccountName() + ")", hash));
             }
 
             for (int i = 0; i < usedOutput.size(); i++) {
-                walletOutputIndices.add(usedOutput.get(i).index);
+                walletOutputIndices.add(usedOutput.get(i).getIndex());
                 walletOutput.add(new TransactionInfoAdapter.TransactionInfoItem(
-                        Utils.formatDecredWithComma(usedOutput.get(i).amount) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).address) + ")",
-                        usedOutput.get(i).address));
+                        Utils.formatDecredWithComma(usedOutput.get(i).getAmount()) + " " + getString(R.string.dcr) + " (" + wallet.accountOfAddress(usedOutput.get(i).getAddress()) + ")",
+                        usedOutput.get(i).getAddress()));
             }
 
             if (transactionType.equalsIgnoreCase(Constants.VOTE)) {

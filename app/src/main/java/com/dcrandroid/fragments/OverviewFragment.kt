@@ -33,22 +33,23 @@ import com.dcrandroid.activities.TransactionDetailsActivity
 import com.dcrandroid.adapter.TransactionAdapter
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
-import dcrlibwallet.GetTransactionsResponse
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_overview.*
 import kotlinx.android.synthetic.main.overview_sync_layout.*
-import java.io.*
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTransactionsResponse {
+class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
     private var walletData: WalletData? = null
-    private val transactionList = ArrayList<TransactionsResponse.TransactionItem>()
+    private val transactionList = ArrayList<Transaction>()
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
     private var isForeground: Boolean = false
@@ -109,16 +110,16 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 val history = transactionList[position]
                 val i = Intent(context, TransactionDetailsActivity::class.java)
                 val extras = Bundle()
-                extras.putLong(Constants.AMOUNT, history.getAmount())
-                extras.putLong(Constants.FEE, history.getFee())
-                extras.putLong(Constants.TIMESTAMP, history.getTimestamp())
-                extras.putInt(Constants.HEIGHT, history.getHeight())
+                extras.putLong(Constants.AMOUNT, history.amount)
+                extras.putLong(Constants.FEE, history.fee)
+                extras.putLong(Constants.TIMESTAMP, history.timestamp)
+                extras.putInt(Constants.HEIGHT, history.height)
                 extras.putLong(Constants.TOTAL_INPUT, history.totalInput)
-                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutputs)
+                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutput)
                 extras.putString(Constants.TYPE, history.type)
                 extras.putString(Constants.HASH, history.hash)
                 extras.putString(Constants.RAW, history.raw)
-                extras.putInt(Constants.DIRECTION, history.getDirection())
+                extras.putInt(Constants.DIRECTION, history.direction)
                 extras.putSerializable(Constants.INPUTS, history.inputs)
                 extras.putSerializable(Constants.OUTPUTS, history.outputs)
                 i.putExtras(extras)
@@ -283,169 +284,104 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
 
     private fun getTransactions() {
         activity!!.runOnUiThread { swipe_refresh_layout2.isRefreshing = true }
-        transactionList.clear()
-        loadTransactions()
         if (walletData!!.syncing) {
             no_history.setText(R.string.synchronizing)
-            println("Going back, Hiding swipe to refresh")
             swipe_refresh_layout2.isRefreshing = false
             return
         }
+
         getBalance()
         hideSyncIndicator()
+
         object : Thread() {
             override fun run() {
                 try {
-                    println("Getting transactions")
-                    walletData!!.wallet.getTransactions(this@OverviewFragment)
+
+                    val jsonResult = walletData!!.wallet.getTransactions(getMaxDisplayItems())
+
+                    val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
+                            .create()
+
+                    val transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
+                    if (transactions.isEmpty()) {
+                        activity!!.runOnUiThread {
+                            no_history.setText(R.string.no_transactions)
+                            history_recycler_view2.visibility = View.GONE
+                            swipe_refresh_layout2.isRefreshing = false
+                        }
+                    } else {
+                        activity!!.runOnUiThread {
+                            transactionList.clear()
+                            transactionList.addAll(transactions)
+                            val latestTx = Collections.min<Transaction>(transactionList, TransactionComparator.MinConfirmationSort())
+                            latestTransactionHeight = latestTx.height + 1
+
+                            val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
+
+                            if (recentTransactionHash.isNotEmpty()) {
+                                val hashIndex = transactionList.find(recentTransactionHash)
+                                if (hashIndex == -1) {
+                                    // All transactions in this list is new
+                                    transactionList.animateNewItems(0, transactionList.size - 1)
+                                } else if (hashIndex != 0) {
+                                    transactionList.animateNewItems(0, hashIndex - 1)
+                                }
+                            } else {
+                                transactionList.animateNewItems(0, transactionList.size - 1)
+                            }
+
+                            util!!.set(Constants.RECENT_TRANSACTION_HASH, transactionList[0].hash)
+
+
+                            val txNotificationHash = util!!.get(Constants.TX_NOTIFICATION_HASH)
+                            println("Hash $txNotificationHash")
+
+                            if (txNotificationHash.isNotEmpty() && txNotificationHash != transactionList[0].hash) {
+                                val hashIndex = transactionList.find(txNotificationHash)
+                                val format = DecimalFormat(getString(R.string.you_received) + " #.######## DCR")
+
+                                if (hashIndex > 0) {
+                                    println("Hash is $hashIndex")
+                                    val subList = transactionList.subList(0, hashIndex)
+                                    subList.forEach {
+                                        if (it.direction == 1) {
+                                            val satoshi = BigDecimal.valueOf(it.amount)
+
+                                            val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
+                                            println("Sending Notifications for ${it.hash}")
+                                            Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutput.toInt() + it.timestamp.toInt())
+                                        } else {
+                                            println("Not Sending Notifications for ${it.hash}")
+                                        }
+                                    }
+                                } else if (hashIndex < 0) {
+                                    println("Hash is less $hashIndex")
+                                    val subList = transactionList.subList(0, transactionList.size - 1)
+                                    subList.forEach {
+                                        if (it.direction == 1) {
+                                            val satoshi = BigDecimal.valueOf(it.amount)
+
+                                            val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
+                                            Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutput.toInt() + it.timestamp.toInt())
+                                        }
+                                    }
+                                }
+                            }
+
+                            println("First Hash: " + transactionList[0].hash)
+                            util!!.set(Constants.TX_NOTIFICATION_HASH, transactionList[0].hash)
+
+                            history_recycler_view2.visibility = View.VISIBLE
+
+                            transactionAdapter!!.notifyDataSetChanged()
+                            swipe_refresh_layout2.isRefreshing = false
+                        }
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
         }.start()
-    }
-
-    private fun saveTransactions(transactions: ArrayList<TransactionsResponse.TransactionItem>) {
-        try {
-            if (activity == null || context == null) {
-                return
-            }
-
-            val path = File(context!!.filesDir.toString() + "/" + BuildConfig.NetType + "/" + "savedata/")
-            path.mkdirs()
-            val file = File(path, "transactions")
-            file.createNewFile()
-            val objectOutputStream = ObjectOutputStream(FileOutputStream(file))
-            objectOutputStream.writeObject(transactions)
-            objectOutputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun loadTransactions() {
-        try {
-            if (activity == null || context == null) {
-                return
-            }
-
-            val path = File(context!!.filesDir.toString() + "/" + BuildConfig.NetType + "/" + "savedata/")
-            path.mkdirs()
-            val file = File(path, "transactions")
-            if (file.exists()) {
-                val objectInputStream = ObjectInputStream(FileInputStream(file))
-                val temp = objectInputStream.readObject() as ArrayList<TransactionsResponse.TransactionItem>
-                if (temp.size > 0) {
-                    if (temp.size > getMaxDisplayItems()) {
-                        transactionList.addAll(temp.subList(0, getMaxDisplayItems()))
-                    } else {
-                        transactionList.addAll(temp)
-                    }
-                    val latestTx = Collections.min<TransactionsResponse.TransactionItem>(temp, TransactionComparator.MinConfirmationSort())
-                    latestTransactionHeight = latestTx.getHeight() + 1
-                }
-                activity!!.runOnUiThread { transactionAdapter!!.notifyDataSetChanged() }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        if (transactionList.size == 0) {
-            no_history.setText(R.string.no_transactions)
-            history_recycler_view2.visibility = View.GONE
-        } else {
-            history_recycler_view2.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onResult(json: String) {
-        if (activity == null || context == null) {
-            return
-        }
-        activity!!.runOnUiThread {
-            println("Got response")
-            if (swipe_refresh_layout2.isRefreshing) {
-                println("Hiding Layout")
-                swipe_refresh_layout2.isRefreshing = false
-            }
-            val response = TransactionsResponse.parse(json)
-            if (response.transactions.size == 0) {
-                no_history.setText(R.string.no_transactions)
-                history_recycler_view2.visibility = View.GONE
-            } else {
-                val transactions = response.transactions
-                Collections.sort<TransactionsResponse.TransactionItem>(transactions, TransactionComparator.TimestampSort())
-                val latestTx = Collections.min<TransactionsResponse.TransactionItem>(transactions, TransactionComparator.MinConfirmationSort())
-                latestTransactionHeight = latestTx.getHeight() + 1
-                transactionList.clear()
-                if (transactions.size > getMaxDisplayItems()) {
-                    transactionList.addAll(transactions.subList(0, getMaxDisplayItems()))
-                } else {
-                    transactionList.addAll(transactions)
-                }
-                history_recycler_view2.visibility = View.VISIBLE
-
-                transactionAdapter!!.notifyDataSetChanged()
-                saveTransactions(transactions)
-
-                val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
-
-                if (recentTransactionHash.isNotEmpty()) {
-                    val hashIndex = transactionList.find(recentTransactionHash)
-                    if (hashIndex == -1) {
-                        // All transactions in this list is new
-                        transactionList.animateNewItems(0, transactionList.size - 1)
-                    } else if (hashIndex != 0) {
-                        transactionList.animateNewItems(0, hashIndex - 1)
-                    }
-                } else {
-                    transactionList.animateNewItems(0, transactionList.size - 1)
-                }
-
-                util!!.set(Constants.RECENT_TRANSACTION_HASH, transactionList[0].hash)
-
-
-                val txNotificationHash = util!!.get(Constants.TX_NOTIFICATION_HASH)
-                println("Hash $txNotificationHash")
-
-                if (txNotificationHash.isNotEmpty() && txNotificationHash != transactions[0].hash) {
-                    val hashIndex = transactions.find(txNotificationHash)
-                    val format = DecimalFormat(getString(R.string.you_received) + " #.######## DCR")
-
-                    if (hashIndex > 0) {
-                        println("Hash is $hashIndex")
-                        val subList = transactions.subList(0, hashIndex)
-                        subList.forEach {
-                            if (it.direction == 1) {
-                                val satoshi = BigDecimal.valueOf(it.amount)
-
-                                val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
-                                println("Sending Notifications for ${it.hash}")
-                                Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutputs.toInt() + it.timestamp.toInt())
-                            } else {
-                                println("Not Sending Notifications for ${it.hash}")
-                            }
-                        }
-                    } else if (hashIndex < 0) {
-                        println("Hash is less $hashIndex")
-                        val subList = transactions.subList(0, transactions.size - 1)
-                        subList.forEach {
-                            if (it.direction == 1) {
-                                val satoshi = BigDecimal.valueOf(it.amount)
-
-                                val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
-                                Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutputs.toInt() + it.timestamp.toInt())
-                            }
-                        }
-                    }
-                }
-
-                println("First Hash: " + transactions[0].hash)
-                util!!.set(Constants.TX_NOTIFICATION_HASH, transactions[0].hash)
-
-            }
-        }
     }
 
     override fun onRefresh() {
@@ -480,7 +416,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         isForeground = false
     }
 
-    fun newTransaction(transaction: TransactionsResponse.TransactionItem) {
+    fun newTransaction(transaction: Transaction) {
 
         if (transactionList.find(transaction.hash) != -1) {
             // Transaction is a duplicate
@@ -492,7 +428,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         if (transactionList.size > getMaxDisplayItems()) {
             transactionList.removeAt(transactionList.size - 1)
         }
-        latestTransactionHeight = transaction.getHeight() + 1
+        latestTransactionHeight = transaction.height + 1
 
         if (activity == null) {
             return
@@ -502,7 +438,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
             history_recycler_view2.visibility = View.VISIBLE
             util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
             transactionAdapter!!.notifyDataSetChanged()
-            saveTransactions(transactionList)
             getBalance()
         }
     }
@@ -513,14 +448,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 val transaction = transactionList[i]
                 transaction.height = height
                 transaction.animate = false
-                latestTransactionHeight = transaction.getHeight() + 1
+                latestTransactionHeight = transaction.height + 1
                 transactionList[i] = transaction
                 transactionAdapter!!.notifyItemChanged(i)
                 break
             }
         }
 
-        saveTransactions(transactionList)
         getBalance()
     }
 
@@ -528,13 +462,12 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         if (height - latestTransactionHeight < 2) {
             for (i in transactionList.indices) {
                 val tx = transactionList[i]
-                if (height - tx.getHeight() >= 2) {
+                if (height - tx.height >= 2) {
                     continue
                 }
                 tx.animate = false
                 activity!!.runOnUiThread {
                     transactionAdapter!!.notifyItemChanged(i)
-                    saveTransactions(transactionList)
                 }
             }
         }
@@ -611,7 +544,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         }
     }
 
-    private fun ArrayList<TransactionsResponse.TransactionItem>.find(hash: String): Int {
+    private fun ArrayList<Transaction>.find(hash: String): Int {
         for (i in this.indices) {
             val item = this[i]
             if (item.hash == hash) {
@@ -621,11 +554,20 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
         return -1
     }
 
-    private fun ArrayList<TransactionsResponse.TransactionItem>.animateNewItems(start: Int, count: Int) {
+    private fun ArrayList<Transaction>.animateNewItems(start: Int, count: Int) {
         for (i: Int in start..count) {
             val item = this[i]
             item.animate = true
             transactionAdapter!!.notifyItemChanged(i)
+        }
+    }
+
+    private fun ArrayList<Transaction>.removeDuplicates(txList: ArrayList<Transaction>) {
+        for (transaction in txList) {
+            val index = this.find(transaction.hash)
+            if (index != -1) {
+                this.removeAt(index)
+            }
         }
     }
 }
