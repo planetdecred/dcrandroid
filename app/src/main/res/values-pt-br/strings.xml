@@ -3,55 +3,54 @@
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
   -->
+<?xml version='1.0' encoding='UTF-8'?>
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--General-->
-    <string name="wallet">Wallet</string>
-    <string name="crash_dialog_text">An unexpected error occurred forcing the
-    application to stop. Please help us fix this by sending us your device specification and app log,
-    all you have to do is click OK. This will help us prevent the error from occurring again</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="label_keys">Keys</string>
-    <string name="label_properties">Properties</string>
-    <string name="require_to_send_fund">Required to send funds</string>
-    <string name="add_an_account">ADD AN ACCOUNT</string>
-    <string name="available_balance">AVAILABLE BALANCE</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
-    <string name="max">SEND MAX</string>
-    <string name="type">Type</string>
-    <string name="loading">Loading</string>
-    <string name="loading_ellipsis">Loading…</string>
-    <string name="date">Date</string>
+    <string name="wallet">Carteira</string>
+    <string name="crash_dialog_text">Um erro inesperado ocorreu forçando a parada da aplicação. Por favor nos ajude a consertar isso, envie a especifícação do seu aparelho e o registro (log) do aplicativ, basta apertear o botão OK. Isso nos ajudará a prevenir que esse erro ocorrá novamente.</string>
+    <string name="navigation_drawer_open">Abrir palheta de navegação</string>
+    <string name="navigation_drawer_close">Fechar palheta de navegaçãoClose navigation drawer</string>
+    <string name="label_keys">Chaves</string>
+    <string name="label_properties">Propriedades</string>
+    <string name="require_to_send_fund">Necessário enviar fundos</string>
+    <string name="add_an_account">ADICIONAR UMA CONTA</string>
+    <string name="available_balance">SALDO DISPONÍVEL</string>
+    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Insira ou escaneie o endereço da carteira de destino e o valor em DCR para enviar fundos.</string>
+    <string name="max">ENVIAR MÁX</string>
+    <string name="type">Tipo</string>
+    <string name="loading">Carregando</string>
+    <string name="loading_ellipsis">Carregando...</string>
+    <string name="date">Data</string>
     <string name="dcr" translatable="false">DCR</string>
-    <string name="help">Help</string>
-    <string name="history">History</string>
-    <string name="overview">Overview</string>
-    <string name="permission">Permission</string>
-    <string name="denied_permission">You denied the permission!!!</string>
-    <string name="error_bundle_null">Error occurred, Bundle is null</string>
-    <string name="receive">Receive</string>
-    <string name="tickets">Tickets</string>
-    <string name="amount_dcr">Amount</string>
-    <string name="send">Send</string>
-    <string name="sending">Sending</string>
-    <string name="cancel">Cancel</string>
-    <string name="done">Done</string>
+    <string name="help">Ajuda</string>
+    <string name="history">Histórico</string>
+    <string name="overview">Visão Geral</string>
+    <string name="permission">Permissão</string>
+    <string name="denied_permission">Voce negou a permissão!!!</string>
+    <string name="error_bundle_null">Ocorreu um erro, Bundle está nulo</string>
+    <string name="receive">Receber</string>
+    <string name="tickets">Bilhetes</string>
+    <string name="amount_dcr">Quantidade</string>
+    <string name="send">Enviar</string>
+    <string name="sending">Enviando</string>
+    <string name="cancel">Cancelar</string>
+    <string name="done">Feito</string>
     <string name="hash">Hash</string>
-    <string name="connection">Connection</string>
-    <string name="certificate">Certificate</string>
-    <string name="confirmations">Confirmation</string>
+    <string name="connection">Conexão</string>
+    <string name="certificate">Certificado</string>
+    <string name="confirmations">Confirmação</string>
     <string name="testnet">testnet</string>
-    <string name="general">General</string>
-    <string name="view_on_dcrdata">view on dcrdata</string>
-    <string name="build_date">Build Date</string>
-    <string name="build">build</string>
-    <string name="copy_on_tap">(copy on tap)</string>
-    <string name="for_more_information_please_visit">For more information please visit</string>
+    <string name="general">Geral</string>
+    <string name="view_on_dcrdata">ver em dcrdata</string>
+    <string name="build_date">Data de construção</string>
+    <string name="build">construir</string>
+    <string name="copy_on_tap">(copiar em um toque)</string>
+    <string name="for_more_information_please_visit">Para mais informações visite</string>
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
-    <string name="exit_app_prompt_title">Exit wallet?</string>
-    <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
-    <string name="delete_wallet_prompt_title">Delete Wallet?</string>
+    <string name="exit_app_prompt_title">Sair da carteira?</string>
+    <string name="exit_app_prompt_message">Voce tem certeza que deseja sair?</string>
+    <string name="delete_wallet_prompt_title">Apagar carteira?</string>
     <string name="delete_wallet_prompt_message">Are you sure you want to delete your wallet? Make sure you have your wallet seed saved or your coins moved before deleting. This will also clear all app settings to a default state.</string>
     <string name="details">Details</string>
     <string name="setting">Setting</string>
@@ -154,6 +153,12 @@
     <string name="connected_to_remote_node">Connected To Remote Node</string>
     <string name="connecting_to_rpc_server">Connecting to RPC Server</string>
     <string name="connecting_attempt">Connecting attempt</string>
+
+    <!--Account-->
+    <string name="account">Account</string>
+    <string name="accounts">Accounts</string>
+    <string name="account_number">Account Number</string>
+ 
     <string name="rpc_connection_failed">RPC Connection Failed:</string>
     <!--/Peers-->
 
@@ -165,6 +170,7 @@
     <string name="spinner_account">Account:</string>
     <string name="input_your_new_account_name_and_enter_your_private_passphrase">Input your new account name and enter your private passphrase</string>
     <string name="account_name">Account Name</string>
+export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="create_account">Create Account</string>
     <string name="add_account">Add account</string>
     <string name="creating_account">Creating account…</string>
