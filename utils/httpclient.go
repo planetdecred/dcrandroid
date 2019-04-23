@@ -1,4 +1,4 @@
-package dcrlibwallet
+package utils
 
 import (
 	"bytes"
@@ -39,11 +39,11 @@ func newHTTPClient(cert string) (*http.Client, error) {
 	return &client, nil
 }
 
-// sendPostRequest sends the marshalled JSON-RPC command using HTTP-POST mode
+// SendPostRequest sends the marshalled JSON-RPC command using HTTP-POST mode
 // to the server described in the passed config struct.  It also attempts to
 // unmarshal the response as a JSON-RPC response and returns either the result
 // field or the error field depending on whether or not there is an error.
-func sendPostRequest(marshalledJSON []byte, rpcServer string, username string, password string, cert string) ([]byte, error) {
+func SendPostRequest(marshalledJSON []byte, rpcServer string, username string, password string, cert string) ([]byte, error) {
 	// Generate a request to the configured RPC server.
 	protocol := "https"
 	url := protocol + "://" + rpcServer

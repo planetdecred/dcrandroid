@@ -30,4 +30,6 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20190104051053-3adb47b1fb0f // indirect
 	github.com/jrick/logrotate v1.0.0
 	github.com/pkg/errors v0.8.1 // indirect
+	go.etcd.io/bbolt v1.3.0
+	google.golang.org/appengine v1.5.0 // indirect
 )

@@ -33,7 +33,7 @@ type Accounts struct {
 	ErrorMessage       string
 	ErrorCode          int
 	ErrorOccurred      bool
-	Acc                *[]Account
+	Acc                []*Account
 	CurrentBlockHash   []byte
 	CurrentBlockHeight int32
 }
@@ -79,12 +79,6 @@ type TransactionCredit struct {
 	Address  string
 }
 
-type TransactionListener interface {
-	OnTransaction(transaction string)
-	OnTransactionConfirmed(hash string, height int32)
-	OnBlockAttached(height int32, timestamp int64)
-}
-
 type DecodedTransaction struct {
 	Hash     string
 	Type     string
@@ -113,46 +107,3 @@ type DecodedOutput struct {
 	ScriptType string
 	Addresses  []string
 }
-
-type SpvSyncResponse interface {
-	OnPeerConnected(peerCount int32)
-	OnPeerDisconnected(peerCount int32)
-	OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd int32, state string)
-	OnFetchedHeaders(fetchedHeadersCount int32, lastHeaderTime int64, state string)
-	OnDiscoveredAddresses(state string)
-	OnRescan(rescannedThrough int32, state string)
-	OnIndexTransactions(totalIndex int32)
-	OnSynced(synced bool)
-	/*
-	* Handled Error Codes
-	* -1 - Unexpected Error
-	*  1 - Context Canceled
-	*  2 - Deadline Exceeded
-	*  3 - Invalid Address
-	 */
-	OnSyncError(code int, err error)
-}
-
-const (
-	// Error Codes
-	ErrInsufficientBalance = "insufficient_balance"
-	ErrInvalid             = "invalid"
-	ErrWalletNotLoaded     = "wallet_not_loaded"
-	ErrPassphraseRequired  = "passphrase_required"
-	ErrInvalidPassphrase   = "invalid_passphrase"
-	ErrNotConnected        = "not_connected"
-	ErrNotExist            = "not_exists"
-	ErrEmptySeed           = "empty_seed"
-	ErrInvalidAddress      = "invalid_address"
-	ErrInvalidAuth         = "invalid_auth"
-	ErrUnavailable         = "unavailable"
-	ErrContextCanceled     = "context_canceled"
-	ErrFailedPrecondition  = "failed_precondition"
-	ErrNoPeers             = "no_peers"
-
-	//Sync States
-
-	START    = "start"
-	FINISH   = "finish"
-	PROGRESS = "progress"
-)
