@@ -183,166 +183,166 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <!--/Account-->
 
     <!--Seed-->
-    <string name="save_seed_instruction">Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet.</string>
-    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Each field contains only one correct word. Please confirm your seed by selecting the correct words.</string>
+    <string name="save_seed_instruction">Escreva abaixo a semente (seed phrase) e guarde-a em um local seguro. Voce será perguntado para inseri-la na próxima tela e também para recuperar sua carteira.</string>
+    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Cada campo contém apenas uma palavra correta. Por favor confirme sua semente (seed phrase) ao selecionar as palavras corretas.</string>
     <string name="start_typing_the_word_and_tap_correct_from_list">Start typing the word and then tap the correct word from the suggestion list.</string>
-    <string name="enter_your_seed">Enter your seed…</string>
-    <string name="theInputFieldIsEmpty">The input fields is empty. Please, enter the words.</string>
-    <string name="error_seed_not_generated">Error occurred, Seed was not generated</string>
-    <string name="warning_save_seed">Failure to keep this seed safe can result in theft of your entire wallet or inability to recover your wallet.</string>
-    <string name="tap_to_select">Tap to select the word</string>
-    <string name="restore_wallet_incorrect_seed_input">You entered an incorrect seed. Please check your words.</string>
-    <string name="create_wallet_incorrect_seeds_input">You selected an incorrect word. Please recheck.</string>
-    <string name="i_copied_the_seed_phrase">I copied the seed phrase</string>
-    <string name="seed_phrase_verification">Seed Phrase Verification</string>
-    <string name="seed_restore">Seed Restore</string>
-    <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
-    <string name="correctWordIs">Word #</string>
+    <string name="enter_your_seed">Insira sua semente...</string>
+    <string name="theInputFieldIsEmpty">As entradas estão vazias. Por favor, insira as palavras.</string>
+    <string name="error_seed_not_generated">Ocorreu um erro, semente não gerada</string>
+    <string name="warning_save_seed">Falha em manter essa semente segura, poderá resultar em extravio da sua carteira ou inviabilidadede para recuperar sua carteira.</string>
+    <string name="tap_to_select">Aperte para selecionar a palavra</string>
+    <string name="restore_wallet_incorrect_seed_input">Voce inseriu uma semente incorreta. Por favor, verifique suas palavras..</string>
+    <string name="create_wallet_incorrect_seeds_input">Voce selecionou uma palavra incorreta. Por favor verifique novamente.</string>
+    <string name="i_copied_the_seed_phrase">Eu copiei a semente (seed phrase)</string>
+    <string name="seed_phrase_verification">Verificação DaSemente</string>
+    <string name="seed_restore">Restaurar Semente</string>
+    <string name="notAllSeedsEntered">Todas as sementes não foram inseridas. Por favor, verifique os campos de inserção e coloque todas as sementes.</string>
+    <string name="correctWordIs">Palavra #</string>
     <!--/Seed-->
 
     <!--Balance-->
-    <string name="label_spendable">Spendable</string>
-    <string name="immature_stake_generation">Immature Stake Generation</string>
-    <string name="label_immature_rewards">Immature Rewards</string>
-    <string name="label_locked_by_tickets">Locked by Tickets</string>
-    <string name="label_voting_authority">Voting Authority</string>
-    <string name="current_total_balance">Current Total Balance</string>
-    <string name="amount_colon">Amount:</string>
-    <string name="equivalent_colon">Equivalent:</string>
-    <string name="balance_remaining_colon">Balance Remaining:</string>
-    <string name="total_balance">Total Balance</string>
+    <string name="label_spendable">Disponível para gasto</string>
+    <string name="immature_stake_generation">Geração De Stake Imaturo</string>
+    <string name="label_immature_rewards">Recompensas Imaturas</string>
+    <string name="label_locked_by_tickets">Travada Para Tickets</string>
+    <string name="label_voting_authority">Votando Autoridade</string>
+    <string name="current_total_balance">Saldo Total Atual</string>
+    <string name="amount_colon">Quantidade:</string>
+    <string name="equivalent_colon">Equivalente:</string>
+    <string name="balance_remaining_colon">Saldo Restante:</string>
+    <string name="total_balance">Saldo Total</string>
     <!--/Balance-->
 
     <!--Wallet-->
-    <string name="setting_up_dcrandroid">Setting Up Decred Wallet</string>
-    <string name="create_wallet">Create Wallet</string>
-    <string name="create_a_new_wallet">Create a New Wallet</string>
-    <string name="restore_existing_wallet">Restore Existing Wallet</string>
-    <string name="recover_wallet">Recover Wallet</string>
-    <string name="private_passphrase">Private Passphrase</string>
-    <string name="opening_wallet">Opening wallet…</string>
-    <string name="input_private_phrase">Enter your private passphrase</string>
-    <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
-    <string name="enter_your_passphrase">Enter your passphrase</string>
-    <string name="invalid_passphrase">Passphrase entered was not valid.</string>
-    <string name="invalid_pin">PIN entered was not valid.</string>
-    <string name="invalid_current_pin">Current PIN entered was not valid.</string>
-    <string name="invalid_password">Password entered was not valid.</string>
-    <string name="invalid_current_password">Current password entered was not valid.</string>
-    <string name="creating_wallet">Creating wallet…</string>
-    <string name="failed_to_open_wallet">Failed to open wallet</string>
+    <string name="setting_up_dcrandroid">Preparando Carteira Decred</string>
+    <string name="create_wallet">Criar Carteira</string>
+    <string name="create_a_new_wallet">Criar Nova Carteira</string>
+    <string name="restore_existing_wallet">Restaurar Carteira Existente</string>
+    <string name="recover_wallet">Reuperar Carteira</string>
+    <string name="private_passphrase">Chave Privada</string>
+    <string name="opening_wallet">Abrindo Carteira...</string>
+    <string name="input_private_phrase">Insira sua senha privada</string>
+    <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Criar ou recuperar sua carteira e \niniciar sua gestão de decred.</string>
+    <string name="enter_your_passphrase">Insira sua senha</string>
+    <string name="invalid_passphrase">Senha inserida não é válida.</string>
+    <string name="invalid_pin">PIN inserido não é válido.</string>
+    <string name="invalid_current_pin">PIN atual inserido não é válido.</string>
+    <string name="invalid_password">Senha inserida não é válida.</string>
+    <string name="invalid_current_password">Senha atual inserida não é válida.</string>
+    <string name="creating_wallet">Criando carteira...</string>
+    <string name="failed_to_open_wallet">Falha ao abrir carteira</string>
     <!--/Wallet-->
 
     <!--Transaction-->
-    <string name="recent_transactions">Recent Transactions</string>
-    <string name="receive_funds">Receive Funds</string>
-    <string name="sending_decred">Sending Decred</string>
-    <string name="fee_cap">FEE</string>
-    <string name="from_colon">From:</string>
-    <string name="to_colon">To:</string>
-    <string name="confirmed">Confirmed</string>
-    <string name="destination_address">Destination Address</string>
-    <string name="estimate_size">Estimate Size:</string>
-    <string name="transaction_fee">Transaction fee</string>
-    <string name="Transaction_details">Transaction details</string>
-    <string name="transaction_confirmation">Please confirm transaction for</string>
-    <string name="tx_hash_copy">Hash copied to clipboard</string>
-    <string name="tx_notify_title">Incoming Transaction Notifications</string>
-    <string name="no_transactions">No transactions</string>
-    <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
+    <string name="recent_transactions">Transações Recentes</string>
+    <string name="receive_funds">Receber Fundos</string>
+    <string name="sending_decred">Enviar Decred</string>
+    <string name="fee_cap">TAXA</string>
+    <string name="from_colon">De:</string>
+    <string name="to_colon">Para:</string>
+    <string name="confirmed">Confirmar</string>
+    <string name="destination_address">Endereço de destino</string>
+    <string name="estimate_size">Estimar tamanho:</string>
+    <string name="transaction_fee">Taxa da transação</string>
+    <string name="Transaction_details">Detalhes da transação</string>
+    <string name="transaction_confirmation">Por favor confirme a transação para</string>
+    <string name="tx_hash_copy">Hash copiada para área de transferência</string>
+    <string name="tx_notify_title">Notificações de transações recebidas</string>
+    <string name="no_transactions">Sem transações</string>
+    <string name="publish_unmined_transaction">Publicar transações não mineradas</string>
     <string name="label_hash">HASH:</string>
-    <string name="transaction">Transaction</string>
-    <string name="TxType">Type</string>
-    <string name="status">Status</string>
+    <string name="transaction">Transação</string>
+    <string name="TxType">Tipo</string>
+    <string name="status">Estado</string>
     <string name="hash_colon">HASH:</string>
-    <string name="pending">Pending</string>
-    <string name="unconfirmed">unconfirmed</string>
-    <string name="change_bracket">(change)</string>
+    <string name="pending">Pendente</string>
+    <string name="unconfirmed">não confirmadas</string>
+    <string name="change_bracket">(mudar)</string>
     <string name="script_bracket">[script]</string>
-    <string name="external_bracket">(external)</string>
-    <string name="null_data_bracket">[null data]</string>
-    <string name="raw_tx_copied">Raw transaction copied to clipboard</string>
-    <string name="vote">Vote</string>
-    <string name="confirmed_immature">Confirmed / Immature</string>
-    <string name="confirmed_live">Confirmed / Live</string>
+    <string name="external_bracket">(externa)</string>
+    <string name="null_data_bracket">[dados nulos]</string>
+    <string name="raw_tx_copied">Transação bruta copiada para área de transferência</string>
+    <string name="vote">Votar</string>
+    <string name="confirmed_immature">Confirmada / Immatura</string>
+    <string name="confirmed_live">Confirmada / Live</string>
     <string name="ticket">Ticket</string>
-    <string name="empty_destination_address">Destination address can not be empty.</string>
-    <string name="invalid_destination_address">Destination address is not valid.</string>
-    <string name="empty_amount">Amount cannot be empty</string>
-    <string name="processing_colon">Processing…</string>
-    <string name="confirm_send_funds">Please confirm to send funds</string>
-    <string name="transaction_was_successful">Transaction Was Successful</string>
-    <string name="amount_invalid_decimal_places">Amount has more then 8 decimal places</string>
-    <string name="invalid_amount">Amount is not valid</string>
-    <string name="new_transaction">New Transaction</string>
-    <string name="latest_block">Latest Block</string>
-    <string name="copy_raw_transaction">Copy raw transaction</string>
-    <string name="tap_this_to_copy_raw_transaction_hex">Tap this to copy raw transaction hex</string>
-    <string name="tap_this_to_copy_transaction_hash">Tap this to copy transaction hash</string>
-    <string name="copy_hash">Copy hash</string>
+    <string name="empty_destination_address">Destino do endereço não pode ser vazio.</string>
+    <string name="invalid_destination_address">Endereço de destino inválido.</string>
+    <string name="empty_amount">Quantia não pode ser vazia</string>
+    <string name="processing_colon">Processando...</string>
+    <string name="confirm_send_funds">Por favor confirme o envio dos saldos</string>
+    <string name="transaction_was_successful">Transação bem sucedida</string>
+    <string name="amount_invalid_decimal_places">Quantidade tem mais que 8 casas decimais</string>
+    <string name="invalid_amount">Quantia não é válida</string>
+    <string name="new_transaction">Nova Transação</string>
+    <string name="latest_block">Último Bloco</string>
+    <string name="copy_raw_transaction">Copiar transação brutra</string>
+    <string name="tap_this_to_copy_raw_transaction_hex">Aperte para copiar o hexadecimal da transação bruta</string>
+    <string name="tap_this_to_copy_transaction_hash">Aperte para copiar hash da transação</string>
+    <string name="copy_hash">Copiar hash</string>
     <!--/Transaction-->
 
     <!--Block chain-->
-    <string name="rescan_block">Rescan Blockchain</string>
-    <string name="starting_height">starting height</string>
-    <string name="current_height">Current height</string>
-    <string name="rescan_blocks_confirmation">Are you sure? This could take some time.</string>
+    <string name="rescan_block">Re-escanear Blockchain</string>
+    <string name="starting_height">altura inicial</string>
+    <string name="current_height">altura atual</string>
+    <string name="rescan_blocks_confirmation">Voce tem certeza? Isso levará algum tempo.</string>
     <!--/Block chain-->
 
     <!--Sync Messages-->
-    <string name="fetching_headers">Fetching block headers.</string>
-    <string name="blocks_behind">%1$d blocks behind.</string>
-    <string name="discovering_used_addresses">Discovering used addresses.</string>
-    <string name="remaining_minute_sync_eta">%1$d%% completed, %2$d min remaining.</string>
-    <string name="remaining_seconds_sync_eta">%1$d%% completed, %2$d sec remaining.</string>
-    <string name="remaining_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds remaining.</string>
-    <string name="left_minute_sync_eta">%1$d%% completed, %2$d min left.</string>
-    <string name="left_seconds_sync_eta">%1$d%% completed, %2$d sec left.</string>
-    <string name="left_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds left.</string>
-    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.</string>
-    <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
-    <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
-    <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
-    <string name="overview_rescan_height_format">Scanning %1$d of %2$d block headers.\n%3$d%% through step 3 of 3.</string>
-    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$d%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
-    <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
-    <string name="overview_discovering_used_addresses">Discovering used addresses.\n~%1$d%% through step 2 of 3.</string>
-    <string name="overview_discovering_used_addresses_over">Discovering used addresses.\n~%1$d%% (over) through step 2 of 3.</string>
-    <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
-    <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
-    <string name="synchronizing">Synchronizing</string>
-    <string name="starting_synchronization">Starting Synchronization…</string>
-    <string name="rescanning_in_progress">Rescanning in progress…</string>
-    <string name="scanning_blocks">Scanning blocks.</string>
-    <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
-    <string name="syncing_peers_testnet">Syncing with %1$d peers on testnet.</string>
-    <string name="one_syncing_peer_testnet">Syncing with 1 peer on testnet.</string>
-    <string name="syncing_peers_mainnet">Syncing with %1$d peers on mainnet.</string>
-    <string name="one_syncing_peer_mainnet">Syncing with 1 peer on mainnet.</string>
-    <string name="sync_status_verbose">All Times\nelapsed: %1$s, remain: %2$s, total: %3$s\n\nStage Times\nelapsed: %4$s, remain: %5$s, total: %6$s</string>
+    <string name="fetching_headers">Buscando cabeçalhos de bloco.</string>
+    <string name="blocks_behind">%1$d blocos atrasados.</string>
+    <string name="discovering_used_addresses">Descobrindo endereços usados.</string>
+    <string name="remaining_minute_sync_eta">%1$d%% completados, %2$d min. restantes.</string>
+    <string name="remaining_seconds_sync_eta">%1$d%% completados, %2$d seg. restantes.</string>
+    <string name="remaining_sync_eta_less_than_seconds">%1$d%% completados, &lt;1 segundo resta.</string>
+    <string name="left_minute_sync_eta">%1$d%% completado, %2$d min. faltam.</string>
+    <string name="left_seconds_sync_eta">%1$d%% completado, %2$d seg. faltam.</string>
+    <string name="left_sync_eta_less_than_seconds">%1$d%% completado, &lt;1 seg. faltante.</string>
+    <string name="percentage_completed">%1$.1f%% completado, %2$s min. restam.</string>
+    <string name="rescan_height_format">(3/3) Escaneando %1$d de %2$d blocos.</string>
+    <string name="notification_rescan_height_format">Escaneando %1$d de %2$d blocos.</string>
+    <string name="status_rescan_height_format">Escaneando %1$d de %2$d blocos. (%3$.1f%%)</string>
+    <string name="overview_rescan_height_format">Escaneando %1$d de %2$d cabeçalhos de blocos.\n%3$d%% passo 3 of 3.</string>
+    <string name="fetched_header_format">Buscados %1$d of ~%2$d cabeçalhos de bloco.\n%3$d%% passo 1 of 3.\nSua carteira está %4$s atrás.</string>
+    <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Buscando cabeçalhos</string>
+    <string name="overview_discovering_used_addresses">Descobrindo endereços usados.\n~%1$d%% passo 2 of 3.</string>
+    <string name="overview_discovering_used_addresses_over">Descobrindo endereços usados.\n~%1$d%% ao longo do passo 2 of 3.</string>
+    <string name="overview_sync_status_mainnet">Sincronizando com rede Decred Principal (Mainnet)</string>
+    <string name="overview_sync_status_testnet">Sincronizando com rede Decred Teste (Testnet)</string>
+    <string name="synchronizing">Sincronizando</string>
+    <string name="starting_synchronization">Iniciando Sincronização...</string>
+    <string name="rescanning_in_progress">Escaneamento em progresso...</string>
+    <string name="scanning_blocks">Escaneando blocos.</string>
+    <string name="check_progress_in_navigation_bar">Verifique o progresso na barra de navegação.</string>
+    <string name="syncing_peers_testnet">Sincronizando %1$d nó na testnet.</string>
+    <string name="one_syncing_peer_testnet">Sincronizando com 1 nó na testnet.</string>
+    <string name="syncing_peers_mainnet">Sincronizando com %1$d nós na mainnet.</string>
+    <string name="one_syncing_peer_mainnet">Sincronizando com 1 nó na mainnet.</string>
+    <string name="sync_status_verbose">Tempo\ndecorrido: %1$s, resta: %2$s, total: %3$s\n\nEstágio De Tempo\ndecorrido: %4$s, resta: %5$s, total: %6$s</string>
     <!--/Sync Messages-->
 
     <!--QR Code-->
-    <string name="camera_permission_scan">This application needs camera permission to scan QRCode for a wallet address , Please allow the permissions in the next dialog.</string>
-    <string name="scan_info">Scan a QRCode to retrieve a decred wallet address</string>
-    <string name="scan">Scan Address QR Code</string>
-    <string name="qr_code_help_text">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
+    <string name="camera_permission_scan">Essa aplicação necessita de permissão a câmera para escanear o código QTR para um endereço de uma carteira, por favor permita o acesso no próximo diálogo.</string>
+    <string name="scan_info">Escaneie o código QR Scan a QRCode recuperar um endereço de carteira decred</string>
+    <string name="scan">Escanear código QR do endereço</string>
+    <string name="qr_code_help_text">Insira ou escaneie o endereço da carteira de destino\ne a quantidade emDCR para enviar os fundos.</string>
     <!--/QR Code-->
 
     <!--Address-->
-    <string name="notification_discovering_used_addresses">(2/3) Discovering used addresses…</string>
-    <string name="address_copy_text">Address copied to clipboard</string>
-    <string name="your_address">Your address</string>
-    <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
-    <string name="generate_new_address">Generate new address</string>
-    <string name="receive_fund_privacy_info">Each time you request a payment, a new address is created to protect your privacy.</string>
-    <string name="error_not_decred_address">This is not a DCR wallet address</string>
-    <string name="wallet_addr_too_long">Wallet Address Is Too Long</string>
-    <string name="wallet_add_too_short">Wallet Address Is Too Short</string>
-    <string name="invalid_address">Not a valid address.</string>
-    <string name="owned_validate_address">Address is valid and you own it.</string>
-    <string name="external_validate_address"><![CDATA[<font color="red">Address is valid and you do <b>NOT</b> own it.</font>]]></string>
-    <string name="paste_from_clipboard">Paste Address From Clipboard</string>
+    <string name="notification_discovering_used_addresses">(2/3) Descobrindo endereços utilizados...</string>
+    <string name="address_copy_text">Endereço copiado para área de transferência</string>
+    <string name="your_address">Seu endereço</string>
+    <string name="error_occurred_getting_address">Erro ocorreu na tentativa de conseguiro endereço para a conta:</string>
+    <string name="generate_new_address">Gerar novo endereço</string>
+    <string name="receive_fund_privacy_info">Cada vez que um pagamento é requerido, um novo endereço é criado para proteger sua privacidade.</string>
+    <string name="error_not_decred_address">Isso não é um endereço de carteira DCR</string>
+    <string name="wallet_addr_too_long">Endereço de carteira é muito longo</string>
+    <string name="wallet_add_too_short">Endereço de carteira é muito curto</string>
+    <string name="invalid_address">Endereço inválido.</string>
+    <string name="owned_validate_address">Endereço válido e você é o proprietário.</string>
+    <string name="external_validate_address"><![CDATA[<font color="red">Endereço válido e voce <b>NÃO</b> é o proprietário.</font>]]></string>
+    <string name="paste_from_clipboard">Colar endereço da área de transferência</string>
     <!--/Address-->
 
     <!--Preference-->
