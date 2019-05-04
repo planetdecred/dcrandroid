@@ -8,9 +8,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--General-->
     <string name="wallet">Carteira</string>
-    <string name="crash_dialog_text">Um erro inesperado ocorreu forçando a parada da aplicação. Por favor nos ajude a consertar isso, envie a especifícação do seu aparelho e o registro (log) do aplicativ, basta apertear o botão OK. Isso nos ajudará a prevenir que esse erro ocorrá novamente.</string>
+    <string name="crash_dialog_text">Um erro inesperado ocorreu forçando a parada da aplicação. Por favor nos ajude a consertar isso, envie a especifícação do seu aparelho e o registro (log) do aplicativo, basta apertear o botão OK. Isso nos ajudará a prevenir que esse erro ocorra novamente.</string>
     <string name="navigation_drawer_open">Abrir palheta de navegação</string>
-    <string name="navigation_drawer_close">Fechar palheta de navegaçãoClose navigation drawer</string>
+    <string name="navigation_drawer_close">Fechar palheta de navegação</string>
     <string name="label_keys">Chaves</string>
     <string name="label_properties">Propriedades</string>
     <string name="require_to_send_fund">Necessário enviar fundos</string>
@@ -51,135 +51,135 @@
     <string name="exit_app_prompt_title">Sair da carteira?</string>
     <string name="exit_app_prompt_message">Voce tem certeza que deseja sair?</string>
     <string name="delete_wallet_prompt_title">Apagar carteira?</string>
-    <string name="delete_wallet_prompt_message">Are you sure you want to delete your wallet? Make sure you have your wallet seed saved or your coins moved before deleting. This will also clear all app settings to a default state.</string>
-    <string name="details">Details</string>
-    <string name="setting">Setting</string>
-    <string name="hide_this_account">Hide This Account</string>
-    <string name="account_balance_will_be_ignored">Account balance will be ignored.</string>
-    <string name="default_account">Default Account</string>
-    <string name="exit_cap">EXIT</string>
-    <string name="hidden">hidden</string>
-    <string name="delete">Delete</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
-    <string name="confirm">Confirm</string>
+    <string name="delete_wallet_prompt_message">Voce tem certeza que deseja apagar sua carteira? Assegure-se de guardar sua semente (seed) antes de remover suas moedas. Isso limpará todas as configurações do aplicativo para o estado padrão.</string>
+    <string name="details">Detalhes</string>
+    <string name="setting">Configurações</string>
+    <string name="hide_this_account">Ocultar Essa Conta</string>
+    <string name="account_balance_will_be_ignored">Saldo Da Conta Será Ignorado.</string>
+    <string name="default_account">Conta Padrão</string>
+    <string name="exit_cap">SAIR</string>
+    <string name="hidden">Ocultar</string>
+    <string name="delete">Apagar</string>
+    <string name="no">Não</string>
+    <string name="yes">Sim</string>
+    <string name="confirm">Confirmar</string>
     <string name="usd" translatable="false">USD</string>
     <string name="hyphen" translatable="false">-</string>
-    <string name="bittrex_unavailable">Bittrex rate unavailable (tap to retry)</string>
-    <string name="coming_soon">Coming soon…</string>
-    <string name="settings">Settings</string>
-    <string name="changes_after_restart">Changes will take effect after app restarts</string>
-    <string name="view_cap">VIEW</string>
-    <string name="close_cap">CLOSE</string>
-    <string name="exchange_rate_error">Exchange failed with error:</string>
-    <string name="exchange_rate_unavailable"> rate unavailable (tap to retry)</string>
-    <string name="ago">ago</string>
-    <string name="now">now</string>
-    <string name="you_received">You received</string>
-    <string name="disconnected">Disconnected</string>
-    <string name="synced_with_one_peer">Synced with 1 peer</string>
-    <string name="syncing_with_one_peer">Syncing with 1 peer</string>
-    <string name="synced_with_multiple_peer">Synced with %1$d peers</string>
+    <string name="bittrex_unavailable">Preço da Bittrex não disponível (aperte para tentar novamente) </string>
+    <string name="coming_soon">Em breve...</string>
+    <string name="settings">Configurações</string>
+    <string name="changes_after_restart">Mudanças terão efeitos após reinicializar o aplicativo</string>
+    <string name="view_cap">VER</string>
+    <string name="close_cap">FECHAR</string>
+    <string name="exchange_rate_error">Falha de erro com a exchange:</string>
+    <string name="exchange_rate_unavailable">Avaliação indisponível (aperte para tenta novamente)</string>
+    <string name="ago">atrás</string>
+    <string name="now">agora</string>
+    <string name="you_received">Voce reebeu</string>
+    <string name="disconnected">Descontectar</string>
+    <string name="synced_with_one_peer">Sincronizado com 1 nó</string>
+    <string name="syncing_with_one_peer">Sincronizando com 1 nó</string>
+    <string name="synced_with_multiple_peer">Sincronizado com %1$d nós</string>
     <string name="syncing_with_multiple_peer">Syncing with %1$d peers</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
-    <string name="log_file_not_found">Log file not found</string>
-    <string name="wallet_log_copied">Wallet log copied successfully</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="welcome_title">Welcome to Decred Wallet.</string>
-    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual. The wallet will connect to p2p nodes to download the blockchain headers, and will fetch only the blocks that you need while preserving your privacy.</string>
-    <string name="less_than_one_day">&lt;1 day</string>
-    <string name="less_than_one_day_ago">&lt;1 day ago</string>
-    <string name="one_day">1 day</string>
-    <string name="one_day_ago">1 day ago</string>
-    <string name="multiple_days">%1$d days</string>
-    <string name="multiple_days_ago">%1$d days ago</string>
-    <string name="copy">Copy</string>
-    <string name="copied_successfully">Copied successfully.</string>
-    <string name="all">All</string>
-    <string name="re_establishing_connection">Re-establishing connection</string>
-    <string name="address_not_found">The address not found.</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="clearAll">Clear All</string>
-    <string name="share">Share</string>
-    <string name="clear_fields">Clear fields</string>
-    <string name="deleting_wallet">Deleting Wallet…</string>
-    <string name="retry_caps">RETRY</string>
-    <string name="share_address_via">Share the QR code image to</string>
-    <string name="license">License</string>
+    <string name="log_file_not_found">Arquivo de registro (log) não encontrado</string>
+    <string name="wallet_log_copied">Registro (log) de carteira copiado com sucesso</string>
+    <string name="dismiss">Dispensado</string>
+    <string name="welcome_title">Bem vindos a carteira Decred.</string>
+    <string name="first_run_notice">Suas 33 palavras semente é sua carteira, mantenha ela segura. Sem a semente, seus fundos não podem ser recuperados caso seu  dispositivo seja perdido ou destruído.\n\nA sincronização inicial da carteira demora mais do que o habitual. A carteira conectará para um nó p2p para fazer o download dos cabeçalhos do blockchain, buscará apenas os blocos que você precisa, preservando sua privacidade.</string>
+    <string name="less_than_one_day">&lt;1 dia</string>
+    <string name="less_than_one_day_ago">&lt;1 dia atrás</string>
+    <string name="one_day">1 dia</string>
+    <string name="one_day_ago">1 dia atrás</string>
+    <string name="multiple_days">%1$d dias</string>
+    <string name="multiple_days_ago">%1$d dias atrás</string>
+    <string name="copy">Copiar</string>
+    <string name="copied_successfully">Cópia bem sucedida.</string>
+    <string name="all">Todas</string>
+    <string name="re_establishing_connection">Restabelecendo conexão</string>
+    <string name="address_not_found">Endereço não encontrado.</string>
+    <string name="copied_to_clipboard">Copiado para a área de transferência</string>
+    <string name="clearAll">Limpar tudo</string>
+    <string name="share">Compartilhar</string>
+    <string name="clear_fields">Limpar campos</string>
+    <string name="deleting_wallet">Apagando carteira...</string>
+    <string name="retry_caps">Repetir</string>
+    <string name="share_address_via">Compartilhar a imagem do código QR para</string>
+    <string name="license">Licença</string>
     <string name="key_license" translatable="false">license</string>
-    <string name="always">Always</string>
-    <string name="not_synced">Not Synced</string>
+    <string name="always">Sempre</string>
+    <string name="not_synced">Não sincronizado</string>
 
     <string-array name="nav_list_titles">
-        <item>Overview</item>
-        <item>History</item>
-        <item>Send</item>
-        <item>Receive</item>
-        <item>Accounts</item>
-        <item>Security</item>
-        <item>Settings</item>
-        <item>Help</item>
+        <item>Visão Global</item>
+        <item>Histórico</item>
+        <item>Enviar</item>
+        <item>Receber</item>
+        <item>Contas</item>
+        <item>Segurança</item>
+        <item>Configurações</item>
+        <item>Ajuda</item>
     </string-array>
     <!--/General-->
 
     <!--Peers-->
-    <string name="view_peers">View peers</string>
+    <string name="view_peers">Ver nós</string>
     <string name="id" translatable="false">Id</string>
     <string name="address_local" translatable="false">Address local</string>
-    <string name="services">Services</string>
+    <string name="services">Serviços</string>
     <string name="relaytxes" translatable="false">Relaytxes</string>
-    <string name="last_send">Last send</string>
-    <string name="last_receive">Last receive</string>
-    <string name="bytes_sent">Bytes sent</string>
-    <string name="bytes_receive">Bytes receive</string>
+    <string name="last_send">Último envio</string>
+    <string name="last_receive">Último recebimento</string>
+    <string name="bytes_sent">Bytes enviados</string>
+    <string name="bytes_receive">Bytes recebidos</string>
     <string name="conntime" translatable="false">Conntime</string>
-    <string name="time_offset">Time offset</string>
+    <string name="time_offset">Deslocamento de tempo</string>
     <string name="pingtime" translatable="false">Pingtime</string>
-    <string name="version">Version</string>
-    <string name="sub_version">Sub version</string>
+    <string name="version">Versão</string>
+    <string name="sub_version">Sub versão</string>
     <string name="inbound">Inbound</string>
     <string name="banscore" translatable="false">Banscore</string>
-    <string name="syncode">Syncode</string>
-    <string name="peer_details">Peer Details</string>
-    <string name="peers">Peers</string>
-    <string name="no_peer_found">No Peer Found</string>
-    <string name="get_peer_info">Get Peers Info</string>
-    <string name="summary_peers">View available peers and details</string>
-    <string name="connecting_to_peers">Connecting to peers</string>
-    <string name="invalid_peer_address">Peer address is invalid</string>
-    <string name="subscribe_to_block_notification">Subscribe to block notification</string>
-    <string name="discover_addresses">Discover addresses</string>
-    <string name="connected_to_remote_node">Connected To Remote Node</string>
-    <string name="connecting_to_rpc_server">Connecting to RPC Server</string>
-    <string name="connecting_attempt">Connecting attempt</string>
+    <string name="syncode">Código de sincronização</string>
+    <string name="peer_details">Detalhes do nó</string>
+    <string name="peers">Nós</string>
+    <string name="no_peer_found">Nenhum nó encontrado</string>
+    <string name="get_peer_info">Mostrar Informações Dos Nós</string>
+    <string name="summary_peers">Ver nós disponíveis e detalhes</string>
+    <string name="connecting_to_peers">Conectando aos nós</string>
+    <string name="invalid_peer_address">Endereço do nó inválido</string>
+    <string name="subscribe_to_block_notification">Assinar notificações do bloco</string>
+    <string name="discover_addresses">Descobrir endereços</string>
+    <string name="connected_to_remote_node">Conectar para um nó remoto</string>
+    <string name="connecting_to_rpc_server">Conectar para um servidor RPC</string>
+    <string name="connecting_attempt">Tentativa de conexão</string>
 
     <!--Account-->
-    <string name="account">Account</string>
-    <string name="accounts">Accounts</string>
-    <string name="account_number">Account Number</string>
+    <string name="account">Conta</string>
+    <string name="accounts">Contas</string>
+    <string name="account_number">Número da conta</string>
  
-    <string name="rpc_connection_failed">RPC Connection Failed:</string>
+    <string name="rpc_connection_failed">Falha De Conexão RPC:</string>
     <!--/Peers-->
 
     <!--Account-->
-    <string name="account">Account</string>
-    <string name="accounts">Accounts</string>
-    <string name="account_number">Account Number</string>
-    <string name="edit_account_name">Edit account name</string>
-    <string name="spinner_account">Account:</string>
-    <string name="input_your_new_account_name_and_enter_your_private_passphrase">Input your new account name and enter your private passphrase</string>
-    <string name="account_name">Account Name</string>
+    <string name="account">Conta</string>
+    <string name="accounts">Contas</string>
+    <string name="account_number">Número da conta</string>
+    <string name="edit_account_name">Editar nome da conta</string>
+    <string name="spinner_account">Conta:</string>
+    <string name="input_your_new_account_name_and_enter_your_private_passphrase">Insira o novo nome da conta e coloquesua senha privada</string>
+    <string name="account_name">Nome da conta</string>
 export PATH="$HOME/.rbenv/bin:$PATH"
-    <string name="create_account">Create Account</string>
-    <string name="add_account">Add account</string>
-    <string name="creating_account">Creating account…</string>
-    <string name="input_account_name">Enter a name for your account</string>
-    <string name="hd_path">HD Path</string>
-    <string name="default_account_info">Make this account default for all outgoing and incoming transactions.</string>
-    <string name="external">external</string>
-    <string name="internal">internal</string>
-    <string name="imported">imported</string>
+    <string name="create_account">Criar conta</string>
+    <string name="add_account">Adicionar conta</string>
+    <string name="creating_account">Criando conta...</string>
+    <string name="input_account_name">Insira um nome para sua conta</string>
+    <string name="hd_path">Caminho HD</string>
+    <string name="default_account_info">Tornar essa conta padrão para todas as entradas e saídas de transações.</string>
+    <string name="external">externa</string>
+    <string name="internal">interna</string>
+    <string name="imported">importada</string>
     <!--/Account-->
 
     <!--Seed-->
