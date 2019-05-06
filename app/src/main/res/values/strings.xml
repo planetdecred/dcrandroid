@@ -504,6 +504,7 @@
     <string name="mismatch_passcode">PINs did not match. Try again</string>
     <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
     <string name="mismatch_password">PASSWORDS DO NOT MATCH</string>
+    <string name="empty_password">Password cannot be empty</string>
     <string name="password_match">PASSWORDS MATCH</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="password">PASSWORD</string>
