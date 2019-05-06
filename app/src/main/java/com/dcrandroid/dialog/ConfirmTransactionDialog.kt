@@ -23,19 +23,23 @@ import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.confirm_tx_dialog.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.math.MathContext
+
 
 class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClickListener {
 
     private var btnPositiveClick: DialogInterface.OnClickListener? = null
 
     private var amount: Long? = null
+    private var fee: Long? = null
 
     private var address: CharSequence? = null
-
     private var account: CharSequence? = null
 
-    private var fee: Long? = null
+    private var exchangeDecimal: BigDecimal? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,33 +50,31 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         findViewById<TextView>(R.id.btn_positive).setOnClickListener(this)
         findViewById<TextView>(R.id.btn_negative).setOnClickListener(this)
 
-        val format = DecimalFormat()
-        format.applyPattern("#.########")
+        val format = DecimalFormat("#.########")
+
+        val util = PreferenceUtil(context)
 
         val tvTitle = findViewById<TextView>(R.id.title)
 
-        tvTitle.text = context.getString(R.string.sending) + " ${format.format(Dcrlibwallet.amountCoin(amount!!))} DCR"
+        val amountCoin = Dcrlibwallet.amountCoin(amount!!)
+        tvTitle.text = context.getString(R.string.sending) + " ${format.format(amountCoin)} DCR"
 
         val tvAddress = findViewById<TextView>(R.id.address)
-        tvAddress.text = address
+        tvAddress.text = "${context.getString(R.string.to)} $address"
 
         val tvAccount = findViewById<TextView>(R.id.account)
         tvAccount.visibility = View.GONE
         if (!account.isNullOrBlank()) {
             tvAccount.visibility = View.VISIBLE
-            tvAccount.text = "($account)"
+            tvAccount.text = context.getString(R.string.to_account, account)
         }
 
         val tvFee = findViewById<TextView>(R.id.fee)
 
         val estFee = Utils.signedSizeToAtom(fee!!)
-        tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(Dcrlibwallet.amountCoin(estFee))} DCR ($fee B)"
+        val feeCoin = Dcrlibwallet.amountCoin(estFee)
+        tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(feeCoin)} DCR"
 
-        val tvTotal = findViewById<TextView>(R.id.total)
-
-        tvTotal.text = "${context.getString(R.string.total)} ${Dcrlibwallet.amountCoin(amount!! + estFee)} DCR"
-
-        val util = PreferenceUtil(context)
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
             passphrase_input_layout.visibility = View.GONE
             btn_positive.isEnabled = true
@@ -80,6 +82,40 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         } else {
             passphrase_input.addTextChangedListener(passphraseTextWatcher)
         }
+
+        // display conversion if enabled and exchange rate has been fetched
+        if(exchangeDecimal != null && Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0")) != 0){
+            val amountUSD = dcrToUSD(amountCoin)
+            tvTitle.text = "${tvTitle.text} ($${format.format(amountUSD)})"
+
+            val feeUSD = dcrToUSD(feeCoin)
+            tvFee.text = "${tvFee.text} ($${format.format(feeUSD)})"
+        }
+    }
+
+    private fun dcrToUSD(dcr: Double): Double{
+        var currentAmount = BigDecimal(dcr)
+        currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
+
+        var convertedAmount = currentAmount.multiply(exchangeDecimal)
+
+        // USD is displayed in 2 decimal places by default.
+        // If the converted amount is less than two significant figures,
+        // it would be rounded to the nearest significant figure.
+        if(convertedAmount.toDouble() < 0.01){
+
+            convertedAmount = convertedAmount.round(MathContext(1))
+
+            return convertedAmount.toDouble()
+        }else{
+            //round to 2 decimal places
+            return Math.round(convertedAmount.toDouble() * 100.0) / 100.0
+        }
+    }
+
+    fun setExchangeDecimal(exchangeDecimal: BigDecimal?): ConfirmTransactionDialog{
+        this.exchangeDecimal = exchangeDecimal
+        return this
     }
 
     fun setPositiveButton(listener: DialogInterface.OnClickListener?): ConfirmTransactionDialog {

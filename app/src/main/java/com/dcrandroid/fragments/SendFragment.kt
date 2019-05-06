@@ -11,7 +11,6 @@ import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,30 +31,21 @@ import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.PreferenceUtil
-import com.dcrandroid.util.Utils
-import com.dcrandroid.util.WalletData
+import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.fragment_send.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchangeRate.ExchangeRateCallback {
 
     private var SEND_ACCOUNT = false
     private val SCANNER_ACTIVITY_REQUEST_CODE = 0
@@ -126,7 +116,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         destination_account_spinner.adapter = dataAdapter
 
         if (Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
-            GetExchangeRate(this).execute()
+            GetExchangeRate(getString(R.string.dcr_to_usd_exchange_url), util!!.get(Constants.USER_AGENT, ""), this).execute()
         }
 
         send_dcr_scan.setOnClickListener {
@@ -302,9 +292,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         constructTransaction()
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented")
-    }
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     private fun prepareAccounts() {
         val parsedAccounts = Account.parse(wallet.getAccounts(requiredConfirmations))
@@ -483,6 +471,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     .setAddress(send_dcr_address.text.toString())
                     .setAmount(amount)
                     .setFee(unsignedTransaction.estimatedSignedSize)
+                    .setExchangeDecimal(exchangeDecimal)
 
             transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
                 if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
@@ -711,83 +700,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private class GetExchangeRate(private val sendFragment: SendFragment) : AsyncTask<Void, String, String>() {
-
-        override fun doInBackground(vararg voids: Void): String? {
-            try {
-                if (sendFragment.activity == null) {
-                    return null
-                }
-                val url = URL(sendFragment.requireActivity().getString(R.string.dcr_to_usd_exchange_url))
-                val connection = url.openConnection() as HttpURLConnection
-                connection.doInput = true
-                connection.readTimeout = 7000
-                connection.connectTimeout = 7000
-                connection.setRequestProperty(Constants.USER_AGENT, sendFragment.util!!.get(Constants.USER_AGENT, ""))
-                val br = BufferedReader(InputStreamReader(connection.inputStream))
-                val result = StringBuilder()
-                br.lineSequence().forEach {
-                    result.append(it)
-                }
-                br.close()
-                connection.disconnect()
-                return result.toString()
-            } catch (e: MalformedURLException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            return null
-        }
-
-        override fun onPostExecute(s: String?) {
-            super.onPostExecute(s)
-            if (sendFragment.activity == null) {
-                return
-            }
-
-            val context = sendFragment.requireActivity().applicationContext
-            val index = Integer.parseInt(sendFragment.util!!.get(Constants.CURRENCY_CONVERSION, "0"))
-            val currency = context.resources.getStringArray(R.array.currency_conversion_abbrv)[index]
-            val source = context.resources.getStringArray(R.array.currency_conversion_source)[index]
-
-            if (s == null) {
-                sendFragment.rate_unavailable.visibility = View.VISIBLE
-                sendFragment.rate_unavailable.text = String.format("%s %s", source, context.getString(R.string.exchange_rate_unavailable))
-                return
-            }
-            try {
-                sendFragment.rate_unavailable.visibility = View.GONE
-                val apiResult = JSONObject(s)
-                if (apiResult.getBoolean("success")) {
-                    val result = apiResult.getJSONObject("result")
-                    sendFragment.exchangeRate = result.getDouble("Last")
-                    sendFragment.exchangeDecimal = BigDecimal(sendFragment.exchangeRate)
-                            .setScale(9, RoundingMode.HALF_UP)
-                    sendFragment.send_dcr_exchange_rate.text = String.format(Locale.getDefault(), "%.2f %s/DCR (%s)", result.getDouble("Last"), currency, source)
-                    sendFragment.exchange_details.visibility = View.VISIBLE
-                    if (sendFragment.amount_dcr.text.isNotEmpty()) {
-                        var currentAmount = BigDecimal(sendFragment.amount_dcr.text.toString())
-                        currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
-
-                        val convertedAmount = currentAmount.multiply(sendFragment.exchangeDecimal)
-                        sendFragment.amount_usd.removeTextChangedListener(sendFragment.exchangeWatcher)
-                        sendFragment.amount_usd.setText(sendFragment.formatter.format(convertedAmount.toDouble()))
-                        sendFragment.amount_usd.addTextChangedListener(sendFragment.exchangeWatcher)
-                    }
-
-                    sendFragment.exchange_layout.visibility = View.VISIBLE
-                } else {
-                    Toast.makeText(context, "${context.getString(R.string.exchange_rate_error)}: ${apiResult.getString("message")}", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-
-        }
-    }
-
     private fun EditText.setupClearAction() {
         addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
@@ -807,5 +719,53 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
             return@OnTouchListener false
         })
+    }
+
+    override fun onExchangeRateSuccess(s: String?) {
+        if (activity == null) {
+            return
+        }
+
+        val context = requireActivity().applicationContext
+        val index = Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0"))
+        val currency = context.resources.getStringArray(R.array.currency_conversion_abbrv)[index]
+        val source = context.resources.getStringArray(R.array.currency_conversion_source)[index]
+
+        if (s == null) {
+            rate_unavailable.visibility = View.VISIBLE
+            rate_unavailable.text = String.format("%s %s", source, context.getString(R.string.exchange_rate_unavailable))
+            return
+        }
+
+        try {
+            rate_unavailable.visibility = View.GONE
+            val apiResult = JSONObject(s)
+            if (apiResult.getBoolean("success")) {
+                val result = apiResult.getJSONObject("result")
+                exchangeRate = result.getDouble("Last")
+                exchangeDecimal = BigDecimal(exchangeRate).setScale(9, RoundingMode.HALF_UP)
+                send_dcr_exchange_rate.text = String.format(Locale.getDefault(), "%.2f %s/DCR (%s)", result.getDouble("Last"), currency, source)
+                exchange_details.visibility = View.VISIBLE
+                if (amount_dcr.text.isNotEmpty()) {
+                    var currentAmount = BigDecimal(amount_dcr.text.toString())
+                    currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
+
+                    val convertedAmount = currentAmount.multiply(exchangeDecimal)
+                    amount_usd.removeTextChangedListener(exchangeWatcher)
+                    amount_usd.setText(formatter.format(convertedAmount.toDouble()))
+                    amount_usd.addTextChangedListener(exchangeWatcher)
+                }
+
+                exchange_layout.visibility = View.VISIBLE
+            } else {
+                Toast.makeText(context, "${context.getString(R.string.exchange_rate_error)}: ${apiResult.getString("message")}", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onExchangeRateError(e: java.lang.Exception) {
+
     }
 }
