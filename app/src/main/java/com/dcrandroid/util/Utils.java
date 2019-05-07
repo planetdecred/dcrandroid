@@ -286,21 +286,20 @@ public class Utils {
     public static String formatDecred(long dcr) {
         BigDecimal satoshi = BigDecimal.valueOf(dcr);
         BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-        DecimalFormat format = new DecimalFormat();
+        DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         format.applyPattern("#,###,###,##0.########");
         return format.format(amount);
     }
 
     public static String removeTrailingZeros(double dcr) {
-        DecimalFormat format = new DecimalFormat();
+        DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         format.applyPattern("#,###,###,##0.########");
         return format.format(dcr);
     }
 
     public static String formatDecredWithComma(long dcr) {
         double convertedDcr = Dcrlibwallet.amountCoin(dcr);
-        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-        DecimalFormat df = (DecimalFormat) nf;
+        DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         df.applyPattern("#,###,###,##0.########");
         return df.format(convertedDcr);
     }
@@ -308,7 +307,7 @@ public class Utils {
     public static String formatDecredWithoutComma(long dcr) {
         BigDecimal atom = new BigDecimal(dcr);
         BigDecimal amount = atom.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-        DecimalFormat format = new DecimalFormat();
+        DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         format.applyPattern("#########0.########");
         return format.format(amount);
     }

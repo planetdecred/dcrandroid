@@ -22,54 +22,15 @@
         android:paddingRight="8dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/greenLightTextColor"
-                android:textSize="18sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                tools:text="title" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/greenLightTextColor"
-                android:textSize="18sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                android:text="@string/to" />
-
-        </LinearLayout>
-
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="14sp"
+            android:textColor="@color/greenLightTextColor"
+            android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="to TsVAhUwocTvXmgBmQgE2CwSLPHgjaXEbR9B" />
-
-        <TextView
-            android:id="@+id/account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="(TEST)" />
+            android:layout_marginTop="20dp"
+            tools:text="title" />
 
         <TextView
             android:id="@+id/fee"
@@ -82,16 +43,26 @@
             tools:text="@string/transaction_fee" />
 
         <TextView
-            android:id="@+id/total"
+            android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
             android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            android:layout_marginBottom="10dp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="@string/total_sending" />
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
 
+        <TextView
+            android:id="@+id/account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:textColor="@color/blueGrayFirstTextColor"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            tools:text="(TEST)" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passphrase_input_layout"

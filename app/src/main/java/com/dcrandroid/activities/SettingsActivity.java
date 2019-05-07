@@ -395,14 +395,23 @@ public class SettingsActivity extends AppCompatActivity {
                                 NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                                 if (networkInfo != null && networkInfo.isConnected()) {
                                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                                        wallet.dropSpvConnection();
+                                        wallet.cancelSync();
                                     }
                                 } else {
-                                    wallet.dropSpvConnection();
+                                    wallet.cancelSync();
                                 }
                             }
                         }
                     }
+                    return true;
+                }
+            });
+
+            findPreference(Constants.LICENSE).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(getContext(), License.class);
+                    startActivity(i);
                     return true;
                 }
             });

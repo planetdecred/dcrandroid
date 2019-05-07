@@ -65,8 +65,6 @@ public class Constants {
             EMPTY_STRING = "",
             DASH = "-",
             NBSP = " ",
-            CONFIRMATIONS = "confirmations",
-            SENDALL = "send_all",
             PASSPHRASE = "passphrase",
             CREDITS = "Credits",
             DEFAULT_ACCOUNT = "default_account",
@@ -87,9 +85,7 @@ public class Constants {
             TESTNET_HD_PATH = "m / 44' / 11' / ",
             MAINNET_HD_PATH = "m / 44' / 20' / ",
             IMPORTED = "imported",
-            KEY_TESTNET = "key_testnet",
             USER_AGENT = "user_agent",
-            MESSAGE = "message",
             TICKET_PURCHASE = "TICKET_PURCHASE",
             VOTE = "VOTE",
             REVOCATION = "REVOCATION",
@@ -113,10 +109,14 @@ public class Constants {
             SENT = "sent",
             RECEIVED = "received",
             TOSELF = "To Self",
-            RECENT_TRANSACTION_HASH = "recent_transaction_hash",
             FIRST_RUN = "first_run",
             TX_NOTIFICATION_HASH = "tx_notification_hash",
-            WIFI_SYNC = "wifi_sync";
+            WIFI_SYNC = "wifi_sync",
+            LICENSE = "license",
+            TRANSACTION_HEIGHT = "transaction_height",
+            MINED_TRANSACTIONS = "MinedTransactions",
+            UNMINED_TRANSACTIONS = "UnminedTransactions",
+            RECENT_TRANSACTION_HASH = "recent_transaction_hash";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 
     public static final long ESTIMATED_ACCT_DISCOVERY = 300000;

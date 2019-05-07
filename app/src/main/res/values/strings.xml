@@ -12,7 +12,7 @@
     all you have to do is click OK. This will help us prevent the error from occurring again</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="label_keys" translatable="false">Keys</string>
+    <string name="label_keys">Keys</string>
     <string name="label_properties">Properties</string>
     <string name="require_to_send_fund">Required to send funds</string>
     <string name="add_an_account">ADD AN ACCOUNT</string>
@@ -88,7 +88,7 @@
     <string name="wallet_log_copied">Wallet log copied successfully</string>
     <string name="dismiss">Dismiss</string>
     <string name="welcome_title">Welcome to Decred Wallet.</string>
-    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
+    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual. The wallet will connect to p2p nodes to download the blockchain headers, and will fetch only the blocks that you need while preserving your privacy.</string>
     <string name="less_than_one_day">&lt;1 day</string>
     <string name="less_than_one_day_ago">&lt;1 day ago</string>
     <string name="one_day">1 day</string>
@@ -107,6 +107,10 @@
     <string name="deleting_wallet">Deleting Wallet…</string>
     <string name="retry_caps">RETRY</string>
     <string name="share_address_via">Share the QR code image to</string>
+    <string name="license">License</string>
+    <string name="key_license" translatable="false">license</string>
+    <string name="always">Always</string>
+    <string name="not_synced">Not Synced</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -489,6 +493,7 @@
     <string name="to">to</string>
     <string name="withFeeOff">with a fee of</string>
     <string name="total">Total</string>
+    <string name="to_account">to account \'%1$s\'</string>
     <!--/Confirm Transaction Dialog-->
 
     <!--Security-->
@@ -499,6 +504,7 @@
     <string name="mismatch_passcode">PINs did not match. Try again</string>
     <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
     <string name="mismatch_password">PASSWORDS DO NOT MATCH</string>
+    <string name="empty_password">Password cannot be empty</string>
     <string name="password_match">PASSWORDS MATCH</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="password">PASSWORD</string>
@@ -539,11 +545,14 @@
     <string name="view_report">View Report</string>
     <!--/Crash Report-->
 
+    <!--WIFI Sync-->
     <string name="wifi_data_sync_title">Sync when not on WiFi</string>
     <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
-    <string name="always">Always</string>
     <string name="no_wifi">No Wi-Fi</string>
     <string name="wifi_sync_notice">Would you like to sync anyways?</string>
     <string name="not_connected_to_wifi">Not connected to WiFi.</string>
-    <string name="not_synced">Not Synced</string>
+    <!--/WIFI Sync-->
+
+    <string name="external_output_amount">%1$s DCR (external)</string>
+    <string name="external_output_account">%1$s DCR (%2$s)</string>
 </resources>

@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.dcrandroid.R
+import com.dcrandroid.data.Constants
 import com.dcrandroid.view.PinView
 import java.util.*
 
@@ -76,6 +77,9 @@ class KeyPad(private val keypadLayout: LinearLayout, private val pinView: PinVie
                 listener!!.onPinEnter(null, passCode)
             }
         } else if (R.id.keypad_ok == v.id) {
+            if(passCode == Constants.EMPTY_STRING){
+                return
+            }
             if (listener != null) {
                 listener!!.onPassCodeCompleted(passCode)
             }

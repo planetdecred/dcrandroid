@@ -6,6 +6,8 @@
 
 package com.dcrandroid.util;
 
+import com.dcrandroid.data.Transaction;
+
 import java.util.Comparator;
 
 /**
@@ -14,19 +16,9 @@ import java.util.Comparator;
 
 public class TransactionComparator {
 
-    public static class TimestampSort implements Comparator<TransactionsResponse.TransactionItem> {
+    public static class MinConfirmationSort implements Comparator<Transaction> {
         @Override
-        public int compare(TransactionsResponse.TransactionItem o1, TransactionsResponse.TransactionItem o2) {
-            if (o1.getTimestamp() == o2.getTimestamp()) {
-                return 0;
-            }
-            return o1.getTimestamp() > o2.getTimestamp() ? -1 : 1;
-        }
-    }
-
-    public static class MinConfirmationSort implements Comparator<TransactionsResponse.TransactionItem> {
-        @Override
-        public int compare(TransactionsResponse.TransactionItem o1, TransactionsResponse.TransactionItem o2) {
+        public int compare(Transaction o1, Transaction o2) {
             if (o1.getHeight() == o2.getHeight()) {
                 return 0;
             }

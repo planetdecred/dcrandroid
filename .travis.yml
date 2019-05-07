@@ -9,18 +9,19 @@ android:
     - extra-google-m2repository
 before_install:
   - yes | sdkmanager "platforms;android-28"
-  - wget -O $ANDROID_HOME/android-ndk-r18-linux-x86_64.zip https://dl.google.com/android/repository/android-ndk-r18-linux-x86_64.zip
-  - unzip -qq $ANDROID_HOME/android-ndk-r18-linux-x86_64.zip -d $ANDROID_HOME/android-ndk-r18-linux-x86_64
-  - mv $ANDROID_HOME/android-ndk-r18-linux-x86_64/android-ndk-r18 $ANDROID_HOME/ndk-bundle
+  - wget -O $ANDROID_HOME/android-ndk-r19b-linux-x86_64.zip https://dl.google.com/android/repository/android-ndk-r19b-linux-x86_64.zip
+  - unzip -qq $ANDROID_HOME/android-ndk-r19b-linux-x86_64.zip -d $ANDROID_HOME/android-ndk-r19b-linux-x86_64
+  - mv $ANDROID_HOME/android-ndk-r19b-linux-x86_64/android-ndk-r19b $ANDROID_HOME/ndk-bundle
   - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-  - gimme --force 1.11
+  - gimme --force 1.12.1
   - echo $GOROOT && rm $GOROOT -R
-  - export GOROOT='/home/travis/.gimme/versions/go1.11.linux.amd64' && echo $GOROOT
+  - export GOROOT='/home/travis/.gimme/versions/go1.12.1.linux.amd64' && echo $GOROOT
   - export PATH=$PATH:$GOROOT/bin && sudo ln -s $GOROOT/bin/go /usr/bin/go
   - mkdir -p go/bin && export GOPATH=$(pwd)/go && export GOBIN=$GOPATH/bin
   - export PATH=$PATH:$GOBIN
-  - go get -u golang.org/x/mobile/cmd/gomobile && go get -u golang.org/x/mobile/cmd/gobind
-  - gomobile init -ndk $ANDROID_NDK_HOME
+  - go get -u golang.org/x/mobile/cmd/gomobile
+  - echo $ANDROID_NDK_HOME
+  - gomobile init
   - mkdir -p $GOPATH/src/github.com/raedahgroup && cd $GOPATH/src/github.com/raedahgroup
   - git clone https://github.com/raedahgroup/dcrlibwallet && cd dcrlibwallet
   - export GO111MODULE=on

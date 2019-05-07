@@ -11,6 +11,7 @@
     <string name="crash_dialog_text">Неожиданная ошибка спровоцировала сбой в работе приложения. Если вы перешлёте нам спецификацию вашего устройства и лог приложения, вы поможете нам решить эту проблему. Вам нужно просто нажать OK. Это поможет нам предотвратить появление ошибки в будущем.</string>
     <string name="navigation_drawer_open">Открыть navigation drawer</string>
     <string name="navigation_drawer_close">Закрыть navigation drawer</string>
+    <string name="label_keys">Ключи</string>
     <string name="label_properties">Свойства</string>
     <string name="require_to_send_fund">Требуется пересылка средств</string>
     <string name="add_an_account">ДОБАВИТЬ АККАУНТ</string>

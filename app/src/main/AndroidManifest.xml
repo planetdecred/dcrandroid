@@ -15,10 +15,14 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-feature android:name="android.hardware.CAMERA" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.CAMERA"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:name=".MainApplication"
@@ -107,37 +111,43 @@
         <activity
             android:name=".activities.EncryptWallet"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/LightTheme.NoActionBar"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:theme="@style/LightTheme.NoActionBar" />
 
         <service
             android:name=".service.SyncService"
             android:enabled="true"
             android:exported="false"
-            android:label="Wallet Syncer"
-            />
-        <activity android:name=".activities.EnterPassCode"
+            android:label="Wallet Syncer" />
+
+        <activity
+            android:name=".activities.EnterPassCode"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:theme="@style/LightTheme.NoActionBar"
-            />
-        <activity android:name=".activities.EnterPasswordActivity"
+            android:theme="@style/LightTheme.NoActionBar" />
+        <activity
+            android:name=".activities.EnterPasswordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:theme="@style/LightTheme.NoActionBar"
-            />
-        <activity android:name=".activities.ChangePassphrase"
+            android:theme="@style/LightTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ChangePassphrase"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:theme="@style/LightTheme.NoActionBar"
-            />
-        <activity android:name=".activities.CustomCrashReport"
-            android:launchMode="singleInstance"/>
+            android:theme="@style/LightTheme.NoActionBar" />
+        <activity
+            android:name=".activities.CustomCrashReport"
+            android:launchMode="singleInstance" />
+
+        <activity
+            android:name=".activities.License"
+            android:launchMode="singleInstance" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
