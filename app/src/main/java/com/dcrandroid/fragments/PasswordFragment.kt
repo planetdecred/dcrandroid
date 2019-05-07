@@ -68,6 +68,10 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
     }
 
     private fun createWallet(password: String) {
+        if(password.isEmpty()){
+            Snackbar.make(view!!, R.string.empty_password, Snackbar.LENGTH_SHORT).show()
+            return
+        }
         pd = Utils.getProgressDialog(context, false, false, "")
         Thread(Runnable {
             try {
