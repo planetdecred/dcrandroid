@@ -20,11 +20,12 @@ import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
-import dcrlibwallet.SpvSyncResponse
+import dcrlibwallet.SyncProgressListener
+import java.lang.Exception
 
 const val NOTIFICATION_ID = 4
 
-class SyncService : Service(), SpvSyncResponse {
+class SyncService : Service(), SyncProgressListener {
 
     private var TAG: String = "SyncService"
     private var notification: Notification? = null
@@ -72,7 +73,7 @@ class SyncService : Service(), SpvSyncResponse {
 
         showNotification()
 
-        wallet!!.addSyncResponse(this)
+        wallet!!.addSyncProgressListener(this)
 
         val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
 
@@ -130,9 +131,9 @@ class SyncService : Service(), SpvSyncResponse {
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
         contentTitle = getString(R.string.synchronizing)
-        if (state == Dcrlibwallet.START) {
+        if (state == Dcrlibwallet.SyncStateStart) {
             contentText = null
-        } else if (state == Dcrlibwallet.PROGRESS) {
+        } else if (state == Dcrlibwallet.SyncStateProgress) {
             contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
         }
 
@@ -140,7 +141,7 @@ class SyncService : Service(), SpvSyncResponse {
     }
 
     override fun onDiscoveredAddresses(state: String) {
-        if (state == Dcrlibwallet.START) {
+        if (state == Dcrlibwallet.SyncStateStart) {
             contentText = null
             showNotification()
 
@@ -175,16 +176,12 @@ class SyncService : Service(), SpvSyncResponse {
         showNotification()
     }
 
-    override fun onSyncError(code: Long, err: Exception?) {
-
-    }
-
     override fun onFetchMissingCFilters(missingCFitlersStart: Int, missingCFitlersEnd: Int, state: String) {
 
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if (state == Dcrlibwallet.PROGRESS) {
+        if (state == Dcrlibwallet.SyncStateProgress) {
             contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
             showNotification()
         }
@@ -197,5 +194,7 @@ class SyncService : Service(), SpvSyncResponse {
         stopForeground(true)
         stopSelf()
     }
+
+    override fun onSyncError(code: Int, err: Exception?) {}
 
 }

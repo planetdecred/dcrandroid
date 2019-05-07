@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SaveSeedAdapter
 import com.dcrandroid.data.Constants
-import com.dcrandroid.util.WalletData
+import dcrlibwallet.Dcrlibwallet
 import java.lang.Exception
 
 class SaveSeedActivity: AppCompatActivity() {
@@ -33,7 +33,7 @@ class SaveSeedActivity: AppCompatActivity() {
         setContentView(R.layout.activity_save_seed_page)
 
         try {
-            val seed = WalletData.getInstance().wallet.generateSeed()
+            val seed = Dcrlibwallet.generateSeed()
             val tempSeed = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val items = ArrayList<SaveSeedAdapter.SeedRow>()
 

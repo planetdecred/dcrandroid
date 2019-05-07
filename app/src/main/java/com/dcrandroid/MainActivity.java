@@ -81,11 +81,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import dcrlibwallet.Dcrlibwallet;
-import dcrlibwallet.SpvSyncResponse;
+import dcrlibwallet.SyncProgressListener;
 import dcrlibwallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener,
-        SpvSyncResponse, View.OnClickListener {
+        SyncProgressListener, View.OnClickListener {
 
     private final double RESCAN_PERCENTAGE = 0.1;
     private final double DISCOVERY_PERCENTAGE = 0.8;
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
 
         walletData.wallet.transactionNotification(this);
-        walletData.wallet.addSyncResponse(this);
+        walletData.wallet.addSyncProgressListener(this);
 
         displayBalance();
 
@@ -754,9 +754,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onSyncError(long l, final Exception e) {
-        e.printStackTrace();
-    }
+    public void onSyncError(int code, Exception err) { err.printStackTrace(); }
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
@@ -772,7 +770,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         long estimatedBlocks = ((currentTime - walletData.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + walletData.wallet.getBestBlock();
 
         switch (state) {
-            case Dcrlibwallet.START:
+            case Dcrlibwallet.SyncStateStart:
                 if (walletData.fetchHeaderTime != -1) {
                     return;
                 }
@@ -793,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 });
 
                 break;
-            case Dcrlibwallet.PROGRESS:
+            case Dcrlibwallet.SyncStateProgress:
 
                 walletData.syncEndPoint = (int) estimatedBlocks - walletData.syncStartPoint;
                 walletData.syncCurrentPoint += fetchedHeadersCount;
@@ -842,7 +840,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 }
 
                 break;
-            case Dcrlibwallet.FINISH:
+            case Dcrlibwallet.SyncStateFinish:
                 updatePeerCount();
                 walletData.totalFetchTime = System.currentTimeMillis() - walletData.fetchHeaderTime;
                 walletData.syncStartPoint = -1;
@@ -861,7 +859,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onDiscoveredAddresses(String state) {
         setChainStatus(null);
         setBestBlockTime(-1);
-        if (state.equals(Dcrlibwallet.START)) {
+        if (state.equals(Dcrlibwallet.SyncStateStart)) {
             accountDiscoveryProgress = new Thread() {
                 public void run() {
                     try {
@@ -952,14 +950,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
 
         switch (state) {
-            case Dcrlibwallet.START:
+            case Dcrlibwallet.SyncStateStart:
                 setConnectionStatus(R.string.scanning_blocks);
                 walletData.syncStartPoint = 0;
                 walletData.syncCurrentPoint = 0;
                 walletData.syncEndPoint = walletData.wallet.getBestBlock();
                 walletData.rescanTime = System.currentTimeMillis();
                 break;
-            case Dcrlibwallet.PROGRESS:
+            case Dcrlibwallet.SyncStateProgress:
 
                 float scannedPercentage = ((float) rescannedThrough / walletData.syncEndPoint) * 100;
 
@@ -1142,7 +1140,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                walletData.wallet.dropSpvConnection();
+                walletData.wallet.cancelSync();
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
                 checkWifiSync();
                 break;

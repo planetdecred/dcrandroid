@@ -395,10 +395,10 @@ public class SettingsActivity extends AppCompatActivity {
                                 NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                                 if (networkInfo != null && networkInfo.isConnected()) {
                                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                                        wallet.dropSpvConnection();
+                                        wallet.cancelSync();
                                     }
                                 } else {
-                                    wallet.dropSpvConnection();
+                                    wallet.cancelSync();
                                 }
                             }
                         }
