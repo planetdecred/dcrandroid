@@ -324,7 +324,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         latestTransactionHeight = transaction.height + 1
         fixedTransactionList.add(0, transaction)
-        println("New transaction hash ${transaction.hash}")
+        println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
         if ((transactionTypeSelected.startsWith("ALL", ignoreCase = true) ||

@@ -41,8 +41,8 @@
                     android:paddingStart="8dp"
                     android:paddingLeft="8dp"
                     android:paddingTop="12dp"
-                    android:paddingEnd="0dp"
-                    android:paddingRight="0dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/date"
                     android:textColor="@color/darkBlueTextColor"
@@ -53,7 +53,6 @@
                     android:id="@+id/tx_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
                     android:padding="8dp"
                     android:textColor="@color/darkBlueTextColor"
                     android:textSize="16sp"
@@ -76,7 +75,7 @@
                     android:id="@+id/label_status"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:padding="8dp"
                     android:text="@string/status"
                     android:textColor="@color/darkBlueTextColor"
@@ -84,17 +83,18 @@
                     app:fontFamily="@font/source_sans_pro_regular" />
 
                 <TextView
-                    android:id="@+id/tx_dts__status"
-                    android:layout_width="75dp"
+                    android:id="@+id/tx_dts_status"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/tx_status_confirmed"
                     android:gravity="center"
-                    android:padding="2dp"
+                    android:padding="3dp"
                     android:text="@string/confirmed"
-                    android:textColor="@color/greenLightTextColor" />
+                    android:textColor="@color/greenLightTextColor"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
@@ -126,7 +126,7 @@
                     android:padding="8dp"
                     android:text="@string/_0_dcr"
                     android:textColor="@color/darkBlueTextColor"
-                    android:textSize="16.8sp"
+                    android:textSize="18sp"
                     app:fontFamily="@font/source_sans_pro_regular" />
 
             </LinearLayout>
@@ -160,7 +160,7 @@
                     android:padding="8dp"
                     android:text="@string/_0_dcr"
                     android:textColor="@color/darkBlueTextColor"
-                    android:textSize="16.8sp"
+                    android:textSize="18sp"
                     app:fontFamily="@font/source_sans_pro_regular" />
 
             </LinearLayout>
@@ -266,7 +266,6 @@
                         android:id="@+id/tx_dts_block_valid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
                         android:padding="8dp"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp"
@@ -299,7 +298,6 @@
                         android:id="@+id/tx_dts_version"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
                         android:padding="8dp"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp"
@@ -332,7 +330,6 @@
                         android:id="@+id/tx_dts_vote_bits"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
                         android:padding="8dp"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="16sp"
@@ -365,12 +362,13 @@
 
                 <TextView
                     android:id="@+id/tx_hash"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:ellipsize="middle"
-                    android:padding="5dp"
+                    android:gravity="end"
+                    android:padding="3dp"
                     android:singleLine="true"
                     android:textColor="@color/blueLinkTextColor"
                     android:textSize="16sp"
@@ -386,87 +384,18 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <ListView
+            android:id="@+id/lv_tx_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:isScrollContainer="false"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:scrollbars="none" />
 
-
-            <LinearLayout
-                android:id="@+id/llInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:visibility="visible">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/inputs"
-                    android:textColor="@color/darkBlueTextColor"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/roboto_regular" />
-
-
-                <ListView
-                    android:id="@+id/lvInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:isScrollContainer="false"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:scrollbars="none" />
-
-                <View
-                    android:id="@+id/separator1444"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/lightGreyBackgroundColor" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/llOutput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/llInput"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/outputs"
-                    android:textColor="@color/darkBlueTextColor"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/roboto_regular" />
-
-                <ListView
-                    android:id="@+id/lvOutput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:isScrollContainer="false"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:scrollbars="none" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
     </LinearLayout>
 </ScrollView>

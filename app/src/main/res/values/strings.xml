@@ -552,4 +552,6 @@
     <string name="not_connected_to_wifi">Not connected to WiFi.</string>
     <!--/WIFI Sync-->
 
+    <string name="external_output_amount">%1$s DCR (external)</string>
+    <string name="external_output_account">%1$s DCR (%2$s)</string>
 </resources>
