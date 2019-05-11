@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.util.Utils;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,10 +35,7 @@ public class LogViewer extends AppCompatActivity {
     Thread buffer = new Thread() {
         public void run() {
             try {
-                String logPath = getIntent().getExtras().getString("log_path");
-                if (logPath == null) {
-                    return;
-                }
+                String logPath = getFilesDir() + BuildConfig.LogDir;
                 File file = new File(logPath);
                 if (!file.exists()) {
                     Snackbar.make(logTextView, R.string.log_file_not_found, Snackbar.LENGTH_LONG).setAction(R.string.dismiss, null).show();
