@@ -13,6 +13,7 @@ import (
 	"github.com/decred/dcrwallet/p2p"
 	"github.com/decred/dcrwallet/spv"
 	"github.com/decred/dcrwallet/wallet"
+	"github.com/raedahgroup/dcrlibwallet/syncprogressestimator"
 )
 
 type syncData struct {
@@ -23,8 +24,36 @@ type syncData struct {
 	rescanning            bool
 }
 
+type SyncErrorCode int32
+
+const (
+	ErrorCodeUnexpectedError SyncErrorCode = iota
+	ErrorCodeContextCanceled
+	ErrorCodeDeadlineExceeded
+)
+
 func (lw *LibWallet) AddSyncProgressListener(syncProgressListener SyncProgressListener) {
 	lw.syncProgressListeners = append(lw.syncProgressListeners, syncProgressListener)
+}
+
+func (lw *LibWallet) AddEstimatedSyncProgressListener(syncProgressJsonListener EstimatedSyncProgressJsonListener) {
+	syncProgressEstimator := syncprogressestimator.Setup(
+		lw.activeNet.Params.Name,
+		false,
+		lw.GetBestBlock,
+		lw.GetBestBlockTimeStamp,
+		&EstimatedSyncProgressListenerJsonWrapper{jsonListener: syncProgressJsonListener},
+	)
+
+	lw.AddSyncProgressListener(syncProgressEstimator)
+}
+
+func (lw *LibWallet) ResetSyncProgressListeners() {
+	for _, syncProgressListener := range lw.syncProgressListeners {
+		if syncProgressEstimator, ok := syncProgressListener.(*syncprogressestimator.SyncProgressEstimator); ok {
+			syncProgressEstimator.Reset()
+		}
+	}
 }
 
 func (lw *LibWallet) SpvSync(peerAddresses string) error {
@@ -49,7 +78,7 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 		for _, address := range addresses {
 			peerAddress, err := NormalizeAddress(address, lw.activeNet.Params.DefaultPort)
 			if err != nil {
-				lw.notifySyncError(ErrorCodeInvalidPeerAddress, errors.E("SPV peer address invalid: %v", err))
+				log.Errorf("SPV peer address invalid: %v", err)
 			} else {
 				validPeerAddresses = append(validPeerAddresses, peerAddress)
 			}
@@ -59,6 +88,10 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 			return errors.New(ErrInvalidPeers)
 		}
 	}
+
+	// reset sync listeners before starting sync
+	// (especially useful if this is not the first sync since the listener was registered)
+	lw.ResetSyncProgressListeners()
 
 	syncer := spv.NewSyncer(loadedWallet, lp)
 	syncer.SetNotifications(lw.spvSyncNotificationCallbacks(loadedWallet))
@@ -72,7 +105,7 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	ctx, cancel := contextWithShutdownCancel(context.Background())
 	lw.cancelSync = cancel
 
-	// syncer.Run uses a wait group to block the thread until defaultsynclistener completes or an error occurs
+	// syncer.Run uses a wait group to block the thread until sync completes or an error occurs
 	go func() {
 		err := syncer.Run(ctx)
 		if err != nil {
@@ -108,6 +141,10 @@ func (lw *LibWallet) RpcSync(networkAddress string, username string, password st
 	if err != nil {
 		return err
 	}
+
+	// reset sync listeners before starting sync
+	// (especially useful if this is not the first sync since the listener was registered)
+	lw.ResetSyncProgressListeners()
 
 	syncer := chain.NewRPCSyncer(loadedWallet, chainClient)
 	syncer.SetNotifications(lw.generalSyncNotificationCallbacks(loadedWallet))
@@ -187,6 +224,14 @@ func (lw *LibWallet) CancelSync() {
 	for _, syncResponse := range lw.syncProgressListeners {
 		syncResponse.OnSynced(false)
 	}
+
+	loadedWallet, walletLoaded := lw.walletLoader.LoadedWallet()
+	if !walletLoaded {
+		return
+	}
+
+	lw.walletLoader.SetNetworkBackend(nil)
+	loadedWallet.SetNetworkBackend(nil)
 }
 
 func (lw *LibWallet) RescanBlocks() error {
@@ -218,18 +263,18 @@ func (lw *LibWallet) RescanBlocks() error {
 			}
 			totalHeight += p.ScannedThrough
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(p.ScannedThrough, SyncStateProgress)
+				syncProgressListener.OnRescan(p.ScannedThrough, syncprogressestimator.SyncStateProgress)
 			}
 		}
 
 		select {
 		case <-ctx.Done():
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(totalHeight, SyncStateProgress)
+				syncProgressListener.OnRescan(totalHeight, syncprogressestimator.SyncStateProgress)
 			}
 		default:
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(totalHeight, SyncStateFinish)
+				syncProgressListener.OnRescan(totalHeight, syncprogressestimator.SyncStateFinish)
 			}
 		}
 	}()

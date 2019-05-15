@@ -124,7 +124,6 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 		for {
 			v := <-n.C
 			for _, transaction := range v.UnminedTransactions {
-
 				tempTransaction, err := lw.parseTxSummary(&transaction, nil)
 				if err != nil {
 					log.Errorf("Error ntfn parse tx: %v", err)
@@ -136,7 +135,8 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					log.Errorf("Tx ntfn replace tx err: %v", err)
 				}
 
-				fmt.Println("New Transaction")
+				log.Info("New Transaction")
+
 				result, err := json.Marshal(tempTransaction)
 				if err != nil {
 					log.Error(err)
