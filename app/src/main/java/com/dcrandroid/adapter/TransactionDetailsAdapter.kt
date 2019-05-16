@@ -1,6 +1,7 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
+import android.text.method.ReplacementTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,17 +9,17 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.dcrandroid.R
 
-class TransactionDetailsAdapter constructor(val context: Context, val items: MutableList<TransactionDebitCredit>) : BaseAdapter() {
+class TransactionDetailsAdapter constructor(val context: Context, private val items: MutableList<TransactionDebitCredit>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var vi = convertView
         val item = items[position]
 
         if (vi == null) {
-            if (item.type == TransactionDebitCredit.ItemType.ITEM) {
-                vi = LayoutInflater.from(context).inflate(R.layout.list_item_adapter, parent, false)
+            vi = if (item.type == TransactionDebitCredit.ItemType.ITEM) {
+                LayoutInflater.from(context).inflate(R.layout.list_item_adapter, parent, false)
             } else {
-                vi = LayoutInflater.from(context).inflate(R.layout.tx_details_list_header, parent, false)
+                LayoutInflater.from(context).inflate(R.layout.tx_details_list_header, parent, false)
             }
         }
 

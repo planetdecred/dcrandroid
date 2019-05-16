@@ -17,12 +17,6 @@ public class Constants {
             TYPE = "Type",
             AMOUNT = "Amount",
             AMOUNT_IN = "AmountIn",
-            EXTRA_BALANCE_SPENDABLE = "spendable_balance",
-            EXTRA_BALANCE_TOTAL = "total_balance",
-            EXTRA_BALANCE_IMMATURE_REWARDS = "immature_rewards",
-            EXTRA_BALANCE_LOCKED_BY_TICKETS = "locked_by_tickets",
-            EXTRA_BALANCE_VOTING_AUTHORITY = "voting_authority",
-            EXTRA_BALANCE_IMMATURE_STAKE_GEN = "immature_stake_generation",
             BALANCE = "Balance",
             SPENDABLE = "Spendable",
             TOTAL = "Total",
@@ -33,10 +27,6 @@ public class Constants {
             UNCONFIRMED = "UnConfirmed",
             ACCOUNT_NUMBER = "account_number",
             ACCOUNT_NAME = "AccountName",
-            EXTRA_HD_PATH = "hd_path",
-            KEYS = "keys",
-            TOTAL_INPUT = "total_input",
-            TOTAL_OUTPUT = "total_outputs",
             HEIGHT = "Height",
             TRANSACTION_NOTIFICATION = "transaction_notification",
             NETWORK_MODES = "network_modes",
@@ -50,7 +40,7 @@ public class Constants {
             TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS",
             CURRENCY_CONVERSION = "currency_conversion",
             TIMESTAMP = "Timestamp",
-            TRANSACTIONS = "Transactions",
+            TRANSACTION = "Transaction",
             INDEX = "Index",
             PREVIOUS_AMOUNT = "PreviousAmount",
             PREVIOUS_ACCOUNT = "PreviousAccount",
@@ -113,6 +103,7 @@ public class Constants {
             TX_NOTIFICATION_HASH = "tx_notification_hash",
             WIFI_SYNC = "wifi_sync",
             LICENSE = "license",
+            STAKE_BASE_HASH = "0000000000000000000000000000000000000000000000000000000000000000",
             TRANSACTION_HEIGHT = "transaction_height",
             MINED_TRANSACTIONS = "MinedTransactions",
             UNMINED_TRANSACTIONS = "UnminedTransactions",
@@ -120,6 +111,7 @@ public class Constants {
             SYNC_STATE_PROGRESS = "progress",
             SYNC_STATE_FINISH = "finish",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
+
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 
     public static final long ESTIMATED_ACCT_DISCOVERY = 300000;

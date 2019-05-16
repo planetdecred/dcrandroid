@@ -31,6 +31,10 @@ import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_history.*
 import java.util.*
 
+const val SENT_TX = 0
+const val RECEIVED_TX = 1
+const val TRANSFERED_TX = 2
+
 class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var latestTransactionHeight: Int = 0
@@ -88,22 +92,9 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 if (transactionList.size <= position || position < 0) {
                     return
                 }
-                val history = transactionList[position]
+                val tx = transactionList[position]
                 val i = Intent(context, TransactionDetailsActivity::class.java)
-                val extras = Bundle()
-                extras.putLong(Constants.AMOUNT, history.amount)
-                extras.putLong(Constants.FEE, history.fee)
-                extras.putLong(Constants.TIMESTAMP, history.timestamp)
-                extras.putInt(Constants.HEIGHT, history.height)
-                extras.putLong(Constants.TOTAL_INPUT, history.totalInput)
-                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutput)
-                extras.putString(Constants.TYPE, history.type)
-                extras.putString(Constants.HASH, history.hash)
-                extras.putString(Constants.RAW, history.raw)
-                extras.putInt(Constants.DIRECTION, history.direction)
-                extras.putSerializable(Constants.INPUTS, history.inputs)
-                extras.putSerializable(Constants.OUTPUTS, history.outputs)
-                i.putExtras(extras)
+                i.putExtra(Constants.TRANSACTION, tx)
                 startActivity(i)
             }
 
@@ -205,7 +196,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             if (fixedTransactionList.size > 0) {
                                 val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
                                 if (recentTransactionHash.isNotEmpty()) {
-                                    val hashIndex = fixedTransactionList.find(recentTransactionHash)
+                                    val hashIndex = fixedTransactionList.indexOfFirst{ it.hash == recentTransactionHash }
 
                                     if (hashIndex == -1) {
                                         // All transactions in this list is new
@@ -222,15 +213,15 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                             availableTxTypes.add("$ALL (${fixedTransactionList.size})")
                             availableTxTypes.add("$SENT (" + fixedTransactionList.count {
-                                it.direction == 0 && it.type.equals(Constants.REGULAR, ignoreCase = true)
+                                it.direction == SENT_TX && it.type.equals(Constants.REGULAR, ignoreCase = true)
                             }
                                     + ")")
                             availableTxTypes.add("$RECEIVED (" + fixedTransactionList.count {
-                                it.direction == 1 && it.type.equals(Constants.REGULAR, ignoreCase = true)
+                                it.direction == RECEIVED_TX && it.type.equals(Constants.REGULAR, ignoreCase = true)
                             }
                                     + ")")
                             availableTxTypes.add("$YOURSELF (" + fixedTransactionList.count {
-                                it.direction == 2 && it.type.equals(Constants.REGULAR, ignoreCase = true)
+                                it.direction == TRANSFERED_TX && it.type.equals(Constants.REGULAR, ignoreCase = true)
                             }
                                     + ")")
 
@@ -283,23 +274,24 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (transactionTypeSelected.startsWith(ALL)) {
             transactionList.addAll(fixedTransactionList)
         } else {
-            for (i in fixedTransactionList.indices) {
-                val item = fixedTransactionList[i]
-                when {
-                    transactionTypeSelected.startsWith(STAKING) -> if (item.type == Constants.VOTE || item.type == Constants.REVOCATION
-                            || item.type == Constants.TICKET_PURCHASE) {
-                        transactionList.add(item)
-                    }
-                    transactionTypeSelected.startsWith(item.type) -> // Coinbase transaction
-                        transactionList.add(item)
-                    transactionTypeSelected.startsWith(SENT) && item.direction == 0 -> transactionList.add(item)
-                    transactionTypeSelected.startsWith(RECEIVED) && item.direction == 1 -> transactionList.add(item)
-                    transactionTypeSelected.startsWith(YOURSELF) && item.direction == 2 -> transactionList.add(item)
-                }
+            when{
+                transactionTypeSelected.startsWith(STAKING) ->
+                    transactionList.addAll(fixedTransactionList.filter {
+                        it.type == Constants.VOTE || it.type == Constants.REVOCATION
+                        || it.type == Constants.TICKET_PURCHASE })
+                transactionTypeSelected.startsWith(COINBASE) -> transactionList.addAll(fixedTransactionList.filter { it.type == Constants.COINBASE })
+                transactionTypeSelected.startsWith(SENT) -> transactionList.addAll(fixedTransactionList.filter {
+                    it.type == Constants.REGULAR && it.direction == SENT_TX
+                })
+                transactionTypeSelected.startsWith(RECEIVED) -> transactionList.addAll(fixedTransactionList.filter {
+                    it.type == Constants.REGULAR && it.direction == RECEIVED_TX
+                })
+                transactionTypeSelected.startsWith(YOURSELF) -> transactionList.addAll(fixedTransactionList.filter {
+                    it.type == Constants.REGULAR && it.direction == TRANSFERED_TX
+                })
             }
         }
 
-        println("Sort Size: ${transactionList.size} Selected: $transactionTypeSelected")
         if (transactionList.size > 0) {
             history_recycler_view.visibility = View.VISIBLE
             no_history.visibility = View.GONE
@@ -317,7 +309,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     fun newTransaction(transaction: Transaction) {
-        if (transactionList.find(transaction.hash) != -1) {
+        if (transactionList.find{ it.hash == transaction.hash} != null) {
             // Transaction is a duplicate
             return
         }
@@ -327,12 +319,12 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
-        if ((transactionTypeSelected.startsWith("ALL", ignoreCase = true) ||
-                        transactionTypeSelected.startsWith(transaction.type, ignoreCase = true) ||
-                        (transactionTypeSelected.startsWith(Constants.SENT, ignoreCase = true) && transaction.direction == 0) ||
-                        (transactionTypeSelected.startsWith(Constants.RECEIVED, ignoreCase = true) && transaction.direction == 1) ||
-                        (transactionTypeSelected.startsWith(Constants.TOSELF, ignoreCase = true) && transaction.direction == 2) ||
-                        transactionTypeSelected.startsWith(Constants.STAKING, ignoreCase = true) && (transaction.type == Constants.VOTE ||
+        if ((transactionTypeSelected.startsWith(ALL) ||
+                        transactionTypeSelected.startsWith(COINBASE) ||
+                        (transactionTypeSelected.startsWith(SENT) && transaction.direction == SENT_TX) ||
+                        (transactionTypeSelected.startsWith(RECEIVED) && transaction.direction == RECEIVED_TX) ||
+                        (transactionTypeSelected.startsWith(YOURSELF) && transaction.direction == TRANSFERED_TX) ||
+                        transactionTypeSelected.startsWith(STAKING) && (transaction.type == Constants.VOTE ||
                         transaction.type == Constants.REVOCATION ||
                         transaction.type == Constants.TICKET_PURCHASE))) {
             transaction.animate = true
@@ -396,16 +388,6 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
         }
-    }
-
-    private fun ArrayList<Transaction>.find(hash: String): Int {
-        for (i in this.indices) {
-            val item = this[i]
-            if (item.hash == hash) {
-                return i
-            }
-        }
-        return -1
     }
 
     private fun ArrayList<Transaction>.animateNewItems(start: Int, count: Int) {

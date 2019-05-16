@@ -105,22 +105,9 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                 if (transactionList.size <= position || position < 0) {
                     return
                 }
-                val history = transactionList[position]
+                val tx = transactionList[position]
                 val i = Intent(context, TransactionDetailsActivity::class.java)
-                val extras = Bundle()
-                extras.putLong(Constants.AMOUNT, history.amount)
-                extras.putLong(Constants.FEE, history.fee)
-                extras.putLong(Constants.TIMESTAMP, history.timestamp)
-                extras.putInt(Constants.HEIGHT, history.height)
-                extras.putLong(Constants.TOTAL_INPUT, history.totalInput)
-                extras.putLong(Constants.TOTAL_OUTPUT, history.totalOutput)
-                extras.putString(Constants.TYPE, history.type)
-                extras.putString(Constants.HASH, history.hash)
-                extras.putString(Constants.RAW, history.raw)
-                extras.putInt(Constants.DIRECTION, history.direction)
-                extras.putSerializable(Constants.INPUTS, history.inputs)
-                extras.putSerializable(Constants.OUTPUTS, history.outputs)
-                i.putExtras(extras)
+                i.putExtra(Constants.TRANSACTION, tx)
                 startActivity(i)
             }
 
