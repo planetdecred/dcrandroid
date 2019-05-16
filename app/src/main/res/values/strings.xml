@@ -4,7 +4,7 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--General-->
     <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
@@ -369,12 +369,6 @@
     <string name="proposals_vote_status_url" translatable="false">https://%1$s/api/v1/proposals/votestatus</string>
     <string name="new_block_notification_description">Beep for new blocks.</string>
     <string name="new_block_notification">New Block Notification</string>
-    <string name="new_politeia_proposals">New Proposals</string>
-    <string name="politeia">Politeia</string>
-    <string name="proposals">Proposals</string>
-    <string name="enable_politeia_description">Access Politeia Proposals</string>
-    <string name="enable_politeia_proposals_notifications">Politeia Proposal Notifications</string>
-    <string name="enable_politeia_proposals_notifications_description">Receive Politeia Proposal Notifications</string>
     <string name="currency_conversion">Currency Conversion</string>
     <string name="requires_restart">Requires restart.</string>
     <string name="user_agent_summary">For exchange rate fetching.</string>
@@ -492,6 +486,8 @@
     <!--/Send Fragment-->
 
     <!--Transaction Details View-->
+    <string name="external_output_amount">%1$s DCR (external)</string>
+    <string name="external_output_account">%1$s DCR (%2$s)</string>
     <string name="fee_colon">Fee:</string>
     <string name="inputs">Inputs</string>
     <string name="outputs">Outputs</string>
@@ -569,6 +565,15 @@
     <string name="not_connected_to_wifi">Not connected to WiFi.</string>
     <!--/WIFI Sync-->
 
-    <string name="external_output_amount">%1$s DCR (external)</string>
-    <string name="external_output_account">%1$s DCR (%2$s)</string>
+    <!--Proposals-->
+    <string name="proposals_votes_summary">Yes - %1$d\nNo - %2$d</string>
+    <string name="proposal_voting_started">Voting has started on %1$s</string>
+    <string name="proposal_voting_finished">Voting has finished on %1$s</string>
+    <string name="new_politeia_proposals">New Proposals</string>
+    <string name="politeia">Politeia</string>
+    <string name="proposals">Proposals</string>
+    <string name="enable_politeia_description">Access Politeia Proposals</string>
+    <string name="enable_politeia_proposals_notifications">Politeia Proposal Notifications</string>
+    <string name="enable_politeia_proposals_notifications_description">Receive Politeia Proposal Notifications</string>
+    <!--/Proposals-->
 </resources>

@@ -31,6 +31,8 @@ import org.json.JSONObject
 import java.util.ArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
+const val ACTIVE_VOTING = 2
+
 class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
 
     private var context: Context? = null
@@ -43,12 +45,10 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
     private val notificationId = AtomicInteger(0)
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        println("onReceive invoked")
         this.context = context
         util = PreferenceUtil(context!!)
         votingStartNotifications = util!!.getBoolean(Constants.VOTING_START_NOTIFICATIONS, false)
         votingEndNotifications = util!!.getBoolean(Constants.VOTING_END_NOTIFICATIONS, false)
-        println("Vote Start: $votingStartNotifications Vote End: $votingEndNotifications")
         if (votingStartNotifications || votingEndNotifications) {
             if (intent!!.action != null && intent.action!!.equals(Intent.ACTION_BOOT_COMPLETED, ignoreCase = true)) {
                 MainActivity().enablePoliteiaNotifs()
@@ -61,7 +61,7 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
     private fun registerProposalNotificationChannel() {
         notificationManager = context!!.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("new politeia proposal", context!!.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(Constants.VOTING_CHANGE_NOTIFICATIONS, context!!.getString(R.string.politeia), NotificationManager.IMPORTANCE_DEFAULT)
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
@@ -73,43 +73,7 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
     private fun processProposalNotification(){
         val vettedProposalsUrl = context!!.getString(R.string.vetted_proposals_url, BuildConfig.PoliteiaHost)
         val userAgent = util!!.get(Constants.USER_AGENT, Constants.EMPTY_STRING)
-        println("Executing vetted proposals")
         QueryAPI(vettedProposalsUrl, userAgent, this).execute()
-    }
-
-    private fun sendNotification(proposal: Proposal, text: String) {
-        println("Sending notifications for ${proposal.censorshipRecord!!.token}")
-        val launchIntent = Intent(context, ProposalDetails::class.java)
-        launchIntent.action = Constants.NEW_POLITEIA_PROPOSAL_NOTIFICATION
-        launchIntent.putExtra(Constants.PROPOSAL, proposal)
-
-        val launchPendingIntent = PendingIntent.getActivity(context, Constants.POLITEIA_VOTING_STATUS, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val notification = NotificationCompat.Builder(context!!, "new politeia proposal")
-                .setContentTitle(text + " " + proposal.name)
-                .setSmallIcon(R.drawable.politeia2)
-                .setOngoing(false)
-                .setAutoCancel(true)
-                .setGroup("com.dcrandroid.NEW_PROPOSAL_NOTIFS")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(launchPendingIntent)
-                .build()
-
-        val groupSummary = NotificationCompat.Builder(context!!, "new politeia proposal")
-                .setContentTitle(text + " " + proposal.name)
-                .setSmallIcon(R.drawable.politeia2)
-                .setGroup("com.dcrandroid.NEW_PROPOSAL_NOTIFS")
-                .setGroupSummary(true)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .build()
-
-        notificationManager?.let {
-            synchronized(it) {
-                it.notify(notificationId.incrementAndGet(), notification)
-                it.notify(Constants.PROPOSAL_SUMMARY_ID, groupSummary)
-            }
-        }
     }
 
     private fun parseResults(proposalsJson: String, voteStatusJson: String){
@@ -127,50 +91,80 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
         val voteStartedTokens = util!!.getStringList(Constants.VOTE_STARTED_TOKENS)
         val voteFinishedTokens = util!!.getStringList(Constants.VOTE_FINISHED_TOKENS)
 
-        println("Total ${proposals.size}")
-
         proposals.map { proposal ->
-            val status = voteStatus.find { it.token == proposal.censorshipRecord!!.token }
-            if(status == null){
-                println("Status ${proposal.censorshipRecord!!.token} is null")
-                return@map
-            }
+            val status = voteStatus.find { it.token == proposal.censorshipRecord!!.token } ?: return@map
+
+            proposal.voteStatus = status
 
             if(voteStartedTokens == null){
-                println("Vote Started token is null")
                 return@map
             }
 
             if(proposal.censorshipRecord == null){
-                println("proposal censorshipRecord is null")
                 return@map
             }
 
             if(proposal.censorshipRecord!!.token == null){
-                println("token is null")
                 return@map
             }
 
             if (!voteStartedTokens.contains(proposal.censorshipRecord!!.token) && status.status == 2 && votingStartNotifications) {
-                sendNotification(proposal,"Voting has started on")
+                sendNotification(proposal)
                 if(voteStartedTokens.indexOf(proposal.censorshipRecord!!.token) < 0){
                     voteStartedTokens.add(proposal.censorshipRecord!!.token)
                 }
             }else if (!voteFinishedTokens.contains(proposal.censorshipRecord!!.token) && status.status == 3 && votingEndNotifications) {
-                sendNotification(proposal, "Voting has finished on")
+                sendNotification(proposal)
                 if(voteFinishedTokens.indexOf(proposal.censorshipRecord!!.token) < 0){
                     voteFinishedTokens.add(proposal.censorshipRecord!!.token)
                 }
             }
-
-            println("Checked proposal ${proposal.censorshipRecord!!.token}")
         }
 
-        //voteStartedTokens.removeAt(voteStartedTokens.size - 1)
         util!!.setStringList(Constants.VOTE_STARTED_TOKENS, voteStartedTokens)
         util!!.setStringList(Constants.VOTE_FINISHED_TOKENS, voteFinishedTokens)
+    }
 
-        println("Done checking proposals")
+    private fun sendNotification(proposal: Proposal) {
+        val launchIntent = Intent(context, ProposalDetails::class.java)
+        launchIntent.action = Constants.NEW_POLITEIA_PROPOSAL_NOTIFICATION
+        launchIntent.putExtra(Constants.PROPOSAL, proposal)
+
+        val launchPendingIntent = PendingIntent.getActivity(context, Constants.POLITEIA_VOTING_STATUS, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val notificationBuilder = NotificationCompat.Builder(context!!, Constants.VOTING_CHANGE_NOTIFICATIONS)
+                .setSmallIcon(R.drawable.politeia2)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setGroup(Constants.POLITEIA_NOTIFICATIONS_GROUP)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+
+        if(proposal.voteStatus!!.status == ACTIVE_VOTING){
+            notificationBuilder.setContentTitle(context!!.getString(R.string.proposal_voting_started, proposal.name))
+        }else{
+            notificationBuilder.setContentTitle(context!!.getString(R.string.proposal_voting_finished, proposal.name))
+            notificationBuilder.setContentText(context!!.getString(R.string.proposals_votes_summary,
+                    proposal.voteStatus!!.optionsResult!!.yes, proposal.voteStatus!!.optionsResult!!.no))
+        }
+
+        val notification = notificationBuilder.build()
+
+        val groupSummary = NotificationCompat.Builder(context!!, Constants.VOTING_CHANGE_NOTIFICATIONS)
+                .setContentTitle(context!!.getString(R.string.politeia))
+                .setSmallIcon(R.drawable.politeia2)
+                .setGroup(Constants.POLITEIA_NOTIFICATIONS_GROUP)
+                .setGroupSummary(true)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
+
+        notificationManager?.let {
+            synchronized(it) {
+                it.notify(notificationId.incrementAndGet(), notification)
+                it.notify(Constants.PROPOSAL_SUMMARY_ID, groupSummary)
+            }
+        }
     }
 
     override fun onQueryAPIError(e: Exception) {
@@ -184,10 +178,8 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
         val userAgent = util!!.get(Constants.USER_AGENT, Constants.EMPTY_STRING)
         val proposalsJson = result
 
-        println("Vetted proposals gotten, executing vote status api")
         QueryAPI(voteStatusUrl, userAgent, object : QueryAPI.QueryAPICallback{
             override fun onQueryAPISuccess(result: String?) {
-                println("Vote status gotten")
                 parseResults(proposalsJson!!, result!!)
             }
 

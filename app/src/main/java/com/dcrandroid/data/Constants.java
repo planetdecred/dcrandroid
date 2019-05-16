@@ -116,10 +116,12 @@ public class Constants {
             PROPOSAL = "proposal",
             PROPOSALS = "proposals",
             POLITEIA_NOTIFICATIONS_ID = BuildConfig.APPLICATION_ID + ".POLITEIA_NOTIFICATIONS",
+            POLITEIA_NOTIFICATIONS_GROUP = BuildConfig.APPLICATION_ID + ".POLITEIA_NOTIFICATIONS_GROUP",
             VOTE_STARTED_TOKENS = "vote_started_tokens",
             VOTE_FINISHED_TOKENS = "vote_finished_tokens",
             VOTING_START_NOTIFICATIONS = "voting_start_notifications",
             VOTING_END_NOTIFICATIONS = "voting_end_notifications",
+            VOTING_CHANGE_NOTIFICATIONS = "voting_change_notifications",
             VOTES_STATUS = "votesstatus",
             FILES = "files",
             OPTION = "option",
@@ -135,6 +137,4 @@ public class Constants {
             REQUIRED_CONFIRMATIONS = 2,
             PROPOSAL_SUMMARY_ID = 383829,
             POLITEIA_VOTING_STATUS = 1;
-
-    public static final long ESTIMATED_ACCT_DISCOVERY = 300000;
 }
