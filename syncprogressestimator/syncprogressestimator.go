@@ -74,11 +74,6 @@ func (syncListener *SyncProgressEstimator) OnIndexTransactions(totalIndexed int3
 }
 
 func (syncListener *SyncProgressEstimator) OnSynced(synced bool) {
-	if !syncListener.syncing {
-		// ignore subsequent updates
-		return
-	}
-
 	syncListener.syncing = false
 
 	if synced {
@@ -89,11 +84,6 @@ func (syncListener *SyncProgressEstimator) OnSynced(synced bool) {
 }
 
 func (syncListener *SyncProgressEstimator) OnSyncEndedWithError(code int32, err error) {
-	if !syncListener.syncing {
-		// ignore subsequent updates
-		return
-	}
-
 	syncListener.syncing = false
 
 	syncError := fmt.Sprintf("Code: %d, Error: %s", code, err.Error())
