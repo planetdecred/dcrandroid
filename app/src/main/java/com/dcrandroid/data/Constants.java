@@ -6,6 +6,8 @@
 
 package com.dcrandroid.data;
 
+import com.dcrandroid.BuildConfig;
+
 /**
  * Created by afomic on 2/28/18.
  */
@@ -107,6 +109,20 @@ public class Constants {
             WIFI_SYNC = "wifi_sync",
             LICENSE = "license",
             STAKE_BASE_HASH = "0000000000000000000000000000000000000000000000000000000000000000",
+            YES = "yes",
+            NO = "no",
+            ID = "id",
+            VOTES_RECEIVED = "votesreceived",
+            PROPOSAL = "proposal",
+            PROPOSALS = "proposals",
+            POLITEIA_NOTIFICATIONS_ID = BuildConfig.APPLICATION_ID + ".POLITEIA_NOTIFICATIONS",
+            VOTE_STARTED_TOKENS = "vote_started_tokens",
+            VOTE_FINISHED_TOKENS = "vote_finished_tokens",
+            VOTING_START_NOTIFICATIONS = "voting_start_notifications",
+            VOTING_END_NOTIFICATIONS = "voting_end_notifications",
+            VOTES_STATUS = "votesstatus",
+            FILES = "files",
+            OPTION = "option",
             TRANSACTION_HEIGHT = "transaction_height",
             MINED_TRANSACTIONS = "MinedTransactions",
             UNMINED_TRANSACTIONS = "UnminedTransactions",
@@ -115,7 +131,10 @@ public class Constants {
             SYNC_STATE_FINISH = "finish",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
 
-    public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
+    public static final int TRANSACTION_SUMMARY_ID = 5552478,
+            REQUIRED_CONFIRMATIONS = 2,
+            PROPOSAL_SUMMARY_ID = 383829,
+            POLITEIA_VOTING_STATUS = 1;
 
     public static final long ESTIMATED_ACCT_DISCOVERY = 300000;
 }

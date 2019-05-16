@@ -28,12 +28,12 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         val proposal = proposals[position]
         holder.title.text = proposal.name
         val meta = String.format(Locale.getDefault(), "updated %s \nby %s \nversion %s - %d Comments",
-                Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, context), proposal.username, proposal.version, proposal.getNumcomments())
+                Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, context), proposal.username, proposal.version, proposal.numComments)
         holder.meta.setText(meta, TextView.BufferType.SPANNABLE)
-        if (proposal.voteStatus != null && proposal.voteStatus!!.totalvotes != 0) {
+        if (proposal.voteStatus != null && proposal.voteStatus!!.totalVotes != 0) {
             holder.progress.visibility = View.VISIBLE
             holder.progressBar.visibility = View.VISIBLE
-            val percentage = (proposal.voteStatus!!.yes.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
+            val percentage = (proposal.voteStatus!!.optionsResult!!.yes.toFloat() / proposal.voteStatus!!.totalVotes.toFloat()) * 100
             holder.progress.text = "%.2f%%".format(percentage)
             holder.progressBar.progress = percentage.toInt()
         } else {

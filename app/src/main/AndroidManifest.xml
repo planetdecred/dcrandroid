@@ -113,13 +113,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:theme="@style/LightTheme.NoActionBar" />
-
-        <service
-            android:name=".service.SyncService"
-            android:enabled="true"
-            android:exported="false"
-            android:label="Wallet Syncer" />
-
         <activity
             android:name=".activities.EnterPassCode"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -138,10 +131,12 @@
         <activity
             android:name=".activities.CustomCrashReport"
             android:launchMode="singleInstance" />
-
         <activity
             android:name=".activities.License"
             android:launchMode="singleInstance" />
+        <activity android:name=".activities.ProposalDetails"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -154,16 +149,19 @@
         </provider>
 
         <receiver android:name=".service.AlarmReceiver"
-            android:enabled="false">
+            android:exported="true">
             <intent-filter>
                 <action
                     android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.ProposalDetails"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"/>
+        <service
+            android:name=".service.SyncService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="Wallet Syncer" />
+
     </application>
 
 </manifest>

@@ -103,6 +103,7 @@ public class PreferenceUtil {
         if (ctx == null) {
             return d;
         }
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sp.getBoolean(key, d);
     }

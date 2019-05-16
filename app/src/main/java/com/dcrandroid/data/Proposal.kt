@@ -1,49 +1,76 @@
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
 package com.dcrandroid.data
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import java.util.*
 
 class Proposal : Serializable {
+    @SerializedName("name")
     var name: String? = null
-    var userid: String? = null
+    @SerializedName("userid")
+    var userID: String? = null
+    @SerializedName("username")
     var username: String? = null
-    var publickey: String? = null
+    @SerializedName("publickey")
+    var publicKey: String? = null
+    @SerializedName("signature")
     var signature: String? = null
+    @SerializedName("version")
     var version: String? = null
+    @SerializedName("status")
     var status: Int = 0
+    @SerializedName("state")
     var state: Int = 0
-    private var numcomments: Int = 0
+    @SerializedName("numcomments")
+    var numComments: Int = 0
+    @SerializedName("timestamp")
     var timestamp: Long = 0
-    var files: ArrayList<File>? = null
+    @SerializedName("files")
+    var files: ArrayList<PoliteiaFile>? = null
+    @SerializedName("censorshiprecord")
     var censorshipRecord: CensorshipRecord? = null
     var voteStatus: VoteStatus? = null
 
-    fun getNumcomments(): Int? {
-        return numcomments
-    }
-
-    fun setNumcomments(numcomments: Int?) {
-        this.numcomments = numcomments!!
-    }
-
-    inner class File : Serializable{
+    class PoliteiaFile : Serializable {
+        @SerializedName("")
         var name: String? = null
         var mime: String? = null
         var digest: String? = null
         var payload: String? = null
     }
 
-    inner class CensorshipRecord : Serializable {
+    class CensorshipRecord : Serializable {
+        @SerializedName("token")
         var token: String? = null
+        @SerializedName("merkle")
         var merkle: String? = null
+        @SerializedName("signature")
         var signature: String? = null
     }
 
-    inner class VoteStatus : Serializable {
+    class VoteStatus : Serializable {
+        @SerializedName("token")
         var token: String? = null
+        @SerializedName("status")
         var status: Int = 0
-        var totalvotes: Int = 0
-        var yes: Int = 0
-        var no: Int = 0
+        @SerializedName("totalvotes")
+        var totalVotes: Int = 0
+        @SerializedName("optionsresult")
+        var optionsResult: OptionsResult? = null
+        @SerializedName("endheight")
+        var endHeight: String? = null
+        @SerializedName("numofeligiblevotes")
+        var numOfEligibleVotes: Int = 0
+        @SerializedName("quorumpercentage")
+        var quorumPercentage: Int = 0
+        @SerializedName("passpercentage")
+        var passPercentage: Int = 0
+
+        class OptionsResult(var yes: Int = 0, var no: Int = 0) : Serializable
     }
 }

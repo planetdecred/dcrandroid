@@ -42,6 +42,7 @@ android {
             buildConfigField("int", "TargetTimePerBlock", "120")
             buildConfigField("String", "LogDir", "\"/wallet/testnet3/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"testnet3\"")
+            buildConfigField("String", "PoliteiaHost", "\"test-proposals.decred.org\"")
             resValue "string", "app_name", "Decred Wallet Testnet"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_testnet",
@@ -58,6 +59,7 @@ android {
             buildConfigField("int", "TargetTimePerBlock", "300")
             buildConfigField("String", "LogDir", "\"/wallet/mainnet/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"mainnet\"")
+            buildConfigField("String", "PoliteiaHost", "\"proposals.decred.org\"")
             resValue "string", "app_name", "Decred Wallet"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_mainnet",

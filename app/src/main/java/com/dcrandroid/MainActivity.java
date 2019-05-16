@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private Animation rotateAnimation;
     private SoundPool alertSound;
     private Thread blockUpdate;
+    private AlarmReceiver politeiaNotificationsReceiver = new AlarmReceiver();
 
     private Handler handler = new Handler();
     private Intent broadcastIntent = null;
@@ -302,6 +304,21 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                 }
             }, 1000);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        this.registerReceiver(politeiaNotificationsReceiver, new IntentFilter(Constants.POLITEIA_NOTIFICATIONS_ID));
+        sendBroadcast(new Intent(Constants.POLITEIA_NOTIFICATIONS_ID));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        unregisterReceiver(politeiaNotificationsReceiver);
     }
 
     @Override

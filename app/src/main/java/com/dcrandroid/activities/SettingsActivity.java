@@ -179,30 +179,36 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            findPreference("voting_start_notifications").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference(Constants.VOTING_START_NOTIFICATIONS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (getActivity() instanceof MainActivity) {
-                        if (util.getBoolean("voting_start_notifications", false) || util.getBoolean("voting_end_notifications", false)) {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Boolean b = (Boolean) newValue;
+                    Boolean enableVotingEndNotification = util.getBoolean(Constants.VOTING_END_NOTIFICATIONS);
+                    if(getActivity() instanceof MainActivity){
+                        if(b || enableVotingEndNotification){
                             ((MainActivity) getActivity()).enablePoliteiaNotifs();
-                        } else {
+                        }else {
                             ((MainActivity) getActivity()).disablePoliteiaNotifs();
                         }
                     }
+
                     return true;
                 }
             });
 
-            findPreference("voting_end_notifications").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference(Constants.VOTING_END_NOTIFICATIONS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (getActivity() instanceof MainActivity) {
-                        if (util.getBoolean("voting_start_notifications", false) || util.getBoolean("voting_end_notifications", false)) {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Boolean b = (Boolean) newValue;
+                    Boolean enableVotingStartNotification = util.getBoolean(Constants.VOTING_START_NOTIFICATIONS);
+                    if(getActivity() instanceof MainActivity){
+                        if(b || enableVotingStartNotification){
                             ((MainActivity) getActivity()).enablePoliteiaNotifs();
-                        } else {
+                        }else {
                             ((MainActivity) getActivity()).disablePoliteiaNotifs();
                         }
                     }
+
                     return true;
                 }
             });

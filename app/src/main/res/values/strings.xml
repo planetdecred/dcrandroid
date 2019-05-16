@@ -364,8 +364,9 @@
     <string name="remote_address_invalid">Remote address is invalid</string>
     <string name="key_rescan_block" translatable="false">rescan_block</string>
     <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
-    <string name="politeia_proposals_url" translatable="false">https://proposals.decred.org/api/v1/proposals/vetted</string>
-
+    <string name="vetted_proposals_url" translatable="false">https://%1$s/api/v1/proposals/vetted</string>
+    <string name="proposal_url" translatable="false">https://%1$s/api/v1/proposals/%2$s</string>
+    <string name="proposals_vote_status_url" translatable="false">https://%1$s/api/v1/proposals/votestatus</string>
     <string name="new_block_notification_description">Beep for new blocks.</string>
     <string name="new_block_notification">New Block Notification</string>
     <string name="new_politeia_proposals">New Proposals</string>

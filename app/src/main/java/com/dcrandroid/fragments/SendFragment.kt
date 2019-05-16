@@ -45,7 +45,7 @@ import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchangeRate.ExchangeRateCallback {
+class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, QueryAPI.QueryAPICallback {
 
     private var SEND_ACCOUNT = false
     private val SCANNER_ACTIVITY_REQUEST_CODE = 0
@@ -133,7 +133,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         util = PreferenceUtil(requireContext())
 
         if (Integer.parseInt(util!!.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
-            GetExchangeRate(getString(R.string.dcr_to_usd_exchange_url), util!!.get(Constants.USER_AGENT, ""), this).execute()
+            QueryAPI(getString(R.string.dcr_to_usd_exchange_url), util!!.get(Constants.USER_AGENT, ""), this).execute()
         }
 
         send_dcr_scan.setOnClickListener {
@@ -712,7 +712,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         })
     }
 
-    override fun onExchangeRateSuccess(s: String?) {
+    override fun onQueryAPISuccess(s: String?) {
         if (activity == null) {
             return
         }
@@ -750,7 +750,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         }
     }
 
-    override fun onExchangeRateError(e: java.lang.Exception) {
+    override fun onQueryAPIError(e: java.lang.Exception) {
 
     }
 

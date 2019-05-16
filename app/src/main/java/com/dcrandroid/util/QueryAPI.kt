@@ -15,12 +15,12 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
-class GetExchangeRate(private val exchangeURL: String, private val userAgent: String,
-                      private val callback: ExchangeRateCallback) : AsyncTask<Void, String, String>() {
+class QueryAPI(private val apiURL: String, private val userAgent: String,
+               private val callback: QueryAPICallback) : AsyncTask<Void, String, String>() {
 
     override fun doInBackground(vararg voids: Void): String? {
         try {
-            val url = URL(exchangeURL)
+            val url = URL(apiURL)
             val connection = url.openConnection() as HttpURLConnection
             connection.doInput = true
             connection.readTimeout = 7000
@@ -36,10 +36,10 @@ class GetExchangeRate(private val exchangeURL: String, private val userAgent: St
             return result.toString()
         } catch (e: MalformedURLException) {
             e.printStackTrace()
-            callback.onExchangeRateError(e)
+            callback.onQueryAPIError(e)
         } catch (e: IOException) {
             e.printStackTrace()
-            callback.onExchangeRateError(e)
+            callback.onQueryAPIError(e)
         }
 
         return null
@@ -47,11 +47,13 @@ class GetExchangeRate(private val exchangeURL: String, private val userAgent: St
 
     override fun onPostExecute(s: String?) {
         super.onPostExecute(s)
-        callback.onExchangeRateSuccess(s)
+        if(s != null) {
+            callback.onQueryAPISuccess(s)
+        }
     }
 
-    interface ExchangeRateCallback {
-        fun onExchangeRateSuccess(result: String?)
-        fun onExchangeRateError(e: Exception)
+    interface QueryAPICallback {
+        fun onQueryAPISuccess(result: String?)
+        fun onQueryAPIError(e: Exception)
     }
 }
