@@ -28,7 +28,6 @@ type SyncErrorCode int32
 
 const (
 	ErrorCodeUnexpectedError SyncErrorCode = iota
-	ErrorCodeContextCanceled
 	ErrorCodeDeadlineExceeded
 )
 
@@ -36,10 +35,10 @@ func (lw *LibWallet) AddSyncProgressListener(syncProgressListener SyncProgressLi
 	lw.syncProgressListeners = append(lw.syncProgressListeners, syncProgressListener)
 }
 
-func (lw *LibWallet) AddEstimatedSyncProgressListener(syncProgressJsonListener EstimatedSyncProgressJsonListener) {
+func (lw *LibWallet) AddEstimatedSyncProgressListener(syncProgressJsonListener EstimatedSyncProgressJsonListener, logEstimatedProgress bool) {
 	syncProgressEstimator := syncprogressestimator.Setup(
 		lw.activeNet.Params.Name,
-		false,
+		logEstimatedProgress,
 		lw.GetBestBlock,
 		lw.GetBestBlockTimeStamp,
 		&EstimatedSyncProgressListenerJsonWrapper{jsonListener: syncProgressJsonListener},
@@ -110,7 +109,7 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 		err := syncer.Run(ctx)
 		if err != nil {
 			if err == context.Canceled {
-				lw.notifySyncError(ErrorCodeContextCanceled, errors.E("SPV synchronization canceled: %v", err))
+				lw.notifySyncCanceled()
 			} else if err == context.DeadlineExceeded {
 				lw.notifySyncError(ErrorCodeDeadlineExceeded, errors.E("SPV synchronization deadline exceeded: %v", err))
 			} else {
@@ -163,7 +162,7 @@ func (lw *LibWallet) RpcSync(networkAddress string, username string, password st
 		err := syncer.Run(ctx, true)
 		if err != nil {
 			if err == context.Canceled {
-				lw.notifySyncError(ErrorCodeContextCanceled, errors.E("RPC synchronization canceled: %v", err))
+				lw.notifySyncCanceled()
 			} else if err == context.DeadlineExceeded {
 				lw.notifySyncError(ErrorCodeDeadlineExceeded, errors.E("RPC synchronization deadline exceeded: %v", err))
 			} else {
@@ -218,11 +217,8 @@ func (lw *LibWallet) connectToRpcClient(ctx context.Context, networkAddress stri
 
 func (lw *LibWallet) CancelSync() {
 	if lw.cancelSync != nil {
-		lw.cancelSync()
-	}
-
-	for _, syncResponse := range lw.syncProgressListeners {
-		syncResponse.OnSynced(false)
+		lw.cancelSync() // will trigger context canceled in rpcSync or spvSync
+		lw.cancelSync = nil
 	}
 
 	loadedWallet, walletLoaded := lw.walletLoader.LoadedWallet()

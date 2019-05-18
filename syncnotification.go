@@ -125,3 +125,9 @@ func (lw *LibWallet) notifySyncError(code SyncErrorCode, err error) {
 		syncProgressListener.OnSyncEndedWithError(int32(code), err)
 	}
 }
+
+func (lw *LibWallet) notifySyncCanceled() {
+	for _, syncProgressListener := range lw.syncProgressListeners {
+		syncProgressListener.OnSynced(false)
+	}
+}
