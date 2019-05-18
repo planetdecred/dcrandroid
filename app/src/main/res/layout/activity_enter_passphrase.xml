@@ -17,14 +17,14 @@
         android:layout_height="48dp"
         android:orientation="horizontal"
         android:weightSum="100"
-        android:background="#fff">
+        android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/layout_password"
             android:background="#F3F5F6"
-            android:layout_weight="50">
+            android:layout_weight="49.5">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,19 +37,26 @@
                 app:fontFamily="@font/source_sans_pro_regular_family" />
 
             <View
-                android:id="@+id/password_active_indicator"
+                android:id="@+id/password_bottom_border"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
-                android:background="#091440"
+                android:background="#808080"
+                android:visibility="gone"
                 />
         </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#808080"
+            />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackground"
-            android:layout_weight="50"
+            android:background="@color/white"
+            android:layout_weight="49.5"
             android:id="@+id/layout_pin">
 
             <TextView
@@ -63,13 +70,13 @@
                 app:fontFamily="@font/source_sans_pro_regular_family" />
 
             <View
-                android:id="@+id/pin_active_indicator"
+                android:id="@+id/pin_bottom_border"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
-                android:background="#091440"
-                android:visibility="gone"
+                android:background="#808080"
                 />
+
         </RelativeLayout>
     </LinearLayout>
 

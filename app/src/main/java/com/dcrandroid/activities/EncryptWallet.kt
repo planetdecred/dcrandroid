@@ -50,20 +50,24 @@ class EncryptWallet : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.layout_password -> {
+
+                password_bottom_border.visibility = View.GONE
+                pin_bottom_border.visibility = View.VISIBLE
+
                 layout_password.setBackgroundColor(Color.parseColor("#F3F5F6"))
-                layout_pin.setBackgroundColor(android.R.attr.selectableItemBackground)
-                pin_active_indicator.visibility = View.GONE
-                password_active_indicator.visibility = View.VISIBLE
+                layout_pin.setBackgroundColor(Color.WHITE)
                 val passwordFragment = PasswordFragment()
                 passwordFragment.seed = seed
                 supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
                         .commit()
             }
             R.id.layout_pin -> {
+
+                password_bottom_border.visibility = View.VISIBLE
+                pin_bottom_border.visibility = View.GONE
+
                 layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
-                layout_password.setBackgroundColor(android.R.attr.selectableItemBackground)
-                pin_active_indicator.visibility = View.VISIBLE
-                password_active_indicator.visibility = View.GONE
+                layout_password.setBackgroundColor(Color.WHITE)
                 val pinFragment = PinFragment()
                 pinFragment.seed = seed
                 supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
