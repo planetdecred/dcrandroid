@@ -754,7 +754,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onSyncError(int code, Exception err) { err.printStackTrace(); }
+    public void onSyncEndedWithError(int code, Exception err) { err.printStackTrace(); }
 
     @Override
     public void onFetchedHeaders(int fetchedHeadersCount, long lastHeaderTime, String state) {
@@ -770,7 +770,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         long estimatedBlocks = ((currentTime - walletData.wallet.getBestBlockTimeStamp()) / BuildConfig.TargetTimePerBlock) + walletData.wallet.getBestBlock();
 
         switch (state) {
-            case Dcrlibwallet.SyncStateStart:
+            case Constants.SYNC_STATE_START:
                 if (walletData.fetchHeaderTime != -1) {
                     return;
                 }
@@ -791,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 });
 
                 break;
-            case Dcrlibwallet.SyncStateProgress:
+            case Constants.SYNC_STATE_PROGRESS:
 
                 walletData.syncEndPoint = (int) estimatedBlocks - walletData.syncStartPoint;
                 walletData.syncCurrentPoint += fetchedHeadersCount;
@@ -840,7 +840,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 }
 
                 break;
-            case Dcrlibwallet.SyncStateFinish:
+            default:
                 updatePeerCount();
                 walletData.totalFetchTime = System.currentTimeMillis() - walletData.fetchHeaderTime;
                 walletData.syncStartPoint = -1;
@@ -859,7 +859,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onDiscoveredAddresses(String state) {
         setChainStatus(null);
         setBestBlockTime(-1);
-        if (state.equals(Dcrlibwallet.SyncStateStart)) {
+        if (state.equals(Constants.SYNC_STATE_START)) {
             accountDiscoveryProgress = new Thread() {
                 public void run() {
                     try {
@@ -950,14 +950,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         }
 
         switch (state) {
-            case Dcrlibwallet.SyncStateStart:
+            case Constants.SYNC_STATE_START:
                 setConnectionStatus(R.string.scanning_blocks);
                 walletData.syncStartPoint = 0;
                 walletData.syncCurrentPoint = 0;
                 walletData.syncEndPoint = walletData.wallet.getBestBlock();
                 walletData.rescanTime = System.currentTimeMillis();
                 break;
-            case Dcrlibwallet.SyncStateProgress:
+            case Constants.SYNC_STATE_PROGRESS:
 
                 float scannedPercentage = ((float) rescannedThrough / walletData.syncEndPoint) * 100;
 

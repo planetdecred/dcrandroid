@@ -131,17 +131,16 @@ class SyncService : Service(), SyncProgressListener {
 
     override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
         contentTitle = getString(R.string.synchronizing)
-        if (state == Dcrlibwallet.SyncStateStart) {
-            contentText = null
-        } else if (state == Dcrlibwallet.SyncStateProgress) {
-            contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
+        when (state) {
+            Constants.SYNC_STATE_START -> contentText = null
+            Constants.SYNC_STATE_PROGRESS -> contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
         }
 
         showNotification()
     }
 
     override fun onDiscoveredAddresses(state: String) {
-        if (state == Dcrlibwallet.SyncStateStart) {
+        if (state == Constants.SYNC_STATE_START) {
             contentText = null
             showNotification()
 
@@ -181,7 +180,7 @@ class SyncService : Service(), SyncProgressListener {
     }
 
     override fun onRescan(rescannedThrough: Int, state: String) {
-        if (state == Dcrlibwallet.SyncStateProgress) {
+        if (state == Constants.SYNC_STATE_PROGRESS) {
             contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
             showNotification()
         }
@@ -195,6 +194,6 @@ class SyncService : Service(), SyncProgressListener {
         stopSelf()
     }
 
-    override fun onSyncError(code: Int, err: Exception?) {}
+    override fun onSyncEndedWithError(code: Int, err: Exception?) {}
 
 }
