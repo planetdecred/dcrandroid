@@ -104,15 +104,27 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
             isAllSeedsEntered(false)
         }
 
-        holder.savedSeed.setOnFocusChangeListener { _, isFocused ->
-            if (!isFocused) {
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
                 if (!allStringSeedArray.contains(holder.savedSeed.text.toString())) {
                     holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
                 } else {
                     holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
                     holder.ivClearText.setImageResource(0)
                 }
-            } else if (isFocused && holder.savedSeed.text.isNotEmpty()) {
+            }
+
+        }
+
+        holder.savedSeed.addTextChangedListener(textWatcher)
+
+        holder.savedSeed.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused && holder.savedSeed.text.isNotEmpty()) {
                 holder.ivClearText.setImageResource(R.drawable.ic_clear)
             }
         }
