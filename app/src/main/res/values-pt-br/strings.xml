@@ -348,31 +348,31 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <!--Preference-->
     <string name="key_connection_certificate" translatable="false">key_connection_certificate</string>
     <string name="key_get_peers" translatable="false">key_get_peers</string>
-    <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
-    <string name="title_rescan_blockchain">Rescan Blockchain</string>
-    <string name="title_general">General</string>
+    <string name="summary_paste_certificate">Colar o certificado para o dcrd</string>
+    <string name="title_rescan_blockchain">Reescanear Blockchain</string>
+    <string name="title_general">Geral</string>
     <string name="remote_node_address" translatable="false">remote_node_address</string>
-    <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
+    <string name="unconfirmed_funds">Gastar fundos não confirmados</string>
     <string name="build_date_system" translatable="false">build_date_system</string>
     <string name="delete_wallet" translatable="false">delete_wallet</string>
-    <string name="delete_wallet_title">Delete Wallet</string>
-    <string name="logging_level">Logging Level</string>
-    <string name="network_mode">Network Mode</string>
-    <string name="connect_to_peer">Connect to Peer</string>
-    <string name="server_address">Server Address</string>
-    <string name="wallet_log">Wallet Log</string>
-    <string name="crash_title">Force Crash</string>
-    <string name="remote_address_invalid">Remote address is invalid</string>
+    <string name="delete_wallet_title">Apagar Carteira</string>
+    <string name="logging_level">Nível dos registros</string>
+    <string name="network_mode">Modo rede</string>
+    <string name="connect_to_peer">Conectar para o nó</string>
+    <string name="server_address">Endereço Do Servidor</string>
+    <string name="wallet_log">Registro Da Carteira</string>
+    <string name="crash_title">Forçar Quebra</string>
+    <string name="remote_address_invalid">Endereço Remoto inválido</string>
     <string name="key_rescan_block" translatable="false">rescan_block</string>
     <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
-    <string name="new_block_notification_description">Beep for new blocks.</string>
-    <string name="new_block_notification">New Block Notification</string>
-    <string name="currency_conversion">Currency Conversion</string>
-    <string name="requires_restart">Requires restart.</string>
-    <string name="user_agent_summary">For exchange rate fetching.</string>
-    <string name="changing">Changing…</string>
-    <string name="setting_startup_pin">Setting startup PIN…</string>
-    <string name="setting_startup_password">Setting startup password…</string>
+    <string name="new_block_notification_description">Apitar ao um novo bloco.</string>
+    <string name="new_block_notification">Notificação De Novo Bloco</string>
+    <string name="currency_conversion">Comversão De Moeda</string>
+    <string name="requires_restart">Necessário Reiniciar.</string>
+    <string name="user_agent_summary">Busca por taxa de cmabio.</string>
+    <string name="changing">Mudando...</string>
+    <string name="setting_startup_pin">Configurando PIN Abertura...</string>
+    <string name="setting_startup_password">Configurando Senha De Abertura...</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -411,150 +411,149 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <!--/Preference-->
 
     <!-- Overview Fragment -->
-    <string name="recent_activity">Recent Activity</string>
-    <string name="show_all_transactions">Show All Transactions</string>
-    <string name="tap_for_more_information">Tap for more information.</string>
+    <string name="recent_activity">Atividades Recentes</string>
+    <string name="show_all_transactions">Mostrar Todas As Transações</string>
+    <string name="tap_for_more_information">Aperte para mais informações.</string>
     <!--/ Overview Fragment -->
 
     <!--History Fragment -->
     <string name="coinbase" translatable="false">Coinbase</string>
-    <string name="sent">Sent</string>
-    <string name="yourself">Yourself</string>
-    <string name="received">Received</string>
-    <string name="staking">Staking</string>
-    <string name="no_transactions_have_occurred">No transactions have occurred.</string>
-    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar.</string>
+    <string name="sent">EnviadoSent</string>
+    <string name="yourself">Voce mesmoYourself</string>
+    <string name="received">Recebido</string>
+    <string name="staking">Em Staking</string>
+    <string name="no_transactions_have_occurred">Sem transações.</string>
+    <string name="wallet_is_rescanning">Carteira está pronta, reescaneando, acompanhe o progresso na barra de navegação.</string>
     <!--/History Fragment -->
 
     <!--Error Messages-->
-    <string name="not_enough_funds">Not enough funds.</string>
-    <string name="empty_seed">Empty Seed</string>
-    <string name="not_connected">Not Connected To Decred Network</string>
-    <string name="passphrase_required">Private Passphrase is required</string>
-    <string name="wallet_not_loaded">Wallet Not Loaded</string>
-    <string name="balance_remaining">Balance Remaining:</string>
-    <string name="failed_to_send_transaction">Failed to send transaction</string>
-    <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
-    <string name="not_connected_error">Not connected to the network.</string>
-    <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
-    <string name="invalid_testnet_address">This is not a valid Decred testnet3 address.</string>
-    <string name="invalid_mainnett_address">This is not a valid Decred mainnet address.</string>
+    <string name="not_enough_funds">Saldo insufuciente.</string>
+    <string name="empty_seed">Semente (Seed)Vazia</string>
+    <string name="not_connected">Sem conexão para a rede Decred</string>
+    <string name="passphrase_required">Senha privada é necessária</string>
+    <string name="wallet_not_loaded">Carteira Não Carregada</string>
+    <string name="balance_remaining">Saldo remanescente:</string>
+    <string name="failed_to_send_transaction">Falha ao enviar transação</string>
+    <string name="err_no_peers">Rede Decred não está Decred acessível devido a falta de nós (nodes).</string>
+    <string name="not_connected_error">Não conectado a rede.</string>
+    <string name="not_enought_funds_synced">Saldo insuficiente (ou sem conexão).</string>
+    <string name="invalid_testnet_address">Este não é um endereço testnet3 válido.</string>
+    <string name="invalid_mainnett_address">Este não é um endereço Decred válido.</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
-    <string name="security">Security</string>
-    <string name="sign_message">Sign Message</string>
-    <string name="address_colon">Address:</string>
-    <string name="message_colon">Message:</string>
-    <string name="this_field_is_required">This field is required.</string>
-    <string name="signature_colon">Signature:</string>
-    <string name="valid_signature">This signature verifies against the message and address.</string>
-    <string name="invalid_signature">This signature does not verify against the message and address.</string>
-    <string name="sign_message_description">Here you can verify the validity of an address, sign messages to prove your ownership of an address, and verify signatures.</string>
+    <string name="security">Segurança</string>
+    <string name="sign_message">Assinar Mensagem</string>
+    <string name="address_colon">Endereço:</string>
+    <string name="message_colon">Mensagem:</string>
+    <string name="this_field_is_required">Esse campo é necessário.</string>
+    <string name="signature_colon">Assinatura:</string>
+    <string name="valid_signature">Essa assinatura verifica contra a mensagem e o endereço.</string>
+    <string name="invalid_signature">Essa assinatura não verifica contra a mensagem e o endereço.</string>
+    <string name="sign_message_description">Aqui voce pode verificar a validade de um endereço, assinar mensagens para comprovar sua propriedade e verificar assinaturas.</string>
     <!--/Security Fragment-->
 
     <!--Send Fragment-->
-    <string name="send_in_dcr">Send in DCR:</string>
-    <string name="send_in_usd">Send in USD:</string>
+    <string name="send_in_dcr">Enviar em DCR:</string>
+    <string name="send_in_usd">Enviar em USD:</string>
     <string name="_0_00_dcr">0.00 DCR</string>
     <string name="_0_00_">0.00 </string>
-    <string name="confirmation_required">Confirmation Required</string>
-    <string name="passphrase_is_empty">Passphrase is empty</string>
+    <string name="confirmation_required">Necessária Confirmação</string>
+    <string name="passphrase_is_empty">Senha está vazia</string>
     <string name="_0_dcr">0 DCR</string>
     <string name="_0_bytes">0 bytes</string>
-    <string name="total_sending">Total Sending:</string>
-    <string name="balance_after">Balance After:</string>
-    <string name="amount_is_empty">Amount is empty</string>
-    <string name="_8_decimal_amount_err">Amount has more then 8 decimal places</string>
+    <string name="total_sending">Total Do Envio:</string>
+    <string name="balance_after">Saldo Após Envio:</string>
+    <string name="amount_is_empty">Quantidade está vazia</string>
+    <string name="_8_decimal_amount_err">Quantidade tem mais que 8 casas decimais</string>
     <string name="bytes">bytes</string>
     <string name="decred_colon">decred:</string>
-    <string name="exchange_rate">Exchange Rate:</string>
-    <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex rate unavailable (tap to retry)</string>
-    <string name="fee">Fee</string>
-    <string name="estimatedFee">Estimated Fee</string>
-    <string name="link_to_dcr_data">Tab this to see details in Dcrdata</string>
-    <string name="View_on_dcrdata">View On Dcrdata</string>
-    <string name="tap_to_paste">Tap to Paste</string>
-    <string name="sending_transaction">Sending transaction…</string>
-    <string name="send_to_account">Send to account</string>
-    <string name="send_to_address">Send to address</string>
-    <string name="amount_can_not_be_zero">Amount can not be zero.</string>
-    <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
-    <string name="network_synchronization">Please wait for network synchronization.</string>
+    <string name="exchange_rate">Fator De Conversão:</string>
+    <string name="bittrex_rate_unavailable_tap_to_retry">Fator da Bittrex indisponível (aperte para tentar novamente)</string>
+    <string name="fee">Taxa (Fee)</string>
+    <string name="estimatedFee">Taxa Estimada</string>
+    <string name="link_to_dcr_data">Detalhes em Dcrdata</string>
+    <string name="View_on_dcrdata">Veja em Dcrdata</string>
+    <string name="tap_to_paste">Aperte para Colar</string>
+    <string name="sending_transaction">Enviando transsação...</string>
+    <string name="send_to_account">Enviar para a conta</string>
+    <string name="send_to_address">Enviar para um endereço</string>
+    <string name="amount_can_not_be_zero">Quantidade não pode ser zero.</string>
+    <string name="amount_must_be_greater_than_zero">Quantidade precisa ser maior que zero.</string>
+    <string name="network_synchronization">Porfavor espere a sincronização da rede.</string>
     <!--/Send Fragment-->
 
     <!--Transaction Details View-->
-    <string name="fee_colon">Fee:</string>
-    <string name="inputs">Inputs</string>
-    <string name="outputs">Outputs</string>
-    <string name="ticket_purchase">Ticket Purchase</string>
-    <string name="vote_bits">Vote Bits</string>
-    <string name="last_block_valid">Last Block Valid</string>
-    <string name="menu_view_on_dcrdata">View on Dcrdata</string>
-    <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
+    <string name="fee_colon">Taxa:</string>
+    <string name="inputs">Entradas</string>
+    <string name="outputs">Saídas</string>
+    <string name="ticket_purchase">Adquirir Tíquete</string>
+    <string name="vote_bits">Bits De Voto</string>
+    <string name="last_block_valid">Último Bloco Válido</string>
+    <string name="menu_view_on_dcrdata">Ver no Dcrdata</string>
+    <string name="view_dcrdata_description">Ver detalhes da transação no Dcrdata</string>
     <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->
-    <string name="toConfirmEnterYourPassword">To confirm, enter your password:</string>
-    <string name="to">to</string>
-    <string name="withFeeOff">with a fee of</string>
+    <string name="toConfirmEnterYourPassword">Insira sua senha para confirmar:</string>
+    <string name="to">para</string>
+    <string name="withFeeOff">com uma taxa de</string>
     <string name="total">Total</string>
     <!--/Confirm Transaction Dialog-->
 
     <!--Security-->
     <string name="erase_char">⌫</string>
-    <string name="confirm_spending_pin">Confirm Spending PIN</string>
-    <string name="create_spending_pin">Create Spending PIN</string>
-    <string name="create_security_pass">Create Spending Password</string>
-    <string name="mismatch_passcode">PINs did not match. Try again</string>
-    <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
-    <string name="mismatch_password">PASSWORDS DO NOT MATCH</string>
-    <string name="password_match">PASSWORDS MATCH</string>
-    <string name="confirm_password">CONFIRM PASSWORD</string>
-    <string name="password">PASSWORD</string>
-    <string name="enter_spending_pin">Enter Spending PIN</string>
-    <string name="password_strength">PASSWORD STRENGTH</string>
-    <string name="pin_strength">PIN STRENGTH</string>
-    <string name="enter_startup_pin">Enter Startup Pin</string>
-    <string name="confirm_startup_pin">Confirm Startup PIN</string>
-    <string name="create_startup_pin">Create Startup PIN</string>
-    <string name="enter_spending_password">Enter Spending Password</string>
-    <string name="create_startup_password">Create Startup Password</string>
-    <string name="change_spending_pin_password">Change Spending PIN/Password</string>
-    <string name="required_to_send_funds">Required to send funds.</string>
-    <string name="enter_current_pin">Enter Current PIN</string>
-    <string name="confirm_startup_password">Confirm Startup Password</string>
-    <string name="enter_current_spending_password">Enter Current Spending Password</string>
-    <string name="enter_current_startup_password">Enter Current Startup Password</string>
-    <string name="enter_startup_password">Enter Startup Password</string>
-    <string name="removing_startup_pass">Removing startup password…</string>
-    <string name="removing_startup_pin">Removing startup pin…</string>
-    <string name="changing_password">Changing password…</string>
-    <string name="startup_pin_password">Startup PIN/Password</string>
-    <string name="encrypt_wallet_summary">A pin/password will be required at startup.</string>
-    <string name="change_startup_pin_password">Change Startup PIN/Password</string>
-    <string name="required_to_enter_app">Required to enter app.</string>
-    <string name="changing_pin">Changing PIN…</string>
-    <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
+    <string name="confirm_spending_pin">Confirmar PIN De Gasto</string>
+    <string name="create_spending_pin">Criar PIN De Gasto</string>
+    <string name="create_security_pass">Criar Senha De Gasto</string>
+    <string name="mismatch_passcode">PINs não coincidem. Tente novamente</string>
+    <string name="create_wallet_uninitialized">Carteira não pode ser criada, LibWallet não inicializada</string>
+    <string name="mismatch_password">SENHAS NÃO COINCIDEM</string>
+    <string name="password_match">SENHAS COINCIDEM</string>
+    <string name="confirm_password">CONFIRMAR SENHA</string>
+    <string name="password">SENHA</string>
+    <string name="enter_spending_pin">Insira PIN De Gasto</string>
+    <string name="password_strength">FORÇA DA SENHA</string>
+    <string name="pin_strength">FORÇA DO PIN</string>
+    <string name="enter_startup_pin">Insira PIN de inicialização</string>
+    <string name="confirm_startup_pin">Confirmar PIN de inicialização</string>
+    <string name="create_startup_pin">Criar PIN de inicialização</string>
+    <string name="enter_spending_password">Insira Senha De Gasto</string>
+    <string name="create_startup_password">Criar Senha De Inicialização</string>
+    <string name="change_spending_pin_password">Mudar PIN/Senha De Gasto</string>
+    <string name="required_to_send_funds">Necessário para enviar fundos.</string>
+    <string name="enter_current_pin">Insira PIN Atual</string>
+    <string name="confirm_startup_password">Confirmar Senha De Inicialização</string>
+    <string name="enter_current_spending_password">Insira Senha De Gasto Atual</string>
+    <string name="enter_current_startup_password">Insira a atual Senha De Inicialização</string>
+    <string name="enter_startup_password">Insira a Senha De Inicialização</string>
+    <string name="removing_startup_pass">Removendo Senha De Inicialização...</string>
+    <string name="removing_startup_pin">Removendo PIN De Inicialização...</string>
+    <string name="changing_password">Mudando senha...</string>
+    <string name="startup_pin_password">PIN/Senha De Inicialização</string>
+    <string name="encrypt_wallet_summary">Um PIN/Senha será solicitado para inicialização.</string>
+    <string name="change_startup_pin_password">Mudar PIN/Senha De Inicialização</string>
+    <string name="required_to_enter_app">Necesssária para no aplicativo.</string>
+    <string name="changing_pin">Mudando PIN...</string>
+    <string name="security_page_wallet_sync">Por favor espere sua carteira terminar a sincronização.</string>
     <!--/Security-->
 
     <!--Crash Report-->
-    <string name="confirm_crash">Confirm Crash</string>
-    <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report.</string>
-    <string name="dont_send">Don\'t send</string>
-    <string name="send_report">Send Report</string>
-    <string name="app_crashed">App Crashed</string>
-    <string name="crash_report_copied">Crash report copied successfully</string>
-    <string name="hide_report">Hide Report</string>
-    <string name="view_report">View Report</string>
+    <string name="confirm_crash">Confirmar Quebra</string>
+    <string name="crash_confirmation_description">Isso forçará a quebra do aplicativo e será possível enviar um relatório do erro.</string>
+    <string name="dont_send">Não enviar relatório</string>
+    <string name="send_report">Enviar relatório</string>
+    <string name="app_crashed">Quebra do aplicativo</string>
+    <string name="crash_report_copied">Relatório de quebra  copiado com sucesso</string>
+    <string name="hide_report">Ocultar relatório</string>
+    <string name="view_report">Ver relatório</string>
     <!--/Crash Report-->
 
     <!--WIFI Sync-->
-    <string name="wifi_data_sync_title">Sync when not on WiFi</string>
-    <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
-    <string name="no_wifi">No Wi-Fi</string>
-    <string name="wifi_sync_notice">Would you like to sync anyways?</string>
-    <string name="not_connected_to_wifi">Not connected to WiFi.</string>
+    <string name="wifi_data_sync_title">Sincronizar quando não estiver na rede sem fio</string>
+    <string name="connect_to_wifi">Conectar a uma rede sem fio para sincronizar</string>
+    <string name="no_wifi">Não há rede sem fio</string>
+    <string name="wifi_sync_notice">Deseja sincronizar de qualquer jeito?</string>
+    <string name="not_connected_to_wifi">Sem conexão com a rede sem fio.</string>
     <!--/WIFI Sync-->
-
 </resources>
