@@ -26,6 +26,8 @@ type SyncProgressEstimator struct {
 
 	progressListener EstimatedSyncProgressListener
 
+	connectedPeers int32
+
 	beginFetchTimeStamp   int64
 	startHeaderHeight     int32
 	currentHeaderHeight   int32
@@ -35,6 +37,8 @@ type SyncProgressEstimator struct {
 	totalDiscoveryTimeSpent   int64
 
 	rescanStartTime int64
+
+	totalInactiveSeconds int64
 }
 
 // SetupSyncProgressEstimator creates an instance of `SyncProgressEstimator` which implements `SyncProgressListener`.
@@ -84,9 +88,16 @@ func (syncListener *SyncProgressEstimator) Reset() {
 	syncListener.totalDiscoveryTimeSpent = -1
 }
 
+func (syncListener *SyncProgressEstimator) DiscardPeriodsOfInactivity(totalInactiveSeconds int64) {
+	syncListener.totalInactiveSeconds += totalInactiveSeconds
+	if syncListener.connectedPeers == 0 {
+		// assume it would take another 60 seconds to reconnect to peers
+		syncListener.totalInactiveSeconds += 60
+	}
+}
+
 /**
 Following methods satisfy the `SyncProgressListener` interface.
-Other interface methods are implemented in the different step*.go files in this package.
 */
 func (syncListener *SyncProgressEstimator) OnFetchMissingCFilters(missingCFiltersStart, missingCFiltersEnd int32, state string) {
 }
@@ -124,6 +135,7 @@ func (syncListener *SyncProgressEstimator) OnPeerDisconnected(peerCount int32) {
 }
 
 func (syncListener *SyncProgressEstimator) handlePeerCountUpdate(peerCount int32) {
+	syncListener.connectedPeers = peerCount
 	syncListener.progressListener.OnPeerConnectedOrDisconnected(peerCount)
 
 	if syncListener.showLog && syncListener.syncing {
@@ -176,6 +188,12 @@ func (syncListener *SyncProgressEstimator) OnFetchedHeaders(fetchedHeadersCount 
 
 		syncEndPoint := estimatedFinalBlockHeight - syncListener.startHeaderHeight
 		headersFetchingRate := float64(totalFetchedHeaders) / float64(syncEndPoint)
+
+		// If there was some period of inactivity,
+		// assume that this process started at some point in the future,
+		// thereby accounting for the total reported time of inactivity.
+		syncListener.beginFetchTimeStamp += syncListener.totalInactiveSeconds
+		syncListener.totalInactiveSeconds = 0
 
 		timeTakenSoFar := time.Now().Unix() - syncListener.beginFetchTimeStamp
 		estimatedTotalHeadersFetchTime := math.Round(float64(timeTakenSoFar) / headersFetchingRate)
@@ -242,6 +260,11 @@ func (syncListener *SyncProgressEstimator) updateAddressDiscoveryProgress() {
 	// these values will be used every second to calculate the total sync progress
 	addressDiscoveryStartTime := time.Now().Unix()
 	totalHeadersFetchTime := float64(syncListener.headersFetchTimeSpent)
+	if totalHeadersFetchTime < 150 {
+		// 80% of 150 seconds is 120 seconds.
+		// This ensures that minimum estimated discovery time is 120 seconds (2 minutes).
+		totalHeadersFetchTime = 150
+	}
 	estimatedRescanTime := totalHeadersFetchTime * RescanPercentage
 	estimatedDiscoveryTime := totalHeadersFetchTime * DiscoveryPercentage
 
@@ -257,6 +280,12 @@ func (syncListener *SyncProgressEstimator) updateAddressDiscoveryProgress() {
 
 	go func() {
 		for {
+			// If there was some period of inactivity,
+			// assume that this process started at some point in the future,
+			// thereby accounting for the total reported time of inactivity.
+			addressDiscoveryStartTime += syncListener.totalInactiveSeconds
+			syncListener.totalInactiveSeconds = 0
+
 			select {
 			case <-everySecondTickerChannel:
 				// calculate address discovery progress
@@ -349,6 +378,12 @@ func (syncListener *SyncProgressEstimator) OnRescan(rescannedThrough int32, stat
 		rescanRate := float64(rescannedThrough) / float64(syncListener.headersRescanProgress.TotalHeadersToScan)
 		syncListener.headersRescanProgress.RescanProgress = int32(math.Round(rescanRate * 100))
 		syncListener.headersRescanProgress.CurrentRescanHeight = rescannedThrough
+
+		// If there was some period of inactivity,
+		// assume that this process started at some point in the future,
+		// thereby accounting for the total reported time of inactivity.
+		syncListener.rescanStartTime += syncListener.totalInactiveSeconds
+		syncListener.totalInactiveSeconds = 0
 
 		elapsedRescanTime := time.Now().Unix() - syncListener.rescanStartTime
 		totalElapsedTime := syncListener.headersFetchTimeSpent + syncListener.totalDiscoveryTimeSpent + elapsedRescanTime
