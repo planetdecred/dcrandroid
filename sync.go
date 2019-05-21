@@ -13,7 +13,6 @@ import (
 	"github.com/decred/dcrwallet/p2p"
 	"github.com/decred/dcrwallet/spv"
 	"github.com/decred/dcrwallet/wallet"
-	"github.com/raedahgroup/dcrlibwallet/syncprogressestimator"
 )
 
 type syncData struct {
@@ -35,13 +34,13 @@ func (lw *LibWallet) AddSyncProgressListener(syncProgressListener SyncProgressLi
 	lw.syncProgressListeners = append(lw.syncProgressListeners, syncProgressListener)
 }
 
-func (lw *LibWallet) AddEstimatedSyncProgressListener(syncProgressJsonListener EstimatedSyncProgressJsonListener, logEstimatedProgress bool) {
-	syncProgressEstimator := syncprogressestimator.Setup(
+func (lw *LibWallet) AddEstimatedSyncProgressListener(syncProgressListener EstimatedSyncProgressListener, logEstimatedProgress bool) {
+	syncProgressEstimator := SetupSyncProgressEstimator(
 		lw.activeNet.Params.Name,
 		logEstimatedProgress,
 		lw.GetBestBlock,
 		lw.GetBestBlockTimeStamp,
-		&EstimatedSyncProgressListenerJsonWrapper{jsonListener: syncProgressJsonListener},
+		syncProgressListener,
 	)
 
 	lw.AddSyncProgressListener(syncProgressEstimator)
@@ -49,7 +48,7 @@ func (lw *LibWallet) AddEstimatedSyncProgressListener(syncProgressJsonListener E
 
 func (lw *LibWallet) ResetSyncProgressListeners() {
 	for _, syncProgressListener := range lw.syncProgressListeners {
-		if syncProgressEstimator, ok := syncProgressListener.(*syncprogressestimator.SyncProgressEstimator); ok {
+		if syncProgressEstimator, ok := syncProgressListener.(*SyncProgressEstimator); ok {
 			syncProgressEstimator.Reset()
 		}
 	}
@@ -259,18 +258,18 @@ func (lw *LibWallet) RescanBlocks() error {
 			}
 			totalHeight += p.ScannedThrough
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(p.ScannedThrough, syncprogressestimator.SyncStateProgress)
+				syncProgressListener.OnRescan(p.ScannedThrough, SyncStateProgress)
 			}
 		}
 
 		select {
 		case <-ctx.Done():
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(totalHeight, syncprogressestimator.SyncStateProgress)
+				syncProgressListener.OnRescan(totalHeight, SyncStateProgress)
 			}
 		default:
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(totalHeight, syncprogressestimator.SyncStateFinish)
+				syncProgressListener.OnRescan(totalHeight, SyncStateFinish)
 			}
 		}
 	}()

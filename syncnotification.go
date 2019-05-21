@@ -4,7 +4,6 @@ import (
 	"github.com/decred/dcrwallet/chain"
 	"github.com/decred/dcrwallet/spv"
 	"github.com/decred/dcrwallet/wallet"
-	"github.com/raedahgroup/dcrlibwallet/syncprogressestimator"
 )
 
 type SyncProgressListener interface {
@@ -60,42 +59,42 @@ func (lw *LibWallet) generalSyncNotificationCallbacks(loadedWallet *wallet.Walle
 		},
 		FetchMissingCFiltersStarted: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnFetchMissingCFilters(0, 0, syncprogressestimator.SyncStateStart)
+				syncProgressListener.OnFetchMissingCFilters(0, 0, SyncStateStart)
 			}
 		},
 		FetchMissingCFiltersProgress: func(missingCFitlersStart, missingCFitlersEnd int32) {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, syncprogressestimator.SyncStateProgress)
+				syncProgressListener.OnFetchMissingCFilters(missingCFitlersStart, missingCFitlersEnd, SyncStateProgress)
 			}
 		},
 		FetchMissingCFiltersFinished: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnFetchMissingCFilters(0, 0, syncprogressestimator.SyncStateFinish)
+				syncProgressListener.OnFetchMissingCFilters(0, 0, SyncStateFinish)
 			}
 		},
 		FetchHeadersStarted: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnFetchedHeaders(0, 0, syncprogressestimator.SyncStateStart)
+				syncProgressListener.OnFetchedHeaders(0, 0, SyncStateStart)
 			}
 		},
 		FetchHeadersProgress: func(fetchedHeadersCount int32, lastHeaderTime int64) {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, syncprogressestimator.SyncStateProgress)
+				syncProgressListener.OnFetchedHeaders(fetchedHeadersCount, lastHeaderTime, SyncStateProgress)
 			}
 		},
 		FetchHeadersFinished: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnFetchedHeaders(0, 0, syncprogressestimator.SyncStateFinish)
+				syncProgressListener.OnFetchedHeaders(0, 0, SyncStateFinish)
 			}
 		},
 		DiscoverAddressesStarted: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnDiscoveredAddresses(syncprogressestimator.SyncStateStart)
+				syncProgressListener.OnDiscoveredAddresses(SyncStateStart)
 			}
 		},
 		DiscoverAddressesFinished: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnDiscoveredAddresses(syncprogressestimator.SyncStateFinish)
+				syncProgressListener.OnDiscoveredAddresses(SyncStateFinish)
 			}
 
 			if !loadedWallet.Locked() {
@@ -104,17 +103,17 @@ func (lw *LibWallet) generalSyncNotificationCallbacks(loadedWallet *wallet.Walle
 		},
 		RescanStarted: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(0, syncprogressestimator.SyncStateStart)
+				syncProgressListener.OnRescan(0, SyncStateStart)
 			}
 		},
 		RescanProgress: func(rescannedThrough int32) {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(rescannedThrough, syncprogressestimator.SyncStateProgress)
+				syncProgressListener.OnRescan(rescannedThrough, SyncStateProgress)
 			}
 		},
 		RescanFinished: func() {
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnRescan(0, syncprogressestimator.SyncStateFinish)
+				syncProgressListener.OnRescan(0, SyncStateFinish)
 			}
 		},
 	}

@@ -114,14 +114,13 @@ func (lw *LibWallet) Shutdown(exit bool) {
 		lw.rpcClient.Stop()
 	}
 
-	close(shutdownSignaled)
-
-	if lw.cancelSync != nil {
-		lw.cancelSync()
+	if !IsChannelClosed(shutdownSignaled) {
+		log.Info("Channel not closed, closing")
+		close(shutdownSignaled)
 	}
 
 	if logRotator != nil {
-		log.Infof("Shutting down log rotator")
+		log.Info("Shutting down log rotator")
 		logRotator.Close()
 	}
 
@@ -130,7 +129,7 @@ func (lw *LibWallet) Shutdown(exit bool) {
 		if err != nil {
 			log.Errorf("Failed to close wallet: %v", err)
 		} else {
-			log.Infof("Closed wallet")
+			log.Info("Closed wallet")
 		}
 	}
 
