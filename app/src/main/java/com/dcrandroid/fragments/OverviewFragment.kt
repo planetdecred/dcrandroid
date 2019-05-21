@@ -9,10 +9,8 @@ package com.dcrandroid.fragments
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.AnimationDrawable
 import android.os.Build
 import android.os.Bundle
@@ -36,6 +34,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
+import dcrlibwallet.*
 import kotlinx.android.synthetic.main.content_overview.*
 import kotlinx.android.synthetic.main.overview_sync_layout.*
 import java.math.BigDecimal
@@ -44,7 +43,7 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, EstimatedSyncProgressListener {
 
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
@@ -87,9 +86,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             pb_sync_progress.progress = 0
             overview_sync_layout.visibility = View.VISIBLE
             tv_synchronizing.setText(R.string.starting_synchronization)
-            if (walletData!!.syncStatus != null) {
-                publishProgress()
-            }
 
         } else {
             getBalance()
@@ -204,8 +200,9 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         history_recycler_view2.adapter = transactionAdapter
         registerForContextMenu(history_recycler_view2)
-    }
 
+        walletData!!.wallet.addEstimatedSyncProgressListener(this, false)
+    }
 
     private fun registerNotificationChannel() {
         notificationManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -303,7 +300,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             .create()
 
                     val transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
-                    if (transactions.isEmpty()) {
+                    if (transactions == null || transactions.isEmpty()) {
                         activity!!.runOnUiThread {
                             no_history.setText(R.string.no_transactions)
                             history_recycler_view2.visibility = View.GONE
@@ -390,15 +387,19 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onResume() {
         super.onResume()
-        if (context != null) {
-            val filter = IntentFilter(Constants.SYNCED)
-            context!!.registerReceiver(receiver, filter)
-        }
 
         if (walletData!!.syncing) {
             overview_sync_layout.visibility = View.VISIBLE
+            iv_sync_indicator.visibility = View.VISIBLE
+            overview_av_balance.visibility = View.GONE
+            iv_sync_indicator.post {
+                val syncAnimation = iv_sync_indicator.background as AnimationDrawable
+                syncAnimation.start()
+            }
+
+            tv_synchronizing.setText(R.string.starting_synchronization)
         } else {
-            overview_sync_layout.visibility = View.GONE
+            hideSyncLayout()
         }
 
         isForeground = true
@@ -410,9 +411,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onPause() {
         super.onPause()
-        if (context != null) {
-            context!!.unregisterReceiver(receiver)
-        }
         isForeground = false
     }
 
@@ -479,68 +477,133 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         overview_av_balance.visibility = View.VISIBLE
     }
 
-    fun publishProgress() {
+    private fun publishProgress(syncProgress: Int, syncStatus: String, remainingSyncTime: Long) {
         if (activity != null) {
             activity!!.runOnUiThread {
                 tv_synchronizing.setText(R.string.synchronizing)
-                pb_sync_progress.visibility = View.VISIBLE
                 pb_percent_complete.visibility = View.VISIBLE
                 if (pb_status_layout.visibility == View.GONE) {
                     tap_for_more_info.visibility = View.VISIBLE
                 }
 
-                pb_sync_progress.progress = walletData!!.syncProgress.toInt()
+                pb_sync_progress.apply {
+                    visibility = View.VISIBLE
+                    progress = syncProgress
+                }
 
-                pb_percent_complete.text = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, context)
+                pb_percent_complete.text = Utils.getSyncTimeRemaining(remainingSyncTime, syncProgress, false, context)
+                pb_status.text = syncStatus
 
-                pb_status.text = walletData!!.syncStatus
-
-                pb_verbose_status.text = walletData!!.syncVerbose
-
+                val peers = walletData!!.peers
                 if (BuildConfig.IS_TESTNET) {
-                    if (walletData!!.peers == 1) {
+                    if (peers == 1) {
                         syncing_peers.text = getString(R.string.one_syncing_peer_testnet)
                     } else {
-                        syncing_peers.text = getString(R.string.syncing_peers_testnet, walletData!!.peers)
+                        syncing_peers.text = getString(R.string.syncing_peers_testnet, peers)
                     }
                 } else {
-                    if (walletData!!.peers == 1) {
+                    if (peers == 1) {
                         syncing_peers.text = getString(R.string.one_syncing_peer_mainnet)
                     } else {
-                        syncing_peers.text = getString(R.string.syncing_peers_mainnet, walletData!!.peers)
+                        syncing_peers.text = getString(R.string.syncing_peers_mainnet, peers)
                     }
                 }
             }
         }
     }
 
-    private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action != null && intent.action == Constants.SYNCED) {
-                if (walletData!!.syncing) {
-                    overview_sync_layout.visibility = View.VISIBLE
-                    iv_sync_indicator.visibility = View.VISIBLE
-                    overview_av_balance.visibility = View.GONE
-                    iv_sync_indicator.post {
-                        val syncAnimation = iv_sync_indicator.background as AnimationDrawable
-                        syncAnimation.start()
-                    }
+    override fun onHeadersFetchProgress(report: HeadersFetchProgressReport) {
+        if (context == null) {
+            return
+        }
 
-                    tv_synchronizing.setText(R.string.starting_synchronization)
+        val daysBehind = Utils.calculateDays(System.currentTimeMillis() / 1000 - report.currentHeaderTimestamp, context)
+        val syncStatus = getString(R.string.fetched_header_format, report.fetchedHeadersCount,
+                report.totalHeadersToFetch, report.headersFetchProgress, daysBehind)
 
-                    if (walletData!!.syncStatus != null) {
-                        publishProgress()
-                    }
-                } else {
-                    overview_sync_layout.visibility = View.GONE
-                    pb_sync_progress.visibility = View.GONE
-                    pb_percent_complete.visibility = View.GONE
+        publishProgress(report.generalSyncProgress.totalSyncProgress, syncStatus, report.generalSyncProgress.totalTimeRemainingSeconds)
+    }
 
-                    getBalance()
-                    hideSyncIndicator()
-                    prepareHistoryData()
-                }
-            }
+    override fun onAddressDiscoveryProgress(report: AddressDiscoveryProgressReport) {
+        if (context == null) {
+            return
+        }
+        val discoveryProgress = report.addressDiscoveryProgress.toLong()
+        val syncStatus = if (discoveryProgress > 100) {
+            getString(R.string.overview_discovering_used_addresses_over, discoveryProgress)
+        } else {
+            getString(R.string.overview_discovering_used_addresses, discoveryProgress)
+        }
+
+        publishProgress(report.generalSyncProgress.totalSyncProgress, syncStatus, report.generalSyncProgress.totalTimeRemainingSeconds)
+    }
+
+    override fun onHeadersRescanProgress(report: HeadersRescanProgressReport) {
+        if (context == null) {
+            return
+        }
+
+        val syncStatus = getString(R.string.overview_rescan_height_format, report.currentRescanHeight,
+                report.totalHeadersToScan, Math.round(report.rescanProgress.toFloat()))
+
+        publishProgress(report.generalSyncProgress.totalSyncProgress, syncStatus, report.generalSyncProgress.totalTimeRemainingSeconds)
+    }
+
+    override fun debug(debugInfo: DebugInfo) {
+        if (context == null) {
+            return
+        }
+
+        // Current Stage Time
+        val elapsedStageTime = debugInfo.currentStageTimeElapsed
+        val remainingStageTime = debugInfo.currentStageTimeRemaining
+        val totalStageTime = elapsedStageTime + remainingStageTime
+
+        // Total Sync Time
+        val elapsedSyncTime = debugInfo.totalTimeElapsed
+        val remainingSyncTime = debugInfo.totalTimeRemaining
+        val totalSyncTime = elapsedSyncTime + remainingSyncTime
+
+        activity!!.runOnUiThread {
+            pb_verbose_status.text = getString(R.string.sync_status_verbose, Utils.getTime(elapsedSyncTime), Utils.getTime(remainingSyncTime),
+                    Utils.getTime(Math.round(totalSyncTime.toFloat()).toLong()), Utils.getTime(elapsedStageTime), Utils.getTime(remainingStageTime),
+                    Utils.getTime(Math.round(totalStageTime.toFloat()).toLong()))
+        }
+    }
+
+    override fun onSyncCanceled() {
+        if(context == null){
+            return
+        }
+        hideSyncLayout()
+    }
+
+    override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {}
+
+    override fun onSyncCompleted() {
+        if(context == null){
+            return
+        }
+        hideSyncLayout()
+    }
+
+    override fun onSyncEndedWithError(err: java.lang.Exception?) {
+        if(context == null){
+            return
+        }
+        err!!.printStackTrace()
+        hideSyncLayout()
+    }
+
+    private fun hideSyncLayout() {
+        activity!!.runOnUiThread {
+            overview_sync_layout.visibility = View.GONE
+            pb_sync_progress.visibility = View.GONE
+            pb_percent_complete.visibility = View.GONE
+
+            getBalance()
+            hideSyncIndicator()
+            prepareHistoryData()
         }
     }
 

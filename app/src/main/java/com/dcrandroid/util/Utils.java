@@ -166,6 +166,10 @@ public class Utils {
     }
 
     public static String calculateDays(long seconds, Context context) {
+        if(context == null){
+            return "";
+        }
+
         long days = TimeUnit.SECONDS.toDays(seconds);
         if (days == 0) {
             return context.getString(R.string.less_than_one_day);
@@ -245,9 +249,8 @@ public class Utils {
         return seconds + "s " + ago;
     }
 
-    public static String getSyncTimeRemaining(long millis, int percentageCompleted, boolean useLeft, Context ctx) {
-        if (millis > 1000) {
-            long seconds = millis / 1000;
+    public static String getSyncTimeRemaining(long seconds, int percentageCompleted, boolean useLeft, Context ctx) {
+        if (seconds > 1) {
 
             if (seconds > 60) {
                 long minutes = seconds / 60;
@@ -272,8 +275,7 @@ public class Utils {
         return ctx.getString(R.string.remaining_sync_eta_less_than_seconds, percentageCompleted);
     }
 
-    public static String getTime(long millis) {
-        long seconds = millis / 1000;
+    public static String getTime(long seconds) {
         if (seconds > 60) {
             long minutes = seconds / 60;
             seconds = seconds % 60;

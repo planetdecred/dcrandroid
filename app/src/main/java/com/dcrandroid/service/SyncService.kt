@@ -18,14 +18,12 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
-import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
-import dcrlibwallet.SyncProgressListener
+import dcrlibwallet.*
 import java.lang.Exception
 
 const val NOTIFICATION_ID = 4
 
-class SyncService : Service(), SyncProgressListener {
+class SyncService : Service(), EstimatedSyncProgressListener {
 
     private var TAG: String = "SyncService"
     private var notification: Notification? = null
@@ -37,8 +35,6 @@ class SyncService : Service(), SyncProgressListener {
     private var contentText: String? = null
 
     private var peerCount: Int = 0
-
-    private var addressDiscoveryThread: Thread? = null
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -68,12 +64,12 @@ class SyncService : Service(), SyncProgressListener {
             manager.createNotificationChannel(channel)
         }
 
-        contentTitle = "Dcrandroid"
+        contentTitle = getString(R.string.app_name)
         contentText = getString(R.string.connecting_to_peers)
 
         showNotification()
 
-        wallet!!.addSyncProgressListener(this)
+        wallet!!.addEstimatedSyncProgressListener(this, false)
 
         val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
 
@@ -88,34 +84,22 @@ class SyncService : Service(), SyncProgressListener {
         val launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val subText: String = when (peerCount) {
-            0 -> "Syncing"
-            1 -> "Connected to a peer"
-            else -> "Connected to $peerCount peers"
+            0 -> getString(R.string.syncing)
+            1 -> getString(R.string.connected_to_a_peer)
+            else -> getString(R.string.connected_to_n_peer, peerCount)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notification = Notification.Builder(this, "syncer")
-                    .setContentTitle(contentTitle)
-                    .setSubText(subText)
-                    .setContentText(contentText)
-                    .setSmallIcon(R.drawable.decred_symbol_white)
-                    .setOngoing(true)
-                    .setAutoCancel(true)
-                    .setContentIntent(launchPendingIntent)
-                    .build()
-        } else {
-            notification = NotificationCompat.Builder(this)
-                    .setContentTitle(contentTitle)
-                    .setSubText(subText)
-                    .setContentText(contentText)
-                    .setSmallIcon(R.drawable.decred_symbol_white)
-                    .setOngoing(true)
-                    .setAutoCancel(true)
-                    .setSound(null)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(launchPendingIntent)
-                    .build()
-        }
+        notification = NotificationCompat.Builder(this, "syncer")
+                .setContentTitle(contentTitle)
+                .setSubText(subText)
+                .setContentText(contentText)
+                .setSmallIcon(R.drawable.decred_symbol_white)
+                .setOngoing(true)
+                .setAutoCancel(true)
+                .setSound(null)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+                .build()
         startForeground(NOTIFICATION_ID, notification)
     }
 
@@ -129,71 +113,44 @@ class SyncService : Service(), SyncProgressListener {
         println("Task Removed")
     }
 
-    override fun onFetchedHeaders(fetchedHeadersCount: Int, lastHeaderTime: Long, state: String) {
+    private fun publishProgress(remainingTime: Long, syncProgress: Int){
         contentTitle = getString(R.string.synchronizing)
-        when (state) {
-            Constants.SYNC_STATE_START -> contentText = null
-            Constants.SYNC_STATE_PROGRESS -> contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
-        }
-
+        contentText = Utils.getSyncTimeRemaining(remainingTime, syncProgress, false, this)
         showNotification()
     }
 
-    override fun onDiscoveredAddresses(state: String) {
-        if (state == Constants.SYNC_STATE_START) {
-            contentText = null
-            showNotification()
-
-            addressDiscoveryThread = Thread {
-                try {
-                    while (!Thread.interrupted()) {
-                        Thread.sleep(1000)
-
-                        contentText = null
-                        contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
-                        showNotification()
-                    }
-                } catch (_: InterruptedException) {
-                }
-            }
-
-            addressDiscoveryThread!!.start()
-        } else {
-            if (addressDiscoveryThread != null && addressDiscoveryThread!!.isAlive) {
-                addressDiscoveryThread!!.interrupt()
-            }
-        }
+    override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {
+        publishProgress(headersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds, headersFetchProgress.generalSyncProgress.totalSyncProgress)
     }
 
-    override fun onPeerConnected(peerCount: Int) {
-        this.peerCount = peerCount
+    override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport) {
+        publishProgress(addressDiscoveryProgress.generalSyncProgress.totalTimeRemainingSeconds, addressDiscoveryProgress.generalSyncProgress.totalSyncProgress)
+    }
+
+    override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport) {
+        publishProgress(headersRescanProgress.generalSyncProgress.totalTimeRemainingSeconds, headersRescanProgress.generalSyncProgress.totalSyncProgress)
+    }
+
+    override fun onSyncEndedWithError(err: Exception) {
+        err.printStackTrace()
+    }
+
+    override fun onSyncCanceled() {
+        println("Sync Canceled, destroying service")
+        stopForeground(true)
+        stopSelf()
+    }
+
+    override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {
+        this.peerCount = numberOfConnectedPeers
         showNotification()
     }
 
-    override fun onPeerDisconnected(peerCount: Int) {
-        this.peerCount = peerCount
-        showNotification()
-    }
-
-    override fun onFetchMissingCFilters(missingCFitlersStart: Int, missingCFitlersEnd: Int, state: String) {
-
-    }
-
-    override fun onRescan(rescannedThrough: Int, state: String) {
-        if (state == Constants.SYNC_STATE_PROGRESS) {
-            contentText = Utils.getSyncTimeRemaining(walletData!!.syncRemainingTime, walletData!!.syncProgress.toInt(), false, this)
-            showNotification()
-        }
-    }
-
-    override fun onIndexTransactions(p0: Int) {}
-
-    override fun onSynced(synced: Boolean) {
+    override fun onSyncCompleted() {
         println("Synced, destroying service")
         stopForeground(true)
         stopSelf()
     }
 
-    override fun onSyncEndedWithError(code: Int, err: Exception?) {}
-
+    override fun debug(debugInfo: DebugInfo?) {}
 }

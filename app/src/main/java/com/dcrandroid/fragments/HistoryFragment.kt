@@ -188,7 +188,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     val transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
                     activity!!.runOnUiThread {
-                        if (transactions.isEmpty()) {
+                        if (transactions == null || transactions.isEmpty()) {
                             no_history.setText(R.string.no_transactions_have_occurred)
                             no_history.visibility = View.VISIBLE
                             history_recycler_view.visibility = View.GONE
