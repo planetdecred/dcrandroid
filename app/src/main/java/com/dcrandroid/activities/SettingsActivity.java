@@ -56,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
         private final int ENCRYPT_REQUEST_CODE = 1;
-        private final int PASSCODE_REQUEST_CODE = 2;
+        private final int DELETE_WALLET_PASSCODE_REQUEST_CODE = 2;
         private PreferenceUtil util;
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
@@ -339,39 +339,9 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
-                                startActivityForResult(new Intent(getActivity(), EnterPassCode.class), PASSCODE_REQUEST_CODE);
+                                startActivityForResult(new Intent(getActivity(), EnterPassCode.class), DELETE_WALLET_PASSCODE_REQUEST_CODE);
                             } else {
-                                pd = Utils.getProgressDialog(getContext(), false, false, "Deleting Wallet . . .");
-                                pd.show();
-                                new Thread() {
-                                    public void run() {
-                                        try {
-                                            wallet.unlockWallet(deleteWalletDialog.getPassphrase().getBytes());
-                                            if (getActivity() != null) {
-                                                Utils.clearApplicationData(getActivity());
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        pd.dismiss();
-                                                        Utils.restartApp(getContext());
-                                                    }
-                                                });
-                                            }
-                                        } catch (final Exception e) {
-                                            e.printStackTrace();
-                                            if (getActivity() != null) {
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        deleteWalletDialog.dismiss();
-                                                        Toast.makeText(getActivity(), getString(R.string.invalid_passphrase), Toast.LENGTH_LONG).show();
-                                                        pd.dismiss();
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }
-                                }.start();
+                                deleteWallet(deleteWalletDialog.getPassphrase());
                             }
                         }
                     }).show();
@@ -461,27 +431,52 @@ public class SettingsActivity extends AppCompatActivity {
                         changeStartupPass.setVisible(encryptWallet.isChecked());
                     }
                 }
-            } else if (requestCode == PASSCODE_REQUEST_CODE) {
-                if (resultCode == RESULT_OK) {
-                    pd = Utils.getProgressDialog(getContext(), false, false, getString(R.string.deleting_wallet));
-                    pd.show();
-                    if (getActivity() != null) {
-                        Utils.clearApplicationData(getActivity());
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                pd.dismiss();
-                                Utils.restartApp(getActivity());
-                            }
-                        });
-                    }
-                }
+            } else if (requestCode == DELETE_WALLET_PASSCODE_REQUEST_CODE && resultCode == RESULT_OK) {
+                String passphrase = data.getStringExtra(Constants.PASSPHRASE);
+                deleteWallet(passphrase);
             }
         }
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             setPreferencesFromResource(R.xml.pref_main, s);
+        }
+
+        private void deleteWallet(final String passphrase){
+            pd = Utils.getProgressDialog(getContext(), false, false, R.string.deleting_wallet);
+            pd.show();
+
+            new Thread() {
+                public void run() {
+                    try {
+                        wallet.deleteWallet(passphrase.getBytes());
+                        if (getActivity() != null) {
+                            Utils.clearApplicationData(getActivity());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                    if(getContext() != null) {
+                                        Utils.restartApp(getContext());
+                                    }
+                                }
+                            });
+                        }
+                    } catch (final Exception e) {
+                        e.printStackTrace();
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), getString(R.string.invalid_passphrase), Toast.LENGTH_LONG).show();
+                                    pd.dismiss();
+                                }
+                            });
+                        }
+                    }
+                }
+            }.start();
+
         }
     }
 }

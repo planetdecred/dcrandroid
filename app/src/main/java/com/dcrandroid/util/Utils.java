@@ -63,6 +63,10 @@ public class Utils {
         return pd;
     }
 
+    public static ProgressDialog getProgressDialog(Context context, boolean cancelable, boolean cancelOnTouchOutside, @StringRes int message){
+        return  Utils.getProgressDialog(context, cancelable, cancelOnTouchOutside, context.getString(message));
+    }
+
     public static String getWordList(Context context) {
         try {
             InputStream fin = context.getAssets().open("wordlist.txt");
@@ -498,6 +502,8 @@ public class Utils {
     }
 
     public static void clearApplicationData(Context context) {
+        deleteDir(context.getFilesDir()); //clear files directory
+
         File cache = context.getCacheDir();
         File appDir = new File(cache.getParent());
         if (appDir.exists()) {
