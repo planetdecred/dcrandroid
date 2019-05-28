@@ -292,7 +292,7 @@ func (lw *LibWallet) parseTxSummary(tx *wallet.TransactionSummary, blockHash *ch
 	}
 
 	var height int32 = -1
-	if tx != nil {
+	if blockHash != nil {
 		blockIdentifier := wallet.NewBlockIdentifierFromHash(blockHash)
 		blockInfo, err := lw.wallet.BlockInfo(blockIdentifier)
 		if err != nil {
