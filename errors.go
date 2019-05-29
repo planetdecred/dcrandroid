@@ -20,6 +20,7 @@ const (
 	ErrSyncAlreadyInProgress = "sync_already_in_progress"
 	ErrNoPeers               = "no_peers"
 	ErrInvalidPeers          = "invalid_peers"
+	ErrListenerAlreadyExist  = "listener_already_exist"
 )
 
 func translateError(err error) error {

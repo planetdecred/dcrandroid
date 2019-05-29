@@ -151,28 +151,8 @@ func calculateTotalTimeRemaining(timeRemainingInSeconds int64) string {
 	return fmt.Sprintf("%d sec", timeRemainingInSeconds)
 }
 
-func calculateDaysBehind(timestamp int64) string {
-	hoursBehind := float64(time.Now().Unix()-timestamp) / 60
-	daysBehind := int(math.Round(hoursBehind / 24))
-	if daysBehind < 1 {
-		return "<1 day"
-	} else if daysBehind == 1 {
-		return "1 day"
-	} else {
-		return fmt.Sprintf("%d days", daysBehind)
-	}
-}
-
-func estimateFinalBlockHeight(netType string, bestBlockTimeStamp int64, bestBlock int32) int32 {
-	var targetTimePerBlock int32
-	if netType == "mainnet" {
-		targetTimePerBlock = MainNetTargetTimePerBlock
-	} else {
-		targetTimePerBlock = TestNetTargetTimePerBlock
-	}
-
-	timeDifference := time.Now().Unix() - bestBlockTimeStamp
-	return (int32(timeDifference) / targetTimePerBlock) + bestBlock
+func roundUp(n float64) int32 {
+	return int32(math.Round(n))
 }
 
 func IsChannelClosed(ch <-chan struct{}) bool {

@@ -96,12 +96,17 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 		go shutdownListener()
 	}
 
+	syncData := &syncData{
+		syncProgressListeners: make(map[string]SyncProgressListener),
+	}
+
+	// Finally Init LibWallet
 	lw := &LibWallet{
 		walletDataDir: walletDataDir,
 		txDB:          txDB,
 		activeNet:     activeNet,
 		walletLoader:  walletLoader,
-		syncData:      &syncData{},
+		syncData:      syncData,
 	}
 
 	return lw, nil

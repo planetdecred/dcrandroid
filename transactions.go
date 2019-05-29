@@ -57,9 +57,6 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 			}
 
 			totalIndex++
-			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnIndexTransactions(totalIndex)
-			}
 		}
 
 		if block.Header != nil {

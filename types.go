@@ -108,7 +108,7 @@ type DecodedOutput struct {
 	Addresses  []string
 }
 
-type EstimatedSyncProgressListener interface {
+type SyncProgressListener interface {
 	OnPeerConnectedOrDisconnected(numberOfConnectedPeers int32)
 	OnHeadersFetchProgress(headersFetchProgress *HeadersFetchProgressReport)
 	OnAddressDiscoveryProgress(addressDiscoveryProgress *AddressDiscoveryProgressReport)
