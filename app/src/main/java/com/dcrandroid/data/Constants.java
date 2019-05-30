@@ -116,6 +116,9 @@ public class Constants {
             TRANSACTION_HEIGHT = "transaction_height",
             MINED_TRANSACTIONS = "MinedTransactions",
             UNMINED_TRANSACTIONS = "UnminedTransactions",
+            SYNC_STATE_START = "start",
+            SYNC_STATE_PROGRESS = "progress",
+            SYNC_STATE_FINISH = "finish",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 

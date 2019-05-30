@@ -78,10 +78,13 @@
     <string name="now">now</string>
     <string name="you_received">You received</string>
     <string name="disconnected">Disconnected</string>
+    <string name="syncing">Syncing</string>
     <string name="synced_with_one_peer">Synced with 1 peer</string>
     <string name="syncing_with_one_peer">Syncing with 1 peer</string>
     <string name="synced_with_multiple_peer">Synced with %1$d peers</string>
     <string name="syncing_with_multiple_peer">Syncing with %1$d peers</string>
+    <string name="connected_to_a_peer">Connected to a peer</string>
+    <string name="connected_to_n_peer">Connected to %1$d peer</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
     <string name="log_file_not_found">Log file not found</string>
