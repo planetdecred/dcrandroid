@@ -73,8 +73,9 @@ func (lw *LibWallet) handlePeerCountUpdate(peerCount int32) {
 // Fetch Headers Callbacks
 
 func (lw *LibWallet) fetchHeadersStarted() {
-	if lw.beginFetchTimeStamp != -1 {
-		// already started headers fetching
+	if !lw.syncData.syncing || lw.beginFetchTimeStamp != -1 {
+		// ignore if sync is not in progress i.e. !lw.syncData.syncing
+		// or already started headers fetching i.e. lw.beginFetchTimeStamp != -1
 		return
 	}
 
@@ -150,6 +151,11 @@ func (lw *LibWallet) publishFetchHeadersProgress() {
 }
 
 func (lw *LibWallet) fetchHeadersFinished() {
+	if !lw.syncData.syncing {
+		// ignore if sync is not in progress
+		return
+	}
+
 	lw.activeSyncData.startHeaderHeight = -1
 	lw.activeSyncData.headersFetchTimeSpent = time.Now().Unix() - lw.beginFetchTimeStamp
 
@@ -171,7 +177,9 @@ func (lw *LibWallet) fetchHeadersFinished() {
 // Address/Account Discovery Callbacks
 
 func (lw *LibWallet) discoverAddressesStarted() {
-	if lw.activeSyncData.addressDiscoveryCompleted != nil {
+	if !lw.syncData.syncing || lw.activeSyncData.addressDiscoveryCompleted != nil {
+		// ignore if sync is not in progress i.e. !lw.syncData.syncing
+		// or already started address discovery i.e. lw.activeSyncData.addressDiscoveryCompleted != nil
 		return
 	}
 
@@ -272,12 +280,22 @@ func (lw *LibWallet) updateAddressDiscoveryProgress() {
 }
 
 func (lw *LibWallet) publishAddressDiscoveryProgress() {
+	if !lw.syncData.syncing {
+		// ignore if sync is not in progress
+		return
+	}
+
 	for _, syncProgressListener := range lw.syncData.syncProgressListeners {
 		syncProgressListener.OnAddressDiscoveryProgress(&lw.activeSyncData.addressDiscoveryProgress)
 	}
 }
 
 func (lw *LibWallet) discoverAddressesFinished() {
+	if !lw.syncData.syncing {
+		// ignore if sync is not in progress
+		return
+	}
+
 	addressDiscoveryFinishTime := time.Now().Unix()
 	lw.activeSyncData.totalDiscoveryTimeSpent = addressDiscoveryFinishTime - lw.addressDiscoveryStartTime
 
@@ -296,6 +314,11 @@ func (lw *LibWallet) discoverAddressesFinished() {
 // Blocks Scan Callbacks
 
 func (lw *LibWallet) rescanStarted() {
+	if !lw.syncData.syncing {
+		// ignore if sync is not in progress
+		return
+	}
+
 	if lw.activeSyncData.addressDiscoveryCompleted != nil {
 		close(lw.activeSyncData.addressDiscoveryCompleted)
 		lw.activeSyncData.addressDiscoveryCompleted = nil
@@ -313,6 +336,10 @@ func (lw *LibWallet) rescanStarted() {
 }
 
 func (lw *LibWallet) rescanProgress(rescannedThrough int32) {
+	if !lw.syncData.syncing {
+		// ignore if sync is not in progress
+		return
+	}
 
 	lw.activeSyncData.headersRescanProgress.TotalHeadersToScan = lw.GetBestBlock()
 
@@ -371,6 +398,11 @@ func (lw *LibWallet) publishHeadersRescanProgress() {
 }
 
 func (lw *LibWallet) rescanFinished() {
+	if !lw.syncData.syncing {
+		// ignore if sync is not in progress
+		return
+	}
+
 	lw.publishHeadersRescanProgress()
 }
 
@@ -398,6 +430,8 @@ func (lw *LibWallet) estimateBlockHeadersCountAfter(lastHeaderTime int64) int32 
 
 func (lw *LibWallet) notifySyncError(code SyncErrorCode, err error) {
 	lw.syncData.syncing = false
+	lw.activeSyncData = nil // to be reintialized on next sync
+
 	for _, syncProgressListener := range lw.syncData.syncProgressListeners {
 		syncProgressListener.OnSyncEndedWithError(err)
 	}
@@ -405,13 +439,14 @@ func (lw *LibWallet) notifySyncError(code SyncErrorCode, err error) {
 
 func (lw *LibWallet) notifySyncCanceled() {
 	lw.syncData.syncing = false
+	lw.activeSyncData = nil // to be reintialized on next sync
+
 	for _, syncProgressListener := range lw.syncData.syncProgressListeners {
 		syncProgressListener.OnSyncCanceled()
 	}
 }
 
 func (lw *LibWallet) synced(synced bool) {
-
 	lw.syncing = false
 	lw.activeSyncData = nil // to be reintialized on next sync
 

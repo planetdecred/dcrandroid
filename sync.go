@@ -16,15 +16,19 @@ import (
 )
 
 type syncData struct {
-	mu                    sync.Mutex
-	rpcClient             *chain.RPCClient
-	cancelSync            context.CancelFunc
+	mu        sync.Mutex
+	rpcClient *chain.RPCClient
+
 	syncProgressListeners map[string]SyncProgressListener
-	syncing               bool
 	showLogs              bool
+
+	syncing    bool
+	cancelSync context.CancelFunc
 
 	rescanning   bool
 	cancelRescan context.CancelFunc
+
+	connectedPeers int32
 
 	*activeSyncData
 }
@@ -47,8 +51,6 @@ type activeSyncData struct {
 	addressDiscoveryCompleted chan bool
 
 	rescanStartTime int64
-
-	connectedPeers int32
 
 	totalInactiveSeconds int64
 }
@@ -118,7 +120,7 @@ func (lw *LibWallet) SyncInactiveForPeriod(totalInactiveSeconds int64) {
 	}
 
 	lw.syncData.totalInactiveSeconds += totalInactiveSeconds
-	if lw.activeSyncData.connectedPeers == 0 {
+	if lw.syncData.connectedPeers == 0 {
 		// assume it would take another 60 seconds to reconnect to peers
 		lw.syncData.totalInactiveSeconds += 60
 	}
