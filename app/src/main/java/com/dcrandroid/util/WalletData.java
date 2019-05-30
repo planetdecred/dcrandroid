@@ -15,7 +15,7 @@ import dcrlibwallet.LibWallet;
 public class WalletData {
     private static final WalletData ourInstance = new WalletData();
     public LibWallet wallet;
-    public boolean synced = false, syncing = true;
+    public boolean synced = false;
     public int peers = 0, bestBlock = -1;
 
     private WalletData() {}

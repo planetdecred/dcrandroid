@@ -163,7 +163,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             history_recycler_view.visibility = View.VISIBLE
         }
 
-        if (walletData!!.syncing) {
+        if (walletData!!.wallet.isSyncing) {
             no_history.setText(R.string.synchronizing)
             swipe_refresh_layout.isRefreshing = false
             return
@@ -384,7 +384,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != null && intent.action == Constants.SYNCED) {
-                if (!walletData!!.syncing) {
+                if (!walletData!!.wallet.isSyncing) {
                     prepareHistoryData()
                 }
             }

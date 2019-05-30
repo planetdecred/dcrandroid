@@ -57,7 +57,7 @@ public class SecurityFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                if (!WalletData.getInstance().syncing) {
+                if (!WalletData.getInstance().wallet.isSyncing()) {
                     layout.setVisibility(View.VISIBLE);
                 } else {
                     layout.setVisibility(View.GONE);
@@ -253,7 +253,7 @@ public class SecurityFragment extends Fragment {
             }
         });
 
-        if (WalletData.getInstance().syncing) {
+        if (WalletData.getInstance().wallet.isSyncing()) {
             layout.setVisibility(View.GONE);
         }
     }

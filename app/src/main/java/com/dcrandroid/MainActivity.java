@@ -371,7 +371,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         wifiSyncDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                walletData.syncing = false;
                 setupSyncedLayout();
                 sendBroadcast(new Intent(Constants.SYNCED));
                 setConnectionStatus(R.string.connect_to_wifi);
@@ -383,7 +382,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     }
 
     public void startSyncing() {
-        walletData.syncing = true;
         sendBroadcast(new Intent(Constants.SYNCED));
 
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
@@ -406,7 +404,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             public void run() {
                 while (!this.isInterrupted()) {
                     try {
-                        if (!scanning && !walletData.syncing) {
+                        if (!scanning && !walletData.wallet.isSyncing()) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -465,7 +463,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                     return;
                 }
 
-                if (!walletData.syncing) {
+                if (!walletData.wallet.isSyncing()) {
                     bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
                 } else {
                     bestBlockTime.setText(Utils.calculateDaysAgo((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
@@ -707,7 +705,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false) && !walletData.wallet.isSyncing()) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
-        if (!walletData.syncing) {
+        if (!walletData.wallet.isSyncing()) {
             String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
@@ -861,16 +859,16 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     @Override
     public void onPeerConnectedOrDisconnected(int i) {
         walletData.peers = i;
-        if (!walletData.syncing) updatePeerCount();
+        if (!walletData.wallet.isSyncing()) updatePeerCount();
     }
 
     private void updatePeerCount() {
-        if (!walletData.synced && !walletData.syncing) {
+        if (!walletData.synced && !walletData.wallet.isSyncing()) {
             setConnectionStatus(R.string.not_synced);
             return;
         }
 
-        if (!walletData.syncing) {
+        if (!walletData.wallet.isSyncing()) {
             if (walletData.peers == 1) {
                 setConnectionStatus(R.string.synced_with_one_peer);
             } else {
@@ -890,7 +888,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         if (!willRestart) {
             // clear sync layout if sync is not going to restart.
             walletData.synced = false;
-            walletData.syncing = false;
 
             setupSyncedLayout();
         }
@@ -900,7 +897,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     public void onSyncCompleted() {
 
         walletData.synced = true;
-        walletData.syncing = false;
 
         runOnUiThread(new Runnable() {
             @Override
@@ -921,7 +917,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     @Override
     public void onSyncEndedWithError(Exception e) {
         walletData.synced = false;
-        walletData.syncing = false;
 
         setupSyncedLayout();
     }

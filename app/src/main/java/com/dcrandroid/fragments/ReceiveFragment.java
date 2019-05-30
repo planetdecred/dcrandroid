@@ -64,6 +64,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import dcrlibwallet.LibWallet;
+
 
 /**
  * Created by Macsleven on 28/11/2017.
@@ -86,13 +88,15 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
     MenuItem menuAddress;
     MenuItem menuQrCode;
 
+    private LibWallet wallet;
+
     // Set SyncView Visibility to gone if SYNCED is.
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)
                     && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)) {
-                if (!WalletData.getInstance().syncing) {
+                if (!wallet.isSyncing()) {
                     syncView.setVisibility(View.GONE);
                     ReceiveContainer.setVisibility(View.VISIBLE);
                     menuAddress.setVisible(true);
@@ -126,8 +130,10 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         syncView = rootView.findViewById(R.id.sync_view);
         ReceiveContainer = rootView.findViewById(R.id.receive_container);
 
+        this.wallet = WalletData.getInstance().wallet;
+
         // If synchronizing set syncView to visible && ReceiveContainer to gone
-        if(constants.syncing && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
+        if(wallet.isSyncing() && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
             syncView.setVisibility(View.VISIBLE);
             ReceiveContainer.setVisibility(View.GONE);
         }
@@ -213,7 +219,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         menuQrCode = menu.findItem(R.id.share_qr_code);
 
         // If synchronizing set visibility of menuAddress and menuQrCode to false
-        if(constants.syncing && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
+        if(wallet.isSyncing() && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
             menuAddress.setVisible(false);
             menuQrCode.setVisible(false);
         }
