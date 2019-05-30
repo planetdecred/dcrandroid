@@ -22,10 +22,10 @@ import dcrlibwallet.*
 import java.lang.Exception
 
 const val NOTIFICATION_ID = 4
+const val TAG = "SyncService"
 
-class SyncService : Service(), EstimatedSyncProgressListener {
+class SyncService : Service(), SyncProgressListener {
 
-    private var TAG: String = "SyncService"
     private var notification: Notification? = null
     private var wallet: LibWallet? = null
     private var walletData: WalletData? = null
@@ -69,7 +69,8 @@ class SyncService : Service(), EstimatedSyncProgressListener {
 
         showNotification()
 
-        wallet!!.addEstimatedSyncProgressListener(this, false)
+        wallet!!.removeSyncProgressListener(TAG)
+        wallet!!.addSyncProgressListener(this, TAG)
 
         val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
 

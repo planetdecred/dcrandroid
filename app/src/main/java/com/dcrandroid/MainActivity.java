@@ -83,13 +83,13 @@ import java.util.Locale;
 
 import dcrlibwallet.AddressDiscoveryProgressReport;
 import dcrlibwallet.DebugInfo;
-import dcrlibwallet.EstimatedSyncProgressListener;
+import dcrlibwallet.SyncProgressListener;
 import dcrlibwallet.HeadersFetchProgressReport;
 import dcrlibwallet.HeadersRescanProgressReport;
 import dcrlibwallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener,
-        EstimatedSyncProgressListener, View.OnClickListener {
+        SyncProgressListener, View.OnClickListener {
 
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView stopScan, syncIndicator;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private NotificationManager notificationManager;
     private Animation rotateAnimation;
     private SoundPool alertSound;
-    private Thread blockUpdate, accountDiscoveryProgress;
+    private Thread blockUpdate;
 
     private Handler handler = new Handler();
     private Intent broadcastIntent = null;
@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private int bestBlock = 0, blockNotificationSound, pageID;
     private long bestBlockTimestamp;
     private boolean scanning = false, isForeground;
+
+    private final String TAG = "MainActivity";
 
     @Override
     public void onTrimMemory(int level) {
@@ -261,7 +263,12 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
 
         walletData.wallet.transactionNotification(this);
-        walletData.wallet.addEstimatedSyncProgressListener(this, true);
+        try {
+            walletData.wallet.removeSyncProgressListener(TAG);
+            walletData.wallet.addSyncProgressListener(this, TAG);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         displayBalance();
 
@@ -797,7 +804,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onHeadersFetchProgress(final HeadersFetchProgressReport report) {
-
         setConnectionStatus(getString(R.string.fetching_headers));
         setBestBlockTime(report.getCurrentHeaderTimestamp());
         setChainStatus(getString(R.string.blocks_behind, report.getTotalHeadersToFetch() - report.getFetchedHeadersCount()));

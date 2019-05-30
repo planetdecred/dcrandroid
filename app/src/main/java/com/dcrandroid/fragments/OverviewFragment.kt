@@ -43,7 +43,9 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, EstimatedSyncProgressListener {
+const val TAG = "OverviewFragment"
+
+class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncProgressListener {
 
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
@@ -201,7 +203,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, Estim
         history_recycler_view2.adapter = transactionAdapter
         registerForContextMenu(history_recycler_view2)
 
-        walletData!!.wallet.addEstimatedSyncProgressListener(this, false)
+        walletData!!.wallet.removeSyncProgressListener(TAG)
+        walletData!!.wallet.addSyncProgressListener(this, TAG)
     }
 
     private fun registerNotificationChannel() {
