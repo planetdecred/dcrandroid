@@ -70,7 +70,7 @@ func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations in
 	bals, err := lw.wallet.CalculateAccountBalance(uint32(account), requiredConfirmations)
 	if err != nil {
 		log.Error(err)
-		return 0, err
+		return 0, translateError(err)
 	}
 	return int64(bals.Spendable), nil
 }

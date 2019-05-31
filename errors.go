@@ -23,6 +23,7 @@ const (
 	ErrListenerAlreadyExist  = "listener_already_exist"
 )
 
+// todo, should update this method to translate more error kinds.
 func translateError(err error) error {
 	if err, ok := err.(*errors.Error); ok {
 		switch err.Kind {

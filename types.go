@@ -1,5 +1,15 @@
 package dcrlibwallet
 
+type Amount struct {
+	AtomValue int64
+	DcrValue  float64
+}
+
+type TxFeeAndSize struct {
+	Fee                 *Amount
+	EstimatedSignedSize int
+}
+
 type UnsignedTransaction struct {
 	UnsignedTransaction       []byte
 	EstimatedSignedSize       int
