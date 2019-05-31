@@ -91,6 +91,10 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
             return destAddress
         }
 
+    private val selectedAccount: Int
+        get() = accountNumbers[send_account_spinner.selectedItemPosition]
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         formatter.applyPattern("#.########")
@@ -124,29 +128,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
             startActivityForResult(intent, SCANNER_ACTIVITY_REQUEST_CODE)
         }
 
-        send_max.setOnClickListener {
-            isSendAll = true
-            try {
-                val spendableBalance = getSpendableForSelectedAccount()
-                val amount = Utils.formatDecredWithoutComma(spendableBalance)
-                amount_dcr.removeTextChangedListener(amountWatcher)
-                amount_dcr.setText(amount)
-                amount_dcr.addTextChangedListener(amountWatcher)
-
-                if (exchangeDecimal != null) {
-                    var currentAmount = BigDecimal(Dcrlibwallet.amountCoin(spendableBalance))
-                    currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
-                    val convertedAmount = currentAmount.multiply(exchangeDecimal, MathContext.DECIMAL128)
-
-                    amount_usd.removeTextChangedListener(exchangeWatcher)
-                    amount_usd.setText(formatter.format(convertedAmount.toDouble()))
-                    amount_usd.addTextChangedListener(exchangeWatcher)
-                }
-                constructTransaction()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        send_max.setOnClickListener {sendMax()}
 
         send_btn.setOnClickListener {
             var errors = 0
@@ -313,9 +295,42 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         }
     }
 
+    private fun sendMax(){
+        isSendAll = true
+        try {
+
+            val spendableBalance = getSpendableForSelectedAccount()
+
+            if(spendableBalance == 0L){
+                amount_dcr.setText("0")
+                return
+            }
+
+            val maxSpendable = wallet.estimateMaxSendAmount(selectedAccount, destinationAddress, requiredConfirmations)
+
+            val amount = Utils.formatDecredWithoutComma(maxSpendable.atomValue)
+            amount_dcr.removeTextChangedListener(amountWatcher)
+            amount_dcr.setText(amount)
+            amount_dcr.addTextChangedListener(amountWatcher)
+
+            if (exchangeDecimal != null) {
+                var currentAmount = BigDecimal(Dcrlibwallet.amountCoin(maxSpendable.atomValue))
+                currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
+                val convertedAmount = currentAmount.multiply(exchangeDecimal, MathContext.DECIMAL128)
+
+                amount_usd.removeTextChangedListener(exchangeWatcher)
+                amount_usd.setText(formatter.format(convertedAmount.toDouble()))
+                amount_usd.addTextChangedListener(exchangeWatcher)
+            }
+            constructTransaction()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     @Throws(Exception::class)
     private fun getSpendableForSelectedAccount(): Long {
-        return wallet.spendableForAccount(accountNumbers[send_account_spinner.selectedItemPosition], requiredConfirmations)
+        return wallet.spendableForAccount(selectedAccount, requiredConfirmations)
     }
 
     private fun validateAmount(): Boolean {
@@ -369,11 +384,11 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                 tvDestinationError.setText(R.string.invalid_destination_address)
                 return
             }
-            val accountValue = accountNumbers[send_account_spinner.selectedItemPosition]
 
-            val transaction = wallet.constructTransaction(destinationAddress, amount, accountValue, requiredConfirmations, isSendAll)
+            val txFeeAndSize = wallet.calculateNewTxFeeAndSize(amount, selectedAccount, destinationAddress, requiredConfirmations, isSendAll)
 
-            val estFee = Dcrlibwallet.amountCoin(Utils.signedSizeToAtom(transaction.estimatedSignedSize))
+            val estFee = txFeeAndSize.fee.dcrValue
+            val estSize = txFeeAndSize.estimatedSignedSize
 
             if (exchangeDecimal != null) {
                 var fee = BigDecimal(estFee)
@@ -386,30 +401,35 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                 send_dcr_estimate_fee.text = CoinFormat.format(estFee)
             }
 
-            send_dcr_estimate_size.text = String.format(Locale.getDefault(), "%d %s", transaction.estimatedSignedSize, getString(R.string.bytes))
+            send_dcr_estimate_size.text = String.format(Locale.getDefault(), "%d %s", estSize, getString(R.string.bytes))
 
+            val spendableBalance = getSpendableForSelectedAccount()
+            val balanceAfter = spendableBalance - amount - txFeeAndSize.fee.atomValue
+            send_dcr_balance_after.text = CoinFormat.format(balanceAfter)
+
+            // Enable send button if the address is valid
             if (wallet.isAddressValid(send_dcr_address.text.toString())) {
                 toggleSendButton(true)
             }
 
-            if (isSendAll) {
-                send_dcr_balance_after.text = CoinFormat.format(getSpendableForSelectedAccount() - transaction.totalPreviousOutputAmount)
+            if(true){
+                return
+            }
 
+            if (isSendAll) {
                 amount_dcr.removeTextChangedListener(amountWatcher)
-                amount_dcr.setText(Utils.formatDecredWithoutComma(amount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
+                amount_dcr.setText(Utils.formatDecredWithoutComma(amount - Utils.signedSizeToAtom(estSize)))
                 amount_dcr.addTextChangedListener(amountWatcher)
 
                 if (exchangeDecimal != null) {
-                    var currentAmount = BigDecimal(Dcrlibwallet.amountCoin(transaction.totalPreviousOutputAmount - Utils.signedSizeToAtom(transaction.estimatedSignedSize)))
+                    var currentAmount = BigDecimal(Dcrlibwallet.amountCoin(spendableBalance - txFeeAndSize.fee.atomValue))
                     currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
                     val convertedAmount = currentAmount.multiply(exchangeDecimal)
                     amount_usd.removeTextChangedListener(exchangeWatcher)
                     amount_usd.setText(formatter.format(convertedAmount.toDouble()))
                     amount_usd.addTextChangedListener(exchangeWatcher)
-                }
-            } else {
-                send_dcr_balance_after.text = CoinFormat.format(getSpendableForSelectedAccount() - amount)
+            }
             }
 
         } catch (e: Exception) {
@@ -463,14 +483,13 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
             return
         }
         send_error_label.text = null
-        val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
 
         try {
-            val unsignedTransaction = wallet.constructTransaction(send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
+            val txFeeAndSize = wallet.calculateNewTxFeeAndSize(amount, selectedAccount, send_dcr_address.text.toString(), requiredConfirmations, isSendAll)
             val transactionDialog = ConfirmTransactionDialog(context!!)
                     .setAddress(send_dcr_address.text.toString())
                     .setAmount(amount)
-                    .setFee(unsignedTransaction.estimatedSignedSize)
+                    .setFee(txFeeAndSize.estimatedSignedSize)
                     .setExchangeDecimal(exchangeDecimal)
 
             transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
@@ -482,7 +501,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                 }
             })
 
-            if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(wallet.accountName(srcAccount))
+            if (destination_account_container.visibility == View.VISIBLE) transactionDialog.setAccount(wallet.accountName(selectedAccount))
             transactionDialog.setCancelable(true)
             transactionDialog.setCanceledOnTouchOutside(false)
             transactionDialog.show()
@@ -501,8 +520,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
         pd!!.show()
         Thread {
             try {
-                val srcAccount = accountNumbers[send_account_spinner.selectedItemPosition]
-                val txHash = wallet.sendTransaction(passphrase.toByteArray(), send_dcr_address.text.toString(), amount, srcAccount, requiredConfirmations, isSendAll)
+                val txHash = wallet.sendTransaction(amount, selectedAccount, send_dcr_address.text.toString(), requiredConfirmations, isSendAll, passphrase.toByteArray())
                 txHash.reverse()
                 val sb = StringBuilder()
                 for (byte in txHash) {
