@@ -3,7 +3,6 @@
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
   -->
-<?xml version='1.0' encoding='UTF-8'?>
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--General-->
@@ -20,7 +19,7 @@
     <string name="max">ENVIAR MÁX</string>
     <string name="type">Tipo</string>
     <string name="loading">Carregando</string>
-    <string name="loading_ellipsis">Carregando...</string>
+    <string name="loading_ellipsis">Carregando…</string>
     <string name="date">Data</string>
     <string name="dcr" translatable="false">DCR</string>
     <string name="help">Ajuda</string>
@@ -66,7 +65,7 @@
     <string name="usd" translatable="false">USD</string>
     <string name="hyphen" translatable="false">-</string>
     <string name="bittrex_unavailable">Preço da Bittrex não disponível (aperte para tentar novamente) </string>
-    <string name="coming_soon">Em breve...</string>
+    <string name="coming_soon">Em breve…</string>
     <string name="settings">Configurações</string>
     <string name="changes_after_restart">Mudanças terão efeitos após reinicializar o aplicativo</string>
     <string name="view_cap">VER</string>
@@ -103,7 +102,7 @@
     <string name="clearAll">Limpar tudo</string>
     <string name="share">Compartilhar</string>
     <string name="clear_fields">Limpar campos</string>
-    <string name="deleting_wallet">Apagando carteira...</string>
+    <string name="deleting_wallet">Apagando carteira…</string>
     <string name="retry_caps">Repetir</string>
     <string name="share_address_via">Compartilhar a imagem do código QR para</string>
     <string name="license">Licença</string>
@@ -153,12 +152,6 @@
     <string name="connected_to_remote_node">Conectar para um nó remoto</string>
     <string name="connecting_to_rpc_server">Conectar para um servidor RPC</string>
     <string name="connecting_attempt">Tentativa de conexão</string>
-
-    <!--Account-->
-    <string name="account">Conta</string>
-    <string name="accounts">Contas</string>
-    <string name="account_number">Número da conta</string>
- 
     <string name="rpc_connection_failed">Falha De Conexão RPC:</string>
     <!--/Peers-->
 
@@ -170,10 +163,10 @@
     <string name="spinner_account">Conta:</string>
     <string name="input_your_new_account_name_and_enter_your_private_passphrase">Insira o novo nome da conta e coloquesua senha privada</string>
     <string name="account_name">Nome da conta</string>
-export PATH="$HOME/.rbenv/bin:$PATH"
+    export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="create_account">Criar conta</string>
     <string name="add_account">Adicionar conta</string>
-    <string name="creating_account">Criando conta...</string>
+    <string name="creating_account">Criando conta…</string>
     <string name="input_account_name">Insira um nome para sua conta</string>
     <string name="hd_path">Caminho HD</string>
     <string name="default_account_info">Tornar essa conta padrão para todas as entradas e saídas de transações.</string>
@@ -186,7 +179,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="save_seed_instruction">Escreva abaixo a semente (seed phrase) e guarde-a em um local seguro. Voce será perguntado para inseri-la na próxima tela e também para recuperar sua carteira.</string>
     <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Cada campo contém apenas uma palavra correta. Por favor confirme sua semente (seed phrase) ao selecionar as palavras corretas.</string>
     <string name="start_typing_the_word_and_tap_correct_from_list">Start typing the word and then tap the correct word from the suggestion list.</string>
-    <string name="enter_your_seed">Insira sua semente...</string>
+    <string name="enter_your_seed">Insira sua semente…</string>
     <string name="theInputFieldIsEmpty">As entradas estão vazias. Por favor, insira as palavras.</string>
     <string name="error_seed_not_generated">Ocorreu um erro, semente não gerada</string>
     <string name="warning_save_seed">Falha em manter essa semente segura, poderá resultar em extravio da sua carteira ou inviabilidadede para recuperar sua carteira.</string>
@@ -220,7 +213,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="restore_existing_wallet">Restaurar Carteira Existente</string>
     <string name="recover_wallet">Reuperar Carteira</string>
     <string name="private_passphrase">Chave Privada</string>
-    <string name="opening_wallet">Abrindo Carteira...</string>
+    <string name="opening_wallet">Abrindo Carteira…</string>
     <string name="input_private_phrase">Insira sua senha privada</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Criar ou recuperar sua carteira e \niniciar sua gestão de decred.</string>
     <string name="enter_your_passphrase">Insira sua senha</string>
@@ -229,7 +222,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="invalid_current_pin">PIN atual inserido não é válido.</string>
     <string name="invalid_password">Senha inserida não é válida.</string>
     <string name="invalid_current_password">Senha atual inserida não é válida.</string>
-    <string name="creating_wallet">Criando carteira...</string>
+    <string name="creating_wallet">Criando carteira…</string>
     <string name="failed_to_open_wallet">Falha ao abrir carteira</string>
     <!--/Wallet-->
 
@@ -269,7 +262,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="empty_destination_address">Destino do endereço não pode ser vazio.</string>
     <string name="invalid_destination_address">Endereço de destino inválido.</string>
     <string name="empty_amount">Quantia não pode ser vazia</string>
-    <string name="processing_colon">Processando...</string>
+    <string name="processing_colon">Processando…</string>
     <string name="confirm_send_funds">Por favor confirme o envio dos saldos</string>
     <string name="transaction_was_successful">Transação bem sucedida</string>
     <string name="amount_invalid_decimal_places">Quantidade tem mais que 8 casas decimais</string>
@@ -311,8 +304,8 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="overview_sync_status_mainnet">Sincronizando com rede Decred Principal (Mainnet)</string>
     <string name="overview_sync_status_testnet">Sincronizando com rede Decred Teste (Testnet)</string>
     <string name="synchronizing">Sincronizando</string>
-    <string name="starting_synchronization">Iniciando Sincronização...</string>
-    <string name="rescanning_in_progress">Escaneamento em progresso...</string>
+    <string name="starting_synchronization">Iniciando Sincronização…</string>
+    <string name="rescanning_in_progress">Escaneamento em progresso…</string>
     <string name="scanning_blocks">Escaneando blocos.</string>
     <string name="check_progress_in_navigation_bar">Verifique o progresso na barra de navegação.</string>
     <string name="syncing_peers_testnet">Sincronizando %1$d nó na testnet.</string>
@@ -330,7 +323,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <!--/QR Code-->
 
     <!--Address-->
-    <string name="notification_discovering_used_addresses">(2/3) Descobrindo endereços utilizados...</string>
+    <string name="notification_discovering_used_addresses">(2/3) Descobrindo endereços utilizados…</string>
     <string name="address_copy_text">Endereço copiado para área de transferência</string>
     <string name="your_address">Seu endereço</string>
     <string name="error_occurred_getting_address">Erro ocorreu na tentativa de conseguiro endereço para a conta:</string>
@@ -370,9 +363,9 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="currency_conversion">Comversão De Moeda</string>
     <string name="requires_restart">Necessário Reiniciar.</string>
     <string name="user_agent_summary">Busca por taxa de cmabio.</string>
-    <string name="changing">Mudando...</string>
-    <string name="setting_startup_pin">Configurando PIN Abertura...</string>
-    <string name="setting_startup_password">Configurando Senha De Abertura...</string>
+    <string name="changing">Mudando…</string>
+    <string name="setting_startup_pin">Configurando PIN Abertura…</string>
+    <string name="setting_startup_password">Configurando Senha De Abertura…</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -475,7 +468,7 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="link_to_dcr_data">Detalhes em Dcrdata</string>
     <string name="View_on_dcrdata">Veja em Dcrdata</string>
     <string name="tap_to_paste">Aperte para Colar</string>
-    <string name="sending_transaction">Enviando transsação...</string>
+    <string name="sending_transaction">Enviando transsação…</string>
     <string name="send_to_account">Enviar para a conta</string>
     <string name="send_to_address">Enviar para um endereço</string>
     <string name="amount_can_not_be_zero">Quantidade não pode ser zero.</string>
@@ -527,14 +520,14 @@ export PATH="$HOME/.rbenv/bin:$PATH"
     <string name="enter_current_spending_password">Insira Senha De Gasto Atual</string>
     <string name="enter_current_startup_password">Insira a atual Senha De Inicialização</string>
     <string name="enter_startup_password">Insira a Senha De Inicialização</string>
-    <string name="removing_startup_pass">Removendo Senha De Inicialização...</string>
-    <string name="removing_startup_pin">Removendo PIN De Inicialização...</string>
-    <string name="changing_password">Mudando senha...</string>
+    <string name="removing_startup_pass">Removendo Senha De Inicialização…</string>
+    <string name="removing_startup_pin">Removendo PIN De Inicialização…</string>
+    <string name="changing_password">Mudando senha…</string>
     <string name="startup_pin_password">PIN/Senha De Inicialização</string>
     <string name="encrypt_wallet_summary">Um PIN/Senha será solicitado para inicialização.</string>
     <string name="change_startup_pin_password">Mudar PIN/Senha De Inicialização</string>
     <string name="required_to_enter_app">Necesssária para no aplicativo.</string>
-    <string name="changing_pin">Mudando PIN...</string>
+    <string name="changing_pin">Mudando PIN…</string>
     <string name="security_page_wallet_sync">Por favor espere sua carteira terminar a sincronização.</string>
     <!--/Security-->
 
