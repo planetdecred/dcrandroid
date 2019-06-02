@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -52,14 +53,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         this.util = new PreferenceUtil(context);
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.history_list_row, parent, false);
         return new TransactionAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if (position > historyList.size() - 1) {
             return;
         }
@@ -70,16 +72,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         int grayTextColor = context.getResources().getColor(R.color.grayTextColor);
 
         int confirmations = 0;
-        if (history.getHeight() != -1) {
-            confirmations = WalletData.getInstance().wallet.getBestBlock() - history.getHeight();
-            confirmations += 1;
-        }
 
-        if (history.getHeight() == -1) {
+        if (history.getHeight() == 0) {
             //No included in block chain, therefore transaction is pending
             holder.status.setTextColor(pendingTextColor);
             holder.status.setText(context.getString(R.string.pending));
         } else {
+            confirmations = WalletData.getInstance().wallet.getBestBlock() - history.getHeight();
+            confirmations += 1;
             if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {
                 holder.status.setTextColor(confirmedTextColor);
                 holder.status.setText(context.getString(R.string.confirmed));
@@ -108,7 +108,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (history.getType().equals(Constants.REGULAR)) {
             String strAmount = Utils.formatDecredWithComma(history.getAmount());
 
-            holder.Amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
+            holder.amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
             if (history.getDirection() == 0) {
                 holder.minus.setVisibility(View.VISIBLE);
                 holder.txType.setBackgroundResource(R.drawable.ic_send);
@@ -121,7 +121,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }
         } else if (history.getType().equals(Constants.TICKET_PURCHASE)) {
             holder.minus.setVisibility(View.INVISIBLE);
-            holder.Amount.setText(R.string.ticket);
+            holder.amount.setText(R.string.ticket);
             holder.txType.setBackgroundResource(R.drawable.immature_ticket);
 
             Locale currentLocale = context.getResources().getConfiguration().locale;
@@ -172,9 +172,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 holder.txType.setBackgroundResource(R.drawable.live_ticket);
             }
         } else if (history.getType().equals(Constants.VOTE)) {
-            holder.Amount.setText(R.string.vote);
+            holder.amount.setText(R.string.vote);
             holder.minus.setVisibility(View.INVISIBLE);
             holder.txType.setBackgroundResource(R.drawable.vote);
+        } else if (history.getType().equals(Constants.REVOCATION)) {
+            holder.amount.setText(R.string.revoked);
+            holder.minus.setVisibility(View.INVISIBLE);
+            holder.txType.setBackgroundResource(R.drawable.revocation);
         }
     }
 
@@ -184,7 +188,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView Amount;
+        private TextView amount;
         private TextView txType;
         private TextView status;
         private TextView minus;
@@ -193,7 +197,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         public MyViewHolder(View view) {
             super(view);
-            Amount = view.findViewById(R.id.history_amount_transferred);
+            amount = view.findViewById(R.id.history_amount_transferred);
             txType = view.findViewById(R.id.history_snd_rcv);
             status = view.findViewById(R.id.history_tx_status);
             minus = view.findViewById(R.id.history_minus);

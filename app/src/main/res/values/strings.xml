@@ -260,6 +260,7 @@
     <string name="null_data_bracket">[null data]</string>
     <string name="raw_tx_copied">Raw transaction copied to clipboard</string>
     <string name="vote">Vote</string>
+    <string name="revoked">Revoked</string>
     <string name="confirmed_immature">Confirmed / Immature</string>
     <string name="confirmed_live">Confirmed / Live</string>
     <string name="ticket">Ticket</string>
