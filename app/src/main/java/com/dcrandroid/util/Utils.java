@@ -318,12 +318,19 @@ public class Utils {
         BigDecimal signed = new BigDecimal(signedSize);
         signed = signed.setScale(9, RoundingMode.HALF_UP);
 
-        BigDecimal feePerKb = new BigDecimal(0.01);
+        BigDecimal bytesPerKb = new BigDecimal(1000);
+        bytesPerKb = bytesPerKb.setScale(9, RoundingMode.HALF_UP);
+
+        // convert bytes to kb
+        signed = signed.divide(bytesPerKb, RoundingMode.HALF_UP);
+
+        BigDecimal feePerKb = new BigDecimal(0.0001);
         feePerKb = feePerKb.setScale(9, RoundingMode.HALF_UP);
 
-        signed = signed.divide(feePerKb, MathContext.DECIMAL128);
+        // multiply signed size(in kb) by fee per kb
+        signed = signed.multiply(feePerKb, MathContext.DECIMAL128);
 
-        return signed.longValue();
+        return Dcrlibwallet.amountAtom(signed.doubleValue());
     }
 
     public static void copyToClipboard(Context ctx, String copyText, String successMessage) {
