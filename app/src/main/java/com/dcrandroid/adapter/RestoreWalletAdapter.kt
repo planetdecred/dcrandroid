@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.recover_wallet_list_row.view.*
-import java.util.*
 
 data class InputSeed(val number: Int, var phrase: String)
 
@@ -88,13 +87,11 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
         holder.ivClearText.setOnClickListener {
             holder.savedSeed.text.clear()
             removeSeed(seedItems[holder.adapterPosition])
@@ -111,7 +108,9 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                if (!allStringSeedArray.contains(holder.savedSeed.text.toString())) {
+                val seedIsValid = allStringSeedArray.containsPrefix(holder.savedSeed.text.toString())
+
+                if (!seedIsValid) {
                     holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
                 } else {
                     holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
@@ -124,6 +123,16 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
         holder.savedSeed.addTextChangedListener(textWatcher)
 
         holder.savedSeed.setOnFocusChangeListener { _, isFocused ->
+
+            val seedIsValid = allStringSeedArray.contains(holder.savedSeed.text.toString())
+
+            if (!seedIsValid) {
+                holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
+            } else {
+                holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
+                holder.ivClearText.setImageResource(0)
+            }
+
             if (isFocused && holder.savedSeed.text.isNotEmpty()) {
                 holder.ivClearText.setImageResource(R.drawable.ic_clear)
             }
@@ -142,6 +151,11 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
         val hintView = LayoutInflater.from(context).inflate(R.layout.completion_hint_view, null).findViewById(android.R.id.text1) as TextView
         hintView.setText(R.string.tap_to_select)
         return hintView
+    }
+
+    private fun ArrayList<String>.containsPrefix(prefix: String): Boolean {
+        val seed = this.find { it.startsWith(prefix, ignoreCase = true) }
+        return seed != null
     }
 
 }
