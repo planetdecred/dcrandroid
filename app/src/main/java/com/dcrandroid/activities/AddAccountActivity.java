@@ -33,6 +33,7 @@ public class AddAccountActivity extends AppCompatActivity {
     private PreferenceUtil util;
     private final int PASSCODE_REQUEST_CODE = 2;
     private EditText accountName;
+    private EditText passphrase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class AddAccountActivity extends AppCompatActivity {
         setContentView(R.layout.add_account_activity);
 
         accountName = findViewById(R.id.add_acc_name);
-        final EditText passphrase = findViewById(R.id.add_acc_passphrase);
+        passphrase = findViewById(R.id.add_acc_passphrase);
 
         util = new PreferenceUtil(this);
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
@@ -60,11 +61,11 @@ public class AddAccountActivity extends AppCompatActivity {
                 final String privatePassphrase = passphrase.getText().toString();
                 final String name = accountName.getText().toString().trim();
                 if (name.equals("")) {
-                    Toast.makeText(AddAccountActivity.this, R.string.input_account_name, Toast.LENGTH_SHORT).show();
+                    accountName.setError(getString(R.string.input_account_name));
                 } else {
                     if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                         if (privatePassphrase.equals("")) {
-                            Toast.makeText(AddAccountActivity.this, R.string.input_private_phrase, Toast.LENGTH_SHORT).show();
+                            passphrase.setError(getString(R.string.input_private_phrase));
                             return;
                         }
                         createAccount(name, privatePassphrase.getBytes());
@@ -101,7 +102,7 @@ public class AddAccountActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(AddAccountActivity.this, Utils.translateError(AddAccountActivity.this, e), Toast.LENGTH_LONG).show();
+                            Utils.showMessage(AddAccountActivity.this, Utils.translateError(AddAccountActivity.this, e), Toast.LENGTH_LONG);
                         }
                     });
                     setResult(RESULT_CANCELED);

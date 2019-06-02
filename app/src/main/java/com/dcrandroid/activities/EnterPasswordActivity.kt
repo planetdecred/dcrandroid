@@ -55,7 +55,7 @@ class EnterPasswordActivity : AppCompatActivity() {
                     finish()
                 }
             } else {
-                Snackbar.make(it, tv_prompt.text, Snackbar.LENGTH_SHORT).show()
+                password.error = getString(R.string.field_cannot_be_empty)
             }
         }
     }

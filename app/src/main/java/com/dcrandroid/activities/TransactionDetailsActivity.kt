@@ -164,7 +164,7 @@ class TransactionDetailsActivity: AppCompatActivity() {
         }
 
         tvHash!!.setOnClickListener {
-            Utils.copyToClipboard(this@TransactionDetailsActivity, transaction!!.hash, getString(R.string.tx_hash_copy))
+            Utils.copyToClipboard(this@TransactionDetailsActivity, transaction!!.hash, R.string.tx_hash_copy)
         }
     }
 
@@ -295,9 +295,9 @@ class TransactionDetailsActivity: AppCompatActivity() {
                 }
 
                 if (item.direction === TransactionDetailsAdapter.TransactionDebitCredit.Direction.DEBIT) {
-                    Utils.copyToClipboard(this@TransactionDetailsActivity, item.info, getString(R.string.tx_hash_copy))
+                    Utils.copyToClipboard(this@TransactionDetailsActivity, item.info, R.string.tx_hash_copy)
                 } else {
-                    Utils.copyToClipboard(this@TransactionDetailsActivity, item.info, getString(R.string.address_copy_text))
+                    Utils.copyToClipboard(this@TransactionDetailsActivity, item.info, R.string.address_copy_text)
                 }
             }
 
@@ -314,8 +314,8 @@ class TransactionDetailsActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.tx_details_tx_hash -> Utils.copyToClipboard(this, transaction!!.hash, getString(R.string.tx_hash_copy))
-            R.id.tx_details_raw_tx -> Utils.copyToClipboard(this, transaction!!.raw, getString(R.string.raw_tx_copied))
+            R.id.tx_details_tx_hash -> Utils.copyToClipboard(this, transaction!!.hash, R.string.tx_hash_copy)
+            R.id.tx_details_raw_tx -> Utils.copyToClipboard(this, transaction!!.raw, R.string.raw_tx_copied)
             R.id.tx_viewOnDcrData -> {
                 val url = if(BuildConfig.IS_TESTNET) {
                     "https://testnet.dcrdata.org/tx/" + transaction!!.hash
