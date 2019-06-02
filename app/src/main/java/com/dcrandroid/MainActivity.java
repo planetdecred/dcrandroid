@@ -288,11 +288,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         super.onResume();
         isForeground = true;
 
-        if (walletData.peers == 0 && walletData.synced) {
-            // restart spv synchronization.
-            connectionStatus.performClick();
-        }
-
         if (broadcastIntent != null)
             handler.postDelayed(new Runnable() {
                 @Override
