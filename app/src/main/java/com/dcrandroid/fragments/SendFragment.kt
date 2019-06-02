@@ -591,7 +591,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                     }
                 })
                 .setMessageClickListener(View.OnClickListener {
-                    Utils.copyToClipboard(context, txHash, getString(R.string.tx_hash_copy))
+                    Utils.copyToClipboard(context, txHash, R.string.tx_hash_copy)
                 })
 
         dialog.setCancelable(true)

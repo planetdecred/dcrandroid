@@ -102,7 +102,7 @@ public class AddAccountActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            passphrase.setError(Utils.translateError(AddAccountActivity.this, e));
+                            Utils.showMessage(AddAccountActivity.this, Utils.translateError(AddAccountActivity.this, e), Toast.LENGTH_LONG);
                         }
                     });
                     setResult(RESULT_CANCELED);

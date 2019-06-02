@@ -187,7 +187,7 @@ public class SecurityFragment extends Fragment {
                         + "\n" + getString(R.string.message_colon) + " " + etMessage.getText().toString()
                         + "\n" + getString(R.string.signature_colon) + " " + etSignature.getText().toString();
 
-                Utils.copyToClipboard(v.getContext(), text, getString(R.string.copied_successfully));
+                Utils.copyToClipboard(v.getContext(), text, R.string.copied_successfully);
             }
         });
 

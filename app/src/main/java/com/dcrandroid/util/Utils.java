@@ -48,6 +48,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 import dcrlibwallet.Dcrlibwallet;
 
@@ -334,9 +336,6 @@ public class Utils {
     }
 
     public static void copyToClipboard(Context ctx, String copyText, String successMessage) {
-        Resources r = ctx.getResources();
-        int margin25dp = Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 25, r.getDisplayMetrics()));
 
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -353,15 +352,12 @@ public class Utils {
                 clipboard.setPrimaryClip(clip);
         }
 
-        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View vi = inflater.inflate(R.layout.toast, null);
-        TextView tv = vi.findViewById(android.R.id.message);
-        tv.setText(successMessage);
-        Toast toast = new Toast(ctx);
-        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 50);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(vi);
-        toast.show();
+        showMessage(ctx, successMessage, Toast.LENGTH_SHORT);
+
+    }
+
+    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage){
+        copyToClipboard(ctx, copyText, ctx.getString(successMessage));
     }
 
     public static String readFromClipboard(Context context) {
@@ -376,6 +372,18 @@ public class Utils {
                 return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
         }
         return "";
+    }
+
+    public static void showMessage(Context ctx, String message, int duration){
+        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vi = inflater.inflate(R.layout.toast, null);
+        TextView tv = vi.findViewById(android.R.id.message);
+        tv.setText(message);
+        Toast toast = new Toast(ctx);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 50);
+        toast.setDuration(duration);
+        toast.setView(vi);
+        toast.show();
     }
 
     public static void backupWalletDB(final Context context) {

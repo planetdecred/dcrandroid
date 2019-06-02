@@ -102,7 +102,7 @@
     <string name="copied_successfully">Copied successfully.</string>
     <string name="all">All</string>
     <string name="re_establishing_connection">Re-establishing connection</string>
-    <string name="address_not_found">The address not found.</string>
+    <string name="address_not_found">Address not found.</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="clearAll">Clear All</string>
     <string name="share">Share</string>
@@ -113,6 +113,7 @@
     <string name="license">License</string>
     <string name="key_license" translatable="false">license</string>
     <string name="always">Always</string>
+    <string name="not_synced">Not Synced</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -560,5 +561,4 @@
 
     <string name="external_output_amount">%1$s DCR (external)</string>
     <string name="external_output_account">%1$s DCR (%2$s)</string>
-    <string name="field_cannot_be_empty">Field cannot be empty</string>
 </resources>

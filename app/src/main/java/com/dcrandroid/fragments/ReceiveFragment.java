@@ -212,7 +212,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
                 if (getContext() == null) {
                     return false;
                 }
-                Utils.copyToClipboard(getContext(), address.getText().toString(), getString(R.string.address_copy_text));
+                Utils.copyToClipboard(getContext(), address.getText().toString(), R.string.address_copy_text);
                 return true;
         }
         return false;
