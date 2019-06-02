@@ -17,43 +17,67 @@
         android:layout_height="48dp"
         android:orientation="horizontal"
         android:weightSum="100"
-        android:background="#fff">
+        android:background="@color/white">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/layout_password"
-            android:gravity="center"
             android:background="#F3F5F6"
-            android:layout_weight="50">
+            android:layout_weight="49.5">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PASSWORD"
+                android:text="@string/password"
                 android:textColor="#091440"
                 android:gravity="center"
+                android:layout_centerInParent="true"
                 android:textSize="17sp"
                 app:fontFamily="@font/source_sans_pro_regular_family" />
-        </LinearLayout>
 
-        <LinearLayout
+            <View
+                android:id="@+id/password_bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#808080"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#808080"
+            />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:layout_weight="50"
+            android:background="@color/white"
+            android:layout_weight="49.5"
             android:id="@+id/layout_pin">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PIN"
+                android:text="@string/pin"
                 android:textColor="#091440"
                 android:gravity="center"
+                android:layout_centerInParent="true"
                 android:textSize="17sp"
                 app:fontFamily="@font/source_sans_pro_regular_family" />
-        </LinearLayout>
+
+            <View
+                android:id="@+id/pin_bottom_border"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#808080"
+                />
+
+        </RelativeLayout>
     </LinearLayout>
 
     <FrameLayout
