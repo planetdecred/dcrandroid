@@ -184,7 +184,6 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
 
                     Intent i = new Intent(getActivity(), LogViewer.class);
-                    i.putExtra("log_path", getContext().getFilesDir() + BuildConfig.LogDir);
                     startActivity(i);
 
                     return true;
