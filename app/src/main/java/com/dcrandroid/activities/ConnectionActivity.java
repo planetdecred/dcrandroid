@@ -7,10 +7,13 @@
 package com.dcrandroid.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
+
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dcrandroid.R;
 import com.dcrandroid.adapter.ConnectionAdapter;
@@ -20,28 +23,18 @@ import com.dcrandroid.util.RecyclerTouchListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 /**
  * Created by Macsleven on 05/01/2018.
  */
 
-public class ConnectionActivity extends AppCompatActivity {
+public class ConnectionActivity extends BaseActivity {
     private List<Connection> connectionList = new ArrayList<>();
     private ConnectionAdapter connectionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
+
         setContentView(R.layout.activity_connection_page);
         setTitle(getString(R.string.connection));
         RecyclerView recyclerView = findViewById(R.id.connection_recycler_view);

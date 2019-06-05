@@ -11,13 +11,11 @@ import android.widget.TextView;
 
 import com.dcrandroid.R;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * Created by Macsleven on 06/01/2018.
  */
 
-public class PeersDetailsActivity extends AppCompatActivity {
+public class PeersDetailsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

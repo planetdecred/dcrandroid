@@ -8,10 +8,8 @@ package com.dcrandroid.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,13 +19,11 @@ import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * Created by Macsleven on 28/12/2017.
  */
 
-public class AddAccountActivity extends AppCompatActivity {
+public class AddAccountActivity extends BaseActivity {
 
     private ProgressDialog pd;
     private PreferenceUtil util;
@@ -38,11 +34,7 @@ public class AddAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
+
         setTitle(getString(R.string.add_account));
         setContentView(R.layout.add_account_activity);
 

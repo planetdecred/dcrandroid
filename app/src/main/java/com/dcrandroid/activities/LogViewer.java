@@ -6,13 +6,12 @@
 
 package com.dcrandroid.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
@@ -21,14 +20,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * Created by collins on 2/17/18.
  */
 
-public class LogViewer extends AppCompatActivity {
+public class LogViewer extends BaseActivity {
     private static final int MENU_ITEM = 1;
 
     private TextView logTextView;
@@ -57,11 +53,7 @@ public class LogViewer extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
+
         setContentView(R.layout.activity_log_viewer);
         logTextView = findViewById(R.id.log_text);
 

@@ -18,6 +18,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
+
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
@@ -28,13 +36,6 @@ import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
 import dcrlibwallet.Dcrlibwallet;
 import dcrlibwallet.LibWallet;
 
@@ -394,10 +395,10 @@ public class SettingsActivity extends AppCompatActivity {
                                 NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                                 if (networkInfo != null && networkInfo.isConnected()) {
                                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                                        wallet.cancelSync();
+                                        wallet.cancelSync(false);
                                     }
                                 } else {
-                                    wallet.cancelSync();
+                                    wallet.cancelSync(false);
                                 }
                             }
                         }

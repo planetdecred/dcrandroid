@@ -49,6 +49,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.dcrandroid.activities.BaseActivity;
 import com.dcrandroid.activities.SettingsActivity;
 import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
@@ -88,7 +89,7 @@ import dcrlibwallet.HeadersRescanProgressReport;
 import dcrlibwallet.SyncProgressListener;
 import dcrlibwallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements TransactionListener,
+public class MainActivity extends BaseActivity implements TransactionListener,
         SyncProgressListener, View.OnClickListener {
 
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
@@ -228,12 +229,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
 
         setContentView(R.layout.activity_main);
 
