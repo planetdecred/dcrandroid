@@ -123,6 +123,13 @@ func (lw *LibWallet) fetchHeadersProgress(fetchedHeadersCount int32, lastHeaderT
 	}
 	estimatedTotalHeadersFetchTime := float64(timeTakenSoFar) / headersFetchProgress
 
+	// For some reason, the actual total headers fetch time is more than the predicted/estimated time.
+	// Account for this difference by multiplying the estimatedTotalHeadersFetchTime by an incrementing factor.
+	// The incrementing factor is inversely proportional to the headers fetch progress,
+	// ranging from 0.5 to 0 as headers fetching progress increases from 0 to 1.
+	adjustmentFactor := 0.5 * (1 - headersFetchProgress)
+	estimatedTotalHeadersFetchTime += estimatedTotalHeadersFetchTime * adjustmentFactor
+
 	estimatedDiscoveryTime := estimatedTotalHeadersFetchTime * DiscoveryPercentage
 	estimatedRescanTime := estimatedTotalHeadersFetchTime * RescanPercentage
 	estimatedTotalSyncTime := estimatedTotalHeadersFetchTime + estimatedDiscoveryTime + estimatedRescanTime
@@ -362,7 +369,7 @@ func (lw *LibWallet) rescanProgress(rescannedThrough int32) {
 	estimatedTotalSyncTime := lw.activeSyncData.headersFetchTimeSpent + lw.activeSyncData.totalDiscoveryTimeSpent + int64(math.Round(estimatedTotalRescanTime))
 	totalProgress := (float64(totalElapsedTime) / float64(estimatedTotalSyncTime)) * 100
 
-	totalTimeRemainingSeconds := int64(math.Round(estimatedTotalRescanTime)) + elapsedRescanTime
+	totalTimeRemainingSeconds := int64(math.Round(estimatedTotalRescanTime)) - elapsedRescanTime
 
 	// do not update total time taken and total progress percent if elapsedRescanTime is 0
 	// because the estimatedTotalRescanTime will be inaccurate (also 0)
@@ -405,6 +412,8 @@ func (lw *LibWallet) rescanFinished() {
 		return
 	}
 
+	lw.activeSyncData.headersRescanProgress.TotalTimeRemainingSeconds = 0
+	lw.activeSyncData.headersRescanProgress.TotalSyncProgress = 100
 	lw.publishHeadersRescanProgress()
 }
 
