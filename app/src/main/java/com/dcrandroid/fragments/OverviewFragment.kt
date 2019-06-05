@@ -82,7 +82,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         transactionAdapter = TransactionAdapter(transactionList, context!!)
         iv_sync_indicator.setBackgroundResource(R.drawable.sync_animation)
 
-        if (!walletData!!.wallet.isSyncing) {
+        if (walletData!!.wallet.isSyncing) {
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
@@ -91,7 +91,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             pb_sync_progress.progress = 0
             overview_sync_layout.visibility = View.VISIBLE
             tv_synchronizing.setText(R.string.starting_synchronization)
-
+            walletData!!.wallet.publishLastSyncProgress()
         } else {
             getBalance()
             iv_sync_indicator.visibility = View.GONE
