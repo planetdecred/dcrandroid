@@ -34,6 +34,7 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 	ctx, _ := contextWithShutdownCancel(context.Background())
 
 	var totalIndex int32
+	var txEndHeight uint32
 	rangeFn := func(block *wallet.Block) (bool, error) {
 		for _, transaction := range block.Transactions {
 
@@ -60,13 +61,14 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 		}
 
 		if block.Header != nil {
-			err := lw.txDB.Set(BucketTxInfo, KeyEndBlock, &endHeight)
+			txEndHeight = block.Header.Height
+			err := lw.txDB.Set(BucketTxInfo, KeyEndBlock, &txEndHeight)
 			if err != nil {
 				log.Errorf("Set tx index end block height error: ", err)
 				return false, err
 			}
 
-			log.Infof("Transaction index caught up to %d", endHeight)
+			log.Infof("Index saved for transactions in block %d", txEndHeight)
 		}
 
 		select {
@@ -107,7 +109,7 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 			log.Errorf("Count Error :%v", err)
 			return
 		}
-		log.Infof("Transaction index finished at %d, %d transaction(s) indexed in total", endHeight, count)
+		log.Infof("Transaction index finished at %d, %d transaction(s) indexed in total", txEndHeight, count)
 	}()
 
 	log.Infof("Indexing transactions start height: %d, end height: %d", beginHeight, endHeight)
