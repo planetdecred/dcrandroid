@@ -9,12 +9,15 @@ package com.dcrandroid.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.StatFs
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
@@ -58,5 +61,38 @@ class SetupWalletActivity : AppCompatActivity() {
                     .putExtra(Constants.SEED, Utils.getWordList(this@SetupWalletActivity))
             startActivity(i)
         }
+
+        checkStorageSpace()
+    }
+
+    private fun checkStorageSpace() {
+        val currentTime = System.currentTimeMillis() / 1000 // Divided by 1000 to convert to unix timestamp
+        val estimatedBlocksSinceGenesis = (currentTime - BuildConfig.GenesisTimestamp) / BuildConfig.TargetTimePerBlock
+
+        val estimatedHeadersSize = estimatedBlocksSinceGenesis / 1000 // estimate of block headers(since genesis) size in mb
+        val freeInternalMemory = getFreeMemory()
+
+        if (estimatedHeadersSize > freeInternalMemory) {
+            val message = getString(R.string.low_storage_message, estimatedHeadersSize, freeInternalMemory)
+
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.low_storage_space)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok, null)
+                    .setNeutralButton(R.string.exit_cap) { _, _ ->
+                        ActivityCompat.finishAffinity(this)
+                    }
+                    .show()
+        }
+    }
+
+    // returns free internal memory(in mb)
+    private fun getFreeMemory(): Long {
+        val statsFs = StatFs(filesDir.absolutePath)
+        val blocks = statsFs.availableBlocks
+        val blockSize = statsFs.blockSize
+
+        return (blocks * blockSize) / 1048576L // convert to megabytes
     }
 }

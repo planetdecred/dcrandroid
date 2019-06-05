@@ -40,6 +40,7 @@ android {
             buildConfigField("boolean", "IS_TESTNET", "true")
             buildConfigField("int", "TicketMaturity", "16")
             buildConfigField("int", "TargetTimePerBlock", "120")
+            buildConfigField("long", "GenesisTimestamp", "1533513600")
             buildConfigField("String", "LogDir", "\"/wallet/testnet3/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"testnet3\"")
             resValue "string", "app_name", "Decred Wallet Testnet"
@@ -56,6 +57,7 @@ android {
             buildConfigField("boolean", "IS_TESTNET", "false")
             buildConfigField("int", "TicketMaturity", "256")
             buildConfigField("int", "TargetTimePerBlock", "300")
+            buildConfigField("long", "GenesisTimestamp", "1454954400")
             buildConfigField("String", "LogDir", "\"/wallet/mainnet/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"mainnet\"")
             resValue "string", "app_name", "Decred Wallet"

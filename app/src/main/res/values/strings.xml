@@ -116,6 +116,8 @@
     <string name="not_synced">Not Synced</string>
     <string name="enter_new_name">Enter new name</string>
     <string name="rename">Rename</string>
+    <string name="low_storage_space">Low Storage Space</string>
+    <string name="low_storage_message">Your device storage space is low and is not enough to sync a wallet. Required space to sync a wallet is ~%1$dmb while your free internal memory is %2$dmb</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
