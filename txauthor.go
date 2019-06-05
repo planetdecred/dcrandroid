@@ -55,16 +55,17 @@ func (lw *LibWallet) CalculateNewTxFeeAndSize(amount int64, fromAccount int32, t
 }
 
 func (lw *LibWallet) SendTransaction(amount int64, fromAccount int32, toAddress string, requiredConfirmations int32, spendAllFundsInAccount bool, privatePassphrase []byte) ([]byte, error) {
-	n, err := lw.wallet.NetworkBackend()
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
 	defer func() {
 		for i := range privatePassphrase {
 			privatePassphrase[i] = 0
 		}
 	}()
+
+	n, err := lw.wallet.NetworkBackend()
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
 
 	unsignedTx, err := lw.constructTransaction(amount, fromAccount, toAddress, requiredConfirmations, spendAllFundsInAccount)
 	if err != nil {
@@ -140,6 +141,10 @@ func (lw *LibWallet) SendTransaction(amount int64, fromAccount int32, toAddress 
 
 func (lw *LibWallet) constructTransaction(amount int64, fromAccount int32, toAddress string, requiredConfirmations int32,
 	spendAllFundsInAccount bool) (unsignedTx *txauthor.AuthoredTx, err error) {
+
+	if !spendAllFundsInAccount && (amount <= 0 || amount > MaxAmountAtom) {
+		return nil, errors.E(errors.Invalid, "invalid amount")
+	}
 
 	// `outputSelectionAlgorithm` specifies the algorithm to use when selecting outputs to construct a transaction.
 	// If spendAllFundsInAccount == true, `outputSelectionAlgorithm` will be `wallet.OutputSelectionAlgorithmAll`.

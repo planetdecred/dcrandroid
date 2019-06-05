@@ -28,6 +28,9 @@ const (
 
 	// Use 80% of estimated total headers fetch time to estimate address discovery time
 	DiscoveryPercentage = 0.8
+
+	MaxAmountAtom = dcrutil.MaxAmount
+	MaxAmountDcr  = dcrutil.MaxAmount / dcrutil.AtomsPerCoin
 )
 
 func shutdownListener() {
