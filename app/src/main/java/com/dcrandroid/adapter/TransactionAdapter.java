@@ -45,12 +45,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private LayoutInflater layoutInflater;
     private PreferenceUtil util;
     private Context context;
+    private WalletData walletData;
 
     public TransactionAdapter(List<Transaction> historyListList, Context context) {
         this.historyList = historyListList;
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.util = new PreferenceUtil(context);
+        walletData = WalletData.getInstance();
     }
 
     @NonNull
@@ -78,7 +80,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.status.setTextColor(pendingTextColor);
             holder.status.setText(context.getString(R.string.pending));
         } else {
-            confirmations = WalletData.getInstance().wallet.getBestBlock() - history.getHeight();
+            confirmations = walletData.bestBlock - history.getHeight();
             confirmations += 1;
             if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) || confirmations > 1) {
                 holder.status.setTextColor(confirmedTextColor);

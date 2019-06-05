@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     private Handler handler = new Handler();
     private Intent broadcastIntent = null;
 
-    private int bestBlock = 0, blockNotificationSound, pageID;
+    private int blockNotificationSound, pageID;
     private long bestBlockTimestamp;
     private boolean scanning = false, isForeground;
 
@@ -187,6 +187,8 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             mListView.setItemChecked(0, true);
         }
 
+        walletData.bestBlock = walletData.wallet.getBestBlock();
+
         displayOverview();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -232,12 +234,12 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
         setContentView(R.layout.activity_main);
 
+        util = new PreferenceUtil(this);
+        walletData = WalletData.getInstance();
+
         initViews();
 
         registerNotificationChannel();
-
-        util = new PreferenceUtil(this);
-        walletData = WalletData.getInstance();
 
         if (walletData.wallet == null) {
             System.out.println("Restarting app");
@@ -700,13 +702,13 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
     @Override
     public void onBlockAttached(int height, long timestamp) {
-        this.bestBlock = height;
+        walletData.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
         if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
         if (!walletData.syncing) {
-            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
+            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
                 @Override
@@ -771,9 +773,8 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 ((AnimationDrawable) syncIndicator.getBackground()).stop();
                 syncIndicator.setVisibility(View.GONE);
 
-                bestBlock = walletData.wallet.getBestBlock();
                 bestBlockTimestamp = walletData.wallet.getBestBlockTimeStamp();
-                String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
+                String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
                 setChainStatus(status);
                 setBestBlockTime(bestBlockTimestamp);
 

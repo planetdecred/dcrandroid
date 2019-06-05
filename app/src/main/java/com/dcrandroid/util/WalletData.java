@@ -16,7 +16,7 @@ public class WalletData {
     private static final WalletData ourInstance = new WalletData();
     public LibWallet wallet;
     public boolean synced = false, syncing = true;
-    public int peers = 0;
+    public int peers = 0, bestBlock = -1;
 
     private WalletData() {}
 
