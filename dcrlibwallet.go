@@ -119,6 +119,8 @@ func (lw *LibWallet) Shutdown(exit bool) {
 		lw.rpcClient.Stop()
 	}
 
+	lw.CancelSync(true)
+
 	if !IsChannelClosed(shutdownSignaled) {
 		log.Info("Channel not closed, closing")
 		close(shutdownSignaled)
@@ -141,15 +143,39 @@ func (lw *LibWallet) Shutdown(exit bool) {
 	if lw.txDB != nil {
 		err := lw.txDB.Close()
 		if err != nil {
-			log.Errorf("db closed with error: %v", err)
+			log.Errorf("tx db closed with error: %v", err)
 		} else {
-			log.Info("db closed successfully")
+			log.Info("tx db closed successfully")
 		}
 	}
 
 	if exit {
 		os.Exit(0)
 	}
+}
+
+func (lw *LibWallet) DeleteWallet(privatePassphrase []byte) error {
+
+	defer func() {
+		for i := range privatePassphrase {
+			privatePassphrase[i] = 0
+		}
+	}()
+
+	wallet, loaded := lw.walletLoader.LoadedWallet()
+	if !loaded {
+		return errors.New(ErrWalletNotLoaded)
+	}
+
+	err := wallet.Unlock(privatePassphrase, nil)
+	if err != nil {
+		return translateError(err)
+	}
+	wallet.Lock()
+
+	lw.Shutdown(false)
+	log.Info("Deleting Wallet")
+	return os.RemoveAll(lw.walletDataDir)
 }
 
 func (lw *LibWallet) CallJSONRPC(method string, args string, address string, username string, password string, caCert string) (string, error) {
