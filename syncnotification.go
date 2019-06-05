@@ -81,6 +81,7 @@ func (lw *LibWallet) fetchHeadersStarted() {
 		return
 	}
 
+	lw.activeSyncData.syncStage = HeadersFetchSyncStage
 	lw.activeSyncData.beginFetchTimeStamp = time.Now().Unix()
 	lw.activeSyncData.startHeaderHeight = lw.GetBestBlock()
 	lw.activeSyncData.totalFetchedHeadersCount = 0
@@ -192,6 +193,7 @@ func (lw *LibWallet) discoverAddressesStarted() {
 		return
 	}
 
+	lw.activeSyncData.syncStage = AddressDiscoverySyncStage
 	lw.activeSyncData.addressDiscoveryStartTime = time.Now().Unix()
 	if lw.syncData.showLogs && lw.syncData.syncing {
 		log.Info("Step 2 of 3 - discovering used addresses.")
@@ -333,6 +335,7 @@ func (lw *LibWallet) rescanStarted() {
 		lw.activeSyncData.addressDiscoveryCompleted = nil
 	}
 
+	lw.activeSyncData.syncStage = HeadersRescanSyncStage
 	lw.activeSyncData.rescanStartTime = time.Now().Unix()
 
 	// retain last total progress report from address discovery phase

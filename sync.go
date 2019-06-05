@@ -37,6 +37,8 @@ type syncData struct {
 type activeSyncData struct {
 	targetTimePerBlock int32
 
+	syncStage int32
+
 	headersFetchProgress     HeadersFetchProgressReport
 	addressDiscoveryProgress AddressDiscoveryProgressReport
 	headersRescanProgress    HeadersRescanProgressReport
@@ -63,6 +65,13 @@ const (
 	ErrorCodeDeadlineExceeded
 )
 
+const (
+	InvalidSyncStage          = -1
+	HeadersFetchSyncStage     = 0
+	AddressDiscoverySyncStage = 1
+	HeadersRescanSyncStage    = 2
+)
+
 func (lw *LibWallet) initActiveSyncData() {
 	headersFetchProgress := HeadersFetchProgressReport{}
 	headersFetchProgress.GeneralSyncProgress = &GeneralSyncProgress{}
@@ -82,6 +91,8 @@ func (lw *LibWallet) initActiveSyncData() {
 
 	lw.syncData.activeSyncData = &activeSyncData{
 		targetTimePerBlock: targetTimePerBlock,
+
+		syncStage: InvalidSyncStage,
 
 		headersFetchProgress:     headersFetchProgress,
 		addressDiscoveryProgress: addressDiscoveryProgress,
@@ -393,6 +404,21 @@ func (lw *LibWallet) CancelRescan() {
 
 func (lw *LibWallet) IsScanning() bool {
 	return lw.syncData.rescanning
+}
+
+func (lw *LibWallet) PublishLastSyncProgress() {
+	if lw.activeSyncData == nil {
+		return
+	}
+
+	switch lw.activeSyncData.syncStage {
+	case HeadersFetchSyncStage:
+		lw.publishFetchHeadersProgress()
+	case AddressDiscoverySyncStage:
+		lw.publishAddressDiscoveryProgress()
+	case HeadersRescanSyncStage:
+		lw.publishHeadersRescanProgress()
+	}
 }
 
 func (lw *LibWallet) GetBestBlock() int32 {
