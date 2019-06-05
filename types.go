@@ -150,8 +150,9 @@ type AddressDiscoveryProgressReport struct {
 type HeadersRescanProgressReport struct {
 	*GeneralSyncProgress
 	TotalHeadersToScan  int32 `json:"totalHeadersToScan"`
-	RescanProgress      int32 `json:"rescanProgress"`
 	CurrentRescanHeight int32 `json:"currentRescanHeight"`
+	RescanProgress      int32 `json:"rescanProgress"`
+	RescanTimeRemaining int64 `json:"rescanTimeRemaining"`
 }
 
 type DebugInfo struct {

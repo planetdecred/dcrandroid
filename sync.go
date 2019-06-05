@@ -13,6 +13,8 @@ import (
 	"github.com/decred/dcrwallet/p2p"
 	"github.com/decred/dcrwallet/spv"
 	"github.com/decred/dcrwallet/wallet"
+	"math"
+	"time"
 )
 
 type syncData struct {
@@ -109,7 +111,21 @@ func (lw *LibWallet) AddSyncProgressListener(syncProgressListener SyncProgressLi
 	if k {
 		return errors.New(ErrListenerAlreadyExist)
 	}
+
 	lw.syncProgressListeners[uniqueIdentifier] = syncProgressListener
+
+	// If sync is already on, notify this newly added listener of the current progress report.
+	if lw.syncData.syncing && lw.activeSyncData != nil {
+		switch lw.activeSyncData.syncStage {
+		case HeadersFetchSyncStage:
+			syncProgressListener.OnHeadersFetchProgress(&lw.headersFetchProgress)
+		case AddressDiscoverySyncStage:
+			syncProgressListener.OnAddressDiscoveryProgress(&lw.activeSyncData.addressDiscoveryProgress)
+		case HeadersRescanSyncStage:
+			syncProgressListener.OnHeadersRescanProgress(&lw.activeSyncData.headersRescanProgress)
+		}
+	}
+
 	return nil
 }
 
@@ -347,26 +363,36 @@ func (lw *LibWallet) RescanBlocks() error {
 		defer func() {
 			lw.rescanning = false
 		}()
+
 		lw.rescanning = true
-		progress := make(chan wallet.RescanProgress, 1)
 		ctx, cancel := contextWithShutdownCancel(context.Background())
 		lw.syncData.cancelRescan = cancel
 
-		var totalHeightRescanned int32
+		progress := make(chan wallet.RescanProgress, 1)
 		go lw.wallet.RescanProgressFromHeight(ctx, netBackend, 0, progress)
+
+		rescanStartTime := time.Now().Unix()
 
 		for p := range progress {
 			if p.Err != nil {
 				log.Error(p.Err)
 				return
 			}
-			totalHeightRescanned += p.ScannedThrough
-			report := &HeadersRescanProgressReport{
-				CurrentRescanHeight: totalHeightRescanned,
+
+			rescanProgressReport := &HeadersRescanProgressReport{
+				CurrentRescanHeight: p.ScannedThrough,
 				TotalHeadersToScan:  lw.GetBestBlock(),
 			}
+
+			elapsedRescanTime := time.Now().Unix() - rescanStartTime
+			rescanRate := float64(p.ScannedThrough) / float64(rescanProgressReport.TotalHeadersToScan)
+
+			rescanProgressReport.RescanProgress = int32(math.Round(rescanRate * 100))
+			estimatedTotalRescanTime := int64(math.Round(float64(elapsedRescanTime) / rescanRate))
+			rescanProgressReport.RescanTimeRemaining = estimatedTotalRescanTime - elapsedRescanTime
+
 			for _, syncProgressListener := range lw.syncProgressListeners {
-				syncProgressListener.OnHeadersRescanProgress(report)
+				syncProgressListener.OnHeadersRescanProgress(rescanProgressReport)
 			}
 
 			select {
@@ -382,13 +408,11 @@ func (lw *LibWallet) RescanBlocks() error {
 		// set this to nil, it no longer need since rescan has completed
 		lw.syncData.cancelRescan = nil
 
-		// Send final report after rescan has completed.
-		report := &HeadersRescanProgressReport{
-			CurrentRescanHeight: totalHeightRescanned,
-			TotalHeadersToScan:  lw.GetBestBlock(),
-		}
+		// Trigger sync completed callback.
+		// todo: probably best to have a dedicated rescan listener
+		// with callbacks for rescanStarted, rescanCompleted, rescanError and rescanCancel
 		for _, syncProgressListener := range lw.syncProgressListeners {
-			syncProgressListener.OnHeadersRescanProgress(report)
+			syncProgressListener.OnSyncCompleted()
 		}
 	}()
 
@@ -404,21 +428,6 @@ func (lw *LibWallet) CancelRescan() {
 
 func (lw *LibWallet) IsScanning() bool {
 	return lw.syncData.rescanning
-}
-
-func (lw *LibWallet) PublishLastSyncProgress() {
-	if lw.activeSyncData == nil {
-		return
-	}
-
-	switch lw.activeSyncData.syncStage {
-	case HeadersFetchSyncStage:
-		lw.publishFetchHeadersProgress()
-	case AddressDiscoverySyncStage:
-		lw.publishAddressDiscoveryProgress()
-	case HeadersRescanSyncStage:
-		lw.publishHeadersRescanProgress()
-	}
 }
 
 func (lw *LibWallet) GetBestBlock() int32 {

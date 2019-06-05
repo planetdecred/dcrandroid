@@ -368,17 +368,18 @@ func (lw *LibWallet) rescanProgress(rescannedThrough int32) {
 	elapsedRescanTime := time.Now().Unix() - lw.activeSyncData.rescanStartTime
 	totalElapsedTime := lw.activeSyncData.headersFetchTimeSpent + lw.activeSyncData.totalDiscoveryTimeSpent + elapsedRescanTime
 
-	estimatedTotalRescanTime := float64(elapsedRescanTime) / rescanRate
-	estimatedTotalSyncTime := lw.activeSyncData.headersFetchTimeSpent + lw.activeSyncData.totalDiscoveryTimeSpent + int64(math.Round(estimatedTotalRescanTime))
-	totalProgress := (float64(totalElapsedTime) / float64(estimatedTotalSyncTime)) * 100
-
-	totalTimeRemainingSeconds := int64(math.Round(estimatedTotalRescanTime)) - elapsedRescanTime
+	estimatedTotalRescanTime := int64(math.Round(float64(elapsedRescanTime) / rescanRate))
+	lw.activeSyncData.headersRescanProgress.RescanTimeRemaining = estimatedTotalRescanTime - elapsedRescanTime
+	totalTimeRemainingSeconds := lw.activeSyncData.headersRescanProgress.RescanTimeRemaining
 
 	// do not update total time taken and total progress percent if elapsedRescanTime is 0
 	// because the estimatedTotalRescanTime will be inaccurate (also 0)
 	// which will make the estimatedTotalSyncTime equal to totalElapsedTime
 	// giving the wrong impression that the process is complete
 	if elapsedRescanTime > 0 {
+		estimatedTotalSyncTime := lw.activeSyncData.headersFetchTimeSpent + lw.activeSyncData.totalDiscoveryTimeSpent + estimatedTotalRescanTime
+		totalProgress := (float64(totalElapsedTime) / float64(estimatedTotalSyncTime)) * 100
+
 		lw.activeSyncData.headersRescanProgress.TotalTimeRemainingSeconds = totalTimeRemainingSeconds
 		lw.activeSyncData.headersRescanProgress.TotalSyncProgress = int32(math.Round(totalProgress))
 	}
@@ -389,7 +390,7 @@ func (lw *LibWallet) rescanProgress(rescannedThrough int32) {
 		totalElapsedTime,
 		totalTimeRemainingSeconds,
 		elapsedRescanTime,
-		int64(math.Round(estimatedTotalRescanTime)) - elapsedRescanTime,
+		lw.activeSyncData.headersRescanProgress.RescanTimeRemaining,
 	}
 	lw.publishDebugInfo(debugInfo)
 
