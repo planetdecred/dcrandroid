@@ -843,15 +843,34 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     @Override
     public void onHeadersRescanProgress(final HeadersRescanProgressReport report) {
         setConnectionStatus(R.string.scanning_blocks);
-        setChainStatus(Utils.getSyncTimeRemaining(report.getGeneralSyncProgress().getTotalTimeRemainingSeconds(),
-                report.getGeneralSyncProgress().getTotalSyncProgress(), true, MainActivity.this));
         setBestBlockTime(-1);
+        String chainStatus;
+        final int progress;
+        if (walletData.wallet.isSyncing()) {
 
+            progress = report.getGeneralSyncProgress().getTotalSyncProgress();
+            chainStatus = Utils.getSyncTimeRemaining(report.getGeneralSyncProgress().getTotalTimeRemainingSeconds(),
+                    progress, true, MainActivity.this);
+
+        } else if (walletData.wallet.isScanning()) {
+            if (blockUpdate != null) {
+                blockUpdate.interrupt();
+                blockUpdate = null;
+            }
+
+            progress = report.getRescanProgress();
+            chainStatus = Utils.getSyncTimeRemaining(report.getRescanTimeRemaining(), progress, true, this);
+
+        } else {
+            return;
+        }
+
+        setChainStatus(chainStatus);
         syncProgressBar.post(new Runnable() {
             @Override
             public void run() {
                 syncProgressBar.setVisibility(View.VISIBLE);
-                syncProgressBar.setProgress(report.getGeneralSyncProgress().getTotalSyncProgress());
+                syncProgressBar.setProgress(progress);
             }
         });
     }

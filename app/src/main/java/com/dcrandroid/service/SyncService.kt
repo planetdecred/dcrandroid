@@ -19,7 +19,6 @@ import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
-import java.lang.Exception
 
 const val NOTIFICATION_ID = 4
 const val TAG = "SyncService"
@@ -119,7 +118,7 @@ class SyncService : Service(), SyncProgressListener {
         println("Task Removed")
     }
 
-    private fun publishProgress(remainingTime: Long, syncProgress: Int){
+    private fun publishProgress(remainingTime: Long, syncProgress: Int) {
         contentTitle = getString(R.string.synchronizing)
         contentText = Utils.getSyncTimeRemaining(remainingTime, syncProgress, false, this)
         showNotification()
@@ -139,6 +138,7 @@ class SyncService : Service(), SyncProgressListener {
 
     override fun onSyncEndedWithError(err: Exception) {
         err.printStackTrace()
+        wallet!!.removeSyncProgressListener(TAG)
     }
 
     override fun onSyncCanceled(willRestart: Boolean) {
@@ -148,6 +148,7 @@ class SyncService : Service(), SyncProgressListener {
         }
         // remove sync notification if sync is not going to restart.
         println("Sync Canceled, destroying service")
+        wallet!!.removeSyncProgressListener(TAG)
         stopForeground(true)
         stopSelf()
     }
@@ -159,6 +160,7 @@ class SyncService : Service(), SyncProgressListener {
 
     override fun onSyncCompleted() {
         println("Synced, destroying service")
+        wallet!!.removeSyncProgressListener(TAG)
         stopForeground(true)
         stopSelf()
     }

@@ -555,7 +555,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
     }
 
     override fun onHeadersRescanProgress(report: HeadersRescanProgressReport) {
-        if (context == null) {
+        if (context == null || walletData!!.wallet.isScanning) {
             return
         }
 
