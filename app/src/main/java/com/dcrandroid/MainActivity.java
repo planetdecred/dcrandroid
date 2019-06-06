@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
     private int blockNotificationSound, pageID;
     private long bestBlockTimestamp;
-    private boolean scanning = false, isForeground;
+    private boolean isForeground;
 
     private final String TAG = "MainActivity";
 
@@ -205,13 +205,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             public void run() {
                 AnimationDrawable syncAnimation = (AnimationDrawable) syncIndicator.getBackground();
                 syncAnimation.start();
-            }
-        });
-
-        stopScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scanning = false;
             }
         });
     }
@@ -404,7 +397,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             public void run() {
                 while (!this.isInterrupted()) {
                     try {
-                        if (!scanning && !walletData.wallet.isSyncing()) {
+                        if (!walletData.wallet.isSyncing() && !walletData.wallet.isScanning()) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -861,6 +854,13 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             progress = report.getRescanProgress();
             chainStatus = Utils.getSyncTimeRemaining(report.getRescanTimeRemaining(), progress, true, this);
 
+            stopScan.post(new Runnable() {
+                @Override
+                public void run() {
+                    stopScan.setVisibility(View.VISIBLE);
+                }
+            });
+
         } else {
             return;
         }
@@ -906,7 +906,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     public void onSyncCanceled(boolean willRestart) {
         if (!willRestart) {
             // clear sync layout if sync is not going to restart.
-            walletData.synced = false;
+            walletData.synced = walletData.wallet.isSynced();
 
             setupSyncedLayout();
         }
