@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/layout_password"
+            android:background="?selectableItemBackground"
             android:layout_weight="49.5">
 
             <TextView
@@ -47,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="49.5"
+            android:background="?selectableItemBackground"
             android:id="@+id/layout_pin">
 
             <TextView
