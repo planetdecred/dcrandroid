@@ -233,7 +233,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             val latestTx = Collections.min(transactionList, TransactionComparator.MinConfirmationSort())
                             latestTransactionHeight = latestTx.height + 1
 
-                            if (transactionList.size > 0) {
+                            if (transactionList.size > 0 && selectedTxFilter == Dcrlibwallet.TxFilterAll) {
                                 val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
                                 if (recentTransactionHash.isNotEmpty()) {
                                     val hashIndex = transactionList.indexOfFirst { it.hash == recentTransactionHash }
