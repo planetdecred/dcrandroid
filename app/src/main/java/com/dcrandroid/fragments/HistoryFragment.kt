@@ -47,7 +47,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var walletData: WalletData? = null
     private val wallet: LibWallet
-    get() = walletData!!.wallet
+        get() = walletData!!.wallet
 
     private var util: PreferenceUtil? = null
 
@@ -64,7 +64,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             val t = transactionTypeSelected
 
-            return when{
+            return when {
                 t.startsWith(SENT) -> Dcrlibwallet.TxFilterSent
                 t.startsWith(RECEIVED) -> Dcrlibwallet.TxFilterReceived
                 t.startsWith(YOURSELF) -> Dcrlibwallet.TxFilterTransferred
@@ -157,7 +157,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         isForeground = false
     }
 
-    private fun loadTxFilters(){
+    private fun loadTxFilters() {
 
         availableTxTypes.clear()
 
@@ -173,11 +173,11 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         availableTxTypes.add("$RECEIVED ($receivedTxCount)")
         availableTxTypes.add("$YOURSELF ($transferredTxCount)")
 
-        if(stakingTxCount > 0){
+        if (stakingTxCount > 0) {
             availableTxTypes.add("$STAKING ($stakingTxCount)")
         }
 
-        if(coinbaseTxCount > 0){
+        if (coinbaseTxCount > 0) {
             availableTxTypes.add("$COINBASE ($coinbaseTxCount)")
         }
 
@@ -212,7 +212,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         object : Thread() {
             override fun run() {
                 try {
-                    val jsonResult = walletData!!.wallet.filterTransactions(selectedTxFilter)
+                    val jsonResult = walletData!!.wallet.getTransactions(0, selectedTxFilter)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
@@ -230,8 +230,9 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             transactionList.clear()
                             transactionList.addAll(transactions)
 
-                            val latestTx = Collections.min(transactionList, TransactionComparator.MinConfirmationSort())
-                            latestTransactionHeight = latestTx.height + 1
+                            latestTransactionHeight = transactions[0].height
+                            transactionList.forEach { latestTransactionHeight = if (it.height < latestTransactionHeight) it.height else latestTransactionHeight }
+                            latestTransactionHeight += 1
 
                             if (transactionList.size > 0 && selectedTxFilter == Dcrlibwallet.TxFilterAll) {
                                 val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
@@ -281,18 +282,19 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     fun newTransaction(transaction: Transaction) {
-        if (transactionList.find{ it.hash == transaction.hash} != null) {
+        if (transactionList.find { it.hash == transaction.hash } != null) {
             // Transaction is a duplicate
             return
         }
-
-        latestTransactionHeight = transaction.height + 1
+        if (transaction.height > 0) {
+            latestTransactionHeight = transaction.height + 1
+        }
         transactionList.add(0, transaction)
         println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
-        val filter = wallet.determineTxFilter(Utils.getHash(transaction.hash))
-        if(filter == selectedTxFilter){
+        val filter = wallet.determineTxFilter(transaction.type, transaction.direction)
+        if (filter == selectedTxFilter) {
             transaction.animate = true
             transactionList.add(0, transaction)
             history_recycler_view.post {
@@ -303,31 +305,27 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     fun transactionConfirmed(hash: String, height: Int) {
-        for (i in transactionList.indices) {
-            if (transactionList[i].hash == hash) {
-                val transaction = transactionList[i]
-                transaction.height = height
-                transaction.animate = false
-                latestTransactionHeight = transaction.height + 1
-                transactionList[i] = transaction
+        transactionList.forEach {
+            if (it.hash == hash) {
+                it.height = height
+                it.animate = false
+                latestTransactionHeight = it.height + 1
                 activity!!.runOnUiThread { transactionAdapter!!.notifyDataSetChanged() }
-                break
+                return
             }
         }
     }
 
     fun blockAttached(height: Int) {
-        if (height - latestTransactionHeight < 2) {
-            for (i in transactionList.indices) {
-                val tx = transactionList[i]
-                if (height - tx.height >= 2) {
-                    continue
+        if ((height - latestTransactionHeight) < 2) {
+            transactionList.forEach {
+                if ((height - it.height) >= 2) {
+                    it.animate = true
+
+                    if (activity != null) {
+                        activity!!.runOnUiThread { transactionAdapter!!.notifyItemChanged(transactionList.indexOf(it)) }
+                    }
                 }
-                tx.animate = false
-                if (activity == null) {
-                    return
-                }
-                activity!!.runOnUiThread { transactionAdapter!!.notifyItemChanged(i) }
             }
         }
     }
