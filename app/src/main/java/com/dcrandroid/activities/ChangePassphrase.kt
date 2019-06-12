@@ -36,19 +36,9 @@ class ChangePassphrase : BaseActivity(), View.OnClickListener {
 
         if ((util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN && isSpendingPassword!!)
                 || (util.get(Constants.STARTUP_PASSPHRASE_TYPE) == Constants.PIN && !isSpendingPassword!!)) {
-            layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
-            layout_password.setBackgroundColor(android.R.attr.selectableItemBackground)
-            val pinFragment = ChangePinFragment()
-            pinFragment.oldPassphrase = oldPassPhrase
-            pinFragment.isSpendingPassword = isSpendingPassword
-            supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
-                    .commit()
+            displayPin()
         } else {
-            val passwordFragment = ChangePasswordFragment()
-            passwordFragment.oldPassphrase = oldPassPhrase
-            passwordFragment.isSpendingPassword = isSpendingPassword
-            supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
-                    .commit()
+            displayPassword()
         }
 
         layout_password.setOnClickListener(this)
@@ -58,23 +48,41 @@ class ChangePassphrase : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.layout_password -> {
-                layout_password.setBackgroundColor(Color.parseColor("#F3F5F6"))
-                layout_pin.setBackgroundColor(android.R.attr.selectableItemBackground)
-                val passwordFragment = ChangePasswordFragment()
-                passwordFragment.oldPassphrase = oldPassPhrase
-                passwordFragment.isSpendingPassword = isSpendingPassword
-                supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
-                        .commit()
+                displayPassword()
             }
             R.id.layout_pin -> {
-                layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
-                layout_password.setBackgroundColor(android.R.attr.selectableItemBackground)
-                val pinFragment = ChangePinFragment()
-                pinFragment.oldPassphrase = oldPassPhrase
-                pinFragment.isSpendingPassword = isSpendingPassword
-                supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
-                        .commit()
+                displayPin()
             }
         }
+    }
+
+    private fun displayPassword() {
+
+        password_bottom_border.visibility = View.VISIBLE
+        label_password.setTextColor(Color.parseColor("#4e5f70"))
+
+        pin_bottom_border.visibility = View.INVISIBLE
+        label_pin.setTextColor(Color.parseColor("#a4abb1"))
+
+        val passwordFragment = ChangePasswordFragment()
+        passwordFragment.oldPassphrase = oldPassPhrase
+        passwordFragment.isSpendingPassword = isSpendingPassword
+        supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
+                .commit()
+    }
+
+    private fun displayPin() {
+
+        password_bottom_border.visibility = View.INVISIBLE
+        label_password.setTextColor(Color.parseColor("#a4abb1"))
+
+        pin_bottom_border.visibility = View.VISIBLE
+        label_pin.setTextColor(Color.parseColor("#4e5f70"))
+
+        val pinFragment = ChangePinFragment()
+        pinFragment.oldPassphrase = oldPassPhrase
+        pinFragment.isSpendingPassword = isSpendingPassword
+        supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
+                .commit()
     }
 }

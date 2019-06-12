@@ -45,11 +45,12 @@ class EncryptWallet : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.layout_password -> {
 
-                password_bottom_border.visibility = View.GONE
-                pin_bottom_border.visibility = View.VISIBLE
+                password_bottom_border.visibility = View.VISIBLE
+                label_password.setTextColor(Color.parseColor("#4e5f70"))
 
-                layout_password.setBackgroundColor(Color.parseColor("#F3F5F6"))
-                layout_pin.setBackgroundColor(Color.WHITE)
+                pin_bottom_border.visibility = View.INVISIBLE
+                label_pin.setTextColor(Color.parseColor("#a4abb1"))
+
                 val passwordFragment = PasswordFragment()
                 passwordFragment.seed = seed
                 supportFragmentManager.beginTransaction().replace(R.id.container, passwordFragment)
@@ -57,11 +58,12 @@ class EncryptWallet : BaseActivity(), View.OnClickListener {
             }
             R.id.layout_pin -> {
 
-                password_bottom_border.visibility = View.VISIBLE
-                pin_bottom_border.visibility = View.GONE
+                password_bottom_border.visibility = View.INVISIBLE
+                label_password.setTextColor(Color.parseColor("#a4abb1"))
 
-                layout_pin.setBackgroundColor(Color.parseColor("#F3F5F6"))
-                layout_password.setBackgroundColor(Color.WHITE)
+                pin_bottom_border.visibility = View.VISIBLE
+                label_pin.setTextColor(Color.parseColor("#4e5f70"))
+
                 val pinFragment = PinFragment()
                 pinFragment.seed = seed
                 supportFragmentManager.beginTransaction().replace(R.id.container, pinFragment)
