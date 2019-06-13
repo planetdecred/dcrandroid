@@ -91,7 +91,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             pb_sync_progress.progress = 0
             overview_sync_layout.visibility = View.VISIBLE
             tv_synchronizing.setText(R.string.starting_synchronization)
-            walletData!!.wallet.publishLastSyncProgress()
         } else {
             getBalance()
             iv_sync_indicator.visibility = View.GONE
