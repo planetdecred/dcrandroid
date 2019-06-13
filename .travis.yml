@@ -8,7 +8,6 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
 before_install:
-  - yes | sdkmanager "platforms;android-28"
   - wget -O $ANDROID_HOME/android-ndk-r19b-linux-x86_64.zip https://dl.google.com/android/repository/android-ndk-r19b-linux-x86_64.zip
   - unzip -qq $ANDROID_HOME/android-ndk-r19b-linux-x86_64.zip -d $ANDROID_HOME/android-ndk-r19b-linux-x86_64
   - mv $ANDROID_HOME/android-ndk-r19b-linux-x86_64/android-ndk-r19b $ANDROID_HOME/ndk-bundle

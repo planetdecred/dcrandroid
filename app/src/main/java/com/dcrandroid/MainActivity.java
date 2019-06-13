@@ -790,7 +790,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                walletData.wallet.cancelSync();
+                walletData.wallet.cancelSync(false);
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
                 checkWifiSync();
                 break;
