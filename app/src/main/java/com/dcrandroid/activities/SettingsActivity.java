@@ -394,10 +394,10 @@ public class SettingsActivity extends AppCompatActivity {
                                 NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
                                 if (networkInfo != null && networkInfo.isConnected()) {
                                     if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                                        wallet.cancelSync();
+                                        wallet.cancelSync(false);
                                     }
                                 } else {
-                                    wallet.cancelSync();
+                                    wallet.cancelSync(false);
                                 }
                             }
                         }
