@@ -200,13 +200,6 @@
                     android:layout_marginLeft="1dp"
                     android:layout_marginStart="1dp"
                     android:id="@+id/best_block_time" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    app:srcCompat="@drawable/ic_close"
-                    android:id="@+id/iv_stop_rescan"
-                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 

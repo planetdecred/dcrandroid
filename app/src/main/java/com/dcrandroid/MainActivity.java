@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         SyncProgressListener, View.OnClickListener {
 
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
-    private ImageView stopScan, syncIndicator;
+    private ImageView syncIndicator;
     private ProgressBar syncProgressBar;
     private ListView mListView;
 
@@ -146,7 +146,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         connectionStatus = findViewById(R.id.tv_connection_status);
         bestBlockTime = findViewById(R.id.best_block_time);
         chainStatus = findViewById(R.id.chain_status);
-        stopScan = findViewById(R.id.iv_stop_rescan);
         totalBalance = findViewById(R.id.tv_total_balance);
         syncIndicator = findViewById(R.id.iv_sync_indicator);
         syncProgressBar = findViewById(R.id.pb_sync_progress);
@@ -853,13 +852,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
             progress = report.getRescanProgress();
             chainStatus = Utils.getSyncTimeRemaining(report.getRescanTimeRemaining(), progress, true, this);
-
-            stopScan.post(new Runnable() {
-                @Override
-                public void run() {
-                    stopScan.setVisibility(View.VISIBLE);
-                }
-            });
 
         } else {
             return;
