@@ -6,6 +6,9 @@ import (
 	"strings"
 	"sync"
 
+	"math"
+	"time"
+
 	"github.com/decred/dcrd/addrmgr"
 	"github.com/decred/dcrd/rpcclient"
 	"github.com/decred/dcrwallet/chain"
@@ -13,8 +16,6 @@ import (
 	"github.com/decred/dcrwallet/p2p"
 	"github.com/decred/dcrwallet/spv"
 	"github.com/decred/dcrwallet/wallet"
-	"math"
-	"time"
 )
 
 type syncData struct {
@@ -24,11 +25,11 @@ type syncData struct {
 	syncProgressListeners map[string]SyncProgressListener
 	showLogs              bool
 
+	synced     bool
 	syncing    bool
 	cancelSync context.CancelFunc
 
-	rescanning   bool
-	cancelRescan context.CancelFunc
+	rescanning bool
 
 	connectedPeers int32
 	peersWG        sync.WaitGroup
@@ -345,6 +346,10 @@ func (lw *LibWallet) CancelSync(losePeers bool) {
 	}
 }
 
+func (lw *LibWallet) IsSynced() bool {
+	return lw.syncData.synced
+}
+
 func (lw *LibWallet) IsSyncing() bool {
 	return lw.syncData.syncing
 }
@@ -365,8 +370,7 @@ func (lw *LibWallet) RescanBlocks() error {
 		}()
 
 		lw.rescanning = true
-		ctx, cancel := contextWithShutdownCancel(context.Background())
-		lw.syncData.cancelRescan = cancel
+		ctx, _ := contextWithShutdownCancel(context.Background())
 
 		progress := make(chan wallet.RescanProgress, 1)
 		go lw.wallet.RescanProgressFromHeight(ctx, netBackend, 0, progress)
@@ -398,15 +402,11 @@ func (lw *LibWallet) RescanBlocks() error {
 			select {
 			case <-ctx.Done():
 				log.Info("Rescan cancelled through context")
-				lw.syncData.cancelRescan = nil
 				return
 			default:
 				continue
 			}
 		}
-
-		// set this to nil, it no longer need since rescan has completed
-		lw.syncData.cancelRescan = nil
 
 		// Trigger sync completed callback.
 		// todo: probably best to have a dedicated rescan listener
@@ -417,13 +417,6 @@ func (lw *LibWallet) RescanBlocks() error {
 	}()
 
 	return nil
-}
-
-func (lw *LibWallet) CancelRescan() {
-	if lw.syncData.cancelRescan != nil {
-		lw.syncData.cancelRescan()
-		lw.syncData.cancelRescan = nil
-	}
 }
 
 func (lw *LibWallet) IsScanning() bool {

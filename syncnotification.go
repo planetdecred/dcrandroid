@@ -445,6 +445,7 @@ func (lw *LibWallet) estimateBlockHeadersCountAfter(lastHeaderTime int64) int32 
 
 func (lw *LibWallet) notifySyncError(code SyncErrorCode, err error) {
 	lw.syncData.syncing = false
+	lw.syncData.synced = false
 	lw.activeSyncData = nil // to be reintialized on next sync
 
 	for _, syncProgressListener := range lw.syncData.syncProgressListeners {
@@ -454,6 +455,7 @@ func (lw *LibWallet) notifySyncError(code SyncErrorCode, err error) {
 
 func (lw *LibWallet) notifySyncCanceled() {
 	lw.syncData.syncing = false
+	lw.syncData.synced = false
 	lw.activeSyncData = nil // to be reintialized on next sync
 
 	for _, syncProgressListener := range lw.syncData.syncProgressListeners {
@@ -462,7 +464,8 @@ func (lw *LibWallet) notifySyncCanceled() {
 }
 
 func (lw *LibWallet) synced(synced bool) {
-	lw.syncing = false
+	lw.syncData.syncing = false
+	lw.syncData.synced = true
 	lw.activeSyncData = nil // to be reintialized on next sync
 
 	// begin indexing transactions after sync is completed,
