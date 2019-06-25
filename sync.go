@@ -32,7 +32,6 @@ type syncData struct {
 	rescanning bool
 
 	connectedPeers int32
-	peersWG        sync.WaitGroup
 
 	*activeSyncData
 }
@@ -323,7 +322,7 @@ func (lw *LibWallet) connectToRpcClient(ctx context.Context, networkAddress stri
 	return
 }
 
-func (lw *LibWallet) CancelSync(losePeers bool) {
+func (lw *LibWallet) CancelSync() {
 	if lw.cancelSync != nil {
 		lw.cancelSync() // will trigger context canceled in rpcSync or spvSync
 		lw.cancelSync = nil
@@ -336,14 +335,6 @@ func (lw *LibWallet) CancelSync(losePeers bool) {
 
 	lw.walletLoader.SetNetworkBackend(nil)
 	loadedWallet.SetNetworkBackend(nil)
-
-	// It's important to wait to lose all peers when canceling sync
-	// if the wallet database would be closed after canceling sync.
-	if losePeers {
-		log.Info("Waiting to lose all peers")
-		lw.syncData.peersWG.Wait()
-		log.Info("All peers are gone")
-	}
 }
 
 func (lw *LibWallet) IsSynced() bool {
@@ -424,11 +415,23 @@ func (lw *LibWallet) IsScanning() bool {
 }
 
 func (lw *LibWallet) GetBestBlock() int32 {
+	if lw.wallet == nil {
+		// This method is sometimes called after a wallet is deleted and causes crash.
+		log.Error("Attempting to read best block height without a loaded wallet.")
+		return 0
+	}
+
 	_, height := lw.wallet.MainChainTip()
 	return height
 }
 
 func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
+	if lw.wallet == nil {
+		// This method is sometimes called after a wallet is deleted and causes crash.
+		log.Error("Attempting to read best block timestamp without a loaded wallet.")
+		return 0
+	}
+
 	_, height := lw.wallet.MainChainTip()
 	identifier := wallet.NewBlockIdentifierFromHeight(height)
 	info, err := lw.wallet.BlockInfo(identifier)

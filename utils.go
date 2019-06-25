@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"math"
 	"net"
-	"os"
-	"os/signal"
 	"time"
 
 	"github.com/decred/dcrd/dcrutil"
@@ -33,36 +31,12 @@ const (
 	MaxAmountDcr  = dcrutil.MaxAmount / dcrutil.AtomsPerCoin
 )
 
-func shutdownListener() {
-	interruptChannel := make(chan os.Signal, 1)
-	signal.Notify(interruptChannel, signals...)
-
-	// Listen for the initial shutdown signal
-	select {
-	case sig := <-interruptChannel:
-		log.Infof("Received signal (%s).  Shutting down...", sig)
-	case <-shutdownRequestChannel:
-		log.Info("Shutdown requested.  Shutting down...")
-	}
-
-	// Cancel all contexts created from withShutdownCancel.
-	close(shutdownSignaled)
-
-	// Listen for any more shutdown signals and log that shutdown has already
-	// been signaled.
-	for {
-		select {
-		case <-interruptChannel:
-		case <-shutdownRequestChannel:
-		}
-		log.Info("Shutdown signaled.  Already shutting down...")
-	}
-}
+var shuttingDown = make(chan bool)
 
 func contextWithShutdownCancel(ctx context.Context) (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithCancel(ctx)
 	go func() {
-		<-shutdownSignaled
+		<-shuttingDown
 		cancel()
 	}()
 	return ctx, cancel
@@ -156,14 +130,4 @@ func calculateTotalTimeRemaining(timeRemainingInSeconds int64) string {
 
 func roundUp(n float64) int32 {
 	return int32(math.Round(n))
-}
-
-func IsChannelClosed(ch <-chan struct{}) bool {
-	select {
-	case <-ch:
-		return true
-	default:
-	}
-
-	return false
 }

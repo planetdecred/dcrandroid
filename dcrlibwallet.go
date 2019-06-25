@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strings"
-	"syscall"
 
 	"github.com/asdine/storm"
 	"github.com/decred/dcrd/dcrjson"
@@ -18,10 +16,6 @@ import (
 	"github.com/raedahgroup/dcrlibwallet/utils"
 	"go.etcd.io/bbolt"
 )
-
-var shutdownRequestChannel = make(chan struct{})
-var shutdownSignaled = make(chan struct{})
-var signals = []os.Signal{os.Interrupt, syscall.SIGTERM}
 
 const (
 	logFileName = "dcrlibwallet.log"
@@ -46,14 +40,14 @@ func NewLibWallet(homeDir string, dbDriver string, netType string) (*LibWallet, 
 	}
 
 	walletDataDir := filepath.Join(homeDir, activeNet.Name)
-	return newLibWallet(walletDataDir, dbDriver, activeNet, true)
+	return newLibWallet(walletDataDir, dbDriver, activeNet)
 }
 
 func NewLibWalletWithDbPath(walletDataDir string, activeNet *netparams.Params) (*LibWallet, error) {
-	return newLibWallet(walletDataDir, "", activeNet, false)
+	return newLibWallet(walletDataDir, "", activeNet)
 }
 
-func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Params, listenForShutdown bool) (*LibWallet, error) {
+func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Params) (*LibWallet, error) {
 	errors.Separator = ":: "
 	initLogRotator(filepath.Join(walletDataDir, logFileName))
 
@@ -92,10 +86,6 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 		walletLoader.SetDatabaseDriver(walletDbDriver)
 	}
 
-	if listenForShutdown {
-		go shutdownListener()
-	}
-
 	syncData := &syncData{
 		syncProgressListeners: make(map[string]SyncProgressListener),
 	}
@@ -112,19 +102,17 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 	return lw, nil
 }
 
-func (lw *LibWallet) Shutdown(exit bool) {
-	log.Info("Shutting down mobile wallet")
+func (lw *LibWallet) Shutdown() {
+	log.Info("Shutting down dcrlibwallet")
+
+	// Trigger shuttingDown signal to cancel all contexts created with `contextWithShutdownCancel`.
+	shuttingDown <- true
 
 	if lw.rpcClient != nil {
 		lw.rpcClient.Stop()
 	}
 
-	lw.CancelSync(true)
-
-	if !IsChannelClosed(shutdownSignaled) {
-		log.Info("Channel not closed, closing")
-		close(shutdownSignaled)
-	}
+	lw.CancelSync()
 
 	if logRotator != nil {
 		log.Info("Shutting down log rotator")
@@ -148,34 +136,6 @@ func (lw *LibWallet) Shutdown(exit bool) {
 			log.Info("tx db closed successfully")
 		}
 	}
-
-	if exit {
-		os.Exit(0)
-	}
-}
-
-func (lw *LibWallet) DeleteWallet(privatePassphrase []byte) error {
-
-	defer func() {
-		for i := range privatePassphrase {
-			privatePassphrase[i] = 0
-		}
-	}()
-
-	wallet, loaded := lw.walletLoader.LoadedWallet()
-	if !loaded {
-		return errors.New(ErrWalletNotLoaded)
-	}
-
-	err := wallet.Unlock(privatePassphrase, nil)
-	if err != nil {
-		return translateError(err)
-	}
-	wallet.Lock()
-
-	lw.Shutdown(false)
-	log.Info("Deleting Wallet")
-	return os.RemoveAll(lw.walletDataDir)
 }
 
 func (lw *LibWallet) CallJSONRPC(method string, args string, address string, username string, password string, caCert string) (string, error) {
