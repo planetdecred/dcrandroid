@@ -66,9 +66,8 @@ github.com/decred/dcrd/dcrec v0.0.0-20180721031028-5369a485acf6/go.mod h1:cRAH1S
 github.com/decred/dcrd/dcrec v0.0.0-20180801202239-0761de129164/go.mod h1:cRAH1SNk8Mi9hKBc/DHbeiWz/fyO8KWZR3H7okrIuOA=
 github.com/decred/dcrd/dcrec v0.0.0-20180809193022-9536f0c88fa8/go.mod h1:cRAH1SNk8Mi9hKBc/DHbeiWz/fyO8KWZR3H7okrIuOA=
 github.com/decred/dcrd/dcrec v0.0.0-20180816212643-20eda7ec9229/go.mod h1:cRAH1SNk8Mi9hKBc/DHbeiWz/fyO8KWZR3H7okrIuOA=
+github.com/decred/dcrd/dcrec v0.0.0-20181212181811-1a370d38d671 h1:7CaWvkh3YH6zUtM68d0HVxslhU2o4hChc22sDonRPbI=
 github.com/decred/dcrd/dcrec v0.0.0-20181212181811-1a370d38d671/go.mod h1:cRAH1SNk8Mi9hKBc/DHbeiWz/fyO8KWZR3H7okrIuOA=
-github.com/decred/dcrd/dcrec v0.0.0-20190311054417-9a5161ce9e68 h1:B1D7mNerPowhabwwGMB8ZzLiG8gtacAt+0CcIffpKDU=
-github.com/decred/dcrd/dcrec v0.0.0-20190311054417-9a5161ce9e68/go.mod h1:cRAH1SNk8Mi9hKBc/DHbeiWz/fyO8KWZR3H7okrIuOA=
 github.com/decred/dcrd/dcrec/edwards v0.0.0-20180721005212-59fe2b293f69/go.mod h1:+ehP0Hk/mesyZXttxCtBbhPX23BMpZJ1pcVBqUfbmvU=
 github.com/decred/dcrd/dcrec/edwards v0.0.0-20180721031028-5369a485acf6/go.mod h1:+ehP0Hk/mesyZXttxCtBbhPX23BMpZJ1pcVBqUfbmvU=
 github.com/decred/dcrd/dcrec/edwards v0.0.0-20180809193022-9536f0c88fa8/go.mod h1:+ehP0Hk/mesyZXttxCtBbhPX23BMpZJ1pcVBqUfbmvU=
@@ -82,9 +81,8 @@ github.com/decred/dcrd/dcrec/secp256k1 v1.0.1 h1:EFWVd1p0t0Y5tnsm/dJujgV0ORogRJ6
 github.com/decred/dcrd/dcrec/secp256k1 v1.0.1/go.mod h1:lhu4eZFSfTJWUnR3CFRcpD+Vta0KUAqnhTsTksHXgy0=
 github.com/decred/dcrd/dcrjson v1.0.0 h1:50DnA0XeV2JrQXoHh43TCKmH+kz2gHjZ1Mj/Pdk7Oz0=
 github.com/decred/dcrd/dcrjson v1.0.0/go.mod h1:ozddIaeF+EAvZZvFuB3zpfxhyxBGfvbt22crQh+PYuI=
+github.com/decred/dcrd/dcrjson v1.1.0 h1:pFpbay3cWACkgloFxWjHBwlXWG2+S2QCJJzNxL40hwg=
 github.com/decred/dcrd/dcrjson v1.1.0/go.mod h1:ozddIaeF+EAvZZvFuB3zpfxhyxBGfvbt22crQh+PYuI=
-github.com/decred/dcrd/dcrjson v1.2.0 h1:3BFFQHq3/YO/zae9WLxQkXsX6AXKx3+M8H3yk4oXZi0=
-github.com/decred/dcrd/dcrjson v1.2.0/go.mod h1:ozddIaeF+EAvZZvFuB3zpfxhyxBGfvbt22crQh+PYuI=
 github.com/decred/dcrd/dcrutil v1.0.0/go.mod h1:CBpbItyMKkL/4i1qPJDsE/cdSYklsWFcTYgprRZh4yk=
 github.com/decred/dcrd/dcrutil v1.1.1 h1:zOkGiumN/JkobhAgpG/zfFgUoolGKVGYT5na1hbYUoE=
 github.com/decred/dcrd/dcrutil v1.1.1/go.mod h1:Jsttr0pEvzPAw+qay1kS1/PsbZYPyhluiNwwY6yBJS4=

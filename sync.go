@@ -25,9 +25,10 @@ type syncData struct {
 	syncProgressListeners map[string]SyncProgressListener
 	showLogs              bool
 
-	synced     bool
-	syncing    bool
-	cancelSync context.CancelFunc
+	synced       bool
+	syncing      bool
+	cancelSync   context.CancelFunc
+	syncCanceled chan bool
 
 	rescanning bool
 
@@ -213,6 +214,7 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 		if err != nil {
 			if err == context.Canceled {
 				lw.notifySyncCanceled()
+				lw.syncCanceled <- true
 			} else if err == context.DeadlineExceeded {
 				lw.notifySyncError(ErrorCodeDeadlineExceeded, errors.E("SPV synchronization deadline exceeded: %v", err))
 			} else {
@@ -270,6 +272,7 @@ func (lw *LibWallet) RpcSync(networkAddress string, username string, password st
 		if err != nil {
 			if err == context.Canceled {
 				lw.notifySyncCanceled()
+				lw.syncCanceled <- true
 			} else if err == context.DeadlineExceeded {
 				lw.notifySyncError(ErrorCodeDeadlineExceeded, errors.E("RPC synchronization deadline exceeded: %v", err))
 			} else {
@@ -324,8 +327,16 @@ func (lw *LibWallet) connectToRpcClient(ctx context.Context, networkAddress stri
 
 func (lw *LibWallet) CancelSync() {
 	if lw.cancelSync != nil {
-		lw.cancelSync() // will trigger context canceled in rpcSync or spvSync
+		log.Info("Canceling sync. May take a while for sync to fully cancel.")
+
+		// Cancel the context used for syncer.Run in rpcSync() or spvSync().
+		lw.cancelSync()
 		lw.cancelSync = nil
+
+		// syncer.Run may not immediately return, following code blocks this function
+		// and waits for the syncer.Run to return `err == context.Canceled`.
+		<-lw.syncCanceled
+		log.Info("Sync fully canceled.")
 	}
 
 	loadedWallet, walletLoaded := lw.walletLoader.LoadedWallet()

@@ -87,6 +87,7 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 	}
 
 	syncData := &syncData{
+		syncCanceled:          make(chan bool),
 		syncProgressListeners: make(map[string]SyncProgressListener),
 	}
 
