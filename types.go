@@ -58,7 +58,7 @@ type BlockScanResponse interface {
 Direction
 0: Sent
 1: Received
-2: Transfered
+2: Transferred
 */
 type Transaction struct {
 	Hash      string `storm:"id,unique"`

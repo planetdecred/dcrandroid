@@ -9,6 +9,7 @@ import (
 	"math"
 
 	"github.com/asdine/storm"
+	"github.com/asdine/storm/q"
 	"github.com/decred/dcrd/blockchain/stake"
 	"github.com/decred/dcrd/chaincfg"
 	"github.com/decred/dcrd/chaincfg/chainhash"
@@ -28,6 +29,26 @@ const (
 	BucketTxInfo   = "TxIndexInfo"
 	KeyEndBlock    = "EndBlock"
 	MaxReOrgBlocks = 6
+)
+
+const (
+	TxFilterAll         int32 = 0
+	TxFilterSent        int32 = 1
+	TxFilterReceived    int32 = 2
+	TxFilterTransferred int32 = 3
+	TxFilterStaking     int32 = 4
+	TxFilterCoinBase    int32 = 5
+
+	TxDirectionInvalid     int32 = -1
+	TxDirectionSent        int32 = 0
+	TxDirectionReceived    int32 = 1
+	TxDirectionTransferred int32 = 2
+
+	TxTypeRegular        = "REGULAR"
+	TxTypeCoinBase       = "COINBASE"
+	TxTypeTicketPurchase = "TICKET_PURCHASE"
+	TxTypeVote           = "VOTE"
+	TxTypeRevocation     = "REVOCATION"
 )
 
 func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, afterIndexing func()) error {
@@ -197,27 +218,6 @@ func (lw *LibWallet) GetTransactionRaw(txHash []byte) (*Transaction, error) {
 	return lw.parseTxSummary(txSummary, blockHash)
 }
 
-func (lw *LibWallet) GetTransactions(limit int32) (string, error) {
-	var transactions []Transaction
-
-	query := lw.txDB.Select().OrderBy("Timestamp").Reverse()
-	if limit > 0 {
-		query = query.Limit(int(limit))
-	}
-
-	err := query.Find(&transactions)
-	if err != nil {
-		return "", nil
-	}
-
-	jsonEncodedTransactions, err := json.Marshal(&transactions)
-	if err != nil {
-		return "", err
-	}
-
-	return string(jsonEncodedTransactions), nil
-}
-
 func (lw *LibWallet) replaceTxIfExist(tx *Transaction) error {
 	var oldTx Transaction
 	err := lw.txDB.One("Hash", tx.Hash, &oldTx)
@@ -269,20 +269,20 @@ func (lw *LibWallet) parseTxSummary(tx *wallet.TransactionSummary, blockHash *ch
 			AccountName:     lw.AccountName(int32(debit.PreviousAccount))}
 	}
 
-	var direction int32 = -1
+	var direction int32 = TxDirectionInvalid
 	if tx.Type == wallet.TransactionTypeRegular {
 		amountDifference := outputTotal - inputTotal
 		if amountDifference < 0 && (float64(tx.Fee) == math.Abs(float64(amountDifference))) {
 			//Transfered
-			direction = 2
+			direction = TxDirectionTransferred
 			amount = int64(tx.Fee)
 		} else if amountDifference > 0 {
 			//Received
-			direction = 1
+			direction = TxDirectionReceived
 			amount = outputTotal
 		} else {
 			//Sent
-			direction = 0
+			direction = TxDirectionSent
 			amount = inputTotal
 			amount -= outputTotal
 
@@ -359,6 +359,93 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 	}
 	result, _ := json.Marshal(tx)
 	return string(result), nil
+}
+
+func (lw *LibWallet) GetTransactions(limit, txFilter int32) (string, error) {
+	query := lw.prepareTxQuery(txFilter)
+	if limit > 0 {
+		query = query.Limit(int(limit))
+	}
+
+	var transactions []Transaction
+
+	err := query.Find(&transactions)
+	if err != nil {
+		return "", nil
+	}
+
+	jsonEncodedTransactions, err := json.Marshal(&transactions)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonEncodedTransactions), nil
+}
+
+func (lw *LibWallet) CountTransactions(txFilter int32) (int, error) {
+	query := lw.prepareTxQuery(txFilter)
+
+	count, err := query.Count(&Transaction{})
+	if err != nil {
+		return -1, err
+	}
+
+	return count, nil
+}
+
+func (lw *LibWallet) DetermineTxFilter(txType string, txDirection int32) int32 {
+	if txType == TxTypeCoinBase {
+		return TxFilterCoinBase
+	}
+	if txType != TxTypeRegular {
+		return TxFilterStaking
+	}
+
+	switch txDirection {
+	case TxDirectionSent:
+		return TxFilterSent
+	case TxDirectionReceived:
+		return TxFilterReceived
+	default:
+		return TxFilterTransferred
+	}
+}
+
+// - Helper Functions
+
+func (lw *LibWallet) prepareTxQuery(txFilter int32) (query storm.Query) {
+	switch txFilter {
+	case TxFilterSent:
+		query = lw.txDB.Select(
+			q.Eq("Direction", TxDirectionSent),
+		)
+	case TxFilterReceived:
+		query = lw.txDB.Select(
+			q.Eq("Direction", TxDirectionReceived),
+		)
+	case TxFilterTransferred:
+		query = lw.txDB.Select(
+			q.Eq("Direction", TxDirectionTransferred),
+		)
+	case TxFilterStaking:
+		query = lw.txDB.Select(
+			q.Not(
+				q.Eq("Type", TxTypeRegular),
+				q.Eq("Type", TxTypeCoinBase),
+			),
+		)
+	case TxFilterCoinBase:
+		query = lw.txDB.Select(
+			q.Eq("Type", TxTypeCoinBase),
+		)
+	default:
+		query = lw.txDB.Select(
+			q.True(),
+		)
+	}
+
+	query = query.OrderBy("Timestamp").Reverse()
+	return
 }
 
 func decodeTxInputs(mtx *wire.MsgTx) []DecodedInput {
@@ -440,14 +527,14 @@ func reverse(hash []byte) []byte {
 func transactionType(txType wallet.TransactionType) string {
 	switch txType {
 	case wallet.TransactionTypeCoinbase:
-		return "COINBASE"
+		return TxTypeCoinBase
 	case wallet.TransactionTypeTicketPurchase:
-		return "TICKET_PURCHASE"
+		return TxTypeTicketPurchase
 	case wallet.TransactionTypeVote:
-		return "VOTE"
+		return TxTypeVote
 	case wallet.TransactionTypeRevocation:
-		return "REVOCATION"
+		return TxTypeRevocation
 	default:
-		return "REGULAR"
+		return TxTypeRegular
 	}
 }
