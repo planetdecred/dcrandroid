@@ -35,6 +35,7 @@ import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
+import dcrlibwallet.Dcrlibwallet.TxFilterAll
 import kotlinx.android.synthetic.main.content_overview.*
 import kotlinx.android.synthetic.main.overview_sync_layout.*
 import java.math.BigDecimal
@@ -284,7 +285,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             override fun run() {
                 try {
 
-                    val jsonResult = walletData!!.wallet.getTransactions(getMaxDisplayItems(), 0)
+                    val jsonResult = walletData!!.wallet.getTransactions(getMaxDisplayItems(), TxFilterAll)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
