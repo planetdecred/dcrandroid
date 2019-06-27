@@ -531,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         stopService(syncIntent);
 
         if (walletData.wallet != null) {
-            walletData.wallet.shutdown(true); // Exit should probably be done here in android
+            walletData.wallet.shutdown(); // Exit should probably be done here in android
         }
 
         finish();
@@ -790,7 +790,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                walletData.wallet.cancelSync(false);
+                walletData.wallet.cancelSync();
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
                 checkWifiSync();
                 break;

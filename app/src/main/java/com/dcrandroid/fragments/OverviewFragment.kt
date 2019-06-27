@@ -284,7 +284,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             override fun run() {
                 try {
 
-                    val jsonResult = walletData!!.wallet.getTransactions(getMaxDisplayItems())
+                    val jsonResult = walletData!!.wallet.getTransactions(getMaxDisplayItems(), 0)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
