@@ -117,7 +117,7 @@ public class SplashScreen extends AppCompatActivity {
         walletData = WalletData.getInstance();
 
         if (walletData.wallet != null) {
-            walletData.wallet.shutdown(false);
+            walletData.wallet.shutdown();
         }
 
         String homeDir = getFilesDir() + "/wallet";

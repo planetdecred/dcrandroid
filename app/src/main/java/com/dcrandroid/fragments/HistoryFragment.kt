@@ -28,6 +28,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.content_history.*
 import java.util.*
 
@@ -171,7 +172,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         object : Thread() {
             override fun run() {
                 try {
-                    val jsonResult = walletData!!.wallet.getTransactions(0)
+                    val jsonResult = walletData!!.wallet.getTransactions(0, Dcrlibwallet.TxFilterAll)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
