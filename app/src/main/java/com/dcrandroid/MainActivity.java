@@ -892,6 +892,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     @Override
     public void onSyncCanceled(boolean willRestart) {
         if (!willRestart) {
+            // clear sync layout if sync is not going to restart.
             walletData.synced = false;
             walletData.syncing = false;
 

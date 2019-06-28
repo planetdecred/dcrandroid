@@ -565,6 +565,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         if (context == null) {
             return
         }
+        // clear sync layout if sync is not going to restart.
         if (!willRestart)
             hideSyncLayout()
     }

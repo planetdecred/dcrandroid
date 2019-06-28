@@ -146,6 +146,7 @@ class SyncService : Service(), SyncProgressListener {
             println("Sync Restarting")
             return
         }
+        // remove sync notification if sync is not going to restart.
         println("Sync Canceled, destroying service")
         stopForeground(true)
         stopSelf()
