@@ -83,9 +83,9 @@ import java.util.Locale;
 
 import dcrlibwallet.AddressDiscoveryProgressReport;
 import dcrlibwallet.DebugInfo;
-import dcrlibwallet.SyncProgressListener;
 import dcrlibwallet.HeadersFetchProgressReport;
 import dcrlibwallet.HeadersRescanProgressReport;
+import dcrlibwallet.SyncProgressListener;
 import dcrlibwallet.TransactionListener;
 
 public class MainActivity extends AppCompatActivity implements TransactionListener,
@@ -532,9 +532,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         if (walletData.wallet != null) {
             walletData.wallet.shutdown(); // Exit should probably be done here in android
+            finish();
+            System.exit(0);
+        } else {
+            finish();
         }
-
-        finish();
     }
 
     public void switchFragment(int position) {
@@ -790,9 +792,25 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                walletData.wallet.cancelSync();
+                if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
+                    setConnectionStatus(R.string.connecting_to_peers);
+                    String peerAddresses = util.get(Constants.PEER_IP);
+                    try {
+                        walletData.wallet.restartSpvSync(peerAddresses);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    setConnectionStatus(R.string.connecting_to_rpc_server);
+                    String remoteNodeAddress = util.get(Constants.REMOTE_NODE_ADDRESS);
+                    try {
+                        walletData.wallet.restartRpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).getBytes());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Toast.makeText(this, R.string.re_establishing_connection, Toast.LENGTH_SHORT).show();
-                checkWifiSync();
                 break;
         }
     }
@@ -872,11 +890,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void onSyncCanceled() {
-        walletData.synced = false;
-        walletData.syncing = false;
+    public void onSyncCanceled(boolean willRestart) {
+        if (!willRestart) {
+            walletData.synced = false;
+            walletData.syncing = false;
 
-        setupSyncedLayout();
+            setupSyncedLayout();
+        }
     }
 
     @Override
@@ -910,5 +930,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     }
 
     @Override
-    public void debug(DebugInfo debugInfo) {}
+    public void debug(DebugInfo debugInfo) {
+    }
 }
