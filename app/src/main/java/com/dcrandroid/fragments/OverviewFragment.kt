@@ -35,7 +35,6 @@ import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.content_overview.*
 import kotlinx.android.synthetic.main.overview_sync_layout.*
 import java.math.BigDecimal
@@ -562,24 +561,26 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         }
     }
 
-    override fun onSyncCanceled() {
-        if(context == null){
+    override fun onSyncCanceled(willRestart: Boolean) {
+        if (context == null) {
             return
         }
-        hideSyncLayout()
+        // clear sync layout if sync is not going to restart.
+        if (!willRestart)
+            hideSyncLayout()
     }
 
     override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {}
 
     override fun onSyncCompleted() {
-        if(context == null){
+        if (context == null) {
             return
         }
         hideSyncLayout()
     }
 
     override fun onSyncEndedWithError(err: java.lang.Exception?) {
-        if(context == null){
+        if (context == null) {
             return
         }
         err!!.printStackTrace()

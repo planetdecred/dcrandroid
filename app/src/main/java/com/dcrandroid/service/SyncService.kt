@@ -72,10 +72,15 @@ class SyncService : Service(), SyncProgressListener {
         wallet!!.removeSyncProgressListener(TAG)
         wallet!!.addSyncProgressListener(this, TAG)
 
-        val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
-
-        Log.d(TAG, "Starting SPV Sync")
-        wallet!!.spvSync(peerAddresses)
+        if (Integer.parseInt(preferenceUtil!!.get(Constants.NETWORK_MODES, "0")) == 0) {
+            val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
+            Log.d(TAG, "Starting SPV Sync")
+            wallet!!.spvSync(peerAddresses)
+        } else {
+            val remoteNodeAddress = preferenceUtil!!.get(Constants.REMOTE_NODE_ADDRESS)
+            Log.d(TAG, "Starting RPC Sync")
+            wallet!!.rpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).toByteArray())
+        }
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -136,7 +141,12 @@ class SyncService : Service(), SyncProgressListener {
         err.printStackTrace()
     }
 
-    override fun onSyncCanceled() {
+    override fun onSyncCanceled(willRestart: Boolean) {
+        if(willRestart){
+            println("Sync Restarting")
+            return
+        }
+        // remove sync notification if sync is not going to restart.
         println("Sync Canceled, destroying service")
         stopForeground(true)
         stopSelf()
