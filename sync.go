@@ -30,6 +30,9 @@ type syncData struct {
 	cancelSync   context.CancelFunc
 	syncCanceled chan bool
 
+	// Flag to notify syncCanceled callback if the sync was canceled so as to be restarted.
+	restartSyncRequested bool
+
 	rescanning bool
 
 	connectedPeers int32
@@ -156,6 +159,9 @@ func (lw *LibWallet) SyncInactiveForPeriod(totalInactiveSeconds int64) {
 }
 
 func (lw *LibWallet) SpvSync(peerAddresses string) error {
+	// Unset this flag as the invocation of this method implies that any request to restart sync has been fulfilled.
+	lw.syncData.restartSyncRequested = false
+
 	loadedWallet, walletLoaded := lw.walletLoader.LoadedWallet()
 	if !walletLoaded {
 		return errors.New(ErrWalletNotLoaded)
@@ -226,7 +232,16 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	return nil
 }
 
+func (lw *LibWallet) RestartSpvSync(peerAddresses string) error {
+	lw.syncData.restartSyncRequested = true
+	lw.CancelSync() // necessary to unset the network backend.
+	return lw.SpvSync(peerAddresses)
+}
+
 func (lw *LibWallet) RpcSync(networkAddress string, username string, password string, cert []byte) error {
+	// Unset this flag as the invocation of this method implies that any request to restart sync has been fulfilled.
+	lw.syncData.restartSyncRequested = false
+
 	loadedWallet, walletLoaded := lw.walletLoader.LoadedWallet()
 	if !walletLoaded {
 		return errors.New(ErrWalletNotLoaded)
@@ -282,6 +297,12 @@ func (lw *LibWallet) RpcSync(networkAddress string, username string, password st
 	}()
 
 	return nil
+}
+
+func (lw *LibWallet) RestartRpcSync(networkAddress string, username string, password string, cert []byte) error {
+	lw.syncData.restartSyncRequested = true
+	lw.CancelSync() // necessary to unset the network backend.
+	return lw.RpcSync(networkAddress, username, password, cert)
 }
 
 func (lw *LibWallet) connectToRpcClient(ctx context.Context, networkAddress string, username string, password string,

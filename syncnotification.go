@@ -457,7 +457,7 @@ func (lw *LibWallet) notifySyncCanceled() {
 	lw.activeSyncData = nil // to be reintialized on next sync
 
 	for _, syncProgressListener := range lw.syncData.syncProgressListeners {
-		syncProgressListener.OnSyncCanceled()
+		syncProgressListener.OnSyncCanceled(lw.syncData.restartSyncRequested)
 	}
 }
 
@@ -473,7 +473,7 @@ func (lw *LibWallet) synced(synced bool) {
 			if synced {
 				syncProgressListener.OnSyncCompleted()
 			} else {
-				syncProgressListener.OnSyncCanceled()
+				syncProgressListener.OnSyncCanceled(false)
 			}
 		}
 	})

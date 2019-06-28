@@ -124,7 +124,7 @@ type SyncProgressListener interface {
 	OnAddressDiscoveryProgress(addressDiscoveryProgress *AddressDiscoveryProgressReport)
 	OnHeadersRescanProgress(headersRescanProgress *HeadersRescanProgressReport)
 	OnSyncCompleted()
-	OnSyncCanceled()
+	OnSyncCanceled(willRestart bool)
 	OnSyncEndedWithError(err error)
 	Debug(debugInfo *DebugInfo)
 }
