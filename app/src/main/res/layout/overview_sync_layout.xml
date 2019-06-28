@@ -53,7 +53,7 @@
         android:text="@string/tap_for_more_information" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pb_status_layout"
         android:orientation="vertical"
@@ -68,7 +68,7 @@
             android:layout_marginTop="10dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/pb_verbose_status"
             android:textAlignment="center"
