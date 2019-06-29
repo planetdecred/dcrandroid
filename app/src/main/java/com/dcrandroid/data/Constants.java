@@ -65,6 +65,7 @@ public class Constants {
             SYNCED = "synced",
             SEED = "seed",
             RESTORE = "restore",
+            RESTORE_WALLET = "restore_wallet",
             BADGER_DB = "badgerdb",
             VALUE = "Value",
             NUMBER = "Number",

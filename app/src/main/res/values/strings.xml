@@ -114,6 +114,7 @@
     <string name="key_license" translatable="false">license</string>
     <string name="always">Always</string>
     <string name="not_synced">Not Synced</string>
+    <string name="text_syncing">Synchronizing...</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>

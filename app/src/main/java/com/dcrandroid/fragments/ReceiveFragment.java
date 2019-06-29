@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+
 /**
  * Created by Macsleven on 28/11/2017.
  */
@@ -67,6 +69,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
 
     ImageView imageView;
     LinearLayout ReceiveContainer;
+    RelativeLayout syncView;
     ArrayAdapter dataAdapter;
     List<String> categories;
     PreferenceUtil preferenceUtil;
@@ -94,7 +97,15 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         preferenceUtil = new PreferenceUtil(getContext());
         View rootView = inflater.inflate(R.layout.content_receive, container, false);
 
+        syncView = rootView.findViewById(R.id.sync_view);
         ReceiveContainer = rootView.findViewById(R.id.receive_container);
+
+        // If synchronizing set syncView to visible && ReceiveContainer to gone
+        if(constants.syncing && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
+            syncView.setVisibility(View.VISIBLE);
+            ReceiveContainer.setVisibility(View.GONE);
+        }
+
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
 
