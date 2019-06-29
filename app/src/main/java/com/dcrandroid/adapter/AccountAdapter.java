@@ -8,6 +8,7 @@ package com.dcrandroid.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Balance;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.dialog.RenameAccountDialog;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
@@ -29,9 +35,7 @@ import com.dcrandroid.util.WalletData;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.recyclerview.widget.RecyclerView;
+import dcrlibwallet.LibWallet;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -62,7 +66,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         final Account account = accountList.get(position);
         Balance balance = account.getBalance();
-        boolean hidden = preferenceUtil.getBoolean(Constants.HIDE_WALLET + account.getAccountNumber(), false);
+        final boolean hidden = preferenceUtil.getBoolean(Constants.HIDE_WALLET + account.getAccountNumber(), false);
         if (hidden) {
             holder.accountName.setText(
                     String.format(Locale.getDefault(), "%s (%s)", account.getAccountName(), context.getString(R.string.hidden))
@@ -234,10 +238,52 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
                 if (holder.detailsLayout.getVisibility() == View.GONE) {
                     holder.arrowRight.setRotation(90);
                     holder.detailsLayout.setVisibility(View.VISIBLE);
+                    if (!account.getAccountName().equals(Constants.IMPORTED)) {
+                        holder.renameAccount.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     holder.arrowRight.setRotation(0);
                     holder.detailsLayout.setVisibility(View.GONE);
+                    holder.renameAccount.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        holder.renameAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RenameAccountDialog(context)
+                        .setPositiveButton(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                LibWallet wallet = WalletData.getInstance().wallet;
+
+                                RenameAccountDialog renameAccountDialog = (RenameAccountDialog) dialog;
+                                String newName = renameAccountDialog.getNewName();
+
+                                try {
+                                    wallet.renameAccount(account.getAccountNumber(), newName);
+
+                                    int index = accountList.indexOf(account);
+                                    account.setAccountName(newName);
+                                    accountList.set(index, account);
+
+                                    if (hidden) {
+                                        holder.accountName.setText(
+                                                String.format(Locale.getDefault(), "%s (%s)", newName, context.getString(R.string.hidden))
+                                        );
+                                    } else {
+                                        holder.accountName.setText(newName);
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        })
+                        .show();
             }
         });
     }
@@ -255,11 +301,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         private ImageView syncIndicator;
 
         private LinearLayout detailsLayout, icon, arrowRight, account, staking_data;
-        private View view;
+        private View view, renameAccount;
 
         private MyViewHolder(View view) {
             super(view);
             this.view = view;
+            renameAccount = view.findViewById(R.id.view_rename_account);
 
             // TextViews
             accountName = view.findViewById(R.id.account_name);

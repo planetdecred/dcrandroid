@@ -114,6 +114,8 @@
     <string name="key_license" translatable="false">license</string>
     <string name="always">Always</string>
     <string name="not_synced">Not Synced</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="rename">Rename</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -177,6 +179,7 @@
     <string name="external">external</string>
     <string name="internal">internal</string>
     <string name="imported">imported</string>
+    <string name="rename_account">Rename Account</string>
     <!--/Account-->
 
     <!--Seed-->
