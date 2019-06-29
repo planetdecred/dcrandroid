@@ -42,6 +42,7 @@ import java.math.MathContext
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 const val TAG = "OverviewFragment"
 
@@ -210,7 +211,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         if (activity == null) {
             return 0
         }
-        val px = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52f, activity!!.resources.displayMetrics))
+        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52f, activity!!.resources.displayMetrics).roundToInt()
         val max = history_recycler_view2.height / px
         if (max < 1) {
             return 5

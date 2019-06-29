@@ -82,6 +82,11 @@ public class SplashScreen extends AppCompatActivity {
                 if (loadThread != null) {
                     loadThread.interrupt();
                 }
+
+                if (walletData.wallet != null) {
+                    walletData.wallet.shutdown();
+                }
+
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivityForResult(intent, 2);
             }
@@ -116,12 +121,17 @@ public class SplashScreen extends AppCompatActivity {
     private void startup() {
         walletData = WalletData.getInstance();
 
-        if (walletData.wallet != null) {
-            walletData.wallet.shutdown();
+        try {
+            if (walletData.wallet != null && walletData.wallet.walletOpened()) {
+                walletData.wallet.shutdown();
+            }
+
+            walletData.wallet = null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         String homeDir = getFilesDir() + "/wallet";
-
         walletData.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
         Dcrlibwallet.setLogLevels(util.get(Constants.LOGGING_LEVEL));
 
