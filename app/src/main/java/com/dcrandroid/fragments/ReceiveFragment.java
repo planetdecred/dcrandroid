@@ -6,7 +6,10 @@
 
 package com.dcrandroid.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -80,6 +83,28 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
     private Spinner accountSpinner;
     private Bitmap generatedQR;
     private Uri generatedUri;
+    MenuItem menuAddress;
+    MenuItem menuQrCode;
+
+    // Set SyncView Visibility to gone if SYNCED is true.
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                if (!WalletData.getInstance().syncing) {
+                    syncView.setVisibility(View.GONE);
+                    ReceiveContainer.setVisibility(View.VISIBLE);
+                    menuAddress.setVisible(true);
+                    menuQrCode.setVisible(true);
+                } else {
+                    syncView.setVisibility(View.VISIBLE);
+                    ReceiveContainer.setVisibility(View.GONE);
+                    menuAddress.setVisible(false);
+                    menuQrCode.setVisible(false);
+                }
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +130,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
             syncView.setVisibility(View.VISIBLE);
             ReceiveContainer.setVisibility(View.GONE);
         }
+
 
         imageView = rootView.findViewById(R.id.bitm);
         address = rootView.findViewById(R.id.barcode_address);
@@ -139,6 +165,23 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (getContext() != null) {
+            getContext().unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getContext() != null) {
+            IntentFilter filter = new IntentFilter(Constants.SYNCED);
+            getContext().registerReceiver(receiver, filter);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.generate_address:
@@ -159,6 +202,21 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        menuAddress = menu.findItem(R.id.generate_address);
+        menuQrCode = menu.findItem(R.id.share_qr_code);
+
+        // If synchronizing set visibility of menuAddress and menuQrCode to false
+        if(constants.syncing && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
+            menuAddress.setVisible(false);
+            menuQrCode.setVisible(false);
+        }
+
     }
 
     private void prepareAccounts() {
