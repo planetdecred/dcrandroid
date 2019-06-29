@@ -180,7 +180,7 @@
     <!--/Account-->
 
     <!--Seed-->
-    <string name="save_seed_instruction">Write down this seed phrase and save it in a secure location. You will be asked to enter it on the next screen and if you ever need to restore your wallet.</string>
+    <string name="save_seed_instruction">Write down this seed phrase and save it in a secure location. You will require this seed if you ever need to restore your wallet.</string>
     <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Each field contains only one correct word. Please confirm your seed by selecting the correct words.</string>
     <string name="start_typing_the_word_and_tap_correct_from_list">Start typing the word and then tap the correct word from the suggestion list.</string>
     <string name="enter_your_seed">Enter your seed…</string>
@@ -195,6 +195,7 @@
     <string name="seed_restore">Seed Restore</string>
     <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
     <string name="correctWordIs">Word #</string>
+    <string name="verify_seed_instruction">Tap here to verify your seed to avoid losing your wallet permanently.</string>
     <!--/Seed-->
 
     <!--Balance-->

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SaveSeedAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.util.PreferenceUtil
 import dcrlibwallet.Dcrlibwallet
 
 class SaveSeedActivity : BaseActivity() {
@@ -44,10 +45,15 @@ class SaveSeedActivity : BaseActivity() {
             recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             recyclerView.adapter = adp
 
+            val util = PreferenceUtil(this)
+
             findViewById<Button>(R.id.save_seed_btn_continue).setOnClickListener {
-                val i = Intent(this@SaveSeedActivity, VerifySeedActivity::class.java)
+
+                util.set(Constants.SEED, seed)
+                util.setBoolean(Constants.VERIFIED_SEED, false)
+
+                val i = Intent(this@SaveSeedActivity, EncryptWallet::class.java)
                         .putExtra(Constants.SEED, seed)
-                        .putExtra(Constants.RESTORE, false)
                 startActivity(i)
             }
         } catch (e: Exception) {

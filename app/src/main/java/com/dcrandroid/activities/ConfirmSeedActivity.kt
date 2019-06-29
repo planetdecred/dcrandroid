@@ -22,6 +22,7 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.adapter.RestoreWalletAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.util.PreferenceUtil
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.confirm_seed_page.*
 
@@ -114,6 +115,11 @@ class ConfirmSeedActivity : BaseActivity(), View.OnTouchListener {
                 handler!!.removeCallbacks(longHold)
                 if ((System.currentTimeMillis() - lastConfirmClick) <= CLICK_THRESHOLD) {
                     if (verifiedSeed) {
+
+                        val util = PreferenceUtil(this)
+                        util.set(Constants.SEED, null)
+                        util.setBoolean(Constants.VERIFIED_SEED, true)
+
                         val intent = Intent(this, EncryptWallet::class.java)
                         intent.putExtra(Constants.SEED, finalSeedsString)
                         startActivity(intent)
@@ -128,6 +134,11 @@ class ConfirmSeedActivity : BaseActivity(), View.OnTouchListener {
     private val longHold = Runnable {
         val enteredSeed = ""
         if (enteredSeed.isNotEmpty()) {
+
+            val util = PreferenceUtil(this)
+            util.set(Constants.SEED, null)
+            util.setBoolean(Constants.VERIFIED_SEED, true)
+
             val i = Intent(this@ConfirmSeedActivity, EncryptWallet::class.java)
                     .putExtra(Constants.SEED, enteredSeed)
             startActivity(i)
