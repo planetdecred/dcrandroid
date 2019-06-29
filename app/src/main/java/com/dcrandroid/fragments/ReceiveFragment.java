@@ -86,11 +86,12 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
     MenuItem menuAddress;
     MenuItem menuQrCode;
 
-    // Set SyncView Visibility to gone if SYNCED is true.
+    // Set SyncView Visibility to gone if SYNCED is.
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)
+                    && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)) {
                 if (!WalletData.getInstance().syncing) {
                     syncView.setVisibility(View.GONE);
                     ReceiveContainer.setVisibility(View.VISIBLE);
