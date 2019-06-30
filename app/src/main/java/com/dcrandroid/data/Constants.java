@@ -112,7 +112,8 @@ public class Constants {
             SYNC_STATE_START = "start",
             SYNC_STATE_PROGRESS = "progress",
             SYNC_STATE_FINISH = "finish",
-            RECENT_TRANSACTION_HASH = "recent_transaction_hash";
+            RECENT_TRANSACTION_HASH = "recent_transaction_hash",
+            NO_WALLET_CREATED = "noWallet";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 
