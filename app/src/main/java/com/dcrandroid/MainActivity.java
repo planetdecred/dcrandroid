@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private boolean scanning = false, isForeground;
 
     private final String TAG = "MainActivity";
-    private boolean noWalletCreated;
+    private boolean noWalletCreated, isSyncing = false;
 
     @Override
     public void onTrimMemory(int level) {
@@ -253,22 +253,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         if (noWalletCreated) {
             displayCreateWalletPrompt();
-            return;
+        } else {
+            startSync();
         }
-
-        displayOverview();
-
-        setSoundNotification();
-
-        walletData.wallet.transactionNotification(this);
-
-        setSyncSyncProgressListener();
-
-        displayBalance();
-
-        checkWifiSync();
-
-        startBlockUpdate();
     }
 
     @Override
@@ -281,6 +268,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     protected void onResume() {
         super.onResume();
         isForeground = true;
+        noWalletCreated = preferenceUtil.getBoolean(Constants.NO_WALLET_CREATED);
+
+        if (!noWalletCreated && !isSyncing) {
+            startSync();
+        }
 
         if (broadcastIntent != null)
             handler.postDelayed(new Runnable() {
@@ -309,6 +301,24 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void startSync() {
+        isSyncing = true; // to avoid starting sync again
+
+        displayOverview();
+
+        setSoundNotification();
+
+        walletData.wallet.transactionNotification(this);
+
+        setSyncSyncProgressListener();
+
+        displayBalance();
+
+        checkWifiSync();
+
+        startBlockUpdate();
     }
 
     private void setSoundNotification() {
