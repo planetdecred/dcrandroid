@@ -21,10 +21,12 @@
         android:padding="16dp">
         <TextView
             android:id="@+id/text_view_syncing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="@string/security_page_wallet_sync"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+             />
     </RelativeLayout>
 
     <LinearLayout
