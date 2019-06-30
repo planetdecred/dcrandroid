@@ -65,6 +65,7 @@ import com.dcrandroid.fragments.OverviewFragment;
 import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SecurityFragment;
 import com.dcrandroid.fragments.SendFragment;
+import com.dcrandroid.fragments.SetUpWalletPromptFragment;
 import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private SecurityFragment securityFragment = new SecurityFragment();
 
     private WalletData walletData;
-    private PreferenceUtil util;
+    private PreferenceUtil preferenceUtil;
     private NotificationManager notificationManager;
     private Animation rotateAnimation;
     private SoundPool alertSound;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private boolean scanning = false, isForeground;
 
     private final String TAG = "MainActivity";
+    private boolean noWalletCreated;
 
     @Override
     public void onTrimMemory(int level) {
@@ -186,8 +188,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             mListView.setItemChecked(0, true);
         }
 
-        displayOverview();
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         registerNotificationChannel();
 
-        util = new PreferenceUtil(this);
+        preferenceUtil = new PreferenceUtil(this);
         walletData = WalletData.getInstance();
 
         if (walletData.wallet == null) {
@@ -249,16 +249,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             Utils.restartApp(this);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SoundPool.Builder builder = new SoundPool.Builder().setMaxStreams(3);
-            AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
-                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build();
-            builder.setAudioAttributes(attributes);
-            alertSound = builder.build();
-        } else {
-            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION, 0);
+        noWalletCreated = preferenceUtil.getBoolean(Constants.NO_WALLET_CREATED);
+
+        if (noWalletCreated) {
+            displayCreateWalletPrompt();
+            return;
         }
+
+        displayOverview();
 
         setSoundNotification();
 
@@ -330,10 +328,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     public void displayBalance() {
         try {
-            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(walletData.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(walletData.wallet.getAccounts(preferenceUtil.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             long walletBalance = 0;
             for (int i = 0; i < accounts.size(); i++) {
-                if (util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {
+                if (preferenceUtil.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {
                     continue;
                 }
                 walletBalance += accounts.get(i).getBalance().getTotal();
@@ -348,17 +346,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private void checkWifiSync() {
 
         // One-time notice
-        if (util.getBoolean(Constants.FIRST_RUN, true)) {
+        if (preferenceUtil.getBoolean(Constants.FIRST_RUN, true)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.welcome_title)
                     .setMessage(R.string.first_run_notice)
                     .setPositiveButton(R.string.ok, null)
                     .show();
 
-            util.setBoolean(Constants.FIRST_RUN, false);
+            preferenceUtil.setBoolean(Constants.FIRST_RUN, false);
         }
 
-        if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
+        if (!preferenceUtil.getBoolean(Constants.WIFI_SYNC, false)) {
             // Check if wifi is connected
             ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectionManager != null) {
@@ -387,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     public void onClick(DialogInterface dialog, int which) {
                         startSyncing();
                         WiFiSyncDialog syncDialog = (WiFiSyncDialog) dialog;
-                        util.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
+                        preferenceUtil.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
                     }
                 });
 
@@ -409,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         walletData.syncing = true;
         sendBroadcast(new Intent(Constants.SYNCED));
 
-        if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
+        if (Integer.parseInt(preferenceUtil.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
         } else {
             setConnectionStatus(R.string.connecting_to_rpc_server);
@@ -562,19 +560,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void switchFragment(int position) {
         switch (position) {
             case 0:
-                currentFragment = new OverviewFragment();
+                currentFragment = noWalletCreated ? new SetUpWalletPromptFragment() : new OverviewFragment();
                 break;
             case 1:
-                currentFragment = new HistoryFragment();
+                currentFragment = noWalletCreated ? new SetUpWalletPromptFragment() : new HistoryFragment();
                 break;
             case 2:
-                currentFragment = sendFragment;
+                currentFragment = noWalletCreated ? new SetUpWalletPromptFragment() : sendFragment;
                 break;
             case 3:
-                currentFragment = new ReceiveFragment();
+                currentFragment = noWalletCreated ? new SetUpWalletPromptFragment() : new ReceiveFragment();
                 break;
             case 4:
-                currentFragment = new AccountsFragment();
+                currentFragment = noWalletCreated ? new SetUpWalletPromptFragment() : new AccountsFragment();
                 break;
             case 5:
                 currentFragment = securityFragment;
@@ -617,6 +615,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void displayReceive() {
         switchFragment(3);
         mListView.setItemChecked(3, true);
+    }
+
+    public void displayCreateWalletPrompt() {
+        switchFragment(0);
+        mListView.setItemChecked(0, true);
     }
 
     @Override
@@ -678,20 +681,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 historyFragment.newTransaction(transaction);
             }
 
-            if (util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
+            if (preferenceUtil.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
                 double fee = obj.getDouble(Constants.FEE);
                 if (fee == 0) {
                     BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
 
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
-                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
+                    preferenceUtil.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
                     sendNotification(format.format(amount), (int) totalInput + (int) totalOutput + (int) transaction.getTimestamp());
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
+            if (preferenceUtil.getBoolean(Constants.DEBUG_MESSAGES)) {
                 showText(e.getMessage());
             }
         }
@@ -709,7 +712,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                util.setInt(Constants.TRANSACTION_HEIGHT, height);
+                preferenceUtil.setInt(Constants.TRANSACTION_HEIGHT, height);
                 displayBalance();
 
                 if (currentFragment instanceof OverviewFragment) {
@@ -727,7 +730,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onBlockAttached(int height, long timestamp) {
         this.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
-        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+        if (preferenceUtil.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
         if (!walletData.syncing) {
