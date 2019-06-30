@@ -647,7 +647,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
             if (signature != null) {
 
                 val biometricPrompt = BiometricPrompt.Builder(context)
-                        .setTitle(getString(R.string.app_name))
+                        .setTitle(getString(R.string.authentication_required))
                         .setNegativeButton("Cancel", activity!!.mainExecutor, DialogInterface.OnClickListener { _, _ ->
 
                         })
@@ -673,7 +673,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
             activity!!.runOnUiThread {
 
                 biometricDialogV23 = BiometricDialogV23(context!!)
-                biometricDialogV23!!.setTitle(getString(R.string.app_name))
+                biometricDialogV23!!.setTitle(R.string.authentication_required)
                 biometricDialogV23!!.show()
             }
         } else {

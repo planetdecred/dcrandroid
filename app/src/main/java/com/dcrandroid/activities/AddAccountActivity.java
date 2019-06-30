@@ -154,7 +154,7 @@ public class AddAccountActivity extends AppCompatActivity {
             if (signature != null) {
 
                 BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(this)
-                        .setTitle(getString(R.string.app_name))
+                        .setTitle(getString(R.string.authentication_required))
                         .setNegativeButton("Cancel", getMainExecutor(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -186,7 +186,7 @@ public class AddAccountActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             biometricDialogV23 = new BiometricDialogV23(AddAccountActivity.this);
-                            biometricDialogV23.setTitle(getString(R.string.app_name));
+                            biometricDialogV23.setTitle(R.string.authentication_required);
                             biometricDialogV23.show();
                         }
                     });

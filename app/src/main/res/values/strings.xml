@@ -543,6 +543,7 @@
     <string name="changing_pin">Changing PIN…</string>
     <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
     <string name="field_cannot_be_empty">Field cannot be empty</string>
+    <string name="authentication_required">Authentication Required</string>
     <!--/Security-->
 
     <!--Crash Report-->

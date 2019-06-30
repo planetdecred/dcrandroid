@@ -111,7 +111,7 @@ class EnterPasswordActivity : AppCompatActivity() {
             if (signature != null) {
 
                 val biometricPrompt = BiometricPrompt.Builder(this)
-                        .setTitle(getString(R.string.app_name))
+                        .setTitle(getString(R.string.authentication_required))
                         .setNegativeButton("Cancel", mainExecutor, DialogInterface.OnClickListener { _, _ ->
                             finishActivity()
                         })
@@ -144,7 +144,7 @@ class EnterPasswordActivity : AppCompatActivity() {
                 }
 
                 biometricDialogV23!!.setCancelListener(cancelListener)
-                biometricDialogV23!!.setTitle(getString(R.string.app_name))
+                biometricDialogV23!!.setTitle(R.string.authentication_required)
                 biometricDialogV23!!.show()
             }
         }
