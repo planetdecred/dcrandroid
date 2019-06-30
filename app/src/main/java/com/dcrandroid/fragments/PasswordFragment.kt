@@ -17,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.dcrandroid.MainActivity
 import com.dcrandroid.R
@@ -68,7 +67,7 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
     }
 
     private fun createWallet(password: String) {
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             Snackbar.make(view!!, R.string.empty_password, Snackbar.LENGTH_SHORT).show()
             return
         }
@@ -82,13 +81,14 @@ class PasswordFragment : Fragment(), View.OnKeyListener {
                 wallet.unlockWallet(password.toByteArray())
                 val util = PreferenceUtil(this@PasswordFragment.context!!)
                 util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PASSWORD)
+                util.setBoolean(Constants.NO_WALLET_CREATED, false);
                 activity!!.runOnUiThread {
                     pd!!.dismiss()
                     val i = Intent(this@PasswordFragment.context, MainActivity::class.java)
                     i.putExtra(Constants.PASSPHRASE, password)
                     startActivity(i)
                     //Finish all the activities before this
-                    ActivityCompat.finishAffinity(this@PasswordFragment.activity!!)
+                    //ActivityCompat.finishAffinity(this@PasswordFragment.activity!!)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

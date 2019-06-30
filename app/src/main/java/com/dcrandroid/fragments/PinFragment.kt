@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.dcrandroid.MainActivity
 import com.dcrandroid.R
@@ -95,13 +94,14 @@ class PinFragment : Fragment(), KeyPad.KeyPadListener {
                 wallet.unlockWallet(passCode!!.toByteArray())
                 val util = PreferenceUtil(this@PinFragment.context!!)
                 util.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN)
+                util.setBoolean(Constants.NO_WALLET_CREATED, false);
                 activity!!.runOnUiThread {
                     pd!!.dismiss()
                     val i = Intent(this@PinFragment.context, MainActivity::class.java)
                     i.putExtra(Constants.PASSPHRASE, passCode)
                     startActivity(i)
                     //Finish all the activities before this
-                    ActivityCompat.finishAffinity(this@PinFragment.activity!!)
+                    //ActivityCompat.finishAffinity(this@PinFragment.activity!!)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
