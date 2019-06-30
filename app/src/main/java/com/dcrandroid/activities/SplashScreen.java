@@ -16,6 +16,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
@@ -27,10 +32,6 @@ import com.dcrandroid.util.WalletData;
 
 import java.io.File;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import dcrlibwallet.Dcrlibwallet;
 import dcrlibwallet.LibWallet;
 
@@ -42,7 +43,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private final int PASSWORD_REQUEST_CODE = 1;
     private ImageView imgAnim;
-    private PreferenceUtil util;
+    private PreferenceUtil preferenceUtil;
     private TextView tvLoading;
     private Thread loadThread;
     private WalletData walletData;
@@ -63,7 +64,7 @@ public class SplashScreen extends AppCompatActivity {
             decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
-        util = new PreferenceUtil(this);
+        preferenceUtil = new PreferenceUtil(this);
         setContentView(R.layout.splash_page);
 
         if (BuildConfig.IS_TESTNET) {
@@ -133,7 +134,7 @@ public class SplashScreen extends AppCompatActivity {
 
         String homeDir = getFilesDir() + "/wallet";
         walletData.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
-        Dcrlibwallet.setLogLevels(util.get(Constants.LOGGING_LEVEL));
+        Dcrlibwallet.setLogLevels(preferenceUtil.get(Constants.LOGGING_LEVEL));
 
         String walletDB;
 
@@ -144,20 +145,12 @@ public class SplashScreen extends AppCompatActivity {
         }
 
         File f = new File(homeDir, walletDB);
-        if (!f.exists()) {
-            loadThread = new Thread() {
-                public void run() {
-                    try {
-                        sleep(3000);
-                        createWallet();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            loadThread.start();
-        } else {
+
+        if (f.exists()) {
             checkEncryption();
+        } else {
+            preferenceUtil.setBoolean(Constants.NO_WALLET_CREATED, true);
+            navigateToOverViewPage();
         }
     }
 
@@ -170,23 +163,13 @@ public class SplashScreen extends AppCompatActivity {
         });
     }
 
-    private void createWallet() {
-        Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
-        startActivity(i);
-        finish();
-    }
-
     private void openWallet(final String publicPass) {
         loadThread = new Thread() {
             public void run() {
                 try {
                     setText(getString(R.string.opening_wallet));
                     walletData.wallet.openWallet(publicPass.getBytes());
-                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                    //Finish all the activities before this
-                    ActivityCompat.finishAffinity(SplashScreen.this);
+                    navigateToOverViewPage();
                 } catch (final Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
@@ -204,7 +187,7 @@ public class SplashScreen extends AppCompatActivity {
                                     });
 
                             if (e.getMessage().equals(Dcrlibwallet.ErrInvalidPassphrase)) {
-                                if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PIN)) {
+                                if (preferenceUtil.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PIN)) {
                                     infoDialog.setMessage(getString(R.string.invalid_pin));
                                 }
                                 infoDialog.setNegativeButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
@@ -217,7 +200,7 @@ public class SplashScreen extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent i;
 
-                                        if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+                                        if (preferenceUtil.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                                             i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
                                         } else {
                                             i = new Intent(SplashScreen.this, EnterPassCode.class);
@@ -243,10 +226,10 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void checkEncryption() {
-        if (util.getBoolean(Constants.ENCRYPT)) {
+        if (preferenceUtil.getBoolean(Constants.ENCRYPT)) {
             Intent i;
 
-            if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+            if (preferenceUtil.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
                 i = new Intent(this, EnterPasswordActivity.class);
             } else {
                 i = new Intent(this, EnterPassCode.class);
@@ -270,6 +253,16 @@ public class SplashScreen extends AppCompatActivity {
                 openWallet(data.getStringExtra(Constants.PASSPHRASE));
             }
         }
+    }
+
+    /**
+     * Navigates user to overview page
+     */
+    private void navigateToOverViewPage() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        ActivityCompat.finishAffinity(this);//Finish all the activities before this
     }
 
     public abstract class DoubleClickListener implements View.OnClickListener {
