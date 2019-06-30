@@ -228,6 +228,8 @@
     <string name="invalid_current_password">Current password entered was not valid.</string>
     <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
+    <string name="create_or_recover_your_wallet_prompt">You need to create or recover your wallet \n so that you can start managing your decred.</string>
+    <string name="click_here_to_get_started"><u>Click Here To get Started</u></string>
     <!--/Wallet-->
 
     <!--Transaction-->
