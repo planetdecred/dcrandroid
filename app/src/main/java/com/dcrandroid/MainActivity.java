@@ -825,9 +825,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
+                if (Integer.parseInt(preferenceUtil.get(Constants.NETWORK_MODES, "0")) == 0) {
                     setConnectionStatus(R.string.connecting_to_peers);
-                    String peerAddresses = util.get(Constants.PEER_IP);
+                    String peerAddresses = preferenceUtil.get(Constants.PEER_IP);
                     try {
                         walletData.wallet.restartSpvSync(peerAddresses);
                     } catch (Exception e) {
@@ -835,7 +835,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                 } else {
                     setConnectionStatus(R.string.connecting_to_rpc_server);
-                    String remoteNodeAddress = util.get(Constants.REMOTE_NODE_ADDRESS);
+                    String remoteNodeAddress = preferenceUtil.get(Constants.REMOTE_NODE_ADDRESS);
                     try {
                         walletData.wallet.restartRpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).getBytes());
                     } catch (Exception e) {
