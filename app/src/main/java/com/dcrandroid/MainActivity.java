@@ -260,15 +260,11 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION, 0);
         }
 
-        blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
+        setSoundNotification();
 
         walletData.wallet.transactionNotification(this);
-        try {
-            walletData.wallet.removeSyncProgressListener(TAG);
-            walletData.wallet.addSyncProgressListener(this, TAG);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        setSyncSyncProgressListener();
 
         displayBalance();
 
@@ -306,6 +302,30 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             if (pageID != 0)
                 displayOverview();
         }
+    }
+
+    private void setSyncSyncProgressListener() {
+        try {
+            walletData.wallet.removeSyncProgressListener(TAG);
+            walletData.wallet.addSyncProgressListener(this, TAG);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setSoundNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SoundPool.Builder builder = new SoundPool.Builder().setMaxStreams(3);
+            AudioAttributes attributes = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build();
+            builder.setAudioAttributes(attributes);
+            alertSound = builder.build();
+        } else {
+            alertSound = new SoundPool(3, AudioManager.STREAM_NOTIFICATION, 0);
+        }
+
+        blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
     }
 
     public void displayBalance() {
