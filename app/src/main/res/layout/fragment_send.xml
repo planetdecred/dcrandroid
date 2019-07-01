@@ -49,7 +49,7 @@
             android:paddingTop="5dp">
 
             <TextView
-                android:layout_width="55dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="@string/from_colon"
