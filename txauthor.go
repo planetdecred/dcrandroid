@@ -180,7 +180,7 @@ func (lw *LibWallet) PublishUnminedTransactions() error {
 	if err != nil {
 		return errors.New(ErrNotConnected)
 	}
-	ctx, _ := contextWithShutdownCancel(context.Background())
+	ctx, _ := lw.contextWithShutdownCancel(context.Background())
 	err = lw.wallet.PublishUnminedTransactions(ctx, netBackend)
 	return err
 }

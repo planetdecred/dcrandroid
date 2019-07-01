@@ -31,14 +31,21 @@ const (
 	MaxAmountDcr  = dcrutil.MaxAmount / dcrutil.AtomsPerCoin
 )
 
-var shuttingDown = make(chan bool)
+func (lw *LibWallet) listenForShutdown() {
 
-func contextWithShutdownCancel(ctx context.Context) (context.Context, context.CancelFunc) {
-	ctx, cancel := context.WithCancel(ctx)
+	lw.cancelFuncs = make([]context.CancelFunc, 0)
+	lw.shuttingDown = make(chan bool)
 	go func() {
-		<-shuttingDown
-		cancel()
+		<-lw.shuttingDown
+		for _, cancel := range lw.cancelFuncs {
+			cancel()
+		}
 	}()
+}
+
+func (lw *LibWallet) contextWithShutdownCancel(ctx context.Context) (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithCancel(ctx)
+	lw.cancelFuncs = append(lw.cancelFuncs, cancel)
 	return ctx, cancel
 }
 

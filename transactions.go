@@ -52,7 +52,7 @@ const (
 )
 
 func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, afterIndexing func()) error {
-	ctx, _ := contextWithShutdownCancel(context.Background())
+	ctx, _ := lw.contextWithShutdownCancel(context.Background())
 
 	var totalIndex int32
 	var txEndHeight uint32

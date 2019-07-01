@@ -2,6 +2,7 @@ package dcrlibwallet
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"path/filepath"
@@ -31,6 +32,9 @@ type LibWallet struct {
 	wallet        *wallet.Wallet
 	txDB          *storm.DB
 	*syncData
+
+	shuttingDown chan bool
+	cancelFuncs  []context.CancelFunc
 }
 
 func NewLibWallet(homeDir string, dbDriver string, netType string) (*LibWallet, error) {
@@ -100,6 +104,8 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 		syncData:      syncData,
 	}
 
+	lw.listenForShutdown()
+
 	return lw, nil
 }
 
@@ -107,7 +113,7 @@ func (lw *LibWallet) Shutdown() {
 	log.Info("Shutting down dcrlibwallet")
 
 	// Trigger shuttingDown signal to cancel all contexts created with `contextWithShutdownCancel`.
-	shuttingDown <- true
+	lw.shuttingDown <- true
 
 	if lw.rpcClient != nil {
 		lw.rpcClient.Stop()

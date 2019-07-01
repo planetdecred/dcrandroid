@@ -207,7 +207,7 @@ func (lw *LibWallet) SpvSync(peerAddresses string) error {
 	loadedWallet.SetNetworkBackend(syncer)
 	lw.walletLoader.SetNetworkBackend(syncer)
 
-	ctx, cancel := contextWithShutdownCancel(context.Background())
+	ctx, cancel := lw.contextWithShutdownCancel(context.Background())
 	lw.cancelSync = cancel
 
 	// syncer.Run uses a wait group to block the thread until sync completes or an error occurs
@@ -253,7 +253,7 @@ func (lw *LibWallet) RpcSync(networkAddress string, username string, password st
 		return errors.New(ErrSyncAlreadyInProgress)
 	}
 
-	ctx, cancel := contextWithShutdownCancel(context.Background())
+	ctx, cancel := lw.contextWithShutdownCancel(context.Background())
 	lw.cancelSync = cancel
 
 	chainClient, err := lw.connectToRpcClient(ctx, networkAddress, username, password, cert)
@@ -393,7 +393,7 @@ func (lw *LibWallet) RescanBlocks() error {
 		}()
 
 		lw.rescanning = true
-		ctx, _ := contextWithShutdownCancel(context.Background())
+		ctx, _ := lw.contextWithShutdownCancel(context.Background())
 
 		progress := make(chan wallet.RescanProgress, 1)
 		go lw.wallet.RescanProgressFromHeight(ctx, netBackend, 0, progress)
