@@ -23,10 +23,13 @@
             android:summary="@string/required_to_enter_app"
             android:title="@string/change_startup_pin_password"
             app:iconSpaceReserved="false" />
-        <SwitchPreference
+        <ListPreference
             android:key="use_biometric"
             android:title="@string/use_biometric_auth"
             android:summary="@string/biometric_pref_summary"
+            android:entries="@array/biometric_options"
+            android:entryValues="@array/biometric_options_values"
+            android:defaultValue="0"
             app:iconSpaceReserved="false"
             />
         <SwitchPreference

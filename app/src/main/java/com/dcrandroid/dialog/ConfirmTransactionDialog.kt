@@ -24,9 +24,9 @@ import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.confirm_tx_dialog.*
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.math.MathContext
 
 
 class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClickListener {
@@ -75,7 +75,10 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         val feeCoin = Dcrlibwallet.amountCoin(estFee)
         tvFee.text = "${context.getString(R.string.withFeeOff)} ${format.format(feeCoin)} DCR"
 
-        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
+        // Hide passphrase input if user's spending passphrase type is pin
+        // or user chose the fingerprint only biometric option
+        val biometricOption = util.get(Constants.USE_BIOMETRIC)
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN || biometricOption == Constants.FINGERPRINT) {
             passphrase_input_layout.visibility = View.GONE
             btn_positive.isEnabled = true
             btn_positive.setTextColor(ContextCompat.getColor(context, R.color.blue))
@@ -84,7 +87,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         }
 
         // display conversion if enabled and exchange rate has been fetched
-        if(exchangeDecimal != null && Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0")) != 0){
+        if (exchangeDecimal != null && Integer.parseInt(util.get(Constants.CURRENCY_CONVERSION, "0")) != 0) {
             val amountUSD = dcrToUSD(amountCoin)
             tvTitle.text = "${tvTitle.text} ($${format.format(amountUSD)})"
 
@@ -93,7 +96,7 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         }
     }
 
-    private fun dcrToUSD(dcr: Double): Double{
+    private fun dcrToUSD(dcr: Double): Double {
         var currentAmount = BigDecimal(dcr)
         currentAmount = currentAmount.setScale(9, RoundingMode.HALF_UP)
 
@@ -102,18 +105,18 @@ class ConfirmTransactionDialog(context: Context) : Dialog(context), View.OnClick
         // USD is displayed in 2 decimal places by default.
         // If the converted amount is less than two significant figures,
         // it would be rounded to the nearest significant figure.
-        if(convertedAmount.toDouble() < 0.01){
+        if (convertedAmount.toDouble() < 0.01) {
 
             convertedAmount = convertedAmount.round(MathContext(1))
 
             return convertedAmount.toDouble()
-        }else{
+        } else {
             //round to 2 decimal places
             return Math.round(convertedAmount.toDouble() * 100.0) / 100.0
         }
     }
 
-    fun setExchangeDecimal(exchangeDecimal: BigDecimal?): ConfirmTransactionDialog{
+    fun setExchangeDecimal(exchangeDecimal: BigDecimal?): ConfirmTransactionDialog {
         this.exchangeDecimal = exchangeDecimal
         return this
     }

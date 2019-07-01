@@ -16,23 +16,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+import androidx.biometric.BiometricConstants;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.app.NotificationCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,13 +50,8 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.spec.ECGenParameterSpec;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -57,12 +59,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.StringRes;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+
 import dcrlibwallet.Dcrlibwallet;
 
 public class Utils {
@@ -180,7 +185,7 @@ public class Utils {
     }
 
     public static String calculateDays(long seconds, Context context) {
-        if(context == null){
+        if (context == null) {
             return "";
         }
 
@@ -368,7 +373,7 @@ public class Utils {
 
     }
 
-    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage){
+    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage) {
         copyToClipboard(ctx, copyText, ctx.getString(successMessage));
     }
 
@@ -386,7 +391,7 @@ public class Utils {
         return "";
     }
 
-    public static void showMessage(Context ctx, String message, int duration){
+    public static void showMessage(Context ctx, String message, int duration) {
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vi = inflater.inflate(R.layout.toast, null);
         TextView tv = vi.findViewById(android.R.id.message);
@@ -577,24 +582,102 @@ public class Utils {
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
 
-    public static class Biometric {
-
-        public static boolean isSupportBiometricPrompt(Context context) {
-            PackageManager packageManager = context.getPackageManager();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                return packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT);
-            }
-
-            return false;
+    static byte[] readFileToBytes(String path) throws Exception {
+        FileInputStream fin = new FileInputStream(path);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buff = new byte[8192];
+        int len;
+        while ((len = fin.read(buff)) != -1) {
+            out.write(buff, 0, len);
         }
 
-        public static boolean isSupportFingerprint(Context context) {
-            PackageManager packageManager = context.getPackageManager();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT);
-            }
+        fin.close();
 
-            return false;
+        return out.toByteArray();
+    }
+
+    static void writeBytesToFile(byte[] output, String path) throws Exception {
+        File file = new File(path);
+
+        FileOutputStream fout = new FileOutputStream(file);
+        ByteArrayInputStream bin = new ByteArrayInputStream(output);
+
+        int len;
+        byte[] buff = new byte[8192];
+
+        while ((len = bin.read(buff)) != -1) {
+            fout.write(buff, 0, len);
+        }
+
+        fout.flush();
+        fout.close();
+        bin.close();
+    }
+
+    public static class Biometric {
+
+        static String getFilePath(Context context, String fileName) {
+            File path = new File(context.getFilesDir() + "/auth/");
+            if (!path.exists()) {
+                path.mkdir();
+            }
+            return path.getAbsolutePath() + fileName;
+        }
+
+        static byte[] readFromFile(Context context, String fileName) throws Exception {
+            String path = Utils.Biometric.getFilePath(context, fileName);
+            return Utils.readFileToBytes(path);
+        }
+
+        static void saveToFile(Context context, String fileName, byte[] output) throws Exception {
+            String path = Utils.Biometric.getFilePath(context, fileName);
+            Utils.writeBytesToFile(output, path);
+        }
+
+
+        @TargetApi(Build.VERSION_CODES.M)
+        public static void savePassToKeystore(Context context, String pass, String alias) throws Exception {
+            final KeyGenerator keyGenerator = KeyGenerator
+                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, Constants.ANDROID_KEY_STORE);
+
+            final KeyGenParameterSpec keyGenParameterSpec = new KeyGenParameterSpec.Builder(alias,
+                    KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .build();
+
+            keyGenerator.init(keyGenParameterSpec);
+            final SecretKey secretKey = keyGenerator.generateKey();
+
+            final Cipher cipher = Cipher.getInstance(Constants.TRANSFORMATION);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+            byte[] iv = cipher.getIV();
+            saveToFile(context, Constants.ENCRYPTION_IV, iv);
+
+            byte[] encryption = cipher.doFinal(pass.getBytes(StandardCharsets.UTF_8));
+            saveToFile(context, Constants.ENCRYPTION_DATA, encryption);
+        }
+
+        @TargetApi(Build.VERSION_CODES.KITKAT)
+        public static String getPassFromKeystore(Context context, String alias) throws Exception {
+
+            byte[] encryptionIv = readFromFile(context, Constants.ENCRYPTION_IV);
+            byte[] encryptedData = readFromFile(context, Constants.ENCRYPTION_DATA);
+
+            KeyStore keyStore = KeyStore.getInstance(Constants.ANDROID_KEY_STORE);
+            keyStore.load(null);
+            final KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore
+                    .getEntry(alias, null);
+
+            final SecretKey secretKey = secretKeyEntry.getSecretKey();
+            final Cipher cipher = Cipher.getInstance(Constants.TRANSFORMATION);
+            final GCMParameterSpec spec = new GCMParameterSpec(128, encryptionIv);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
+
+            final byte[] decodedData = cipher.doFinal(encryptedData);
+
+            return new String(decodedData, StandardCharsets.UTF_8);
         }
 
         public static boolean isFingerprintEnrolled(Context context) {
@@ -602,52 +685,35 @@ public class Utils {
             return fingerprintManager.hasEnrolledFingerprints();
         }
 
-        @TargetApi(Build.VERSION_CODES.N)
-        public static KeyPair generateKeyPair(String keyName, boolean invalidatedByBiometricEnrollment) throws Exception {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+        public static boolean displayBiometricPrompt(FragmentActivity activity, BiometricPrompt.AuthenticationCallback callback) {
 
-            KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(keyName,
-                    KeyProperties.PURPOSE_SIGN)
-                    .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
-                    .setDigests(KeyProperties.DIGEST_SHA256,
-                            KeyProperties.DIGEST_SHA384,
-                            KeyProperties.DIGEST_SHA512)
-                    // Require the user to authenticate with a biometric to authorize every use of the key
-                    .setUserAuthenticationRequired(true)
-                    // Generated keys will be invalidated if the biometric templates are added more to user device
-                    .setInvalidatedByBiometricEnrollment(invalidatedByBiometricEnrollment);
+            if (Utils.Biometric.isFingerprintEnrolled(activity)) {
+                Executor executor = Executors.newSingleThreadExecutor();
+                BiometricPrompt biometricPrompt = new BiometricPrompt(activity, executor, callback);
+                BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                        .setTitle(activity.getString(R.string.authentication_required))
+                        .setNegativeButtonText(activity.getString(R.string.cancel))
+                        .build();
 
-            keyPairGenerator.initialize(builder.build());
-
-            return keyPairGenerator.generateKeyPair();
-        }
-
-        @Nullable
-        public static KeyPair getKeyPair(String keyName) throws Exception {
-            KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
-            keyStore.load(null);
-            if (keyStore.containsAlias(keyName)) {
-                // Get public key
-                PublicKey publicKey = keyStore.getCertificate(keyName).getPublicKey();
-                // Get private key
-                PrivateKey privateKey = (PrivateKey) keyStore.getKey(keyName, null);
-                // Return a key pair
-                return new KeyPair(publicKey, privateKey);
-            }
-            return null;
-        }
-
-        @Nullable
-        public static Signature initSignature(String keyName) throws Exception {
-            KeyPair keyPair = getKeyPair(keyName);
-
-            if (keyPair != null) {
-                Signature signature = Signature.getInstance("SHA256withECDSA");
-                signature.initSign(keyPair.getPrivate());
-                return signature;
+                biometricPrompt.authenticate(promptInfo);
+                return true;
             }
 
-            return null;
+            return false;
+        }
+
+        public static String translateError(Context context, int errorCode) {
+            String message = null;
+            switch (errorCode) {
+                case BiometricConstants.ERROR_LOCKOUT:
+                    message = context.getString(R.string.biometric_lockout_error);
+                    break;
+                case BiometricConstants.ERROR_LOCKOUT_PERMANENT:
+                    message = context.getString(R.string.biometric_permanent_lockout_error);
+                    break;
+            }
+
+            return message;
         }
     }
 }

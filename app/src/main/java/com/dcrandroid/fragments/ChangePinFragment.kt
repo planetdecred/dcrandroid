@@ -123,6 +123,12 @@ class ChangePinFragment : Fragment(), KeyPad.KeyPadListener {
                     util.set(Constants.STARTUP_PASSPHRASE_TYPE, Constants.PIN)
                 }
 
+                // Update saved pass
+                val biometricOption = util.get(Constants.USE_BIOMETRIC)
+                if (biometricOption == Constants.FINGERPRINT) {
+                    Utils.Biometric.savePassToKeystore(context, passCode, Constants.SPENDING_PASSPHRASE_TYPE)
+                }
+
                 activity!!.runOnUiThread {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()

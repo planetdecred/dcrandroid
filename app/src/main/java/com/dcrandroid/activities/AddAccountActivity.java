@@ -6,30 +6,25 @@
 
 package com.dcrandroid.activities;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricConstants;
+import androidx.biometric.BiometricPrompt;
+
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.dialog.BiometricDialogV23;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
-
-import java.security.Signature;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 /**
  * Created by Macsleven on 28/12/2017.
@@ -41,8 +36,6 @@ public class AddAccountActivity extends AppCompatActivity {
     private PreferenceUtil util;
     private final int PASSCODE_REQUEST_CODE = 2;
     private EditText accountName, passphrase;
-
-    private BiometricDialogV23 biometricDialogV23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +52,12 @@ public class AddAccountActivity extends AppCompatActivity {
         passphrase = findViewById(R.id.add_acc_passphrase);
 
         util = new PreferenceUtil(this);
-        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
+
+        final String biometricOption = util.get(Constants.USE_BIOMETRIC);
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN) || biometricOption.equals(Constants.FINGERPRINT)) {
             passphrase.setVisibility(View.GONE);
         }
+
 
         pd = Utils.getProgressDialog(this, false, false, getString(R.string.creating_account));
         findViewById(R.id.add_acc_button).setOnClickListener(new View.OnClickListener() {
@@ -72,16 +68,15 @@ public class AddAccountActivity extends AppCompatActivity {
                 if (name.equals("")) {
                     accountName.setError(getString(R.string.input_account_name));
                 } else {
-                    if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+
+                    if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD) && !biometricOption.equals(Constants.FINGERPRINT)) {
                         if (privatePassphrase.equals("")) {
                             passphrase.setError(getString(R.string.input_private_phrase));
                             return;
                         }
-                        checkBiometric();
-                    } else {
-                        Intent enterPinIntent = new Intent(AddAccountActivity.this, EnterPassCode.class);
-                        startActivityForResult(enterPinIntent, PASSCODE_REQUEST_CODE);
                     }
+
+                    checkBiometric();
                 }
             }
         });
@@ -93,16 +88,17 @@ public class AddAccountActivity extends AppCompatActivity {
         if (requestCode == PASSCODE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 final String passcode = data.getStringExtra(Constants.PASSPHRASE);
-                createAccount(accountName.getText().toString().trim(), passcode.getBytes());
+                createAccount(passcode.getBytes());
             }
         }
     }
 
-    private void createAccount(final String name, final byte[] privatePassphrase) {
+    private void createAccount(final byte[] privatePassphrase) {
         pd.show();
         new Thread() {
             public void run() {
                 try {
+                    String name = accountName.getText().toString().trim();
                     WalletData.getInstance().wallet.nextAccount(name, privatePassphrase);
                     setResult(RESULT_OK);
                     finish();
@@ -128,152 +124,85 @@ public class AddAccountActivity extends AppCompatActivity {
         }.start();
     }
 
+    private void promptPass() {
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+            createAccount(passphrase.getText().toString().getBytes());
+        } else {
+            Intent enterPinIntent = new Intent(AddAccountActivity.this, EnterPassCode.class);
+            startActivityForResult(enterPinIntent, PASSCODE_REQUEST_CODE);
+        }
+    }
+
     private void checkBiometric() {
-        if (!util.getBoolean(Constants.USE_BIOMETRIC, false)) {
+        String biometricOption = util.get(Constants.USE_BIOMETRIC);
+        if (biometricOption.equals(Constants.OFF)) {
+
             System.out.println("Biometric not enabled in settings");
-            createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
+
+            // proceed to ask for/get password/pin since biometric option
+            // isn't enabled
+            promptPass();
+
             return;
         }
 
-        if (Utils.Biometric.isSupportBiometricPrompt(this)) {
-            displayBiometricPrompt();
-        } else if (Utils.Biometric.isSupportFingerprint(this)) {
-            System.out.println("Device does support biometric prompt");
-            showFingerprintDialog();
-        } else {
-            createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
+        if (!Utils.Biometric.displayBiometricPrompt(this, authenticationCallback)) {
+            Utils.showMessage(this, getString(R.string.no_fingerprint_error), Toast.LENGTH_LONG);
         }
     }
 
-    @SuppressLint("NewApi")
-    private void displayBiometricPrompt() {
-        try {
-            Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
-            Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
-
-            if (signature != null) {
-
-                BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(this)
-                        .setTitle(getString(R.string.authentication_required))
-                        .setNegativeButton("Cancel", getMainExecutor(), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .build();
-
-                biometricPrompt.authenticate(new BiometricPrompt.CryptoObject(signature), getBiometricCancellationSignal(), getMainExecutor(), biometricAuthenticationCallback);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showFingerprintDialog() {
-        FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(this);
-        if (fingerprintManager.hasEnrolledFingerprints()) {
-            try {
-                Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
-                Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
-
-                if (signature != null) {
-
-                    fingerprintManager.authenticate(new FingerprintManagerCompat.CryptoObject(signature), 0,
-                            getFingerprintCancellationSignal(), fingerprintAuthCallback, null);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            biometricDialogV23 = new BiometricDialogV23(AddAccountActivity.this);
-                            biometricDialogV23.setTitle(R.string.authentication_required);
-                            biometricDialogV23.show();
-                        }
-                    });
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
-        }
-    }
-
-    @SuppressLint("NewApi")
-    private CancellationSignal getBiometricCancellationSignal() {
-        // With this cancel signal, we can cancel biometric prompt operation
-        CancellationSignal cancellationSignal = new CancellationSignal();
-        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
-            @Override
-            public void onCancel() {
-                System.out.println("Cancel result, signal triggered");
-            }
-        });
-
-        return cancellationSignal;
-    }
-
-    @SuppressLint("NewApi")
-    private androidx.core.os.CancellationSignal getFingerprintCancellationSignal() {
-        // With this cancel signal, we can cancel biometric prompt operation
-        androidx.core.os.CancellationSignal cancellationSignal = new androidx.core.os.CancellationSignal();
-        cancellationSignal.setOnCancelListener(new androidx.core.os.CancellationSignal.OnCancelListener() {
-            @Override
-            public void onCancel() {
-                System.out.println("Cancel result, signal triggered");
-            }
-        });
-
-        return cancellationSignal;
-    }
-
-    @SuppressLint("NewApi")
-    private BiometricPrompt.AuthenticationCallback biometricAuthenticationCallback = new BiometricPrompt.AuthenticationCallback() {
-
+    private BiometricPrompt.AuthenticationCallback authenticationCallback = new BiometricPrompt.AuthenticationCallback() {
         @Override
-        public void onAuthenticationError(int errorCode, CharSequence errString) {
+        public void onAuthenticationError(final int errorCode, @NonNull final CharSequence errString) {
             super.onAuthenticationError(errorCode, errString);
-            Toast.makeText(AddAccountActivity.this, errString, Toast.LENGTH_LONG).show();
+
+            System.out.println("Biometric Error Code: " + errorCode + " Error String: " + errString);
+
+            if(errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON){
+                return;
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final String message = Utils.Biometric.translateError(AddAccountActivity.this, errorCode);
+                    if (message != null) {
+                        Toast.makeText(AddAccountActivity.this, message, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(AddAccountActivity.this, errString, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
 
         @Override
-        public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+        public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
-            createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
+
+            String biometricOption = util.get(Constants.USE_BIOMETRIC);
+            if (biometricOption.equals(Constants.FINGERPRINT)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String pass = Utils.Biometric.getPassFromKeystore(AddAccountActivity.this, Constants.SPENDING_PASSPHRASE_TYPE);
+                            createAccount(pass.getBytes());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                return;
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    promptPass();
+                }
+            });
         }
     };
 
-    private FingerprintManagerCompat.AuthenticationCallback fingerprintAuthCallback = new FingerprintManagerCompat.AuthenticationCallback() {
-        @Override
-        public void onAuthenticationError(int errMsgId, CharSequence errString) {
-            super.onAuthenticationError(errMsgId, errString);
-            Toast.makeText(AddAccountActivity.this, errString, Toast.LENGTH_LONG).show();
-            if (biometricDialogV23 != null) {
-                biometricDialogV23.dismiss();
-            }
-        }
-
-        @Override
-        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-            super.onAuthenticationHelp(helpMsgId, helpString);
-            Toast.makeText(AddAccountActivity.this, helpString, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
-            super.onAuthenticationSucceeded(result);
-            if (biometricDialogV23 != null) {
-                biometricDialogV23.dismiss();
-            }
-
-            createAccount(accountName.getText().toString().trim(), passphrase.getText().toString().getBytes());
-        }
-
-        @Override
-        public void onAuthenticationFailed() {
-            super.onAuthenticationFailed();
-            Toast.makeText(AddAccountActivity.this, R.string.biometric_auth_failed, Toast.LENGTH_SHORT).show();
-        }
-    };
 }

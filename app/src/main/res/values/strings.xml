@@ -410,6 +410,20 @@
     </string-array>
     <!--/Preference-->
 
+    <!--Biometric-->
+    <string-array name="biometric_options">
+        <item>Off</item>
+        <item>Fingerprint</item>
+        <item>Fingerprint + Pass</item>
+    </string-array>
+
+    <string-array name="biometric_options_values" translatable="false">
+        <item>off</item>
+        <item>fingerprint</item>
+        <item>fingerprint_pass</item>
+    </string-array>
+    <!--/Biometric-->
+
     <!-- Overview Fragment -->
     <string name="recent_activity">Recent Activity</string>
     <string name="show_all_transactions">Show All Transactions</string>
@@ -567,4 +581,8 @@
 
     <string name="external_output_amount">%1$s DCR (external)</string>
     <string name="external_output_account">%1$s DCR (%2$s)</string>
+    <string name="biometric_lockout_error">Too many attempts. Try again later.</string>
+    <string name="biometric_permanent_lockout_error">Biometric disabled. Unlock your device with a strong authentication (PIN/Pattern/Password)</string>
+    <string name="signing_ellipsis">Signing…</string>
+    <string name="no_fingerprint_error">Enroll at least one fingerprint</string>
 </resources>

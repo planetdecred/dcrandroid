@@ -113,8 +113,13 @@ public class Constants {
             SYNC_STATE_START = "start",
             SYNC_STATE_PROGRESS = "progress",
             SYNC_STATE_FINISH = "finish",
+            ANDROID_KEY_STORE = "AndroidKeyStore",
+            TRANSFORMATION = "AES/GCM/NoPadding",
+            ENCRYPTION_DATA = "encryption_data",
+            ENCRYPTION_IV = "encryption_iv",
+            OFF = "off",
+            FINGERPRINT = "fingerprint",
+            FINGERPRINT_PASS = "fingerprint_pass",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
-
-    public static final long ESTIMATED_ACCT_DISCOVERY = 300000;
 }

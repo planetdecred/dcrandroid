@@ -6,7 +6,6 @@
 
 package com.dcrandroid.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,9 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.hardware.biometrics.BiometricPrompt;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -32,111 +29,37 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.biometric.BiometricConstants;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.dcrandroid.R;
 import com.dcrandroid.activities.EnterPassCode;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.dialog.BiometricDialogV23;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.security.Signature;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
-import androidx.fragment.app.Fragment;
 import dcrlibwallet.Dcrlibwallet;
 import dcrlibwallet.LibWallet;
 
 import static android.app.Activity.RESULT_OK;
 
 public class SecurityFragment extends Fragment {
+
     private final int PASSCODE_REQUEST_CODE = 1;
     private EditText etAddress, etMessage, etSignature;
     private TextView tvValidateAddress, tvRequiredMessage, tvRequiredSignature;
     private Button btnSignMessage, btnCopy;
     private LinearLayout layout;
-    private BiometricDialogV23 biometricDialogV23;
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
-                if (!WalletData.getInstance().syncing) {
-                    layout.setVisibility(View.VISIBLE);
-                } else {
-                    layout.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
     private LibWallet wallet;
     private PreferenceUtil util;
     private ProgressDialog pd;
-    private TextWatcher validateAddressWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            checkCopyButton();
-            verifyMessage();
-            if (s.toString().trim().equals("")) {
-                tvValidateAddress.setText(null);
-                toggleMessageButton(false);
-                return;
-            }
-
-            if (wallet.isAddressValid(s.toString().trim())) {
-                if (wallet.haveAddress(s.toString().trim())) {
-                    tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
-                    tvValidateAddress.setText(R.string.owned_validate_address);
-                    toggleMessageButton(true);
-                    return;
-                }
-                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.greenTextColor));
-                tvValidateAddress.setText(Html.fromHtml(getString(R.string.external_validate_address)));
-                toggleMessageButton(false);
-            } else {
-                tvValidateAddress.setTextColor(Color.RED);
-                tvValidateAddress.setText(R.string.invalid_address);
-                toggleMessageButton(false);
-            }
-        }
-    };
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            checkCopyButton();
-            verifyMessage();
-
-            if (etSignature.getText().toString().equals("") && wallet.isAddressValid(etAddress.getText().toString())) {
-                toggleMessageButton(true);
-            } else {
-                toggleMessageButton(false);
-            }
-        }
-    };
 
     @Nullable
     @Override
@@ -215,16 +138,6 @@ public class SecurityFragment extends Fragment {
                     return;
                 }
 
-                if (getContext() == null) {
-                    return;
-                }
-
-                if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
-                    Intent intent = new Intent(getContext(), EnterPassCode.class);
-                    startActivityForResult(intent, PASSCODE_REQUEST_CODE);
-                    return;
-                }
-
                 checkBiometric();
             }
         });
@@ -255,7 +168,7 @@ public class SecurityFragment extends Fragment {
                     return;
                 }
 
-                pd = Utils.getProgressDialog(getContext(), false, false, "Signing...");
+                pd = Utils.getProgressDialog(getContext(), false, false, getString(R.string.signing_ellipsis));
                 pd.show();
                 new Thread() {
                     public void run() {
@@ -277,7 +190,7 @@ public class SecurityFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PASSCODE_REQUEST_CODE && resultCode == RESULT_OK) {
-            pd = Utils.getProgressDialog(getContext(), false, false, "Signing...");
+            pd = Utils.getProgressDialog(getContext(), false, false, getString(R.string.signing_ellipsis));
             pd.show();
             new Thread() {
                 public void run() {
@@ -416,164 +329,168 @@ public class SecurityFragment extends Fragment {
         }
     }
 
+    private void promptPass() {
+        if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
+            Intent intent = new Intent(getContext(), EnterPassCode.class);
+            startActivityForResult(intent, PASSCODE_REQUEST_CODE);
+        } else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showPasswordDialog();
+                }
+            });
+        }
+    }
+
     private void checkBiometric() {
         if (getActivity() == null || getContext() == null) {
             return;
         }
 
-        if (!util.getBoolean(Constants.USE_BIOMETRIC, false)) {
+        String biometricOption = util.get(Constants.USE_BIOMETRIC);
+        if (biometricOption.equals(Constants.OFF)) {
             System.out.println("Biometric not enabled in settings");
-            showPasswordDialog();
+            promptPass();
             return;
         }
 
-        if (Utils.Biometric.isSupportBiometricPrompt(getContext())) {
-            displayBiometricPrompt();
-        } else if (Utils.Biometric.isSupportFingerprint(getContext())) {
-            System.out.println("Device does support biometric prompt");
-            showFingerprintDialog();
-        } else {
-            showPasswordDialog();
+        if (!Utils.Biometric.displayBiometricPrompt(getActivity(), authenticationCallback)) {
+            Utils.showMessage(getActivity(), getString(R.string.no_fingerprint_error), Toast.LENGTH_LONG);
         }
     }
 
-    @SuppressLint("NewApi")
-    private void displayBiometricPrompt() {
-        if (getActivity() == null || getContext() == null) {
-            return;
-        }
-
-        try {
-            Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
-            Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
-
-            if (signature != null) {
-
-                BiometricPrompt biometricPrompt = new BiometricPrompt.Builder(getContext())
-                        .setTitle(getString(R.string.authentication_required))
-                        .setNegativeButton("Cancel", getActivity().getMainExecutor(), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .build();
-
-                biometricPrompt.authenticate(new BiometricPrompt.CryptoObject(signature), getBiometricCancellationSignal(), getActivity().getMainExecutor(), biometricAuthenticationCallback);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showFingerprintDialog() {
-        if (getContext() == null || getActivity() == null) {
-            return;
-        }
-
-        FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getContext());
-        if (fingerprintManager.hasEnrolledFingerprints()) {
-            try {
-                Utils.Biometric.generateKeyPair(Constants.SPENDING_PASSPHRASE_TYPE, true);
-                Signature signature = Utils.Biometric.initSignature(Constants.SPENDING_PASSPHRASE_TYPE);
-
-                if (signature != null) {
-
-                    fingerprintManager.authenticate(new FingerprintManagerCompat.CryptoObject(signature), 0,
-                            getFingerprintCancellationSignal(), fingerprintAuthCallback, null);
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            biometricDialogV23 = new BiometricDialogV23(getContext());
-                            biometricDialogV23.setTitle(R.string.authentication_required);
-                            biometricDialogV23.show();
-                        }
-                    });
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            showPasswordDialog();
-        }
-    }
-
-    @SuppressLint("NewApi")
-    private CancellationSignal getBiometricCancellationSignal() {
-        // With this cancel signal, we can cancel biometric prompt operation
-        CancellationSignal cancellationSignal = new CancellationSignal();
-        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
-            @Override
-            public void onCancel() {
-                System.out.println("Cancel result, signal triggered");
-            }
-        });
-
-        return cancellationSignal;
-    }
-
-    @SuppressLint("NewApi")
-    private androidx.core.os.CancellationSignal getFingerprintCancellationSignal() {
-        // With this cancel signal, we can cancel biometric prompt operation
-        androidx.core.os.CancellationSignal cancellationSignal = new androidx.core.os.CancellationSignal();
-        cancellationSignal.setOnCancelListener(new androidx.core.os.CancellationSignal.OnCancelListener() {
-            @Override
-            public void onCancel() {
-                System.out.println("Cancel result, signal triggered");
-            }
-        });
-
-        return cancellationSignal;
-    }
-
-    @SuppressLint("NewApi")
-    private BiometricPrompt.AuthenticationCallback biometricAuthenticationCallback = new BiometricPrompt.AuthenticationCallback() {
-
+    private BiometricPrompt.AuthenticationCallback authenticationCallback = new BiometricPrompt.AuthenticationCallback() {
         @Override
-        public void onAuthenticationError(int errorCode, CharSequence errString) {
+        public void onAuthenticationError(final int errorCode, @NonNull final CharSequence errString) {
             super.onAuthenticationError(errorCode, errString);
-            Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
+            if (getContext() == null || getActivity() == null) {
+                return;
+            }
+
+            System.out.println("Biometric Error Code: " + errorCode + " Error String: " + errString);
+
+            if(errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON){
+                return;
+            }
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final String message = Utils.Biometric.translateError(getContext(), errorCode);
+                    if (message != null) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
         }
 
         @Override
-        public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+        public void onAuthenticationSucceeded(@NonNull androidx.biometric.BiometricPrompt.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
-            showPasswordDialog();
+            if (getContext() == null || getActivity() == null) {
+                return;
+            }
+
+            String biometricOption = util.get(Constants.USE_BIOMETRIC);
+            if (biometricOption.equals(Constants.FINGERPRINT)) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            pd = Utils.getProgressDialog(getContext(), false, false, getString(R.string.signing_ellipsis));
+                            pd.show();
+
+                            String pass = Utils.Biometric.getPassFromKeystore(getContext(), Constants.SPENDING_PASSPHRASE_TYPE);
+                            signMessage(pass.getBytes());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                return;
+            }
+
+            promptPass();
         }
     };
 
-    private FingerprintManagerCompat.AuthenticationCallback fingerprintAuthCallback = new FingerprintManagerCompat.AuthenticationCallback() {
+    BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
-        public void onAuthenticationError(int errMsgId, CharSequence errString) {
-            super.onAuthenticationError(errMsgId, errString);
-            Toast.makeText(getContext(), errString, Toast.LENGTH_LONG).show();
-            if (biometricDialogV23 != null) {
-                biometricDialogV23.dismiss();
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)) {
+                if (!WalletData.getInstance().syncing) {
+                    layout.setVisibility(View.VISIBLE);
+                } else {
+                    layout.setVisibility(View.GONE);
+                }
             }
         }
+    };
 
+    private TextWatcher validateAddressWatcher = new TextWatcher() {
         @Override
-        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-            super.onAuthenticationHelp(helpMsgId, helpString);
-            Toast.makeText(getContext(), helpString, Toast.LENGTH_SHORT).show();
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
         }
 
         @Override
-        public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
-            super.onAuthenticationSucceeded(result);
-            if (biometricDialogV23 != null) {
-                biometricDialogV23.dismiss();
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkCopyButton();
+            verifyMessage();
+            if (s.toString().trim().equals("")) {
+                tvValidateAddress.setText(null);
+                toggleMessageButton(false);
+                return;
             }
 
-            showPasswordDialog();
+            if (wallet.isAddressValid(s.toString().trim())) {
+                if (wallet.haveAddress(s.toString().trim())) {
+                    tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.bluePendingTextColor));
+                    tvValidateAddress.setText(R.string.owned_validate_address);
+                    toggleMessageButton(true);
+                    return;
+                }
+                tvValidateAddress.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.greenTextColor));
+                tvValidateAddress.setText(Html.fromHtml(getString(R.string.external_validate_address)));
+                toggleMessageButton(false);
+            } else {
+                tvValidateAddress.setTextColor(Color.RED);
+                tvValidateAddress.setText(R.string.invalid_address);
+                toggleMessageButton(false);
+            }
+        }
+    };
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
         }
 
         @Override
-        public void onAuthenticationFailed() {
-            super.onAuthenticationFailed();
-            Toast.makeText(getContext(), R.string.biometric_auth_failed, Toast.LENGTH_SHORT).show();
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkCopyButton();
+            verifyMessage();
+
+            if (etSignature.getText().toString().equals("") && wallet.isAddressValid(etAddress.getText().toString())) {
+                toggleMessageButton(true);
+            } else {
+                toggleMessageButton(false);
+            }
         }
     };
 }

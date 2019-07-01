@@ -103,6 +103,12 @@ class ChangePasswordFragment : Fragment(), View.OnKeyListener {
                     util.set(Constants.STARTUP_PASSPHRASE_TYPE, Constants.PASSWORD)
                 }
 
+                // Update saved pass
+                val biometricOption = util.get(Constants.USE_BIOMETRIC)
+                if (biometricOption == Constants.FINGERPRINT) {
+                    Utils.Biometric.savePassToKeystore(context, password, Constants.SPENDING_PASSPHRASE_TYPE)
+                }
+
                 activity!!.runOnUiThread {
                     if (pd!!.isShowing) {
                         pd!!.dismiss()
