@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private SecurityFragment securityFragment = new SecurityFragment();
 
     private WalletData walletData;
-    private PreferenceUtil preferenceUtil;
+    private PreferenceUtil util;
     private NotificationManager notificationManager;
     private Animation rotateAnimation;
     private SoundPool alertSound;
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
         registerNotificationChannel();
 
-        preferenceUtil = new PreferenceUtil(this);
+        util = new PreferenceUtil(this);
         walletData = WalletData.getInstance();
 
         if (walletData.wallet == null) {
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             Utils.restartApp(this);
         }
 
-        noWalletCreated = preferenceUtil.getBoolean(Constants.NO_WALLET_CREATED);
+        noWalletCreated = util.getBoolean(Constants.NO_WALLET_CREATED);
 
         if (noWalletCreated) {
             displayCreateWalletPrompt();
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     protected void onResume() {
         super.onResume();
         isForeground = true;
-        noWalletCreated = preferenceUtil.getBoolean(Constants.NO_WALLET_CREATED);
+        noWalletCreated = util.getBoolean(Constants.NO_WALLET_CREATED);
 
         if (!noWalletCreated && !isSyncing) {
             startSync();
@@ -338,10 +338,10 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     public void displayBalance() {
         try {
-            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(walletData.wallet.getAccounts(preferenceUtil.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(walletData.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
             long walletBalance = 0;
             for (int i = 0; i < accounts.size(); i++) {
-                if (preferenceUtil.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {
+                if (util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {
                     continue;
                 }
                 walletBalance += accounts.get(i).getBalance().getTotal();
@@ -356,17 +356,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private void checkWifiSync() {
 
         // One-time notice
-        if (preferenceUtil.getBoolean(Constants.FIRST_RUN, true)) {
+        if (util.getBoolean(Constants.FIRST_RUN, true)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.welcome_title)
                     .setMessage(R.string.first_run_notice)
                     .setPositiveButton(R.string.ok, null)
                     .show();
 
-            preferenceUtil.setBoolean(Constants.FIRST_RUN, false);
+            util.setBoolean(Constants.FIRST_RUN, false);
         }
 
-        if (!preferenceUtil.getBoolean(Constants.WIFI_SYNC, false)) {
+        if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
             // Check if wifi is connected
             ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectionManager != null) {
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     public void onClick(DialogInterface dialog, int which) {
                         startSyncing();
                         WiFiSyncDialog syncDialog = (WiFiSyncDialog) dialog;
-                        preferenceUtil.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
+                        util.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
                     }
                 });
 
@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         walletData.syncing = true;
         sendBroadcast(new Intent(Constants.SYNCED));
 
-        if (Integer.parseInt(preferenceUtil.get(Constants.NETWORK_MODES, "0")) == 0) {
+        if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
             setConnectionStatus(R.string.connecting_to_peers);
         } else {
             setConnectionStatus(R.string.connecting_to_rpc_server);
@@ -691,20 +691,20 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 historyFragment.newTransaction(transaction);
             }
 
-            if (preferenceUtil.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
+            if (util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
                 double fee = obj.getDouble(Constants.FEE);
                 if (fee == 0) {
                     BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
 
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
-                    preferenceUtil.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
+                    util.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
                     sendNotification(format.format(amount), (int) totalInput + (int) totalOutput + (int) transaction.getTimestamp());
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            if (preferenceUtil.getBoolean(Constants.DEBUG_MESSAGES)) {
+            if (util.getBoolean(Constants.DEBUG_MESSAGES)) {
                 showText(e.getMessage());
             }
         }
@@ -722,7 +722,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                preferenceUtil.setInt(Constants.TRANSACTION_HEIGHT, height);
+                util.setInt(Constants.TRANSACTION_HEIGHT, height);
                 displayBalance();
 
                 if (currentFragment instanceof OverviewFragment) {
@@ -740,7 +740,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onBlockAttached(int height, long timestamp) {
         this.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
-        if (preferenceUtil.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
         if (!walletData.syncing) {
@@ -825,9 +825,9 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
-                if (Integer.parseInt(preferenceUtil.get(Constants.NETWORK_MODES, "0")) == 0) {
+                if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
                     setConnectionStatus(R.string.connecting_to_peers);
-                    String peerAddresses = preferenceUtil.get(Constants.PEER_IP);
+                    String peerAddresses = util.get(Constants.PEER_IP);
                     try {
                         walletData.wallet.restartSpvSync(peerAddresses);
                     } catch (Exception e) {
@@ -835,7 +835,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                     }
                 } else {
                     setConnectionStatus(R.string.connecting_to_rpc_server);
-                    String remoteNodeAddress = preferenceUtil.get(Constants.REMOTE_NODE_ADDRESS);
+                    String remoteNodeAddress = util.get(Constants.REMOTE_NODE_ADDRESS);
                     try {
                         walletData.wallet.restartRpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).getBytes());
                     } catch (Exception e) {
