@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 
 /**
@@ -25,6 +26,7 @@ import com.dcrandroid.util.Utils;
 public class SetupWalletActivity extends BaseActivity {
 
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
+    PreferenceUtil preferenceUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +39,13 @@ public class SetupWalletActivity extends BaseActivity {
 
         buildDate.setText(BuildConfig.VERSION_NAME);
 
+        preferenceUtil = new PreferenceUtil(this);
+
         createWalletLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
+                preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
                 Intent i = new Intent(SetupWalletActivity.this, SaveSeedActivity.class);
                 startActivity(i);
             }
@@ -50,6 +55,7 @@ public class SetupWalletActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
+                preferenceUtil.setBoolean(Constants.RESTORE_WALLET, true);
                 Intent i = new Intent(SetupWalletActivity.this, ConfirmSeedActivity.class)
                         .putExtra(Constants.SEED, Utils.getWordList(SetupWalletActivity.this))
                         .putExtra(Constants.RESTORE, true);
