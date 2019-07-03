@@ -16,7 +16,6 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.RelativeLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
@@ -34,7 +33,7 @@ import kotlin.collections.ArrayList
 private const val CLICK_THRESHOLD = 300 //millisecond
 
 // TODO: Split this class into VerifySeedActivity  for old wallet and EnterSeedActivity for new wallet.
-class ConfirmSeedActivity : AppCompatActivity(), View.OnTouchListener {
+class ConfirmSeedActivity : BaseActivity(), View.OnTouchListener {
 
     private var restore: Boolean = false
     private var verifiedSeed: Boolean = false
@@ -57,10 +56,6 @@ class ConfirmSeedActivity : AppCompatActivity(), View.OnTouchListener {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        }
         setContentView(R.layout.confirm_seed_page)
         recyclerViewSeeds.isNestedScrollingEnabled = false
         linearLayoutManager = LinearLayoutManager(this)

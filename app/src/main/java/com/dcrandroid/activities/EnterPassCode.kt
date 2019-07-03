@@ -8,17 +8,14 @@ package com.dcrandroid.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.KeyPad
 import kotlinx.android.synthetic.main.passcode.*
 
-class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
+class EnterPassCode : BaseActivity(), KeyPad.KeyPadListener {
 
     private var keyPad: KeyPad? = null
     private var isChange: Boolean? = null
@@ -26,10 +23,7 @@ class EnterPassCode : AppCompatActivity(), KeyPad.KeyPadListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        }
+
         setContentView(R.layout.passcode)
 
         pin_strength.visibility = View.GONE

@@ -6,17 +6,13 @@
 
 package com.dcrandroid.activities
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionDetailsAdapter
@@ -25,19 +21,18 @@ import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
 import dcrlibwallet.LibWallet
 import org.json.JSONObject
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TransactionDetailsActivity: AppCompatActivity() {
+class TransactionDetailsActivity : BaseActivity() {
 
     private var value: TextView? = null
-    private var date:TextView? = null
-    private var status:TextView? = null
-    private var txType:TextView? = null
-    private var confirmation:TextView? = null
-    private var transactionFee:TextView? = null
-    private var tvHash:TextView? = null
+    private var date: TextView? = null
+    private var status: TextView? = null
+    private var txType: TextView? = null
+    private var confirmation: TextView? = null
+    private var transactionFee: TextView? = null
+    private var tvHash: TextView? = null
 
     private var mListView: ListView? = null
 
@@ -84,11 +79,6 @@ class TransactionDetailsActivity: AppCompatActivity() {
             return
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        }
-
         title = getString(R.string.Transaction_details)
         setContentView(R.layout.transaction_details_view)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -113,7 +103,7 @@ class TransactionDetailsActivity: AppCompatActivity() {
         if (intent.getBooleanExtra(Constants.NO_INFO, false)) {
             getTransaction()
             return
-        }else{
+        } else {
             transaction = intent.getSerializableExtra(Constants.TRANSACTION) as Transaction
             if (transaction == null) {
                 println("transaction is null")
@@ -168,17 +158,17 @@ class TransactionDetailsActivity: AppCompatActivity() {
         }
     }
 
-    private fun getTransaction(){
-        try{
+    private fun getTransaction() {
+        try {
             val txHash = intent.getStringExtra(Constants.HASH) ?: return
             transaction = TransactionsParser.parseTransaction(wallet!!.getTransaction(Utils.getHash(txHash)))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun loadInOut(){
+    private fun loadInOut() {
         val usedInput = transaction!!.inputs
         val usedOutput = transaction!!.outputs
 
@@ -189,7 +179,7 @@ class TransactionDetailsActivity: AppCompatActivity() {
         items!!.add(TransactionDetailsAdapter.TransactionDebitCredit(getString(R.string.inputs),
                 TransactionDetailsAdapter.TransactionDebitCredit.ItemType.HEADER)) // Inputs Header
 
-        try{
+        try {
             val rawJson = wallet!!.decodeTransaction(Utils.getHash(transaction!!.hash))
             val parent = JSONObject(rawJson)
             val inputs = parent.getJSONArray(Constants.INPUTS)
@@ -302,7 +292,7 @@ class TransactionDetailsActivity: AppCompatActivity() {
             }
 
             setListViewHeight()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -317,7 +307,7 @@ class TransactionDetailsActivity: AppCompatActivity() {
             R.id.tx_details_tx_hash -> Utils.copyToClipboard(this, transaction!!.hash, R.string.tx_hash_copy)
             R.id.tx_details_raw_tx -> Utils.copyToClipboard(this, transaction!!.raw, R.string.raw_tx_copied)
             R.id.tx_viewOnDcrData -> {
-                val url = if(BuildConfig.IS_TESTNET) {
+                val url = if (BuildConfig.IS_TESTNET) {
                     "https://testnet.dcrdata.org/tx/" + transaction!!.hash
                 } else {
                     "https://mainnet.dcrdata.org/tx/" + transaction!!.hash

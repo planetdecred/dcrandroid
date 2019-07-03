@@ -9,13 +9,11 @@ package com.dcrandroid.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.change_password.*
 
-class EnterPasswordActivity : AppCompatActivity() {
+class EnterPasswordActivity : BaseActivity() {
 
     private var isChange: Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {

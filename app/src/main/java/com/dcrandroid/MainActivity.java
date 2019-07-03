@@ -49,6 +49,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.dcrandroid.activities.BaseActivity;
 import com.dcrandroid.activities.SettingsActivity;
 import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
@@ -88,7 +89,7 @@ import dcrlibwallet.HeadersRescanProgressReport;
 import dcrlibwallet.SyncProgressListener;
 import dcrlibwallet.TransactionListener;
 
-public class MainActivity extends AppCompatActivity implements TransactionListener,
+public class MainActivity extends BaseActivity implements TransactionListener,
         SyncProgressListener, View.OnClickListener {
 
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     private Handler handler = new Handler();
     private Intent broadcastIntent = null;
 
-    private int bestBlock = 0, blockNotificationSound, pageID;
+    private int blockNotificationSound, pageID;
     private long bestBlockTimestamp;
     private boolean scanning = false, isForeground;
 
@@ -186,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             mListView.setItemChecked(0, true);
         }
 
+        walletData.bestBlock = walletData.wallet.getBestBlock();
+
         displayOverview();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -229,20 +232,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
-
         setContentView(R.layout.activity_main);
+
+        util = new PreferenceUtil(this);
+        walletData = WalletData.getInstance();
 
         initViews();
 
         registerNotificationChannel();
-
-        util = new PreferenceUtil(this);
-        walletData = WalletData.getInstance();
 
         if (walletData.wallet == null) {
             System.out.println("Restarting app");
@@ -705,13 +702,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
 
     @Override
     public void onBlockAttached(int height, long timestamp) {
-        this.bestBlock = height;
+        walletData.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
         if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
         if (!walletData.syncing) {
-            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
+            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
                 @Override
@@ -776,9 +773,8 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 ((AnimationDrawable) syncIndicator.getBackground()).stop();
                 syncIndicator.setVisibility(View.GONE);
 
-                bestBlock = walletData.wallet.getBestBlock();
                 bestBlockTimestamp = walletData.wallet.getBestBlockTimeStamp();
-                String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), bestBlock);
+                String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
                 setChainStatus(status);
                 setBestBlockTime(bestBlockTimestamp);
 
