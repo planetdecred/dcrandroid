@@ -20,7 +20,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/meta"
+            android:id="@+id/tv_meta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

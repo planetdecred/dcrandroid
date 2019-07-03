@@ -37,10 +37,13 @@ class Proposal : Serializable {
     var voteStatus: VoteStatus? = null
 
     class PoliteiaFile : Serializable {
-        @SerializedName("")
+        @SerializedName("name")
         var name: String? = null
+        @SerializedName("mime")
         var mime: String? = null
+        @SerializedName("digest")
         var digest: String? = null
+        @SerializedName("payload")
         var payload: String? = null
     }
 

@@ -575,5 +575,8 @@
     <string name="enable_politeia_description">Access Politeia Proposals</string>
     <string name="enable_politeia_proposals_notifications">Politeia Proposal Notifications</string>
     <string name="enable_politeia_proposals_notifications_description">Receive Politeia Proposal Notifications</string>
+    <string name="share_proposal_link">Share Proposal Link</string>
+    <string name="proposal_meta_format">updated %1$s\nby %2$s\nversion %2$s - %4$d Comments</string>
+    <string name="proposal_details">Proposal Details</string>
     <!--/Proposals-->
 </resources>

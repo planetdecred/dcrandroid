@@ -11,10 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.activities.ProposalDetails
+import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.Utils
-import java.util.*
-
 
 class ProposalAdapter(private val proposals: List<Proposal>, private val context: Context) : RecyclerView.Adapter<ProposalAdapter.MyViewHolder>() {
 
@@ -25,11 +24,15 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         val proposal = proposals[position]
+
         holder.title.text = proposal.name
-        val meta = String.format(Locale.getDefault(), "updated %s \nby %s \nversion %s - %d Comments",
-                Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, context), proposal.username, proposal.version, proposal.numComments)
+
+        val meta = context.getString(R.string.proposal_meta_format, Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, context),
+                proposal.username, proposal.version, proposal.numComments)
         holder.meta.setText(meta, TextView.BufferType.SPANNABLE)
+
         if (proposal.voteStatus != null && proposal.voteStatus!!.totalVotes != 0) {
             holder.progress.visibility = View.VISIBLE
             holder.progressBar.visibility = View.VISIBLE
@@ -40,10 +43,11 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
             holder.progress.visibility = View.GONE
             holder.progressBar.visibility = View.GONE
         }
+
         holder.view.setOnClickListener {
             val intent = Intent(context, ProposalDetails::class.java)
             val b = Bundle()
-            b.putSerializable("proposal", proposal)
+            b.putSerializable(Constants.PROPOSAL, proposal)
             intent.putExtras(b)
             context.startActivity(intent)
         }
@@ -55,7 +59,7 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
 
     inner class MyViewHolder internal constructor(var view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.title)
-        var meta: TextView = view.findViewById(R.id.meta)
+        var meta: TextView = view.findViewById(R.id.tv_meta)
         var progressBar: ProgressBar = view.findViewById(R.id.progressBar)
         var progress: TextView = view.findViewById(R.id.progress)
     }

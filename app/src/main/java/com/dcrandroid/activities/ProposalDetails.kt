@@ -15,7 +15,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.BuildConfig
@@ -27,20 +26,12 @@ import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.QueryAPI
 import com.dcrandroid.util.Utils
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_proposal_details.*
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
-import java.util.*
 import kotlin.text.Charsets.UTF_8
 
-class ProposalDetails: AppCompatActivity(), QueryAPI.QueryAPICallback {
-
-    private var tv_title: TextView? = null
-    private var tv_description:TextView? = null
-    private var tv_meta:TextView? = null
-    private var tv_progress:TextView? = null
-
-    private var progressBar: ProgressBar? = null
-    private var vote_progress:ProgressBar? = null
+class ProposalDetails : AppCompatActivity(), QueryAPI.QueryAPICallback {
 
     private var proposal: Proposal? = null
 
@@ -54,45 +45,34 @@ class ProposalDetails: AppCompatActivity(), QueryAPI.QueryAPICallback {
             decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
 
-        title = "Proposal Details"
+        title = getString(R.string.proposal_details)
         setContentView(R.layout.activity_proposal_details)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        tv_title = findViewById(R.id.title)
-        tv_description = findViewById(R.id.description)
-        tv_meta = findViewById(R.id.meta)
-        tv_progress = findViewById(R.id.vote_progress)
-
-        vote_progress = findViewById(R.id.progressBar)
-        progressBar = findViewById(R.id.progress)
-
         util = PreferenceUtil(this)
 
-        proposal = intent.getSerializableExtra("proposal") as Proposal
+        proposal = intent.getSerializableExtra(Constants.PROPOSAL) as Proposal
         loadProposal()
     }
 
-    private fun loadProposal(){
-        tv_title!!.text = proposal!!.name
+    private fun loadProposal() {
+        proposal_name.text = proposal!!.name
 
-        val meta = String.format(Locale.getDefault(), "updated %s \nby %s \nversion %s - %d Comments",
-                Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal!!.timestamp, this),
+        val meta = getString(R.string.proposal_meta_format, Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal!!.timestamp, this),
                 proposal!!.username, proposal!!.version, proposal!!.numComments)
-        tv_meta!!.setText(meta, TextView.BufferType.SPANNABLE)
+        tv_meta.setText(meta, TextView.BufferType.SPANNABLE)
 
         progressBar!!.visibility = View.VISIBLE
+
         val userAgent = util!!.get(Constants.USER_AGENT, Constants.EMPTY_STRING)
         val proposalUrl = getString(R.string.proposal_url, BuildConfig.PoliteiaHost, proposal!!.censorshipRecord!!.token)
         QueryAPI(proposalUrl, userAgent, this).execute()
     }
 
-    private fun loadContent(){
+    private fun loadContent() {
         val description = StringBuilder()
-        println("Debug 1 ${proposal!!.files}")
-        for(file in proposal!!.files!!){
-            println("Debug 2")
-            if(file.name == "index.md"){
-                println("Debug 3")
+        for (file in proposal!!.files!!) {
+            if (file.name == "index.md") {
                 try {
                     val payload = file.payload!!
                     val data = Base64.decode(payload, Base64.DEFAULT)
@@ -106,7 +86,7 @@ class ProposalDetails: AppCompatActivity(), QueryAPI.QueryAPICallback {
 
         progressBar!!.visibility = View.GONE
 
-        tv_description!!.text = description.toString()
+        tv_description.text = description.toString()
     }
 
     override fun onQueryAPISuccess(result: String?) {
@@ -116,13 +96,13 @@ class ProposalDetails: AppCompatActivity(), QueryAPI.QueryAPICallback {
                 .registerTypeHierarchyAdapter(Proposal.VoteStatus.OptionsResult::class.java, Deserializer.OptionsResultDeserializer())
                 .create()
         val parentObj = JSONObject(result)
-        proposal = gson.fromJson(parentObj.getJSONObject("proposal").toString(), Proposal::class.java)
+        proposal = gson.fromJson(parentObj.getJSONObject(Constants.PROPOSAL).toString(), Proposal::class.java)
         loadContent()
 
     }
 
     override fun onQueryAPIError(e: Exception) {
-        print("Proposal Error")
+        print("Proposal Error ${e.message}")
         e.printStackTrace()
     }
 
@@ -143,12 +123,13 @@ class ProposalDetails: AppCompatActivity(), QueryAPI.QueryAPICallback {
                 share.type = "text/plain"
                 share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
                 share.putExtra(Intent.EXTRA_SUBJECT, proposal!!.name)
-                share.putExtra(Intent.EXTRA_TEXT, "http://proposals.decred.org/proposals/" + proposal!!.censorshipRecord!!.token!!)
-                startActivity(Intent.createChooser(share, "Share Proposal Link"))
+
+                share.putExtra(Intent.EXTRA_TEXT, "http://${BuildConfig.PoliteiaHost}/proposals/" + proposal!!.censorshipRecord!!.token!!)
+                startActivity(Intent.createChooser(share, getString(R.string.share_proposal_link)))
                 return true
             }
             R.id.open_proposal -> {
-                val url = "http://proposals.decred.org/proposals/" + proposal!!.censorshipRecord!!.token!!
+                val url = "http://${BuildConfig.PoliteiaHost}/proposals/" + proposal!!.censorshipRecord!!.token!!
                 val i = Intent(Intent.ACTION_VIEW)
                 i.data = Uri.parse(url)
                 startActivity(i)
@@ -162,7 +143,7 @@ class ProposalDetails: AppCompatActivity(), QueryAPI.QueryAPICallback {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent!!.action != null && intent.action == Constants.NEW_POLITEIA_PROPOSAL_NOTIFICATION) {
-            proposal = intent.getSerializableExtra("proposal") as Proposal
+            proposal = intent.getSerializableExtra(Constants.PROPOSAL) as Proposal
             loadProposal()
         }
     }

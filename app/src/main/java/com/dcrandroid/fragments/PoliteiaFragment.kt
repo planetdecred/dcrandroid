@@ -7,6 +7,7 @@
 package com.dcrandroid.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,11 +29,14 @@ import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.QueryAPI
 import com.google.gson.GsonBuilder
 import org.json.JSONObject
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
 import java.util.ArrayList
+import javax.net.ssl.*
 
-const val PRE_VOTING = 1
-const val ACTIVE_VOTING = 2
-const val FINISHED_VOTING = 3
+const val PRE_VOTING = 2
+const val ACTIVE_VOTING = 3
+const val FINISHED_VOTING = 4
 const val ABANDONED_PROPOSALS = 6
 
 class PoliteiaFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener, QueryAPI.QueryAPICallback {
@@ -102,7 +106,7 @@ class PoliteiaFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener, QueryA
         filteredProposals.clear()
 
         when(pos){
-            in 1..3 -> filteredProposals.addAll(proposals.filter { it.voteStatus != null && it.voteStatus!!.status == pos })
+            in 1..3 -> filteredProposals.addAll(proposals.filter { it.voteStatus != null && it.voteStatus!!.status == (pos+1) }) // pre-voting: 2, active: 3, finished; 4
             4 -> filteredProposals.addAll(proposals.filter { it.status == ABANDONED_PROPOSALS })
             else -> filteredProposals.addAll(proposals)
         }

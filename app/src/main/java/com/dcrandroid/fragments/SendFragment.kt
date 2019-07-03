@@ -217,7 +217,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, QueryAPI.Qu
 
         rate_unavailable.setOnClickListener {
             it.visibility = View.INVISIBLE
-            GetExchangeRate(getString(R.string.dcr_to_usd_exchange_url), util!!.get(Constants.USER_AGENT, ""), this).execute()
+            QueryAPI(getString(R.string.dcr_to_usd_exchange_url), util!!.get(Constants.USER_AGENT, ""), this).execute()
         }
     }
 

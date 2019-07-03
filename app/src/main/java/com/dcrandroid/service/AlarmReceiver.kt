@@ -15,6 +15,7 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
+import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.BuildConfig
@@ -31,7 +32,8 @@ import org.json.JSONObject
 import java.util.ArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
-const val ACTIVE_VOTING = 2
+const val ACTIVE_VOTING = 3
+const val FINISHED_VOTING = 4
 
 class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
 
@@ -108,12 +110,12 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
                 return@map
             }
 
-            if (!voteStartedTokens.contains(proposal.censorshipRecord!!.token) && status.status == 2 && votingStartNotifications) {
+            if (!voteStartedTokens.contains(proposal.censorshipRecord!!.token) && status.status == ACTIVE_VOTING && votingStartNotifications) {
                 sendNotification(proposal)
                 if(voteStartedTokens.indexOf(proposal.censorshipRecord!!.token) < 0){
                     voteStartedTokens.add(proposal.censorshipRecord!!.token)
                 }
-            }else if (!voteFinishedTokens.contains(proposal.censorshipRecord!!.token) && status.status == 3 && votingEndNotifications) {
+            }else if (!voteFinishedTokens.contains(proposal.censorshipRecord!!.token) && status.status == FINISHED_VOTING && votingEndNotifications) {
                 sendNotification(proposal)
                 if(voteFinishedTokens.indexOf(proposal.censorshipRecord!!.token) < 0){
                     voteFinishedTokens.add(proposal.censorshipRecord!!.token)
@@ -169,7 +171,7 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
 
     override fun onQueryAPIError(e: Exception) {
         e.printStackTrace()
-        //TODO: Test
+        Looper.prepare()
         Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
     }
 
@@ -185,7 +187,7 @@ class AlarmReceiver: BroadcastReceiver(), QueryAPI.QueryAPICallback {
 
             override fun onQueryAPIError(e: Exception) {
                 e.printStackTrace()
-                //TODO: Test
+                Looper.prepare()
                 Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }).execute()

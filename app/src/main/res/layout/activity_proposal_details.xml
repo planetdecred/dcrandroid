@@ -35,14 +35,14 @@
                 android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/proposal_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/meta"
+                    android:id="@+id/tv_meta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -72,7 +72,7 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/description"
+                    android:id="@+id/tv_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
