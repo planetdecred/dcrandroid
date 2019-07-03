@@ -125,7 +125,7 @@ class PoliteiaFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener, QueryA
                 .create()
 
         var parentObj = JSONObject(proposalsJson)
-        val tempProposals = gson.fromJson(parentObj.getJSONArray("proposals").toString(), Array<Proposal>::class.java)
+        val tempProposals = gson.fromJson(parentObj.getJSONArray(Constants.PROPOSALS).toString(), Array<Proposal>::class.java)
         proposals.clear()
         proposals.addAll(tempProposals)
 
@@ -139,9 +139,9 @@ class PoliteiaFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener, QueryA
             }
         }
 
-        val preVoting = voteStatus.count { it.status == PRE_VOTING }
-        val activeVoting = voteStatus.count { it.status == ACTIVE_VOTING }
-        val finishedVoting = voteStatus.count { it.status == FINISHED_VOTING }
+        val preVoting = proposals.count { it.status == PRE_VOTING }
+        val activeVoting = proposals.count { it.status == ACTIVE_VOTING }
+        val finishedVoting = proposals.count { it.status == FINISHED_VOTING }
         val abandoned = proposals.count { it.status == ABANDONED_PROPOSALS }
 
         filters.clear()
