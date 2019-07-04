@@ -195,7 +195,7 @@
     <string name="seed_restore">Seed Restore</string>
     <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
     <string name="correctWordIs">Word #</string>
-    <string name="verify_seed_instruction">Tap here to verify your seed to avoid losing your wallet permanently.</string>
+    <string name="backup_wallet_instruction">Back up your wallet</string>
     <!--/Seed-->
 
     <!--Balance-->
