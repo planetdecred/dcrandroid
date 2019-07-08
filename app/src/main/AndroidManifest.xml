@@ -58,6 +58,12 @@
             android:launchMode="singleTask"
             android:theme="@style/LightTheme.NoActionBar" />
         <activity
+            android:name=".activities.VerifySeedActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/LightTheme.NoActionBar" />
+        <activity
             android:name=".activities.SetupWalletActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"

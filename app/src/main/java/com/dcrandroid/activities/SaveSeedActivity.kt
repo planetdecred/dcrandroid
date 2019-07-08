@@ -45,7 +45,7 @@ class SaveSeedActivity : BaseActivity() {
             recyclerView.adapter = adp
 
             findViewById<Button>(R.id.save_seed_btn_continue).setOnClickListener {
-                val i = Intent(this@SaveSeedActivity, ConfirmSeedActivity::class.java)
+                val i = Intent(this@SaveSeedActivity, VerifySeedActivity::class.java)
                         .putExtra(Constants.SEED, seed)
                         .putExtra(Constants.RESTORE, false)
                 startActivity(i)
