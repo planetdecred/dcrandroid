@@ -704,7 +704,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     public void onBlockAttached(int height, long timestamp) {
         walletData.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
-        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false)) {
+        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false) && !walletData.wallet.isSyncing()) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
         if (!walletData.syncing) {
