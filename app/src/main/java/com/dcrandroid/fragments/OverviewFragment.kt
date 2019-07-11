@@ -80,7 +80,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         transactionAdapter = TransactionAdapter(transactionList, context!!)
         iv_sync_indicator.setBackgroundResource(R.drawable.sync_animation)
 
-        if (!walletData!!.syncing) {
+        if (!walletData!!.wallet.isSyncing) {
             iv_sync_indicator.post {
                 val syncAnimation = iv_sync_indicator.background as AnimationDrawable
                 syncAnimation.start()
@@ -222,7 +222,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
     }
 
     private fun getBalance() {
-        if (walletData!!.syncing) {
+        if (walletData!!.wallet.isSyncing) {
             return
         }
 
@@ -272,7 +272,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
 
     private fun getTransactions() {
         activity!!.runOnUiThread { swipe_refresh_layout2.isRefreshing = true }
-        if (walletData!!.syncing) {
+        if (walletData!!.wallet.isSyncing) {
             no_history.setText(R.string.synchronizing)
             swipe_refresh_layout2.isRefreshing = false
             return
@@ -379,7 +379,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
     override fun onResume() {
         super.onResume()
 
-        if (walletData!!.syncing) {
+        if (walletData!!.wallet.isSyncing) {
             overview_sync_layout.visibility = View.VISIBLE
             iv_sync_indicator.visibility = View.VISIBLE
             overview_av_balance.visibility = View.GONE
