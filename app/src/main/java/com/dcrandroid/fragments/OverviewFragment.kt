@@ -42,7 +42,6 @@ import kotlinx.android.synthetic.main.overview_sync_layout.*
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
@@ -325,8 +324,10 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                         activity!!.runOnUiThread {
                             transactionList.clear()
                             transactionList.addAll(transactions)
-                            val latestTx = Collections.min<Transaction>(transactionList, TransactionComparator.MinConfirmationSort())
-                            latestTransactionHeight = latestTx.height + 1
+
+                            latestTransactionHeight = transactions[0].height
+                            transactionList.forEach { latestTransactionHeight = if (it.height < latestTransactionHeight) it.height else latestTransactionHeight }
+                            latestTransactionHeight += 1
 
                             val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
 

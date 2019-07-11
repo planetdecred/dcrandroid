@@ -29,28 +29,25 @@ import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.content_history.*
 import java.util.*
-
-const val SENT_TX = 0
-const val RECEIVED_TX = 1
-const val TRANSFERED_TX = 2
 
 class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
     private var isForeground: Boolean = false
-    private var transactionTypeSelected = ""
 
     private var transactionAdapter: TransactionAdapter? = null
     private var sortSpinnerAdapter: ArrayAdapter<String>? = null
 
     private val transactionList = ArrayList<Transaction>()
-    private var fixedTransactionList: ArrayList<Transaction> = ArrayList()
     private val availableTxTypes = ArrayList<String>()
 
     private var walletData: WalletData? = null
+    private val wallet: LibWallet
+        get() = walletData!!.wallet
 
     private var util: PreferenceUtil? = null
 
@@ -60,6 +57,22 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private val YOURSELF: String by lazy { getString(R.string.yourself) }
     private val STAKING: String by lazy { getString(R.string.staking) }
     private val COINBASE: String by lazy { getString(R.string.coinbase) }
+
+    private var transactionTypeSelected = ""
+    private val selectedTxFilter: Int
+        get() {
+
+            val t = transactionTypeSelected
+
+            return when {
+                t.startsWith(SENT) -> Dcrlibwallet.TxFilterSent
+                t.startsWith(RECEIVED) -> Dcrlibwallet.TxFilterReceived
+                t.startsWith(YOURSELF) -> Dcrlibwallet.TxFilterTransferred
+                t.startsWith(STAKING) -> Dcrlibwallet.TxFilterStaking
+                t.startsWith(COINBASE) -> Dcrlibwallet.TxFilterCoinBase
+                else -> Dcrlibwallet.TxFilterAll
+            }
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.content_history, container, false)
@@ -107,11 +120,11 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         history_recycler_view.adapter = transactionAdapter
         registerForContextMenu(history_recycler_view)
 
-        availableTxTypes.add(ALL)
-
         sortSpinnerAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
         sortSpinnerAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerHistory.adapter = sortSpinnerAdapter
+
+        loadTxFilters()
 
         transactionTypeSelected = ALL
         spinnerHistory.setSelection(0, false)
@@ -144,6 +157,33 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         isForeground = false
     }
 
+    private fun loadTxFilters() {
+
+        availableTxTypes.clear()
+
+        val txCount = wallet.countTransactions(Dcrlibwallet.TxFilterAll)
+        val sentTxCount = wallet.countTransactions(Dcrlibwallet.TxFilterSent)
+        val receivedTxCount = wallet.countTransactions(Dcrlibwallet.TxFilterReceived)
+        val transferredTxCount = wallet.countTransactions(Dcrlibwallet.TxFilterTransferred)
+        val stakingTxCount = wallet.countTransactions(Dcrlibwallet.TxFilterStaking)
+        val coinbaseTxCount = wallet.countTransactions(Dcrlibwallet.TxFilterCoinBase)
+
+        availableTxTypes.add("$ALL ($txCount)")
+        availableTxTypes.add("$SENT ($sentTxCount)")
+        availableTxTypes.add("$RECEIVED ($receivedTxCount)")
+        availableTxTypes.add("$YOURSELF ($transferredTxCount)")
+
+        if (stakingTxCount > 0) {
+            availableTxTypes.add("$STAKING ($stakingTxCount)")
+        }
+
+        if (coinbaseTxCount > 0) {
+            availableTxTypes.add("$COINBASE ($coinbaseTxCount)")
+        }
+
+        sortSpinnerAdapter!!.notifyDataSetChanged()
+    }
+
     private fun prepareHistoryData() {
         if (!isForeground) {
             needsUpdate = true
@@ -172,11 +212,10 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         object : Thread() {
             override fun run() {
                 try {
-                    val jsonResult = walletData!!.wallet.getTransactions(0, Dcrlibwallet.TxFilterAll)
+                    val jsonResult = walletData!!.wallet.getTransactions(0, selectedTxFilter)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
-
                     val transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
                     activity!!.runOnUiThread {
@@ -188,78 +227,52 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                 swipe_refresh_layout.isRefreshing = false
                             }
                         } else {
-                            fixedTransactionList.clear()
-                            fixedTransactionList.addAll(transactions)
+                            transactionList.clear()
+                            transactionList.addAll(transactions)
 
-                            val latestTx = Collections.min(fixedTransactionList, TransactionComparator.MinConfirmationSort())
-                            latestTransactionHeight = latestTx.height + 1
+                            latestTransactionHeight = transactions[0].height
+                            transactionList.forEach { latestTransactionHeight = if (it.height < latestTransactionHeight) it.height else latestTransactionHeight }
+                            latestTransactionHeight += 1
 
-                            if (fixedTransactionList.size > 0) {
+                            if (transactionList.size > 0 && selectedTxFilter == Dcrlibwallet.TxFilterAll) {
                                 val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
                                 if (recentTransactionHash.isNotEmpty()) {
-                                    val hashIndex = fixedTransactionList.indexOfFirst{ it.hash == recentTransactionHash }
+                                    val hashIndex = transactionList.indexOfFirst { it.hash == recentTransactionHash }
 
                                     if (hashIndex == -1) {
                                         // All transactions in this list is new
-                                        fixedTransactionList.animateNewItems(0, fixedTransactionList.size - 1)
+                                        transactionList.animateNewItems(0, transactionList.size - 1)
                                     } else if (hashIndex != 0) {
-                                        fixedTransactionList.animateNewItems(0, hashIndex - 1)
+                                        transactionList.animateNewItems(0, hashIndex - 1)
                                     }
                                 }
 
-                                util!!.set(Constants.RECENT_TRANSACTION_HASH, fixedTransactionList[0].hash)
+                                util!!.set(Constants.RECENT_TRANSACTION_HASH, transactionList[0].hash)
                             }
 
-                            availableTxTypes.clear()
-
-                            availableTxTypes.add("$ALL (${fixedTransactionList.size})")
-                            availableTxTypes.add("$SENT (" + fixedTransactionList.count {
-                                it.direction == SENT_TX && it.type.equals(Constants.REGULAR, ignoreCase = true)
-                            }
-                                    + ")")
-                            availableTxTypes.add("$RECEIVED (" + fixedTransactionList.count {
-                                it.direction == RECEIVED_TX && it.type.equals(Constants.REGULAR, ignoreCase = true)
-                            }
-                                    + ")")
-                            availableTxTypes.add("$YOURSELF (" + fixedTransactionList.count {
-                                it.direction == TRANSFERED_TX && it.type.equals(Constants.REGULAR, ignoreCase = true)
-                            }
-                                    + ")")
-
-                            for (i in fixedTransactionList.indices) {
-                                var type = fixedTransactionList[i].type
-                                type = if (type.equals(Constants.VOTE, ignoreCase = true) || type.equals(Constants.TICKET_PURCHASE, ignoreCase = true)
-                                        || type.equals(Constants.REVOCATION, ignoreCase = true)) {
-                                    "$STAKING (" +
-                                            fixedTransactionList.count {
-                                                it.type.equals(Constants.VOTE, ignoreCase = true)
-                                                        || it.type.equals(Constants.TICKET_PURCHASE, ignoreCase = true)
-                                                        || it.type.equals(Constants.REVOCATION, ignoreCase = true)
-                                            } + ")"
-                                } else if (type.equals(Constants.COINBASE, ignoreCase = true)) {
-                                    "$COINBASE (" + fixedTransactionList.count { it.type.equals(Constants.COINBASE, ignoreCase = true) }
-                                } else {
-                                    continue
-                                }
-
-                                if (!availableTxTypes.contains(type)) {
-                                    availableTxTypes.add(type)
-                                }
-
-                                if (availableTxTypes.size >= 6) { // There're only 5 sort types
-                                    break
-                                }
-                            }
+                            loadTxFilters()
 
                             sortSpinnerAdapter!!.notifyDataSetChanged()
 
-                            sortTransactions()
+                            if (transactionList.size > 0) {
+                                history_recycler_view.visibility = View.VISIBLE
+                                no_history.visibility = View.GONE
+                            } else {
+                                no_history.setText(R.string.no_transactions)
+                                no_history.visibility = View.VISIBLE
+                                history_recycler_view.visibility = View.GONE
+                            }
+
+                            if (swipe_refresh_layout.isRefreshing) {
+                                swipe_refresh_layout.isRefreshing = false
+                            }
+
+                            transactionAdapter!!.notifyDataSetChanged()
                         }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
         }.start()
     }
@@ -268,66 +281,20 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         prepareHistoryData()
     }
 
-    private fun sortTransactions() {
-        println("Sorting transaction ${fixedTransactionList.size}")
-        // TODO: Simplify this using a custom sublist function and a predicate
-        transactionList.clear()
-        if (transactionTypeSelected.startsWith(ALL)) {
-            transactionList.addAll(fixedTransactionList)
-        } else {
-            when{
-                transactionTypeSelected.startsWith(STAKING) ->
-                    transactionList.addAll(fixedTransactionList.filter {
-                        it.type == Constants.VOTE || it.type == Constants.REVOCATION
-                        || it.type == Constants.TICKET_PURCHASE })
-                transactionTypeSelected.startsWith(COINBASE) -> transactionList.addAll(fixedTransactionList.filter { it.type == Constants.COINBASE })
-                transactionTypeSelected.startsWith(SENT) -> transactionList.addAll(fixedTransactionList.filter {
-                    it.type == Constants.REGULAR && it.direction == SENT_TX
-                })
-                transactionTypeSelected.startsWith(RECEIVED) -> transactionList.addAll(fixedTransactionList.filter {
-                    it.type == Constants.REGULAR && it.direction == RECEIVED_TX
-                })
-                transactionTypeSelected.startsWith(YOURSELF) -> transactionList.addAll(fixedTransactionList.filter {
-                    it.type == Constants.REGULAR && it.direction == TRANSFERED_TX
-                })
-            }
-        }
-
-        if (transactionList.size > 0) {
-            history_recycler_view.visibility = View.VISIBLE
-            no_history.visibility = View.GONE
-        } else {
-            no_history.setText(R.string.no_transactions)
-            no_history.visibility = View.VISIBLE
-            history_recycler_view.visibility = View.GONE
-        }
-
-        if (swipe_refresh_layout.isRefreshing) {
-            swipe_refresh_layout.isRefreshing = false
-        }
-
-        transactionAdapter!!.notifyDataSetChanged()
-    }
-
     fun newTransaction(transaction: Transaction) {
-        if (transactionList.find{ it.hash == transaction.hash} != null) {
+        if (transactionList.find { it.hash == transaction.hash } != null) {
             // Transaction is a duplicate
             return
         }
-
-        latestTransactionHeight = transaction.height + 1
-        fixedTransactionList.add(0, transaction)
+        if (transaction.height > 0) {
+            latestTransactionHeight = transaction.height + 1
+        }
+        transactionList.add(0, transaction)
         println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
-        if ((transactionTypeSelected.startsWith(ALL) ||
-                        transactionTypeSelected.startsWith(COINBASE) ||
-                        (transactionTypeSelected.startsWith(SENT) && transaction.direction == SENT_TX) ||
-                        (transactionTypeSelected.startsWith(RECEIVED) && transaction.direction == RECEIVED_TX) ||
-                        (transactionTypeSelected.startsWith(YOURSELF) && transaction.direction == TRANSFERED_TX) ||
-                        transactionTypeSelected.startsWith(STAKING) && (transaction.type == Constants.VOTE ||
-                        transaction.type == Constants.REVOCATION ||
-                        transaction.type == Constants.TICKET_PURCHASE))) {
+        val filter = wallet.determineTxFilter(transaction.type, transaction.direction)
+        if (filter == selectedTxFilter) {
             transaction.animate = true
             transactionList.add(0, transaction)
             history_recycler_view.post {
@@ -338,31 +305,27 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     fun transactionConfirmed(hash: String, height: Int) {
-        for (i in transactionList.indices) {
-            if (transactionList[i].hash == hash) {
-                val transaction = transactionList[i]
-                transaction.height = height
-                transaction.animate = false
-                latestTransactionHeight = transaction.height + 1
-                transactionList[i] = transaction
+        transactionList.forEach {
+            if (it.hash == hash) {
+                it.height = height
+                it.animate = false
+                latestTransactionHeight = it.height + 1
                 activity!!.runOnUiThread { transactionAdapter!!.notifyDataSetChanged() }
-                break
+                return
             }
         }
     }
 
     fun blockAttached(height: Int) {
-        if (height - latestTransactionHeight < 2) {
-            for (i in transactionList.indices) {
-                val tx = transactionList[i]
-                if (height - tx.height >= 2) {
-                    continue
+        if ((height - latestTransactionHeight) < 2) {
+            transactionList.forEach {
+                if ((height - it.height) >= 2) {
+                    it.animate = true
+
+                    if (activity != null) {
+                        activity!!.runOnUiThread { transactionAdapter!!.notifyItemChanged(transactionList.indexOf(it)) }
+                    }
                 }
-                tx.animate = false
-                if (activity == null) {
-                    return
-                }
-                activity!!.runOnUiThread { transactionAdapter!!.notifyItemChanged(i) }
             }
         }
     }
@@ -372,7 +335,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 println("onItemSelected")
                 transactionTypeSelected = availableTxTypes[position]
-                sortTransactions()
+                prepareHistoryData()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
