@@ -53,6 +53,15 @@
                 android:textSize="18sp"
                 android:id="@+id/account_name" />
 
+            <View
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:background="@drawable/ic_edit"
+                android:id="@+id/view_rename_account"
+                android:visibility="gone" />
+
         </LinearLayout>
 
         <LinearLayout
