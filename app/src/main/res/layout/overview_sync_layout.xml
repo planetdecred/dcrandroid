@@ -6,12 +6,14 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:animateLayoutChanges="true"
-    android:id="@+id/overview_sync_layout">
+    android:id="@+id/overview_sync_layout"
+    tools:showIn="@layout/content_overview">
 
     <TextView
         android:layout_width="wrap_content"

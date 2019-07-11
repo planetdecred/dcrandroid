@@ -6,13 +6,14 @@
 
 package com.dcrandroid.activities
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.*
 import com.dcrandroid.data.Constants
+import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
@@ -113,9 +114,12 @@ class VerifySeedActivity : BaseActivity(), SeedTapListener {
             footer.buttonBackground = R.drawable.btn_shape3
             footer.error = null
 
-            val intent = Intent(this, EncryptWallet::class.java)
-            intent.putExtra(Constants.SEED, seedString)
-            startActivity(intent)
+            val util = PreferenceUtil(this)
+            util.set(Constants.SEED, null)
+            util.setBoolean(Constants.VERIFIED_SEED, true)
+
+            setResult(Activity.RESULT_OK)
+            finish()
         } else {
             footer.buttonBackground = R.drawable.btn_shape2
             footer.error = getString(R.string.create_wallet_incorrect_seeds_input)

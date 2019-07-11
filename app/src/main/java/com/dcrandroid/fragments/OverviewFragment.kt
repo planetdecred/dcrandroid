@@ -6,6 +6,7 @@
 
 package com.dcrandroid.fragments
 
+import android.app.Activity.RESULT_OK
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -28,6 +29,7 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainActivity
 import com.dcrandroid.R
 import com.dcrandroid.activities.TransactionDetailsActivity
+import com.dcrandroid.activities.VerifySeedActivity
 import com.dcrandroid.adapter.TransactionAdapter
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
@@ -45,6 +47,7 @@ import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 const val TAG = "OverviewFragment"
+const val VERIFY_SEED_REQUEST_CODE = 5
 
 class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncProgressListener {
 
@@ -171,6 +174,20 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             tap_for_more_info.visibility = View.VISIBLE
         }
 
+        // using true as default as per backwards compatibility
+        // we don't want to tell wallets created before this
+        // feature to verify their seed
+        if (!util!!.getBoolean(Constants.VERIFIED_SEED, true)) {
+            verify_seed.visibility = View.VISIBLE
+
+            verify_seed.setOnClickListener {
+                val seed = util!!.get(Constants.SEED)
+                val i = Intent(context, VerifySeedActivity::class.java)
+                        .putExtra(Constants.SEED, seed)
+                startActivityForResult(i, VERIFY_SEED_REQUEST_CODE)
+            }
+        }
+
         val vto = history_recycler_view2.viewTreeObserver
         if (vto.isAlive) {
             vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -193,6 +210,13 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
 
         walletData!!.wallet.removeSyncProgressListener(TAG)
         walletData!!.wallet.addSyncProgressListener(this, TAG)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK) {
+            verify_seed.visibility = View.GONE
+        }
     }
 
     private fun registerNotificationChannel() {
