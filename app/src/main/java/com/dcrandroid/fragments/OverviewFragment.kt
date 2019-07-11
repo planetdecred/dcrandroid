@@ -12,7 +12,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
@@ -31,9 +30,9 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.TransactionDetailsActivity
 import com.dcrandroid.activities.VerifySeedActivity
 import com.dcrandroid.adapter.TransactionAdapter
-import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
@@ -42,7 +41,6 @@ import kotlinx.android.synthetic.main.overview_sync_layout.*
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 const val TAG = "OverviewFragment"
@@ -50,9 +48,12 @@ const val VERIFY_SEED_REQUEST_CODE = 5
 
 class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncProgressListener {
 
+    private var walletData: WalletData? = null
+    private val wallet: LibWallet
+        get() = walletData!!.wallet
+
     private var transactionAdapter: TransactionAdapter? = null
     private var util: PreferenceUtil? = null
-    private var walletData: WalletData? = null
     private val transactionList = ArrayList<Transaction>()
     private var latestTransactionHeight: Int = 0
     private var needsUpdate = false
@@ -80,23 +81,9 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                 R.color.colorPrimaryDarkBlue)
         swipe_refresh_layout2.setOnRefreshListener(this)
         transactionAdapter = TransactionAdapter(transactionList, context!!)
-        iv_sync_indicator.setBackgroundResource(R.drawable.sync_animation)
 
-        if (!walletData!!.wallet.isSyncing) {
-            iv_sync_indicator.post {
-                val syncAnimation = iv_sync_indicator.background as AnimationDrawable
-                syncAnimation.start()
-            }
-
-            pb_sync_progress.progress = 0
-            overview_sync_layout.visibility = View.VISIBLE
-            tv_synchronizing.setText(R.string.starting_synchronization)
-
-        } else {
-            getBalance()
-            iv_sync_indicator.visibility = View.GONE
-            overview_av_balance.visibility = View.VISIBLE
-        }
+        if (!walletData!!.wallet.isSyncing) setupSyncLayout()
+        else hideSyncLayout()
 
         val mLayoutManager = LinearLayoutManager(context)
         history_recycler_view2.layoutManager = mLayoutManager
@@ -245,35 +232,9 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
     }
 
     private fun getBalance() {
-        if (walletData!!.wallet.isSyncing) {
-            return
-        }
-
-        object : Thread() {
-            override fun run() {
-                try {
-                    if (context == null) {
-                        return
-                    }
-                    val accounts = Account.parse(walletData!!.wallet.getAccounts(if (util!!.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS))
-                    var totalBalance: Long = 0
-                    for (i in accounts.indices) {
-                        if (util!!.getBoolean(Constants.HIDE_WALLET + accounts[i].accountNumber)) {
-                            continue
-                        }
-                        totalBalance += accounts[i].balance.total
-                    }
-                    val finalTotalBalance = totalBalance
-                    if (activity == null) {
-                        return
-                    }
-                    activity!!.runOnUiThread { overview_av_balance.text = CoinFormat.format(Utils.formatDecredWithComma(finalTotalBalance) + " DCR") }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-            }
-        }.start()
+        val requiredConfirmation = if (util!!.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS
+        val totalBalance = wallet.totalWalletBalance(requiredConfirmation, context!!)
+        overview_av_balance.text = CoinFormat.format(Utils.formatDecredWithComma(totalBalance) + " DCR")
     }
 
     private fun prepareHistoryData() {
@@ -302,7 +263,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         }
 
         getBalance()
-        hideSyncIndicator()
 
         object : Thread() {
             override fun run() {
@@ -332,15 +292,15 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                             val recentTransactionHash = util!!.get(Constants.RECENT_TRANSACTION_HASH)
 
                             if (recentTransactionHash.isNotEmpty()) {
-                                val hashIndex = transactionList.find(recentTransactionHash)
+                                val hashIndex = transactionList.indexOfFirst { it.hash == recentTransactionHash }
                                 if (hashIndex == -1) {
                                     // All transactions in this list is new
-                                    transactionList.animateNewItems(0, transactionList.size - 1)
+                                    transactionList.map { it.animate = true }
                                 } else if (hashIndex != 0) {
-                                    transactionList.animateNewItems(0, hashIndex - 1)
+                                    transactionList.mapIndexed { index, it -> if(index < hashIndex) it.animate = true }
                                 }
                             } else {
-                                transactionList.animateNewItems(0, transactionList.size - 1)
+                                transactionList.map { it.animate = true }
                             }
 
                             util!!.set(Constants.RECENT_TRANSACTION_HASH, transactionList[0].hash)
@@ -350,7 +310,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                             println("Hash $txNotificationHash")
 
                             if (txNotificationHash.isNotEmpty() && txNotificationHash != transactionList[0].hash) {
-                                val hashIndex = transactionList.find(txNotificationHash)
+                                val hashIndex = transactionList.indexOfFirst { it.hash == txNotificationHash }
                                 val format = DecimalFormat(getString(R.string.you_received) + " #.######## DCR")
 
                                 if (hashIndex > 0) {
@@ -406,13 +366,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
 
         if (walletData!!.wallet.isSyncing) {
             overview_sync_layout.visibility = View.VISIBLE
-            iv_sync_indicator.visibility = View.VISIBLE
-            overview_av_balance.visibility = View.GONE
-            iv_sync_indicator.post {
-                val syncAnimation = iv_sync_indicator.background as AnimationDrawable
-                syncAnimation.start()
-            }
-
             tv_synchronizing.setText(R.string.starting_synchronization)
         } else {
             hideSyncLayout()
@@ -432,7 +385,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
 
     fun newTransaction(transaction: Transaction) {
 
-        if (transactionList.find(transaction.hash) != -1) {
+        if (transactionList.find { it.hash == transaction.hash } != null) {
             // Transaction is a duplicate
             return
         }
@@ -485,12 +438,6 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                 }
             }
         }
-    }
-
-    private fun hideSyncIndicator() {
-        (iv_sync_indicator.background as AnimationDrawable).stop()
-        iv_sync_indicator.visibility = View.GONE
-        overview_av_balance.visibility = View.VISIBLE
     }
 
     private fun publishProgress(syncProgress: Int, syncStatus: String, remainingSyncTime: Long) {
@@ -613,6 +560,12 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         hideSyncLayout()
     }
 
+    fun setupSyncLayout() {
+        pb_sync_progress.progress = 0
+        overview_sync_layout.visibility = View.VISIBLE
+        tv_synchronizing.setText(R.string.starting_synchronization)
+    }
+
     private fun hideSyncLayout() {
         activity!!.runOnUiThread {
             overview_sync_layout.visibility = View.GONE
@@ -620,35 +573,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             pb_percent_complete.visibility = View.GONE
 
             getBalance()
-            hideSyncIndicator()
             prepareHistoryData()
-        }
-    }
-
-    private fun ArrayList<Transaction>.find(hash: String): Int {
-        for (i in this.indices) {
-            val item = this[i]
-            if (item.hash == hash) {
-                return i
-            }
-        }
-        return -1
-    }
-
-    private fun ArrayList<Transaction>.animateNewItems(start: Int, count: Int) {
-        for (i: Int in start..count) {
-            val item = this[i]
-            item.animate = true
-            transactionAdapter!!.notifyItemChanged(i)
-        }
-    }
-
-    private fun ArrayList<Transaction>.removeDuplicates(txList: ArrayList<Transaction>) {
-        for (transaction in txList) {
-            val index = this.find(transaction.hash)
-            if (index != -1) {
-                this.removeAt(index)
-            }
         }
     }
 }

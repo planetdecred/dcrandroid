@@ -17,7 +17,7 @@ import com.dcrandroid.data.Account
 import com.dcrandroid.util.CoinFormat
 import dcrlibwallet.Dcrlibwallet
 
-class AccountSpinnerAdapter(val accounts: ArrayList<Account>, val inflater: LayoutInflater) : BaseAdapter(), SpinnerAdapter {
+class AccountSpinnerAdapter(val accounts: List<Account>, val inflater: LayoutInflater) : BaseAdapter(), SpinnerAdapter {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var vi = convertView

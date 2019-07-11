@@ -25,10 +25,12 @@ public class Account implements Serializable {
     private int accountNumber, externalKeyCount, internalKeyCount, importedKeyCount;
 
     public static ArrayList<Account> parse(String json) throws JSONException {
+
         JSONObject obj = new JSONObject(json);
         JSONArray acc = obj.getJSONArray("Acc");
         ArrayList<Account> items = new ArrayList<>();
         for (int i = 0; i < acc.length(); i++) {
+
             final JSONObject accJSONObject = acc.getJSONObject(i);
             Account account = new Account();
             account.setAccountNumber(accJSONObject.getInt(Constants.NUMBER));
@@ -37,6 +39,7 @@ public class Account implements Serializable {
             account.setInternalKeyCount(accJSONObject.getInt(Constants.INTERNAL_KEY_COUNT));
             account.setImportedKeyCount(accJSONObject.getInt(Constants.IMPORTED_KEY_COUNT));
             JSONObject balanceObj = accJSONObject.getJSONObject(Constants.BALANCE);
+
             Balance balance = new Balance();
             balance.setTotal(balanceObj.getLong(Constants.TOTAL));
             balance.setSpendable(balanceObj.getLong(Constants.SPENDABLE));
