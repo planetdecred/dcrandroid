@@ -22,9 +22,9 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StatFs;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -42,7 +42,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
@@ -269,7 +268,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
         displayBalance();
 
-        checkWifiSync();
+        checkStorageSpace();
 
         startBlockUpdate();
     }
@@ -319,6 +318,41 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR"));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkStorageSpace() {
+        Long currentTime = System.currentTimeMillis() / 1000; // Divided by 1000 to convert to unix timestamp
+        Long estimatedBlocksSinceGenesis = (currentTime - BuildConfig.GenesisTimestamp) / BuildConfig.TargetTimePerBlock;
+
+        Long estimatedHeadersSize = estimatedBlocksSinceGenesis / 1000; // estimate of block headers(since genesis) size in mb
+        Long freeInternalMemory = getFreeMemory();
+
+        if (estimatedHeadersSize < freeInternalMemory) {
+            String message = getString(R.string.low_storage_message, estimatedHeadersSize, freeInternalMemory);
+
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.low_storage_space)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            checkWifiSync();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            setupSyncedLayout();
+                            sendBroadcast(new Intent(Constants.SYNCED));
+                            setConnectionStatus(R.string.low_storage_space);
+                            connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                        }
+                    })
+                    .show();
+        } else {
+            checkWifiSync();
         }
     }
 
@@ -788,6 +822,8 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             case R.id.tv_connection_status:
                 if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
                     setConnectionStatus(R.string.connecting_to_peers);
+                    connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+
                     String peerAddresses = util.get(Constants.PEER_IP);
                     try {
                         walletData.wallet.restartSpvSync(peerAddresses);
@@ -923,5 +959,13 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
     @Override
     public void debug(DebugInfo debugInfo) {
+    }
+
+    public long getFreeMemory() {
+        StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
+        int blocks = statFs.getAvailableBlocks();
+        int blockSize = statFs.getBlockSize();
+
+        return (blocks * blockSize) / 1048576L; // convert to megabytes
     }
 }
