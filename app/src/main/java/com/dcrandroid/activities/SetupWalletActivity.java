@@ -7,13 +7,14 @@
 package com.dcrandroid.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dcrandroid.BuildConfig;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.util.PreferenceUtil;
@@ -26,22 +27,20 @@ import com.dcrandroid.util.Utils;
 public class SetupWalletActivity extends BaseActivity {
 
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
-    PreferenceUtil preferenceUtil;
+    private PreferenceUtil preferenceUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_setup_page);
-        TextView buildDate = findViewById(R.id.build_date);
-        RelativeLayout createWalletLl = findViewById(R.id.button_create_wallet);
-        RelativeLayout retrieveWalletLl = findViewById(R.id.button_retrieve_wallet);
-
-        buildDate.setText(BuildConfig.VERSION_NAME);
+        LinearLayout restoreView = findViewById(R.id.ll_restore_wallet);
+        LinearLayout createView = findViewById(R.id.ll_create_wallet);
+        TextView tvViewSource = findViewById(R.id.tv_github_link);
 
         preferenceUtil = new PreferenceUtil(this);
 
-        createWalletLl.setOnClickListener(new View.OnClickListener() {
+        createView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
@@ -51,7 +50,7 @@ public class SetupWalletActivity extends BaseActivity {
             }
         });
 
-        retrieveWalletLl.setOnClickListener(new View.OnClickListener() {
+        restoreView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
@@ -62,6 +61,16 @@ public class SetupWalletActivity extends BaseActivity {
                 startActivity(i);
             }
         });
-    }
 
+        tvViewSource.setMovementMethod(LinkMovementMethod.getInstance());
+        tvViewSource.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(
+                        "https://github.com/decred/dcrandroid/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+    }
 }
