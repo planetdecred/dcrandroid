@@ -328,7 +328,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         Long estimatedHeadersSize = estimatedBlocksSinceGenesis / 1000; // estimate of block headers(since genesis) size in mb
         Long freeInternalMemory = getFreeMemory();
 
-        if (estimatedHeadersSize < freeInternalMemory) {
+        if (estimatedHeadersSize > freeInternalMemory) {
             String message = getString(R.string.low_storage_message, estimatedHeadersSize, freeInternalMemory);
 
             new AlertDialog.Builder(this)
