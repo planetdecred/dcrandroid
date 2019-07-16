@@ -38,20 +38,6 @@
             android:textSize="30sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
-        <TextView
-            android:id="@+id/tv_github_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_welcome"
-            android:layout_marginTop="16dp"
-            android:gravity="start|center_vertical"
-            android:drawableEnd="@drawable/ic_arrow_forward_blue"
-            android:drawableRight="@drawable/ic_arrow_forward_blue"
-            android:text="@string/view_source_code"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
         <LinearLayout
             android:id="@+id/ll_create_wallet"
             android:layout_width="match_parent"

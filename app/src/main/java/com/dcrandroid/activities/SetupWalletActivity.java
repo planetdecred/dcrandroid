@@ -7,13 +7,10 @@
 package com.dcrandroid.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
@@ -26,9 +23,6 @@ import com.dcrandroid.util.Utils;
 
 public class SetupWalletActivity extends BaseActivity {
 
-    private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
-    private PreferenceUtil preferenceUtil;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +30,9 @@ public class SetupWalletActivity extends BaseActivity {
         setContentView(R.layout.activity_setup_page);
         LinearLayout restoreView = findViewById(R.id.ll_restore_wallet);
         LinearLayout createView = findViewById(R.id.ll_create_wallet);
-        TextView tvViewSource = findViewById(R.id.tv_github_link);
 
-        preferenceUtil = new PreferenceUtil(this);
+        final PreferenceUtil preferenceUtil = new PreferenceUtil(this);
+        final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
 
         createView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,17 +53,6 @@ public class SetupWalletActivity extends BaseActivity {
                         .putExtra(Constants.SEED, Utils.getWordList(SetupWalletActivity.this))
                         .putExtra(Constants.RESTORE, true);
                 startActivity(i);
-            }
-        });
-
-        tvViewSource.setMovementMethod(LinkMovementMethod.getInstance());
-        tvViewSource.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse(
-                        "https://github.com/decred/dcrandroid/");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
             }
         });
     }
