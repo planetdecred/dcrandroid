@@ -115,6 +115,10 @@
             android:title="@string/crash_title"
             app:iconSpaceReserved="false" />
         <Preference
+            android:key="@string/setting_show_stats"
+            android:title="@string/title_show_stats"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:key="@string/delete_wallet"
             android:title="@string/delete_wallet_title"
             app:iconSpaceReserved="false" />

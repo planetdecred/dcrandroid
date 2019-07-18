@@ -41,5 +41,6 @@ public class MainApplication extends Application {
         super.onCreate();
         PreferenceUtil util = new PreferenceUtil(this);
         util.setInt(Constants.APP_VERSION, BuildConfig.VERSION_CODE);
+        util.setLong(Constants.STARTUP_TIME, System.currentTimeMillis());
     }
 }

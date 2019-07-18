@@ -120,6 +120,12 @@
             android:launchMode="singleTask"
             android:theme="@style/LightTheme.NoActionBar" />
 
+        <activity
+            android:name=".activities.StatsActivity"
+            android:label="@string/title_activity_stats"
+            android:launchMode="singleTask"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <service
             android:name=".service.SyncService"
             android:enabled="true"
@@ -158,6 +164,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
     </application>
 
 </manifest>

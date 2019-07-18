@@ -61,6 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
         private Preference changeStartupPass;
+        private Preference showStats;
         private ProgressDialog pd;
 
         private LibWallet wallet;
@@ -79,6 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
             pd = Utils.getProgressDialog(getActivity(), false, false, "");
             encryptWallet = (SwitchPreference) findPreference(Constants.ENCRYPT);
             changeStartupPass = findPreference("change_startup_passphrase");
+            showStats = findPreference(getString(R.string.setting_show_stats));
             final EditTextPreference remoteNodeAddress = (EditTextPreference) findPreference(getString(R.string.remote_node_address));
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
@@ -272,6 +274,15 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivity(intent);
 
                     return true;
+                }
+            });
+
+            showStats.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getContext(), StatsActivity.class);
+                    startActivity(intent);
+                    return false;
                 }
             });
 

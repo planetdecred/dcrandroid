@@ -375,6 +375,8 @@
     <string name="changing">Changing…</string>
     <string name="setting_startup_pin">Setting startup PIN…</string>
     <string name="setting_startup_password">Setting startup password…</string>
+    <string name="setting_show_stats">show_stats</string>
+    <string name="title_show_stats">Show Stats</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -565,4 +567,18 @@
 
     <string name="external_output_amount">%1$s DCR (external)</string>
     <string name="external_output_account">%1$s DCR (%2$s)</string>
+
+    <!--Stats -->
+    <string name="title_activity_stats">Statistics</string>
+    <string name="stats_build_text">Build:</string>
+    <string name="stats_chain_data_text">Chain Data:</string>
+    <string name="stats_peers_connected_text">Peers Connected:</string>
+    <string name="stats_network_text">Network:</string>
+    <string name="stats_best_block_text">Best Block:</string>
+    <string name="stats_block_timestamp_text">Best Block Timestamp:</string>
+    <string name="stats_block_age_text">Best Block Age:</string>
+    <string name="stats_uptime_text">Uptime:</string>
+    <string name="stats_accounts_text">Accounts:</string>
+    <string name="stats_transactions_text">Transactions:</string>
+    <!-- Stats -->
 </resources>
