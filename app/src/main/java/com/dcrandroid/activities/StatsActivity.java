@@ -34,10 +34,11 @@ public class StatsActivity extends AppCompatActivity {
     private TextView networkType;        // Nettype mainly testnet3 and mainnet
     private TextView bestBlock;          // Chains best block
     private TextView bestBlockTimestamp; // Best block's time stamp
-    private TextView bestBlockAge;       // time diff between bestBlockTimestamp and now
+    private TextView bestBlockAge;       // Time diff between bestBlockTimestamp and now
     private TextView uptime;             // Application uptime
-    private TextView transactions;       // number of transactions executed
-    private TextView accounts;           // number of accounts in the wallet.
+    private TextView transactions;       // Number of transactions executed
+    private TextView accounts;           // Number of accounts in the wallet.
+    private TextView walletFile;         // Location of wallet file
     private WalletData walletData;
     private PreferenceUtil util;
     private Thread uiUpdateThread;
@@ -60,9 +61,13 @@ public class StatsActivity extends AppCompatActivity {
         uptime = findViewById(R.id.stats_uptime_value);
         transactions = findViewById(R.id.stats_transactions_value);
         accounts = findViewById(R.id.stats_accounts_value);
+        walletFile = findViewById(R.id.stats_wallet_file_value);
 
+        // Set static values
         buildName.setText(BuildConfig.VERSION_NAME);
         networkType.setText(BuildConfig.NetType);
+        walletFile.setText(getFilesDir() + "/wallet/" + BuildConfig.NetType + "/walleb.db");
+
         startUIUpdate();
     }
 

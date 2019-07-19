@@ -580,5 +580,6 @@
     <string name="stats_uptime_text">Uptime:</string>
     <string name="stats_accounts_text">Accounts:</string>
     <string name="stats_transactions_text">Transactions:</string>
+    <string name="stats_wallet_file_text">Wallet File:</string>
     <!-- Stats -->
 </resources>

@@ -26,6 +26,14 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="16dp" />
 
+        <!-- End Vertical guide-->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vertical_guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
         <!-- Start Horizontal guide -->
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontal_guideline_start"
@@ -49,7 +57,7 @@
             android:id="@+id/stats_build_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="116dp"
+            android:layout_marginLeft="110dp"
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toEndOf="@id/stats_build_text"
@@ -89,7 +97,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_peers_connected_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_peers_connected_value"
             app:fontFamily="@font/source_sans_pro_regular_family" />
         <TextView
             android:id="@+id/stats_uptime_value"
@@ -111,7 +119,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_uptime_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_uptime_value"
             app:fontFamily="@font/source_sans_pro_regular_family"/>
         <TextView
             android:id="@+id/stats_network_value"
@@ -133,7 +141,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_network_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_network_value"
             app:fontFamily="@font/source_sans_pro_regular_family"
              />
         <TextView
@@ -151,22 +159,23 @@
         <TextView
             android:id="@+id/stats_block_timestamp_text"
             android:text="@string/stats_block_timestamp_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_best_block_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_best_block_value"
             app:fontFamily="@font/source_sans_pro_regular_family"
             />
         <TextView
             android:id="@+id/stats_block_timestamp_value"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/stats_build_value"
             app:layout_constraintTop_toBottomOf="@id/stats_best_block_value"
+            app:layout_constraintEnd_toStartOf="@id/vertical_guideline_end"
             app:fontFamily="@font/source_sans_pro_regular_family"/>
         <!-- Best block timestamp section end -->
 
@@ -179,7 +188,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_block_timestamp_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_block_timestamp_value"
             app:fontFamily="@font/source_sans_pro_regular_family"
             />
         <TextView
@@ -193,6 +202,29 @@
             app:fontFamily="@font/source_sans_pro_regular_family"/>
         <!-- Block age section end -->
 
+        <!-- Wallet file section start -->
+        <TextView
+            android:id="@+id/stats_wallet_file_text"
+            android:text="@string/stats_wallet_file_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/blueGrayFirstTextColor"
+            app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/stats_block_age_value"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
+        <TextView
+            android:id="@+id/stats_wallet_file_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/blueGrayFirstTextColor"
+            app:layout_constraintStart_toStartOf="@id/stats_build_value"
+            app:layout_constraintTop_toBottomOf="@id/stats_block_age_value"
+            app:layout_constraintEnd_toStartOf="@id/vertical_guideline_end"
+            app:fontFamily="@font/source_sans_pro_regular_family"/>
+        <!-- Wallet file section end -->
+
         <!-- Chain data section start -->
         <TextView
             android:id="@+id/stats_chain_data_text"
@@ -202,7 +234,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_block_age_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_wallet_file_value"
             app:fontFamily="@font/source_sans_pro_regular_family" />
         <TextView
             android:id="@+id/stats_chain_data_value"
@@ -211,7 +243,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/stats_build_value"
-            app:layout_constraintTop_toBottomOf="@id/stats_block_age_value"
+            app:layout_constraintTop_toBottomOf="@id/stats_wallet_file_value"
             app:fontFamily="@font/source_sans_pro_regular_family"/>
         <!-- Chain data section end -->
 
@@ -224,7 +256,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_chain_data_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_chain_data_value"
             app:fontFamily="@font/source_sans_pro_regular_family" />
         <TextView
             android:id="@+id/stats_transactions_value"
@@ -246,7 +278,7 @@
             android:textSize="14sp"
             android:textColor="@color/blueGrayFirstTextColor"
             app:layout_constraintStart_toStartOf="@id/vertical_guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/stats_transactions_text"
+            app:layout_constraintTop_toBottomOf="@id/stats_transactions_value"
             app:fontFamily="@font/source_sans_pro_regular" />
         <TextView
             android:id="@+id/stats_accounts_value"
