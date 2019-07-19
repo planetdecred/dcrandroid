@@ -38,67 +38,83 @@
             android:textSize="30sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
-        <LinearLayout
-            android:id="@+id/ll_create_wallet"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_create_wallet"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_padding_size_56"
-            android:layout_above="@+id/ll_restore_wallet"
-            android:background="@drawable/bg_blue_corner_8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/cv_restore_wallet"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_padding_size_20"
-                android:layout_marginLeft="@dimen/margin_padding_size_20"
-                app:srcCompat="@drawable/ic_create_wallet_24px" />
+            <LinearLayout
+                android:id="@+id/ll_create_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_padding_size_56"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_padding_size_16"
-                android:layout_marginLeft="@dimen/margin_padding_size_16"
-                android:text="@string/create_a_new_wallet"
-                android:textColor="@color/white"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/margin_padding_size_16"
+                    app:srcCompat="@drawable/ic_create_wallet_24px" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/create_a_new_wallet"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/edit_text_size_16"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
 
-        <LinearLayout
-            android:id="@+id/ll_restore_wallet"
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_restore_wallet"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_padding_size_56"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/margin_padding_size_16"
-            android:background="@drawable/bg_turquoise_corner_8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="horizontal">
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/turquoise"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_padding_size_20"
-                android:layout_marginLeft="@dimen/margin_padding_size_20"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                app:srcCompat="@drawable/ic_restore_wallet_24px" />
+            <LinearLayout
+                android:id="@+id/ll_restore_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_padding_size_56"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_padding_size_16"
-                android:layout_marginLeft="@dimen/margin_padding_size_16"
-                android:text="@string/restore_existing_wallet"
-                android:textColor="@color/white"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/margin_padding_size_16"
+                    app:srcCompat="@drawable/ic_restore_wallet_24px" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/restore_existing_wallet"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/edit_text_size_16"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
 
     </RelativeLayout>
 
