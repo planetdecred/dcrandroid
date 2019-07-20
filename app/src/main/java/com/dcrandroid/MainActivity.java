@@ -16,12 +16,14 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -653,7 +655,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 historyFragment.newTransaction(transaction);
             }
 
-            if (util.getBoolean(Constants.TRANSACTION_NOTIFICATION, true)) {
+            if (!util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_NONE)) {
                 double fee = obj.getDouble(Constants.FEE);
                 if (fee == 0) {
                     BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
@@ -730,7 +732,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         Intent launchIntent = new Intent(this, MainActivity.class);
         launchIntent.setAction(Constants.NEW_TRANSACTION_NOTIFICATION);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new NotificationCompat.Builder(this, "new transaction")
+        NotificationCompat.Builder notBuilder = new NotificationCompat.Builder(this, "new transaction")
                 .setContentTitle(getString(R.string.new_transaction))
                 .setContentText(amount)
                 .setSmallIcon(R.drawable.ic_notification_icon)
@@ -738,18 +740,33 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 .setAutoCancel(true)
                 .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(launchPendingIntent)
-                .build();
-        Notification groupSummary = new NotificationCompat.Builder(this, "new transaction")
+                .setContentIntent(launchPendingIntent);
+
+        NotificationCompat.Builder groupBuilder = new NotificationCompat.Builder(this, "new transaction")
                 .setContentTitle(getString(R.string.new_transaction))
                 .setContentText(getString(R.string.new_transaction))
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
                 .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .build();
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        if (util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_SOUND_AND_VIBRATE)){
+            notBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            groupBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            notBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
+            groupBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
+        } else if (util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_VIBRATE_ONLY)){
+            notBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
+            groupBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
+        } else if (util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_SOUND_ONLY)){
+            notBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            groupBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        }
+
+
+        Notification groupSummary = groupBuilder.build();
+        Notification notification = notBuilder.build();
         notificationManager.notify(nonce, notification);
         notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }

@@ -104,7 +104,12 @@ public class Constants {
             STAKE_BASE_HASH = "0000000000000000000000000000000000000000000000000000000000000000",
             TRANSACTION_HEIGHT = "transaction_height",
             VERIFIED_SEED = "verified_seed",
-            RECENT_TRANSACTION_HASH = "recent_transaction_hash";
+            RECENT_TRANSACTION_HASH = "recent_transaction_hash",
+            NOTIFICATION_NONE = "0",
+            NOTIFICATION_SILENT = "1",
+            NOTIFICATION_VIBRATE_ONLY = "2",
+            NOTIFICATION_SOUND_ONLY = "3",
+            NOTIFICATION_SOUND_AND_VIBRATE = "4";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 

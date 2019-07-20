@@ -28,8 +28,10 @@
             android:key="spend_unconfirmed_funds"
             android:title="@string/unconfirmed_funds"
             app:iconSpaceReserved="false" />
-        <SwitchPreference
-            android:defaultValue="true"
+        <ListPreference
+            android:defaultValue="4"
+            android:entries="@array/notification_alert_type"
+            android:entryValues="@array/notification_alert_type_values"
             android:key="transaction_notification"
             android:title="@string/tx_notify_title"
             app:iconSpaceReserved="false" />

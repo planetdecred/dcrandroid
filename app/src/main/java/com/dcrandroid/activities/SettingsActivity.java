@@ -83,6 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
+            final ListPreference notificationAlertType = (ListPreference) findPreference(Constants.TRANSACTION_NOTIFICATION);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             buildDate.setSummary(BuildConfig.VERSION_NAME);
 
@@ -120,6 +121,18 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            notificationAlertType.setSummary(getResources().getStringArray(R.array.notification_alert_type)[Integer.parseInt(util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE))]);
+            notificationAlertType.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int i = Integer.valueOf((String) newValue);
+                    preference.setSummary(getResources().getStringArray(R.array.notification_alert_type)[i]);
+                    util.set(Constants.TRANSACTION_NOTIFICATION, String.valueOf(i));
+                    return true;
+                }
+            });
+
 
             peerAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
