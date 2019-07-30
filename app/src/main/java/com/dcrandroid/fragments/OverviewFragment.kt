@@ -362,7 +362,20 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
 
                                             val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
                                             println("Sending Notifications for ${it.hash}")
-                                            Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutput.toInt() + it.timestamp.toInt())
+                                            // System tray notification
+                                            if(util!!.get(Constants.TX_NOTIFICATION_SOUND) != Constants.TX_NOTIFICATION_SOUND_SILENT){
+                                                Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutput.toInt() + it.timestamp.toInt())
+                                            }
+
+                                            // Vibrate
+                                            if (util!!.get(Constants.TX_NOTIFICATION_VIBRATION) != Constants.TX_VIBRATION_DISABLED) {
+                                                Utils.onTxNotifyVibrate(context)
+                                            }
+
+                                            // Sound Notification
+                                            if (util!!.get(Constants.TX_NOTIFICATION_SOUND) != Constants.TX_NOTIFICATION_SOUND_SILENT) {
+                                                Utils.onTxNotifySound(context)
+                                            }
                                         } else {
                                             println("Not Sending Notifications for ${it.hash}")
                                         }
@@ -375,7 +388,20 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
                                             val satoshi = BigDecimal.valueOf(it.amount)
 
                                             val amount = satoshi.divide(BigDecimal.valueOf(1e8), MathContext(100))
-                                            Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutput.toInt() + it.timestamp.toInt())
+                                            // Vibrate
+                                            if (util!!.get(Constants.TX_NOTIFICATION_VIBRATION) != Constants.TX_VIBRATION_DISABLED) {
+                                                Utils.onTxNotifyVibrate(context)
+                                            }
+
+                                            // Sound Notification
+                                            if (util!!.get(Constants.TX_NOTIFICATION_SOUND) != Constants.TX_NOTIFICATION_SOUND_SILENT) {
+                                                Utils.onTxNotifySound(context)
+                                            }
+
+                                            // System tray notification
+                                            if(util!!.get(Constants.TX_NOTIFICATION_SOUND) != Constants.TX_NOTIFICATION_SOUND_SILENT) {
+                                                Utils.sendTransactionNotification(context, notificationManager, format.format(amount), it.totalInput.toInt() + it.totalOutput.toInt() + it.timestamp.toInt())
+                                            }
                                         }
                                     }
                                 }

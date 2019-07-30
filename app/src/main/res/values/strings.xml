@@ -375,6 +375,11 @@
     <string name="changing">Changing…</string>
     <string name="setting_startup_pin">Setting startup PIN…</string>
     <string name="setting_startup_password">Setting startup password…</string>
+    <string name="key_tx_notification" translatable="false">transaction_notification</string>
+    <string name="key_tx_notifications_sound" translatable="false">tx_notification_sound</string>
+    <string name="key_tx_notifications_vibration" translatable="false">tx_notification_vibration</string>
+    <string name="summary_tx_notifications_system_tray">Transaction notifications on system tray.</string>
+    <string name="tx_notification_tone_dialog_title">Notification Sound</string>
 
     <string-array name="network_modes">
         <item>Simplified Payment Verification (SPV)</item>
@@ -385,20 +390,22 @@
         <item>1</item>
     </string-array>
 
-    <string-array name="notification_alert_type">
-        <item>None</item>
-        <item>Silent</item>
-        <item>Vibrate Only</item>
-        <item>Sound Only</item>
-        <item>Sound And Vibrate</item>
+    <!-- Transaction notification vibration string array begin -->
+    <string-array name="vibration_mode" translatable="false">
+        <item>Enable</item>
+        <item>Disable</item>
+        <item>Short</item>
+        <item>Long</item>
+        <item>Only if silent</item>
     </string-array>
-    <string-array name="notification_alert_type_values" translatable="false">
+    <string-array name="vibration_mode_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
     </string-array>
+    <!-- Transaction notification vibration string array end -->
 
     <string-array name="currency_conversion">
         <item>None</item>

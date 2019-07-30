@@ -29,6 +29,14 @@ public class Constants {
             ACCOUNT_NAME = "AccountName",
             HEIGHT = "Height",
             TRANSACTION_NOTIFICATION = "transaction_notification",
+            TX_NOTIFICATION_SOUND = "tx_notification_sound",
+            TX_NOTIFICATION_SOUND_SILENT = "Silent",
+            TX_NOTIFICATION_VIBRATION = "tx_notification_vibration",
+            TX_VIBRATION_ENABLE = "0",
+            TX_VIBRATION_DISABLED = "1",
+            TX_VIBRATION_SHORT = "2",
+            TX_VIBRATION_LONG = "3",
+            TX_VIBRATION_ONLY_IF_SILENT = "4",
             NETWORK_MODES = "network_modes",
             PEER_IP = "peer_ip",
             REMOTE_NODE_ADDRESS = "remote_node_address",
@@ -104,12 +112,7 @@ public class Constants {
             STAKE_BASE_HASH = "0000000000000000000000000000000000000000000000000000000000000000",
             TRANSACTION_HEIGHT = "transaction_height",
             VERIFIED_SEED = "verified_seed",
-            RECENT_TRANSACTION_HASH = "recent_transaction_hash",
-            NOTIFICATION_NONE = "0",
-            NOTIFICATION_SILENT = "1",
-            NOTIFICATION_VIBRATE_ONLY = "2",
-            NOTIFICATION_SOUND_ONLY = "3",
-            NOTIFICATION_SOUND_AND_VIBRATE = "4";
+            RECENT_TRANSACTION_HASH = "recent_transaction_hash";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
 

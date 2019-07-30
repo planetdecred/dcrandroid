@@ -16,7 +16,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -570,4 +577,65 @@ public class Utils {
         manager.notify(nonce, notification);
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
+
+
+    // Vibrate on TX
+    public static void onTxNotifySound(Context context){
+        PreferenceUtil util = new PreferenceUtil(context);
+        Uri tone;
+        // Fall back to system default notification sound if no sound is set.
+        if(util.get(Constants.TX_NOTIFICATION_SOUND).isEmpty()){
+            tone = Settings.System.DEFAULT_NOTIFICATION_URI;
+        } else {
+            tone = Uri.parse(new PreferenceUtil(context).get(Constants.TX_NOTIFICATION_SOUND));
+        }
+        try {
+            Ringtone r = RingtoneManager.getRingtone(context, tone);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void onTxNotifyVibrate(Context context){
+        PreferenceUtil util = new PreferenceUtil(context);
+
+        if (util.get(Constants.TX_NOTIFICATION_VIBRATION)
+                .equals(Constants.TX_VIBRATION_ENABLE)){
+            long[] VIBRATE_PATTERN = {0, 250, 250, 250};                                       // Android's default vibration pattern for notification
+            vibrate(context, VIBRATE_PATTERN);
+            return;
+        } else if (util.get(Constants.TX_NOTIFICATION_VIBRATION)
+                .equals(Constants.TX_VIBRATION_SHORT)){
+            long[] VIBRATE_PATTERN = {0,100,120,120};
+            vibrate(context, VIBRATE_PATTERN);
+            return;
+        } else if (util.get(Constants.TX_NOTIFICATION_VIBRATION)
+                .equals(Constants.TX_VIBRATION_LONG)){
+            long[] VIBRATE_PATTERN = {0, 500, 500, 500, 500, 500};
+            vibrate(context, VIBRATE_PATTERN);
+            return;
+        } else if ((util.get(Constants.TX_NOTIFICATION_VIBRATION)
+                .equals(Constants.TX_VIBRATION_ONLY_IF_SILENT))
+                && (util.get(Constants.TX_NOTIFICATION_SOUND)
+                .equals(Constants.TX_NOTIFICATION_SOUND_SILENT))){
+            long[] VIBRATE_PATTERN = {0, 250, 250, 250};                                       // Android's default vibration pattern for notification
+            vibrate(context, VIBRATE_PATTERN);
+            return;
+        }
+
+    }
+
+    public static void vibrate(Context context, long [] pattern){
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createWaveform(pattern, -1));
+        } else {
+            //deprecated in API 26
+            v.vibrate(pattern, -1);
+        }
+    }
+
 }

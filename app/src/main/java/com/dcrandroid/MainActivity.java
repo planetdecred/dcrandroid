@@ -9,24 +9,20 @@ package com.dcrandroid;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -44,9 +40,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -655,7 +649,15 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 historyFragment.newTransaction(transaction);
             }
 
-            if (!util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_NONE)) {
+            if(!util.get(Constants.TX_NOTIFICATION_VIBRATION).equals(Constants.TX_VIBRATION_DISABLED)){
+                Utils.onTxNotifyVibrate(getApplicationContext());
+            }
+
+            if(!util.get(Constants.TX_NOTIFICATION_SOUND).equals(Constants.TX_NOTIFICATION_SOUND_SILENT)){
+                Utils.onTxNotifySound(getApplicationContext());
+            }
+
+            if (util.getBoolean(Constants.TRANSACTION_NOTIFICATION, false)) {
                 double fee = obj.getDouble(Constants.FEE);
                 if (fee == 0) {
                     BigDecimal satoshi = BigDecimal.valueOf(obj.getLong(Constants.AMOUNT));
@@ -663,7 +665,9 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                     BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
                     DecimalFormat format = new DecimalFormat(getString(R.string.you_received) + " #.######## DCR");
                     util.set(Constants.TX_NOTIFICATION_HASH, transaction.getHash());
-                    sendNotification(format.format(amount), (int) totalInput + (int) totalOutput + (int) transaction.getTimestamp());
+                    Utils.sendTransactionNotification(getApplicationContext(), notificationManager, format.format(amount), (int) totalInput + (int) totalOutput + (int) transaction.getTimestamp());
+
+
                 }
             }
         } catch (JSONException e) {
@@ -726,49 +730,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             HistoryFragment historyFragment = (HistoryFragment) currentFragment;
             historyFragment.blockAttached(height);
         }
-    }
-
-    private void sendNotification(String amount, int nonce) {
-        Intent launchIntent = new Intent(this, MainActivity.class);
-        launchIntent.setAction(Constants.NEW_TRANSACTION_NOTIFICATION);
-        PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder notBuilder = new NotificationCompat.Builder(this, "new transaction")
-                .setContentTitle(getString(R.string.new_transaction))
-                .setContentText(amount)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setOngoing(false)
-                .setAutoCancel(true)
-                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(launchPendingIntent);
-
-        NotificationCompat.Builder groupBuilder = new NotificationCompat.Builder(this, "new transaction")
-                .setContentTitle(getString(R.string.new_transaction))
-                .setContentText(getString(R.string.new_transaction))
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
-                .setGroupSummary(true)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        if (util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_SOUND_AND_VIBRATE)){
-            notBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-            groupBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-            notBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
-            groupBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
-        } else if (util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_VIBRATE_ONLY)){
-            notBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
-            groupBuilder.setVibrate(new long[] { 2000, 2000, 2000, 2000, 2000 });
-        } else if (util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE).equals(Constants.NOTIFICATION_SOUND_ONLY)){
-            notBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-            groupBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-        }
-
-
-        Notification groupSummary = groupBuilder.build();
-        Notification notification = notBuilder.build();
-        notificationManager.notify(nonce, notification);
-        notificationManager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary);
     }
 
     private void setupSyncedLayout() {
@@ -941,4 +902,5 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     @Override
     public void debug(DebugInfo debugInfo) {
     }
+
 }

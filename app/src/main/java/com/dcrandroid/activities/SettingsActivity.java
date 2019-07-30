@@ -6,14 +6,19 @@
 
 package com.dcrandroid.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -57,11 +62,13 @@ public class SettingsActivity extends AppCompatActivity {
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
         private final int ENCRYPT_REQUEST_CODE = 1;
         private final int DELETE_WALLET_PASSCODE_REQUEST_CODE = 2;
+        private final int TONE_REQUEST_CODE = 3;
         private PreferenceUtil util;
         private int buildDateClicks = 0;
         private SwitchPreference encryptWallet;
         private Preference changeStartupPass;
         private ProgressDialog pd;
+        private Preference txNotificationSound;
 
         private LibWallet wallet;
 
@@ -83,7 +90,8 @@ public class SettingsActivity extends AppCompatActivity {
             final EditTextPreference remoteNodeCertificate = (EditTextPreference) findPreference(getString(R.string.key_connection_certificate));
             final EditTextPreference peerAddress = (EditTextPreference) findPreference(Constants.PEER_IP);
             final ListPreference networkModes = (ListPreference) findPreference(Constants.NETWORK_MODES);
-            final ListPreference notificationAlertType = (ListPreference) findPreference(Constants.TRANSACTION_NOTIFICATION);
+            final ListPreference txVibrationMode = (ListPreference) findPreference(Constants.TX_NOTIFICATION_VIBRATION);
+            txNotificationSound = findPreference(Constants.TX_NOTIFICATION_SOUND);
             Preference buildDate = findPreference(getString(R.string.build_date_system));
             buildDate.setSummary(BuildConfig.VERSION_NAME);
 
@@ -100,6 +108,15 @@ public class SettingsActivity extends AppCompatActivity {
                 remoteNodeAddress.setVisible(false);
                 peerAddress.setVisible(true);
             }
+
+            txVibrationMode.setSummary(getResources().getStringArray(R.array.vibration_mode)[Integer.parseInt(util.get(Constants.TX_NOTIFICATION_VIBRATION, "0"))]);
+            txVibrationMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    txVibrationMode.setSummary(getResources().getStringArray(R.array.vibration_mode)[Integer.valueOf((String) newValue)]);
+                    return true;
+                }
+            });
 
             networkModes.setSummary(getResources().getStringArray(R.array.network_modes)[Integer.parseInt(util.get(Constants.NETWORK_MODES, "0"))]);
             networkModes.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -122,16 +139,23 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            notificationAlertType.setSummary(getResources().getStringArray(R.array.notification_alert_type)[Integer.parseInt(util.get(Constants.TRANSACTION_NOTIFICATION, Constants.NOTIFICATION_NONE))]);
-            notificationAlertType.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int i = Integer.valueOf((String) newValue);
-                    preference.setSummary(getResources().getStringArray(R.array.notification_alert_type)[i]);
-                    util.set(Constants.TRANSACTION_NOTIFICATION, String.valueOf(i));
-                    return true;
-                }
-            });
+
+            // Sound option is empty, never been set.
+            if(util.get(Constants.TX_NOTIFICATION_SOUND).isEmpty()){
+                // set notification sound to default system sound.
+                util.set(Constants.TX_NOTIFICATION_SOUND, Settings.System.DEFAULT_NOTIFICATION_URI.toString());
+                Ringtone ringtone = RingtoneManager.getRingtone(getContext(), Settings.System.DEFAULT_NOTIFICATION_URI);
+                String ringTitle = ringtone.getTitle(getContext());
+                txNotificationSound.setSummary(ringTitle);
+            } else if (util.get(Constants.TX_NOTIFICATION_SOUND).equals(Constants.TX_NOTIFICATION_SOUND_SILENT)){
+                // Sound is silent set txNotification summary to Silent.
+                txNotificationSound.setSummary(Constants.TX_NOTIFICATION_SOUND_SILENT);
+            } else {
+                // Set txNotification summary to sound title.
+                Ringtone ringtone = RingtoneManager.getRingtone(getContext(), Uri.parse(util.get(Constants.TX_NOTIFICATION_SOUND)));
+                String ringTitle = ringtone.getTitle(getContext());
+                txNotificationSound.setSummary(ringTitle);
+            }
 
 
             peerAddress.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -447,6 +471,19 @@ public class SettingsActivity extends AppCompatActivity {
             } else if (requestCode == DELETE_WALLET_PASSCODE_REQUEST_CODE && resultCode == RESULT_OK) {
                 String passphrase = data.getStringExtra(Constants.PASSPHRASE);
                 deleteWallet(passphrase);
+            } else if (requestCode == TONE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (uri != null)
+                {
+                    util.set(Constants.TX_NOTIFICATION_SOUND, uri.toString());          // Save in persistent storage.
+                    Ringtone ringtone = RingtoneManager.getRingtone(getContext(), uri); // get tone title
+                    String ringTitle = ringtone.getTitle(getContext());
+                    txNotificationSound.setSummary(ringTitle);                          // Set txNotificationSound summary to tone title.
+                } else {
+                    // None was selected
+                    util.set(Constants.TX_NOTIFICATION_SOUND, Constants.TX_NOTIFICATION_SOUND_SILENT);
+                    txNotificationSound.setSummary(Constants.TX_NOTIFICATION_SOUND_SILENT);             // Set txNotificationSound summary to Silent
+                }
             }
         }
 
@@ -491,5 +528,29 @@ public class SettingsActivity extends AppCompatActivity {
             }.start();
 
         }
+
+        @Override
+        public boolean onPreferenceTreeClick(Preference preference) {
+            if (preference.getKey().equals(Constants.TX_NOTIFICATION_SOUND)) {
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);               // Set ringtone type to notification.
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                if(util.get(Constants.TX_NOTIFICATION_SOUND).equals(Constants.TX_NOTIFICATION_SOUND_SILENT)){          // null Uri when when existing tone is silent.
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                } else {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(util.get(Constants.TX_NOTIFICATION_SOUND))); // Set Uri to existing tone Uri.
+                }
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.tx_notification_tone_dialog_title));           // Tone picker dialog title
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);                                               // Show default entry
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);                                                // Show None entry
+
+                startActivityForResult(intent, TONE_REQUEST_CODE);
+                return true;
+            } else {
+                return super.onPreferenceTreeClick(preference);
+            }
+        }
+
     }
+
 }

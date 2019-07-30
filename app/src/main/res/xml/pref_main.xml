@@ -29,13 +29,6 @@
             android:title="@string/unconfirmed_funds"
             app:iconSpaceReserved="false" />
         <ListPreference
-            android:defaultValue="4"
-            android:entries="@array/notification_alert_type"
-            android:entryValues="@array/notification_alert_type_values"
-            android:key="transaction_notification"
-            android:title="@string/tx_notify_title"
-            app:iconSpaceReserved="false" />
-        <ListPreference
             android:defaultValue="0"
             android:entries="@array/currency_conversion"
             android:entryValues="@array/currency_conversion_values"
@@ -47,6 +40,27 @@
             android:key="new_block_notification"
             android:summary="@string/new_block_notification_description"
             android:title="@string/new_block_notification"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/tx_notify_title">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/key_tx_notification"
+            android:title="System Tray"
+            android:summary="@string/summary_tx_notifications_system_tray"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/vibration_mode"
+            android:entryValues="@array/vibration_mode_values"
+            android:key="@string/key_tx_notifications_vibration"
+            android:title="Vibration"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="@string/key_tx_notifications_sound"
+            android:title="Sound"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
