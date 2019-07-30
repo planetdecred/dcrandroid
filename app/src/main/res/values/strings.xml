@@ -116,6 +116,7 @@
     <string name="not_synced">Not Synced</string>
     <string name="enter_new_name">Enter new name</string>
     <string name="rename">Rename</string>
+    <string name="create">Create</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -508,7 +509,9 @@
     <string name="erase_char">⌫</string>
     <string name="pin">PIN</string>
     <string name="confirm_spending_pin">Confirm Spending PIN</string>
-    <string name="create_spending_pin">Create Spending PIN</string>
+    <string name="confirm_spending_password">Confirm Spending Password</string>
+    <string name="create_spending_pin">Create a Spending PIN</string>
+    <string name="create_spending_pass">Create a Spending Password</string>
     <string name="create_security_pass">Create Spending Password</string>
     <string name="mismatch_passcode">PINs did not match. Try again</string>
     <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
@@ -516,10 +519,10 @@
     <string name="empty_password">Password cannot be empty</string>
     <string name="password_match">PASSWORDS MATCH</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
-    <string name="password">PASSWORD</string>
+    <string name="password">Password</string>
     <string name="enter_spending_pin">Enter Spending PIN</string>
-    <string name="password_strength">PASSWORD STRENGTH</string>
-    <string name="pin_strength">PIN STRENGTH</string>
+    <string name="password_strength">Password strength</string>
+    <string name="pin_strength">PIN strength</string>
     <string name="enter_startup_pin">Enter Startup Pin</string>
     <string name="confirm_startup_pin">Confirm Startup PIN</string>
     <string name="create_startup_pin">Create Startup PIN</string>
@@ -542,6 +545,12 @@
     <string name="changing_pin">Changing PIN…</string>
     <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
     <string name="field_cannot_be_empty">Field cannot be empty</string>
+    <string name="spending_pin">Spending PIN</string>
+    <string name="spending_password">Spending Password</string>
+    <string name="or_a_spending_pin">or a Spending PIN</string>
+    <string name="or_a_spending_password">or a Spending Password</string>
+    <string name="digit_zero">0</string>
+
     <!--/Security-->
 
     <!--Crash Report-->
