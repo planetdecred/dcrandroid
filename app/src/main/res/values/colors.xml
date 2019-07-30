@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -18,11 +17,12 @@
     <color name="colorAccent">#888a8b</color>
     <color name="lightGray">#C4CBD2</color>
     <color name="colorPrimary">#F3F5F6</color>
-    <color name="colorPrimaryDark">#F3F5F6</color>
+    <color name="colorPrimaryDark">#e6eaed</color>
     <color name="white">#ffffff</color>
     <color name="blue">#2970FF</color>
     <color name="green">#1dc54c</color>
     <color name="turquoise">#2ED6A1</color>
+    <color name="colorBackground">#F3F5F6</color>
     <!--/General-->
 
     <!--Text-->
