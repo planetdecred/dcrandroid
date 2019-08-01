@@ -23,6 +23,8 @@
     <color name="green">#1dc54c</color>
     <color name="turquoise">#2ED6A1</color>
     <color name="colorBackground">#F3F5F6</color>
+    <color name="colorError">#ed6d47</color>
+
     <!--/General-->
 
     <!--Text-->
