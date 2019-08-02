@@ -28,7 +28,16 @@ class SpendingPinFragment(private var clickListener: DialogButtonListener) : Fra
         ed_confirm_pin.addTextChangedListener(pinWatcher)
 
         btn_cancel.setOnClickListener { clickListener.onClickCancel() }
-        btn_create.setOnClickListener { clickListener.onClickOk(ed_pin.text.toString()) }
+        btn_create.setOnClickListener {
+            it.visibility = View.GONE
+            Thread(Runnable {
+                progress_bar.visibility = View.VISIBLE
+                parentFragment?.activity?.runOnUiThread {
+                    clickListener.onClickOk(ed_pin.text.toString())
+                }
+
+            }).start()
+        }
     }
 
     private val passwordStrengthWatcher = object : TextWatcher {
