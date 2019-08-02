@@ -19,8 +19,12 @@ import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.ui.security.PasswordPinDialogFragment;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.WalletData;
 
 import org.jetbrains.annotations.NotNull;
+
+import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.LibWallet;
 
 /**
  * Created by Macsleven on 25/12/2017.
@@ -73,7 +77,8 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
         } else {
             preferenceUtil.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN);
         }
-        navigateToMainActivity(spendingKey);
+
+        createWallet(spendingKey);
     }
 
     /**
@@ -90,12 +95,39 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      * @param spendingKey - spending password or pin
      */
     private void navigateToMainActivity(String spendingKey) {
-        preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Constants.PASSPHRASE, spendingKey);
         startActivity(intent);
         ActivityCompat.finishAffinity(this);
+    }
+
+    /**
+     * Creates the wallet and navigate user to main activity
+     *
+     * @param spendingKey - spending password or pin
+     */
+    private void createWallet(String spendingKey) {
+
+        try {
+
+            LibWallet wallet = WalletData.getInstance().wallet;
+            if (wallet == null) {
+                throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
+            }
+
+            String seed = Dcrlibwallet.generateSeed();
+            preferenceUtil.set(Constants.SEED, seed);
+            preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
+            preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
+            wallet.createWallet(spendingKey, seed);
+            wallet.unlockWallet(spendingKey.getBytes());
+
+            navigateToMainActivity(spendingKey);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void navigateToRestoreSeedWorkflow() {
