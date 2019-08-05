@@ -31,6 +31,7 @@ import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ConfirmTransactionDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.extensions.visibleWalletAccounts
 import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
@@ -56,7 +57,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     private var exchangeRate: Double = -1.0
     private var exchangeDecimal: BigDecimal? = null
     private val formatter: DecimalFormat = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-    private var accounts: ArrayList<Account> = ArrayList()
+    private var accounts: List<Account> = ArrayList()
     private var dataAdapter: AccountSpinnerAdapter? = null
     private var util: PreferenceUtil? = null
     private var pd: ProgressDialog? = null
@@ -293,8 +294,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     private fun prepareAccounts() {
-        accounts = Account.parse(wallet.getAccounts(requiredConfirmations))
-        accounts = ArrayList(accounts.filter { it.accountNumber != Int.MAX_VALUE }) // Filter out imported account
+        accounts = wallet.visibleWalletAccounts(requiredConfirmations, context!!)
+        accounts = accounts.filter { it.accountNumber != Int.MAX_VALUE }.toList() // Filter out imported account
 
         if (dataAdapter != null) {
             requireActivity().runOnUiThread {

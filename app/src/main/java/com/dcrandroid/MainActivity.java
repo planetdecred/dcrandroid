@@ -362,9 +362,16 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 .setPositiveButton(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         startSyncing();
+
                         WiFiSyncDialog syncDialog = (WiFiSyncDialog) dialog;
                         util.setBoolean(Constants.WIFI_SYNC, syncDialog.getChecked());
+
+                        if(currentFragment instanceof OverviewFragment){
+                            OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
+                            overviewFragment.setupSyncLayout();
+                        }
                     }
                 });
 
@@ -375,6 +382,11 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 sendBroadcast(new Intent(Constants.SYNCED));
                 setConnectionStatus(R.string.connect_to_wifi);
                 connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                if(currentFragment instanceof OverviewFragment){
+                    OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
+                    overviewFragment.onSyncCanceled(false);
+                }
             }
         });
 

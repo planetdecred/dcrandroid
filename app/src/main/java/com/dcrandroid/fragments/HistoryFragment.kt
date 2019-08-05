@@ -241,9 +241,9 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                                     if (hashIndex == -1) {
                                         // All transactions in this list is new
-                                        transactionList.animateNewItems(0, transactionList.size - 1)
+                                        transactionList.map { it.animate = true }
                                     } else if (hashIndex != 0) {
-                                        transactionList.animateNewItems(0, hashIndex - 1)
+                                        transactionList.mapIndexed { index, it -> if(index < hashIndex) it.animate = true }
                                     }
                                 }
 
@@ -286,9 +286,11 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             // Transaction is a duplicate
             return
         }
+
         if (transaction.height > 0) {
             latestTransactionHeight = transaction.height + 1
         }
+
         transactionList.add(0, transaction)
         println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
@@ -351,13 +353,6 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     prepareHistoryData()
                 }
             }
-        }
-    }
-
-    private fun ArrayList<Transaction>.animateNewItems(start: Int, count: Int) {
-        for (i: Int in start..count) {
-            val item = this[i]
-            item.animate = true
         }
     }
 }
