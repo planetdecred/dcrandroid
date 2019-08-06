@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/syncing_layout"
+    android:visibility="gone"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_syncing"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Syncing..."
+            android:textSize="20sp"
+            android:textColor="#091440"
+            android:includeFontPadding="false"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/sync_progress_bar"
+            android:indeterminate="false"
+            android:progress="30"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                android:textSize="16sp"
+                android:textColor="#091440"
+                android:text="20%"
+                android:includeFontPadding="false"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                android:textSize="16sp"
+                android:textColor="#091440"
+                android:text="6 min left"
+                android:includeFontPadding="false"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#edeff1"
+        android:layout_marginTop="16dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/sync_details"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="14sp"
+                    android:textColor="#596d81"
+                    android:text="Block header fetched"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="16sp"
+                    android:textColor="#091440"
+                    android:text="6000 of 164864"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="14sp"
+                    android:textColor="#596d81"
+                    android:text="Steps"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="16sp"
+                    android:textColor="#091440"
+                    android:text="1 of 3\t&#8226;\t89%"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="14sp"
+                    android:textColor="#596d81"
+                    android:text="Syncing progress"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="16sp"
+                    android:textColor="#091440"
+                    android:text="220 days behind"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="14sp"
+                    android:textColor="#596d81"
+                    android:text="Connected peers count"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:textSize="16sp"
+                    android:textColor="#091440"
+                    android:text="16"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#edeff1"
+            android:layout_marginTop="16dp"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/show_details"
+        android:text="Show details"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:background="@drawable/curved_bottom_ripple"
+        android:focusable="true"
+        android:clickable="true"
+        android:textSize="16sp"
+        android:textColor="#2970ff"
+        android:includeFontPadding="false"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+</LinearLayout>

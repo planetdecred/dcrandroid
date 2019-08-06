@@ -6,6 +6,7 @@
 
 package com.dcrandroid.data
 
+import com.dcrandroid.util.WalletData
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -28,6 +29,14 @@ class Transaction : Serializable {
     var totalOutput: Long = 0
     @SerializedName("Timestamp")
     var timestamp: Long = 0
+    val confirmations: Int
+    get() {
+        return if(height == 0){
+            0
+        }else{
+            (WalletData.getInstance().wallet.bestBlock - height) + 1
+        }
+    }
 
     @Transient
     var animate = false

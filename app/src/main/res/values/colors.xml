@@ -62,6 +62,7 @@
     <color name="whiteFirstBackgroundColor">#F9FAFA</color>
     <color name="whiteSecondBackgroundColor">#ebefee</color>
     <color name="lightOrangeBackgroundColor">#FFC84E</color>
+    <color name="send_receive_button_background_color">#2970ff</color>
     <!--/Background-->
 
     <!--Drawable-->

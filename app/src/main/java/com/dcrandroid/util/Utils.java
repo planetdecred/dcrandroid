@@ -198,7 +198,7 @@ public class Utils {
     }
 
     public static String calculateTime(long seconds, Context context) {
-        String ago = context.getString(R.string.ago);
+        String ago = "";
         if (seconds > 59) {
 
             // convert to minutes
@@ -214,45 +214,22 @@ public class Utils {
                     // convert to days
                     seconds /= 24;
 
-                    if (seconds > 6) {
-
-                        // convert to weeks
-                        seconds /= 7;
-                        if (seconds > 3) {
-
-                            // convert to month
-                            seconds /= 4;
-
-                            if (seconds > 11) {
-
-                                // convert to year
-                                seconds /= 12;
-
-                                return seconds + "y " + ago;
-                            }
-
-                            //months
-                            return seconds + "mo " + ago;
-                        }
-                        //weeks
-                        return seconds + "w " + ago;
-                    }
                     //days
-                    return seconds + "d " + ago;
+                    return seconds + " days " + ago;
                 }
                 //hour
-                return seconds + "h " + ago;
+                return seconds + " hours " + ago;
             }
 
             //minutes
-            return seconds + "m " + ago;
+            return seconds + " minutes " + ago;
         }
 
         if (seconds < 0) {
-            return context.getString(R.string.now);
+            seconds = 0;
         }
         //seconds
-        return seconds + "s " + ago;
+        return seconds + " seconds " + ago;
     }
 
     public static String getSyncTimeRemaining(long seconds, int percentageCompleted, boolean useLeft, Context ctx) {

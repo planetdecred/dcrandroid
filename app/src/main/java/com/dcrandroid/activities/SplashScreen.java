@@ -19,6 +19,7 @@ import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.dcrandroid.BuildConfig;
+import com.dcrandroid.HomeActivity;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
@@ -176,7 +177,7 @@ public class SplashScreen extends BaseActivity {
                 try {
                     setText(getString(R.string.opening_wallet));
                     walletData.wallet.openWallet(publicPass.getBytes());
-                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                    Intent i = new Intent(SplashScreen.this, HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     //Finish all the activities before this

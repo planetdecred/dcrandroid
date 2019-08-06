@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="#3D091440" android:endColor="#f3f5f6" android:angle="90"/>
+</layer-list>

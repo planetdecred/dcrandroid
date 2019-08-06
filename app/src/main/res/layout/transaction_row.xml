@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_receive"
+        android:id="@+id/tx_icon"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textColor="#091440"
+        android:text="8.61990311 DCR"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        app:fontFamily="@font/source_sans_pro_regular_family"
+        android:id="@+id/amount"
+        android:letterSpacing="0.05"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Pending"
+        android:textColor="#8997a5"
+        app:fontFamily="@font/source_sans_pro_regular_family"
+        android:drawableRight="@drawable/ic_pending"
+        android:drawableEnd="@drawable/ic_pending"
+        android:gravity="center_vertical"
+        android:drawablePadding="8dp"
+        android:id="@+id/status"
+        />
+    
+</LinearLayout>

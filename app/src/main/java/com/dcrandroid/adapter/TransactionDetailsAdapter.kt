@@ -1,7 +1,6 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.text.method.ReplacementTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,7 @@ class TransactionDetailsAdapter constructor(val context: Context, private val it
         }
 
         if (item.type == TransactionDebitCredit.ItemType.ITEM) {
-            vi!!.findViewById<TextView>(R.id.tv_amount).text = item.title
+            vi!!.findViewById<TextView>(R.id.tv_visble_wallet_balance).text = item.title
             vi.findViewById<TextView>(R.id.tv_info).text = item.info
         } else {
             vi!!.findViewById<TextView>(R.id.text).text = item.title

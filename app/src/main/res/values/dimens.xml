@@ -42,4 +42,8 @@
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="bottom_sheet_corner_radius_8">8dp</dimen>
 
+    <dimen name="tab_indicator_width">74dp</dimen>
+    <dimen name="visible_balance_text_size">40sp</dimen>
+    <dimen name="send_receive_button_corner_radius">100dp</dimen>
+    <dimen name="app_bar_elevation">4dp</dimen>
 </resources>

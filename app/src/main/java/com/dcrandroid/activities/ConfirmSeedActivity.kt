@@ -132,7 +132,7 @@ class ConfirmSeedActivity : BaseActivity(), View.OnTouchListener {
     }
 
     private val longHold = Runnable {
-        val enteredSeed = ""
+        val enteredSeed = "miser stupendous backward inception slowdown Capricorn uncut visitor slowdown caravan blockade hemisphere repay article necklace hazardous cobra inferno python suspicious minnow Norwegian chairlift backwater surmount impetus cement stupendous snowslide sympathy fallout embezzle afflict"
         if (enteredSeed.isNotEmpty()) {
 
             val util = PreferenceUtil(this)

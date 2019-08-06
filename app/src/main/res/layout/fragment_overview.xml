@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/scroll_view_overview"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="24sp"
+            android:layout_marginStart="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/visible_balance_text_size"
+                android:includeFontPadding="false"
+                android:textColor="#091440"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                android:id="@+id/tv_visble_wallet_balance"
+                android:letterSpacing="0.05"
+                android:text="315.08193725 DCR" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_total_balance"
+                android:textSize="14sp"
+                android:textColor="#596d81"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/card_bg"
+            app:elevation="4dp"
+            android:elevation="4dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recent_transactions"
+                    android:textSize="14sp"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No transactions yet."
+                android:id="@+id/tv_no_transactions"
+                android:textSize="16sp"
+                android:textColor="#8997a5"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/transactions_view"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_transactions"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#edeff1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/btn_view_all_transactions"
+                        android:gravity="center"
+                        android:text="See All"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp"
+                        android:background="@drawable/curved_bottom_ripple"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:textSize="16sp"
+                        android:textColor="#2970ff"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/card_bg"
+            app:elevation="4dp"
+            android:elevation="4dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Wallet Status"
+                    android:textSize="14sp"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/offline_dot" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Offline"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:textSize="12sp"
+                    android:textColor="#091440"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            </LinearLayout>
+
+            <include layout="@layout/synced_unsynced_layout"/>
+            <include layout="@layout/syncing_layout"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

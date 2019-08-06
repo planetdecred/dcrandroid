@@ -1,0 +1,66 @@
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M4.0101,5.3168L4.0101,5.3056C4.0099,5.0811 4.038,4.8574 4.0939,4.64L1.3333,4.64L1.3333,5.9733L4.0891,5.9733C4.0367,5.7622 4.0102,5.5455 4.0101,5.328L4.0101,5.3168Z"
+      android:strokeWidth="1"
+      android:fillColor="#848AA0"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M9.3408,5.3056L9.3408,5.328C9.3407,5.5455 9.3142,5.7622 9.2619,5.9733L22.6667,5.9733L22.6667,4.64L9.2571,4.64C9.3129,4.8574 9.3411,5.0811 9.3408,5.3056Z"
+      android:strokeWidth="1"
+      android:fillColor="#848AA0"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M20.0091,11.9733C20.0091,11.9771 20.0091,11.9808 20.0091,11.9845C20.0091,11.9883 20.0091,11.992 20.0091,11.9957C20.0089,12.2129 19.9822,12.4293 19.9296,12.64L22.6667,12.64L22.6667,11.3067L19.9248,11.3067C19.9809,11.5244 20.0092,11.7484 20.0091,11.9733L20.0091,11.9733Z"
+      android:strokeWidth="1"
+      android:fillColor="#848AA0"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M14.6779,11.9845L14.6779,11.9733C14.6778,11.7485 14.706,11.5245 14.7616,11.3067L1.3333,11.3067L1.3333,12.64L14.7568,12.64C14.7044,12.4293 14.6779,12.2129 14.6779,11.9957L14.6779,11.9845Z"
+      android:strokeWidth="1"
+      android:fillColor="#848AA0"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M4.0101,18.6512L4.0101,18.64C4.0098,18.4151 4.038,18.1911 4.0939,17.9733L1.3333,17.9733L1.3333,19.3067L4.0891,19.3067C4.0367,19.0959 4.0102,18.8796 4.0101,18.6624L4.0101,18.6512Z"
+      android:strokeWidth="1"
+      android:fillColor="#848AA0"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M9.3408,18.64L9.3408,18.6624C9.3408,18.8796 9.3143,19.0959 9.2619,19.3067L22.6667,19.3067L22.6667,17.9733L9.2571,17.9733C9.313,18.1911 9.3411,18.4151 9.3408,18.64Z"
+      android:strokeWidth="1"
+      android:fillColor="#848AA0"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M9.3408,18.6512C9.2953,17.212 8.1154,16.0688 6.6755,16.0688C5.2355,16.0688 4.0557,17.212 4.0101,18.6512L4.0101,18.6624C4.0101,18.8796 4.0367,19.0959 4.0891,19.3067L4.0939,19.3291C4.3984,20.5057 5.46,21.3276 6.6755,21.3276C7.8909,21.3276 8.9525,20.5057 9.2571,19.3291L9.2619,19.3067C9.3143,19.0959 9.3408,18.8796 9.3408,18.6624L9.3408,18.6512Z"
+      android:strokeWidth="1"
+      android:fillColor="#E2E5E9"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M20.0085,11.9845C20.0085,10.5118 18.8146,9.3179 17.3419,9.3179C15.8691,9.3179 14.6752,10.5118 14.6752,11.9845L14.6752,11.9957C14.6761,12.213 14.7035,12.4294 14.7568,12.64L14.7616,12.6624C15.0661,13.839 16.1278,14.6609 17.3432,14.6609C18.5586,14.6609 19.6203,13.839 19.9248,12.6624C19.9248,12.6549 19.928,12.6475 19.9296,12.64C19.9822,12.4293 20.0089,12.2129 20.0091,11.9957C20.0091,11.992 20.0085,11.9883 20.0085,11.9845Z"
+      android:strokeWidth="1"
+      android:fillColor="#E2E5E9"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M9.3408,5.3168C9.2953,3.8776 8.1154,2.7345 6.6755,2.7345C5.2355,2.7345 4.0557,3.8776 4.0101,5.3168L4.0101,5.328C4.0102,5.5455 4.0367,5.7622 4.0891,5.9733C4.0891,5.9808 4.0923,5.9883 4.0944,5.9957C4.3997,7.1714 5.4608,7.9922 6.6755,7.9922C7.8901,7.9922 8.9513,7.1714 9.2565,5.9957C9.2565,5.9883 9.2597,5.9808 9.2619,5.9733C9.3142,5.7622 9.3407,5.5455 9.3408,5.328L9.3408,5.3168Z"
+      android:strokeWidth="1"
+      android:fillColor="#E2E5E9"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+</vector>
