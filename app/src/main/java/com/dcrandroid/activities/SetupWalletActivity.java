@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import dcrlibwallet.Dcrlibwallet;
 import dcrlibwallet.LibWallet;
 
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
+
 /**
  * Created by Macsleven on 25/12/2017.
  */
@@ -86,6 +88,7 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      */
     private void showPassWordPinDialog() {
         PasswordPinDialogFragment passwordPinDialog = new PasswordPinDialogFragment();
+        passwordPinDialog.setCancelable(false);
         passwordPinDialog.show(getSupportFragmentManager(), "passwordPinDialog");
     }
 
@@ -94,12 +97,17 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      *
      * @param spendingKey - spending password or pin
      */
-    private void navigateToMainActivity(String spendingKey) {
+    private void navigateToMainActivity(final String spendingKey) {
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Constants.PASSPHRASE, spendingKey);
-        startActivity(intent);
-        ActivityCompat.finishAffinity(this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SetupWalletActivity.this, MainActivity.class);
+                intent.putExtra(Constants.PASSPHRASE, spendingKey);
+                startActivity(intent);
+                ActivityCompat.finishAffinity(SetupWalletActivity.this);
+            }
+        });
     }
 
     /**
@@ -107,27 +115,32 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      *
      * @param spendingKey - spending password or pin
      */
-    private void createWallet(String spendingKey) {
+    private void createWallet(final String spendingKey) {
 
-        try {
+        newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
 
-            LibWallet wallet = WalletData.getInstance().wallet;
-            if (wallet == null) {
-                throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
+                    LibWallet wallet = WalletData.getInstance().wallet;
+                    if (wallet == null) {
+                        throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
+                    }
+
+                    String seed = Dcrlibwallet.generateSeed();
+                    preferenceUtil.set(Constants.SEED, seed);
+                    preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
+                    preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
+                    wallet.createWallet(spendingKey, seed);
+                    wallet.unlockWallet(spendingKey.getBytes());
+
+                    navigateToMainActivity(spendingKey);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
-            String seed = Dcrlibwallet.generateSeed();
-            preferenceUtil.set(Constants.SEED, seed);
-            preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
-            preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
-            wallet.createWallet(spendingKey, seed);
-            wallet.unlockWallet(spendingKey.getBytes());
-
-            navigateToMainActivity(spendingKey);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     private void navigateToRestoreSeedWorkflow() {
