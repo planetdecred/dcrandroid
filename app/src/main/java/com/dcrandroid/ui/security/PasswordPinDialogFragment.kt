@@ -2,10 +2,12 @@ package com.dcrandroid.ui.security
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -28,9 +30,9 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         spendingPasswordFragment = SpendingPasswordFragment(this)
-        spendingPinFragment = SpendingPinFragment(this);
+        spendingPinFragment = SpendingPinFragment(this)
         fragmentList = listOf(spendingPasswordFragment, spendingPinFragment)
-        tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
+        tabsTitleList = listOf(context!!.getString(com.dcrandroid.R.string.password), context!!.getString(R.string.pin))
         titleList = listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
     }
 
@@ -52,13 +54,17 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
     }
 
     override fun onClickOk(spendingKey: String) {
-        if (view_pager.currentItem == 0) {
-            passwordPinListener?.onEnterPasswordOrPin(spendingKey, true)
+        val normalColor = Color.parseColor("#c4cbd2")
+        tab_layout.setSelectedTabIndicatorColor(normalColor)
+        tab_layout.setTabTextColors(normalColor, normalColor)
+        // disable click on any tabs
+        val tabStrip = tab_layout.getChildAt(0) as LinearLayout
+        for (i in 0 until tabStrip.childCount) {
+            tabStrip.getChildAt(i).setOnTouchListener { v, event -> true }
         }
 
-        if (view_pager.currentItem == 1) {
-            passwordPinListener?.onEnterPasswordOrPin(spendingKey, false)
-        }
+        val isPassword = view_pager.currentItem == 0
+        passwordPinListener?.onEnterPasswordOrPin(spendingKey, isPassword)
     }
 
     override fun onClickCancel() {
