@@ -4,15 +4,20 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dcrandroid.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
@@ -26,6 +31,7 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
     private lateinit var tabsTitleList: List<String>
     private lateinit var titleList: List<String>
     private var passwordPinListener: PasswordPinListener? = null
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +44,35 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
 
     override fun getTheme(): Int = R.style.BottomSheetDialogStyle
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        super.onCreateDialog(savedInstanceState)
+        val dialog: Dialog = BottomSheetDialog(requireContext(), theme)
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        dialog.setOnShowListener {
+            Handler().postDelayed({
+                val bottomSheetDialog = dialog as BottomSheetDialog
+                val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
+                bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
+                bottomSheetBehavior.state = STATE_EXPANDED
+            }, 300)
+        }
+        return dialog
+    }
+
+    /*override fun onStart() {
+        super.onStart()
+
+        val bottomSheet = dialog?.findViewById<View>(R.id.design_bottom_sheet) as FrameLayout?
+        bottomSheet?.layoutParams?.height = ViewGroup.LayoutParams.MATCH_PARENT
+        view?.post {
+            val parent = view?.parent as View
+            val params = parent.layoutParams as CoordinatorLayout.LayoutParams
+            params.topMargin = 40
+            val bottomSheetBehavior = params.behavior as BottomSheetBehavior
+            view?.measuredHeight?.let { bottomSheetBehavior.peekHeight = it }
+        }
+    }*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -61,6 +95,11 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
         val tabStrip = tab_layout.getChildAt(0) as LinearLayout
         for (i in 0 until tabStrip.childCount) {
             tabStrip.getChildAt(i).setOnTouchListener { v, event -> true }
+        }
+
+        // drag the dialog down
+        if (bottomSheetBehavior.state == STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         val isPassword = view_pager.currentItem == 0
