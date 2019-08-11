@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/snackbar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="@dimen/design_snackbar_padding_vertical"
+        android:paddingBottom="@dimen/design_snackbar_padding_vertical"
+        android:paddingLeft="@dimen/design_snackbar_padding_horizontal"
+        android:paddingRight="@dimen/design_snackbar_padding_horizontal"
+        android:maxLines="@integer/design_snackbar_text_max_lines"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:fontFamily="@font/source_sans_pro_regular"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical|start"
+        android:textAlignment="center"
+        tools:text="Text Goes Here"
+        android:ellipsize="end"/>
+    <Button
+        android:id="@+id/snackbar_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/design_snackbar_extra_spacing_horizontal"
+        android:layout_marginStart="@dimen/design_snackbar_extra_spacing_horizontal"
+        android:layout_gravity="center_vertical|end"
+        android:paddingTop="@dimen/design_snackbar_padding_vertical"
+        android:paddingBottom="@dimen/design_snackbar_padding_vertical"
+        android:paddingLeft="@dimen/design_snackbar_padding_horizontal"
+        android:paddingRight="@dimen/design_snackbar_padding_horizontal"
+        android:visibility="gone"
+        android:textColor="?attr/colorAccent"
+        style="?attr/borderlessButtonStyle"
+        tools:visibility="visible"
+        tools:text="Action"/>
+</merge>

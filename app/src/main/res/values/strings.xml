@@ -322,6 +322,7 @@
     <string name="syncing_peers_mainnet">Syncing with %1$d peers on mainnet.</string>
     <string name="one_syncing_peer_mainnet">Syncing with 1 peer on mainnet.</string>
     <string name="sync_status_verbose">All Times\nelapsed: %1$s, remain: %2$s, total: %3$s\n\nStage Times\nelapsed: %4$s, remain: %5$s, total: %6$s</string>
+    <string name="network_not_connected">Cannot sync without network connection.</string>
     <!--/Sync Messages-->
 
     <!--QR Code-->
@@ -557,7 +558,7 @@
 
     <!--WIFI Sync-->
     <string name="wifi_data_sync_title">Sync when not on WiFi</string>
-    <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
+    <string name="connect_to_wifi">Connect to WiFi to sync</string>
     <string name="no_wifi">No Wi-Fi</string>
     <string name="wifi_sync_notice">Would you like to sync anyways?</string>
     <string name="not_connected_to_wifi">Not connected to WiFi.</string>

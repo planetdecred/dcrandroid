@@ -44,6 +44,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -69,6 +70,7 @@ import com.dcrandroid.fragments.SendFragment;
 import com.dcrandroid.service.SyncService;
 import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
+import com.dcrandroid.util.TopSnackbar;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
@@ -114,6 +116,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     private int blockNotificationSound, pageID;
     private long bestBlockTimestamp;
     private boolean scanning = false, isForeground;
+    private CoordinatorLayout snackbarView;
 
     private final String TAG = "MainActivity";
 
@@ -151,6 +154,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         syncIndicator = findViewById(R.id.iv_sync_indicator);
         syncProgressBar = findViewById(R.id.pb_sync_progress);
         mListView = findViewById(R.id.lv_nav);
+        snackbarView = findViewById(R.id.snackbar_view);
 
         connectionStatus.setOnClickListener(this);
 
@@ -382,6 +386,38 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     }
 
     public void startSyncing() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        // When sync is only allowed on WiFi check only for a WiFi connection.
+        if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
+            // Return if WiFi is not connected.
+            if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+                TopSnackbar.make(snackbarView, getString(R.string.network_not_connected), TopSnackbar.LENGTH_LONG).show();
+                setConnectionStatus(R.string.not_connected_to_wifi);
+                connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                return;
+            }
+        } else {
+            // Prevent Null pointer exception on device without mobile connection. E.g Tablets.
+            if(connectivityManager.getNetworkInfo(connectivityManager.TYPE_MOBILE) != null){
+                // Return if Mobile and WiFI is not connected.
+                if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() != NetworkInfo.State.CONNECTED &&
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+                    TopSnackbar.make(snackbarView, getString(R.string.network_not_connected), TopSnackbar.LENGTH_LONG).show();
+                    setConnectionStatus(R.string.not_connected_to_wifi);
+                    connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                    return;
+                }
+            } else {
+                // Return if WiFi is not connected.
+                if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+                    TopSnackbar.make(snackbarView, getString(R.string.network_not_connected), TopSnackbar.LENGTH_LONG).show();
+                    setConnectionStatus(R.string.not_connected_to_wifi);
+                    connectionStatus.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                    return;
+                }
+            }
+        }
+
         sendBroadcast(new Intent(Constants.SYNCED));
 
         if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
@@ -786,6 +822,45 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_connection_status:
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                // When sync is only allowed on WiFi check only for WiFi connection.
+                if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
+                    // Return if WiFi is not connected.
+                    if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        }
+                        TopSnackbar.make(snackbarView, getString(R.string.network_not_connected), TopSnackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                } else {
+                    // Prevent Null pointer exception on device without mobile connection. E.g Tablets.
+                    if(connectivityManager.getNetworkInfo(connectivityManager.TYPE_MOBILE) != null){
+                        // Return if Mobile and WiFI is not connected.
+                        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() != NetworkInfo.State.CONNECTED &&
+                                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+                            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                                drawer.closeDrawer(GravityCompat.START);
+                            }
+                            TopSnackbar.make(snackbarView, getString(R.string.network_not_connected), TopSnackbar.LENGTH_LONG).show();
+                            return;
+                        }
+                    } else {
+                        // Return if WiFi is not connected.
+                        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() != NetworkInfo.State.CONNECTED) {
+                            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                                drawer.closeDrawer(GravityCompat.START);
+                            }
+                            TopSnackbar.make(snackbarView, getString(R.string.network_not_connected), TopSnackbar.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                }
+
                 if (Integer.parseInt(util.get(Constants.NETWORK_MODES, "0")) == 0) {
                     setConnectionStatus(R.string.connecting_to_peers);
                     String peerAddresses = util.get(Constants.PEER_IP);
