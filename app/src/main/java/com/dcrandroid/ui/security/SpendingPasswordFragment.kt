@@ -32,11 +32,11 @@ class SpendingPasswordFragment(private var clickListener: DialogButtonListener) 
             it.visibility = View.GONE
             ed_password.isFocusable = false
             ed_confirm_password.isFocusable = false
-            Thread(Runnable {
+            activity?.runOnUiThread {
                 btn_cancel.isEnabled = false
                 btn_cancel.setTextColor(resources.getColor(R.color.colorDisabled))
                 progress_bar.visibility = View.VISIBLE
-            }).start()
+            }
 
             clickListener.onClickOk(ed_password.text.toString())
         }

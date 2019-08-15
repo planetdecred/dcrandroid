@@ -33,11 +33,11 @@ class SpendingPinFragment(private var clickListener: DialogButtonListener) : Fra
             ed_pin.isFocusable = false
             ed_confirm_pin.isFocusable = false
 
-            Thread(Runnable {
+            activity?.runOnUiThread {
                 btn_cancel.isEnabled = false
                 btn_cancel.setTextColor(resources.getColor(R.color.colorDisabled))
                 progress_bar.visibility = View.VISIBLE
-            }).start()
+            }
 
             clickListener.onClickOk(ed_pin.text.toString())
         }
