@@ -35,7 +35,7 @@
             android:gravity="start"
             android:text="@string/welcome_android_title"
             android:textColor="@color/darkBlueTextColor"
-            android:textSize="30sp"
+            android:textSize="24sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <androidx.cardview.widget.CardView
@@ -46,7 +46,7 @@
             android:layout_marginTop="@dimen/margin_padding_size_16"
             app:cardBackgroundColor="@color/blue"
             app:cardCornerRadius="8dp"
-            app:cardElevation="1dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:id="@+id/ll_create_wallet"
@@ -85,7 +85,7 @@
             android:layout_marginBottom="8dp"
             app:cardBackgroundColor="@color/turquoise"
             app:cardCornerRadius="8dp"
-            app:cardElevation="1dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:id="@+id/ll_restore_wallet"
