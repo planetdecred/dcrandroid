@@ -1,14 +1,18 @@
-package com.dcrandroid.ui.security
+/*
+ * Copyright (c) 2018-2019 The Decred developers
+ * Use of this source code is governed by an ISC
+ * license that can be found in the LICENSE file.
+ */
+
+package com.dcrandroid.fragments
 
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,11 +21,17 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dcrandroid.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
+
+interface DialogButtonListener {
+
+    fun onClickOk(spendingKey: String)
+
+    fun onClickCancel()
+}
 
 class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListener {
 
@@ -35,8 +45,10 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         spendingPasswordFragment = SpendingPasswordFragment(this)
         spendingPinFragment = SpendingPinFragment(this)
+
         fragmentList = listOf(spendingPasswordFragment, spendingPinFragment)
         tabsTitleList = listOf(context!!.getString(com.dcrandroid.R.string.password), context!!.getString(R.string.pin))
         titleList = listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
@@ -46,33 +58,29 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
+
         val dialog: Dialog = BottomSheetDialog(requireContext(), theme)
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         dialog.setOnShowListener {
-            Handler().postDelayed({
-                val bottomSheetDialog = dialog as BottomSheetDialog
-                val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
-                bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
-                bottomSheetBehavior.state = STATE_EXPANDED
-            }, 300)
+            val bottomSheetDialog = dialog as BottomSheetDialog
+            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
+            bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+                }
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
+                }
+
+            })
         }
+
         return dialog
     }
-
-    /*override fun onStart() {
-        super.onStart()
-
-        val bottomSheet = dialog?.findViewById<View>(R.id.design_bottom_sheet) as FrameLayout?
-        bottomSheet?.layoutParams?.height = ViewGroup.LayoutParams.MATCH_PARENT
-        view?.post {
-            val parent = view?.parent as View
-            val params = parent.layoutParams as CoordinatorLayout.LayoutParams
-            params.topMargin = 40
-            val bottomSheetBehavior = params.behavior as BottomSheetBehavior
-            view?.measuredHeight?.let { bottomSheetBehavior.peekHeight = it }
-        }
-    }*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -98,7 +106,7 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
         }
 
         // drag the dialog down
-        if (bottomSheetBehavior.state == STATE_EXPANDED) {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 

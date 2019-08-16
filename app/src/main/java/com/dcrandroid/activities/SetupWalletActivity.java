@@ -17,7 +17,7 @@ import androidx.core.app.ActivityCompat;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
-import com.dcrandroid.ui.security.PasswordPinDialogFragment;
+import com.dcrandroid.fragments.PasswordPinDialogFragment;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.WalletData;
 

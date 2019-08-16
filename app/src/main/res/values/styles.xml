@@ -62,10 +62,10 @@
 
     <!-- BottomSheetDialog Style -->
     <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+        <item name="bottomSheetStyle">@style/BottomSheetStyleWrapper</item>
     </style>
 
-    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+    <style name="BottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_rounded_corner_top</item>
     </style>
     <!--/BottomSheetDialog Style -->
