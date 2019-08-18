@@ -44,7 +44,7 @@ android {
             buildConfigField("String", "NetType", "\"testnet3\"")
             resValue "string", "app_name", "Decred Wallet Testnet"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher_testnet",
+                    appIcon     : "@mipmap/ic_launcher_testnet",
                     appIconRound: "@mipmap/ic_launcher_round_testnet"
             ]
         }
@@ -60,7 +60,7 @@ android {
             buildConfigField("String", "NetType", "\"mainnet\"")
             resValue "string", "app_name", "Decred Wallet"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher_mainnet",
+                    appIcon     : "@mipmap/ic_launcher_mainnet",
                     appIconRound: "@mipmap/ic_launcher_round_mainnet"
             ]
         }
@@ -93,6 +93,7 @@ dependencies {
     // JSON serialization & deserialization
     implementation 'com.google.code.gson:gson:2.8.2'
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     }

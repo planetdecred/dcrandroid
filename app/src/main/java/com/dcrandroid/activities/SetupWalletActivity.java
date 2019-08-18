@@ -10,58 +10,141 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
-import com.dcrandroid.BuildConfig;
+import androidx.core.app.ActivityCompat;
+
+import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
+import com.dcrandroid.fragments.PasswordPinDialogFragment;
 import com.dcrandroid.util.PreferenceUtil;
-import com.dcrandroid.util.Utils;
+import com.dcrandroid.util.WalletData;
+
+import org.jetbrains.annotations.NotNull;
+
+import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.LibWallet;
+
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
 /**
  * Created by Macsleven on 25/12/2017.
  */
 
-public class SetupWalletActivity extends BaseActivity {
+public class SetupWalletActivity extends BaseActivity implements PasswordPinDialogFragment.PasswordPinListener {
 
-    private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
-    PreferenceUtil preferenceUtil;
+    private PreferenceUtil preferenceUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_setup_page);
-        TextView buildDate = findViewById(R.id.build_date);
-        RelativeLayout createWalletLl = findViewById(R.id.button_create_wallet);
-        RelativeLayout retrieveWalletLl = findViewById(R.id.button_retrieve_wallet);
-
-        buildDate.setText(BuildConfig.VERSION_NAME);
 
         preferenceUtil = new PreferenceUtil(this);
 
-        createWalletLl.setOnClickListener(new View.OnClickListener() {
+        LinearLayout restoreView = findViewById(R.id.ll_restore_wallet);
+        LinearLayout createView = findViewById(R.id.ll_create_wallet);
+
+        final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.7F);
+
+        createView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
-                preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
-                Intent i = new Intent(SetupWalletActivity.this, SaveSeedActivity.class);
-                startActivity(i);
+                showPassWordPinDialog();
             }
         });
 
-        retrieveWalletLl.setOnClickListener(new View.OnClickListener() {
+        restoreView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(buttonClick);
-                preferenceUtil.setBoolean(Constants.RESTORE_WALLET, true);
-                Intent i = new Intent(SetupWalletActivity.this, ConfirmSeedActivity.class)
-                        .putExtra(Constants.SEED, Utils.getWordList(SetupWalletActivity.this))
-                        .putExtra(Constants.RESTORE, true);
-                startActivity(i);
+                navigateToRestoreSeedWorkflow();
             }
         });
     }
 
+    /**
+     * Callback when the user submits spending password or pin
+     *
+     * @param spendingKey - either a spending password or pin
+     * @param isPassword  - flag to tell whether its a password or pin
+     */
+    @Override
+    public void onEnterPasswordOrPin(@NotNull String spendingKey, boolean isPassword) {
+        if (isPassword) {
+            preferenceUtil.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PASSWORD);
+        } else {
+            preferenceUtil.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN);
+        }
+
+        createWallet(spendingKey);
+    }
+
+    /**
+     * Shows the spending pin and password bottom sheet dialog
+     */
+    private void showPassWordPinDialog() {
+        PasswordPinDialogFragment passwordPinDialog = new PasswordPinDialogFragment();
+        passwordPinDialog.setCancelable(false);
+        passwordPinDialog.show(getSupportFragmentManager(), "passwordPinDialog");
+    }
+
+    /**
+     * Navigates user to main activity
+     *
+     * @param spendingKey - spending password or pin
+     */
+    private void navigateToMainActivity(final String spendingKey) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SetupWalletActivity.this, MainActivity.class);
+                intent.putExtra(Constants.PASSPHRASE, spendingKey);
+                startActivity(intent);
+                ActivityCompat.finishAffinity(SetupWalletActivity.this);
+            }
+        });
+    }
+
+    /**
+     * Creates the wallet and navigate user to main activity
+     *
+     * @param spendingKey - spending password or pin
+     */
+    private void createWallet(final String spendingKey) {
+
+        newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    LibWallet wallet = WalletData.getInstance().wallet;
+                    if (wallet == null) {
+                        throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
+                    }
+
+                    String seed = Dcrlibwallet.generateSeed();
+                    preferenceUtil.set(Constants.SEED, seed);
+                    preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
+                    preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
+                    wallet.createWallet(spendingKey, seed);
+                    wallet.unlockWallet(spendingKey.getBytes());
+
+                    navigateToMainActivity(spendingKey);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void navigateToRestoreSeedWorkflow() {
+        preferenceUtil.setBoolean(Constants.RESTORE_WALLET, true);
+        // TODO - hook up restore wallet workflow after implementing restore wallet UI
+    }
 }
