@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/backup_seed_prompt_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:background="@drawable/bg_orange_corner_8dp"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/imv_wallet_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:srcCompat="@drawable/ic_wallet_alert" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toEndOf="@+id/imv_wallet_alert"
+        android:layout_toRightOf="@+id/imv_wallet_alert"
+        android:text="@string/backup_seed_phrase"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <TextView
+        android:id="@+id/tv_verify_seed_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_alignStart="@+id/tv_title"
+        android:layout_alignLeft="@+id/tv_title"
+        android:layout_marginBottom="16dp"
+        android:layout_toStartOf="@+id/imv_back_up"
+        android:layout_toLeftOf="@+id/imv_back_up"
+        android:text="@string/verify_seed_phrase"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <ImageView
+        android:id="@+id/imv_back_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        app:srcCompat="@drawable/ic_next" />
+
+</RelativeLayout>

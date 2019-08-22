@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -7,75 +6,72 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:id="@+id/synced_unsynced_layout"
-    android:paddingBottom="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="14dp"
-        android:gravity="center_vertical">
+        android:paddingRight="16dp">
 
         <ImageView
+            android:id="@+id/sync_state_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_crossmark"
-            android:id="@+id/sync_state_icon"
-            />
+            app:srcCompat="@drawable/ic_crossmark" />
 
         <TextView
+            android:id="@+id/tv_sync_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Not syncing"
-            android:textSize="20sp"
-            android:textColor="#091440"
             android:includeFontPadding="false"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
-
+            android:text="@string/not_syncing"
+            android:textColor="#091440"
+            android:textSize="20sp"
+            app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <LinearLayout
+            android:id="@+id/reconnect_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:id="@+id/reconnect_layout"
             android:background="@drawable/reconnect_background"
-            android:focusable="true"
             android:clickable="true"
-            android:paddingEnd="9dp"
-            android:paddingRight="9dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingStart="4dp"
             android:paddingLeft="4dp"
-            android:orientation="horizontal">
+            android:paddingTop="4dp"
+            android:paddingEnd="9dp"
+            android:paddingRight="9dp"
+            android:paddingBottom="4dp">
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                app:srcCompat="@drawable/ic_rescan"
-                />
+                app:srcCompat="@drawable/ic_rescan" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reconnect"
-                android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                android:textColor="#091440"
-                android:includeFontPadding="false"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
-                />
+                android:includeFontPadding="false"
+                android:text="@string/reconnect"
+                android:textColor="#091440"
+                android:textSize="14sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
 
         </LinearLayout>
 
@@ -84,32 +80,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="56dp"
         android:layout_marginStart="56dp"
+        android:layout_marginLeft="56dp"
         android:layout_marginTop="14dp"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_latest_block"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/synced_latest_block_time"
             android:includeFontPadding="false"
-            android:id="@+id/tv_latest_block"
-            android:textSize="16sp"
+            android:text="@string/synced_latest_block_time"
             android:textColor="#8997a5"
+            android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <TextView
+            android:id="@+id/connected_peers"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/synced_latest_block_time"
-            android:includeFontPadding="false"
-            android:id="@+id/connected_peers"
-            android:textSize="16sp"
-            android:textColor="#8997a5"
             android:layout_marginTop="14dp"
+            android:layout_weight="1"
+            android:includeFontPadding="false"
+            android:text="@string/synced_latest_block_time"
+            android:textColor="#8997a5"
+            android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
     </LinearLayout>

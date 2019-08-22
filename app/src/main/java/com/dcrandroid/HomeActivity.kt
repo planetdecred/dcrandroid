@@ -11,12 +11,13 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,32 +25,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.adapter.OnTabSelectedListener
+import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.WiFiSyncDialog
 import com.dcrandroid.fragments.Overview
+import com.dcrandroid.service.SyncService
+import com.dcrandroid.util.NetworkUtil
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
-import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlin.math.roundToInt
 
 const val TAG = "HomeActivity"
 
-class HomeActivity: BaseActivity(), TransactionListener, SyncProgressListener {
+class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
 
     private lateinit var adapter: NavigationTabsAdapter
-
     private lateinit var notificationManager: NotificationManager
     internal lateinit var util: PreferenceUtil
-
     private lateinit var alertSound: SoundPool
+    private lateinit var currentFragment: Fragment
 
     private val walletData: WalletData = WalletData.getInstance()
     private val wallet: LibWallet
-    get() = walletData.wallet
+        get() = walletData.wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +88,8 @@ class HomeActivity: BaseActivity(), TransactionListener, SyncProgressListener {
         }
 
         initNavigationTabs()
+
+        checkWifiSync()
     }
 
     private fun registerNotificationChannel() {
@@ -99,7 +104,7 @@ class HomeActivity: BaseActivity(), TransactionListener, SyncProgressListener {
         }
     }
 
-    private fun initNavigationTabs(){
+    private fun initNavigationTabs() {
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay
@@ -115,14 +120,14 @@ class HomeActivity: BaseActivity(), TransactionListener, SyncProgressListener {
 
         switchFragment(0)
 
-        adapter.onTabSelectedListener = object : OnTabSelectedListener  {
+        adapter.onTabSelectedListener = object : OnTabSelectedListener {
             override fun onTabSelected(position: Int) {
                 switchFragment(position)
             }
         }
     }
 
-    private fun setTabIndicator(){
+    private fun setTabIndicator() {
         val tabWidth = deviceWidth / 4
         val tabIndicatorWidth = resources.getDimension(R.dimen.tab_indicator_width)
 
@@ -135,30 +140,74 @@ class HomeActivity: BaseActivity(), TransactionListener, SyncProgressListener {
         }
     }
 
-    private fun switchFragment(position: Int){
+    private fun switchFragment(position: Int) {
 
-        val fragment = when(position){
+        currentFragment = when (position) {
             0 -> Overview()
-            else ->  Fragment()
+            else -> Fragment()
         }
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.frame, fragment)
+                .replace(R.id.frame, currentFragment)
                 .commit()
 
         setTabIndicator()
     }
 
-    fun setToolbarTitle(title: CharSequence, showShadow: Boolean){
+    fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
         toolbar_title.text = title
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            app_bar.elevation = if(showShadow){
+            app_bar.elevation = if (showShadow) {
                 resources.getDimension(R.dimen.app_bar_elevation)
-            }else{
+            } else {
                 0f
             }
         }
+    }
+
+    private fun checkWifiSync() {
+        if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
+            // Check if wifi is connected
+            val isWifiConnected = this.let { NetworkUtil.isWifiConnected(it) }
+            if (!isWifiConnected) {
+                showWifiNotice()
+                return
+            }
+        }
+
+        startSyncing()
+    }
+
+    private fun showWifiNotice() {
+        val wifiSyncDialog = WiFiSyncDialog(this)
+                .setPositiveButton(DialogInterface.OnClickListener { dialog, which ->
+                    startSyncing()
+
+                    val syncDialog = dialog as WiFiSyncDialog
+                    util.setBoolean(Constants.WIFI_SYNC, syncDialog.checked)
+
+                    if (currentFragment is Overview) {
+                        val overviewFragment = currentFragment as Overview
+                        overviewFragment.setupSyncLayout()
+                    }
+                })
+
+        wifiSyncDialog.setOnCancelListener {
+            sendBroadcast(Intent(Constants.SYNCED))
+            if (currentFragment is Overview) {
+                val overviewFragment = currentFragment as Overview
+                overviewFragment.onSyncCanceled(false)
+            }
+        }
+
+        wifiSyncDialog.show()
+    }
+
+    private fun startSyncing() {
+        sendBroadcast(Intent(Constants.SYNCED))
+        val syncIntent = Intent(this, SyncService::class.java)
+        startService(syncIntent)
     }
 
     // -- Block Notification

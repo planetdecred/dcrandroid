@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -7,83 +6,85 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="280dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/card_bg"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="start"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_24"
+        android:layout_marginLeft="@dimen/margin_padding_size_24"
+        android:layout_marginTop="@dimen/margin_padding_size_24"
+        android:layout_marginEnd="@dimen/margin_padding_size_24"
+        android:layout_marginRight="@dimen/margin_padding_size_24"
+        android:text="@string/not_connected_to_wifi"
+        android:textColor="#091440"
+        android:textSize="20sp"
+        app:fontFamily="@font/source_sans_pro_semibold_family" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/not_connected_to_wifi"
-            android:textColor="@color/turquoise"
-            android:textSize="20sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/wifi_sync_notice"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
-
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_24"
+        android:layout_marginLeft="@dimen/margin_padding_size_24"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:layout_marginEnd="@dimen/margin_padding_size_24"
+        android:layout_marginRight="@dimen/margin_padding_size_24"
+        android:layout_marginBottom="@dimen/margin_padding_size_16"
+        android:text="@string/wifi_sync_notice"
+        android:textColor="@color/blueGrayFirstTextColor"
+        android:textSize="16sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@color/colorPrimary"
-        android:weightSum="3">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="@dimen/margin_padding_size_24"
+        android:layout_marginEnd="@dimen/margin_padding_size_24"
+        android:layout_marginRight="@dimen/margin_padding_size_24"
+        android:layout_marginBottom="@dimen/margin_padding_size_8"
+        android:orientation="horizontal">
 
-        <TextView
+        <Button
             android:id="@+id/btn_negative"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
+            android:layout_weight="1.5"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text="@string/no"
-            android:textColor="@color/darkBlueTextColor"
-            android:textSize="14sp"
+            android:text="@string/not_now"
+            android:textAllCaps="false"
+            android:gravity="start"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_semibold_family" />
 
-        <TextView
+        <Button
             android:id="@+id/btn_positive"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text="@string/yes"
+            android:layout_height="match_parent"
+            android:text="@string/sync"
+            android:textAllCaps="false"
+            android:gravity="center_horizontal"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_semibold_family" />
 
-        <TextView
+        <Button
             android:id="@+id/btn_always"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
             android:text="@string/always"
+            android:textAllCaps="false"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_semibold_family" />
     </LinearLayout>
 

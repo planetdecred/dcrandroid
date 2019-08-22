@@ -23,7 +23,7 @@ class TransactionDetailsAdapter constructor(val context: Context, private val it
         }
 
         if (item.type == TransactionDebitCredit.ItemType.ITEM) {
-            vi!!.findViewById<TextView>(R.id.tv_visble_wallet_balance).text = item.title
+            vi!!.findViewById<TextView>(R.id.tv_visible_wallet_balance).text = item.title
             vi.findViewById<TextView>(R.id.tv_info).text = item.info
         } else {
             vi!!.findViewById<TextView>(R.id.text).text = item.title

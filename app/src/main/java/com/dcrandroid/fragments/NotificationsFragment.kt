@@ -11,9 +11,8 @@ import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
-import java.lang.Exception
 
-open class NotificationsFragment: Fragment(), SyncProgressListener {
+open class NotificationsFragment : Fragment(), SyncProgressListener {
 
     private val walletData: WalletData = WalletData.getInstance()
     private val wallet: LibWallet
@@ -29,15 +28,15 @@ open class NotificationsFragment: Fragment(), SyncProgressListener {
         wallet.removeSyncProgressListener(this.javaClass.name)
     }
 
-    fun setToolbarTitle(title: CharSequence, showShadow: Boolean){
-        if(activity is HomeActivity){
+    fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
+        if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity
             homeActivity.setToolbarTitle(title, showShadow)
         }
     }
 
-    fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean){
-        if(context != null){
+    fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean) {
+        if (context != null) {
             setToolbarTitle(context!!.getString(title), showShadow)
         }
     }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/transactions_overview_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    app:elevation="4dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/recent_transactions"
+        android:textColor="#3d5873"
+        android:textSize="14sp"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <TextView
+        android:id="@+id/tv_no_transactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:textColor="#8997a5"
+        android:textSize="16sp"
+        android:text="@string/no_transactions_yet"
+        app:fontFamily="@font/source_sans_pro_regular_family" />
+
+    <LinearLayout
+        android:id="@+id/transactions_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_transactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#edeff1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/btn_view_all_transactions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="#2970ff"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

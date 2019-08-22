@@ -15,14 +15,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.StringRes;
+import androidx.core.app.NotificationCompat;
 
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
@@ -48,9 +49,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.StringRes;
-import androidx.core.app.NotificationCompat;
 import dcrlibwallet.Dcrlibwallet;
 
 public class Utils {
@@ -63,8 +61,8 @@ public class Utils {
         return pd;
     }
 
-    public static ProgressDialog getProgressDialog(Context context, boolean cancelable, boolean cancelOnTouchOutside, @StringRes int message){
-        return  Utils.getProgressDialog(context, cancelable, cancelOnTouchOutside, context.getString(message));
+    public static ProgressDialog getProgressDialog(Context context, boolean cancelable, boolean cancelOnTouchOutside, @StringRes int message) {
+        return Utils.getProgressDialog(context, cancelable, cancelOnTouchOutside, context.getString(message));
     }
 
     public static String getWordList(Context context) {
@@ -172,7 +170,7 @@ public class Utils {
     }
 
     public static String calculateDays(long seconds, Context context) {
-        if(context == null){
+        if (context == null) {
             return "";
         }
 
@@ -258,6 +256,18 @@ public class Utils {
         return ctx.getString(R.string.remaining_sync_eta_less_than_seconds, percentageCompleted);
     }
 
+    public static String getSyncTimeRemaining(long seconds, Context ctx) {
+
+
+        if (seconds > 60) {
+            long minutes = seconds / 60;
+
+            return ctx.getString(R.string.time_left_minutes, minutes);
+        }
+
+        return ctx.getString(R.string.time_left_seconds, seconds);
+    }
+
     public static String getTime(long seconds) {
         if (seconds > 60) {
             long minutes = seconds / 60;
@@ -337,7 +347,7 @@ public class Utils {
 
     }
 
-    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage){
+    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage) {
         copyToClipboard(ctx, copyText, ctx.getString(successMessage));
     }
 
@@ -355,7 +365,7 @@ public class Utils {
         return "";
     }
 
-    public static void showMessage(Context ctx, String message, int duration){
+    public static void showMessage(Context ctx, String message, int duration) {
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View vi = inflater.inflate(R.layout.toast, null);
         TextView tv = vi.findViewById(android.R.id.message);

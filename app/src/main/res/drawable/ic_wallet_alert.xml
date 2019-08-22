@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:pathData="M4,2.6667L18.6667,2.6667C19.403,2.6667 20,3.2636 20,4L20,6.4L2.6667,6.4L2.6667,4C2.6667,3.2636 3.2636,2.6667 4,2.6667Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#091440"
+        android:fillType="nonZero"
+        android:pathData="M5.3333,20L21.3333,20C22.0697,20 22.6667,19.403 22.6667,18.6667L22.6667,6.6667C22.6667,5.9303 22.0697,5.3333 21.3333,5.3333L4,5.3333C3.2636,5.3333 2.6667,4.7364 2.6667,4L2.6667,17.3333C2.6667,18.8061 3.8606,20 5.3333,20Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:pathData="M19.3333,12.6667C19.3333,14.5076 20.8533,16 22.6667,16L22.6667,9.3333C20.8533,9.3333 19.3333,10.8257 19.3333,12.6667Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:pathData="M7.3333,9.3333C4.0196,9.3333 1.3333,12.0196 1.3333,15.3333C1.3333,18.647 4.0196,21.3333 7.3333,21.3333C10.647,21.3333 13.3333,18.647 13.3333,15.3333C13.3333,12.0196 10.647,9.3333 7.3333,9.3333Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+    <path
+        android:fillColor="#091440"
+        android:fillType="evenOdd"
+        android:pathData="M6.2293,17.9177C6.2293,17.2661 6.7003,16.8224 7.3333,16.8224C7.9663,16.8224 8.4373,17.2661 8.4373,17.9177C8.4373,18.5693 7.9663,19.0319 7.3333,19.0319C6.7003,19.0319 6.2293,18.5694 6.2293,17.9177ZM6.576,13.0232L6.522,11.5681L8.1444,11.5681L8.0904,13.0232L7.8654,16.1058L6.8011,16.1058L6.576,13.0232Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+</vector>
