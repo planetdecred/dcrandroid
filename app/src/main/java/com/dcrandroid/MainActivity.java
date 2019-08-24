@@ -241,7 +241,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
         registerNotificationChannel();
 
-        if (walletData.wallet == null) {
+        if (walletData.multiWallet == null) {
             System.out.println("Restarting app");
             Utils.restartApp(this);
         }
@@ -261,17 +261,18 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
         walletData.wallet.transactionNotification(this);
         try {
-            walletData.wallet.removeSyncProgressListener(TAG);
-            walletData.wallet.addSyncProgressListener(this, TAG);
+            walletData.multiWallet.removeSyncProgressListener(TAG);
+            walletData.multiWallet.addSyncProgressListener(this, TAG);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         displayBalance();
 
+        if(!walletData.multiWallet.isSynced())
         checkWifiSync();
 
-        startBlockUpdate();
+        //startBlockUpdate();
     }
 
     @Override
@@ -416,7 +417,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
             public void run() {
                 while (!this.isInterrupted()) {
                     try {
-                        if (!scanning && !walletData.wallet.isSyncing()) {
+                        if (!scanning && !walletData.multiWallet.isSyncing()) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -475,7 +476,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                     return;
                 }
 
-                if (!walletData.wallet.isSyncing()) {
+                if (!walletData.multiWallet.isSyncing()) {
                     bestBlockTime.setText(Utils.calculateTime((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
                 } else {
                     bestBlockTime.setText(Utils.calculateDaysAgo((System.currentTimeMillis() / 1000) - seconds, MainActivity.this));
@@ -714,10 +715,10 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     public void onBlockAttached(int height, long timestamp) {
         walletData.bestBlock = height;
         this.bestBlockTimestamp = timestamp / 1000000000;
-        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false) && !walletData.wallet.isSyncing()) {
+        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false) && !walletData.multiWallet.isSyncing()) {
             alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
         }
-        if (!walletData.wallet.isSyncing()) {
+        if (!walletData.multiWallet.isSyncing()) {
             String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
             setChainStatus(status);
             runOnUiThread(new Runnable() {
@@ -802,7 +803,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                     setConnectionStatus(R.string.connecting_to_peers);
                     String peerAddresses = util.get(Constants.PEER_IP);
                     try {
-                        walletData.wallet.restartSpvSync(peerAddresses);
+                        walletData.multiWallet.restartSpvSync(peerAddresses);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -871,16 +872,16 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     @Override
     public void onPeerConnectedOrDisconnected(int i) {
         walletData.peers = i;
-        if (!walletData.wallet.isSyncing()) updatePeerCount();
+        if (!walletData.multiWallet.isSyncing()) updatePeerCount();
     }
 
     private void updatePeerCount() {
-        if (!walletData.synced && !walletData.wallet.isSyncing()) {
+        if (!walletData.synced && !walletData.multiWallet.isSyncing()) {
             setConnectionStatus(R.string.not_synced);
             return;
         }
 
-        if (!walletData.wallet.isSyncing()) {
+        if (!walletData.multiWallet.isSyncing()) {
             if (walletData.peers == 1) {
                 setConnectionStatus(R.string.synced_with_one_peer);
             } else {

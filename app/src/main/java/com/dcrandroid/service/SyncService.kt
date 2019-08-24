@@ -27,7 +27,7 @@ const val TAG = "SyncService"
 class SyncService : Service(), SyncProgressListener {
 
     private var notification: Notification? = null
-    private var wallet: LibWallet? = null
+    private var multiWallet: MultiWallet? = null
     private var walletData: WalletData? = null
     private var preferenceUtil: PreferenceUtil? = null
 
@@ -44,10 +44,10 @@ class SyncService : Service(), SyncProgressListener {
         Log.d(TAG, "Service is Started")
 
         walletData = WalletData.getInstance()
-        wallet = walletData!!.wallet
+        multiWallet = walletData!!.multiWallet
 
-        if (wallet == null) {
-            Log.d(TAG, "Wallet is null")
+        if (multiWallet == null) {
+            Log.d(TAG, "MultiWallet is null")
             return super.onStartCommand(intent, flags, startId)
         }
 
@@ -69,17 +69,18 @@ class SyncService : Service(), SyncProgressListener {
 
         showNotification()
 
-        wallet!!.removeSyncProgressListener(TAG)
-        wallet!!.addSyncProgressListener(this, TAG)
+        multiWallet?.enableSyncLogs()
+        multiWallet?.removeSyncProgressListener(TAG)
+        multiWallet?.addSyncProgressListener(this, TAG)
 
         if (Integer.parseInt(preferenceUtil!!.get(Constants.NETWORK_MODES, "0")) == 0) {
             val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
             Log.d(TAG, "Starting SPV Sync")
-            wallet!!.spvSync(peerAddresses)
+            multiWallet?.spvSync(peerAddresses)
         } else {
-            val remoteNodeAddress = preferenceUtil!!.get(Constants.REMOTE_NODE_ADDRESS)
-            Log.d(TAG, "Starting RPC Sync")
-            wallet!!.rpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).toByteArray())
+//            val remoteNodeAddress = preferenceUtil!!.get(Constants.REMOTE_NODE_ADDRESS)
+//            Log.d(TAG, "Starting RPC Sync")
+//            multiWallet!!.rpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).toByteArray())
         }
 
         return super.onStartCommand(intent, flags, startId)

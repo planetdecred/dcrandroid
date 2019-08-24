@@ -24,7 +24,7 @@ import com.dcrandroid.util.WalletData;
 import org.jetbrains.annotations.NotNull;
 
 import dcrlibwallet.Dcrlibwallet;
-import dcrlibwallet.LibWallet;
+import dcrlibwallet.MultiWallet;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
@@ -35,10 +35,16 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 public class SetupWalletActivity extends BaseActivity implements PasswordPinDialogFragment.PasswordPinListener {
 
     private PreferenceUtil preferenceUtil;
+    private String walletAlias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent data = getIntent();
+        if(data.hasExtra(Constants.WALLET_ALIAS)){
+            walletAlias = data.getStringExtra(Constants.WALLET_ALIAS);
+        }else return;
 
         setContentView(R.layout.activity_setup_page);
 
@@ -102,8 +108,13 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                MultiWallet multiWallet = WalletData.getInstance().multiWallet;
                 Intent intent = new Intent(SetupWalletActivity.this, MainActivity.class);
                 intent.putExtra(Constants.PASSPHRASE, spendingKey);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                if(multiWallet.syncedWalletCount() > 0){
+                    multiWallet.cancelSync();
+                }
                 startActivity(intent);
                 ActivityCompat.finishAffinity(SetupWalletActivity.this);
             }
@@ -122,8 +133,8 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
             public void run() {
                 try {
 
-                    LibWallet wallet = WalletData.getInstance().wallet;
-                    if (wallet == null) {
+                    MultiWallet multiWallet = WalletData.getInstance().multiWallet;
+                    if (multiWallet == null) {
                         throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
                     }
 
@@ -131,8 +142,9 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
                     preferenceUtil.set(Constants.SEED, seed);
                     preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
                     preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
-                    wallet.createWallet(spendingKey, seed);
-                    wallet.unlockWallet(spendingKey.getBytes());
+
+                    WalletData.getInstance().wallet = multiWallet.createNewWallet(walletAlias, spendingKey, seed);
+                    multiWallet.unlockWallet(walletAlias, spendingKey.getBytes());
 
                     navigateToMainActivity(spendingKey);
 
@@ -145,6 +157,6 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
 
     private void navigateToRestoreSeedWorkflow() {
         preferenceUtil.setBoolean(Constants.RESTORE_WALLET, true);
-        // TODO - hook up restore wallet workflow after implementing restore wallet UI
+
     }
 }

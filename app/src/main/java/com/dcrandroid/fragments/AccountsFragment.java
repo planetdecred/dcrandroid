@@ -17,9 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.dcrandroid.R;
 import com.dcrandroid.activities.AddAccountActivity;
+import com.dcrandroid.activities.SetupWalletActivity;
 import com.dcrandroid.adapter.AccountAdapter;
 import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
@@ -139,17 +141,22 @@ public class AccountsFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.accounts_page_menu, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_account:
                 Intent intent = new Intent(getContext(), AddAccountActivity.class);
                 startActivityForResult(intent, CREATE_ACCOUNT_REQUEST_CODE);
+                return true;
+            case R.id.add_new_wallet:
+                Intent i = new Intent(getContext(), SetupWalletActivity.class);
+                i.putExtra(Constants.WALLET_ALIAS, "wallet-2");
+                startActivity(i);
                 return true;
         }
         return super.onOptionsItemSelected(item);

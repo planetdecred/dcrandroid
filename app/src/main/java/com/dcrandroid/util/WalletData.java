@@ -7,6 +7,7 @@
 package com.dcrandroid.util;
 
 import dcrlibwallet.LibWallet;
+import dcrlibwallet.MultiWallet;
 
 /**
  * Created by collins on 2/24/18.
@@ -17,6 +18,8 @@ public class WalletData {
     public LibWallet wallet;
     public boolean synced = false;
     public int peers = 0, bestBlock = -1;
+
+    public MultiWallet multiWallet;
 
     private WalletData() {}
 

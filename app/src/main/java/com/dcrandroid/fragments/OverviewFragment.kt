@@ -82,7 +82,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         swipe_refresh_layout2.setOnRefreshListener(this)
         transactionAdapter = TransactionAdapter(transactionList, context!!)
 
-        if (!walletData!!.wallet.isSyncing) setupSyncLayout()
+        if (!walletData!!.multiWallet.isSyncing) setupSyncLayout()
         else hideSyncLayout()
 
         val mLayoutManager = LinearLayoutManager(context)
@@ -194,8 +194,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         history_recycler_view2.adapter = transactionAdapter
         registerForContextMenu(history_recycler_view2)
 
-        walletData!!.wallet.removeSyncProgressListener(TAG)
-        walletData!!.wallet.addSyncProgressListener(this, TAG)
+        walletData!!.multiWallet.removeSyncProgressListener(TAG)
+        walletData!!.multiWallet.addSyncProgressListener(this, TAG)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -256,7 +256,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
 
     private fun getTransactions() {
         activity!!.runOnUiThread { swipe_refresh_layout2.isRefreshing = true }
-        if (walletData!!.wallet.isSyncing) {
+        if (walletData!!.multiWallet.isSyncing) {
             no_history.setText(R.string.synchronizing)
             swipe_refresh_layout2.isRefreshing = false
             return
@@ -364,7 +364,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
     override fun onResume() {
         super.onResume()
 
-        if (walletData!!.wallet.isSyncing) {
+        if (walletData!!.multiWallet.isSyncing) {
             overview_sync_layout.visibility = View.VISIBLE
             tv_synchronizing.setText(R.string.starting_synchronization)
         } else {

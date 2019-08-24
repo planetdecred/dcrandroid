@@ -12,4 +12,9 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add_account"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/add_new_wallet"
+        android:title="Add a wallet"
+        app:showAsAction="never"/>
 </menu>

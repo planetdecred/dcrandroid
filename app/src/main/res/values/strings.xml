@@ -226,6 +226,7 @@
     <string name="recover_wallet">Recover Wallet</string>
     <string name="private_passphrase">Private Passphrase</string>
     <string name="opening_wallet">Opening wallet…</string>
+    <string name="opening_wallets">Opening wallets…</string>
     <string name="input_private_phrase">Enter your private passphrase</string>
     <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
     <string name="enter_your_passphrase">Enter your passphrase</string>
@@ -518,7 +519,7 @@
     <string name="create_spending_pass">Create a Spending Password</string>
     <string name="create_security_pass">Create Spending Password</string>
     <string name="mismatch_passcode">PIN do not match</string>
-    <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
+    <string name="create_wallet_uninitialized">Cannot create wallet, MultiWallet not initialized</string>
     <string name="mismatch_password">Password do not match</string>
     <string name="empty_password">Password cannot be empty</string>
     <string name="password_match">PASSWORDS MATCH</string>

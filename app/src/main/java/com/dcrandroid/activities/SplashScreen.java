@@ -28,10 +28,8 @@ import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
 
-import java.io.File;
-
 import dcrlibwallet.Dcrlibwallet;
-import dcrlibwallet.LibWallet;
+import dcrlibwallet.MultiWallet;
 
 /**
  * Created by Macsleven on 24/12/2017.
@@ -117,29 +115,20 @@ public class SplashScreen extends BaseActivity {
         walletData = WalletData.getInstance();
 
         try {
-            if (walletData.wallet != null && walletData.wallet.walletOpened()) {
-                walletData.wallet.shutdown();
+            if (walletData.multiWallet != null) {
+                walletData.multiWallet.shutdown();
             }
 
-            walletData.wallet = null;
+            walletData.multiWallet = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         String homeDir = getFilesDir() + "/wallet";
-        walletData.wallet = new LibWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
+        walletData.multiWallet = new MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
         Dcrlibwallet.setLogLevels(util.get(Constants.LOGGING_LEVEL));
 
-        String walletDB;
-
-        if (BuildConfig.IS_TESTNET) {
-            walletDB = "/testnet3/wallet.db";
-        } else {
-            walletDB = "/mainnet/wallet.db";
-        }
-
-        File f = new File(homeDir, walletDB);
-        if (!f.exists()) {
+        if (walletData.multiWallet.loadedWalletsCount() == 0) {
             loadThread = new Thread() {
                 public void run() {
                     try {
@@ -167,6 +156,7 @@ public class SplashScreen extends BaseActivity {
 
     private void createWallet() {
         Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
+        i.putExtra(Constants.WALLET_ALIAS, Constants.DEFAULT);
         startActivity(i);
         finish();
     }
@@ -175,13 +165,21 @@ public class SplashScreen extends BaseActivity {
         loadThread = new Thread() {
             public void run() {
                 try {
-                    setText(getString(R.string.opening_wallet));
-                    walletData.wallet.openWallet(publicPass.getBytes());
-                    Intent i = new Intent(SplashScreen.this, HomeActivity.class);
+                    if(walletData.multiWallet.loadedWalletsCount() > 1){
+                        setText(getString(R.string.opening_wallets));
+                    }else{
+                        setText(getString(R.string.opening_wallet));
+                    }
+
+                    walletData.multiWallet.openWallets(publicPass.getBytes());
+                    walletData.wallet = walletData.multiWallet.getWallet("default");
+
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     //Finish all the activities before this
                     ActivityCompat.finishAffinity(SplashScreen.this);
+
                 } catch (final Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {

@@ -93,7 +93,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         }
 
         // Balance
-        if (!WalletData.getInstance().wallet.isSyncing()) {
+        if (!WalletData.getInstance().multiWallet.isSyncing()) {
             holder.spendable.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(balance.getSpendable())));
             holder.total.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(balance.getTotal())));
             holder.immatureRewards.setText(CoinFormat.Companion.format(balance.getImmatureReward()));

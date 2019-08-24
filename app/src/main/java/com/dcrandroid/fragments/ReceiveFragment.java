@@ -96,7 +96,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null && intent.getAction().equals(Constants.SYNCED)
                     && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)) {
-                if (!wallet.isSyncing()) {
+                if (!WalletData.getInstance().multiWallet.isSyncing()) {
                     syncView.setVisibility(View.GONE);
                     ReceiveContainer.setVisibility(View.VISIBLE);
                     menuAddress.setVisible(true);
@@ -133,7 +133,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         this.wallet = WalletData.getInstance().wallet;
 
         // If synchronizing set syncView to visible && ReceiveContainer to gone
-        if(wallet.isSyncing() && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
+        if(WalletData.getInstance().multiWallet.isSyncing() && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
             syncView.setVisibility(View.VISIBLE);
             ReceiveContainer.setVisibility(View.GONE);
         }
@@ -219,7 +219,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
         menuQrCode = menu.findItem(R.id.share_qr_code);
 
         // If synchronizing set visibility of menuAddress and menuQrCode to false
-        if(wallet.isSyncing() && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
+        if(WalletData.getInstance().multiWallet.isSyncing() && preferenceUtil.getBoolean(Constants.RESTORE_WALLET)){
             menuAddress.setVisible(false);
             menuQrCode.setVisible(false);
         }
