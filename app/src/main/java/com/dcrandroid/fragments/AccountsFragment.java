@@ -155,7 +155,6 @@ public class AccountsFragment extends Fragment {
                 return true;
             case R.id.add_new_wallet:
                 Intent i = new Intent(getContext(), SetupWalletActivity.class);
-                i.putExtra(Constants.WALLET_ALIAS, "wallet-2");
                 startActivity(i);
                 return true;
         }

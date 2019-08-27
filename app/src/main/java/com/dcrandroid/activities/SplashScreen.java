@@ -156,7 +156,6 @@ public class SplashScreen extends BaseActivity {
 
     private void createWallet() {
         Intent i = new Intent(SplashScreen.this, SetupWalletActivity.class);
-        i.putExtra(Constants.WALLET_ALIAS, Constants.DEFAULT);
         startActivity(i);
         finish();
     }
@@ -172,7 +171,7 @@ public class SplashScreen extends BaseActivity {
                     }
 
                     walletData.multiWallet.openWallets(publicPass.getBytes());
-                    walletData.wallet = walletData.multiWallet.getWallet("default");
+                    walletData.wallet = walletData.multiWallet.getWallet(0);
 
                     Intent i = new Intent(SplashScreen.this, HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

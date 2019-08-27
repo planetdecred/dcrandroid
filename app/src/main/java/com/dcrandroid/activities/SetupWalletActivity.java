@@ -25,6 +25,7 @@ import com.dcrandroid.util.WalletData;
 import org.jetbrains.annotations.NotNull;
 
 import dcrlibwallet.Dcrlibwallet;
+import dcrlibwallet.LibWallet;
 import dcrlibwallet.MultiWallet;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -36,16 +37,10 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 public class SetupWalletActivity extends BaseActivity implements PasswordPinDialogFragment.PasswordPinListener {
 
     private PreferenceUtil preferenceUtil;
-    private String walletAlias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent data = getIntent();
-        if(data.hasExtra(Constants.WALLET_ALIAS)){
-            walletAlias = data.getStringExtra(Constants.WALLET_ALIAS);
-        }else return;
 
         setContentView(R.layout.activity_setup_page);
 
@@ -144,8 +139,9 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
                     preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
                     preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
 
-                    WalletData.getInstance().wallet = multiWallet.createNewWallet(walletAlias, spendingKey, seed);
-                    multiWallet.unlockWallet(walletAlias, spendingKey.getBytes());
+                    LibWallet wallet = multiWallet.createNewWallet(spendingKey, seed);
+                    WalletData.getInstance().wallet = wallet;
+                    multiWallet.unlockWallet(wallet.getWalletID(), spendingKey.getBytes());
 
                     navigateToMainActivity(spendingKey);
 
