@@ -811,7 +811,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                     setConnectionStatus(R.string.connecting_to_rpc_server);
                     String remoteNodeAddress = util.get(Constants.REMOTE_NODE_ADDRESS);
                     try {
-                        walletData.wallet.restartRpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).getBytes());
+                        walletData.multiWallet.restartRpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).getBytes());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -932,6 +932,11 @@ public class MainActivity extends BaseActivity implements TransactionListener,
         walletData.synced = false;
 
         setupSyncedLayout();
+    }
+
+    @Override
+    public void onSyncStarted() {
+
     }
 
     @Override

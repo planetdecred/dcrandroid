@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import androidx.core.app.ActivityCompat;
 
+import com.dcrandroid.HomeActivity;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
@@ -109,7 +110,7 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
             @Override
             public void run() {
                 MultiWallet multiWallet = WalletData.getInstance().multiWallet;
-                Intent intent = new Intent(SetupWalletActivity.this, MainActivity.class);
+                Intent intent = new Intent(SetupWalletActivity.this, HomeActivity.class);
                 intent.putExtra(Constants.PASSPHRASE, spendingKey);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 if(multiWallet.syncedWalletCount() > 0){

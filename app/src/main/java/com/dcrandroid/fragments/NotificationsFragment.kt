@@ -15,17 +15,17 @@ import dcrlibwallet.*
 open class NotificationsFragment : Fragment(), SyncProgressListener {
 
     private val walletData: WalletData = WalletData.getInstance()
-    private val wallet: LibWallet
-        get() = walletData.wallet
+    private val multiWallet: MultiWallet
+        get() = walletData.multiWallet
 
     override fun onStart() {
         super.onStart()
-        wallet.addSyncProgressListener(this, this.javaClass.name)
+        multiWallet.addSyncProgressListener(this, this.javaClass.name)
     }
 
     override fun onStop() {
         super.onStop()
-        wallet.removeSyncProgressListener(this.javaClass.name)
+        multiWallet.removeSyncProgressListener(this.javaClass.name)
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
@@ -43,6 +43,9 @@ open class NotificationsFragment : Fragment(), SyncProgressListener {
 
     // -- Sync Progress Listener
 
+    override fun onSyncStarted() {
+    }
+
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {
     }
 
@@ -59,4 +62,11 @@ open class NotificationsFragment : Fragment(), SyncProgressListener {
     override fun onSyncEndedWithError(err: Exception?) {}
 
     override fun debug(debugInfo: DebugInfo?) {}
+
+
+    override fun onBlockAttached(height: Int, timestamp: Long) {}
+
+    override fun onTransactionConfirmed(hash: String?, height: Int) {}
+
+    override fun onTransaction(transaction: String?) {}
 }

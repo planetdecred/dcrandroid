@@ -9,7 +9,7 @@ package com.dcrandroid.util
 import android.content.Context
 import android.net.ConnectivityManager
 
-class NetworkUtil() {
+class NetworkUtil {
 
     companion object {
         fun isWifiConnected(context: Context): Boolean {

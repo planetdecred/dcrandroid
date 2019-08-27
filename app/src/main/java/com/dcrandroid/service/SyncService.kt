@@ -69,7 +69,6 @@ class SyncService : Service(), SyncProgressListener {
 
         showNotification()
 
-        multiWallet?.enableSyncLogs()
         multiWallet?.removeSyncProgressListener(TAG)
         multiWallet?.addSyncProgressListener(this, TAG)
 
@@ -126,6 +125,9 @@ class SyncService : Service(), SyncProgressListener {
         showNotification()
     }
 
+    override fun onSyncStarted() {
+    }
+
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {
         publishProgress(headersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds, headersFetchProgress.generalSyncProgress.totalSyncProgress)
     }
@@ -165,4 +167,10 @@ class SyncService : Service(), SyncProgressListener {
     }
 
     override fun debug(debugInfo: DebugInfo?) {}
+
+    override fun onBlockAttached(height: Int, timestamp: Long) {}
+
+    override fun onTransactionConfirmed(hash: String?, height: Int) {}
+
+    override fun onTransaction(transaction: String?) {}
 }

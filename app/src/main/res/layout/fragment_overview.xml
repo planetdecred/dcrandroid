@@ -60,6 +60,7 @@
             android:background="@drawable/card_bg"
             android:elevation="4dp"
             android:orientation="vertical"
+            android:id="@+id/sync_layout"
             app:elevation="4dp">
 
             <LinearLayout
@@ -86,7 +87,7 @@
                     android:id="@+id/view_online_offline_status"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:background="@drawable/offline_dot" />
+                    android:background="@drawable/online_dot" />
 
                 <TextView
                     android:id="@+id/tv_online_offline_status"
@@ -94,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
-                    android:text="@string/offline"
+                    android:text="@string/online"
                     android:textColor="#091440"
                     android:textSize="12sp"
                     app:fontFamily="@font/source_sans_pro_regular_family" />

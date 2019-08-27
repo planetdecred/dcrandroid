@@ -11,3 +11,15 @@ import android.view.View
 fun View.toggleVisibility() {
     this.visibility = if (this.visibility == View.VISIBLE) View.GONE else View.VISIBLE
 }
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
+}
+
+fun View.isShowing(): Boolean{
+    return this.visibility == View.VISIBLE
+}

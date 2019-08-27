@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:indeterminate="false"
-            android:progress="30"
+            android:progress="0"
             android:progressDrawable="@drawable/sync_progress_bar" />
 
         <LinearLayout
@@ -78,22 +78,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:includeFontPadding="false"
-                android:text="@string/percentage"
                 android:textColor="#091440"
                 android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                tools:text="34%" />
+                app:fontFamily="@font/source_sans_pro_regular_family" />
 
             <TextView
                 android:id="@+id/tv_time_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="@string/time_left_minutes"
                 android:textColor="#091440"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro_regular_family"
-                tools:text="6 min left" />
+                 />
 
         </LinearLayout>
 
@@ -115,131 +112,61 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_steps"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:includeFontPadding="false"
-                android:text="@string/step_1_3"
-                android:textColor="#596d81"
-                android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
-
-            <TextView
-                android:id="@+id/tv_steps_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:text="@string/fetching_block_headers"
-                android:textColor="#091440"
-                android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                tools:text="Fetching block headers 76%" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/bg_gray_corner_8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="@dimen/margin_padding_size_16">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_block_header_fetched"
+                    android:id="@+id/tv_steps"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/block_header_fetched"
+                    android:includeFontPadding="false"
+                    android:text="@string/step_1_3"
                     android:textColor="#596d81"
                     android:textSize="14sp"
                     app:fontFamily="@font/source_sans_pro_regular_family" />
 
                 <TextView
-                    android:id="@+id/tv_fetch_discover_scan_count"
+                    android:id="@+id/tv_steps_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/fetching_block_headers"
                     android:textColor="#091440"
                     android:textSize="16sp"
                     app:fontFamily="@font/source_sans_pro_regular_family"
-                    tools:text="6000 of 164864" />
+                    tools:text="Fetching block headers 76%" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:id="@+id/syncing_layout_connected_peers_row"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_progress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/syncing_progress"
-                    android:textColor="#596d81"
-                    android:textSize="14sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
-
-                <TextView
-                    android:id="@+id/tv_days"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/days_behind"
-                    android:textColor="#091440"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
-                    tools:text="290 days behind" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="17dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_connected_peers"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:includeFontPadding="false"
                     android:text="@string/connected_peers_count"
                     android:textColor="#596d81"
                     android:textSize="14sp"
                     app:fontFamily="@font/source_sans_pro_regular_family" />
 
                 <TextView
-                    android:id="@+id/tv_peers_count"
+                    android:id="@+id/tv_syncing_layout_connected_peer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:textColor="#091440"
                     android:textSize="16sp"
                     app:fontFamily="@font/source_sans_pro_regular_family"
@@ -247,12 +174,15 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+            <include layout="@layout/single_wallet_sync_details" />
+
+            <include layout="@layout/multi_wallet_sync_details" />
+
+    </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
             android:background="#edeff1" />
 
     </LinearLayout>

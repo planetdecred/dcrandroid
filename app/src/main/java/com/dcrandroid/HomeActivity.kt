@@ -36,10 +36,11 @@ import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
 import kotlin.math.roundToInt
+import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
+class HomeActivity : BaseActivity(), SyncProgressListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -53,6 +54,8 @@ class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
     private val walletData: WalletData = WalletData.getInstance()
     private val wallet: LibWallet
         get() = walletData.wallet
+    private val multiWallet: MultiWallet
+        get() = walletData.multiWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,10 +82,9 @@ class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
 
         blockNotificationSound = alertSound.load(this, R.raw.beep, 1)
 
-        walletData.wallet.transactionNotification(this)
         try {
-            walletData.wallet.removeSyncProgressListener(TAG)
-            walletData.wallet.addSyncProgressListener(this, TAG)
+            walletData.multiWallet.removeSyncProgressListener(TAG)
+            walletData.multiWallet.addSyncProgressListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -90,6 +92,17 @@ class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
         initNavigationTabs()
 
         checkWifiSync()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        val syncIntent = Intent(this, SyncService::class.java)
+        stopService(syncIntent)
+
+        multiWallet.shutdown()
+        finish()
+        exitProcess(1)
     }
 
     private fun registerNotificationChannel() {
@@ -187,18 +200,10 @@ class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
                     val syncDialog = dialog as WiFiSyncDialog
                     util.setBoolean(Constants.WIFI_SYNC, syncDialog.checked)
 
-                    if (currentFragment is Overview) {
-                        val overviewFragment = currentFragment as Overview
-                        overviewFragment.setupSyncLayout()
-                    }
                 })
 
         wifiSyncDialog.setOnCancelListener {
             sendBroadcast(Intent(Constants.SYNCED))
-            if (currentFragment is Overview) {
-                val overviewFragment = currentFragment as Overview
-                overviewFragment.onSyncCanceled(false)
-            }
         }
 
         wifiSyncDialog.show()
@@ -222,6 +227,9 @@ class HomeActivity : BaseActivity(), TransactionListener, SyncProgressListener {
     }
 
     // -- Sync Progress Listener
+
+    override fun onSyncStarted() {
+    }
 
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {
     }

@@ -195,6 +195,15 @@ public class Utils {
         return context.getString(R.string.multiple_days_ago, days);
     }
 
+    public static String getDaysBehind(long seconds, Context context) {
+        long days = TimeUnit.SECONDS.toDays(seconds);
+        if (days == 1) {
+            return context.getString(R.string.one_days_behind);
+        }
+
+        return context.getString(R.string.days_behind, days);
+    }
+
     public static String calculateTime(long seconds, Context context) {
         String ago = "";
         if (seconds > 59) {
@@ -257,8 +266,6 @@ public class Utils {
     }
 
     public static String getSyncTimeRemaining(long seconds, Context ctx) {
-
-
         if (seconds > 60) {
             long minutes = seconds / 60;
 
@@ -375,66 +382,6 @@ public class Utils {
         toast.setDuration(duration);
         toast.setView(vi);
         toast.show();
-    }
-
-    public static void backupWalletDB(final Context context) {
-        try {
-            long startTime = System.currentTimeMillis();
-            //TODO: Mainnet support
-            File walletDb = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db");
-            File backup = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db.bak");
-            if (backup.exists()) {
-                backup.delete();
-            }
-            if (walletDb.exists() && walletDb.isFile()) {
-                FileOutputStream out = new FileOutputStream(backup);
-                FileInputStream in = new FileInputStream(walletDb);
-
-                byte[] buff = new byte[8192];
-                int len;
-
-                while ((len = in.read(buff)) != -1) {
-                    out.write(buff, 0, len);
-                    out.flush();
-                }
-                out.close();
-                in.close();
-                System.out.println("Backup took " + (System.currentTimeMillis() - startTime) + " ms");
-            }
-        } catch (IOException e) {
-            System.out.println("Backup Failed");
-            e.printStackTrace();
-        }
-    }
-
-    public static void restoreWalletDB(final Context context) {
-        try {
-            long startTime = System.currentTimeMillis();
-            //TODO: Mainnet support
-            File walletDb = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db");
-            File backup = new File(context.getFilesDir() + "/dcrwallet/testnet2/wallet.db.bak");
-            if (walletDb.exists()) {
-                walletDb.delete();
-            }
-            if (walletDb.exists()) {
-                FileOutputStream out = new FileOutputStream(walletDb);
-                FileInputStream in = new FileInputStream(backup);
-
-                byte[] buff = new byte[8192];
-                int len;
-
-                while ((len = in.read(buff)) != -1) {
-                    out.write(buff, 0, len);
-                    out.flush();
-                }
-                out.close();
-                in.close();
-                System.out.println("Restore took " + (System.currentTimeMillis() - startTime) + " ms");
-            }
-        } catch (IOException e) {
-            System.out.println("Restore Failed");
-            e.printStackTrace();
-        }
     }
 
     public static String translateError(Context ctx, Exception e) {

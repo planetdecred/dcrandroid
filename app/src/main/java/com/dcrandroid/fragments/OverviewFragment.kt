@@ -475,6 +475,8 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         }
     }
 
+    override fun onSyncStarted() {}
+
     override fun onHeadersFetchProgress(report: HeadersFetchProgressReport) {
         if (context == null) {
             return
@@ -558,6 +560,18 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         }
         err!!.printStackTrace()
         hideSyncLayout()
+    }
+
+    override fun onBlockAttached(p0: Int, p1: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onTransactionConfirmed(p0: String?, p1: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onTransaction(p0: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun setupSyncLayout() {

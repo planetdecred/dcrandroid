@@ -25,7 +25,7 @@
             android:id="@+id/sync_state_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_crossmark" />
+            app:srcCompat="@drawable/ic_checkmark" />
 
         <TextView
             android:id="@+id/tv_sync_state"
@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:includeFontPadding="false"
-            android:text="@string/not_syncing"
+            android:text="@string/synced"
             android:textColor="#091440"
             android:textSize="20sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
@@ -91,7 +91,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:includeFontPadding="false"
-            android:text="@string/synced_latest_block_time"
+            android:text="Latest block 320505．2 min ago"
             android:textColor="#8997a5"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
@@ -103,7 +103,7 @@
             android:layout_marginTop="14dp"
             android:layout_weight="1"
             android:includeFontPadding="false"
-            android:text="@string/synced_latest_block_time"
+            android:text="@string/no_connected_peers"
             android:textColor="#8997a5"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
