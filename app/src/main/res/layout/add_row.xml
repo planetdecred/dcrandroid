@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/curved_bottom_ripple"
+    android:focusable="true"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:padding="@dimen/margin_padding_size_16">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_add" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add new account"
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="#596d81"
+        android:layout_marginLeft="@dimen/margin_padding_size_16"
+        android:layout_marginStart="@dimen/margin_padding_size_16" />
+
+</LinearLayout>

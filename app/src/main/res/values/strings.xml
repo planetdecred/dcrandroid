@@ -79,6 +79,7 @@
     <string name="you_received">You received</string>
     <string name="disconnected">Disconnected</string>
     <string name="syncing">Syncing</string>
+    <string name="syncing_ellipsis">Syncing…</string>
     <string name="synced_with_one_peer">Synced with 1 peer</string>
     <string name="syncing_with_one_peer">Syncing with 1 peer</string>
     <string name="synced_with_multiple_peer">Synced with %1$d peers</string>
@@ -597,6 +598,8 @@
     <string name="no_transactions_yet">No transactions yet.</string>
     <string name="not_syncing">Not syncing</string>
     <string name="reconnect">Reconnect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
     <string name="show_details">Show details</string>
     <string name="hide_details">Hide Details</string>
     <string name="block_header_fetched">Block header fetched</string>
@@ -623,5 +626,6 @@
     <string name="no_connected_peers">No connected peers.</string>
     <string name="_default">Default</string>
     <string name="starting_up">Starting up</string>
+    <string name="waiting_for_other_wallets">Waiting for other wallets</string>
 
 </resources>

@@ -30,15 +30,17 @@
             android:text="@string/_default"
             android:textColor="#091440"
             android:textSize="16sp"
+            android:id="@+id/wallet_name"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/wallet_syncing_status"
             android:textColor="#c4cbd2"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="Waiting for other wallets" />
+            tools:text="@string/waiting_for_other_wallets" />
 
     </LinearLayout>
 

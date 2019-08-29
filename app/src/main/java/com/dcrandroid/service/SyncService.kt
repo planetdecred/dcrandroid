@@ -47,7 +47,9 @@ class SyncService : Service(), SyncProgressListener {
         multiWallet = walletData!!.multiWallet
 
         if (multiWallet == null) {
-            Log.d(TAG, "MultiWallet is null")
+            Log.d(TAG, "MultiWallet is null, destroying service")
+            stopForeground(true)
+            stopSelf()
             return super.onStartCommand(intent, flags, startId)
         }
 

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -10,9 +11,8 @@
     android:id="@+id/syncing_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical"
-    android:visibility="visible">
+    android:visibility="gone"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,8 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_syncing" />
+            app:srcCompat="@drawable/ic_syncing"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="0dp"
@@ -42,6 +43,41 @@
             android:textColor="#091440"
             android:textSize="20sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        <LinearLayout
+            android:id="@+id/syncing_cancel_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/reconnect_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="9dp"
+            android:paddingRight="9dp"
+            android:paddingBottom="4dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:srcCompat="@drawable/ic_crossmark"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:includeFontPadding="false"
+                android:text="@string/cancel"
+                android:textColor="#091440"
+                android:textSize="14sp"
+                app:fontFamily="@font/source_sans_pro_regular_family" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -107,7 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -149,7 +185,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_padding_size_16"
                 android:id="@+id/syncing_layout_connected_peers_row"
-                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView

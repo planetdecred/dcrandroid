@@ -6,35 +6,25 @@
 
 package com.dcrandroid.fragments
 
-import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.*
-import androidx.core.text.HtmlCompat
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
-import com.dcrandroid.activities.VerifySeedActivity
 import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
-import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
-import kotlinx.android.synthetic.main.backup_seed_prompt_layout.view.*
-import kotlinx.android.synthetic.main.fragment_overview.*
-import kotlinx.android.synthetic.main.synced_unsynced_layout.*
-import kotlinx.android.synthetic.main.syncing_layout.view.*
-import java.util.concurrent.TimeUnit
 
-class Overview : NotificationsFragment(), ViewTreeObserver.OnScrollChangedListener {
+class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
     private val requiredConfirmations: Int
         get() {
@@ -55,7 +45,7 @@ class Overview : NotificationsFragment(), ViewTreeObserver.OnScrollChangedListen
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
             .create()
 
-    private lateinit var scrollView: ScrollView
+    private lateinit var scrollView: NestedScrollView
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var balanceTextView: TextView
@@ -105,7 +95,11 @@ class Overview : NotificationsFragment(), ViewTreeObserver.OnScrollChangedListen
 
     override fun onResume() {
         super.onResume()
-        syncLayoutUtil = SyncLayoutUtil(syncLayout)
+        syncLayoutUtil = SyncLayoutUtil(syncLayout, {restartSyncProcess()}, {
+            scrollView.postDelayed({
+                scrollView.smoothScrollTo(0, scrollView.bottom)
+            }, 200)
+        })
     }
 
     override fun onPause() {

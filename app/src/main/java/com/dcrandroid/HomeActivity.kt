@@ -27,6 +27,7 @@ import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.adapter.OnTabSelectedListener
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.WiFiSyncDialog
+import com.dcrandroid.fragments.AccountsFragment
 import com.dcrandroid.fragments.Overview
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
@@ -52,14 +53,16 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     private lateinit var currentFragment: Fragment
 
     private val walletData: WalletData = WalletData.getInstance()
-    private val wallet: LibWallet
+    private var wallet: LibWallet? = null
         get() = walletData.wallet
-    private val multiWallet: MultiWallet
+    private var multiWallet: MultiWallet? = null
         get() = walletData.multiWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
+
+        setSupportActionBar(toolbar)
 
         util = PreferenceUtil(this)
         if (wallet == null) {
@@ -100,7 +103,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val syncIntent = Intent(this, SyncService::class.java)
         stopService(syncIntent)
 
-        multiWallet.shutdown()
+        multiWallet?.shutdown()
         finish()
         exitProcess(1)
     }
@@ -157,6 +160,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         currentFragment = when (position) {
             0 -> Overview()
+            2 -> AccountsFragment()
             else -> Fragment()
         }
 
@@ -179,7 +183,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         }
     }
 
-    private fun checkWifiSync() {
+    fun checkWifiSync() {
         if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
             // Check if wifi is connected
             val isWifiConnected = this.let { NetworkUtil.isWifiConnected(it) }

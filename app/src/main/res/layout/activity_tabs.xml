@@ -18,32 +18,42 @@
         android:background="#f3f5f6"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            app:contentInsetStart="16dp"
+            app:contentInsetLeft="16dp"
+            app:contentInsetEnd="16dp"
+            app:contentInsetRight="16dp"
             >
-            <ImageView
-                android:layout_width="33dp"
-                android:layout_height="27dp"
-                app:srcCompat="@drawable/decred_symbol_blue"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Overview"
-                android:id="@+id/toolbar_title"
-                android:textSize="20sp"
-                android:textColor="#091440"
-                android:includeFontPadding="false"
-                app:fontFamily="@font/source_sans_pro_regular_family"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_decred_blue" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overview"
+                    android:id="@+id/toolbar_title"
+                    android:textSize="20sp"
+                    android:textColor="#091440"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -135,8 +135,6 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
                     }
 
                     String seed = Dcrlibwallet.generateSeed();
-                    preferenceUtil.set(Constants.SEED, seed);
-                    preferenceUtil.setBoolean(Constants.VERIFIED_SEED, false);
                     preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
 
                     LibWallet wallet = multiWallet.createNewWallet(spendingKey, seed);

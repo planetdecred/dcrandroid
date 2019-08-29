@@ -12,7 +12,7 @@ import com.dcrandroid.HomeActivity
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
 
-open class NotificationsFragment : Fragment(), SyncProgressListener {
+open class BaseFragment : Fragment(), SyncProgressListener {
 
     private val walletData: WalletData = WalletData.getInstance()
     private val multiWallet: MultiWallet
@@ -38,6 +38,13 @@ open class NotificationsFragment : Fragment(), SyncProgressListener {
     fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean) {
         if (context != null) {
             setToolbarTitle(context!!.getString(title), showShadow)
+        }
+    }
+
+    fun restartSyncProcess(){
+        if (activity is HomeActivity) {
+            val homeActivity = activity as HomeActivity
+            homeActivity.checkWifiSync()
         }
     }
 

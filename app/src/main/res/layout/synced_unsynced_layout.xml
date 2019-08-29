@@ -60,6 +60,7 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:id="@+id/cancel_icon"
                 app:srcCompat="@drawable/ic_rescan" />
 
             <TextView
@@ -71,6 +72,7 @@
                 android:text="@string/reconnect"
                 android:textColor="#091440"
                 android:textSize="14sp"
+                android:id="@+id/tv_reconnect"
                 app:fontFamily="@font/source_sans_pro_regular_family" />
 
         </LinearLayout>

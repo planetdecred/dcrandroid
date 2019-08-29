@@ -171,7 +171,7 @@ public class SplashScreen extends BaseActivity {
                     }
 
                     walletData.multiWallet.openWallets(publicPass.getBytes());
-                    walletData.wallet = walletData.multiWallet.getWallet(0);
+                    walletData.wallet = walletData.multiWallet.getWallet(1); // TODO
 
                     Intent i = new Intent(SplashScreen.this, HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
