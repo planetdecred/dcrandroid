@@ -126,6 +126,8 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
         syncLayout.tv_steps_title.text = context.getString(R.string.starting_up)
         syncLayout.tv_steps.text = context.getString(R.string.step_1_3)
 
+        syncLayout.syncing_layout_wallet_name.hide()
+
         // single wallet setup
         if(multiWallet.openedWalletsCount() > 1) {
             showSyncVerboseExtras()
@@ -310,6 +312,18 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
 
             hideSyncVerboseExtras()
             syncLayout.syncing_layout_connected_peers_row.show()
+
+            // connected peers count
+            syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
+
+            if(multiWallet.openedWalletsCount() > 1){
+                syncLayout.syncing_layout_wallet_name.show()
+
+                val wallet = multiWallet.getWallet(addressDiscoveryProgress!!.walletID)
+                syncLayout.tv_syncing_layout_wallet_name.text = wallet.walletName
+            }else{
+                syncLayout.syncing_layout_wallet_name.hide()
+            }
         }
 
         publishSyncProgress(addressDiscoveryProgress!!.generalSyncProgress)
@@ -336,6 +350,18 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             syncLayout.tv_progress.setText(R.string.syncing_progress)
             syncLayout.tv_days.text = context.getString(R.string.blocks_left,
                     headersRescanProgress.totalHeadersToScan - headersRescanProgress.currentRescanHeight)
+
+            // connected peers count
+            syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
+
+            if(multiWallet.openedWalletsCount() > 1){
+                syncLayout.syncing_layout_wallet_name.show()
+
+                val wallet = multiWallet.getWallet(headersRescanProgress.walletID)
+                syncLayout.tv_syncing_layout_wallet_name.text = wallet.walletName
+            }else{
+                syncLayout.syncing_layout_wallet_name.hide()
+            }
         }
 
         publishSyncProgress(headersRescanProgress!!.generalSyncProgress)

@@ -17,6 +17,7 @@ import com.dcrandroid.util.WalletData
 import com.dcrandroid.activities.SetupWalletActivity
 import android.content.Intent
 import android.widget.Toast
+import com.dcrandroid.data.Constants
 import dcrlibwallet.MultiWallet
 
 class AccountsFragment: BaseFragment() {

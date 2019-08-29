@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.dcrandroid.HomeActivity;
-import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.fragments.PasswordPinDialogFragment;
@@ -108,11 +107,13 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
                 Intent intent = new Intent(SetupWalletActivity.this, HomeActivity.class);
                 intent.putExtra(Constants.PASSPHRASE, spendingKey);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                if(multiWallet.syncedWalletCount() > 0){
-                    multiWallet.cancelSync();
+
+                if(multiWallet.openedWalletsCount() > 1){
+                    finish();
+                }else{
+                    startActivity(intent);
+                    ActivityCompat.finishAffinity(SetupWalletActivity.this);
                 }
-                startActivity(intent);
-                ActivityCompat.finishAffinity(SetupWalletActivity.this);
             }
         });
     }

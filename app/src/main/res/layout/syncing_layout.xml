@@ -209,6 +209,36 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:id="@+id/syncing_layout_wallet_name"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="@string/wallet"
+                    android:textColor="#596d81"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+                <TextView
+                    android:id="@+id/tv_syncing_layout_wallet_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="#091440"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    tools:text="wallet-1" />
+
+            </LinearLayout>
+
             <include layout="@layout/single_wallet_sync_details" />
 
             <include layout="@layout/multi_wallet_sync_details" />
