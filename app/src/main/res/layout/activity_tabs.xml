@@ -22,8 +22,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentInsetStart="16dp"
-            app:contentInsetLeft="16dp"
+            app:contentInsetStart="24dp"
+            app:contentInsetLeft="24dp"
             app:contentInsetEnd="16dp"
             app:contentInsetRight="16dp"
             >
@@ -141,7 +141,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="24dp"
-                android:background="@color/white"
+                android:background="#6b9dfc"
                 />
 
             <LinearLayout

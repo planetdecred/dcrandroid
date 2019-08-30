@@ -107,7 +107,7 @@
             android:includeFontPadding="false"
             android:text="@string/no_connected_peers"
             android:textColor="#8997a5"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:fontFamily="@font/source_sans_pro_regular_family" />
 
     </LinearLayout>

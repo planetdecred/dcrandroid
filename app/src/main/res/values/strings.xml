@@ -606,9 +606,9 @@
     <string name="step_1_3" tools:ignore="TypographyFractions">Step 1/3</string>
     <string name="step_2_3">Step 2/3</string>
     <string name="step_3_3">Step 3/3</string>
-    <string name="fetching_block_headers"><![CDATA[Fetching block headers &bull; %1$d%%]]></string>
-    <string name="scanning_block_headers"><![CDATA[Scanning block headers &bull; %1$d%%]]></string>
-    <string name="discovering_addresses"><![CDATA[Discovering used addresses &bull; %1$d%%]]></string>
+    <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="syncing_progress">Syncing progress</string>
     <string name="days_behind">%1$d days behind</string>
     <string name="one_days_behind">1 day behind</string>
@@ -620,8 +620,8 @@
     <string name="blocks_left">%1$d blocks left</string>
     <string name="synced">Synced</string>
 
-    <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#091440">%1$d</font> &bull; <font color="#091440">%2$s</font> ago]]></string>
-    <string name="latest_block_time"><![CDATA[Synced to block <font color="#091440">%1$d</font> &bull; <font color="#091440">%2$s</font> ago]]></string>
+    <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
+    <string name="latest_block_time"><![CDATA[Synced to block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
     <string name="connected_peers"><![CDATA[Connected to <font color="#091440">%1$d</font> peers.]]></string>
     <string name="no_connected_peers">No connected peers.</string>
     <string name="_default">Default</string>

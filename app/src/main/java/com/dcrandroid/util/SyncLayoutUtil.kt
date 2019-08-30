@@ -6,14 +6,10 @@
 
 package com.dcrandroid.util
 
-import android.animation.Animator
 import android.content.Context
 import android.view.View
-import android.view.animation.Animation
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.MultiWalletSyncDetailsAdapter
@@ -30,7 +26,6 @@ import kotlinx.android.synthetic.main.single_wallet_sync_details.view.*
 import kotlinx.android.synthetic.main.synced_unsynced_layout.view.*
 import kotlinx.android.synthetic.main.syncing_layout.view.*
 import kotlinx.coroutines.*
-import java.security.AccessController.getContext
 
 class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:() -> Unit, scrollToBottom:() -> Unit) : SyncProgressListener {
 
@@ -49,11 +44,6 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
         loadOpenedWallets()
         syncDetailsAdapter = MultiWalletSyncDetailsAdapter(context, openedWallets)
 
-        val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        ContextCompat.getDrawable(context, R.drawable.divider_8dp)?.let {
-            dividerItemDecoration.setDrawable(it)
-            syncLayout.multi_wallet_sync_rv.addItemDecoration(dividerItemDecoration)
-        }
         syncLayout.multi_wallet_sync_rv.layoutManager = LinearLayoutManager(context)
         syncLayout.multi_wallet_sync_rv.isNestedScrollingEnabled = false
         syncLayout.multi_wallet_sync_rv.adapter = syncDetailsAdapter
@@ -194,7 +184,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
                 syncLayout.tv_sync_state.setText(R.string.synced)
 
                 syncLayout.tv_reconnect.setText(R.string.disconnect)
-                syncLayout.cancel_icon.setImageResource(R.drawable.ic_crossmark)
+                syncLayout.cancel_icon.hide()
 
                 connectedPeers = context.getString(R.string.connected_peers, multiWallet.connectedPeers())
 
@@ -207,6 +197,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
                 syncLayout.tv_sync_state.setText(R.string.not_syncing)
 
                 syncLayout.tv_reconnect.setText(R.string.connect)
+                syncLayout.cancel_icon.show()
                 syncLayout.cancel_icon.setImageResource(R.drawable.ic_rescan)
 
                 connectedPeers = syncLayout.context.getString(R.string.no_connected_peers)
@@ -271,11 +262,6 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
 
             syncLayout.tv_steps.text = context.getString(R.string.step_1_3)
 
-            if(multiWallet.openedWalletsCount() > 1)
-                syncLayout.syncing_layout_connected_peers_row.show()
-            else
-                syncLayout.syncing_layout_connected_peers_row.hide()
-
             // single wallet fetch headers layout
             if(multiWallet.openedWalletsCount() == 1){
                 showSyncVerboseExtras()
@@ -311,7 +297,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             syncLayout.tv_steps.text = context.getString(R.string.step_2_3)
 
             hideSyncVerboseExtras()
-            syncLayout.syncing_layout_connected_peers_row.show()
+//            syncLayout.syncing_layout_connected_peers_row.show()
 
             // connected peers count
             syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
@@ -340,7 +326,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
 
             showSyncVerboseExtras()
 
-            syncLayout.syncing_layout_connected_peers_row.show()
+//            syncLayout.syncing_layout_connected_peers_row.show()
 
             // blocks scanned
             syncLayout.tv_block_header_fetched.setText(R.string.scanned_blocks)

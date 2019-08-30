@@ -16,6 +16,8 @@ import dcrlibwallet.HeadersFetchProgressReport
 import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.multi_wallet_fetch_headers.view.*
 import com.dcrandroid.R
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
 
 class MultiWalletSyncDetailsAdapter(private val context: Context, private var openedWallets: List<Long>): RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
@@ -72,13 +74,18 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
             }
         }
 
-
         if(fetchProgressReport == null){
             // ## of ######
             holder.fetchCount.text = "0"
 
             // ## days behind
             holder.daysBehind.text = null
+        }
+
+        if(position == itemCount - 1){
+            holder.divider.hide()
+        }else{
+            holder.divider.show()
         }
     }
 
@@ -88,5 +95,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
 
         val fetchCount = itemView.tv_fetch_discover_scan_count
         val daysBehind = itemView.tv_days
+
+        val divider = itemView.rv_divider
     }
 }
