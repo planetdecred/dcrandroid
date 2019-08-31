@@ -21,13 +21,8 @@ import kotlinx.android.synthetic.main.tab_row.view.*
 
 data class NavigationTab(@StringRes val title: Int, @DrawableRes val activeIcon: Int, @DrawableRes val inactiveIcon: Int)
 
-interface OnTabSelectedListener{
-    fun onTabSelected(position: Int)
-}
+class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int, var tabSelected:(position: Int) -> Unit): RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
 
-class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int): RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
-
-    var onTabSelectedListener: OnTabSelectedListener? = null
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private var tabs: ArrayList<NavigationTab> = ArrayList()
 
@@ -67,7 +62,7 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
             notifyItemChanged(position)
             notifyItemChanged(oldActiveTab)
 
-            onTabSelectedListener?.onTabSelected(position)
+            tabSelected(position)
         }
 
         holder.itemView.layoutParams = ViewGroup.LayoutParams(deviceWidth / 4, ViewGroup.LayoutParams.MATCH_PARENT)

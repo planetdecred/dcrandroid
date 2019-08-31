@@ -141,17 +141,6 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
             hideTransactionList()
         }
     }
-
-    private fun setShowDetailsClickListener() {
-//        showDetails.setOnClickListener {
-//            syncDetails.toggleVisibility()
-//            scrollView.postDelayed({
-//                scrollView.smoothScrollTo(0, scrollView.bottom)
-//            }, 200)
-//
-//            showDetails.text = if (syncDetails.visibility == View.VISIBLE) getString(R.string.hide_details) else getString(R.string.show_details)
-//        }
-    }
 //
 //    private fun setupBackupSeedLayout() {
 //

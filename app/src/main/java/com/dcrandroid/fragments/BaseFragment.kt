@@ -41,7 +41,7 @@ open class BaseFragment : Fragment(), SyncProgressListener {
         }
     }
 
-    fun restartSyncProcess(){
+    fun restartSyncProcess() {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity
             homeActivity.checkWifiSync()

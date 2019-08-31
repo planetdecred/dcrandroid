@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+    android:background="@color/white"
+    android:padding="@dimen/margin_padding_size_24"
+    >
+
+    <TextView
+        android:id="@+id/unlock_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/resume_account_discovery_title"
+        android:textColor="#091440"
+        android:textSize="20sp"
+        app:fontFamily="@font/source_sans_pro_semibold_family"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/resume_account_discovery_desc"
+        android:textColor="#3d5873"
+        android:textSize="16sp"
+        app:fontFamily="@font/source_sans_pro_regular_family"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/spending_password"
+        android:layout_marginTop="@dimen/margin_padding_size_24"
+        app:hintTextColor="#2970ff"
+        app:boxStrokeColor="#2970ff"
+        app:errorTextColor="@color/colorError"
+        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:passwordToggleEnabled="true"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/resume_restore_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textCursorDrawable="@null"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="@dimen/edit_text_size_16"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="83dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_padding_size_24"
+        >
+
+        <TextView
+            android:id="@+id/tv_create"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/default_app_button_bg"
+            android:enabled="false"
+            android:text="@string/unlock"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/edit_text_size_16"
+            android:focusable="true"
+            android:clickable="true"
+            app:fontFamily="@font/source_sans_pro_semibold_family"
+            android:visibility="visible"
+            />
+
+        <ProgressBar
+            android:id="@+id/discovery_progress_bar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:indeterminate="true"
+            android:theme="@style/CircularProgressBar"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

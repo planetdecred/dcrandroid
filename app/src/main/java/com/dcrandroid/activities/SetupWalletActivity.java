@@ -77,11 +77,11 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
     public void onEnterPasswordOrPin(@NotNull String spendingKey, boolean isPassword) {
         if (isPassword) {
             preferenceUtil.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PASSWORD);
+            createWallet(spendingKey, Dcrlibwallet.SpendingPassphraseTypePass);
         } else {
+            createWallet(spendingKey, Dcrlibwallet.SpendingPassphraseTypePin);
             preferenceUtil.set(Constants.SPENDING_PASSPHRASE_TYPE, Constants.PIN);
         }
-
-        createWallet(spendingKey);
     }
 
     /**
@@ -123,7 +123,7 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      *
      * @param spendingKey - spending password or pin
      */
-    private void createWallet(final String spendingKey) {
+    private void createWallet(final String spendingKey, final int type) {
 
         newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -135,10 +135,9 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
                         throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
                     }
 
-                    String seed = Dcrlibwallet.generateSeed();
                     preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
 
-                    LibWallet wallet = multiWallet.createNewWallet(spendingKey, seed);
+                    LibWallet wallet = multiWallet.createNewWallet(spendingKey, type);
                     WalletData.getInstance().wallet = wallet;
                     multiWallet.unlockWallet(wallet.getWalletID(), spendingKey.getBytes());
 

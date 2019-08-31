@@ -24,11 +24,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
-import com.dcrandroid.adapter.OnTabSelectedListener
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.WiFiSyncDialog
+import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.fragments.AccountsFragment
 import com.dcrandroid.fragments.Overview
+import com.dcrandroid.fragments.ResumeAccountDiscovery
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
 import com.dcrandroid.util.PreferenceUtil
@@ -130,17 +131,13 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth)
-        adapter.activeTab = 0
+        adapter = NavigationTabsAdapter(this, 0, deviceWidth) {position ->
+            switchFragment(position)
+        }
         recycler_view_tabs.adapter = adapter
 
         switchFragment(0)
 
-        adapter.onTabSelectedListener = object : OnTabSelectedListener {
-            override fun onTabSelected(position: Int) {
-                switchFragment(position)
-            }
-        }
     }
 
     private fun setTabIndicator() {
@@ -213,7 +210,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         wifiSyncDialog.show()
     }
 
-    private fun startSyncing() {
+    fun startSyncing() {
+        for (w in multiWallet!!.openedWalletsList()){
+            if(!w.discoveredAccounts && w.isLocked){
+                ResumeAccountDiscovery()
+                        .setWalletID(w.walletID)
+                        .show(supportFragmentManager, ResumeAccountDiscovery::javaClass.name)
+                return
+            }
+        }
         sendBroadcast(Intent(Constants.SYNCED))
         val syncIntent = Intent(this, SyncService::class.java)
         startService(syncIntent)

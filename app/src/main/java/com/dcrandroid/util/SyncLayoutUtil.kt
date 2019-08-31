@@ -326,8 +326,6 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
 
             showSyncVerboseExtras()
 
-//            syncLayout.syncing_layout_connected_peers_row.show()
-
             // blocks scanned
             syncLayout.tv_block_header_fetched.setText(R.string.scanned_blocks)
             syncLayout.tv_fetch_discover_scan_count.text = headersRescanProgress!!.currentRescanHeight.toString()
