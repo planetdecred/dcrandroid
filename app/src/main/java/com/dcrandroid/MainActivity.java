@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -42,7 +41,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
@@ -59,7 +57,7 @@ import com.dcrandroid.data.Transaction;
 import com.dcrandroid.data.Transaction.TransactionInput;
 import com.dcrandroid.data.Transaction.TransactionOutput;
 import com.dcrandroid.dialog.WiFiSyncDialog;
-import com.dcrandroid.fragments.AccountsFragment;
+import com.dcrandroid.fragments.WalletsFragment;
 import com.dcrandroid.fragments.HelpFragment;
 import com.dcrandroid.fragments.HistoryFragment;
 import com.dcrandroid.fragments.OverviewFragment;
@@ -562,7 +560,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 currentFragment = new ReceiveFragment();
                 break;
             case 4:
-                currentFragment = new AccountsFragment();
+                currentFragment = new WalletsFragment();
                 break;
             case 5:
                 currentFragment = securityFragment;

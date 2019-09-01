@@ -631,5 +631,6 @@
     <string name="multi_resume_account_discovery_title">Unlock %1$s to resume restoration</string>
     <string name="resume_account_discovery_desc">The restoration process to discover your accounts was interrupted in the last sync.\n\nUnlock the wallet to resume the process.</string>
     <string name="unlock">Unlock</string>
+    <string name="wallets">Wallets</string>
 
 </resources>

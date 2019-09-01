@@ -27,7 +27,7 @@ import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.WiFiSyncDialog
 import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.fragments.AccountsFragment
+import com.dcrandroid.fragments.WalletsFragment
 import com.dcrandroid.fragments.Overview
 import com.dcrandroid.fragments.ResumeAccountDiscovery
 import com.dcrandroid.service.SyncService
@@ -157,7 +157,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         currentFragment = when (position) {
             0 -> Overview()
-            2 -> AccountsFragment()
+            2 -> WalletsFragment()
             else -> Fragment()
         }
 
