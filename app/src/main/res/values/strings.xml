@@ -118,6 +118,7 @@
     <string name="enter_new_name">Enter new name</string>
     <string name="rename">Rename</string>
     <string name="create">Create</string>
+    <string name="dcr_amount">%1$s DCR</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>

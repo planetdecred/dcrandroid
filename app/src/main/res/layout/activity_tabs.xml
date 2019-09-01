@@ -22,10 +22,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentInsetStart="24dp"
-            app:contentInsetLeft="24dp"
-            app:contentInsetEnd="16dp"
-            app:contentInsetRight="16dp"
+            android:paddingStart="@dimen/margin_padding_size_24"
+            android:paddingLeft="@dimen/margin_padding_size_24"
+            app:contentInsetStart="@dimen/margin_padding_size_24"
+            app:contentInsetLeft="@dimen/margin_padding_size_24"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            android:paddingRight="@dimen/margin_padding_size_16"
+            app:contentInsetEnd="@dimen/margin_padding_size_16"
+            app:contentInsetRight="@dimen/margin_padding_size_16"
             >
 
             <LinearLayout
@@ -98,6 +102,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center"

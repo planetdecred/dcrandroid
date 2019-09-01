@@ -13,7 +13,12 @@
     android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:padding="@dimen/margin_padding_size_16">
+    android:paddingLeft="44dp"
+    android:paddingStart="44dp"
+    android:paddingRight="@dimen/margin_padding_size_16"
+    android:paddingEnd="@dimen/margin_padding_size_16"
+    android:paddingTop="@dimen/margin_padding_size_16"
+    android:paddingBottom="@dimen/margin_padding_size_16">
 
     <ImageView
         android:layout_width="24dp"

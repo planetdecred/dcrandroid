@@ -306,7 +306,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
     public void displayBalance() {
         try {
-            final ArrayList<com.dcrandroid.data.Account> accounts = Account.parse(walletData.wallet.getAccounts(util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+            final ArrayList<com.dcrandroid.data.Account> accounts = new ArrayList<>();
             long walletBalance = 0;
             for (int i = 0; i < accounts.size(); i++) {
                 if (util.getBoolean(Constants.HIDE_WALLET + accounts.get(i).getAccountNumber())) {

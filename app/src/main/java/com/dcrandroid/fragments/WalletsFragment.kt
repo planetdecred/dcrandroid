@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.WalletsAdapter
-import com.dcrandroid.data.Account
 import com.dcrandroid.util.WalletData
 import com.dcrandroid.activities.SetupWalletActivity
 import android.content.Intent
 import android.widget.Toast
-import com.dcrandroid.extensions.openedWalletsList
 import dcrlibwallet.MultiWallet
 
 class WalletsFragment: BaseFragment() {
@@ -32,21 +30,19 @@ class WalletsFragment: BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_account, container, false)
+        return inflater.inflate(R.layout.fragment_wallets, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.account_list_rv)
+        recyclerView = view.findViewById(R.id.wallets_list_rv)
         setToolbarTitle(R.string.wallets, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val multiWallet = WalletData.getInstance().multiWallet
-        val wallets = multiWallet.openedWalletsList()
-        val adapter = WalletsAdapter(wallets)
+        val adapter = WalletsAdapter(context!!)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false

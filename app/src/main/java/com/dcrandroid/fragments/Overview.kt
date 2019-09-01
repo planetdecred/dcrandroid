@@ -88,7 +88,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         setToolbarTitle(R.string.overview, false)
         scrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
-        balanceTextView.text = CoinFormat.format(wallet.totalWalletBalance(requiredConfirmations, context!!))
+        balanceTextView.text = CoinFormat.format(wallet.totalWalletBalance(context!!))
 
         loadTransactions()
     }

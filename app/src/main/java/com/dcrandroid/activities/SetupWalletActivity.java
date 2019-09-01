@@ -89,7 +89,6 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      */
     private void showPassWordPinDialog() {
         PasswordPinDialogFragment passwordPinDialog = new PasswordPinDialogFragment();
-        passwordPinDialog.setCancelable(false);
         passwordPinDialog.show(getSupportFragmentManager(), "passwordPinDialog");
     }
 
@@ -108,9 +107,9 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
                 intent.putExtra(Constants.PASSPHRASE, spendingKey);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                if(multiWallet.openedWalletsCount() > 1){
+                if (multiWallet.openedWalletsCount() > 1) {
                     finish();
-                }else{
+                } else {
                     startActivity(intent);
                     ActivityCompat.finishAffinity(SetupWalletActivity.this);
                 }

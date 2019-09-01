@@ -294,7 +294,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     private fun prepareAccounts() {
-        accounts = wallet.visibleWalletAccounts(requiredConfirmations, context!!)
+        accounts = wallet.visibleWalletAccounts(context!!)
         accounts = accounts.filter { it.accountNumber != Int.MAX_VALUE }.toList() // Filter out imported account
 
         if (dataAdapter != null) {

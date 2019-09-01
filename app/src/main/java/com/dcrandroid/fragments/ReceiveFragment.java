@@ -228,7 +228,7 @@ public class ReceiveFragment extends Fragment implements AdapterView.OnItemSelec
 
     private void prepareAccounts() {
         try {
-            final ArrayList<Account> accounts = Account.parse(constants.wallet.getAccounts(preferenceUtil.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS) ? 0 : Constants.REQUIRED_CONFIRMATIONS));
+            final ArrayList<Account> accounts = new ArrayList<>();
             accountNumbers.clear();
             categories.clear();
             for (int i = 0; i < accounts.size(); i++) {

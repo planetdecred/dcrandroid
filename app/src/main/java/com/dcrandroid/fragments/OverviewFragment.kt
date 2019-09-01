@@ -227,13 +227,11 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             return 5
         }
 
-
         return max
     }
 
     private fun getBalance() {
-        val requiredConfirmation = if (util!!.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS
-        val totalBalance = wallet.totalWalletBalance(requiredConfirmation, context!!)
+        val totalBalance = wallet.totalWalletBalance(context!!)
         overview_av_balance.text = CoinFormat.format(Utils.formatDecredWithComma(totalBalance) + " DCR")
     }
 

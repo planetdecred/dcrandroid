@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/card_bg"
-        android:id="@+id/account_list_rv"
+        android:id="@+id/wallets_list_rv"
         android:layout_margin="8dp"
         app:elevation="4dp"
         android:elevation="4dp"
