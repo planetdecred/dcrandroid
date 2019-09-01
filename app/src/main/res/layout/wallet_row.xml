@@ -8,6 +8,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_margin="4dp"
+    android:background="@drawable/card_bg"
+    app:elevation="4dp"
+    android:elevation="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,6 +34,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:id="@+id/expand_icon"
             app:srcCompat="@drawable/ic_expand02" />
 
         <ImageView
@@ -92,13 +97,5 @@
             />
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#e6eaed"
-        android:id="@+id/rv_divider"
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="28dp"/>
 
 </LinearLayout>

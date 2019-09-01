@@ -118,6 +118,9 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
 
         syncLayout.syncing_layout_wallet_name.hide()
 
+        // connected peers count
+        syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
+
         // single wallet setup
         if(multiWallet.openedWalletsCount() == 1) {
             showSyncVerboseExtras()
@@ -129,9 +132,6 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             // syncing progress
             syncLayout.tv_progress.setText(R.string.syncing_progress)
             syncLayout.tv_days.text = null
-
-            // connected peers count
-            syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
         }else{
             showMultiWalletSyncLayout()
             loadOpenedWallets()
@@ -247,6 +247,9 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
         syncLayout.pb_sync_progress.progress = syncProgress.totalSyncProgress
         syncLayout.tv_percentage.text = context.getString(R.string.percentage, syncProgress.totalSyncProgress)
         syncLayout.tv_time_left.text = Utils.getSyncTimeRemaining(syncProgress.totalTimeRemainingSeconds, context)
+
+        // connected peers count
+        syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
     }
 
     override fun onSyncStarted() {
@@ -297,10 +300,6 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             syncLayout.tv_steps.text = context.getString(R.string.step_2_3)
 
             hideSyncVerboseExtras()
-//            syncLayout.syncing_layout_connected_peers_row.show()
-
-            // connected peers count
-            syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
 
             if(multiWallet.openedWalletsCount() > 1){
                 syncLayout.syncing_layout_wallet_name.show()
@@ -334,9 +333,6 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             syncLayout.tv_progress.setText(R.string.syncing_progress)
             syncLayout.tv_days.text = context.getString(R.string.blocks_left,
                     headersRescanProgress.totalHeadersToScan - headersRescanProgress.currentRescanHeight)
-
-            // connected peers count
-            syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
 
             if(multiWallet.openedWalletsCount() > 1){
                 syncLayout.syncing_layout_wallet_name.show()

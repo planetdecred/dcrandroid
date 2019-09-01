@@ -52,22 +52,6 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 Utils.formatDecred(wallet.totalWalletBalance(context)))
 
-        when{
-            position == 0 -> holder.container.setBackgroundResource(R.drawable.curved_top_ripple)
-            (position == itemCount - 1) && expanded != position -> holder.container.setBackgroundResource(R.drawable.curved_bottom_ripple) // last item and not expanded
-            else -> {
-                val outValue = TypedValue()
-                context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-                holder.container.setBackgroundResource(outValue.resourceId)
-            }
-        }
-
-        if(position == itemCount - 1){
-            holder.divider.hide()
-        }else{
-            holder.divider.show()
-        }
-
         if(expanded == position){
             val adapter = AccountsAdapter(context, wallet.walletID) {position == itemCount-1}
 
@@ -76,9 +60,15 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
             holder.accountsList.adapter = adapter
 
             holder.accountsLayout.show()
+
+            holder.expand.setImageResource(R.drawable.ic_collapse)
+            holder.container.setBackgroundResource(R.drawable.curved_top_ripple)
         }else{
             holder.accountsList.adapter = null
             holder.accountsLayout.hide()
+
+            holder.expand.setImageResource(R.drawable.ic_expand02)
+            holder.container.setBackgroundResource(R.drawable.wallet_row_background)
         }
 
         holder.container.setOnClickListener {
@@ -103,9 +93,9 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
         val walletName =  itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
 
+        val expand = itemView.expand_icon
         val container = itemView.container
         val accountsLayout = itemView.accounts
-        val divider = itemView.rv_divider
 
         val accountsList = itemView.account_list_rv
 
