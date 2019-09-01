@@ -71,4 +71,11 @@
     </style>
     <!--/BottomSheetDialog Style -->
 
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/blue</item>
+        <item name="android:textColorHint">@color/darkerBlueGrayTextColor</item>
+        <item name="counterTextColor">@color/darkerBlueGrayTextColor</item>
+        <item name="errorTextColor">@color/colorError</item>
+    </style>
+
 </resources>

@@ -42,6 +42,7 @@
     <color name="blueGrayFirstTextColor38pc">#61617386</color>
     <color name="lightGrayTextColor">#8997A5</color>
     <color name="darkBlueGrayTextColor">#444F65</color>
+    <color name="darkerBlueGrayTextColor">#3d5873</color>
     <color name="bluePendingTextColor">#3d659c</color>
     <color name="blueLinkTextColor">#4A92FF</color>
     <color name="darkBlueTextColor">#091440</color>

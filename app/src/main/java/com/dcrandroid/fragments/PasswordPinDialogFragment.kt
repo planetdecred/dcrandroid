@@ -35,8 +35,8 @@ interface DialogButtonListener {
 
 class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListener {
 
-    private lateinit var spendingPasswordFragment: SpendingPasswordFragment
-    private lateinit var spendingPinFragment: SpendingPinFragment
+    private lateinit var spendingPasswordFragment: PassphrasePromptFragment
+    private lateinit var spendingPinFragment: PassphrasePromptFragment
     private lateinit var fragmentList: List<Fragment>
     private lateinit var tabsTitleList: List<String>
     private lateinit var titleList: List<String>
@@ -46,11 +46,11 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        spendingPasswordFragment = SpendingPasswordFragment(this)
-        spendingPinFragment = SpendingPinFragment(this)
+        spendingPasswordFragment = PassphrasePromptFragment(this, true)
+        spendingPinFragment = PassphrasePromptFragment(this, false)
 
         fragmentList = listOf(spendingPasswordFragment, spendingPinFragment)
-        tabsTitleList = listOf(context!!.getString(com.dcrandroid.R.string.password), context!!.getString(R.string.pin))
+        tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
         titleList = listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
     }
 
@@ -65,6 +65,7 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
             val bottomSheetDialog = dialog as BottomSheetDialog
             val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
@@ -72,7 +73,7 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
 
@@ -92,7 +93,22 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
 
         view_pager.adapter = ViewPagerAdapter(childFragmentManager, fragmentList, tabsTitleList)
         tab_layout.setupWithViewPager(view_pager)
-        tab_layout.addOnTabSelectedListener(TabSelectedListener(titleList, tv_title))
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab!!.position == 0) {
+                    tv_title.text = titleList[0]
+                } else {
+                    tv_title.text = titleList[1]
+                }
+            }
+
+        })
     }
 
     override fun onClickOk(spendingKey: String) {
@@ -103,11 +119,6 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
         val tabStrip = tab_layout.getChildAt(0) as LinearLayout
         for (i in 0 until tabStrip.childCount) {
             tabStrip.getChildAt(i).setOnTouchListener { v, event -> true }
-        }
-
-        // drag the dialog down
-        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         val isPassword = view_pager.currentItem == 0
@@ -135,27 +146,6 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
 
     interface PasswordPinListener {
         fun onEnterPasswordOrPin(spendingKey: String, isPassword: Boolean)
-    }
-
-    class TabSelectedListener(private val titleList: List<String>,
-                              private val titleView: TextView) : TabLayout.OnTabSelectedListener {
-
-        override fun onTabReselected(tab: TabLayout.Tab?) {
-
-        }
-
-        override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-        }
-
-        override fun onTabSelected(tab: TabLayout.Tab?) {
-
-            if (tab!!.position == 0) {
-                titleView.text = titleList[0]
-            } else {
-                titleView.text = titleList[1]
-            }
-        }
     }
 
     class ViewPagerAdapter(fragmentManager: FragmentManager,

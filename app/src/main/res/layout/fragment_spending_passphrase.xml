@@ -12,43 +12,31 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="@dimen/margin_padding_size_24">
+    android:paddingTop="@dimen/margin_padding_size_24"
+    android:paddingLeft="@dimen/margin_padding_size_24"
+    android:paddingRight="@dimen/margin_padding_size_24">
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/TextInputLayoutStyle"
         android:id="@+id/pin_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:hint="@string/spending_pin"
-        android:textColorHint="#3d5873"
         app:fontFamily="@font/source_sans_pro_regular_family"
-        app:boxStrokeColor="#2970ff"
+        app:counterEnabled="true"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_pin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:textCursorDrawable="@null"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_16"
             android:inputType="numberPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_pin_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_padding_size_16"
-        android:layout_marginRight="@dimen/margin_padding_size_16"
-        android:layout_gravity="end"
-        android:text="@string/digit_zero"
-        android:textColor="#3d5873"
-        android:textSize="@dimen/edit_text_size_12"
-        app:fontFamily="@font/source_sans_pro_regular_family"
-        tools:text="12" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -61,8 +49,7 @@
             android:id="@+id/pin_strength_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_horizontal"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:text="@string/pin_strength"
             android:textColor="#3d5873"
             android:textSize="@dimen/edit_text_size_16"
@@ -71,14 +58,13 @@
         <ProgressBar
             android:id="@+id/pin_strength"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
+            android:layout_width="160dp"
             android:layout_height="8dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="6dp"
-            android:layout_weight="2"
             android:indeterminateOnly="false"
             android:max="100"
             android:progressDrawable="@drawable/password_strength_bar_weak" />
@@ -86,42 +72,28 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutStyle"
         android:id="@+id/til_confirm_pin"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_padding_size_16"
         android:hint="@string/confirm_spending_pin"
-        android:textColorHint="#3d5873"
-        app:errorTextColor="@color/colorError"
         app:fontFamily="@font/source_sans_pro_regular_family"
+        app:counterEnabled="true"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_confirm_pin"
+            android:theme="@style/TextInputLayoutStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:textCursorDrawable="@null"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_16"
             android:inputType="numberPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_confirm_pin_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="@dimen/margin_padding_size_16"
-        android:layout_marginRight="@dimen/margin_padding_size_16"
-        android:layout_gravity="end"
-        android:text="@string/digit_zero"
-        android:textColor="#3d5873"
-        android:textSize="@dimen/edit_text_size_12"
-        app:fontFamily="@font/source_sans_pro_regular_family"
-        tools:text="12" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
@@ -161,15 +133,12 @@
             android:layout_height="40dp"
             android:gravity="center"
             android:background="@drawable/outline_button_bg"
-            android:enabled="false"
             android:text="@string/cancel"
-            android:textAllCaps="false"
             android:textColor="@color/blue"
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"
             android:clickable="true"
             app:fontFamily="@font/source_sans_pro_semibold_family"
-            android:visibility="visible"
             />
 
         <TextView
@@ -182,7 +151,6 @@
             android:background="@drawable/default_app_button_bg"
             android:enabled="false"
             android:text="@string/unlock"
-            android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"

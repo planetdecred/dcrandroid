@@ -119,7 +119,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
         syncLayout.syncing_layout_wallet_name.hide()
 
         // single wallet setup
-        if(multiWallet.openedWalletsCount() > 1) {
+        if(multiWallet.openedWalletsCount() == 1) {
             showSyncVerboseExtras()
 
             // block headers fetched
