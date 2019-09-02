@@ -113,6 +113,7 @@ class SyncService : Service(), SyncProgressListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        multiWallet?.removeSyncProgressListener(TAG)
         Log.d(TAG, "Service Destroyed")
     }
 

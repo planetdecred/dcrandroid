@@ -24,5 +24,7 @@ fun MultiWallet.openedWalletsList(): ArrayList<LibWallet> {
         wallets.add(wallet)
     }
 
-    return  wallets
+    wallets.sortBy { it.walletID }
+
+    return wallets
 }
