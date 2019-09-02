@@ -7,7 +7,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -33,6 +32,7 @@
             android:layout_height="48dp"
             android:textCursorDrawable="@null"
             android:textColor="@color/darkBlueTextColor"
+            app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="@dimen/edit_text_size_16"
             android:inputType="numberPassword" />
 
@@ -90,6 +90,7 @@
             android:layout_height="48dp"
             android:textCursorDrawable="@null"
             android:textColor="@color/darkBlueTextColor"
+            app:fontFamily="@font/source_sans_pro_regular_family"
             android:textSize="@dimen/edit_text_size_16"
             android:inputType="numberPassword" />
 
@@ -101,31 +102,6 @@
         android:layout_gravity="end"
         android:layout_marginTop="@dimen/margin_padding_size_8"
         android:orientation="horizontal">
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_cancel"-->
-<!--            style="@style/Widget.MaterialComponents.Button.TextButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:text="@string/cancel"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="@color/blue"-->
-<!--            android:textSize="@dimen/edit_text_size_16"-->
-<!--            app:fontFamily="@font/source_sans_pro_semibold_family" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_create"-->
-<!--            style="@style/materialButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:enabled="false"-->
-<!--            android:text="@string/create"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="@dimen/edit_text_size_16"-->
-<!--            app:fontFamily="@font/source_sans_pro_semibold_family" />-->
 
         <TextView
             android:id="@+id/btn_cancel"
@@ -150,7 +126,7 @@
             android:gravity="center"
             android:background="@drawable/default_app_button_bg"
             android:enabled="false"
-            android:text="@string/unlock"
+            android:text="@string/create"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"

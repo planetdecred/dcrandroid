@@ -18,6 +18,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PreferenceUtil
+import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_row.view.*
 
@@ -66,15 +67,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long, 
 
             holder.accountName.text = account.accountName
             holder.totalBalance.text = CoinFormat.format(account.balance.total)
-            holder.spendableBalance.text = CoinFormat.format(account.balance.spendable)
-        }else{
-            if(isLastItem()){
-                holder.itemView.setBackgroundResource(R.drawable.curved_bottom_ripple)
-            }else{
-                val outValue = TypedValue()
-                context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-                holder.itemView.setBackgroundResource(outValue.resourceId)
-            }
+            holder.spendableBalance.text = context.getString(R.string.dcr_amount, Utils.formatDecred(account.balance.spendable))
         }
     }
 

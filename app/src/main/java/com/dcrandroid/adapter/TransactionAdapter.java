@@ -110,7 +110,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (history.getType().equals(Constants.REGULAR)) {
             String strAmount = Utils.formatDecredWithComma(history.getAmount());
 
-            holder.amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
+//            holder.amount.setText(CoinFormat.Companion.format(strAmount + Constants.NBSP + layoutInflater.getContext().getString(R.string.dcr)));
             if (history.getDirection() == 0) {
                 holder.minus.setVisibility(View.VISIBLE);
                 holder.txType.setBackgroundResource(R.drawable.ic_send);

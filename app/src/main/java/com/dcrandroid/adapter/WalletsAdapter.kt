@@ -11,6 +11,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
@@ -22,6 +24,7 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
+import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.wallet_row.view.*
 
 class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
@@ -61,7 +64,7 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
 
             holder.accountsLayout.show()
 
-            holder.expand.setImageResource(R.drawable.ic_collapse)
+            holder.expand.setImageResource(R.drawable.ic_collapse02)
             holder.container.setBackgroundResource(R.drawable.curved_top_ripple)
         }else{
             holder.accountsList.adapter = null
@@ -87,13 +90,42 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
             }
             notifyItemChanged(position)
         }
+
+        // popup menu
+        holder.more.setOnClickListener {
+            val inflater = LayoutInflater.from(context)
+            val view = inflater.inflate(R.layout.popup_layout, null)
+            val window = PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, true)
+
+            val recyclerView = view.popup_rv
+            val items = arrayOf(
+                    PopupItem(R.string.rename_account),
+                    PopupItem(R.string.change_spending_pass),
+                    PopupItem(R.string.view_property),
+                    PopupItem(R.string.remove_wallet, R.color.orangeTextColor)
+            )
+
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = PopupMenuAdapter(context, items) {index ->
+                window.dismiss()
+                when(index){
+                    0 ->{
+
+                    }
+                }
+            }
+            window.showAsDropDown(it)
+        }
     }
 
     inner class WalletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val walletName =  itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
 
+        val more = itemView.iv_more
         val expand = itemView.expand_icon
+
         val container = itemView.container
         val accountsLayout = itemView.accounts
 

@@ -21,6 +21,9 @@
     <color name="colorPrimaryDark">#838383</color>
     <color name="white">#ffffff</color>
     <color name="blue">#2970FF</color>
+    <color name="whiteRipple">#EDEFF1</color>
+    <color name="blueRipple">#1B41B3</color>
+    <color name="outlineButtonRipple">#EDEFF1</color>
     <color name="green">#1dc54c</color>
     <color name="turquoise">#2ED6A1</color>
     <color name="colorBackground">#F3F5F6</color>

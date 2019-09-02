@@ -315,7 +315,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 walletBalance += accounts.get(i).getBalance().getTotal();
             }
 
-            totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR"));
+//            totalBalance.setText(CoinFormat.Companion.format(Utils.formatDecredWithComma(walletBalance) + " DCR");
         } catch (Exception e) {
             e.printStackTrace();
         }

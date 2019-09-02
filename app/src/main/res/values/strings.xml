@@ -119,6 +119,10 @@
     <string name="rename">Rename</string>
     <string name="create">Create</string>
     <string name="dcr_amount">%1$s DCR</string>
+    <string name="rename_wallet">Rename Wallet</string>
+    <string name="change_spending_pass">Change spending password/PIN</string>
+    <string name="view_property">View property</string>
+    <string name="remove_wallet">Remove wallet from device</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -633,5 +637,6 @@
     <string name="resume_account_discovery_desc">The restoration process to discover your accounts was interrupted in the last sync.\n\nUnlock the wallet to resume the process.</string>
     <string name="unlock">Unlock</string>
     <string name="wallets">Wallets</string>
+    <string name="add_new_account">Add new account</string>
 
 </resources>

@@ -23,12 +23,12 @@
         android:background="@drawable/wallet_row_background"
         android:clickable="true"
         android:focusable="true"
-        android:paddingTop="@dimen/margin_padding_size_16"
-        android:paddingBottom="@dimen/margin_padding_size_16"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="@dimen/margin_padding_size_16"
         android:paddingStart="@dimen/margin_padding_size_16"
-        android:paddingEnd="@dimen/margin_padding_size_16"
-        android:paddingRight="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_8"
+        android:paddingRight="@dimen/margin_padding_size_8"
         android:gravity="center_vertical">
 
         <ImageView
@@ -68,10 +68,13 @@
             android:textColor="@color/blueGraySecondTextColor" />
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="@dimen/margin_padding_size_8"
-            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:id="@+id/iv_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/circular_transparent_ripple"
             app:srcCompat="@drawable/ic_more" />
 
     </LinearLayout>
@@ -87,8 +90,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#e6eaed"
-            android:layout_marginLeft="28dp"
-            android:layout_marginStart="28dp"/>
+            android:layout_marginLeft="44dp"
+            android:layout_marginStart="44dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
