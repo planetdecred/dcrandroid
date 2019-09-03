@@ -7,7 +7,6 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.AccountDetailsDialog
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PreferenceUtil
@@ -22,7 +22,7 @@ import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_row.view.*
 
-class AccountsAdapter(private val context: Context, private val walletID: Long,  var isLastItem:() -> Boolean): RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
+class AccountsAdapter(private val context: Context, private val walletID: Long): RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
 
     private val accounts: Array<Account>
 
@@ -68,6 +68,10 @@ class AccountsAdapter(private val context: Context, private val walletID: Long, 
             holder.accountName.text = account.accountName
             holder.totalBalance.text = CoinFormat.format(account.balance.total)
             holder.spendableBalance.text = context.getString(R.string.dcr_amount, Utils.formatDecred(account.balance.spendable))
+
+            holder.itemView.setOnClickListener {
+                AccountDetailsDialog(context, walletID, account).show()
+            }
         }
     }
 

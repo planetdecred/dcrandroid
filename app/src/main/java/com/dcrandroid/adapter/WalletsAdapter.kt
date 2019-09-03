@@ -13,9 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.dialog.RenameAccountDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
@@ -56,7 +58,7 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
                 Utils.formatDecred(wallet.totalWalletBalance(context)))
 
         if(expanded == position){
-            val adapter = AccountsAdapter(context, wallet.walletID) {position == itemCount-1}
+            val adapter = AccountsAdapter(context, wallet.walletID)
 
             holder.accountsList.layoutManager = LinearLayoutManager(context)
             holder.accountsList.isNestedScrollingEnabled = false
@@ -100,7 +102,7 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
 
             val recyclerView = view.popup_rv
             val items = arrayOf(
-                    PopupItem(R.string.rename_account),
+                    PopupItem(R.string.rename_wallet),
                     PopupItem(R.string.change_spending_pass),
                     PopupItem(R.string.view_property),
                     PopupItem(R.string.remove_wallet, R.color.orangeTextColor)
@@ -110,7 +112,7 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
             recyclerView.adapter = PopupMenuAdapter(context, items) {index ->
                 window.dismiss()
                 when(index){
-                    0 ->{
+                    0 -> {
 
                     }
                 }

@@ -212,7 +212,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     fun startSyncing() {
         for (w in multiWallet!!.openedWalletsList()){
-            if(!w.discoveredAccounts && w.isLocked){
+            w.walletExists()
+            if(!w.hasDiscoveredAccounts() && w.isLocked){
                 ResumeAccountDiscovery()
                         .setWalletID(w.walletID)
                         .show(supportFragmentManager, ResumeAccountDiscovery::javaClass.name)

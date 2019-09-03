@@ -78,4 +78,21 @@
         <item name="errorTextColor">@color/colorError</item>
     </style>
 
+    <style name="FullWidthDialog" parent="AppTheme.Dialog">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Switch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/blue</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#FFFFFF</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#C4CBD2</item>
+    </style>
+
 </resources>

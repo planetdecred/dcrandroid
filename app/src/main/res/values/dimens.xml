@@ -38,6 +38,7 @@
     <dimen name="margin_padding_size_32">32dp</dimen>
     <dimen name="margin_padding_size_40">40dp</dimen>
     <dimen name="margin_padding_size_56">56dp</dimen>
+    <dimen name="margin_padding_size_64">64dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="bottom_sheet_corner_radius_8">8dp</dimen>

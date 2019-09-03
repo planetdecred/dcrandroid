@@ -9,30 +9,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-    android:background="@color/white"
-    android:padding="@dimen/margin_padding_size_24"
-    >
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_padding_size_24">
 
     <TextView
-        android:id="@+id/unlock_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/resume_account_discovery_title"
-        android:textColor="#091440"
-        android:textSize="20sp"
+        android:text="@string/rename_account"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_20"
         app:fontFamily="@font/source_sans_pro_semibold_family"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/resume_account_discovery_desc"
-        android:textColor="#3d5873"
-        android:textSize="16sp"
-        app:fontFamily="@font/source_sans_pro_regular_family"
-        android:layout_marginTop="@dimen/margin_padding_size_16"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -40,11 +26,9 @@
         android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/spending_password"
+        android:hint="@string/account_name"
         android:layout_marginTop="@dimen/margin_padding_size_24"
-        app:fontFamily="@font/source_sans_pro_regular_family"
-        app:passwordToggleEnabled="true"
-        >
+        app:fontFamily="@font/source_sans_pro_regular_family">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/resume_restore_pass"
@@ -53,45 +37,59 @@
             android:textCursorDrawable="@null"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_16"
-            android:inputType="textPassword" />
+            android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="83dp"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:orientation="horizontal"
         android:layout_gravity="end"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/margin_padding_size_24"
-        >
+        android:layout_marginTop="@dimen/margin_padding_size_8"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_create"
+            android:id="@+id/btn_cancel"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/outline_button_bg"
+            android:text="@string/cancel"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/edit_text_size_16"
+            android:focusable="true"
+            android:clickable="true"
+            app:fontFamily="@font/source_sans_pro_semibold_family"
+            android:layout_marginRight="@dimen/margin_padding_size_8"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            />
+
+        <TextView
+            android:id="@+id/btn_confirm"
             android:layout_width="83dp"
             android:layout_height="40dp"
             android:gravity="center"
             android:background="@drawable/default_app_button_bg"
             android:enabled="false"
-            android:text="@string/unlock"
-            android:textAllCaps="false"
+            android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"
             android:clickable="true"
             app:fontFamily="@font/source_sans_pro_semibold_family"
+            android:includeFontPadding="false"
             android:visibility="visible"
             />
 
         <ProgressBar
-            android:id="@+id/discovery_progress_bar"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:id="@+id/progress_bar"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
             android:indeterminate="true"
             android:theme="@style/CircularProgressBar"
-            android:visibility="gone"
-            />
-    </LinearLayout>
+            android:visibility="gone" />
 
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </LinearLayout>

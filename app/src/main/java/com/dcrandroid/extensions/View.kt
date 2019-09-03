@@ -8,8 +8,9 @@ package com.dcrandroid.extensions
 
 import android.view.View
 
-fun View.toggleVisibility() {
+fun View.toggleVisibility(): Int {
     this.visibility = if (this.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+    return this.visibility
 }
 
 fun View.show() {

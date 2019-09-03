@@ -6,12 +6,13 @@
 
 package com.dcrandroid.data
 
+import com.dcrandroid.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import java.io.Serializable
 
-class Accounts : Serializable{
+class Accounts : Serializable {
 
     @SerializedName("CurrentBlockHash")
     lateinit var currentBlockHash: String // base64
@@ -22,7 +23,7 @@ class Accounts : Serializable{
     lateinit var accounts: Array<Account>
 }
 
-fun parseAccounts(json: String): Accounts{
+fun parseAccounts(json: String): Accounts {
     val gson = Gson()
     return gson.fromJson(json, Accounts::class.java)
 }
@@ -42,6 +43,9 @@ class Account : Serializable {
     var internalKeyCount: Int = 0
     @SerializedName("ImportedKeyCount")
     var importedKeyCount: Int = 0
+
+    val hdPath: String
+        get() = (if (BuildConfig.IS_TESTNET) Constants.TESTNET_HD_PATH else Constants.MAINNET_HD_PATH) + accountNumber + "'"
 }
 
 fun parseAccountArray(json: String): ArrayList<Account> {

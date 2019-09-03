@@ -638,5 +638,11 @@
     <string name="unlock">Unlock</string>
     <string name="wallets">Wallets</string>
     <string name="add_new_account">Add new account</string>
+    <string name="key_count">%1$d external, %2$d internal, %3$d imported</string>
+    <string name="keys">Keys</string>
+    <string name="properties">Properties</string>
+    <string name="show_properties">Show properties</string>
+    <string name="hide_properties">Hide properties</string>
+    <string name="default_account_switch_desc">Default for all transactions</string>
 
 </resources>
