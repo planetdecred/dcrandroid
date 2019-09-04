@@ -20,7 +20,6 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.HomeActivity;
-import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
@@ -76,8 +75,8 @@ public class SplashScreen extends BaseActivity {
                     loadThread.interrupt();
                 }
 
-                if (walletData.wallet != null) {
-                    walletData.wallet.shutdown();
+                if (walletData.multiWallet != null) {
+                    walletData.multiWallet.shutdown();
                 }
 
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
@@ -171,7 +170,6 @@ public class SplashScreen extends BaseActivity {
                     }
 
                     walletData.multiWallet.openWallets(publicPass.getBytes());
-                    walletData.wallet = walletData.multiWallet.getWallet(1); // TODO
 
                     Intent i = new Intent(SplashScreen.this, HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -134,6 +134,12 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
         }
     }
 
+    fun addWallet(walletID: Long){
+        val wallet = multiWallet.getWallet(walletID)
+        wallets.add(wallet)
+        notifyItemInserted(wallets.size - 1)
+    }
+
     inner class WalletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val walletName =  itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance

@@ -6,6 +6,7 @@
 
 package com.dcrandroid.fragments
 
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,11 +17,16 @@ import com.dcrandroid.util.WalletData
 import com.dcrandroid.activities.SetupWalletActivity
 import android.content.Intent
 import android.widget.Toast
+import com.dcrandroid.data.Constants
 import dcrlibwallet.MultiWallet
+
+const val CREATE_WALLET_REQUEST_CODE = 100
 
 class WalletsFragment: BaseFragment() {
 
+    private lateinit var adapter: WalletsAdapter
     private lateinit var recyclerView: RecyclerView
+
     private val multiWallet: MultiWallet
     get() = WalletData.getInstance().multiWallet
 
@@ -42,11 +48,19 @@ class WalletsFragment: BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val adapter = WalletsAdapter(context!!)
+        adapter = WalletsAdapter(context!!)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = adapter
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == CREATE_WALLET_REQUEST_CODE && resultCode == RESULT_OK){
+            val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
+            adapter.addWallet(walletID)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,7 +77,7 @@ class WalletsFragment: BaseFragment() {
                 }
 
                 val i = Intent(context, SetupWalletActivity::class.java)
-                startActivity(i)
+                startActivityForResult(i, CREATE_WALLET_REQUEST_CODE)
                 return true
             }
         }

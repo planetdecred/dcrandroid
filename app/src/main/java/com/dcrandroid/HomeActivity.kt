@@ -54,8 +54,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     private lateinit var currentFragment: Fragment
 
     private val walletData: WalletData = WalletData.getInstance()
-    private var wallet: LibWallet? = null
-        get() = walletData.wallet
+
     private var multiWallet: MultiWallet? = null
         get() = walletData.multiWallet
 
@@ -66,7 +65,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         setSupportActionBar(toolbar)
 
         util = PreferenceUtil(this)
-        if (wallet == null) {
+        if (multiWallet == null) {
             println("Restarting app")
             Utils.restartApp(this)
         }

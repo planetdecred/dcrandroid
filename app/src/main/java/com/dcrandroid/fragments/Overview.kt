@@ -26,15 +26,8 @@ import dcrlibwallet.*
 
 class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
-    private val requiredConfirmations: Int
-        get() {
-            return if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0
-            else Constants.REQUIRED_CONFIRMATIONS
-        }
-
     private val walletData: WalletData = WalletData.getInstance()
-    private val wallet: LibWallet
-        get() = walletData.wallet
+
     private val multiWallet: MultiWallet
         get() = walletData.multiWallet
 
@@ -88,7 +81,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         setToolbarTitle(R.string.overview, false)
         scrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
-        balanceTextView.text = CoinFormat.format(wallet.totalWalletBalance(context!!))
+        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
 
         loadTransactions()
     }
@@ -122,7 +115,8 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 
     private fun loadTransactions() {
-        val jsonResult = wallet.getTransactions(3, Dcrlibwallet.TxFilterAll)
+//        val jsonResult = wallet.getTransactions(3, Dcrlibwallet.TxFilterAll)
+        val jsonResult = ""
         var transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (transactions == null) {

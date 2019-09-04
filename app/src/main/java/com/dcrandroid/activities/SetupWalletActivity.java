@@ -97,19 +97,23 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
      *
      * @param spendingKey - spending password or pin
      */
-    private void navigateToMainActivity(final String spendingKey) {
+    private void navigateToMainActivity(final String spendingKey, final long walletID) {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 MultiWallet multiWallet = WalletData.getInstance().multiWallet;
-                Intent intent = new Intent(SetupWalletActivity.this, HomeActivity.class);
-                intent.putExtra(Constants.PASSPHRASE, spendingKey);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 if (multiWallet.openedWalletsCount() > 1) {
+                    Intent data = new Intent();
+                    data.putExtra(Constants.WALLET_ID, walletID);
+                    setResult(RESULT_OK, data);
                     finish();
                 } else {
+                    Intent intent = new Intent(SetupWalletActivity.this, HomeActivity.class);
+                    intent.putExtra(Constants.PASSPHRASE, spendingKey);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
                     startActivity(intent);
                     ActivityCompat.finishAffinity(SetupWalletActivity.this);
                 }
@@ -136,9 +140,9 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
 
                     preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
 
-                    WalletData.getInstance().wallet = multiWallet.createNewWallet(spendingKey, type);
+                    LibWallet wallet = multiWallet.createNewWallet(spendingKey, type);
 
-                    navigateToMainActivity(spendingKey);
+                    navigateToMainActivity(spendingKey, wallet.getWalletID());
 
                 } catch (Exception e) {
                     e.printStackTrace();
