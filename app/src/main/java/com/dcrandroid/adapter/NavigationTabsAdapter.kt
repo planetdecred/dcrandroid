@@ -11,17 +11,16 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.extensions.*
 import kotlinx.android.synthetic.main.tab_row.view.*
 
 data class NavigationTab(@StringRes val title: Int, @DrawableRes val activeIcon: Int, @DrawableRes val inactiveIcon: Int)
 
-class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int, var tabSelected:(position: Int) -> Unit): RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
+class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int, var backupsNeeded: Int, var tabSelected:(position: Int) -> Unit): RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private var tabs: ArrayList<NavigationTab> = ArrayList()
@@ -29,7 +28,7 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
     init {
         tabs.add(NavigationTab(R.string.overview, R.drawable.ic_overview, R.drawable.ic_overview_inactive))
         tabs.add(NavigationTab(R.string.transactions, R.drawable.ic_transactions, R.drawable.ic_transactions_inactive))
-        tabs.add(NavigationTab(R.string.wallets, R.drawable.ic_wallet, R.drawable.ic_accounts_inactive))
+        tabs.add(NavigationTab(R.string.wallets, R.drawable.ic_wallet, R.drawable.ic_wallet02))
         tabs.add(NavigationTab(R.string.settings, R.drawable.ic_settings, R.drawable.ic_settings_inactive))
     }
 
@@ -53,6 +52,12 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
             holder.icon.setImageResource(tabs[position].inactiveIcon)
         }
 
+        if(position == 2 && backupsNeeded > 0){ // Wallets Page
+            holder.backupIcon.show()
+        }else{
+            holder.backupIcon.hide()
+        }
+
         holder.itemView.setOnClickListener {
             val oldActiveTab = activeTab
             activeTab = position
@@ -69,7 +74,8 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
     }
 
     inner class NavigationTabViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.tab_title
-        val icon: ImageView = itemView.tab_icon
+        val title = itemView.tab_title
+        val icon = itemView.tab_icon
+        val backupIcon = itemView.backup_icon
     }
 }

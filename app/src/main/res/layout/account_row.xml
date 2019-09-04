@@ -7,6 +7,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/ripple"
     android:clickable="true"
@@ -21,14 +22,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_vertical"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_accounts"
+            tools:src="@drawable/ic_accounts"
             android:layout_gravity="center_vertical"
             android:id="@+id/account_row_icon" />
 
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:layout_marginTop="7dp"
-                android:text="Spendable"
+                android:text="@string/label_spendable"
                 android:textSize="14sp"
                 android:textColor="#596d81"
                 app:fontFamily="@font/source_sans_pro_regular_family"
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="0 DCR"
+                tools:text="0 DCR"
                 android:textSize="20sp"
                 android:textColor="#091440"
                 app:fontFamily="@font/source_sans_pro_regular_family"
@@ -88,7 +88,7 @@
                 android:layout_gravity="end"
                 android:maxLines="1"
                 android:layout_marginTop="7dp"
-                android:text="0 DCR"
+                tools:text="0 DCR"
                 android:textSize="14sp"
                 android:textColor="#596d81"
                 app:fontFamily="@font/source_sans_pro_regular_family"

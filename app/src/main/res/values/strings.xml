@@ -652,5 +652,6 @@
     <string name="create_account_warning">Accounts CANNOT be deleted once created.</string>
     <string name="create_new_account">Create new account</string>
     <string name="confirm_to_create_account">Confirm to create account</string>
+    <string name="not_backed_up">Not backed up</string>
 
 </resources>

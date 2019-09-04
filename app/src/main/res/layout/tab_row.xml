@@ -7,21 +7,36 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
     android:gravity="center"
     android:orientation="vertical"
     android:focusable="true"
     android:clickable="true"
     android:paddingTop="2dp"
-    android:background="?selectableItemBackground">
+    android:background="@drawable/ripple">
 
-    <ImageView
-        android:layout_width="24dp"
+    <FrameLayout
+        android:layout_width="30dp"
         android:layout_height="24dp"
-        android:id="@+id/tab_icon"
-        />
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:id="@+id/tab_icon" />
+
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="end"
+            android:id="@+id/backup_icon"
+            android:visibility="gone"
+            android:background="@drawable/offline_dot" />
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="wrap_content"

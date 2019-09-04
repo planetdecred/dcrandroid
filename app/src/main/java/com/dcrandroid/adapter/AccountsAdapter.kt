@@ -44,7 +44,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
         val view = if (viewType == 0) {
             inflater.inflate(R.layout.account_row, parent, false)
         }else{
-            inflater.inflate(R.layout.add_row, parent, false)
+            inflater.inflate(R.layout.add_account_row, parent, false)
         }
 
         return AccountsViewHolder(view)

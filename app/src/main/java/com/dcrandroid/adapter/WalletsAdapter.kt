@@ -7,14 +7,12 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
@@ -57,6 +55,12 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
         holder.walletName.text = wallet.walletName
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 Utils.formatDecred(wallet.totalWalletBalance(context)))
+
+        if(wallet.walletSeed.isNullOrBlank()){
+            holder.backupNeeded.hide()
+        }else{
+            holder.backupNeeded.show()
+        }
 
         if(expanded == position){
             val adapter = AccountsAdapter(context, wallet.walletID)
@@ -143,6 +147,7 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
     inner class WalletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val walletName =  itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
+        val backupNeeded = itemView.backup_needed
 
         val more = itemView.iv_more
         val expand = itemView.expand_icon

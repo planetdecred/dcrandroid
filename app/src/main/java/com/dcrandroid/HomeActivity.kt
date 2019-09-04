@@ -130,7 +130,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth) {position ->
+        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.backupsNeeded) {position ->
             switchFragment(position)
         }
         recycler_view_tabs.adapter = adapter

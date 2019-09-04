@@ -7,6 +7,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_margin="4dp"
     android:background="@drawable/card_bg"
@@ -44,17 +45,37 @@
             android:layout_marginLeft="@dimen/margin_padding_size_8"
             android:layout_marginStart="@dimen/margin_padding_size_8" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/wallet_name"
             android:layout_weight="1"
-            android:text="Default"
-            android:textSize="@dimen/edit_text_size_16"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            android:textColor="@color/darkBlueTextColor"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/margin_padding_size_16"
-            android:layout_marginStart="@dimen/margin_padding_size_16" />
+            android:layout_marginStart="@dimen/margin_padding_size_16">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wallet_name"
+                tools:text="Default"
+                android:textSize="@dimen/edit_text_size_16"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                android:textColor="@color/darkBlueTextColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/backup_needed"
+                android:text="@string/not_backed_up"
+                android:textSize="@dimen/edit_text_size_14"
+                android:layout_marginTop="4dp"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro_regular_family"
+                android:textColor="@color/orangeTextColor" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +84,7 @@
             android:layout_marginLeft="@dimen/margin_padding_size_8"
             android:layout_marginStart="@dimen/margin_padding_size_8"
             app:fontFamily="@font/source_sans_pro_regular_family"
-            android:text="7.51464806 DCR"
+            tools:text="7.51464806 DCR"
             android:textSize="@dimen/edit_text_size_16"
             android:textColor="@color/blueGraySecondTextColor" />
 
@@ -85,6 +106,61 @@
         android:id="@+id/accounts"
         android:visibility="gone"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="44dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginBottom="16dp"
+            android:padding="@dimen/margin_padding_size_16"
+            android:background="@drawable/backup_seed_bg"
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_wallet_alert" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_padding_size_16"
+                android:layout_marginStart="@dimen/margin_padding_size_16">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backup_seed_phrase"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/verify_seed_phrase"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginTop="8dp"
+                    app:fontFamily="@font/source_sans_pro_regular_family" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_next" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

@@ -12,6 +12,7 @@
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/turquoise</item>
+        <item name="colorControlHighlight">@color/whiteRipple</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:navigationBarColor" tools:targetApi="21">@android:color/white</item>
         <item name="android:textColor">@color/blackFirstTextColor</item>
