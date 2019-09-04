@@ -15,17 +15,39 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rename_account"
+        android:text="@string/create_new_account"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="@dimen/edit_text_size_20"
-        android:id="@+id/sheet_title"
         app:fontFamily="@font/source_sans_pro_semibold_family" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_24"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:srcCompat="@drawable/ic_alert" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/edit_text_size_16"
+            android:textColor="@color/darkerBlueGrayTextColor"
+            app:fontFamily="@font/source_sans_pro_regular_family"
+            android:layout_marginLeft="@dimen/margin_padding_size_8"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:includeFontPadding="false"
+            android:text="@string/create_account_warning" />
+
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/account_name_input"
         android:hint="@string/account_name"
         android:layout_marginTop="@dimen/margin_padding_size_24"
         app:fontFamily="@font/source_sans_pro_regular_family">
@@ -64,13 +86,13 @@
             android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
         <TextView
-            android:id="@+id/btn_confirm"
+            android:id="@+id/btn_create"
             android:layout_width="83dp"
             android:layout_height="40dp"
             android:gravity="center"
             android:background="@drawable/default_app_button_bg"
             android:enabled="false"
-            android:text="@string/confirm"
+            android:text="@string/create"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"

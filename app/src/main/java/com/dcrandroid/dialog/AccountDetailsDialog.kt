@@ -17,16 +17,19 @@ import com.dcrandroid.data.Account
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
+import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.account_details.*
+import java.lang.Exception
 
-class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account) : Dialog(ctx, R.style.FullWidthDialog) {
+class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account, val renameAccount:(newName: String) -> Exception?) : Dialog(ctx, R.style.FullWidthDialog) {
 
     private var wallet: LibWallet? = null
+    private var multiWallet: MultiWallet = WalletData.getInstance().multiWallet
 
     init {
-        val multiWallet = WalletData.getInstance().multiWallet
         this.wallet = multiWallet.getWallet(walletID)
     }
 
@@ -49,10 +52,14 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
         account_details_keys.text = context.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
 
         if(account.accountNumber == wallet!!.defaultAccount){
-            default_account_switch.isEnabled = false
+            default_account_switch.apply {
+                isChecked = true
+                isEnabled = false
+            }
         }else if(account.accountNumber == Int.MAX_VALUE){ // imported account
             default_account_row.hide()
             account_details_icon.setImageResource(R.drawable.ic_accounts_locked)
+            iv_rename_account.hide()
         }
 
         // click listeners
@@ -66,7 +73,23 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
 
         iv_rename_account.setOnClickListener {
             val activity = ctx as AppCompatActivity
-            RenameAccountDialog().show(activity.supportFragmentManager, null)
+            RenameAccountDialog(account.accountName) {
+
+                val e = renameAccount(it)
+                if (e != null){
+                    return@RenameAccountDialog e
+                }else{
+                    tv_account_name.text = it
+                    SnackBar.showText(account_details_root, R.string.account_renamed)
+                    null
+                }
+
+            }.show(activity.supportFragmentManager, null)
+        }
+
+        default_account_switch.setOnClickListener {
+            multiWallet.setDefaultAccount(walletID, account.accountNumber)
+            it.isEnabled = false
         }
 
     }

@@ -136,9 +136,7 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
 
                     preferenceUtil.setBoolean(Constants.RESTORE_WALLET, false);
 
-                    LibWallet wallet = multiWallet.createNewWallet(spendingKey, type);
-                    WalletData.getInstance().wallet = wallet;
-                    multiWallet.unlockWallet(wallet.getWalletID(), spendingKey.getBytes());
+                    WalletData.getInstance().wallet = multiWallet.createNewWallet(spendingKey, type);
 
                     navigateToMainActivity(spendingKey);
 

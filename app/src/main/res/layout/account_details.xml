@@ -10,14 +10,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/account_details_root"
-    >
+    android:id="@+id/account_details_root">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:padding="@dimen/margin_padding_size_8">
 
         <ImageView
@@ -36,6 +34,7 @@
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_20"
             android:text="Default"
+            android:layout_gravity="center_vertical"
             app:fontFamily="@font/source_sans_pro_regular_family"
             />
 

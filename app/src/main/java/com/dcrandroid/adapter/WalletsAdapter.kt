@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,7 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
@@ -32,10 +33,10 @@ import kotlinx.android.synthetic.main.wallet_row.view.*
 class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
     private var wallets: ArrayList<LibWallet>
+    private val multiWallet = WalletData.getInstance().multiWallet
     private var expanded = -1
 
     init {
-        val multiWallet = WalletData.getInstance().multiWallet
         wallets = multiWallet.openedWalletsList()
     }
 
@@ -112,8 +113,20 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
             recyclerView.adapter = PopupMenuAdapter(context, items) {index ->
                 window.dismiss()
                 when(index){
-                    0 -> {
+                    0 -> { // rename account
+                        val activity = context as AppCompatActivity
+                        RenameAccountDialog(wallet.walletName, true){newName ->
 
+                            try{
+                                multiWallet.renameWallet(wallet.walletID, newName)
+                            }catch (e: Exception){
+                                return@RenameAccountDialog e
+                            }
+                            notifyItemChanged(position)
+                            SnackBar.showText(context, R.string.wallet_renamed)
+
+                            return@RenameAccountDialog null
+                        }.show(activity.supportFragmentManager, null)
                     }
                 }
             }

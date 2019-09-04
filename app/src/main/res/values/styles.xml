@@ -76,6 +76,7 @@
         <item name="android:textColorHint">@color/darkerBlueGrayTextColor</item>
         <item name="counterTextColor">@color/darkerBlueGrayTextColor</item>
         <item name="errorTextColor">@color/colorError</item>
+        <item name="hintTextColor">@color/blue</item>
     </style>
 
     <style name="FullWidthDialog" parent="AppTheme.Dialog">

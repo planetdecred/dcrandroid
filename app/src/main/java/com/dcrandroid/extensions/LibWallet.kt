@@ -13,7 +13,7 @@ import com.dcrandroid.data.parseAccounts
 import com.dcrandroid.util.PreferenceUtil
 import dcrlibwallet.LibWallet
 
-fun LibWallet.walletAccounts(requiredConfirmations: Int) : Array<Account>{
+fun LibWallet.walletAccounts(requiredConfirmations: Int) : ArrayList<Account>{
     return parseAccounts(this.getAccounts(requiredConfirmations)).accounts
 }
 

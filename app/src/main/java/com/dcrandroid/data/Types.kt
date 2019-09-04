@@ -20,7 +20,7 @@ class Accounts : Serializable {
     var currentBlockHeight: Int = 0
 
     @SerializedName("Acc")
-    lateinit var accounts: Array<Account>
+    lateinit var accounts: ArrayList<Account>
 }
 
 fun parseAccounts(json: String): Accounts {
@@ -29,14 +29,14 @@ fun parseAccounts(json: String): Accounts {
 }
 
 class Account : Serializable {
+    @SerializedName("Number")
+    var accountNumber: Int = 0
     @SerializedName("Name")
     lateinit var accountName: String
     @SerializedName("Balance")
     lateinit var balance: Balance
     @SerializedName("TotalBalance")
     var totalBalance: Long = 0
-    @SerializedName("Number")
-    var accountNumber: Int = 0
     @SerializedName("ExternalKeyCount")
     var externalKeyCount: Int = 0
     @SerializedName("InternalKeyCount")
@@ -46,6 +46,21 @@ class Account : Serializable {
 
     val hdPath: String
         get() = (if (BuildConfig.IS_TESTNET) Constants.TESTNET_HD_PATH else Constants.MAINNET_HD_PATH) + accountNumber + "'"
+
+    companion object{
+        fun from(acc: dcrlibwallet.Account): Account {
+            val account = Account()
+            return account.apply {
+                accountNumber = acc.number
+                accountName = acc.name
+                balance = Balance.from(acc.balance)
+                totalBalance = acc.totalBalance
+                externalKeyCount = acc.externalKeyCount
+                internalKeyCount = acc.internalKeyCount
+                importedKeyCount = acc.importedKeyCount
+            }
+        }
+    }
 }
 
 fun parseAccountArray(json: String): ArrayList<Account> {
@@ -69,6 +84,21 @@ class Balance : Serializable {
     var votingAuthority: Long = 0
     @SerializedName("UnConfirmed")
     var unConfirmed: Long = 0
+
+    companion object{
+        fun from(bal: dcrlibwallet.Balance): Balance{
+            val balance = Balance()
+            return balance.apply {
+                spendable = bal.spendable
+                total = bal.total
+                immatureReward = bal.immatureReward
+                immatureStakeGeneration = bal.immatureStakeGeneration
+                lockedByTickets = bal.lockedByTickets
+                votingAuthority = bal.votingAuthority
+                unConfirmed = bal.unConfirmed
+            }
+        }
+    }
 }
 
 fun parseBalanceArray(json: String): ArrayList<Balance> {

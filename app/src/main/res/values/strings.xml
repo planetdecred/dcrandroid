@@ -120,6 +120,8 @@
     <string name="create">Create</string>
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet">Rename Wallet</string>
+    <string name="rename_wallet_sheet_title">Rename wallet</string>
+    <string name="wallet_name">Wallet Name</string>
     <string name="change_spending_pass">Change spending password/PIN</string>
     <string name="view_property">View property</string>
     <string name="remove_wallet">Remove wallet from device</string>
@@ -644,5 +646,11 @@
     <string name="show_properties">Show properties</string>
     <string name="hide_properties">Hide properties</string>
     <string name="default_account_switch_desc">Default for all transactions</string>
+    <string name="wallet_renamed">Wallet renamed</string>
+    <string name="account_renamed">Account renamed</string>
+    <string name="account_created">Account created</string>
+    <string name="create_account_warning">Accounts CANNOT be deleted once created.</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="confirm_to_create_account">Confirm to create account</string>
 
 </resources>
