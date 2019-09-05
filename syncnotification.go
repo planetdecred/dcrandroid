@@ -468,7 +468,7 @@ func (lw *LibWallet) synced(synced bool) {
 
 	// begin indexing transactions after sync is completed,
 	// syncProgressListeners.OnSynced() will be invoked after transactions are indexed
-	lw.IndexTransactions(-1, -1, func() {
+	lw.IndexTransactions(func() {
 		for _, syncProgressListener := range lw.syncProgressListeners {
 			if synced {
 				syncProgressListener.OnSyncCompleted()

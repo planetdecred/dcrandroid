@@ -5,18 +5,16 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/asdine/storm"
 	"github.com/decred/dcrwallet/errors"
 	"github.com/decred/dcrwallet/netparams"
 	"github.com/decred/dcrwallet/wallet"
 	"github.com/decred/dcrwallet/wallet/txrules"
+	"github.com/raedahgroup/dcrlibwallet/txindex"
 	"github.com/raedahgroup/dcrlibwallet/utils"
-	"go.etcd.io/bbolt"
 )
 
 const (
 	logFileName = "dcrlibwallet.log"
-	txDbName    = "tx.db"
 
 	BlockValid = 1 << 0
 )
@@ -26,7 +24,7 @@ type LibWallet struct {
 	activeNet     *netparams.Params
 	walletLoader  *WalletLoader
 	wallet        *wallet.Wallet
-	txDB          *storm.DB
+	txDB          *txindex.DB
 	*syncData
 
 	shuttingDown chan bool
@@ -52,20 +50,10 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 	initLogRotator(filepath.Join(walletDataDir, logFileName))
 
 	// open database for indexing transactions for faster loading
-	txDB, err := storm.Open(filepath.Join(walletDataDir, txDbName))
+	txDBPath := filepath.Join(walletDataDir, txindex.DbName)
+	txDB, err := txindex.Initialize(txDBPath, &Transaction{})
 	if err != nil {
-		log.Errorf("Error opening tx database for wallet: %s", err.Error())
-		if err == bolt.ErrTimeout {
-			// timeout error occurs if storm fails to acquire a lock on the database file
-			return nil, fmt.Errorf("tx index database is in use by another process")
-		}
-		return nil, fmt.Errorf("error opening tx index database: %s", err.Error())
-	}
-
-	// init database for saving/reading transaction objects
-	err = txDB.Init(&Transaction{})
-	if err != nil {
-		log.Errorf("Error initializing tx database for wallet: %s", err.Error())
+		log.Error(err.Error())
 		return nil, err
 	}
 

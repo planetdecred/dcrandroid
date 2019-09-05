@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/asdine/storm"
-	"github.com/asdine/storm/q"
 	"github.com/decred/dcrd/blockchain/stake"
 	"github.com/decred/dcrd/chaincfg"
 	"github.com/decred/dcrd/chaincfg/chainhash"
@@ -17,6 +15,8 @@ import (
 	"github.com/decred/dcrd/txscript"
 	"github.com/decred/dcrd/wire"
 	"github.com/decred/dcrwallet/wallet"
+	"github.com/raedahgroup/dcrlibwallet/txhelper"
+	"github.com/raedahgroup/dcrlibwallet/txindex"
 )
 
 type TransactionListener interface {
@@ -26,32 +26,28 @@ type TransactionListener interface {
 }
 
 const (
-	BucketTxInfo   = "TxIndexInfo"
-	KeyEndBlock    = "EndBlock"
-	MaxReOrgBlocks = 6
+	// Export constants for use in mobile apps
+	// since gomobile excludes fields from sub packages.
+	TxFilterAll         = txindex.TxFilterAll
+	TxFilterSent        = txindex.TxFilterSent
+	TxFilterReceived    = txindex.TxFilterReceived
+	TxFilterTransferred = txindex.TxFilterTransferred
+	TxFilterStaking     = txindex.TxFilterStaking
+	TxFilterCoinBase    = txindex.TxFilterCoinBase
+
+	TxDirectionInvalid     = txhelper.TxDirectionInvalid
+	TxDirectionSent        = txhelper.TxDirectionSent
+	TxDirectionReceived    = txhelper.TxDirectionReceived
+	TxDirectionTransferred = txhelper.TxDirectionTransferred
+
+	TxTypeRegular        = txhelper.TxTypeRegular
+	TxTypeCoinBase       = txhelper.TxTypeCoinBase
+	TxTypeTicketPurchase = txhelper.TxTypeTicketPurchase
+	TxTypeVote           = txhelper.TxTypeVote
+	TxTypeRevocation     = txhelper.TxTypeRevocation
 )
 
-const (
-	TxFilterAll         int32 = 0
-	TxFilterSent        int32 = 1
-	TxFilterReceived    int32 = 2
-	TxFilterTransferred int32 = 3
-	TxFilterStaking     int32 = 4
-	TxFilterCoinBase    int32 = 5
-
-	TxDirectionInvalid     int32 = -1
-	TxDirectionSent        int32 = 0
-	TxDirectionReceived    int32 = 1
-	TxDirectionTransferred int32 = 2
-
-	TxTypeRegular        = "REGULAR"
-	TxTypeCoinBase       = "COINBASE"
-	TxTypeTicketPurchase = "TICKET_PURCHASE"
-	TxTypeVote           = "VOTE"
-	TxTypeRevocation     = "REVOCATION"
-)
-
-func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, afterIndexing func()) error {
+func (lw *LibWallet) IndexTransactions(afterIndexing func()) error {
 	ctx, _ := lw.contextWithShutdownCancel(context.Background())
 
 	var totalIndex int32
@@ -72,7 +68,7 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 				return false, err
 			}
 
-			err = lw.replaceTxIfExist(tx)
+			err = lw.txDB.SaveOrUpdate(&Transaction{}, tx)
 			if err != nil {
 				log.Errorf("Index tx replace tx err :%v", err)
 				return false, err
@@ -83,7 +79,7 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 
 		if block.Header != nil {
 			txEndHeight = block.Header.Height
-			err := lw.txDB.Set(BucketTxInfo, KeyEndBlock, &txEndHeight)
+			err := lw.txDB.SaveLastIndexPoint(int32(txEndHeight))
 			if err != nil {
 				log.Errorf("Set tx index end block height error: ", err)
 				return false, err
@@ -100,34 +96,22 @@ func (lw *LibWallet) IndexTransactions(beginHeight int32, endHeight int32, after
 		}
 	}
 
-	if beginHeight == -1 {
-		var previousEndBlock int32
-		err := lw.txDB.Get(BucketTxInfo, KeyEndBlock, &previousEndBlock)
-		if err != nil && err != storm.ErrNotFound {
-			log.Errorf("Get not found :%v", err)
-			return err
-		}
-
-		beginHeight = previousEndBlock
-		beginHeight -= MaxReOrgBlocks
-
-		if beginHeight < 0 {
-			beginHeight = 0
-		}
+	beginHeight, err := lw.txDB.ReadIndexingStartBlock()
+	if err != nil {
+		log.Errorf("Get tx indexing start point error: %v", err)
+		return err
 	}
 
-	if beginHeight > endHeight {
-		endHeight = lw.GetBestBlock()
-	}
+	endHeight := lw.GetBestBlock()
 
 	startBlock := wallet.NewBlockIdentifierFromHeight(beginHeight)
 	endBlock := wallet.NewBlockIdentifierFromHeight(endHeight)
 
 	defer func() {
 		afterIndexing()
-		count, err := lw.txDB.Count(&Transaction{})
+		count, err := lw.txDB.Count(txindex.TxFilterAll, &Transaction{})
 		if err != nil {
-			log.Errorf("Count Error :%v", err)
+			log.Errorf("Post-indexing tx count error :%v", err)
 			return
 		}
 		log.Infof("Transaction index finished at %d, %d transaction(s) indexed in total", txEndHeight, count)
@@ -150,7 +134,7 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 					return
 				}
 
-				err = lw.replaceTxIfExist(tempTransaction)
+				err = lw.txDB.SaveOrUpdate(&Transaction{}, tempTransaction)
 				if err != nil {
 					log.Errorf("Tx ntfn replace tx err: %v", err)
 				}
@@ -174,7 +158,7 @@ func (lw *LibWallet) TransactionNotification(listener TransactionListener) {
 						return
 					}
 
-					err = lw.replaceTxIfExist(tempTransaction)
+					err = lw.txDB.SaveOrUpdate(&Transaction{}, tempTransaction)
 					if err != nil {
 						log.Errorf("Incoming block replace tx error :%v", err)
 						return
@@ -218,31 +202,6 @@ func (lw *LibWallet) GetTransactionRaw(txHash []byte) (*Transaction, error) {
 	return lw.parseTxSummary(txSummary, blockHash)
 }
 
-func (lw *LibWallet) replaceTxIfExist(tx *Transaction) error {
-	var oldTx Transaction
-	err := lw.txDB.One("Hash", tx.Hash, &oldTx)
-	if err != nil {
-		if err != storm.ErrNotFound {
-			log.Errorf("Find old tx error: %v", err)
-			return err
-		}
-	} else {
-		err = lw.txDB.DeleteStruct(&oldTx)
-		if err != nil {
-			log.Errorf("Delete old tx error: %v", err)
-			return err
-		}
-	}
-
-	err = lw.txDB.Save(tx)
-	if err != nil {
-		log.Errorf("Save transaction error :%v", err)
-		return err
-	}
-
-	return nil
-}
-
 func (lw *LibWallet) parseTxSummary(tx *wallet.TransactionSummary, blockHash *chainhash.Hash) (*Transaction, error) {
 	var inputTotal int64
 	var outputTotal int64
@@ -269,7 +228,7 @@ func (lw *LibWallet) parseTxSummary(tx *wallet.TransactionSummary, blockHash *ch
 			AccountName:     lw.AccountName(int32(debit.PreviousAccount))}
 	}
 
-	var direction int32 = TxDirectionInvalid
+	var direction = TxDirectionInvalid
 	if tx.Type == wallet.TransactionTypeRegular {
 		amountDifference := outputTotal - inputTotal
 		if amountDifference < 0 && (float64(tx.Fee) == math.Abs(float64(amountDifference))) {
@@ -361,17 +320,11 @@ func (lw *LibWallet) DecodeTransaction(txHash []byte) (string, error) {
 	return string(result), nil
 }
 
-func (lw *LibWallet) GetTransactions(limit, txFilter int32) (string, error) {
-	query := lw.prepareTxQuery(txFilter)
-	if limit > 0 {
-		query = query.Limit(int(limit))
-	}
-
+func (lw *LibWallet) GetTransactions(offset, limit, txFilter int32) (string, error) {
 	var transactions []Transaction
-
-	err := query.Find(&transactions)
+	err := lw.txDB.Read(offset, limit, txFilter, &transactions)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	jsonEncodedTransactions, err := json.Marshal(&transactions)
@@ -383,70 +336,14 @@ func (lw *LibWallet) GetTransactions(limit, txFilter int32) (string, error) {
 }
 
 func (lw *LibWallet) CountTransactions(txFilter int32) (int, error) {
-	query := lw.prepareTxQuery(txFilter)
-
-	count, err := query.Count(&Transaction{})
-	if err != nil {
-		return -1, err
-	}
-
-	return count, nil
+	return lw.txDB.Count(txFilter, &Transaction{})
 }
 
 func (lw *LibWallet) DetermineTxFilter(txType string, txDirection int32) int32 {
-	if txType == TxTypeCoinBase {
-		return TxFilterCoinBase
-	}
-	if txType != TxTypeRegular {
-		return TxFilterStaking
-	}
-
-	switch txDirection {
-	case TxDirectionSent:
-		return TxFilterSent
-	case TxDirectionReceived:
-		return TxFilterReceived
-	default:
-		return TxFilterTransferred
-	}
+	return txindex.DetermineTxFilter(txType, txDirection)
 }
 
 // - Helper Functions
-
-func (lw *LibWallet) prepareTxQuery(txFilter int32) (query storm.Query) {
-	switch txFilter {
-	case TxFilterSent:
-		query = lw.txDB.Select(
-			q.Eq("Direction", TxDirectionSent),
-		)
-	case TxFilterReceived:
-		query = lw.txDB.Select(
-			q.Eq("Direction", TxDirectionReceived),
-		)
-	case TxFilterTransferred:
-		query = lw.txDB.Select(
-			q.Eq("Direction", TxDirectionTransferred),
-		)
-	case TxFilterStaking:
-		query = lw.txDB.Select(
-			q.Not(
-				q.Eq("Type", TxTypeRegular),
-				q.Eq("Type", TxTypeCoinBase),
-			),
-		)
-	case TxFilterCoinBase:
-		query = lw.txDB.Select(
-			q.Eq("Type", TxTypeCoinBase),
-		)
-	default:
-		query = lw.txDB.Select(
-			q.True(),
-		)
-	}
-
-	query = query.OrderBy("Timestamp").Reverse()
-	return
-}
 
 func decodeTxInputs(mtx *wire.MsgTx) []DecodedInput {
 	inputs := make([]DecodedInput, len(mtx.TxIn))

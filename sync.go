@@ -473,3 +473,7 @@ func (lw *LibWallet) GetBestBlockTimeStamp() int64 {
 	}
 	return info.Timestamp
 }
+
+func (lw *LibWallet) GetConnectedPeersCount() int32 {
+	return lw.connectedPeers
+}
