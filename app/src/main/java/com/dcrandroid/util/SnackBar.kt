@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.dcrandroid.R
 
@@ -30,9 +31,15 @@ class SnackBar {
             showText(0, context, text, length)
         }
 
-        private fun showText(x: Int = 0, context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+        fun showError(context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+            showText(0, context, text, length, R.drawable.orange_bg_corners_4dp)
+        }
+
+        private fun showText(x: Int = 0, context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT,
+                            @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp){
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.snackbar, null)
+            view.setBackgroundResource(backgroundResource)
 
             val textView = view.findViewById<TextView>(android.R.id.text1)
             textView.setText(text)

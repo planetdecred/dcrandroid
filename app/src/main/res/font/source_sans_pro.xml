@@ -14,4 +14,12 @@
         app:font="@font/source_sans_pro_regular"
         app:fontStyle="normal"
         app:fontWeight="400" />
+
+    <font
+        android:font="@font/source_sans_pro_semibold"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        app:font="@font/source_sans_pro_semibold"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
 </font-family>

@@ -7,6 +7,7 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.SaveSeedActivity
+import com.dcrandroid.activities.VerifySeedInstruction
+import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.RenameAccountDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
@@ -28,7 +32,7 @@ import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.wallet_row.view.*
 
-class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
+class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
     private var wallets: ArrayList<LibWallet>
     private val multiWallet = WalletData.getInstance().multiWallet
@@ -58,8 +62,14 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
 
         if(wallet.walletSeed.isNullOrBlank()){
             holder.backupNeeded.hide()
+            holder.backupWarning.hide()
         }else{
             holder.backupNeeded.show()
+            holder.backupWarning.show()
+
+            holder.backupWarning.setOnClickListener {
+                backupSeedClick(wallet.walletID)
+            }
         }
 
         if(expanded == position){
@@ -144,6 +154,16 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
         notifyItemInserted(wallets.size - 1)
     }
 
+    fun walletBackupVerified(walletID: Long){
+        wallets.forEachIndexed { index, wallet ->
+            if(wallet.walletID == walletID){
+                wallets[index] = multiWallet.getWallet(walletID)
+                notifyItemChanged(index)
+                return
+            }
+        }
+    }
+
     inner class WalletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val walletName =  itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
@@ -151,6 +171,7 @@ class WalletsAdapter(val context: Context): RecyclerView.Adapter<WalletsAdapter.
 
         val more = itemView.iv_more
         val expand = itemView.expand_icon
+        val backupWarning = itemView.backup_warning
 
         val container = itemView.container
         val accountsLayout = itemView.accounts

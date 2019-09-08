@@ -16,6 +16,7 @@
     <dimen name="edit_text_size_12">12sp</dimen>
     <dimen name="edit_text_size_14">14sp</dimen>
     <dimen name="edit_text_size_16">16sp</dimen>
+    <dimen name="edit_text_size_18">18sp</dimen>
     <dimen name="edit_text_size_20">20sp</dimen>
     <dimen name="edit_text_size_24">24sp</dimen>
     <dimen name="profile_width">75dp</dimen>
@@ -30,6 +31,7 @@
     <dimen name="mainnet_logo_bottom_margin">5dp</dimen>
 
     <!--Padding and Margins -->
+    <dimen name="margin_padding_size_4">4dp</dimen>
     <dimen name="margin_padding_size_8">8dp</dimen>
     <dimen name="margin_padding_size_12">12dp</dimen>
     <dimen name="margin_padding_size_16">16dp</dimen>
@@ -39,6 +41,7 @@
     <dimen name="margin_padding_size_40">40dp</dimen>
     <dimen name="margin_padding_size_56">56dp</dimen>
     <dimen name="margin_padding_size_64">64dp</dimen>
+
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="bottom_sheet_corner_radius_8">8dp</dimen>
@@ -47,4 +50,7 @@
     <dimen name="visible_balance_text_size">40sp</dimen>
     <dimen name="send_receive_button_corner_radius">100dp</dimen>
     <dimen name="app_bar_elevation">4dp</dimen>
+
+    <dimen name="seed_row_height">22dp</dimen>
+    <dimen name="seed_horizontal_margin">42dp</dimen>
 </resources>

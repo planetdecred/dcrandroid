@@ -42,7 +42,7 @@
             android:text="@string/syncing_state"
             android:textColor="#091440"
             android:textSize="20sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <LinearLayout
             android:id="@+id/syncing_cancel_layout"
@@ -69,7 +69,7 @@
                 android:text="@string/cancel"
                 android:textColor="#091440"
                 android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>
 
@@ -110,7 +110,7 @@
                 android:includeFontPadding="false"
                 android:textColor="#091440"
                 android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                app:fontFamily="@font/source_sans_pro" />
 
             <TextView
                 android:id="@+id/tv_time_left"
@@ -119,7 +119,7 @@
                 android:includeFontPadding="false"
                 android:textColor="#091440"
                 android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                  />
 
         </LinearLayout>
@@ -159,7 +159,7 @@
                     android:text="@string/step_1_3"
                     android:textColor="#596d81"
                     android:textSize="14sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <TextView
                     android:id="@+id/tv_steps_title"
@@ -168,7 +168,7 @@
                     android:includeFontPadding="false"
                     android:textColor="#091440"
                     android:textSize="16sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
+                    app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
 
@@ -187,7 +187,7 @@
                     android:text="@string/connected_peers_count"
                     android:textColor="#596d81"
                     android:textSize="14sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <TextView
                     android:id="@+id/tv_syncing_layout_connected_peer"
@@ -196,7 +196,7 @@
                     android:includeFontPadding="false"
                     android:textColor="#091440"
                     android:textSize="16sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     tools:text="16" />
 
             </LinearLayout>
@@ -217,7 +217,7 @@
                     android:text="@string/wallet"
                     android:textColor="#596d81"
                     android:textSize="14sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <TextView
                     android:id="@+id/tv_syncing_layout_wallet_name"
@@ -226,7 +226,7 @@
                     android:includeFontPadding="false"
                     android:textColor="#091440"
                     android:textSize="16sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     tools:text="wallet-1" />
 
             </LinearLayout>
@@ -258,6 +258,6 @@
         android:text="@string/show_details"
         android:textColor="#2970ff"
         android:textSize="16sp"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
 </LinearLayout>

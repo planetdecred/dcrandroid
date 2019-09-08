@@ -39,7 +39,7 @@
             android:text="@string/synced"
             android:textColor="#091440"
             android:textSize="20sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <LinearLayout
             android:id="@+id/reconnect_layout"
@@ -73,7 +73,7 @@
                 android:textColor="#091440"
                 android:textSize="14sp"
                 android:id="@+id/tv_reconnect"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>
 
@@ -96,7 +96,7 @@
             android:text="Latest block 320505．2 min ago"
             android:textColor="#8997a5"
             android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <TextView
             android:id="@+id/connected_peers"
@@ -108,7 +108,7 @@
             android:text="@string/no_connected_peers"
             android:textColor="#8997a5"
             android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            app:fontFamily="@font/source_sans_pro" />
 
     </LinearLayout>
 

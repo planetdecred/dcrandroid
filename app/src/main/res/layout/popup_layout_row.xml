@@ -21,6 +21,6 @@
         android:text="Rename wallet"
         android:textSize="@dimen/edit_text_size_16"
         android:textColor="#091440"
-        app:fontFamily="@font/source_sans_pro_regular_family"/>
+        app:fontFamily="@font/source_sans_pro"/>
 
 </LinearLayout>

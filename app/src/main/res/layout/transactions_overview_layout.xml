@@ -22,7 +22,7 @@
         android:text="@string/recent_transactions"
         android:textColor="#3d5873"
         android:textSize="14sp"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
     <TextView
         android:id="@+id/tv_no_transactions"
@@ -34,7 +34,7 @@
         android:textColor="#8997a5"
         android:textSize="16sp"
         android:text="@string/no_transactions_yet"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
     <LinearLayout
         android:id="@+id/transactions_view"
@@ -70,7 +70,7 @@
                 android:paddingBottom="14dp"
                 android:textColor="#2970ff"
                 android:textSize="16sp"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>
 

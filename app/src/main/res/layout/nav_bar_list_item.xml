@@ -28,7 +28,7 @@
         android:textSize="18sp"
         android:duplicateParentState="true"
         android:textColor="@color/nav_list_text_color"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         android:id="@+id/title" />
 
 </LinearLayout>

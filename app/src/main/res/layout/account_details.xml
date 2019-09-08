@@ -35,7 +35,7 @@
             android:textSize="@dimen/edit_text_size_20"
             android:text="Default"
             android:layout_gravity="center_vertical"
-            app:fontFamily="@font/source_sans_pro_regular_family"
+            app:fontFamily="@font/source_sans_pro"
             />
 
         <ImageView
@@ -78,7 +78,7 @@
                 android:id="@+id/account_details_total_balance"
                 android:text="7.51464806 DCR"
                 android:textSize="32sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:textColor="@color/darkBlueTextColor" />
 
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/blueGraySecondTextColor"
                 android:layout_marginTop="4dp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:text="@string/total_balance"
                 android:textSize="@dimen/edit_text_size_14"
@@ -99,7 +99,7 @@
                 android:id="@+id/account_details_spendable"
                 android:text="7.51464806 DCR"
                 android:textSize="20sp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:textColor="@color/darkBlueTextColor"
                 android:layout_marginTop="@dimen/margin_padding_size_16" />
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/blueGraySecondTextColor"
                 android:layout_marginTop="4dp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:text="@string/label_spendable"
                 android:textSize="@dimen/edit_text_size_14" />
@@ -135,7 +135,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/edit_text_size_14"
             android:textColor="@color/darkerBlueGrayTextColor"
-            app:fontFamily="@font/source_sans_pro_regular_family"
+            app:fontFamily="@font/source_sans_pro"
             android:text="@string/settings"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:layout_marginLeft="@dimen/margin_padding_size_16"
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/edit_text_size_16"
                     android:textColor="@color/darkBlueTextColor"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:text="@string/default_account"
                     android:includeFontPadding="false" />
 
@@ -174,7 +174,7 @@
                     android:textSize="@dimen/edit_text_size_14"
                     android:textColor="@color/blueGraySecondTextColor"
                     android:includeFontPadding="false"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:layout_marginTop="4dp"
                     android:text="@string/default_account_switch_desc" />
 
@@ -211,7 +211,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_14"
                 android:textColor="@color/darkerBlueGrayTextColor"
                 android:text="@string/properties"
@@ -230,7 +230,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/blueGraySecondTextColor"
                     android:textSize="@dimen/edit_text_size_14"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:text="@string/account_number"
                     android:includeFontPadding="false" />
 
@@ -240,7 +240,7 @@
                     android:id="@+id/account_details_number"
                     android:textColor="@color/darkBlueTextColor"
                     android:textSize="@dimen/edit_text_size_16"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:includeFontPadding="false" />
 
             </LinearLayout>
@@ -257,7 +257,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/blueGraySecondTextColor"
                     android:textSize="@dimen/edit_text_size_14"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:text="@string/hd_path"
                     android:includeFontPadding="false" />
 
@@ -267,7 +267,7 @@
                     android:id="@+id/account_details_path"
                     android:textColor="@color/darkBlueTextColor"
                     android:textSize="@dimen/edit_text_size_16"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:includeFontPadding="false" />
 
             </LinearLayout>
@@ -284,7 +284,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/blueGraySecondTextColor"
                     android:textSize="@dimen/edit_text_size_14"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:text="@string/keys"
                     android:includeFontPadding="false" />
 
@@ -294,7 +294,7 @@
                     android:id="@+id/account_details_keys"
                     android:textColor="@color/darkBlueTextColor"
                     android:textSize="@dimen/edit_text_size_16"
-                    app:fontFamily="@font/source_sans_pro_regular_family"
+                    app:fontFamily="@font/source_sans_pro"
                     android:includeFontPadding="false" />
 
             </LinearLayout>
@@ -312,7 +312,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_toggle_properties"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         android:gravity="center"
         android:text="@string/show_properties"
         android:textSize="@dimen/edit_text_size_16"

@@ -44,7 +44,7 @@
                 android:text="@string/welcome_android_title"
                 android:textColor="@color/darkBlueTextColor"
                 android:textSize="30sp"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                app:fontFamily="@font/source_sans_pro" />
 
         </RelativeLayout>
 
@@ -87,7 +87,7 @@
                         android:text="@string/create_a_new_wallet"
                         android:textColor="@color/white"
                         android:textSize="@dimen/edit_text_size_16"
-                        app:fontFamily="@font/source_sans_pro_regular_family" />
+                        app:fontFamily="@font/source_sans_pro" />
 
                 </LinearLayout>
 
@@ -126,7 +126,7 @@
                         android:text="@string/restore_existing_wallet"
                         android:textColor="@color/white"
                         android:textSize="@dimen/edit_text_size_16"
-                        app:fontFamily="@font/source_sans_pro_regular_family" />
+                        app:fontFamily="@font/source_sans_pro" />
 
                 </LinearLayout>
 

@@ -22,8 +22,8 @@
         android:text="@string/resume_account_discovery_title"
         android:textColor="#091440"
         android:textSize="20sp"
-        app:fontFamily="@font/source_sans_pro_semibold_family"
-        />
+        android:textStyle="bold"
+        app:fontFamily="@font/source_sans_pro" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:text="@string/resume_account_discovery_desc"
         android:textColor="#3d5873"
         android:textSize="16sp"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         android:layout_marginTop="@dimen/margin_padding_size_16"
         />
 
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/spending_password"
         android:layout_marginTop="@dimen/margin_padding_size_24"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         app:passwordToggleEnabled="true"
         >
 
@@ -79,7 +79,7 @@
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"
             android:clickable="true"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
+            app:fontFamily="@font/source_sans_pro_semibold"
             android:visibility="visible"
             />
 

@@ -7,26 +7,32 @@
 package com.dcrandroid.activities
 
 import android.app.Activity
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.*
 import com.dcrandroid.data.Constants
-import com.dcrandroid.util.PreferenceUtil
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
-import dcrlibwallet.Dcrlibwallet
+import com.dcrandroid.util.WalletData
+import dcrlibwallet.LibWallet
+import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
+import java.lang.Exception
 
-class VerifySeedActivity : BaseActivity(), SeedTapListener {
+class VerifySeedActivity : BaseActivity() {
 
-    private var seeds = ArrayList<String>()
+    private lateinit var seeds: Array<String>
     private lateinit var allSeeds: Array<String>
 
-    private lateinit var createWalletAdapter: CreateWalletAdapter
+    private lateinit var verifySeedAdapter: VerifySeedAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    private lateinit var footer: SeedPageFooter
+    private var wallet: LibWallet? = null
+    private var multiWallet: MultiWallet = WalletData.getInstance().multiWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,24 +41,53 @@ class VerifySeedActivity : BaseActivity(), SeedTapListener {
         setContentView(R.layout.verify_seed_page)
 
         linearLayoutManager = LinearLayoutManager(this)
-        recyclerViewSeeds.layoutManager = linearLayoutManager
-
-        footer = SeedPageFooter(null, R.drawable.btn_shape2)
+        recycler_view_seeds.layoutManager = linearLayoutManager
 
         allSeeds = Utils.getWordList(this).split(" ").toTypedArray()
-
         prepareData()
+
+        recycler_view_seeds.viewTreeObserver.addOnScrollChangedListener{
+
+            val firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                app_bar.elevation = if (firstVisibleItem != 0) {
+                    resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    0f
+                }
+            }
+        }
+
+        btn_verify.setOnClickListener {
+            val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
+            try{
+                multiWallet.verifySeed(wallet!!.walletID, seedMnemonic)
+                val data = Intent(this, SeedBackupSuccess::class.java)
+                data.putExtra(Constants.WALLET_ID, wallet!!.walletID)
+                data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+                startActivity(data)
+                finish()
+            }catch (e: Exception){
+                e.printStackTrace()
+                SnackBar.showError(this, R.string.seed_verification_failed)
+            }
+        }
+
+        go_back.setOnClickListener {
+            finish()
+        }
     }
 
     private fun prepareData() {
-        val bundle = intent.extras
-        if (bundle != null && !bundle.isEmpty) {
-            val seed = bundle.getString(Constants.SEED)
-            if (seed != null) {
-                seeds = ArrayList(seed.split(" "))
-                initSeedAdapter()
-                getMultiSeedList()
-            }
+
+        val walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
+        wallet = multiWallet.getWallet(walletId)
+
+        if (wallet!!.walletSeed.isNotBlank()){
+            val seed = wallet!!.walletSeed
+            seeds = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            initSeedAdapter()
         }
     }
 
@@ -79,75 +114,17 @@ class VerifySeedActivity : BaseActivity(), SeedTapListener {
 
         val realInputSeed = InputSeed(realSeedIndex, allSeeds[realSeedIndex])
 
-        val arr = ArrayList<InputSeed>()
-        arr.add(firstInputSeed)
-        arr.add(secondInputSeed)
-        arr.add(realInputSeed)
-
-        arr.shuffle()
-
-        return MultiSeed(arr[0], arr[1], arr[2])
+        val arr = arrayListOf(firstInputSeed, secondInputSeed, realInputSeed).apply { shuffle() }.toTypedArray()
+        return MultiSeed(arr)
     }
 
     private fun initSeedAdapter() {
         val allSeedWords = getMultiSeedList()
-        createWalletAdapter = CreateWalletAdapter(this, allSeedWords, this, footer)
-        recyclerViewSeeds.adapter = createWalletAdapter
+        verifySeedAdapter = VerifySeedAdapter(this, allSeedWords){seedIndex ->
+            linearLayoutManager.scrollToPosition(seedIndex + 2)
+            btn_verify.isEnabled = verifySeedAdapter.allSeedsSelected
+        }
+        recycler_view_seeds.adapter = verifySeedAdapter
     }
 
-    private fun notAllSeedsEntered() {
-        footer.error = getString(R.string.notAllSeedsEntered)
-        // 34: last item on the last after adding up 1 header and 33 seed rows(using 0th index)
-        createWalletAdapter.notifyItemChanged(34)
-    }
-
-    override fun onConfirm(enteredSeeds: ArrayList<String>, emptySeed: Boolean) {
-
-        if (emptySeed) {
-            notAllSeedsEntered()
-            return
-        }
-
-        val seedString = enteredSeeds.joinToString(" ", "", "", -1, "...")
-
-        if (Dcrlibwallet.verifySeed(seedString)) {
-            footer.buttonBackground = R.drawable.btn_shape3
-            footer.error = null
-
-            val util = PreferenceUtil(this)
-            util.set(Constants.SEED, null)
-            util.setBoolean(Constants.VERIFIED_SEED, true)
-
-            setResult(Activity.RESULT_OK)
-            finish()
-        } else {
-            footer.buttonBackground = R.drawable.btn_shape2
-            footer.error = getString(R.string.create_wallet_incorrect_seeds_input)
-        }
-
-
-        createWalletAdapter.notifyItemChanged(34)
-    }
-
-    override fun onSeedEntered(enteredSeeds: ArrayList<String>, emptySeed: Boolean, position: Int) {
-
-        linearLayoutManager.scrollToPosition(position + 2)
-
-        if (emptySeed) {
-            notAllSeedsEntered()
-            return
-        }
-
-        val seedString = enteredSeeds.joinToString(" ", "", "", -1, "...")
-        if (Dcrlibwallet.verifySeed(seedString)) {
-            footer.buttonBackground = R.drawable.btn_shape3
-            footer.error = null
-        } else {
-            footer.buttonBackground = R.drawable.btn_shape2
-            footer.error = getString(R.string.create_wallet_incorrect_seeds_input)
-        }
-
-        // 34: last item on the last after adding up 1 header and 33 seed rows(using 0th index)
-        createWalletAdapter.notifyItemChanged(34)
-    }
 }

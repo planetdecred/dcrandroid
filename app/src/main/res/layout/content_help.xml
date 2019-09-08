@@ -27,7 +27,7 @@
         android:text="@string/for_more_information_please_visit"
         android:textSize="17sp"
         android:layout_marginTop="15dp"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
     <TextView
         android:id="@+id/website_link"
@@ -38,6 +38,6 @@
         android:textColor="@color/blue"
         android:textSize="17sp"
         android:layout_below="@+id/help_info"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
 </LinearLayout>

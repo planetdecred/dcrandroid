@@ -83,7 +83,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 android:text="@string/backup_wallet_instruction" />
 
             <ImageView

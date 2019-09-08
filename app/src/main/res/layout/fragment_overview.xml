@@ -31,7 +31,7 @@
                 android:letterSpacing="0.05"
                 android:textColor="#091440"
                 android:textSize="@dimen/visible_balance_text_size"
-                app:fontFamily="@font/source_sans_pro_regular_family"
+                app:fontFamily="@font/source_sans_pro"
                 tools:text="315.08193725 DCR" />
 
             <TextView
@@ -41,7 +41,7 @@
                 android:text="@string/current_total_balance"
                 android:textColor="#596d81"
                 android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro_regular_family" />
+                app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>
 
@@ -81,7 +81,7 @@
                     android:text="@string/wallet_status"
                     android:textColor="#3d5873"
                     android:textSize="14sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
+                    app:fontFamily="@font/source_sans_pro" />
 
                 <View
                     android:id="@+id/view_online_offline_status"
@@ -98,7 +98,7 @@
                     android:text="@string/online"
                     android:textColor="#091440"
                     android:textSize="12sp"
-                    app:fontFamily="@font/source_sans_pro_regular_family" />
+                    app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
 

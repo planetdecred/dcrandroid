@@ -16,4 +16,4 @@
     android:textAlignment="inherit"
     android:textColor="@color/darkBlueTextColor"
     android:textSize="21sp"
-    app:fontFamily="@font/source_sans_pro_regular_family" />
+    app:fontFamily="@font/source_sans_pro" />

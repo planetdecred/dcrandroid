@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_padding_size_16"
+    android:elevation="4dp"
+    android:layout_marginRight="@dimen/margin_padding_size_8"
+    android:layout_marginLeft="@dimen/margin_padding_size_8"
+    android:layout_marginBottom="@dimen/margin_padding_size_4"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:background="@drawable/card_bg">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:id="@+id/seed_index"
+            android:layout_width="30dp"
+            android:layout_height="@dimen/seed_row_height"
+            android:textColor="#3d5873"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textSize="@dimen/edit_text_size_16"
+            app:fontFamily="@font/source_sans_pro_regular"
+            android:background="@drawable/seed_index_bg"
+            tools:text="33" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            app:fontFamily="@font/source_sans_pro_semibold"
+            android:layout_marginLeft="@dimen/margin_padding_size_8"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:textColor="#8997a5"
+            android:id="@+id/selected_seed"
+            tools:text="—"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:weightSum="90" >
+
+        <TextView
+            android:id="@+id/seed1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:textSize="@dimen/edit_text_size_16"
+            android:text="tonic"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/blue"
+            android:background="@drawable/verify_seed_selected"
+            android:paddingTop="@dimen/margin_padding_size_12"
+            android:paddingBottom="@dimen/margin_padding_size_12"
+            app:fontFamily="@font/source_sans_pro" />
+
+        <TextView
+            android:id="@+id/seed2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:textSize="@dimen/edit_text_size_16"
+            android:text="tonic"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="#8997a5"
+            android:background="@drawable/verify_seed_normal"
+            android:paddingTop="@dimen/margin_padding_size_12"
+            android:paddingBottom="@dimen/margin_padding_size_12"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            app:fontFamily="@font/source_sans_pro" />
+
+        <TextView
+            android:id="@+id/seed3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:textSize="@dimen/edit_text_size_16"
+            android:text="tonic"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="#8997a5"
+            android:background="@drawable/verify_seed_normal"
+            android:paddingTop="@dimen/margin_padding_size_12"
+            android:paddingBottom="@dimen/margin_padding_size_12"
+            app:fontFamily="@font/source_sans_pro" />
+
+    </LinearLayout>
+
+</LinearLayout>

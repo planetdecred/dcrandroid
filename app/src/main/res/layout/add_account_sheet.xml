@@ -18,7 +18,7 @@
         android:text="@string/create_new_account"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="@dimen/edit_text_size_20"
-        app:fontFamily="@font/source_sans_pro_semibold_family" />
+        app:fontFamily="@font/source_sans_pro_semibold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/edit_text_size_16"
             android:textColor="@color/darkerBlueGrayTextColor"
-            app:fontFamily="@font/source_sans_pro_regular_family"
+            app:fontFamily="@font/source_sans_pro"
             android:layout_marginLeft="@dimen/margin_padding_size_8"
             android:layout_marginStart="@dimen/margin_padding_size_8"
             android:includeFontPadding="false"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/account_name"
         android:layout_marginTop="@dimen/margin_padding_size_24"
-        app:fontFamily="@font/source_sans_pro_regular_family">
+        app:fontFamily="@font/source_sans_pro">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/new_account_name"
@@ -81,7 +81,7 @@
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"
             android:clickable="true"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
+            app:fontFamily="@font/source_sans_pro_semibold"
             android:layout_marginRight="@dimen/margin_padding_size_8"
             android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
@@ -97,7 +97,7 @@
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"
             android:clickable="true"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
+            app:fontFamily="@font/source_sans_pro_semibold"
             android:includeFontPadding="false"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

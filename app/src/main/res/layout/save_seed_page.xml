@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/margin_padding_size_16"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingRight="0dp"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Write down seed phrase"
+                        android:textSize="@dimen/edit_text_size_20"
+                        android:textColor="@color/darkBlueTextColor"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Step 1/2"
+                        android:layout_marginTop="4dp"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/scroll_view_seeds"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_padding_size_4"
+            android:paddingLeft="@dimen/margin_padding_size_4"
+            android:paddingStart="@dimen/margin_padding_size_4"
+            android:paddingRight="@dimen/margin_padding_size_4"
+            android:paddingEnd="@dimen/margin_padding_size_4"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save_seed_instruction"
+                android:textSize="@dimen/edit_text_size_16"
+                android:textColor="#3d5873"
+                app:fontFamily="@font/source_sans_pro"
+                android:layout_marginLeft="@dimen/margin_padding_size_20"
+                android:layout_marginStart="@dimen/margin_padding_size_20"
+                android:layout_marginRight="@dimen/margin_padding_size_4"
+                android:layout_marginEnd="@dimen/margin_padding_size_4" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                android:background="@color/white"
+                android:layout_marginStart="@dimen/margin_padding_size_4"
+                android:layout_marginLeft="@dimen/margin_padding_size_4"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:layout_marginEnd="@dimen/margin_padding_size_4"
+                android:layout_marginRight="@dimen/margin_padding_size_4"
+                android:layout_marginBottom="@dimen/margin_padding_size_4" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/margin_padding_size_16"
+                    android:paddingLeft="@dimen/margin_padding_size_16"
+                    android:paddingRight="@dimen/margin_padding_size_16"
+                    android:paddingBottom="@dimen/margin_padding_size_8"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Your 33-word seed phrase"
+                        android:textColor="#3d5873"
+                        android:textSize="@dimen/edit_text_size_14"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_seeds"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_8"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="@dimen/margin_padding_size_4"
+        android:paddingTop="@dimen/margin_padding_size_16"
+        android:paddingLeft="@dimen/margin_padding_size_24"
+        android:paddingStart="@dimen/margin_padding_size_24"
+        android:paddingRight="@dimen/margin_padding_size_24"
+        android:paddingEnd="@dimen/margin_padding_size_24"
+        android:paddingBottom="@dimen/margin_padding_size_24"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/seed_phase_2_briefing"
+            android:textSize="@dimen/edit_text_size_14"
+            android:textColor="#3d5873"
+            app:fontFamily="@font/source_sans_pro"
+            android:text="@string/seed_phase_2_briefing" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/step_2"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/seed_phase_2_briefing"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            android:paddingTop="@dimen/margin_padding_size_16"
+            android:paddingBottom="@dimen/margin_padding_size_16"
+            android:paddingStart="@dimen/margin_padding_size_24"
+            android:paddingLeft="@dimen/margin_padding_size_24"
+            android:paddingRight="@dimen/margin_padding_size_24"
+            android:paddingEnd="@dimen/margin_padding_size_24"
+            android:background="@drawable/default_app_button_bg"
+            android:text="I have wrote down all 33 words"
+            android:textColor="@color/white"
+            android:textSize="@dimen/edit_text_size_18"
+            android:focusable="true"
+            android:clickable="true"
+            android:includeFontPadding="false"
+            app:fontFamily="@font/source_sans_pro"
+            android:visibility="visible" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

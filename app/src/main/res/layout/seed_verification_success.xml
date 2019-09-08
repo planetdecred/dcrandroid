@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:padding="@dimen/margin_padding_size_24">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:srcCompat="@drawable/ic_checkmark"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your seed phrase backup is verified"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="@dimen/edit_text_size_24"
+            app:fontFamily="@font/source_sans_pro"
+            android:layout_marginTop="@dimen/margin_padding_size_24"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Be sure to store your seed phrase backup in a secure location."
+            android:textColor="#3d5873"
+            android:textSize="@dimen/edit_text_size_16"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            app:fontFamily="@font/source_sans_pro"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/textViewButton.Outline"
+        android:padding="15dp"
+        android:gravity="center"
+        android:onClick="backToWallets"
+        android:text="@string/back_to_wallets" />
+
+</LinearLayout>

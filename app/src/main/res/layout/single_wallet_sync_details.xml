@@ -30,7 +30,7 @@
             android:text="@string/block_header_fetched"
             android:textColor="#596d81"
             android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <TextView
             android:id="@+id/tv_fetch_discover_scan_count"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textColor="#091440"
             android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
+            app:fontFamily="@font/source_sans_pro"
             tools:text="6000 of 164864" />
 
     </LinearLayout>
@@ -57,7 +57,7 @@
             android:text="@string/syncing_progress"
             android:textColor="#596d81"
             android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            app:fontFamily="@font/source_sans_pro" />
 
         <TextView
             android:id="@+id/tv_days"
@@ -66,7 +66,7 @@
             android:text="@string/days_behind"
             android:textColor="#091440"
             android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
+            app:fontFamily="@font/source_sans_pro"
             tools:text="290 days behind" />
 
     </LinearLayout>

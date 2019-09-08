@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/margin_padding_size_16"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingRight="0dp"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Keep in mind"
+                        android:textSize="@dimen/edit_text_size_20"
+                        android:textColor="@color/darkBlueTextColor"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_padding_size_24">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/seed_check_1"
+                    android:onClick="verifyChecks"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:button="@drawable/checkbox"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seed_instruction_1"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_marginLeft="@dimen/margin_padding_size_24"
+                    android:layout_marginStart="@dimen/margin_padding_size_24" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/margin_padding_size_24"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/seed_check_2"
+                    android:onClick="verifyChecks"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:button="@drawable/checkbox"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seed_instruction_2"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_marginLeft="@dimen/margin_padding_size_24"
+                    android:layout_marginStart="@dimen/margin_padding_size_24" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/margin_padding_size_24"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/seed_check_3"
+                    android:onClick="verifyChecks"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:button="@drawable/checkbox"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seed_instruction_3"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_marginLeft="@dimen/margin_padding_size_24"
+                    android:layout_marginStart="@dimen/margin_padding_size_24" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/margin_padding_size_24"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/seed_check_4"
+                    android:onClick="verifyChecks"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:button="@drawable/checkbox"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seed_instruction_4"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_marginLeft="@dimen/margin_padding_size_24"
+                    android:layout_marginStart="@dimen/margin_padding_size_24" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/margin_padding_size_24"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/seed_check_5"
+                    android:onClick="verifyChecks"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:button="@drawable/checkbox"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seed_instruction_5"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="#3d5873"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_marginLeft="@dimen/margin_padding_size_24"
+                    android:layout_marginStart="@dimen/margin_padding_size_24" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/margin_padding_size_24"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_verify"
+            android:enabled="false"
+            android:paddingTop="@dimen/margin_padding_size_16"
+            android:paddingBottom="@dimen/margin_padding_size_16"
+            android:gravity="center"
+            style="@style/textViewButton"
+            android:onClick="proceedToNextPhase"
+            android:text="@string/view_seed_phrase"
+            android:textSize="@dimen/edit_text_size_18" />
+
+    </RelativeLayout>
+
+</LinearLayout>

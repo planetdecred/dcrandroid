@@ -17,10 +17,12 @@ import com.dcrandroid.util.WalletData
 import com.dcrandroid.activities.SetupWalletActivity
 import android.content.Intent
 import android.widget.Toast
+import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.data.Constants
 import dcrlibwallet.MultiWallet
 
 const val CREATE_WALLET_REQUEST_CODE = 100
+const val VERIFY_SEED_REQUEST_CODE = 200
 
 class WalletsFragment: BaseFragment() {
 
@@ -48,7 +50,11 @@ class WalletsFragment: BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = WalletsAdapter(context!!)
+        adapter = WalletsAdapter(context!!){walletID ->
+            val intent = Intent(context, VerifySeedInstruction::class.java)
+            intent.putExtra(Constants.WALLET_ID, walletID)
+            startActivityForResult(intent, VERIFY_SEED_REQUEST_CODE)
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false
@@ -60,6 +66,11 @@ class WalletsFragment: BaseFragment() {
         if(requestCode == CREATE_WALLET_REQUEST_CODE && resultCode == RESULT_OK){
             val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID)
+            refreshNavigationTabs()
+        }else if(requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK){
+            val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
+            adapter.walletBackupVerified(walletID)
+            refreshNavigationTabs()
         }
     }
 

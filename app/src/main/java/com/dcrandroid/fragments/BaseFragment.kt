@@ -41,6 +41,13 @@ open class BaseFragment : Fragment(), SyncProgressListener {
         }
     }
 
+    fun refreshNavigationTabs(){
+        if (activity is HomeActivity) {
+            val homeActivity = activity as HomeActivity
+            homeActivity.refreshNavigationTabs()
+        }
+    }
+
     fun restartSyncProcess() {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity

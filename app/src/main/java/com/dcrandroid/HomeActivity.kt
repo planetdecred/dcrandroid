@@ -139,6 +139,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     }
 
+    fun refreshNavigationTabs(){
+        adapter.backupsNeeded = multiWallet!!.backupsNeeded
+        adapter.notifyItemChanged(2) // Wallets Page
+    }
+
     private fun setTabIndicator() {
         val tabWidth = deviceWidth / 4
         val tabIndicatorWidth = resources.getDimension(R.dimen.tab_indicator_width)

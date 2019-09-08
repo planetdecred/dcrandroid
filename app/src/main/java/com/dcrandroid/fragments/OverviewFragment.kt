@@ -44,7 +44,6 @@ import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 const val TAG = "OverviewFragment"
-const val VERIFY_SEED_REQUEST_CODE = 5
 
 class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncProgressListener {
 

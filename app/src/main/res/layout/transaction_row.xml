@@ -28,7 +28,7 @@
         android:text="8.61990311 DCR"
         android:layout_marginLeft="14dp"
         android:layout_marginStart="14dp"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         android:id="@+id/amount"
         android:letterSpacing="0.05"
         />
@@ -39,7 +39,7 @@
         android:textSize="16sp"
         android:text="Pending"
         android:textColor="#8997a5"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         android:drawableRight="@drawable/ic_pending"
         android:drawableEnd="@drawable/ic_pending"
         android:gravity="center_vertical"

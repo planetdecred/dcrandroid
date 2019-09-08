@@ -42,7 +42,7 @@
         android:text="@string/backup_seed_phrase"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
     <TextView
         android:id="@+id/tv_verify_seed_desc"
@@ -57,7 +57,7 @@
         android:text="@string/verify_seed_phrase"
         android:textColor="@color/white"
         android:textSize="14sp"
-        app:fontFamily="@font/source_sans_pro_regular_family" />
+        app:fontFamily="@font/source_sans_pro" />
 
     <ImageView
         android:id="@+id/imv_back_up"

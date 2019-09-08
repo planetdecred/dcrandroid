@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="16sp"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         tools:text="test text" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:breakStrategy="simple"
         android:textColor="@color/blueLinkTextColor"
         android:textSize="16sp"
-        app:fontFamily="@font/source_sans_pro_regular_family"
+        app:fontFamily="@font/source_sans_pro"
         tools:text="test text" />
 
 </LinearLayout>
