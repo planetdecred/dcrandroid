@@ -170,16 +170,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            // peers preference click listener
-            findPreference(getString(R.string.key_get_peers)).setVisible(false);
-            findPreference(getString(R.string.key_get_peers)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), GetPeersActivity.class);
-                    startActivity(intent);
-                    return true;
-                }
-            });
-
             findPreference("dcrwallet_log").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

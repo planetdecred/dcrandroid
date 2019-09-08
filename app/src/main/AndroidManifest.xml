@@ -105,13 +105,6 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activities.ConnectionActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activities.GetPeersActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".activities.PeersDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
