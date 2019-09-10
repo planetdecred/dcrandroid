@@ -13,11 +13,7 @@ import (
 	"github.com/raedahgroup/dcrlibwallet/utils"
 )
 
-const (
-	logFileName = "dcrlibwallet.log"
-
-	BlockValid = 1 << 0
-)
+const logFileName = "dcrlibwallet.log"
 
 type LibWallet struct {
 	walletDataDir string

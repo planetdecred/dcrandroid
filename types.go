@@ -48,75 +48,7 @@ type Accounts struct {
 	CurrentBlockHeight int32
 }
 
-type BlockScanResponse interface {
-	OnScan(rescannedThrough int32) bool
-	OnEnd(height int32, cancelled bool)
-	OnError(err string)
-}
-
-/*
-Direction
-0: Sent
-1: Received
-2: Transferred
-*/
-type Transaction struct {
-	Hash      string `storm:"id,unique"`
-	Raw       string
-	Fee       int64
-	Timestamp int64
-	Type      string
-	Amount    int64
-	Status    string
-	Height    int32
-	Direction int32
-	Debits    *[]TransactionDebit
-	Credits   *[]TransactionCredit
-}
-
-type TransactionDebit struct {
-	Index           int32
-	PreviousAccount int32
-	PreviousAmount  int64
-	AccountName     string
-}
-
-type TransactionCredit struct {
-	Index    int32
-	Account  int32
-	Internal bool
-	Amount   int64
-	Address  string
-}
-
-type DecodedTransaction struct {
-	Hash     string
-	Type     string
-	Version  int32
-	LockTime int32
-	Expiry   int32
-	Inputs   []DecodedInput
-	Outputs  []DecodedOutput
-
-	//Vote Info
-	VoteVersion    int32
-	LastBlockValid bool
-	VoteBits       string
-}
-
-type DecodedInput struct {
-	PreviousTransactionHash  string
-	PreviousTransactionIndex int32
-	AmountIn                 int64
-}
-
-type DecodedOutput struct {
-	Index      int32
-	Value      int64
-	Version    int32
-	ScriptType string
-	Addresses  []string
-}
+/** begin sync-related types */
 
 type SyncProgressListener interface {
 	OnPeerConnectedOrDisconnected(numberOfConnectedPeers int32)
@@ -161,3 +93,85 @@ type DebugInfo struct {
 	CurrentStageTimeElapsed   int64
 	CurrentStageTimeRemaining int64
 }
+
+/** end sync-related types */
+
+/** begin tx-related types */
+
+// Transaction is used with storm for tx indexing operations.
+// For faster queries, the `Hash`, `Type` and `Direction` fields are indexed.
+type Transaction struct {
+	Hash        string `storm:"id,unique" json:"hash"`
+	Type        string `storm:"index" json:"type"`
+	Hex         string `json:"hex"`
+	Timestamp   int64  `json:"timestamp"`
+	BlockHeight int32  `json:"block_height"`
+
+	Version  int32 `json:"version"`
+	LockTime int32 `json:"lock_time"`
+	Expiry   int32 `json:"expiry"`
+	Fee      int64 `json:"fee"`
+	FeeRate  int64 `json:"fee_rate"`
+	Size     int   `json:"size"`
+
+	Direction int32       `storm:"index" json:"direction"`
+	Amount    int64       `json:"amount"`
+	Inputs    []*TxInput  `json:"inputs"`
+	Outputs   []*TxOutput `json:"outputs"`
+
+	// Vote Info
+	VoteVersion    int32  `json:"vote_version"`
+	LastBlockValid bool   `json:"last_block_valid"`
+	VoteBits       string `json:"vote_bits"`
+}
+
+type TxInput struct {
+	PreviousTransactionHash  string `json:"previous_transaction_hash"`
+	PreviousTransactionIndex int32  `json:"previous_transaction_index"`
+	PreviousOutpoint         string `json:"previous_outpoint"`
+	Amount                   int64  `json:"amount"`
+	AccountName              string `json:"account_name"`
+	AccountNumber            int32  `json:"previous_account"`
+}
+
+type TxOutput struct {
+	Index         int32  `json:"index"`
+	Amount        int64  `json:"amount"`
+	Version       int32  `json:"version"`
+	ScriptType    string `json:"script_type"`
+	Address       string `json:"address"`
+	Internal      bool   `json:"internal"`
+	AccountName   string `json:"account_name"`
+	AccountNumber int32  `json:"previous_account"`
+}
+
+// TxInfoFromWallet contains tx data that relates to the querying wallet.
+// This info is used with `DecodeTransaction` to compose the entire details of a transaction.
+type TxInfoFromWallet struct {
+	Hex         string
+	Timestamp   int64
+	BlockHeight int32
+	Inputs      []*WalletInput
+	Outputs     []*WalletOutput
+}
+
+type WalletInput struct {
+	Index    int32 `json:"index"`
+	AmountIn int64 `json:"amount_in"`
+	*WalletAccount
+}
+
+type WalletOutput struct {
+	Index     int32  `json:"index"`
+	AmountOut int64  `json:"amount"`
+	Internal  bool   `json:"internal"`
+	Address   string `json:"address"`
+	*WalletAccount
+}
+
+type WalletAccount struct {
+	AccountNumber int32  `json:"account_number"`
+	AccountName   string `json:"account_name"`
+}
+
+/** end tx-related types */
