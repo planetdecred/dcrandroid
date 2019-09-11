@@ -212,7 +212,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         object : Thread() {
             override fun run() {
                 try {
-                    val jsonResult = walletData!!.wallet.getTransactions(0, 0, selectedTxFilter)
+                    val jsonResult = walletData!!.multiWallet.getTransactions(0, 0, selectedTxFilter)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
@@ -295,8 +295,8 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
-        val filter = wallet.determineTxFilter(transaction.type, transaction.direction)
-        if (filter == selectedTxFilter) {
+        val sameFilter = wallet.compareTxFilter(selectedTxFilter, transaction.type, transaction.direction)
+        if (sameFilter) {
             transaction.animate = true
             transactionList.add(0, transaction)
             history_recycler_view.post {

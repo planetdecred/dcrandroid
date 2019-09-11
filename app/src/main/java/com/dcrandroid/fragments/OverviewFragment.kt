@@ -265,7 +265,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
             override fun run() {
                 try {
 
-                    val jsonResult = walletData!!.wallet.getTransactions(0, getMaxDisplayItems(), Dcrlibwallet.TxFilterAll)
+                    val jsonResult = walletData!!.multiWallet.getTransactions(0, getMaxDisplayItems(), Dcrlibwallet.TxFilterAll)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()
@@ -559,12 +559,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, SyncP
         hideSyncLayout()
     }
 
-    override fun onBlockAttached(p0: Int, p1: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onTransactionConfirmed(p0: String?, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onTransactionConfirmed(walletID: Long, hash: String?) {
     }
 
     override fun onTransaction(p0: String?) {

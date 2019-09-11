@@ -51,7 +51,6 @@ import com.dcrandroid.activities.BaseActivity;
 import com.dcrandroid.activities.SettingsActivity;
 import com.dcrandroid.adapter.NavigationListAdapter;
 import com.dcrandroid.adapter.NavigationListAdapter.NavigationBarItem;
-import com.dcrandroid.data.Account;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.data.Transaction;
 import com.dcrandroid.data.Transaction.TransactionInput;
@@ -65,7 +64,6 @@ import com.dcrandroid.fragments.ReceiveFragment;
 import com.dcrandroid.fragments.SecurityFragment;
 import com.dcrandroid.fragments.SendFragment;
 import com.dcrandroid.service.SyncService;
-import com.dcrandroid.util.CoinFormat;
 import com.dcrandroid.util.PreferenceUtil;
 import com.dcrandroid.util.Utils;
 import com.dcrandroid.util.WalletData;
@@ -85,10 +83,8 @@ import dcrlibwallet.DebugInfo;
 import dcrlibwallet.HeadersFetchProgressReport;
 import dcrlibwallet.HeadersRescanProgressReport;
 import dcrlibwallet.SyncProgressListener;
-import dcrlibwallet.TransactionListener;
 
-public class MainActivity extends BaseActivity implements TransactionListener,
-        SyncProgressListener, View.OnClickListener {
+public class MainActivity extends BaseActivity implements SyncProgressListener, View.OnClickListener {
 
     private TextView chainStatus, bestBlockTime, connectionStatus, totalBalance;
     private ImageView stopScan, syncIndicator;
@@ -257,7 +253,6 @@ public class MainActivity extends BaseActivity implements TransactionListener,
 
         blockNotificationSound = alertSound.load(MainActivity.this, R.raw.beep, 1);
 
-        walletData.wallet.transactionNotification(this);
         try {
             walletData.multiWallet.removeSyncProgressListener(TAG);
             walletData.multiWallet.addSyncProgressListener(this, TAG);
@@ -631,7 +626,7 @@ public class MainActivity extends BaseActivity implements TransactionListener,
                 TransactionInput input = new TransactionInput();
                 input.setIndex(debit.getInt(Constants.INDEX));
                 input.setPreviousAccount(debit.getLong(Constants.PREVIOUS_ACCOUNT));
-                input.setPreviousAmount(debit.getLong(Constants.PREVIOUS_AMOUNT));
+                input.setAmount(debit.getLong(Constants.PREVIOUS_AMOUNT));
                 input.setAccountName(debit.getString(Constants.ACCOUNT_NAME));
                 totalInput += debit.getLong(Constants.PREVIOUS_ACCOUNT);
 
@@ -691,51 +686,56 @@ public class MainActivity extends BaseActivity implements TransactionListener,
     }
 
     @Override
-    public void onTransactionConfirmed(final String hash, final int height) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                util.setInt(Constants.TRANSACTION_HEIGHT, height);
-                displayBalance();
+    public void onTransactionConfirmed(long l, String s) {
 
-                if (currentFragment instanceof OverviewFragment) {
-                    OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
-                    overviewFragment.transactionConfirmed(hash, height);
-                } else if (currentFragment instanceof HistoryFragment) {
-                    HistoryFragment historyFragment = (HistoryFragment) currentFragment;
-                    historyFragment.transactionConfirmed(hash, height);
-                }
-            }
-        });
     }
 
-    @Override
-    public void onBlockAttached(int height, long timestamp) {
-        walletData.bestBlock = height;
-        this.bestBlockTimestamp = timestamp / 1000000000;
-        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false) && !walletData.multiWallet.isSyncing()) {
-            alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
-        }
-        if (!walletData.multiWallet.isSyncing()) {
-            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
-            setChainStatus(status);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    displayBalance();
-                }
-            });
-            setBestBlockTime(bestBlockTimestamp);
-        }
+//    @Override
+//    public void onTransactionConfirmed(final String hash, final int height) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                util.setInt(Constants.TRANSACTION_HEIGHT, height);
+//                displayBalance();
+//
+//                if (currentFragment instanceof OverviewFragment) {
+//                    OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
+//                    overviewFragment.transactionConfirmed(hash, height);
+//                } else if (currentFragment instanceof HistoryFragment) {
+//                    HistoryFragment historyFragment = (HistoryFragment) currentFragment;
+//                    historyFragment.transactionConfirmed(hash, height);
+//                }
+//            }
+//        });
+//    }
 
-        if (currentFragment instanceof OverviewFragment) {
-            OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
-            overviewFragment.blockAttached(height);
-        } else if (currentFragment instanceof HistoryFragment) {
-            HistoryFragment historyFragment = (HistoryFragment) currentFragment;
-            historyFragment.blockAttached(height);
-        }
-    }
+//    @Override
+//    public void onBlockAttached(int height, long timestamp) {
+//        walletData.bestBlock = height;
+//        this.bestBlockTimestamp = timestamp / 1000000000;
+//        if (util.getBoolean(Constants.NEW_BLOCK_NOTIFICATION, false) && !walletData.multiWallet.isSyncing()) {
+//            alertSound.play(blockNotificationSound, 1, 1, 1, 0, 1);
+//        }
+//        if (!walletData.multiWallet.isSyncing()) {
+//            String status = String.format(Locale.getDefault(), "%s: %d", getString(R.string.latest_block), walletData.bestBlock);
+//            setChainStatus(status);
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    displayBalance();
+//                }
+//            });
+//            setBestBlockTime(bestBlockTimestamp);
+//        }
+//
+//        if (currentFragment instanceof OverviewFragment) {
+//            OverviewFragment overviewFragment = (OverviewFragment) currentFragment;
+//            overviewFragment.blockAttached(height);
+//        } else if (currentFragment instanceof HistoryFragment) {
+//            HistoryFragment historyFragment = (HistoryFragment) currentFragment;
+//            historyFragment.blockAttached(height);
+//        }
+//    }
 
     private void sendNotification(String amount, int nonce) {
         Intent launchIntent = new Intent(this, MainActivity.class);

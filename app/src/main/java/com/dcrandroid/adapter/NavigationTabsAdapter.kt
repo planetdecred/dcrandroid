@@ -73,6 +73,14 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
         holder.itemView.layoutParams = ViewGroup.LayoutParams(deviceWidth / 4, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
+    fun changeActiveTab(position: Int){
+        if(activeTab == position){
+            return
+        }
+        activeTab = position
+        notifyDataSetChanged()
+    }
+
     inner class NavigationTabViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title = itemView.tab_title
         val icon = itemView.tab_icon

@@ -42,9 +42,9 @@ public class TransactionsParser {
             TransactionInput input = new TransactionInput();
             input.setIndex(dbt.getJSONObject(j).getInt(Constants.INDEX));
             input.setPreviousAccount(dbt.getJSONObject(j).getLong(Constants.PREVIOUS_ACCOUNT));
-            input.setPreviousAmount(dbt.getJSONObject(j).getLong(Constants.PREVIOUS_AMOUNT));
+            input.setAmount(dbt.getJSONObject(j).getLong(Constants.PREVIOUS_AMOUNT));
             input.setAccountName(dbt.getJSONObject(j).getString(Constants.ACCOUNT_NAME));
-            transaction.setTotalInput(transaction.getTotalInput() + input.getPreviousAmount());
+            transaction.setTotalInput(transaction.getTotalInput() + input.getAmount());
             inputs.add(input);
         }
         transaction.setFee(tx.getLong(Constants.FEE));

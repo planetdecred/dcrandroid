@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
+import java.text.FieldPosition
 
 open class BaseFragment : Fragment(), SyncProgressListener {
 
@@ -55,6 +56,13 @@ open class BaseFragment : Fragment(), SyncProgressListener {
         }
     }
 
+    fun switchFragment(position: Int){
+        if (activity is HomeActivity) {
+            val homeActivity = activity as HomeActivity
+            homeActivity.switchFragment(position)
+        }
+    }
+
     // -- Sync Progress Listener
 
     override fun onSyncStarted() {
@@ -78,9 +86,7 @@ open class BaseFragment : Fragment(), SyncProgressListener {
     override fun debug(debugInfo: DebugInfo?) {}
 
 
-    override fun onBlockAttached(height: Int, timestamp: Long) {}
-
-    override fun onTransactionConfirmed(hash: String?, height: Int) {}
+    override fun onTransactionConfirmed(walletID: Long, hash: String?) {}
 
     override fun onTransaction(transaction: String?) {}
 }

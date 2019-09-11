@@ -171,9 +171,7 @@ class SyncService : Service(), SyncProgressListener {
 
     override fun debug(debugInfo: DebugInfo?) {}
 
-    override fun onBlockAttached(height: Int, timestamp: Long) {}
-
-    override fun onTransactionConfirmed(hash: String?, height: Int) {}
+    override fun onTransactionConfirmed(walletID: Long, hash: String?) {}
 
     override fun onTransaction(transaction: String?) {}
 }

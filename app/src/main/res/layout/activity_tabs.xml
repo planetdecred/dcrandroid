@@ -29,8 +29,7 @@
             android:paddingEnd="@dimen/margin_padding_size_16"
             android:paddingRight="@dimen/margin_padding_size_16"
             app:contentInsetEnd="@dimen/margin_padding_size_16"
-            app:contentInsetRight="@dimen/margin_padding_size_16"
-            >
+            app:contentInsetRight="@dimen/margin_padding_size_16" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -101,7 +100,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center"
@@ -113,9 +111,9 @@
             android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:id="@+id/send_receive_layout"
             android:background="@drawable/send_receive_button_layout"
-            android:elevation="4dp"
-            >
+            android:elevation="4dp" >
 
             <LinearLayout
                 android:layout_width="0dp"

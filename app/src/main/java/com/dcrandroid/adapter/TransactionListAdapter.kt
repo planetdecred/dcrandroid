@@ -19,10 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +34,7 @@ import kotlin.collections.ArrayList
 class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>): RecyclerView.Adapter<TransactionListAdapter.TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val walletData: WalletData = WalletData.getInstance()
+    val multiWallet = WalletData.getInstance().multiWallet
     val util = PreferenceUtil(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
@@ -46,6 +49,14 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
     override fun onBindViewHolder(holder: TransactionListViewHolder, position: Int) {
         val transaction = transactions[position]
 
+        if(multiWallet.openedWalletsCount() > 1){
+            holder.walletName.apply {
+                show()
+                text = transaction.walletName
+            }
+        }else{
+            holder.walletName.hide()
+        }
         if (transaction.confirmations == 0) {
             holder.status.setPending()
         }else if (transaction.confirmations > 1 || util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)){
@@ -58,10 +69,10 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
             transaction.animate = false
         }
 
-        if (transaction.type == Constants.REGULAR) run {
+        if (transaction.type == Dcrlibwallet.TxTypeRegular) run {
             val strAmount = Utils.formatDecredWithComma(transaction.amount)
 
-            holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr))
+            holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
 
             val iconRes = when {
                 transaction.direction == 0 -> R.drawable.ic_send
@@ -77,18 +88,19 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         val icon: ImageView = view.tx_icon
         val amount: TextView = view.amount
         val status: TextView = view.status
+        val walletName: TextView = view.wallet_name
     }
 
     private fun TextView.setPending(){
         this.text = "Pending"
         this.setTextColor(Color.parseColor("#8997a5"))
-        this.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pending, 0, 0, 0)
+        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_pending, 0)
     }
 
     private fun TextView.setConfirmed(timestamp: Long){
         this.text = getTimestamp(timestamp * 1000) // convert seconds to milliseconds
         this.setTextColor(Color.parseColor("#596d81"))
-        this.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_confirmed, 0, 0, 0)
+        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_confirmed, 0)
     }
 
     fun getTimestamp(timestamp: Long): String{

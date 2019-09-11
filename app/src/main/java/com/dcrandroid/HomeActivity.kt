@@ -6,6 +6,7 @@
 
 package com.dcrandroid
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Notification
 import android.app.NotificationChannel
@@ -26,10 +27,13 @@ import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.WiFiSyncDialog
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
+import com.dcrandroid.extensions.show
 import com.dcrandroid.fragments.WalletsFragment
 import com.dcrandroid.fragments.Overview
 import com.dcrandroid.fragments.ResumeAccountDiscovery
+import com.dcrandroid.fragments.TransactionsFragment
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
 import com.dcrandroid.util.PreferenceUtil
@@ -145,22 +149,55 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     private fun setTabIndicator() {
-        val tabWidth = deviceWidth / 4
-        val tabIndicatorWidth = resources.getDimension(R.dimen.tab_indicator_width)
+        tab_indicator.post {
+            val tabWidth = deviceWidth / 4
+            val tabIndicatorWidth = resources.getDimension(R.dimen.tab_indicator_width)
 
-        var leftMargin = tabWidth * adapter.activeTab
-        leftMargin += ((tabWidth - tabIndicatorWidth) / 2f).roundToInt()
+            var leftMargin = tabWidth * adapter.activeTab
+            leftMargin += ((tabWidth - tabIndicatorWidth) / 2f).roundToInt()
 
-        ObjectAnimator.ofFloat(tab_indicator, "translationX", leftMargin.toFloat()).apply {
-            duration = 350
-            start()
+            ObjectAnimator.ofFloat(tab_indicator, "translationX", leftMargin.toFloat()).apply {
+                duration = 350
+                start()
+            }
         }
     }
 
-    private fun switchFragment(position: Int) {
+    private fun showOrHideFab(position: Int){
+        send_receive_layout.post {
+            if(position < 2){ // show send and receive buttons for overview & transactions page
+                send_receive_layout.show()
+                ObjectAnimator.ofFloat(send_receive_layout, "translationY", 0f).setDuration(350).start() // bring view down
+            }else{
+                val objectAnimator = ObjectAnimator.ofFloat(send_receive_layout, "translationY", send_receive_layout.height.toFloat())
+
+                objectAnimator.addListener(object : Animator.AnimatorListener{
+                    override fun onAnimationRepeat(animation: Animator?) {
+                    }
+
+                    override fun onAnimationEnd(animation: Animator?) {
+                        send_receive_layout.hide()
+                    }
+
+                    override fun onAnimationCancel(animation: Animator?) {
+                    }
+
+                    override fun onAnimationStart(animation: Animator?) {
+                    }
+                })
+
+                objectAnimator.duration = 350
+
+                objectAnimator.start()
+            }
+        }
+    }
+
+    fun switchFragment(position: Int) {
 
         currentFragment = when (position) {
             0 -> Overview()
+            1 -> TransactionsFragment()
             2 -> WalletsFragment()
             else -> Fragment()
         }
@@ -171,6 +208,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
                 .commit()
 
         setTabIndicator()
+
+        showOrHideFab(position)
+
+        adapter.changeActiveTab(position)
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
@@ -231,10 +272,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     // -- Block Notification
 
-    override fun onBlockAttached(height: Int, timestamp: Long) {
-    }
-
-    override fun onTransactionConfirmed(hash: String?, height: Int) {
+    override fun onTransactionConfirmed(walletID: Long, hash: String?) {
     }
 
     override fun onTransaction(transaction: String?) {

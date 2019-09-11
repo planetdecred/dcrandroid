@@ -23,6 +23,7 @@ import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
+import kotlinx.android.synthetic.main.transactions_overview_layout.*
 
 class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
@@ -84,6 +85,10 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
 
         loadTransactions()
+
+        btn_view_all_transactions.setOnClickListener {
+            switchFragment(1) // Transactions Fragment
+        }
     }
 
     override fun onResume() {
@@ -115,8 +120,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 
     private fun loadTransactions() {
-//        val jsonResult = wallet.getTransactions(3, Dcrlibwallet.TxFilterAll)
-        val jsonResult = ""
+        val jsonResult = multiWallet.getTransactions(0, 3, Dcrlibwallet.TxFilterRegular)
         var transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (transactions == null) {
@@ -135,22 +139,6 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
             hideTransactionList()
         }
     }
-//
-//    private fun setupBackupSeedLayout() {
-//
-//        // using true as default as per backwards compatibility
-//        // we don't want to tell wallets created before this
-//        // feature to verify their seed
-//        if (!util.getBoolean(Constants.VERIFIED_SEED, true)) {
-//            backupSeedLayout.visibility = View.VISIBLE
-//            backupSeedLayout.imv_back_up.setOnClickListener {
-//                val seed = util.get(Constants.SEED)
-//                val i = Intent(context, VerifySeedActivity::class.java)
-//                        .putExtra(Constants.SEED, seed)
-//                startActivityForResult(i, VERIFY_SEED_REQUEST_CODE)
-//            }
-//        }
-//    }
 
     private fun isOffline(): Boolean {
 
@@ -169,6 +157,10 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         }
 
         return false
+    }
+
+    override fun onSyncCompleted() {
+        loadTransactions()
     }
 }
 

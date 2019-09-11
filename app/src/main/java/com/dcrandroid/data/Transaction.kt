@@ -8,65 +8,73 @@ package com.dcrandroid.data
 
 import com.dcrandroid.util.WalletData
 import com.google.gson.annotations.SerializedName
+import dcrlibwallet.Dcrlibwallet
 import java.io.Serializable
 
 class Transaction : Serializable {
-    @SerializedName("Hash")
+    @SerializedName("walletID")
+    var walletID: Long = 0
+    @SerializedName("hash")
     var hash: String = ""
-    @SerializedName("Type")
+    @SerializedName("type")
     var type: String = ""
-    @SerializedName("Raw")
+    @SerializedName("raw")
     var raw: String = ""
-    @SerializedName("Height")
+    @SerializedName("block_height")
     var height: Int = 0
-    @SerializedName("Direction")
+    @SerializedName("direction")
     var direction: Int = 0
-    @SerializedName("Fee")
+    @SerializedName("fee")
     var fee: Long = 0
-    @SerializedName("Amount")
+    @SerializedName("amount")
     var amount: Long = 0
     var totalInput: Long = 0
     var totalOutput: Long = 0
-    @SerializedName("Timestamp")
+    @SerializedName("timestamp")
     var timestamp: Long = 0
     val confirmations: Int
     get() {
-        return if(height == 0){
+        return if(height == Dcrlibwallet.BlockHeightInvalid){
             0
         }else{
-            (WalletData.getInstance().wallet.bestBlock - height) + 1
+            (WalletData.getInstance().multiWallet.bestBlock.height - height) + 1
         }
+    }
+
+    val walletName: String?
+    get(){
+        return WalletData.getInstance().multiWallet.getWallet(walletID)?.walletName
     }
 
     @Transient
     var animate = false
 
-    @SerializedName("Credits")
+    @SerializedName("credits")
     var outputs: ArrayList<TransactionOutput>? = null
-    @SerializedName("Debits")
+    @SerializedName("debits")
     var inputs: ArrayList<TransactionInput>? = null
 
     class TransactionInput : Serializable {
-        @SerializedName("PreviousAccount")
+        @SerializedName("previous_account")
         var previousAccount: Long = 0
-        @SerializedName("Index")
+        @SerializedName("index")
         var index: Int = 0
-        @SerializedName("PreviousAmount")
-        var previousAmount: Long = 0
-        @SerializedName("AccountName")
+        @SerializedName("amount")
+        var amount: Long = 0
+        @SerializedName("account_name")
         var accountName: String? = null
     }
 
     class TransactionOutput : Serializable {
-        @SerializedName("Index")
+        @SerializedName("index")
         var index: Int = 0
-        @SerializedName("Account")
+        @SerializedName("previous_account")
         var account: Int = 0
-        @SerializedName("Amount")
+        @SerializedName("account_name")
         var amount: Long = 0
-        @SerializedName("Internal")
+        @SerializedName("internal")
         var internal: Boolean = false
-        @SerializedName("Address")
+        @SerializedName("address")
         var address: String? = null
     }
 }

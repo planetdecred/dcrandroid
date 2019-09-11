@@ -180,7 +180,8 @@ class TransactionDetailsActivity : BaseActivity() {
                 TransactionDetailsAdapter.TransactionDebitCredit.ItemType.HEADER)) // Inputs Header
 
         try {
-            val rawJson = wallet!!.decodeTransaction(Utils.getHash(transaction!!.hash))
+            val rawJson = ""
+//            val rawJson = wallet!!.decodeTransaction(Utils.getHash(transaction!!.hash))
             val parent = JSONObject(rawJson)
             val inputs = parent.getJSONArray(Constants.INPUTS)
             val outputs = parent.getJSONArray(Constants.OUTPUTS)
@@ -197,7 +198,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
                 hash += ":" + input.getInt(Constants.PREVIOUS_TRANSACTION_INDEX)
 
-                val amount = getString(R.string.external_output_account, Utils.formatDecredWithComma(usedInput[i].previousAmount), usedInput[i].accountName)
+                val amount = getString(R.string.external_output_account, Utils.formatDecredWithComma(usedInput[i].amount), usedInput[i].accountName)
 
                 val debit = TransactionDetailsAdapter.TransactionDebitCredit(amount, hash,
                         TransactionDetailsAdapter.TransactionDebitCredit.ItemType.ITEM, TransactionDetailsAdapter.TransactionDebitCredit.Direction.DEBIT)

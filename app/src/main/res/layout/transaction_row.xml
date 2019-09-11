@@ -7,10 +7,19 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="56dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/ripple"
     android:gravity="center_vertical"
-    android:padding="16dp">
+    android:paddingTop="@dimen/margin_padding_size_8"
+    android:paddingBottom="@dimen/margin_padding_size_8"
+    android:paddingLeft="@dimen/margin_padding_size_16"
+    android:paddingRight="@dimen/margin_padding_size_16"
+    >
 
     <ImageView
         android:layout_width="24dp"
@@ -19,19 +28,40 @@
         android:id="@+id/tx_icon"
         />
 
-    <TextView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="20sp"
-        android:textColor="#091440"
-        android:text="8.61990311 DCR"
+        android:orientation="vertical"
         android:layout_marginLeft="14dp"
-        android:layout_marginStart="14dp"
-        app:fontFamily="@font/source_sans_pro"
-        android:id="@+id/amount"
-        android:letterSpacing="0.05"
-        />
+        android:layout_marginStart="14dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/edit_text_size_20"
+            android:textColor="@color/darkBlueTextColor"
+            android:text="8.61990311 DCR"
+            app:fontFamily="@font/source_sans_pro"
+            android:id="@+id/amount"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.05" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wallet_name"
+            android:background="@color/colorBackground"
+            android:layout_marginTop="@dimen/margin_padding_size_4"
+            android:padding="@dimen/margin_padding_size_2"
+            android:textSize="@dimen/edit_text_size_12"
+            android:textColor="@color/lightGrayTextColor"
+            android:text="wallet-1"
+            android:visibility="gone"
+            app:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

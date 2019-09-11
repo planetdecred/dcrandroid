@@ -62,6 +62,7 @@
                 android:id="@+id/btn_view_all_transactions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/curved_bottom_ripple"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -69,7 +70,8 @@
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
                 android:textColor="#2970ff"
-                android:textSize="16sp"
+                android:textSize="@dimen/edit_text_size_16"
+                android:text="See all"
                 app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>

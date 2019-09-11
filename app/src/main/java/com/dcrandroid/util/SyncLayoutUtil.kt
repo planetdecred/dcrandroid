@@ -377,11 +377,12 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
 
     override fun debug(debugInfo: DebugInfo?) {}
 
-    override fun onBlockAttached(height: Int, timestamp: Long) {
-        updateLatestBlock()
-    }
+//    override fun onBlockAttached(height: Int, timestamp: Long) {
+//        updateLatestBlock()
+//    }
 
-    override fun onTransactionConfirmed(hash: String?, height: Int) {}
+    override fun onTransactionConfirmed(walletID: Long, hash: String?) {
+    }
 
     override fun onTransaction(transaction: String?) {}
 }
