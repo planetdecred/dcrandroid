@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/asdine/storm"
 	"github.com/decred/dcrwallet/errors"
 	"github.com/decred/dcrwallet/netparams"
 	"github.com/decred/dcrwallet/wallet"
 	"github.com/decred/dcrwallet/wallet/txrules"
 	"github.com/raedahgroup/dcrlibwallet/txindex"
 	"github.com/raedahgroup/dcrlibwallet/utils"
+	"go.etcd.io/bbolt"
 )
 
 const logFileName = "dcrlibwallet.log"
@@ -21,33 +23,56 @@ type LibWallet struct {
 	walletLoader  *WalletLoader
 	wallet        *wallet.Wallet
 	txDB          *txindex.DB
+	configDB      *storm.DB
 	*syncData
 
 	shuttingDown chan bool
 	cancelFuncs  []context.CancelFunc
 }
 
-func NewLibWallet(homeDir string, dbDriver string, netType string) (*LibWallet, error) {
+func NewLibWallet(defaultAppDataDir, walletDbDriver string, netType string) (*LibWallet, error) {
 	activeNet := utils.NetParams(netType)
 	if activeNet == nil {
 		return nil, fmt.Errorf("unsupported network type: %s", netType)
 	}
 
-	walletDataDir := filepath.Join(homeDir, activeNet.Name)
-	return newLibWallet(walletDataDir, dbDriver, activeNet)
-}
+	configDbPath := filepath.Join(defaultAppDataDir, userConfigDbFilename)
+	configDB, err := storm.Open(configDbPath)
+	if err != nil {
+		if err == bolt.ErrTimeout {
+			// timeout error occurs if storm fails to acquire a lock on the database file
+			return nil, fmt.Errorf("settings db is in use by another process")
+		}
+		return nil, fmt.Errorf("error opening settings db store: %s", err.Error())
+	}
 
-func NewLibWalletWithDbPath(walletDataDir string, activeNet *netparams.Params) (*LibWallet, error) {
-	return newLibWallet(walletDataDir, "", activeNet)
-}
+	lw := &LibWallet{
+		activeNet: activeNet,
+		configDB:  configDB,
+	}
 
-func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Params) (*LibWallet, error) {
+	var appDataDir string
+
+	err = lw.ReadUserConfigValue(AppDataDir, &appDataDir)
+	if err != nil {
+		return nil, fmt.Errorf("error reading app data dir from settings db: %s", err.Error())
+	}
+
+	if appDataDir == "" {
+		lw.walletDataDir = filepath.Join(defaultAppDataDir, activeNet.Name)
+	} else {
+		lw.walletDataDir = filepath.Join(appDataDir, activeNet.Name)
+	}
+
 	errors.Separator = ":: "
-	initLogRotator(filepath.Join(walletDataDir, logFileName))
+
+	initLogRotator(filepath.Join(lw.walletDataDir, logFileName))
+	logLevel := lw.ReadStringConfigValueForKey(LogLevel)
+	SetLogLevels(logLevel)
 
 	// open database for indexing transactions for faster loading
-	txDBPath := filepath.Join(walletDataDir, txindex.DbName)
-	txDB, err := txindex.Initialize(txDBPath, &Transaction{})
+	txDBPath := filepath.Join(lw.walletDataDir, txindex.DbName)
+	lw.txDB, err = txindex.Initialize(txDBPath, &Transaction{})
 	if err != nil {
 		log.Error(err.Error())
 		return nil, err
@@ -63,27 +88,18 @@ func newLibWallet(walletDataDir, walletDbDriver string, activeNet *netparams.Par
 		TicketFee:     defaultFees,
 	}
 
-	walletLoader := NewLoader(activeNet.Params, walletDataDir, stakeOptions, 20, false,
+	lw.walletLoader = NewLoader(activeNet.Params, lw.walletDataDir, stakeOptions, 20, false,
 		defaultFees, wallet.DefaultAccountGapLimit)
-
 	if walletDbDriver != "" {
-		walletLoader.SetDatabaseDriver(walletDbDriver)
+		lw.walletLoader.SetDatabaseDriver(walletDbDriver)
 	}
 
-	syncData := &syncData{
+	lw.syncData = &syncData{
 		syncCanceled:          make(chan bool),
 		syncProgressListeners: make(map[string]SyncProgressListener),
 	}
 
-	// Finally Init LibWallet
-	lw := &LibWallet{
-		walletDataDir: walletDataDir,
-		txDB:          txDB,
-		activeNet:     activeNet,
-		walletLoader:  walletLoader,
-		syncData:      syncData,
-	}
-
+	// todo add interrupt listener
 	lw.listenForShutdown()
 
 	return lw, nil
