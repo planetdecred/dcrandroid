@@ -295,7 +295,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         println("New transaction info ${transaction.hash}")
         util!!.set(Constants.RECENT_TRANSACTION_HASH, transaction.hash)
 
-        val sameFilter = wallet.compareTxFilter(selectedTxFilter, transaction.type, transaction.direction)
+        val sameFilter = Dcrlibwallet.compareTxFilter(selectedTxFilter, transaction.type, transaction.direction)
         if (sameFilter) {
             transaction.animate = true
             transactionList.add(0, transaction)

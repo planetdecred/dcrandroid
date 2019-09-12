@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M13.6427,18.464L22.3349,16.9313L21.7951,13.87C19.8685,14.2097 18.0314,12.9233 17.6917,10.9967C17.3519,9.0702 18.6383,7.233 20.5649,6.8933L20.0251,3.8319L13.6636,4.9532L13.6427,18.464Z"
+      android:strokeWidth="1"
+      android:fillColor="#ED6D47"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M10.3554,5.5365L1.6653,7.0689L2.2051,10.1302C4.1317,9.7905 5.9689,11.0769 6.3086,13.0035C6.6483,14.9301 5.3618,16.7673 3.4353,17.107L3.9751,20.1683L10.3343,19.047L10.3554,5.5365Z"
+      android:strokeWidth="1"
+      android:fillColor="#ED6D47"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M10.351,8.3815C8.9358,9.0267 8.0267,10.4377 8.0243,11.993C8.0219,13.5483 8.9265,14.9622 10.3397,15.6117L10.351,8.3815Z"
+      android:strokeWidth="1"
+      android:fillColor="#091440"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M15.9152,11.3097C15.6892,10.0237 14.8453,8.9311 13.6583,8.3873L13.647,15.6193C15.297,14.8677 16.2298,13.0953 15.9152,11.3097Z"
+      android:strokeWidth="1"
+      android:fillColor="#091440"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M11.4655,22.999L11.4714,19.0006L12.5344,19.0022L12.5285,23.0006L11.4655,22.999ZM11.4654,16.9986L11.4714,13.0003L12.5344,13.0018L12.5284,17.0002L11.4654,16.9986ZM11.4654,10.9982L11.4714,6.9998L12.5344,7.0014L12.5284,10.9998L11.4654,10.9982ZM11.4654,4.9978L11.4714,0.9994L12.5344,1.001L12.5284,4.9994L11.4654,4.9978Z"
+      android:strokeWidth="1"
+      android:fillColor="#091440"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+</vector>

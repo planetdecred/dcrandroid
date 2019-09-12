@@ -70,11 +70,16 @@
         android:text="Pending"
         android:textColor="#8997a5"
         app:fontFamily="@font/source_sans_pro"
-        android:drawableRight="@drawable/ic_pending"
-        android:drawableEnd="@drawable/ic_pending"
         android:gravity="center_vertical"
-        android:drawablePadding="8dp"
         android:id="@+id/status"
         />
-    
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:id="@+id/img_status"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:layout_marginLeft="@dimen/margin_padding_size_8"
+        app:srcCompat="@drawable/ic_pending"/>
+
 </LinearLayout>

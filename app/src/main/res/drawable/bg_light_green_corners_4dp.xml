@@ -5,10 +5,7 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-
-    <solid android:color="#2ED6A1" />
-    <corners android:radius="8dp" />
-
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="4dp"/>
+    <solid android:color="#2dd8a3"/>
 </shape>

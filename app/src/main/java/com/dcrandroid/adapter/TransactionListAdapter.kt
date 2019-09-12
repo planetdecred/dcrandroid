@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>): RecyclerView.Adapter<TransactionListAdapter.TransactionListViewHolder>() {
+class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>): RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val multiWallet = WalletData.getInstance().multiWallet
@@ -59,8 +59,10 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         }
         if (transaction.confirmations == 0) {
             holder.status.setPending()
+            holder.statusImg.setImageResource(R.drawable.ic_pending)
         }else if (transaction.confirmations > 1 || util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)){
             holder.status.setConfirmed(transaction.timestamp)
+            holder.statusImg.setImageResource(R.drawable.ic_confirmed)
         }
 
         if(transaction.animate){
@@ -83,44 +85,43 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         }
 
     }
+}
 
-    class TransactionListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-        val icon: ImageView = view.tx_icon
-        val amount: TextView = view.amount
-        val status: TextView = view.status
-        val walletName: TextView = view.wallet_name
-    }
+class TransactionListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+    val icon = view.tx_icon
+    val amount = view.amount
+    val status = view.status
+    val statusImg = view.img_status
+    val walletName = view.wallet_name
+}
 
-    private fun TextView.setPending(){
-        this.text = "Pending"
-        this.setTextColor(Color.parseColor("#8997a5"))
-        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_pending, 0)
-    }
+fun TextView.setPending(){
+    this.setText(R.string.pending)
+    this.setTextColor(Color.parseColor("#8997a5"))
+}
 
-    private fun TextView.setConfirmed(timestamp: Long){
-        this.text = getTimestamp(timestamp * 1000) // convert seconds to milliseconds
-        this.setTextColor(Color.parseColor("#596d81"))
-        this.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_confirmed, 0)
-    }
+fun TextView.setConfirmed(timestamp: Long){
+    this.text = getTimestamp(timestamp * 1000) // convert seconds to milliseconds
+    this.setTextColor(Color.parseColor("#596d81"))
+}
 
-    fun getTimestamp(timestamp: Long): String{
-        val txDate = GregorianCalendar()
-        txDate.time = Date(timestamp)
+fun getTimestamp(timestamp: Long): String{
+    val txDate = GregorianCalendar()
+    txDate.time = Date(timestamp)
 
-        val today = GregorianCalendar()
+    val today = GregorianCalendar()
 
-        val difference = System.currentTimeMillis() - timestamp
-        val yesterday: Long = 86400000
+    val difference = System.currentTimeMillis() - timestamp
+    val yesterday: Long = 86400000
 
-        val week = DateUtils.WEEK_IN_MILLIS
-        val month = week * 4
+    val week = DateUtils.WEEK_IN_MILLIS
+    val month = week * 4
 
-        return when {
-            DateUtils.isToday(timestamp) -> "Today"
-            yesterday > difference -> "Yesterday"
-            week > difference -> SimpleDateFormat("EE", Locale.getDefault()).format(timestamp)
-            today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat("MMMM dd", Locale.getDefault()).format(timestamp)
-            else -> SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(timestamp)
-        }
+    return when {
+        DateUtils.isToday(timestamp) -> "Today"
+        yesterday > difference -> "Yesterday"
+        week > difference -> SimpleDateFormat("EE", Locale.getDefault()).format(timestamp)
+        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat("MMMM dd", Locale.getDefault()).format(timestamp)
+        else -> SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(timestamp)
     }
 }

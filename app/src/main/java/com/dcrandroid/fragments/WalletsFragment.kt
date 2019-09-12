@@ -29,9 +29,6 @@ class WalletsFragment: BaseFragment() {
     private lateinit var adapter: WalletsAdapter
     private lateinit var recyclerView: RecyclerView
 
-    private val multiWallet: MultiWallet
-    get() = WalletData.getInstance().multiWallet
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

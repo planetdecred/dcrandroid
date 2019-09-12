@@ -656,5 +656,13 @@
     <string name="view_seed_phrase">View seed phrase</string>
     <string name="seed_verification_failed">Failed to verify. Please go through every words and try again.</string>
     <string name="back_to_wallets">Back to Wallets</string>
+    <string name="tx_sort_all">All (%1$d)</string>
+    <string name="tx_sort_sent">Sent (%1$d)</string>
+    <string name="tx_sort_received">Received (%1$d)</string>
+    <string name="tx_sort_transferred">Transferred (%1$d)</string>
+    <string name="tx_sort_staking">Staking (%1$d)</string>
+    <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
+    <string name="immature">Immature</string>
+    <string name="live">Live</string>
 
 </resources>

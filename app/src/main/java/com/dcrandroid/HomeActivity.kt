@@ -197,7 +197,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         currentFragment = when (position) {
             0 -> Overview()
-            1 -> TransactionsFragment()
+            1 -> TransactionsFragment().setWalletID(1)
             2 -> WalletsFragment()
             else -> Fragment()
         }

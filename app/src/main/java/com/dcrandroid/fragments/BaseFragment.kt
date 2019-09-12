@@ -16,7 +16,7 @@ import java.text.FieldPosition
 open class BaseFragment : Fragment(), SyncProgressListener {
 
     private val walletData: WalletData = WalletData.getInstance()
-    private val multiWallet: MultiWallet
+    internal val multiWallet: MultiWallet
         get() = walletData.multiWallet
 
     override fun onStart() {

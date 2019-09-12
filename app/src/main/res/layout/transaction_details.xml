@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/account_details_root">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_padding_size_8">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="@dimen/margin_padding_size_8"
+            app:srcCompat="@drawable/ic_close"
+            android:background="@drawable/circular_transparent_ripple"
+            android:id="@+id/iv_close" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_account_name"
+            android:layout_weight="1"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="@dimen/edit_text_size_20"
+            android:text="Default"
+            android:layout_gravity="center_vertical"
+            app:fontFamily="@font/source_sans_pro"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/margin_padding_size_16">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_send"
+            android:id="@+id/tx_details_icon"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/margin_padding_size_16"
+            android:layout_marginStart="@dimen/margin_padding_size_16"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_padding_size_16"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/account_details_total_balance"
+                android:text="7.51464806 DCR"
+                android:textSize="32sp"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false"
+                android:textColor="@color/darkBlueTextColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blueGraySecondTextColor"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false"
+                android:text="Jan 25, 2019 11:58am"
+                android:textSize="@dimen/edit_text_size_16"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    app:srcCompat="@drawable/ic_confirmed"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tx_details_confirmations"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:layout_marginLeft="@dimen/margin_padding_size_4"
+                    android:layout_marginStart="@dimen/margin_padding_size_4"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grayBackgroundLightColor" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:id="@+id/extra_details"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_padding_size_16"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textSize="@dimen/edit_text_size_14"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:text="From account"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="@dimen/edit_text_size_16"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:text="Default"
+                    android:includeFontPadding="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textSize="@dimen/edit_text_size_14"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:text="@string/keys"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/account_details_keys"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="@dimen/edit_text_size_16"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:text="T"
+                    android:includeFontPadding="false" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayBackgroundLightColor" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_toggle_properties"
+        app:fontFamily="@font/source_sans_pro"
+        android:gravity="center"
+        android:text="@string/show_details"
+        android:textSize="@dimen/edit_text_size_16"
+        android:paddingTop="@dimen/margin_padding_size_16"
+        android:paddingBottom="@dimen/margin_padding_size_16"
+        android:textColor="@color/blue"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/curved_bottom_ripple"
+        />
+
+</LinearLayout>

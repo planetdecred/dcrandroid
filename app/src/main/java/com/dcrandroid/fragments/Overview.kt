@@ -19,18 +19,19 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
-
-    private val walletData: WalletData = WalletData.getInstance()
-
-    private val multiWallet: MultiWallet
-        get() = walletData.multiWallet
 
     private lateinit var util: PreferenceUtil
 
@@ -119,21 +120,24 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         }
     }
 
-    private fun loadTransactions() {
+    private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
         val jsonResult = multiWallet.getTransactions(0, 3, Dcrlibwallet.TxFilterRegular)
-        var transactions = gson.fromJson(jsonResult, Array<Transaction>::class.java)
+        var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
-        if (transactions == null) {
-            transactions = arrayOf()
+        if (tempTxList == null) {
+            tempTxList = arrayOf()
         } else {
-            this.transactions.let {
+
+            transactions.let {
                 it.clear()
-                it.addAll(transactions)
+                it.addAll(tempTxList)
             }
-            adapter?.notifyDataSetChanged()
+            withContext(Dispatchers.Main) {
+                adapter?.notifyDataSetChanged()
+            }
         }
 
-        if (this.transactions.size > 0) {
+        if (transactions.size > 0) {
             showTransactionList()
         } else {
             hideTransactionList()
@@ -164,12 +168,12 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 }
 
-fun Overview.showTransactionList() {
-    noTransactionsTextView.visibility = View.GONE
-    transactionsLayout.visibility = View.VISIBLE
+fun Overview.showTransactionList() = GlobalScope.launch(Dispatchers.Main) {
+    noTransactionsTextView.hide()
+    transactionsLayout.show()
 }
 
-fun Overview.hideTransactionList() {
-    noTransactionsTextView.visibility = View.VISIBLE
-    transactionsLayout.visibility = View.GONE
+fun Overview.hideTransactionList() = GlobalScope.launch(Dispatchers.Main) {
+    noTransactionsTextView.show()
+    transactionsLayout.hide()
 }
