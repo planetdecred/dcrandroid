@@ -1,5 +1,7 @@
 package dcrlibwallet
 
+import "github.com/decred/dcrwallet/wallet"
+
 type Amount struct {
 	AtomValue int64
 	DcrValue  float64
@@ -175,3 +177,47 @@ type WalletAccount struct {
 }
 
 /** end tx-related types */
+
+/** begin ticket-related types */
+
+type PurchaseTicketsRequest struct {
+	Account               uint32
+	RequiredConfirmations uint32
+	NumTickets            uint32
+	Passphrase            []byte
+	Expiry                uint32
+	TxFee                 int64
+	TicketAddress         string
+	PoolAddress           string
+	PoolFees              float64
+	TicketFee             int64
+}
+
+type GetTicketsRequest struct {
+	StartingBlockHash   []byte
+	StartingBlockHeight int32
+	EndingBlockHash     []byte
+	EndingBlockHeight   int32
+	TargetTicketCount   int32
+}
+
+type TicketInfo struct {
+	BlockHeight int32
+	Status      string
+	Ticket      *wallet.TransactionSummary
+	Spender     *wallet.TransactionSummary
+}
+
+type TicketPriceResponse struct {
+	TicketPrice int64
+	Height      int32
+}
+
+type VSPTicketPurchaseInfo struct {
+	PoolAddress   string
+	PoolFees      float64
+	Script        string
+	TicketAddress string
+}
+
+/** end ticket-related types */

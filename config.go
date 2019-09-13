@@ -8,28 +8,30 @@ const (
 	userConfigDbFilename = "config.db"
 	userConfigBucketName = "user_config"
 
-	AppDataDir = "app_data_dir"
-	LogLevel   = "log_level"
+	AppDataDirConfigKey = "app_data_dir"
+	LogLevelConfigKey   = "log_level"
 
-	NewWalletSetUp                 = "new_wallet_set_up"
-	InitialSyncCompleted           = "initial_sync_complete"
-	IsStartupSecuritySet           = "startup_security_set"
-	StartupSecurityType            = "startup_security_type"
-	SpendingPassphraseSecurityType = "spending_security_type"
-	DefaultWallet                  = "default_wallet"
-	HiddenWalletPrefix             = "hidden"
+	NewWalletSetUpConfigKey                 = "new_wallet_set_up"
+	InitialSyncCompletedConfigKey           = "initial_sync_complete"
+	IsStartupSecuritySetConfigKey           = "startup_security_set"
+	StartupSecurityTypeConfigKey            = "startup_security_type"
+	SpendingPassphraseSecurityTypeConfigKey = "spending_security_type"
+	DefaultWalletConfigKey                  = "default_wallet"
+	HiddenWalletPrefixConfigKey             = "hidden"
 
-	SpvPersistentPeerAddresses = "spv_peer_addresses"
-	RemoteServerIP             = "remote_server_ip"
-	SyncOnCellular             = "always_sync"
+	NetworkModeConfigKey                = "network_mode"
+	SpvPersistentPeerAddressesConfigKey = "spv_peer_addresses"
+	RemoteServerIPConfigKey             = "remote_server_ip"
+	SyncOnCellularConfigKey             = "always_sync"
 
-	SpendUnconfirmed = "spend_unconfirmed"
-	NotifyOnNewTx    = "tx_notification_enabled"
+	SpendUnconfirmedConfigKey = "spend_unconfirmed"
+	NotifyOnNewTxConfigKey    = "tx_notification_enabled"
+	LastTxHashConfigKey       = "last_tx_hash"
+
 	// todo should use this config value to implement cross-platform currency conversion feature
-	CurrencyConversionOption = "currency_conversion_option"
-	NetworkMode              = "network_mode"
+	CurrencyConversionConfigKey = "currency_conversion_option"
 
-	LastTxHash = "last_tx_hash"
+	VSPHostConfigKey = "vsp_host"
 )
 
 func (lw *LibWallet) SaveUserConfigValue(key string, value interface{}) error {

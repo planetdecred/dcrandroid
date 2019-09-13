@@ -53,7 +53,7 @@ func NewLibWallet(defaultAppDataDir, walletDbDriver string, netType string) (*Li
 
 	var appDataDir string
 
-	err = lw.ReadUserConfigValue(AppDataDir, &appDataDir)
+	err = lw.ReadUserConfigValue(AppDataDirConfigKey, &appDataDir)
 	if err != nil {
 		return nil, fmt.Errorf("error reading app data dir from settings db: %s", err.Error())
 	}
@@ -67,7 +67,7 @@ func NewLibWallet(defaultAppDataDir, walletDbDriver string, netType string) (*Li
 	errors.Separator = ":: "
 
 	initLogRotator(filepath.Join(lw.walletDataDir, logFileName))
-	logLevel := lw.ReadStringConfigValueForKey(LogLevel)
+	logLevel := lw.ReadStringConfigValueForKey(LogLevelConfigKey)
 	SetLogLevels(logLevel)
 
 	// open database for indexing transactions for faster loading
