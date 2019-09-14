@@ -5,7 +5,8 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -65,15 +66,13 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
-        android:background="#f3f5f6"
-        >
+        android:background="#f3f5f6" >
 
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -149,6 +148,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:id="@+id/fab_receive"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:background="@drawable/receive_button_effect"
@@ -166,8 +166,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:fontFamily="@font/source_sans_pro"
-                    />
+                    app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
 

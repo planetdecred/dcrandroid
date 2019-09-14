@@ -333,7 +333,7 @@ public class Utils {
         return Dcrlibwallet.amountAtom(signed.doubleValue());
     }
 
-    public static void copyToClipboard(Context ctx, String copyText, String successMessage) {
+    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage) {
 
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -350,12 +350,8 @@ public class Utils {
                 clipboard.setPrimaryClip(clip);
         }
 
-        showMessage(ctx, successMessage, Toast.LENGTH_SHORT);
+        SnackBar.Companion.showText(ctx, successMessage, Toast.LENGTH_SHORT);
 
-    }
-
-    public static void copyToClipboard(Context ctx, String copyText, @StringRes int successMessage) {
-        copyToClipboard(ctx, copyText, ctx.getString(successMessage));
     }
 
     public static String readFromClipboard(Context context) {

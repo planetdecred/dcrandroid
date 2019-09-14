@@ -90,7 +90,7 @@ public class LogViewer extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ITEM:
-                Utils.copyToClipboard(this, logTextView.getText().toString(), getString(R.string.wallet_log_copied));
+                Utils.copyToClipboard(this, logTextView.getText().toString(), R.string.wallet_log_copied);
                 return true;
 
             default:

@@ -14,8 +14,12 @@ import com.dcrandroid.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.dcrandroid.util.WalletData
 
 open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
+
+    protected val multiWallet = WalletData.getInstance().multiWallet
+
     override fun getTheme(): Int = R.style.BottomSheetDialogStyle
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -27,13 +31,14 @@ open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
             val bottomSheetDialog = dialog as BottomSheetDialog
             val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 }
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
             })

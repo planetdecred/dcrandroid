@@ -536,10 +536,9 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                             val message = if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE)
                                     == Constants.PASSWORD) getString(R.string.invalid_password)
                             else getString(R.string.invalid_pin)
-                            val retryDialog = InfoDialog(context)
+                            val retryDialog = InfoDialog(context!!)
                                     .setDialogTitle(getString(R.string.failed_to_send_transaction))
                                     .setMessage(message)
-                                    .setIcon(R.drawable.np_amount_withdrawal)
                                     .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
                                         showConfirmTransactionDialog()
                                     })
@@ -564,12 +563,9 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
             return
         }
 
-        val dialog = InfoDialog(context)
+        val dialog = InfoDialog(context!!)
                 .setDialogTitle(getString(R.string.transaction_was_successful))
                 .setMessage("${getString(R.string.hash_colon)}\n$txHash")
-                .setIcon(R.drawable.np_amount_withdrawal)
-                .setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.greenLightTextColor))
-                .setMessageTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
                 .setPositiveButton(getString(R.string.ok), DialogInterface.OnClickListener { _, _ ->
                     run {
                         if (activity != null && activity is MainActivity) {
@@ -590,9 +586,6 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                             mainActivity.displayOverview()
                         }
                     }
-                })
-                .setMessageClickListener(View.OnClickListener {
-                    Utils.copyToClipboard(context, txHash, R.string.tx_hash_copy)
                 })
 
         dialog.setCancelable(true)

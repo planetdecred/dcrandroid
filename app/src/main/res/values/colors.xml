@@ -28,6 +28,7 @@
     <color name="colorBackground">#F3F5F6</color>
     <color name="colorError">#ed6d47</color>
     <color name="colorDisabled">#c4cbd2</color>
+    <color name="colorDivider">#edeff1</color>
 
     <!--/General-->
 

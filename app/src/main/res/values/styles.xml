@@ -92,6 +92,7 @@
         <item name="counterTextColor">@color/darkerBlueGrayTextColor</item>
         <item name="errorTextColor">@color/colorError</item>
         <item name="hintTextColor">@color/blue</item>
+        <item name="passwordToggleTint">#596d81</item>
     </style>
 
     <style name="FullWidthDialog" parent="AppTheme.Dialog">

@@ -29,6 +29,8 @@ fun parseAccounts(json: String): Accounts {
 }
 
 class Account : Serializable {
+    @SerializedName("WalletID")
+    var walletID: Long = 0
     @SerializedName("Number")
     var accountNumber: Int = 0
     @SerializedName("Name")
@@ -51,6 +53,7 @@ class Account : Serializable {
         fun from(acc: dcrlibwallet.Account): Account {
             val account = Account()
             return account.apply {
+                walletID = acc.walletID
                 accountNumber = acc.number
                 accountName = acc.name
                 balance = Balance.from(acc.balance)

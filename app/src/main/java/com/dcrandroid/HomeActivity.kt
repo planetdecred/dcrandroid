@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.ReceiveDialog
 import com.dcrandroid.dialog.WiFiSyncDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
@@ -99,6 +100,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         initNavigationTabs()
 
         checkWifiSync()
+
+        fab_receive.setOnClickListener {
+            ReceiveDialog().show(supportFragmentManager, null)
+        }
     }
 
     override fun onDestroy() {

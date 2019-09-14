@@ -47,7 +47,7 @@ class CustomCrashReport : BaseCrashReportDialog() {
             dialog.dismiss()
             finish()
         })
-        crashDialog.setCopyReportClickListener(View.OnClickListener { Utils.copyToClipboard(applicationContext, loadReports(), getString(R.string.crash_report_copied)) })
+        crashDialog.setCopyReportClickListener(View.OnClickListener { Utils.copyToClipboard(applicationContext, loadReports(), R.string.crash_report_copied) })
         crashDialog.setViewHideReportClickListener(View.OnClickListener {
             if (crashDialog.isHidden()) {
                 crashDialog.showReport(loadReports())

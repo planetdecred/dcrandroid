@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/white"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/margin_padding_size_16"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingRight="0dp"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_close" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:layout_marginLeft="@dimen/margin_padding_size_8"
+                    android:text="@string/receive_dcr"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro_semibold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="end">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/iv_info"
+                        android:padding="@dimen/margin_padding_size_8"
+                        android:layout_marginRight="@dimen/margin_padding_size_8"
+                        android:layout_marginEnd="@dimen/margin_padding_size_8"
+                        app:srcCompat="@drawable/ic_info"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/circular_transparent_ripple" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/iv_options"
+                        android:padding="@dimen/margin_padding_size_8"
+                        app:srcCompat="@drawable/ic_more"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/circular_transparent_ripple" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDivider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_padding_size_16"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:id="@+id/account_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="@color/blue"
+            app:hintTextColor="@color/blue"
+            android:textColorHint="#3d5873"
+            app:helperText="@string/receive_dropdown_helper"
+            app:helperTextTextColor="#3d5873"
+            app:endIconTint="#596d81"
+            android:hint="@string/account">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/selected_account_name"
+                android:textColor="#091440"
+                android:enabled="false"
+                app:fontFamily="@font/source_sans_pro"
+                android:textSize="@dimen/edit_text_size_16"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="@dimen/margin_padding_size_8"
+            android:id="@+id/qr_image"
+            android:layout_marginTop="@dimen/margin_padding_size_16" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_address"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            app:fontFamily="@font/source_sans_pro"
+            android:textSize="@dimen/edit_text_size_16"
+            android:includeFontPadding="false"
+            android:textColor="@color/blue"
+            tools:text="Dcur2mcGjmENx4DhNqDctW5wJCVyT3Qeqkx" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_8"
+            app:fontFamily="@font/source_sans_pro"
+            android:textSize="@dimen/edit_text_size_16"
+            android:includeFontPadding="false"
+            android:textColor="#8997a5"
+            android:text="@string/tap_to_copy" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_padding_size_24"
+            android:background="#e6eaed" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/share_qr_code"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            android:paddingTop="@dimen/margin_padding_size_16"
+            android:paddingBottom="@dimen/margin_padding_size_16"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@drawable/default_app_button_bg"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_share"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/share"
+                android:textColor="@color/white"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro"
+                android:textSize="@dimen/edit_text_size_18"
+                android:layout_marginLeft="@dimen/margin_padding_size_8"
+                android:layout_marginStart="@dimen/margin_padding_size_8" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

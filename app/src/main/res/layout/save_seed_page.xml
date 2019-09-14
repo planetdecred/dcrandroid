@@ -169,12 +169,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="@dimen/margin_padding_size_4"
-        android:paddingTop="@dimen/margin_padding_size_16"
-        android:paddingLeft="@dimen/margin_padding_size_24"
-        android:paddingStart="@dimen/margin_padding_size_24"
-        android:paddingRight="@dimen/margin_padding_size_24"
-        android:paddingEnd="@dimen/margin_padding_size_24"
-        android:paddingBottom="@dimen/margin_padding_size_24"
+        android:padding="@dimen/margin_padding_size_16"
         android:gravity="center_horizontal"
         >
 
@@ -188,18 +183,15 @@
             android:text="@string/seed_phase_2_briefing" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/step_2"
+            android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/seed_phase_2_briefing"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:paddingTop="@dimen/margin_padding_size_16"
             android:paddingBottom="@dimen/margin_padding_size_16"
-            android:paddingStart="@dimen/margin_padding_size_24"
-            android:paddingLeft="@dimen/margin_padding_size_24"
-            android:paddingRight="@dimen/margin_padding_size_24"
-            android:paddingEnd="@dimen/margin_padding_size_24"
             android:background="@drawable/default_app_button_bg"
             android:text="I have wrote down all 33 words"
             android:textColor="@color/white"

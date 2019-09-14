@@ -8,90 +8,101 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@drawable/card_bg"
+    android:paddingTop="@dimen/margin_padding_size_24"
+    android:paddingLeft="@dimen/margin_padding_size_24"
+    android:paddingStart="@dimen/margin_padding_size_24"
+    android:paddingEnd="0dp"
+    android:paddingRight="0dp"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_padding_size_8"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_marginTop="8dp"
-            android:id="@+id/icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:visibility="visible" />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_20"
+        app:fontFamily="@font/source_sans_pro_semibold"
+        android:includeFontPadding="false"
+        tools:text="Receive DCR" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:textColor="@color/greenLightTextColor"
-            android:textSize="18sp"
-            app:fontFamily="@font/source_sans_pro" />
-
-        <TextView
-            android:padding="8dp"
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro"
-            tools:text="HASH: TsbGZiznn5EBcQEBfjmhuFB56XBkxAcTtah" />
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textSize="@dimen/edit_text_size_16"
+        app:fontFamily="@font/source_sans_pro"
+        tools:text="Each time you request a payment, a new address is created to protect your privacy." />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/view_layout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
         android:id="@+id/btn_layout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@color/colorPrimary"
-        android:weightSum="2">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:padding="@dimen/margin_padding_size_8">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            >
+
+            <TextView
+                android:id="@+id/btn_neutral"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/textViewButton.Outline"
+                android:layout_marginRight="@dimen/margin_padding_size_8"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:padding="8dp"
+                android:textSize="@dimen/edit_text_size_16"
+                android:visibility="invisible"
+                app:fontFamily="@font/source_sans_pro_semibold"
+                tools:text="Neutral"
+                tools:visibility="visible"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/btn_negative"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:textColor="@color/darkBlueTextColor"
-            android:textSize="14sp"
+            style="@style/textViewButton.Outline"
+            android:layout_marginRight="@dimen/margin_padding_size_8"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            android:padding="8dp"
+            android:textSize="@dimen/edit_text_size_16"
             android:visibility="invisible"
             app:fontFamily="@font/source_sans_pro_semibold"
-            tools:text="test text"
-            tools:visibility="visible" />
+            tools:text="Negative"
+            tools:visibility="visible"
+             />
 
         <TextView
             android:id="@+id/btn_positive"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:textColor="@color/blue"
-            android:textSize="14sp"
+            style="@style/textViewButton.Outline"
+            android:padding="8dp"
+            android:textSize="@dimen/edit_text_size_16"
             android:visibility="invisible"
             app:fontFamily="@font/source_sans_pro_semibold"
-            tools:text="test text"
+            tools:text="Positive"
             tools:visibility="visible" />
     </LinearLayout>
 

@@ -7,19 +7,13 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
-import com.dcrandroid.activities.SaveSeedActivity
-import com.dcrandroid.activities.VerifySeedInstruction
-import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.RenameAccountDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
@@ -29,7 +23,6 @@ import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
-import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.wallet_row.view.*
 
 class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
@@ -110,12 +103,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
 
         // popup menu
         holder.more.setOnClickListener {
-            val inflater = LayoutInflater.from(context)
-            val view = inflater.inflate(R.layout.popup_layout, null)
-            val window = PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, true)
 
-            val recyclerView = view.popup_rv
             val items = arrayOf(
                     PopupItem(R.string.rename_wallet),
                     PopupItem(R.string.change_spending_pass),
@@ -123,9 +111,8 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                     PopupItem(R.string.remove_wallet, R.color.orangeTextColor)
             )
 
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = PopupMenuAdapter(context, items) {index ->
-                window.dismiss()
+            PopupUtil.showPopup(it, items){window, index ->
+               window.dismiss()
                 when(index){
                     0 -> { // rename account
                         val activity = context as AppCompatActivity
@@ -144,7 +131,6 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                     }
                 }
             }
-            window.showAsDropDown(it)
         }
     }
 

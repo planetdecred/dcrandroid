@@ -185,7 +185,6 @@ public class SplashScreen extends BaseActivity {
                             InfoDialog infoDialog = new InfoDialog(SplashScreen.this)
                                     .setDialogTitle(getString(R.string.failed_to_open_wallet))
                                     .setMessage(Utils.translateError(SplashScreen.this, e))
-                                    .setIcon(R.drawable.np_amount_withdrawal) //Temporary Icon
                                     .setPositiveButton(getString(R.string.exit_cap), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

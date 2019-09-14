@@ -10,10 +10,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.popup_layout_row.view.*
 
 class PopupItem(@StringRes val title: Int, @ColorRes val color: Int = R.color.darkBlueTextColor)
@@ -48,5 +52,25 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<Po
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val textView = itemView.popup_text
+    }
+}
+
+class PopupUtil {
+    companion object {
+        fun showPopup(anchorView: View, items: Array<PopupItem>, itemClicked: (window: PopupWindow, position: Int) -> Unit) {
+            val context = anchorView.context
+            val inflater = LayoutInflater.from(context)
+            val view = inflater.inflate(R.layout.popup_layout, null)
+            val window = PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, true)
+
+            val recyclerView = view.popup_rv
+
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = PopupMenuAdapter(context, items) { index ->
+                itemClicked(window, index)
+            }
+            window.showAsDropDown(anchorView)
+        }
     }
 }

@@ -341,7 +341,7 @@
 
     <!--Address-->
     <string name="notification_discovering_used_addresses">(2/3) Discovering used addresses…</string>
-    <string name="address_copy_text">Address copied to clipboard</string>
+    <string name="address_copy_text">Address copied</string>
     <string name="your_address">Your address</string>
     <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
     <string name="generate_new_address">Generate new address</string>
@@ -664,5 +664,11 @@
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="immature">Immature</string>
     <string name="live">Live</string>
+    <string name="receive_dcr">Receive DCR</string>
+    <string name="receive_dropdown_helper">The address below is for this account</string>
+    <string name="selected_account_name">%1$s (%1$s)</string>
+    <string name="decred_qr_address_prefix">decred:%1$s</string>
+    <string name="got_it">Got It</string>
+    <string name="tap_to_copy">(Tap to copy)</string>
 
 </resources>
