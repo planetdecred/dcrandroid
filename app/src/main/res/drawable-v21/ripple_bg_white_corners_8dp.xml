@@ -19,7 +19,9 @@
 
     <item>
         <shape>
-            <solid android:color="@android:color/transparent"/>
+            <corners
+                android:radius="@dimen/margin_padding_size_8" />
+            <solid android:color="@android:color/white"/>
         </shape>
     </item>
 </ripple>

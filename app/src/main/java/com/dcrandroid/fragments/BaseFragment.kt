@@ -15,18 +15,21 @@ import java.text.FieldPosition
 
 open class BaseFragment : Fragment(), SyncProgressListener {
 
+    var TAG = this.javaClass.name
+
     private val walletData: WalletData = WalletData.getInstance()
     internal val multiWallet: MultiWallet
         get() = walletData.multiWallet
 
     override fun onStart() {
         super.onStart()
-        multiWallet.addSyncProgressListener(this, this.javaClass.name)
+        multiWallet.removeSyncProgressListener(TAG)
+        multiWallet.addSyncProgressListener(this, TAG)
     }
 
     override fun onStop() {
         super.onStop()
-        multiWallet.removeSyncProgressListener(this.javaClass.name)
+        multiWallet.removeSyncProgressListener(TAG)
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {

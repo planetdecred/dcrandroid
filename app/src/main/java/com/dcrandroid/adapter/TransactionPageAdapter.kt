@@ -41,10 +41,11 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
 
     override fun onBindViewHolder(holder: TransactionListViewHolder, position: Int) {
 
-        // backround ripple
-        val backgroundResource: Int = when (position) {
-            0 -> R.drawable.transactions_row_top
-            itemCount - 1 -> R.drawable.transactions_row_bottom_bg
+        // background ripple
+        val backgroundResource: Int = when {
+            itemCount == 1 -> R.drawable.ripple_bg_white_corners_8dp // only item on the list
+            position == 0 -> R.drawable.transactions_row_top
+            position == (itemCount - 1) -> R.drawable.transactions_row_bottom_bg
             else -> R.drawable.transactions_row_bg
         }
 

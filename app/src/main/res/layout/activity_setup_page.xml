@@ -51,86 +51,73 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/margin_padding_size_12"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_create_wallet"
+            <LinearLayout
+                android:id="@+id/ll_create_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_24"
-                android:layout_marginLeft="@dimen/margin_padding_size_24"
-                android:layout_marginRight="@dimen/margin_padding_size_24"
-                android:layout_marginBottom="@dimen/margin_padding_size_16"
-                app:cardBackgroundColor="@color/blue"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp">
+                android:layout_margin="@dimen/margin_padding_size_8"
+                android:elevation="4dp"
+                android:padding="@dimen/margin_padding_size_16"
+                android:gravity="center_vertical"
+                android:background="@drawable/blue_ripple_corners_8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/ll_create_wallet"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_padding_size_56"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_create_wallet_24px" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/margin_padding_size_16"
-                        app:srcCompat="@drawable/ic_create_wallet_24px" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/margin_padding_size_16"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:text="@string/create_a_new_wallet"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/edit_text_size_16"
+                    app:fontFamily="@font/source_sans_pro" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/create_a_new_wallet"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/edit_text_size_16"
-                        app:fontFamily="@font/source_sans_pro" />
+            </LinearLayout>
 
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_restore_wallet"
+            <LinearLayout
+                android:id="@+id/ll_restore_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_padding_size_24"
-                android:layout_marginRight="@dimen/margin_padding_size_24"
-                android:layout_marginBottom="@dimen/margin_padding_size_24"
-                app:cardBackgroundColor="@color/turquoise"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp">
+                android:background="@drawable/turquoise_ripple_corner_8dp"
+                android:padding="@dimen/margin_padding_size_16"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:layout_marginBottom="@dimen/margin_padding_size_8"
+                android:layout_marginLeft="@dimen/margin_padding_size_8"
+                android:layout_marginRight="@dimen/margin_padding_size_8"
+                android:elevation="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/ll_restore_wallet"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_padding_size_56"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/ic_restore_wallet_24px" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/margin_padding_size_16"
-                        app:srcCompat="@drawable/ic_restore_wallet_24px" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/restore_existing_wallet"
+                    android:layout_marginLeft="@dimen/margin_padding_size_16"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/edit_text_size_16"
+                    app:fontFamily="@font/source_sans_pro" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/restore_existing_wallet"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/edit_text_size_16"
-                        app:fontFamily="@font/source_sans_pro" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
         </LinearLayout>
 

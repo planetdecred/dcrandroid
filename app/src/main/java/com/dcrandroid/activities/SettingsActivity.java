@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
                     View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // load main preference fragment
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
     }

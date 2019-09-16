@@ -112,4 +112,9 @@
         <item name="android:colorForeground">#C4CBD2</item>
     </style>
 
+    <style name="TransactionsTabText" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/edit_text_size_16</item>
+    </style>
+
 </resources>

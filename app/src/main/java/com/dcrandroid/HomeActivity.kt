@@ -31,10 +31,7 @@ import com.dcrandroid.dialog.WiFiSyncDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
-import com.dcrandroid.fragments.WalletsFragment
-import com.dcrandroid.fragments.Overview
-import com.dcrandroid.fragments.ResumeAccountDiscovery
-import com.dcrandroid.fragments.TransactionsFragment
+import com.dcrandroid.fragments.*
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
 import com.dcrandroid.util.PreferenceUtil
@@ -202,7 +199,14 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         currentFragment = when (position) {
             0 -> Overview()
-            1 -> TransactionsFragment().setWalletID(1)
+            1 ->{
+                if(multiWallet!!.openedWalletsCount() > 1){
+                    MultiWalletTransactions()
+                }else{
+                    val wallet = multiWallet!!.openedWalletsList()[0]
+                    TransactionsFragment().setWalletID(wallet.walletID)
+                }
+            }
             2 -> WalletsFragment()
             else -> Fragment()
         }

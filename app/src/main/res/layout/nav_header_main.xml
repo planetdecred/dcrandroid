@@ -35,8 +35,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:srcCompat="@drawable/decred_logo" />
+                android:layout_marginRight="8dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

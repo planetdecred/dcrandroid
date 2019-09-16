@@ -19,6 +19,7 @@ import android.content.Intent
 import android.widget.Toast
 import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.data.Constants
+import com.dcrandroid.util.SnackBar
 import dcrlibwallet.MultiWallet
 
 const val CREATE_WALLET_REQUEST_CODE = 100
@@ -64,6 +65,7 @@ class WalletsFragment: BaseFragment() {
             val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID)
             refreshNavigationTabs()
+            SnackBar.showText(context!!, R.string.wallet_created)
         }else if(requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK){
             val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
             adapter.walletBackupVerified(walletID)
@@ -80,7 +82,7 @@ class WalletsFragment: BaseFragment() {
         when(item.itemId){
             R.id.add_new_wallet -> {
                 if(multiWallet.isSyncing || multiWallet.isSynced){
-                    Toast.makeText(context!!, "Cancel sync before creating wallet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context!!, R.string.cancel_sync_create_wallet, Toast.LENGTH_SHORT).show()
                     return false
                 }
 

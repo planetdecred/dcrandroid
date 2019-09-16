@@ -6,23 +6,18 @@
 
 package com.dcrandroid.fragments
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dcrandroid.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.dcrandroid.dialog.CollapsedBottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
 
@@ -33,7 +28,7 @@ interface DialogButtonListener {
     fun onClickCancel()
 }
 
-class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListener {
+class PasswordPinDialogFragment : CollapsedBottomSheetDialog(), DialogButtonListener {
 
     private lateinit var spendingPasswordFragment: PassphrasePromptFragment
     private lateinit var spendingPinFragment: PassphrasePromptFragment
@@ -41,7 +36,6 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
     private lateinit var tabsTitleList: List<String>
     private lateinit var titleList: List<String>
     private var passwordPinListener: PasswordPinListener? = null
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,35 +46,6 @@ class PasswordPinDialogFragment : BottomSheetDialogFragment(), DialogButtonListe
         fragmentList = listOf(spendingPasswordFragment, spendingPinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
         titleList = listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
-    }
-
-    override fun getTheme(): Int = R.style.BottomSheetDialogStyle
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        super.onCreateDialog(savedInstanceState)
-
-        val dialog: Dialog = BottomSheetDialog(requireContext(), theme)
-
-        dialog.setOnShowListener {
-            val bottomSheetDialog = dialog as BottomSheetDialog
-            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
-            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
-                }
-
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    }
-                }
-
-            })
-        }
-
-        return dialog
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

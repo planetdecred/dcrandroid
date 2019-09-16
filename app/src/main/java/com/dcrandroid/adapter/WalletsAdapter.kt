@@ -81,7 +81,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
             holder.accountsLayout.hide()
 
             holder.expand.setImageResource(R.drawable.ic_expand02)
-            holder.container.setBackgroundResource(R.drawable.wallet_row_background)
+            holder.container.setBackgroundResource(R.drawable.ripple_bg_white_corners_8dp)
         }
 
         holder.container.setOnClickListener {

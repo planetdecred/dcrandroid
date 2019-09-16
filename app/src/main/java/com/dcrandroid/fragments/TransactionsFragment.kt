@@ -15,14 +15,17 @@ import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionPageAdapter
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
-import kotlinx.android.synthetic.main.transactions_page.*
+import kotlinx.android.synthetic.main.single_wallet_transactions_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -49,16 +52,21 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
 
     fun setWalletID(walletID: Long): TransactionsFragment{
         wallet = multiWallet.getWallet(walletID)
+        TAG = wallet!!.walletName
         return this
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.transactions_page, container, false)
+        return inflater.inflate(R.layout.single_wallet_transactions_page, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setToolbarTitle(R.string.transactions, false)
+
+        if(multiWallet.openedWalletsCount() == 1){
+            setToolbarTitle(R.string.transactions, false)
+        }
+
         adapter = TransactionPageAdapter(context!!, transactions)
 
         txTypeSortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
@@ -79,7 +87,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     }
 
     override fun onScrollChanged() {
-        if(context == null) return
+        if(context == null || transactions.size < 5) return
 
         val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -150,6 +158,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         if (tempTxs == null) {
             loadedAll = true
             loading.set(false)
+            showHideList()
             return@launch
         }
 
@@ -178,6 +187,15 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         }
 
         loading.set(false)
+        showHideList()
+    }
+
+    private fun showHideList()  = GlobalScope.launch(Dispatchers.Main){
+        if(transactions.size > 0){
+            recycler_view.show()
+        }else{
+            recycler_view.hide()
+        }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
