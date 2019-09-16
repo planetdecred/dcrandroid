@@ -26,14 +26,15 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tx_type_spinner" />
+            android:id="@+id/timestamp_sort_spinner" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tx_type_spinner"
             android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginStart="@dimen/margin_padding_size_16"
-            android:visibility="gone" />
+            />
 
     </LinearLayout>
 

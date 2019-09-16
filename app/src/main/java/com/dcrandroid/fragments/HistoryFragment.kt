@@ -212,7 +212,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         object : Thread() {
             override fun run() {
                 try {
-                    val jsonResult = walletData!!.multiWallet.getTransactions(0, 0, selectedTxFilter)
+                    val jsonResult = walletData!!.multiWallet.getTransactions(0, 0, selectedTxFilter, true)
 
                     val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
                             .create()

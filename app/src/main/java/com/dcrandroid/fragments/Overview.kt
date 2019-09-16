@@ -121,7 +121,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
-        val jsonResult = multiWallet.getTransactions(0, 3, Dcrlibwallet.TxFilterRegular)
+        val jsonResult = multiWallet.getTransactions(0, 3, Dcrlibwallet.TxFilterRegular, true)
         var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (tempTxList == null) {

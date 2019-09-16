@@ -15,7 +15,6 @@ import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionPageAdapter
 import com.dcrandroid.data.Transaction
@@ -35,7 +34,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
 
     private var loadedAll = false
-    private val loading = AtomicBoolean()
+    private val loading = AtomicBoolean(false)
+    private val initialLoadingDone = AtomicBoolean(false)
 
     private var wallet: LibWallet? = null
 
@@ -45,8 +45,9 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
             .create()
 
+    private var newestTransactionsFirst = true
     private var txFilter = Dcrlibwallet.TxFilterAll
-    private val availableTxTypes = java.util.ArrayList<String>()
+    private val availableTxTypes = ArrayList<String>()
 
     private var txTypeSortAdapter: ArrayAdapter<String>? = null
 
@@ -74,7 +75,6 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         tx_type_spinner.adapter = txTypeSortAdapter
         tx_type_spinner.onItemSelectedListener = this
 
-
         layoutManager = LinearLayoutManager(context)
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
@@ -87,7 +87,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     }
 
     override fun onScrollChanged() {
-        if(context == null || transactions.size < 5) return
+        if(context == null || transactions.size < 5 || !initialLoadingDone.get()) return
 
         val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -105,6 +105,13 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     }
 
     private fun initAdapter() {
+
+        val timestampSortItems = context!!.resources.getStringArray(R.array.timestamp_sort)
+        val timestampSortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, timestampSortItems)
+        timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        timestamp_sort_spinner.onItemSelectedListener = this
+        timestamp_sort_spinner.adapter = timestampSortAdapter
+
         refreshAvailableTxType()
 
         loadTransactions()
@@ -120,20 +127,20 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         val stakingTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterStaking)
         val coinbaseTxCount =  wallet!!.countTransactions(Dcrlibwallet.TxFilterCoinBase)
 
-        availableTxTypes.add(context!!.getString(R.string.tx_sort_all, txCount))
-        availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
-        availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))
-        availableTxTypes.add(context!!.getString(R.string.tx_sort_transferred, transferredTxCount))
-
-        if (stakingTxCount > 0) {
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_staking, stakingTxCount))
-        }
-
-        if (coinbaseTxCount > 0) {
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_coinbase, coinbaseTxCount))
-        }
-
         withContext(Dispatchers.Main){
+            availableTxTypes.add(context!!.getString(R.string.tx_sort_all, txCount))
+            availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
+            availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))
+            availableTxTypes.add(context!!.getString(R.string.tx_sort_transferred, transferredTxCount))
+
+            if (stakingTxCount > 0) {
+                availableTxTypes.add(context!!.getString(R.string.tx_sort_staking, stakingTxCount))
+            }
+
+            if (coinbaseTxCount > 0) {
+                availableTxTypes.add(context!!.getString(R.string.tx_sort_coinbase, coinbaseTxCount))
+            }
+
             txTypeSortAdapter?.notifyDataSetChanged()
         }
     }
@@ -152,8 +159,10 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
             else -> 0
         }
 
-        val jsonResult = wallet!!.getTransactions(offset, limit, txFilter)
+        val jsonResult = wallet!!.getTransactions(offset, limit, txFilter, newestTransactionsFirst)
         val tempTxs = gson.fromJson(jsonResult, Array<Transaction>::class.java)
+
+        initialLoadingDone.set(true)
 
         if (tempTxs == null) {
             loadedAll = true
@@ -199,15 +208,28 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        txFilter = when(position){
-            0 -> Dcrlibwallet.TxFilterAll
-            1 -> Dcrlibwallet.TxFilterSent
-            2 -> Dcrlibwallet.TxFilterReceived
-            3 -> Dcrlibwallet.TxFilterTransferred
-            else -> Dcrlibwallet.TxFilterStaking
+        if(!initialLoadingDone.get()){
+            return
         }
 
-        loadTransactions()
+        if (parent!!.id == R.id.timestamp_sort_spinner){
+            val newestFirst = position == 0 // "Newest" is the first item
+            if (newestFirst != newestTransactionsFirst){
+                newestTransactionsFirst = newestFirst
+                loadTransactions()
+            }
+        }else{
+            txFilter = when(position){
+                0 -> Dcrlibwallet.TxFilterAll
+                1 -> Dcrlibwallet.TxFilterSent
+                2 -> Dcrlibwallet.TxFilterReceived
+                3 -> Dcrlibwallet.TxFilterTransferred
+                else -> Dcrlibwallet.TxFilterStaking
+            }
+
+            loadTransactions()
+        }
+
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

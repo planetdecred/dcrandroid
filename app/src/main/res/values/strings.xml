@@ -289,6 +289,11 @@
     <string name="tap_this_to_copy_transaction_hash">Tap this to copy transaction hash</string>
     <string name="copy_hash">Copy hash</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; 693 Confirmations]]></string>
+
+    <string-array name="timestamp_sort">
+        <item>Newest</item>
+        <item>Oldest</item>
+    </string-array>
     <!--/Transaction-->
 
     <!--Block chain-->
