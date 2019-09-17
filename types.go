@@ -176,6 +176,12 @@ type WalletAccount struct {
 	AccountName   string `json:"account_name"`
 }
 
+type TransactionDestination struct {
+	Address    string
+	AtomAmount int64
+	SendMax    bool
+}
+
 /** end tx-related types */
 
 /** begin ticket-related types */
