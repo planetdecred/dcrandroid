@@ -27,7 +27,7 @@ import java.lang.Exception
 class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account, val renameAccount:(newName: String) -> Exception?) : Dialog(ctx, R.style.FullWidthDialog) {
 
     private var wallet: LibWallet? = null
-    private var multiWallet: MultiWallet = WalletData.getInstance().multiWallet
+    private var multiWallet: MultiWallet = WalletData.multiWallet!!
 
     init {
         this.wallet = multiWallet.getWallet(walletID)

@@ -25,7 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 
-import com.dcrandroid.MainActivity;
+import com.dcrandroid.HomeActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 
@@ -383,7 +383,7 @@ public class Utils {
     public static String translateError(Context ctx, Exception e) {
         switch (e.getMessage()) {
             case Dcrlibwallet.ErrInsufficientBalance:
-                if (!WalletData.getInstance().synced) {
+                if (!WalletData.Companion.getInstance().getSynced()) {
                     return ctx.getString(R.string.not_enought_funds_synced);
                 }
                 return ctx.getString(R.string.not_enough_funds);
@@ -474,7 +474,7 @@ public class Utils {
     }
 
     public static void sendTransactionNotification(Context context, NotificationManager manager, String amount, int nonce) {
-        Intent launchIntent = new Intent(context, MainActivity.class);
+        Intent launchIntent = new Intent(context, HomeActivity.class);
         launchIntent.setAction(Constants.NEW_TRANSACTION_NOTIFICATION);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(context, "new transaction")

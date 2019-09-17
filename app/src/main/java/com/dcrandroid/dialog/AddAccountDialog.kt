@@ -23,7 +23,7 @@ import java.lang.Exception
 
 class AddAccountDialog(private val walletID: Long, private val accountCreated:(accountNumber: Int) -> Unit): CollapsedBottomSheetDialog() {
 
-    private var wallet: LibWallet = WalletData.getInstance().multiWallet.getWallet(walletID)
+    private var wallet: LibWallet = WalletData.multiWallet!!.getWallet(walletID)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.add_account_sheet, container, false)

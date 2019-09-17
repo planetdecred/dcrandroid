@@ -101,7 +101,7 @@ public class Constants {
             WALLET_ID = "wallet_id",
             RECENT_TRANSACTION_HASH = "recent_transaction_hash";
 
-    public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2;
+    public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2, DEFAULT_ACCOUNT_NUMBER = 0;
 
     public static final long ESTIMATED_ACCT_DISCOVERY = 300000;
 }

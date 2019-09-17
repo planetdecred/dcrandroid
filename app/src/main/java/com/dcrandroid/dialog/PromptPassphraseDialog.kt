@@ -28,7 +28,7 @@ class PromptPassphraseDialog(val walletID: Long, val passEntered:(passphrase: St
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val wallet = WalletData.getInstance().multiWallet.getWallet(walletID)
+        val wallet = WalletData.multiWallet!!.getWallet(walletID)
         if(wallet.spendingPassphraseType == Dcrlibwallet.SpendingPassphraseTypePass){
             spending_pin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             spending_pass_layout.hint = getString(R.string.spending_password)

@@ -28,11 +28,11 @@ import kotlinx.android.synthetic.main.wallet_row.view.*
 class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
     private var wallets: ArrayList<LibWallet>
-    private val multiWallet = WalletData.getInstance().multiWallet
+    private val multiWallet = WalletData.multiWallet
     private var expanded = -1
 
     init {
-        wallets = multiWallet.openedWalletsList()
+        wallets = multiWallet!!.openedWalletsList()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsViewHolder {
@@ -119,7 +119,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                         RenameAccountDialog(wallet.walletName, true){newName ->
 
                             try{
-                                multiWallet.renameWallet(wallet.walletID, newName)
+                                multiWallet!!.renameWallet(wallet.walletID, newName)
                             }catch (e: Exception){
                                 return@RenameAccountDialog e
                             }
@@ -135,7 +135,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
     }
 
     fun addWallet(walletID: Long){
-        val wallet = multiWallet.getWallet(walletID)
+        val wallet = multiWallet!!.getWallet(walletID)
         wallets.add(wallet)
         notifyItemInserted(wallets.size - 1)
     }
@@ -143,7 +143,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
     fun walletBackupVerified(walletID: Long){
         wallets.forEachIndexed { index, wallet ->
             if(wallet.walletID == walletID){
-                wallets[index] = multiWallet.getWallet(walletID)
+                wallets[index] = multiWallet!!.getWallet(walletID)
                 notifyItemChanged(index)
                 return
             }

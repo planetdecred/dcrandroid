@@ -17,11 +17,21 @@ class CoinFormat {
 
     companion object {
         fun format(str: String, relativeSize: Float = 0.7f): Spannable {
-            val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d{2,}").matcher(str)
-            val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d").matcher(str)
-            val noDecimal = Pattern.compile("([0-9]{1,3},*)+").matcher(str)
-
             val spannable = SpannableString(str)
+
+            return formatSpannable(spannable, relativeSize)
+        }
+
+        fun formatSpannable(spannable: Spannable, relativeSize: Float = 0.7f): Spannable{
+
+            val removeRelativeSpan = spannable.getSpans(0, spannable.length, RelativeSizeSpan::class.java)
+            for(span in removeRelativeSpan){
+                spannable.removeSpan(span)
+            }
+
+            val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d{2,}").matcher(spannable)
+            val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d").matcher(spannable)
+            val noDecimal = Pattern.compile("([0-9]{1,3},*)+").matcher(spannable)
 
             val span = RelativeSizeSpan(relativeSize)
 
@@ -29,21 +39,21 @@ class CoinFormat {
             val endIndex: Int
             when {
                 doubleOrMoreDecimalPlaces.find() -> {
-                    startIndex = str.indexOf(".", doubleOrMoreDecimalPlaces.start()) + 3
-                    endIndex = str.length
+                    startIndex = spannable.indexOf(".", doubleOrMoreDecimalPlaces.start()) + 3
+                    endIndex = spannable.length
                 }
                 oneDecimalPlace.find() -> {
-                    startIndex = str.indexOf(".", oneDecimalPlace.start()) + 2
-                    endIndex = str.length
+                    startIndex = spannable.indexOf(".", oneDecimalPlace.start()) + 2
+                    endIndex = spannable.length
                 }
                 noDecimal.find() -> {
                     startIndex = noDecimal.end()
-                    endIndex = str.length
+                    endIndex = spannable.length
                 }
                 else -> return spannable
             }
 
-            spannable.setSpan(span, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(span, startIndex, endIndex, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             return spannable
         }
 

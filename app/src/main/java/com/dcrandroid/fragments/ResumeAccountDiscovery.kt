@@ -39,8 +39,8 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
     private var wallet: LibWallet? = null
 
     fun setWalletID(walletID: Long): ResumeAccountDiscovery{
-        val multiWallet = WalletData.getInstance().multiWallet
-        this.wallet = multiWallet.getWallet(walletID)
+        val multiWallet = WalletData.instance.multiWallet
+        this.wallet = multiWallet!!.getWallet(walletID)
         return this
     }
 
@@ -89,7 +89,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
             resume_restore_pass.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         }
 
-        if(WalletData.getInstance().multiWallet.openedWalletsCount() > 1){
+        if(WalletData.instance.multiWallet!!.openedWalletsCount() > 1){
             unlock_title.text = getString(R.string.multi_resume_account_discovery_title, wallet!!.walletName)
         }
 

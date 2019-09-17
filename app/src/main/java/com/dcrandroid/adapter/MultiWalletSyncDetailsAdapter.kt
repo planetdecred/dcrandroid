@@ -22,8 +22,7 @@ import com.dcrandroid.util.Utils
 
 class MultiWalletSyncDetailsAdapter(private val context: Context, private var openedWallets: List<Long>): RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
 
-    private val multiWallet: MultiWallet
-    get() = WalletData.getInstance().multiWallet
+    private val multiWallet: MultiWallet = WalletData.multiWallet!!
 
     var fetchProgressReport: HeadersFetchProgressReport? = null
 

@@ -34,7 +34,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
         requiredConfirmations = if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0
         else Constants.REQUIRED_CONFIRMATIONS
 
-        wallet = WalletData.getInstance().multiWallet.getWallet(walletID)
+        wallet = WalletData.multiWallet!!.getWallet(walletID)
         accounts = wallet.walletAccounts(requiredConfirmations)
     }
 

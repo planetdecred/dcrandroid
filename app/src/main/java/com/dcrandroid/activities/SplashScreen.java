@@ -75,8 +75,8 @@ public class SplashScreen extends BaseActivity {
                     loadThread.interrupt();
                 }
 
-                if (walletData.multiWallet != null) {
-                    walletData.multiWallet.shutdown();
+                if (walletData.getMultiWallet() != null) {
+                    walletData.getMultiWallet().shutdown();
                 }
 
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
@@ -111,23 +111,23 @@ public class SplashScreen extends BaseActivity {
     }
 
     private void startup() {
-        walletData = WalletData.getInstance();
+        walletData = WalletData.Companion.getInstance();
 
         try {
-            if (walletData.multiWallet != null) {
-                walletData.multiWallet.shutdown();
+            if (walletData.getMultiWallet() != null) {
+                walletData.getMultiWallet().shutdown();
             }
 
-            walletData.multiWallet = null;
+            walletData.setMultiWallet(null);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         String homeDir = getFilesDir() + "/wallet";
-        walletData.multiWallet = new MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType);
+        walletData.setMultiWallet(new MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType));
         Dcrlibwallet.setLogLevels(util.get(Constants.LOGGING_LEVEL));
 
-        if (walletData.multiWallet.loadedWalletsCount() == 0) {
+        if (walletData.getMultiWallet().loadedWalletsCount() == 0) {
             loadThread = new Thread() {
                 public void run() {
                     try {
@@ -163,13 +163,13 @@ public class SplashScreen extends BaseActivity {
         loadThread = new Thread() {
             public void run() {
                 try {
-                    if(walletData.multiWallet.loadedWalletsCount() > 1){
+                    if(walletData.getMultiWallet().loadedWalletsCount() > 1){
                         setText(getString(R.string.opening_wallets));
                     }else{
                         setText(getString(R.string.opening_wallet));
                     }
 
-                    walletData.multiWallet.openWallets(publicPass.getBytes());
+                    walletData.getMultiWallet().openWallets(publicPass.getBytes());
 
                     Intent i = new Intent(SplashScreen.this, HomeActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -204,17 +204,17 @@ public class SplashScreen extends BaseActivity {
                                 }).setPositiveButton(getString(R.string.retry_caps), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent i;
-
-                                        if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
-                                            i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
-                                        } else {
-                                            i = new Intent(SplashScreen.this, EnterPassCode.class);
-                                        }
-
-                                        i.putExtra(Constants.SPENDING_PASSWORD, false);
-                                        i.putExtra(Constants.NO_RETURN, true);
-                                        startActivityForResult(i, PASSWORD_REQUEST_CODE);
+//                                        Intent i;
+//
+//                                        if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+//                                            i = new Intent(SplashScreen.this, EnterPasswordActivity.class);
+//                                        } else {
+//                                            i = new Intent(SplashScreen.this, EnterPassCode.class);
+//                                        }
+//
+//                                        i.putExtra(Constants.SPENDING_PASSWORD, false);
+//                                        i.putExtra(Constants.NO_RETURN, true);
+//                                        startActivityForResult(i, PASSWORD_REQUEST_CODE);
                                     }
                                 });
                             }
@@ -233,17 +233,17 @@ public class SplashScreen extends BaseActivity {
 
     public void checkEncryption() {
         if (util.getBoolean(Constants.ENCRYPT)) {
-            Intent i;
-
-            if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
-                i = new Intent(this, EnterPasswordActivity.class);
-            } else {
-                i = new Intent(this, EnterPassCode.class);
-            }
-
-            i.putExtra(Constants.SPENDING_PASSWORD, false);
-            i.putExtra(Constants.NO_RETURN, true);
-            startActivityForResult(i, PASSWORD_REQUEST_CODE);
+//            Intent i;
+//
+////            if (util.get(Constants.STARTUP_PASSPHRASE_TYPE).equals(Constants.PASSWORD)) {
+////                i = new Intent(this, EnterPasswordActivity.class);
+////            } else {
+////                i = new Intent(this, EnterPassCode.class);
+////            }
+//
+//            i.putExtra(Constants.SPENDING_PASSWORD, false);
+//            i.putExtra(Constants.NO_RETURN, true);
+//            startActivityForResult(i, PASSWORD_REQUEST_CODE);
         } else {
             openWallet(Constants.INSECURE_PUB_PASSPHRASE);
         }

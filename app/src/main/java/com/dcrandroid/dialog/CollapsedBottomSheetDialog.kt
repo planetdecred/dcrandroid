@@ -18,7 +18,7 @@ import com.dcrandroid.util.WalletData
 
 open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
 
-    protected val multiWallet = WalletData.getInstance().multiWallet
+    protected val multiWallet = WalletData.multiWallet
 
     override fun getTheme(): Int = R.style.BottomSheetDialogStyle
 

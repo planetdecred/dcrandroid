@@ -21,11 +21,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.dcrandroid.BuildConfig
-import com.dcrandroid.MainActivity
 import com.dcrandroid.R
-import com.dcrandroid.activities.EnterPassCode
 import com.dcrandroid.activities.ReaderActivity
-import com.dcrandroid.activities.TransactionDetailsActivity
 import com.dcrandroid.adapter.AccountSpinnerAdapter
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
@@ -51,7 +48,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     private var SEND_ACCOUNT = false
     private val SCANNER_ACTIVITY_REQUEST_CODE = 0
     private val PASSCODE_REQUEST_CODE = 1
-    private var constants: WalletData = WalletData.getInstance()
+    private var constants: WalletData = WalletData.instance
     private var textChanged: Boolean = false
     private var isSendAll: Boolean = false
     private var exchangeRate: Double = -1.0
@@ -63,7 +60,7 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
     private var pd: ProgressDialog? = null
     private val wallet: LibWallet
         get() {
-            return constants.wallet
+            return constants.wallet!!
         }
 
     private val requiredConfirmations: Int
@@ -483,8 +480,8 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
 
             transactionDialog.setPositiveButton(DialogInterface.OnClickListener { _, _ ->
                 if (util!!.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
-                    val intent = Intent(context, EnterPassCode::class.java)
-                    startActivityForResult(intent, PASSCODE_REQUEST_CODE)
+//                    val intent = Intent(context, EnterPassCode::class.java)
+//                    startActivityForResult(intent, PASSCODE_REQUEST_CODE)
                 } else {
                     startTransaction(transactionDialog.getPassphrase())
                 }
@@ -568,24 +565,24 @@ class SendFragment : Fragment(), AdapterView.OnItemSelectedListener, GetExchange
                 .setMessage("${getString(R.string.hash_colon)}\n$txHash")
                 .setPositiveButton(getString(R.string.ok), DialogInterface.OnClickListener { _, _ ->
                     run {
-                        if (activity != null && activity is MainActivity) {
-                            val mainActivity = activity as MainActivity
-                            mainActivity.displayOverview()
-                        }
+//                        if (activity != null && activity is MainActivity) {
+//                            val mainActivity = activity as MainActivity
+//                            mainActivity.displayOverview()
+//                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.view_cap), DialogInterface.OnClickListener { d, _ ->
                     d.dismiss()
-                    val intent = Intent(context, TransactionDetailsActivity::class.java)
-                    intent.putExtra(Constants.HASH, txHash)
-                    intent.putExtra(Constants.NO_INFO, true)
-                    startActivity(intent)
-                    run {
-                        if (activity != null && activity is MainActivity) {
-                            val mainActivity = activity as MainActivity
-                            mainActivity.displayOverview()
-                        }
-                    }
+//                    val intent = Intent(context, TransactionDetailsActivity::class.java)
+//                    intent.putExtra(Constants.HASH, txHash)
+//                    intent.putExtra(Constants.NO_INFO, true)
+//                    startActivity(intent)
+//                    run {
+//                        if (activity != null && activity is MainActivity) {
+//                            val mainActivity = activity as MainActivity
+//                            mainActivity.displayOverview()
+//                        }
+//                    }
                 })
 
         dialog.setCancelable(true)

@@ -102,7 +102,7 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MultiWallet multiWallet = WalletData.getInstance().multiWallet;
+                MultiWallet multiWallet = WalletData.Companion.getMultiWallet();
 
                 if (multiWallet.openedWalletsCount() > 1) {
                     Intent data = new Intent();
@@ -133,7 +133,7 @@ public class SetupWalletActivity extends BaseActivity implements PasswordPinDial
             public void run() {
                 try {
 
-                    MultiWallet multiWallet = WalletData.getInstance().multiWallet;
+                    MultiWallet multiWallet = WalletData.Companion.getMultiWallet();
                     if (multiWallet == null) {
                         throw new NullPointerException(getString(R.string.create_wallet_uninitialized));
                     }

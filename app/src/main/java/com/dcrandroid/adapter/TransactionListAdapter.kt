@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
@@ -34,7 +33,7 @@ import kotlin.collections.ArrayList
 class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>): RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val multiWallet = WalletData.getInstance().multiWallet
+    val multiWallet = WalletData.multiWallet
     val util = PreferenceUtil(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
@@ -49,7 +48,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
     override fun onBindViewHolder(holder: TransactionListViewHolder, position: Int) {
         val transaction = transactions[position]
 
-        if(multiWallet.openedWalletsCount() > 1){
+        if(multiWallet!!.openedWalletsCount() > 1){
             holder.walletName.apply {
                 show()
                 text = transaction.walletName

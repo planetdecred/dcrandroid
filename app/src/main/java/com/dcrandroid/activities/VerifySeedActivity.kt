@@ -6,7 +6,6 @@
 
 package com.dcrandroid.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -32,7 +31,7 @@ class VerifySeedActivity : BaseActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private var wallet: LibWallet? = null
-    private var multiWallet: MultiWallet = WalletData.getInstance().multiWallet
+    private var multiWallet: MultiWallet = WalletData.multiWallet!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

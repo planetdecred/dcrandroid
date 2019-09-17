@@ -11,15 +11,14 @@ import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
-import java.text.FieldPosition
 
 open class BaseFragment : Fragment(), SyncProgressListener {
 
     var TAG = this.javaClass.name
 
-    private val walletData: WalletData = WalletData.getInstance()
+    private val walletData: WalletData = WalletData.instance
     internal val multiWallet: MultiWallet
-        get() = walletData.multiWallet
+        get() = walletData.multiWallet!!
 
     override fun onStart() {
         super.onStart()

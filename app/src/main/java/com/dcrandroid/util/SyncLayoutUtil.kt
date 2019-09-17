@@ -33,7 +33,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
         get() = syncLayout.context
 
     private val multiWallet: MultiWallet
-        get() = WalletData.getInstance().multiWallet
+        get() = WalletData.multiWallet!!
 
     private var syncDetailsAdapter: MultiWalletSyncDetailsAdapter
     private var openedWallets: ArrayList<Long> = ArrayList()

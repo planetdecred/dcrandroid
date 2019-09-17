@@ -33,7 +33,7 @@ class AccountPickerDialog(val accountSelected:(account: Account) -> Unit?): Coll
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val multiWallet = WalletData.getInstance().multiWallet
+        val multiWallet = WalletData.multiWallet!!
         val wallets = multiWallet.openedWalletsList()
 
         val items = ArrayList<Any>()

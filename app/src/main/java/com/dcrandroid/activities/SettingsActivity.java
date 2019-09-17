@@ -27,7 +27,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.dcrandroid.BuildConfig;
-import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.DeleteWalletDialog;
@@ -73,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             getActivity().setTitle(getActivity().getString(R.string.settings));
 
-            wallet = WalletData.getInstance().wallet;
+            wallet = WalletData.Companion.getInstance().wallet;
 
             util = new PreferenceUtil(getActivity());
             pd = Utils.getProgressDialog(getActivity(), false, false, "");
@@ -225,6 +224,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            /*
             findPreference("change_spending_passphrase").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -265,6 +265,8 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+
+
             encryptWallet.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
@@ -290,6 +292,9 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+
+             */
 
             findPreference("rescan_block").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -329,7 +334,7 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (util.get(Constants.SPENDING_PASSPHRASE_TYPE).equals(Constants.PIN)) {
-                                startActivityForResult(new Intent(getActivity(), EnterPassCode.class), DELETE_WALLET_PASSCODE_REQUEST_CODE);
+//                                startActivityForResult(new Intent(getActivity(), EnterPassCode.class), DELETE_WALLET_PASSCODE_REQUEST_CODE);
                             } else {
                                 deleteWallet(deleteWalletDialog.getPassphrase());
                             }
@@ -344,25 +349,25 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean wifiSync = (Boolean) newValue;
-                    if (getActivity() instanceof MainActivity) {
-                        if (wifiSync) {
-                            if (!WalletData.getInstance().synced) {
-                                ((MainActivity) getActivity()).startSyncing();
-                            }
-                        } else {
-                            ConnectivityManager connectionManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                            if (connectionManager != null) {
-                                NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
-                                if (networkInfo != null && networkInfo.isConnected()) {
-                                    if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-                                        WalletData.getInstance().multiWallet.cancelSync();
-                                    }
-                                } else {
-                                    WalletData.getInstance().multiWallet.cancelSync();
-                                }
-                            }
-                        }
-                    }
+//                    if (getActivity() instanceof MainActivity) {
+//                        if (wifiSync) {
+////                            if (!WalletData.Companion.getInstance().getSynced()) {
+////                                ((MainActivity) getActivity()).startSyncing();
+////                            }
+//                        } else {
+//                            ConnectivityManager connectionManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+//                            if (connectionManager != null) {
+//                                NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+//                                if (networkInfo != null && networkInfo.isConnected()) {
+//                                    if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
+//                                        WalletData.Companion.getMultiWallet().cancelSync();
+//                                    }
+//                                } else {
+//                                    WalletData.Companion.getMultiWallet().cancelSync();
+//                                }
+//                            }
+//                        }
+//                    }
                     return true;
                 }
             });

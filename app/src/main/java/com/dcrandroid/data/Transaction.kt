@@ -6,6 +6,7 @@
 
 package com.dcrandroid.data
 
+import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.google.gson.annotations.SerializedName
 import dcrlibwallet.Dcrlibwallet
@@ -37,13 +38,16 @@ class Transaction : Serializable {
         return if(height == Dcrlibwallet.BlockHeightInvalid){
             0
         }else{
-            (WalletData.getInstance().multiWallet.bestBlock.height - height) + 1
+            (WalletData.multiWallet!!.bestBlock.height - height) + 1
         }
     }
 
+    val hashBytes: ByteArray
+    get() = Utils.getHash(hash)
+
     val walletName: String?
     get(){
-        return WalletData.getInstance().multiWallet.getWallet(walletID)?.walletName
+        return WalletData.multiWallet!!.getWallet(walletID)?.walletName
     }
 
     @Transient

@@ -27,6 +27,7 @@ import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.ReceiveDialog
+import com.dcrandroid.dialog.send.SendDialog
 import com.dcrandroid.dialog.WiFiSyncDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
@@ -55,10 +56,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     private lateinit var alertSound: SoundPool
     private lateinit var currentFragment: Fragment
 
-    private val walletData: WalletData = WalletData.getInstance()
 
-    private var multiWallet: MultiWallet? = null
-        get() = walletData.multiWallet
+    private val multiWallet = WalletData.instance.multiWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +66,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         setSupportActionBar(toolbar)
 
         util = PreferenceUtil(this)
-        if (multiWallet == null) {
+        if(multiWallet == null){
             println("Restarting app")
             Utils.restartApp(this)
         }
@@ -88,8 +87,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         blockNotificationSound = alertSound.load(this, R.raw.beep, 1)
 
         try {
-            walletData.multiWallet.removeSyncProgressListener(TAG)
-            walletData.multiWallet.addSyncProgressListener(this, TAG)
+            multiWallet!!.removeSyncProgressListener(TAG)
+            multiWallet!!.addSyncProgressListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -100,6 +99,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         fab_receive.setOnClickListener {
             ReceiveDialog().show(supportFragmentManager, null)
+        }
+
+        fab_send.setOnClickListener {
+            SendDialog().show(supportFragmentManager, null)
         }
     }
 
@@ -302,7 +305,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {
-        walletData.peers = numberOfConnectedPeers
+        WalletData.instance.peers = numberOfConnectedPeers
     }
 
     override fun onSyncCompleted() {

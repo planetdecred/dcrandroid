@@ -43,7 +43,7 @@ class SyncService : Service(), SyncProgressListener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "Service is Started")
 
-        walletData = WalletData.getInstance()
+        walletData = WalletData.instance
         multiWallet = walletData!!.multiWallet
 
         if (multiWallet == null) {
