@@ -118,11 +118,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:id="@+id/fab_send"
                 android:gravity="center"
                 android:background="@drawable/send_button_effect"
                 android:focusable="true"
-                android:clickable="true"
-                >
+                android:clickable="true" >
 
                 <TextView
                     android:layout_width="wrap_content"

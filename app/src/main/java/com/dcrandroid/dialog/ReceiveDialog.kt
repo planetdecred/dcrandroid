@@ -6,20 +6,15 @@
 
 package com.dcrandroid.dialog
 
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.core.content.FileProvider
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
@@ -27,19 +22,16 @@ import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.data.Account
 import com.dcrandroid.extensions.openedWalletsList
+import com.dcrandroid.util.AccountCustomSpinner
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.receive_page_sheet.*
-import kotlinx.android.synthetic.main.tx_details_list_header.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -53,9 +45,8 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiveDialog: BottomSheetDialogFragment() {
+class ReceiveDialog: FullScreenBottomSheetDialog() {
 
-    private val multiWallet = WalletData.getInstance().multiWallet
     private var wallet: LibWallet? = null
 
     private var selectedAccount: Account? = null
@@ -63,39 +54,7 @@ class ReceiveDialog: BottomSheetDialogFragment() {
     private val qrHints = HashMap<EncodeHintType, Any>()
     private var generatedUri: Uri? = null
 
-    override fun getTheme(): Int = R.style.BottomSheetDialogStyle
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        super.onCreateDialog(savedInstanceState)
-
-        val dialog: Dialog = BottomSheetDialog(requireContext(), theme)
-
-        dialog.setOnShowListener {
-            val bottomSheetDialog = dialog as BottomSheetDialog
-            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
-
-            val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val metrics = DisplayMetrics()
-            wm.defaultDisplay.getMetrics(metrics)
-
-            bottomSheetBehavior.peekHeight = metrics.heightPixels
-
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                }
-
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    }
-                }
-            })
-        }
-
-        return dialog
-    }
+    private lateinit var sourceAccountSpinner: AccountCustomSpinner
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.receive_page_sheet, container, false)
@@ -107,47 +66,37 @@ class ReceiveDialog: BottomSheetDialogFragment() {
         qrHints[EncodeHintType.MARGIN] = 0
         qrHints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
 
-        go_back.setOnClickListener { dismiss() }
-
-        iv_info.setOnClickListener {
-            InfoDialog(context!!)
-                    .setDialogTitle(getString(R.string.receive_dcr))
-                    .setMessage(getString(R.string.receive_fund_privacy_info))
-                    .setPositiveButton(getString(R.string.got_it), null)
-                    .show()
-        }
-
-        iv_options.setOnClickListener {
-            val items = arrayOf(
-                    PopupItem(R.string.generate_new_address)
-            )
-
-            PopupUtil.showPopup(it, items){window, _ ->
-                window.dismiss()
-
-                generateNewAddress()
-            }
-        }
-
         share_qr_code.setOnClickListener { shareQrImage() }
 
         tv_address.setOnClickListener { copyAddress() }
         qr_image.setOnClickListener { copyAddress() }
 
-        account_input_layout.setEndIconOnClickListener{
-            AccountPickerDialog {
-                selectedAccount = it
-                wallet = multiWallet.getWallet(it.walletID)
-                setAddress(wallet!!.currentAddress(it.accountNumber))
-                return@AccountPickerDialog Unit
-            }.show(activity!!.supportFragmentManager, null)
+        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner){
+            selectedAccount = it
+            wallet = multiWallet.getWallet(it.walletID)
+            setAddress(wallet!!.currentAddress(it.accountNumber))
+            return@AccountCustomSpinner Unit
         }
+    }
 
-        // Generate address from default account
-        // for first wallet on the list
-        wallet = multiWallet.openedWalletsList()[0]
-        selectedAccount = Account.from(wallet!!.getAccount(0, 2))
-        setAddress(wallet!!.currentAddress(selectedAccount!!.accountNumber))
+    override fun showInfo() {
+        InfoDialog(context!!)
+                .setDialogTitle(getString(R.string.receive_dcr))
+                .setMessage(getString(R.string.receive_fund_privacy_info))
+                .setPositiveButton(getString(R.string.got_it), null)
+                .show()
+    }
+
+    override fun showOptionsMenu(v: View) {
+        val items = arrayOf(
+                PopupItem(R.string.generate_new_address)
+        )
+
+        PopupUtil.showPopup(v, items){window, _ ->
+            window.dismiss()
+
+            generateNewAddress()
+        }
     }
 
     private fun copyAddress(){

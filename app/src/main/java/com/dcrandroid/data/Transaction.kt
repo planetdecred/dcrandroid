@@ -11,6 +11,7 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.annotations.SerializedName
 import dcrlibwallet.Dcrlibwallet
 import java.io.Serializable
+import java.math.BigDecimal
 
 class Transaction : Serializable {
     @SerializedName("walletID")
@@ -81,4 +82,16 @@ class Transaction : Serializable {
         @SerializedName("address")
         var address: String? = null
     }
+}
+
+class TransactionData {
+    lateinit var dcrAmount: BigDecimal
+    var exchangeDecimal: BigDecimal? = null
+
+    var sendMax = false
+
+    lateinit var sourceAccount: Account
+
+    var destinationAccount: Account? = null
+    lateinit var destinationAddress: String
 }

@@ -15,7 +15,7 @@
     <string name="require_to_send_fund">Necessário enviar fundos</string>
     <string name="add_an_account">ADICIONAR UMA CONTA</string>
     <string name="available_balance">SALDO DISPONÍVEL</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Insira ou escaneie o endereço da carteira de destino e o valor em DCR para enviar fundos.</string>
+    <string name="send_dcr_info">Insira ou escaneie o endereço da carteira de destino e o valor em DCR para enviar fundos.</string>
     <string name="max">ENVIAR MÁX</string>
     <string name="type">Tipo</string>
     <string name="loading">Carregando</string>
@@ -356,8 +356,6 @@
     <string name="wallet_log">Registro Da Carteira</string>
     <string name="crash_title">Forçar Quebra</string>
     <string name="remote_address_invalid">Endereço Remoto inválido</string>
-    <string name="key_rescan_block" translatable="false">rescan_block</string>
-    <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
     <string name="new_block_notification_description">Apitar ao um novo bloco.</string>
     <string name="new_block_notification">Notificação De Novo Bloco</string>
     <string name="currency_conversion">Comversão De Moeda</string>
@@ -458,7 +456,7 @@
     <string name="total_sending">Total Do Envio:</string>
     <string name="balance_after">Saldo Após Envio:</string>
     <string name="amount_is_empty">Quantidade está vazia</string>
-    <string name="_8_decimal_amount_err">Quantidade tem mais que 8 casas decimais</string>
+    <string name="_8_decimal_amount_err">Quantidade tem mais que %1$d casas decimais</string>
     <string name="bytes">bytes</string>
     <string name="decred_colon">decred:</string>
     <string name="exchange_rate">Fator De Conversão:</string>

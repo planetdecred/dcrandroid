@@ -36,6 +36,7 @@
     <dimen name="margin_padding_size_8">8dp</dimen>
     <dimen name="margin_padding_size_12">12dp</dimen>
     <dimen name="margin_padding_size_16">16dp</dimen>
+    <dimen name="margin_padding_size_18">18dp</dimen>
     <dimen name="margin_padding_size_20">20dp</dimen>
     <dimen name="margin_padding_size_24">24dp</dimen>
     <dimen name="margin_padding_size_32">32dp</dimen>

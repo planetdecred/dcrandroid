@@ -16,7 +16,7 @@
     <string name="require_to_send_fund">Требуется пересылка средств</string>
     <string name="add_an_account">ДОБАВИТЬ АККАУНТ</string>
     <string name="available_balance">ДОСТУПНЫЙ БАЛАНС</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Для пересылки средств введите или отсканируйте адрес кошелька-получателя/и сумму в DCR.</string>
+    <string name="send_dcr_info">Для пересылки средств введите или отсканируйте адрес кошелька-получателя/и сумму в DCR.</string>
     <string name="max">ПЕРЕСЛАТЬ МАКСИМУМ</string>
     <string name="type">Тип</string>
     <string name="loading">Загружается</string>

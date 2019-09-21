@@ -14,19 +14,24 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import com.dcrandroid.R
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.spending_passphrase_prompt_sheet.*
 
-class PromptPassphraseDialog(val walletID: Long, val passEntered:(passphrase: String?) -> Unit): CollapsedBottomSheetDialog() {
+class PromptPassphraseDialog(val walletID: Long, @StringRes val dialogTitle: Int, val passEntered:(passphrase: String?) -> Unit): CollapsedBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.spending_passphrase_prompt_sheet, container, false)
     }
 
+    var confirmed = false
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        dialog_title.setText(dialogTitle)
 
         val wallet = WalletData.multiWallet!!.getWallet(walletID)
         if(wallet.spendingPassphraseType == Dcrlibwallet.SpendingPassphraseTypePass){
@@ -48,13 +53,21 @@ class PromptPassphraseDialog(val walletID: Long, val passEntered:(passphrase: St
 
         btn_cancel.setOnClickListener{dismiss()}
         btn_confirm.setOnClickListener {
-            dismiss()
+            confirmed = true
             passEntered(spending_pin.text.toString())
+            dismiss()
         }
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        passEntered(null)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        passEntered(null)
+        if(!confirmed){
+            passEntered(null)
+        }
     }
 }

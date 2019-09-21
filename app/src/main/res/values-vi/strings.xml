@@ -13,7 +13,7 @@
     <string name="require_to_send_fund">Yêu cầu gửi tiền</string>
     <string name="add_an_account">THÊM MỘT TÀI KHOẢN</string>
     <string name="available_balance">SỐ DƯ KHẢ DỤNG</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Nhập hoặc quét địa chỉ ví đích\và số tiền trong DCR để gửi tiền.</string>
+    <string name="send_dcr_info">Nhập hoặc quét địa chỉ ví đích\và số tiền trong DCR để gửi tiền.</string>
     <string name="max">GỬI TỐI ĐA</string>
     <string name="type">Kiểu</string>
     <string name="loading">Đang tải</string>
@@ -411,7 +411,7 @@
     <string name="total_sending">Tổng số gửi:</string>
     <string name="balance_after">Số dư sau:</string>
     <string name="amount_is_empty">Số tiền trống</string>
-    <string name="_8_decimal_amount_err">Số tiền có nhiều hơn 8 chữ số thập phân</string>
+    <string name="_8_decimal_amount_err">Số tiền có nhiều hơn %1$d chữ số thập phân</string>
     <string name="bytes">bytes</string>
     <string name="decred_colon">decred:</string>
     <string name="exchange_rate">Tỷ giá:</string>

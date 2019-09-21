@@ -51,7 +51,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
 
         holder.walletName.text = wallet.walletName
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
-                Utils.formatDecred(wallet.totalWalletBalance(context)))
+                Utils.formatDecredWithComma(wallet.totalWalletBalance(context)))
 
         if(wallet.walletSeed.isNullOrBlank()){
             holder.backupNeeded.hide()
@@ -114,7 +114,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
             PopupUtil.showPopup(it, items){window, index ->
                window.dismiss()
                 when(index){
-                    0 -> { // rename account
+                    0 -> { // rename wallet
                         val activity = context as AppCompatActivity
                         RenameAccountDialog(wallet.walletName, true){newName ->
 
@@ -128,6 +128,10 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
 
                             return@RenameAccountDialog null
                         }.show(activity.supportFragmentManager, null)
+                    }
+                    3 -> {
+                        println("Deleting Wallet")
+                        multiWallet!!.deleteWallet(wallet.walletID, "".toByteArray())
                     }
                 }
             }

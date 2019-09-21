@@ -66,7 +66,7 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context,
             holder.itemView.account_row_total_balance.text = CoinFormat.format(item.balance.total)
 
             holder.itemView.account_row_spendable_balance.text = context.getString(R.string.dcr_amount,
-                    Utils.formatDecred(item.balance.spendable))
+                    Utils.formatDecredWithComma(item.balance.spendable))
 
             holder.itemView.setOnClickListener {
                 accountSelected(item)

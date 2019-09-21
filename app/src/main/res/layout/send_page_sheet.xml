@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/app_bar"
+        app:cardBackgroundColor="@color/colorBackground"
+        app:cardElevation="@dimen/margin_padding_size_4"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_padding_size_8"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/margin_padding_size_8"
+                android:background="@drawable/circular_transparent_ripple"
+                android:focusable="true"
+                android:clickable="true"
+                android:id="@+id/go_back"
+                app:srcCompat="@drawable/ic_close" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:text="@string/send_dcr"
+                android:textSize="@dimen/edit_text_size_20"
+                android:textColor="@color/darkBlueTextColor"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/iv_info"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:layout_marginEnd="@dimen/margin_padding_size_8"
+                    app:srcCompat="@drawable/ic_info"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/circular_transparent_ripple" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/iv_options"
+                    android:padding="@dimen/margin_padding_size_8"
+                    app:srcCompat="@drawable/ic_more"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/circular_transparent_ripple" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/send_scroll_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/margin_padding_size_4"
+            android:paddingRight="@dimen/margin_padding_size_4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_4"
+                android:elevation="4dp"
+                android:background="@drawable/card_bg"
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:includeFontPadding="false"
+                    android:text="@string/from"
+                    android:textColor="@color/darkerBlueGrayTextColor"
+                    android:textSize="@dimen/edit_text_size_14"
+                    app:fontFamily="@font/source_sans_pro" />
+
+                <include
+                    layout="@layout/account_custom_spinner"
+                    android:id="@+id/source_account_spinner" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:id="@+id/dest_address_card"
+                android:elevation="4dp"
+                android:background="@drawable/card_bg"
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_padding_size_16"
+                        android:includeFontPadding="false"
+                        android:text="@string/to"
+                        android:textColor="@color/darkerBlueGrayTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_padding_size_16"
+                        android:gravity="end"
+                        android:text="@string/send_to_address"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/edit_text_size_14"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+                <include
+                    layout="@layout/account_custom_spinner"
+                    android:id="@+id/destination_account_spinner" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/amount_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_4"
+                android:layout_marginStart="@dimen/margin_padding_size_4"
+                android:layout_marginEnd="@dimen/margin_padding_size_4"
+                android:layout_marginBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_padding_size_16">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/darkerBlueGrayTextColor"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:text="@string/amount" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/darkerBlueGrayTextColor"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:gravity="end"
+                        android:id="@+id/spendable_balance"
+                        tools:text="Spendable: 7.51464806 DCR" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:background="@drawable/input_background"
+                    android:paddingStart="@dimen/margin_padding_size_16"
+                    android:paddingLeft="@dimen/margin_padding_size_16"
+                    android:paddingTop="@dimen/margin_padding_size_16"
+                    android:paddingBottom="@dimen/margin_padding_size_16"
+                    android:paddingRight="@dimen/margin_padding_size_4"
+                    android:paddingEnd="@dimen/margin_padding_size_4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <HorizontalScrollView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/send_amount_layout">
+
+                                <EditText
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/send_amount"
+                                    android:background="@color/white"
+                                    android:textSize="32sp"
+                                    android:textColorHint="@color/lightGrayTextColor"
+                                    android:textColor="@color/darkBlueTextColor"
+                                    app:fontFamily="@font/source_sans_pro"
+                                    android:textCursorDrawable="@null"
+                                    android:inputType="numberDecimal"
+                                    android:includeFontPadding="false"
+                                    android:lines="1"
+                                    android:hint="0" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/currency_label"
+                                    android:textSize="@dimen/edit_text_size_20"
+                                    android:textColor="@color/lightGrayTextColor"
+                                    android:text="@string/dcr"
+                                    android:textAllCaps="true"
+                                    android:includeFontPadding="false"
+                                    android:layout_marginLeft="@dimen/margin_padding_size_4"
+                                    android:layout_marginStart="@dimen/margin_padding_size_4"
+                                    app:fontFamily="@font/source_sans_pro" />
+
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:id="@+id/iv_send_max"
+                            android:padding="@dimen/margin_padding_size_8"
+                            android:layout_marginLeft="@dimen/margin_padding_size_4"
+                            android:layout_marginStart="@dimen/margin_padding_size_4"
+                            android:background="@drawable/circular_transparent_ripple"
+                            app:srcCompat="@drawable/ic_send_max" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/exchange_layout"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:id="@+id/swap_currency"
+                                app:srcCompat="@drawable/ic_swap" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="#e6eaed"
+                                android:layout_marginLeft="@dimen/margin_padding_size_8"
+                                android:layout_marginStart="@dimen/margin_padding_size_8" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/send_equivalent_value"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:includeFontPadding="false"
+                            android:text="90 USD" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/amount_error_text"
+                    android:layout_marginTop="@dimen/margin_padding_size_4"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:layout_marginLeft="@dimen/margin_padding_size_16"
+                    app:fontFamily="@font/source_sans_pro_regular"
+                    android:textSize="@dimen/edit_text_size_12"
+                    android:textColor="@color/orangeTextColor"
+                    android:visibility="gone"
+                    tools:text="@string/not_enough_funds"
+                    tools:visibility="visible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:background="#e6eaed" />
+
+                <include layout="@layout/fee_layout" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="6dp"
+        android:padding="@dimen/margin_padding_size_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/total_cost_layout"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/edit_text_size_14"
+                android:text="@string/total_cost"
+                android:textColor="@color/blueGraySecondTextColor"
+                app:fontFamily="@font/source_sans_pro_regular" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/total_cost"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/edit_text_size_16"
+                android:textColor="@color/darkBlueTextColor"
+                app:fontFamily="@font/source_sans_pro_regular"
+                android:text="@string/_dcr"
+                tools:text="3.14161775 DCR" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/balance_after_layout"
+            android:layout_below="@id/total_cost_layout"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/edit_text_size_14"
+                android:text="@string/balance_after_send"
+                android:textColor="@color/blueGraySecondTextColor"
+                app:fontFamily="@font/source_sans_pro_regular" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/balance_after_send"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/edit_text_size_16"
+                android:textColor="@color/darkBlueTextColor"
+                android:text="@string/_dcr"
+                app:fontFamily="@font/source_sans_pro_regular"
+                tools:text="7.51464806 DCR" />
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/textViewButton"
+            android:id="@+id/send_next"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/balance_after_layout"
+            android:text="@string/next"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            android:padding="@dimen/margin_padding_size_16"
+            android:gravity="center"
+            android:textSize="@dimen/edit_text_size_18" />
+
+    </RelativeLayout>
+
+</LinearLayout>

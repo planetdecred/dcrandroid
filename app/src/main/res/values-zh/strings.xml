@@ -15,7 +15,7 @@
        <string name="require_to_send_fund">请求发送金额</string>
        <string name="add_an_account">添加账户</string>
        <string name="available_balance">可用余额</string>
-       <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">输入或扫描目标地址并输入发送的DCR数目。</string>
+       <string name="send_dcr_info">输入或扫描目标地址并输入发送的DCR数目。</string>
        <string name="max">发送所有资金</string>
        <string name="type">类别</string>
        <string name="loading">加载中</string>
@@ -410,7 +410,7 @@
        <string name="total_sending">总共发送:</string>
        <string name="balance_after">发送后余额:</string>
        <string name="amount_is_empty">金额为空</string>
-       <string name="_8_decimal_amount_err">金额超过8位小数</string>
+       <string name="_8_decimal_amount_err">金额超过%1$d位小数</string>
        <string name="bytes">bytes</string>
        <string name="decred_colon">decred:</string>
        <string name="exchange_rate">交易所汇率:</string>

@@ -285,14 +285,6 @@ public class Utils {
         return seconds + "s";
     }
 
-    public static String formatDecred(long dcr) {
-        BigDecimal satoshi = BigDecimal.valueOf(dcr);
-        BigDecimal amount = satoshi.divide(BigDecimal.valueOf(1e8), new MathContext(100));
-        DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
-        format.applyPattern("#,###,###,##0.########");
-        return format.format(amount);
-    }
-
     public static String removeTrailingZeros(double dcr) {
         DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
         format.applyPattern("#,###,###,##0.########");

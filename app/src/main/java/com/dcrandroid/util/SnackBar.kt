@@ -16,6 +16,9 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.dcrandroid.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SnackBar {
 
@@ -35,8 +38,15 @@ class SnackBar {
             showText(0, context, text, length, R.drawable.orange_bg_corners_4dp)
         }
 
+        fun showError(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+            val position = IntArray(2)
+            anchorView.getLocationOnScreen(position)
+
+            showText(position[1], anchorView.context, text, length, R.drawable.orange_bg_corners_4dp)
+        }
+
         private fun showText(x: Int = 0, context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT,
-                            @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp){
+                            @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp) = GlobalScope.launch(Dispatchers.Main){
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.snackbar, null)
             view.setBackgroundResource(backgroundResource)
@@ -51,13 +61,17 @@ class SnackBar {
             }
 
             val topMargin = context.resources.getDimensionPixelSize(R.dimen.margin_padding_size_64)
-            val viewX = (x - statusBarHeight) + topMargin
-            view.translationY = viewX.toFloat()
+            val viewY = if (x > 0){
+                (x - statusBarHeight) + topMargin
+            }else{
+                topMargin
+            }
+            view.translationY = viewY.toFloat()
 
             val t = Toast(context)
             t.view = view
             t.duration = length
-            t.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, viewX)
+            t.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, viewY)
             t.show()
             ObjectAnimator.ofFloat(view, "translationY", 0f).start()
         }

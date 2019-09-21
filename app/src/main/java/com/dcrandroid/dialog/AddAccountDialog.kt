@@ -52,7 +52,7 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
         btn_create.setOnClickListener{
             setEnabled(false)
 
-            PromptPassphraseDialog(walletID) { passphrase ->
+            PromptPassphraseDialog(walletID, R.string.confirm_to_create_account) { passphrase ->
 
                 if(passphrase != null){
                     val newName = new_account_name.text.toString()

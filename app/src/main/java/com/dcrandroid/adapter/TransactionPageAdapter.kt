@@ -130,7 +130,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                     icon = R.drawable.ic_ticket_voted
                     holder.itemView.vote_reward.show()
 
-                    val reward = Utils.formatDecred(104044861)
+                    val reward = Utils.formatDecredWithComma(104044861) // TODO:
                     holder.itemView.vote_reward.text = CoinFormat.format("+$reward DCR", 0.715f)
                 }
                 Dcrlibwallet.TxTypeRevocation -> {

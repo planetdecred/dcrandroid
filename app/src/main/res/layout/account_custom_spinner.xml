@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/margin_padding_size_16"
+    android:paddingStart="@dimen/margin_padding_size_16"
+    android:paddingRight="@dimen/margin_padding_size_8"
+    android:paddingEnd="@dimen/margin_padding_size_8"
+    android:paddingTop="@dimen/margin_padding_size_16"
+    android:paddingBottom="@dimen/margin_padding_size_18" >
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_accounts"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/margin_padding_size_24"
+        android:layout_marginStart="@dimen/margin_padding_size_24" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_account_name"
+            tools:text="@string/_default"
+            android:textSize="@dimen/edit_text_size_18"
+            android:textColor="@color/darkBlueTextColor"
+            app:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false" />
+
+
+        <TextView
+            android:id="@+id/spinner_wallet_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:includeFontPadding="false"
+            android:paddingTop="@dimen/margin_padding_size_2"
+            android:paddingBottom="@dimen/margin_padding_size_2"
+            android:paddingLeft="@dimen/margin_padding_size_4"
+            android:paddingRight="@dimen/margin_padding_size_4"
+            android:textColor="@color/lightGrayTextColor"
+            android:textSize="@dimen/edit_text_size_12"
+            app:fontFamily="@font/source_sans_pro"
+            tools:text="Wallet 2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end|center" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_total_balance"
+            android:textSize="@dimen/edit_text_size_20"
+            android:textColor="@color/darkBlueTextColor"
+            app:fontFamily="@font/source_sans_pro"
+            tools:text="7.51464806 DCR" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/spinner_dropdown"
+            app:srcCompat="@drawable/ic_dropdown"
+            android:padding="@dimen/margin_padding_size_8" />
+
+    </LinearLayout>
+
+</LinearLayout>

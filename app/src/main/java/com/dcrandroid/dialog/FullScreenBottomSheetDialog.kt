@@ -9,20 +9,20 @@ package com.dcrandroid.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import com.dcrandroid.R
+import com.dcrandroid.util.WalletData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.dcrandroid.util.WalletData
 
-open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
+open class FullScreenBottomSheetDialog: BottomSheetDialogFragment(){
 
-    protected val multiWallet = WalletData.multiWallet
+    protected val multiWallet = WalletData.multiWallet!!
 
     override fun getTheme(): Int = R.style.BottomSheetDialogStyle
 
@@ -35,6 +35,13 @@ open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
             val bottomSheetDialog = dialog as BottomSheetDialog
             val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
+
+            val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val metrics = DisplayMetrics()
+            wm.defaultDisplay.getMetrics(metrics)
+
+            bottomSheetBehavior.peekHeight = metrics.heightPixels
+
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -53,13 +60,20 @@ open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         view?.findViewById<ImageView>(R.id.go_back)?.setOnClickListener {
             dismiss()
         }
+
+        view?.findViewById<ImageView>(R.id.iv_info)?.setOnClickListener {
+            showInfo()
+        }
+
+        view?.findViewById<ImageView>(R.id.iv_options)?.setOnClickListener {
+            showOptionsMenu(it)
+        }
     }
 
-    fun show(context: Context) {
-        val activity = context as AppCompatActivity
-        super.show(activity.supportFragmentManager, tag)
-    }
+    open fun showInfo(){}
+    open fun showOptionsMenu(v: View){}
 }

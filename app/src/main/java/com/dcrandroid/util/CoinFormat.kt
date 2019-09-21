@@ -29,40 +29,46 @@ class CoinFormat {
                 spannable.removeSpan(span)
             }
 
-            val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d{2,}").matcher(spannable)
-            val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)+\\.)\\d").matcher(spannable)
+            val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)*\\.)\\d{2,}").matcher(spannable)
+            val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)*\\.)\\d").matcher(spannable)
             val noDecimal = Pattern.compile("([0-9]{1,3},*)+").matcher(spannable)
 
             val span = RelativeSizeSpan(relativeSize)
 
-            val startIndex: Int
-            val endIndex: Int
-            when {
-                doubleOrMoreDecimalPlaces.find() -> {
-                    startIndex = spannable.indexOf(".", doubleOrMoreDecimalPlaces.start()) + 3
-                    endIndex = spannable.length
-                }
-                oneDecimalPlace.find() -> {
-                    startIndex = spannable.indexOf(".", oneDecimalPlace.start()) + 2
-                    endIndex = spannable.length
-                }
-                noDecimal.find() -> {
-                    startIndex = noDecimal.end()
-                    endIndex = spannable.length
-                }
-                else -> return spannable
+            var startIndex: Int = -1
+
+            if (noDecimal.find()) {
+                startIndex = noDecimal.end()
             }
 
-            spannable.setSpan(span, startIndex, endIndex, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            if(oneDecimalPlace.find()){
+                val start = spannable.indexOf(".", oneDecimalPlace.start())
+                if(start <= startIndex || startIndex == -1){
+                    startIndex = start  + 2
+                }
+            }
+
+            if(doubleOrMoreDecimalPlaces.find()){
+                val start = spannable.indexOf(".", doubleOrMoreDecimalPlaces.start())
+                if(start <= startIndex || startIndex == -1){
+                    startIndex = start  + 3
+                }
+            }
+
+            if(startIndex == -1){
+                return spannable
+            }
+
+            spannable.setSpan(span, startIndex, spannable.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             return spannable
         }
 
-        fun format(amount: Long, relativeSize: Float = 0.7f): Spannable {
-            return format(Dcrlibwallet.amountCoin(amount), relativeSize)
+        fun format(amount: Long, relativeSize: Float = 0.7f, suffix: String = " DCR"): Spannable {
+            return format(Dcrlibwallet.amountCoin(amount), relativeSize, suffix)
         }
 
-        fun format(amount: Double, relativeSize: Float = 0.7f): Spannable {
-            return format(Utils.removeTrailingZeros(amount) + " DCR", relativeSize)
+        fun format(amount: Double, relativeSize: Float = 0.7f, suffix: String = " DCR"): Spannable {
+            return format(Utils.removeTrailingZeros(amount) + suffix, relativeSize)
         }
     }
 }
