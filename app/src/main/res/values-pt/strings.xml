@@ -41,7 +41,7 @@
     <string name="confirmations">Confirmação</string>
     <string name="testnet">testnet</string>
     <string name="general">Geral</string>
-    <string name="view_on_dcrdata">ver em dcrdata</string>
+    <string name="view_on_dcrdata">Ver em dcrdata</string>
     <string name="build_date">Data de construção</string>
     <string name="build">construir</string>
     <string name="copy_on_tap">(copiar em um toque)</string>

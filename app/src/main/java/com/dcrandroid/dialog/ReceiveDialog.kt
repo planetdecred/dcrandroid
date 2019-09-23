@@ -100,7 +100,7 @@ class ReceiveDialog: FullScreenBottomSheetDialog() {
     }
 
     private fun copyAddress(){
-        Utils.copyToClipboard(context, tv_address.text.toString(), R.string.address_copy_text)
+        Utils.copyToClipboard(top_bar, tv_address.text.toString(), R.string.address_copy_text)
     }
 
     private fun setAddress(address: String) = GlobalScope.launch(Dispatchers.Main){

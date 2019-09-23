@@ -78,9 +78,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         layoutManager = LinearLayoutManager(context)
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
+        recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
 
         initAdapter()
 
@@ -90,10 +88,8 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         if(context == null || transactions.size < 5 || !initialLoadingDone.get()) return
 
         val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            transactions_page_header.elevation = if(firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-            else 0f
-        }
+        transactions_page_header.elevation = if(firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+        else 0f
 
         val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
         if(lastVisibleItem >= transactions.size - 5){

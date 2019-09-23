@@ -6,6 +6,8 @@
 
 package com.dcrandroid.data
 
+import com.dcrandroid.BuildConfig
+import com.dcrandroid.R
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.google.gson.annotations.SerializedName
@@ -35,39 +37,79 @@ class Transaction : Serializable {
     @SerializedName("timestamp")
     var timestamp: Long = 0
     val confirmations: Int
-    get() {
-        return if(height == Dcrlibwallet.BlockHeightInvalid){
-            0
-        }else{
-            (WalletData.multiWallet!!.bestBlock.height - height) + 1
+        get() {
+            return if (height == Dcrlibwallet.BlockHeightInvalid) {
+                0
+            } else {
+                (WalletData.multiWallet!!.bestBlock.height - height) + 1
+            }
         }
-    }
+
+    val confirmationIcon: Int
+        get() {
+            return if(confirmations > 1)
+                R.drawable.ic_confirmed
+            else R.drawable.ic_pending
+        }
 
     val hashBytes: ByteArray
-    get() = Utils.getHash(hash)
+        get() = Utils.getHash(hash)
 
     val walletName: String?
-    get(){
-        return WalletData.multiWallet!!.getWallet(walletID)?.walletName
-    }
+        get() {
+            return WalletData.multiWallet!!.getWallet(walletID)?.walletName
+        }
+
+    val timestampMillis: Long
+        get() = timestamp * 1000
+
+    val iconResource: Int
+        get() {
+            var res = when (direction) {
+                Dcrlibwallet.TxDirectionSent -> R.drawable.ic_send
+                Dcrlibwallet.TxDirectionReceived -> R.drawable.ic_receive
+                else -> R.drawable.ic_wallet
+            }
+
+            // replace icon for staking tx types
+            if (Dcrlibwallet.compareTxFilter(Dcrlibwallet.TxFilterStaking, type, direction)) {
+
+                res = when (type) {
+                    Dcrlibwallet.TxTypeTicketPurchase -> {
+                        if (confirmations < BuildConfig.TicketMaturity) {
+                            R.drawable.ic_ticket_immature
+                        } else {
+                            R.drawable.ic_ticket_live
+                        }
+                    }
+                    Dcrlibwallet.TxTypeVote -> R.drawable.ic_ticket_voted
+                    else -> R.drawable.ic_ticket_revoked
+                }
+
+            }
+
+            return res
+        }
 
     @Transient
     var animate = false
 
-    @SerializedName("credits")
-    var outputs: ArrayList<TransactionOutput>? = null
-    @SerializedName("debits")
-    var inputs: ArrayList<TransactionInput>? = null
+    @SerializedName("outputs")
+    var outputs: Array<TransactionOutput>? = null
+    @SerializedName("inputs")
+    var inputs: Array<TransactionInput>? = null
 
     class TransactionInput : Serializable {
-        @SerializedName("previous_account")
-        var previousAccount: Long = 0
-        @SerializedName("index")
+        @SerializedName("previous_transaction_index")
         var index: Int = 0
         @SerializedName("amount")
         var amount: Long = 0
         @SerializedName("account_name")
         var accountName: String? = null
+        @SerializedName("previous_account")
+        var accountNumber: Int? = null
+        @SerializedName("previous_outpoint")
+        var previousOutpoint: String? = null
     }
 
     class TransactionOutput : Serializable {
@@ -76,6 +118,8 @@ class Transaction : Serializable {
         @SerializedName("previous_account")
         var account: Int = 0
         @SerializedName("account_name")
+        var accountName: String? = null
+        @SerializedName("amount")
         var amount: Long = 0
         @SerializedName("internal")
         var internal: Boolean = false

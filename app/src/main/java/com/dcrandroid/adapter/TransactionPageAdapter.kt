@@ -16,6 +16,7 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
@@ -33,7 +34,6 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
         val view = layoutInflater.inflate(R.layout.transaction_page_row, parent, false)
         return TransactionListViewHolder(view)
     }
-
 
     override fun getItemCount(): Int {
         return transactions.size
@@ -70,6 +70,8 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
         val transaction = transactions[position]
         val requiredConfs = if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS
 
+        holder.icon.setImageResource(transaction.iconResource)
+
         holder.itemView.ticket_price.hide()
         holder.itemView.days_to_vote.hide()
         holder.itemView.vote_reward.hide()
@@ -98,12 +100,6 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
 
             holder.itemView.ticket_price.hide()
 
-            val iconRes = when {
-                transaction.direction == 0 -> R.drawable.ic_send
-                transaction.direction == 1 -> R.drawable.ic_receive
-                else -> R.drawable.ic_tx_transferred
-            }
-            holder.icon.setImageResource(iconRes)
         } else if(Dcrlibwallet.compareTxFilter(Dcrlibwallet.TxFilterStaking, transaction.type, transaction.direction)){
 
             holder.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
@@ -113,21 +109,17 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                 text = CoinFormat.format(transaction.amount, 0.715f)
             }
 
-            var icon = 0
             var title = 0
             when(transaction.type){
                 Dcrlibwallet.TxTypeTicketPurchase ->{
-                    if (transaction.confirmations < BuildConfig.TicketMaturity) {
-                        icon = R.drawable.ic_ticket_immature
-                        title = R.string.immature
+                    title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
+                        R.string.immature
                     }else{
-                        icon = R.drawable.ic_ticket_live
-                        title = R.string.live
+                        R.string.live
                     }
                 }
                 Dcrlibwallet.TxTypeVote ->{
                     title = R.string.vote
-                    icon = R.drawable.ic_ticket_voted
                     holder.itemView.vote_reward.show()
 
                     val reward = Utils.formatDecredWithComma(104044861) // TODO:
@@ -135,7 +127,6 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                 }
                 Dcrlibwallet.TxTypeRevocation -> {
                     title = R.string.revoked
-                    icon = R.drawable.ic_ticket_revoked
                 }
             }
 
@@ -143,12 +134,12 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                 holder.itemView.days_to_vote.show()
             }
 
-            holder.icon.setImageResource(icon)
             holder.amount.setText(title)
-
         }
 
-        holder.itemView.setOnClickListener { println("Hash: ${transaction.hash}") }
+        holder.itemView.setOnClickListener {
+            TransactionDetailsDialog(transaction).show(context)
+        }
 
     }
 

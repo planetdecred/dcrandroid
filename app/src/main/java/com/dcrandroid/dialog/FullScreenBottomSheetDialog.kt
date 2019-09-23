@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.util.WalletData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -48,8 +49,8 @@ open class FullScreenBottomSheetDialog: BottomSheetDialogFragment(){
                 }
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                        dismiss()
                     }
                 }
             })
@@ -76,4 +77,9 @@ open class FullScreenBottomSheetDialog: BottomSheetDialogFragment(){
 
     open fun showInfo(){}
     open fun showOptionsMenu(v: View){}
+
+    fun show(context: Context) {
+        val activity = context as AppCompatActivity
+        super.show(activity.supportFragmentManager, javaClass.name)
+    }
 }

@@ -43,7 +43,7 @@
     <string name="confirmations">Confirmation</string>
     <string name="testnet">testnet</string>
     <string name="general">General</string>
-    <string name="view_on_dcrdata">view on dcrdata</string>
+    <string name="view_on_dcrdata">View on dcrdata</string>
     <string name="build_date">Build Date</string>
     <string name="build">build</string>
     <string name="copy_on_tap">(copy on tap)</string>
@@ -185,7 +185,7 @@
     <string name="input_account_name">Enter a name for your account</string>
     <string name="hd_path">HD Path</string>
     <string name="default_account_info">Make this account default for all outgoing and incoming transactions.</string>
-    <string name="external">external</string>
+    <string name="external">External</string>
     <string name="internal">internal</string>
     <string name="imported">imported</string>
     <string name="rename_account">Rename Account</string>
@@ -291,7 +291,7 @@
     <string name="tap_this_to_copy_raw_transaction_hex">Tap this to copy raw transaction hex</string>
     <string name="tap_this_to_copy_transaction_hash">Tap this to copy transaction hash</string>
     <string name="copy_hash">Copy hash</string>
-    <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; 693 Confirmations]]></string>
+    <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; %1$d Confirmations]]></string>
 
     <string-array name="timestamp_sort">
         <item>Newest</item>
@@ -435,6 +435,7 @@
 
     <!--History Fragment -->
     <string name="coinbase" translatable="false">Coinbase</string>
+    <string name="transferred">Transferred</string>
     <string name="sent">Sent</string>
     <string name="yourself">Yourself</string>
     <string name="received">Received</string>
@@ -511,12 +512,7 @@
     <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
     <!--/Transaction Details View-->
 
-    <!--Confirm Transaction Dialog-->
     <string name="toConfirmEnterYourPassword">To confirm, enter your password:</string>
-    <string name="withFeeOff">with a fee of</string>
-    <string name="total">Total</string>
-    <string name="to_account">to account \'%1$s\'</string>
-    <!--/Confirm Transaction Dialog-->
 
     <!--Security-->
     <string name="erase_char">⌫</string>
@@ -587,8 +583,7 @@
     <string name="not_now">Not now</string>
     <!--/WIFI Sync-->
 
-    <string name="external_output_amount">%1$s DCR (external)</string>
-    <string name="external_output_account">%1$s DCR (%2$s)</string>
+    <string name="tx_details_account">%1$s DCR (%2$s)</string>
 
     <!--Landing page-->
     <string name="decred_text">de<b>CRED</b></string>
@@ -705,5 +700,18 @@
     <string name="success">Success</string>
     <string name="send_fail_msg">Failed to send. Please try again.</string>
     <string name="transaction_sent">Transaction sent</string>
+    <string name="from_account">From account</string>
+    <string name="included_in_block">Included in block</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="tx_id_copied">Transaction ID copied</string>
+    <string name="to_account">To account</string>
+    <string name="how_to_copy">How to copy</string>
+    <string name="tx_details_copy_info"><![CDATA[Tap on <font color="#2970FF">blue text</font> to copy the item.]]></string>
+    <string name="x_inputs_consumed">%1$d Inputs consumed</string>
+    <string name="x_output_created">%1$d Outputs created</string>
+    <string name="previous_outpoint_copied">Previous outpoint copied</string>
+    <string name="to_address">To address</string>
+    <string name="am">am</string>
+    <string name="pm">pm</string>
 
 </resources>

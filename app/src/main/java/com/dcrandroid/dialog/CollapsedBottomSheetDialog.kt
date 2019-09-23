@@ -60,6 +60,6 @@ open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
 
     fun show(context: Context) {
         val activity = context as AppCompatActivity
-        super.show(activity.supportFragmentManager, tag)
+        super.show(activity.supportFragmentManager, javaClass.name)
     }
 }

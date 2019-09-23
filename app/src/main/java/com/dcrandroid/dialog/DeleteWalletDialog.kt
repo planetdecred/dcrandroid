@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.PreferenceUtil
-import kotlinx.android.synthetic.main.confirm_tx_dialog.*
+import kotlinx.android.synthetic.main.delete_wallet_dialog.*
 
 class DeleteWalletDialog(context: Context) : Dialog(context), View.OnClickListener {
     private var btnPositiveClick: DialogInterface.OnClickListener? = null

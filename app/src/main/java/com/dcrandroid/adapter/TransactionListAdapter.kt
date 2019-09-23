@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
@@ -70,7 +71,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
             transaction.animate = false
         }
 
-        if (transaction.type == Dcrlibwallet.TxTypeRegular) run {
+        if (transaction.type == Dcrlibwallet.TxTypeRegular) {
             val strAmount = Utils.formatDecredWithComma(transaction.amount)
 
             holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
@@ -81,6 +82,10 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
                 else -> R.drawable.ic_tx_transferred
             }
             holder.icon.setImageResource(iconRes)
+        }
+
+        holder.itemView.setOnClickListener {
+            TransactionDetailsDialog(transaction).show(context)
         }
 
     }

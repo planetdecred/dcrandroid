@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_primary_corners_8dp"
+    android:padding="@dimen/margin_padding_size_16"
+    android:layout_marginBottom="@dimen/margin_padding_size_8">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/amount"
+        tools:text="0.67320257 DCR (external)"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_16"
+        android:fontFamily="@font/source_sans_pro" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address"
+        tools:text="911dcc4f7572b3853d10489f837fd14a0f1eb01cb005bf3113c62bf410c9eb34:0"
+        android:breakStrategy="simple"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/edit_text_size_14"
+        android:fontFamily="@font/source_sans_pro"
+        android:layout_marginTop="@dimen/margin_padding_size_4" />
+
+</LinearLayout>
