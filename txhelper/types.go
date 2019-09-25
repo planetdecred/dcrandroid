@@ -6,9 +6,9 @@ const (
 	TxDirectionReceived    int32 = 1
 	TxDirectionTransferred int32 = 2
 
-	TxTypeRegular        = "REGULAR"
-	TxTypeCoinBase       = "COINBASE"
-	TxTypeTicketPurchase = "TICKET_PURCHASE"
-	TxTypeVote           = "VOTE"
-	TxTypeRevocation     = "REVOCATION"
+	TxTypeRegular        = "Regular"
+	TxTypeCoinBase       = "Coinbase"
+	TxTypeTicketPurchase = "Ticket"
+	TxTypeVote           = "Vote"
+	TxTypeRevocation     = "Revocation"
 )

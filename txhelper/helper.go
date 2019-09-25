@@ -43,14 +43,14 @@ func TransactionAmountAndDirection(inputTotal, outputTotal, fee int64) (amount i
 func FormatTransactionType(txType wallet.TransactionType) string {
 	switch txType {
 	case wallet.TransactionTypeCoinbase:
-		return "Coinbase"
+		return TxTypeCoinBase
 	case wallet.TransactionTypeTicketPurchase:
-		return "Ticket"
+		return TxTypeTicketPurchase
 	case wallet.TransactionTypeVote:
-		return "Vote"
+		return TxTypeVote
 	case wallet.TransactionTypeRevocation:
-		return "Revocation"
+		return TxTypeRevocation
 	default:
-		return "Regular"
+		return TxTypeRegular
 	}
 }

@@ -133,7 +133,7 @@ type TxInput struct {
 	PreviousOutpoint         string `json:"previous_outpoint"`
 	Amount                   int64  `json:"amount"`
 	AccountName              string `json:"account_name"`
-	AccountNumber            int32  `json:"previous_account"`
+	AccountNumber            int32  `json:"account_number"`
 }
 
 type TxOutput struct {
@@ -144,7 +144,7 @@ type TxOutput struct {
 	Address       string `json:"address"`
 	Internal      bool   `json:"internal"`
 	AccountName   string `json:"account_name"`
-	AccountNumber int32  `json:"previous_account"`
+	AccountNumber int32  `json:"account_number"`
 }
 
 // TxInfoFromWallet contains tx data that relates to the querying wallet.
@@ -165,7 +165,7 @@ type WalletInput struct {
 
 type WalletOutput struct {
 	Index     int32  `json:"index"`
-	AmountOut int64  `json:"amount"`
+	AmountOut int64  `json:"amount_out"`
 	Internal  bool   `json:"internal"`
 	Address   string `json:"address"`
 	*WalletAccount

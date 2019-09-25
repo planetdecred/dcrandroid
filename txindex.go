@@ -29,7 +29,7 @@ func (lw *LibWallet) IndexTransactions(afterIndexing func()) error {
 				return false, err
 			}
 
-			err = lw.txDB.SaveOrUpdate(tx.Hash, tx)
+			err = lw.txDB.SaveOrUpdate(&Transaction{}, tx)
 			if err != nil {
 				log.Errorf("Index tx replace tx err :%v", err)
 				return false, err
