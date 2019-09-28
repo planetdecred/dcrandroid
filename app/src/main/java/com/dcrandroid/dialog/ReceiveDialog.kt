@@ -6,9 +6,9 @@
 
 package com.dcrandroid.dialog
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -21,23 +21,19 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.data.Account
-import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.util.AccountCustomSpinner
+import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
-import com.dcrandroid.util.WalletData
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
-import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.receive_page_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.glxn.qrgen.android.MatrixToImageConfig
-import net.glxn.qrgen.android.MatrixToImageWriter
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -45,7 +41,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiveDialog: FullScreenBottomSheetDialog() {
+class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullScreenBottomSheetDialog(dismissListener) {
 
     private var wallet: LibWallet? = null
 
@@ -71,7 +67,7 @@ class ReceiveDialog: FullScreenBottomSheetDialog() {
         tv_address.setOnClickListener { copyAddress() }
         qr_image.setOnClickListener { copyAddress() }
 
-        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner){
+        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner, R.string.dest_account_picker_title) {
             selectedAccount = it
             wallet = multiWallet.getWallet(it.walletID)
             setAddress(wallet!!.currentAddress(it.accountNumber))
@@ -107,13 +103,10 @@ class ReceiveDialog: FullScreenBottomSheetDialog() {
         tv_address.text = address
 
         // Generate QR Code
-        val qrWriter = QRCodeWriter()
-        val matrix = qrWriter.encode(getString(R.string.decred_qr_address_prefix, address),
-                BarcodeFormat.QR_CODE,
-                1000, 1000,
-                qrHints)
+        val barcodeEncoder = BarcodeEncoder()
+        val generatedQR = barcodeEncoder.encodeBitmap(getString(R.string.decred_qr_address_prefix, address),
+                BarcodeFormat.QR_CODE, 1000, 1000, qrHints)
 
-        val generatedQR = MatrixToImageWriter.toBitmap(matrix, MatrixToImageConfig(Color.BLACK, Color.TRANSPARENT))
         qr_image.setImageBitmap(generatedQR)
 
         // generate URI

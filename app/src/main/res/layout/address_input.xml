@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="@dimen/margin_padding_size_16"
+    android:paddingStart="@dimen/margin_padding_size_16"
+    android:paddingEnd="@dimen/margin_padding_size_16"
+    android:clipToPadding="false"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/destination_address_layout"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/input_background"
+        android:padding="@dimen/margin_padding_size_12" >
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/send_dest_et"
+            android:background="@null"
+            android:textCursorDrawable="@null"
+            android:fontFamily="@font/source_sans_pro"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="@dimen/edit_text_size_16" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:id="@+id/send_dest_paste"
+            android:text="@string/paste"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/edit_text_size_14"
+            android:fontFamily="@font/source_sans_pro"
+            android:background="@drawable/paste_bg"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:paddingLeft="@dimen/margin_padding_size_8"
+            android:paddingRight="@dimen/margin_padding_size_8"
+            android:includeFontPadding="false" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/iv_scan"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:src="@drawable/ic_scan" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/destination_address_layout"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:layout_marginBottom="@dimen/margin_padding_size_8" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_dest_error"
+            android:textColor="@color/orangeTextColor"
+            android:textSize="@dimen/edit_text_size_14"
+            android:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/send_dest_hint"
+        android:maxLines="2"
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="@color/lightGrayTextColor"
+        android:text="@string/destination_address"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/source_sans_pro"
+        android:background="@color/white"
+        android:layout_marginStart="@dimen/margin_padding_size_12"
+        android:paddingStart="4dp"
+        android:paddingEnd="@dimen/margin_padding_size_4" />
+
+</RelativeLayout>

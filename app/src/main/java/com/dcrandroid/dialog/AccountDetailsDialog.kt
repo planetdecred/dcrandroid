@@ -52,10 +52,7 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
         account_details_keys.text = context.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
 
         if(account.accountNumber == wallet!!.defaultAccount){
-            default_account_switch.apply {
-                isChecked = true
-                isEnabled = false
-            }
+            default_account_switch.isChecked = true
         }else if(account.accountNumber == Int.MAX_VALUE){ // imported account
             default_account_row.hide()
             account_details_icon.setImageResource(R.drawable.ic_accounts_locked)
@@ -87,9 +84,13 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
             }.show(activity.supportFragmentManager, null)
         }
 
-        default_account_switch.setOnClickListener {
-            multiWallet.setDefaultAccount(walletID, account.accountNumber)
-            it.isEnabled = false
+        default_account_switch.setOnCheckedChangeListener { _, _ ->
+
+            if(account.accountNumber != wallet!!.defaultAccount){
+                multiWallet.setDefaultAccount(walletID, account.accountNumber)
+            }
+
+            default_account_switch.isChecked = true // button cannot be unchecked if checked
         }
 
     }

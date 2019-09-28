@@ -26,7 +26,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <!--/LightTheme-->
@@ -109,7 +109,7 @@
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
 
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#C4CBD2</item>
+        <item name="android:colorForeground">#c4cbd2</item>
     </style>
 
     <style name="TransactionsTabText" parent="@android:style/TextAppearance.Widget.TabWidget">

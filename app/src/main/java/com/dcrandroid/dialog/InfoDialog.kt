@@ -78,13 +78,13 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         return this
     }
 
-    fun setPositiveButton(text: String, listener: DialogInterface.OnClickListener?): InfoDialog {
+    fun setPositiveButton(text: String, listener: DialogInterface.OnClickListener? = null): InfoDialog {
         this.btnPositiveText = text
         this.btnPositiveClick = listener
         return this
     }
 
-    fun setNegativeButton(text: String, listener: DialogInterface.OnClickListener?): InfoDialog {
+    fun setNegativeButton(text: String, listener: DialogInterface.OnClickListener? = null): InfoDialog {
         this.btnNegativeText = text
         this.btnNegativeClick = listener
         return this

@@ -12,9 +12,7 @@
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/margin_padding_size_16"
     android:paddingStart="@dimen/margin_padding_size_16"
-    android:paddingRight="@dimen/margin_padding_size_8"
     android:paddingEnd="@dimen/margin_padding_size_8"
     android:paddingTop="@dimen/margin_padding_size_16"
     android:paddingBottom="@dimen/margin_padding_size_18" >

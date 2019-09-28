@@ -65,7 +65,7 @@
                 android:layout_height="40dp"
                 android:id="@+id/iv_options"
                 android:padding="@dimen/margin_padding_size_8"
-                app:srcCompat="@drawable/ic_more"
+                app:srcCompat="@drawable/ic_options"
                 android:focusable="true"
                 android:clickable="true"
                 android:background="@drawable/circular_transparent_ripple" />
@@ -78,9 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="@dimen/margin_padding_size_8"
         android:layout_marginStart="@dimen/margin_padding_size_8"
-        android:layout_marginRight="@dimen/margin_padding_size_8"
         android:layout_marginEnd="@dimen/margin_padding_size_8"
         android:layout_marginBottom="@dimen/margin_padding_size_8"
         android:background="@drawable/card_bg"
@@ -101,8 +99,8 @@
             android:layout_height="match_parent"
             android:paddingTop="@dimen/margin_padding_size_24"
             android:paddingBottom="@dimen/margin_padding_size_24"
-            android:paddingLeft="@dimen/margin_padding_size_16"
-            android:paddingRight="@dimen/margin_padding_size_16"
+            android:paddingStart="@dimen/margin_padding_size_16"
+            android:paddingEnd="@dimen/margin_padding_size_16"
             android:orientation="vertical"
             android:gravity="center_horizontal"
             >
@@ -171,7 +169,6 @@
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_18"
-                android:layout_marginLeft="@dimen/margin_padding_size_8"
                 android:layout_marginStart="@dimen/margin_padding_size_8" />
 
         </LinearLayout>

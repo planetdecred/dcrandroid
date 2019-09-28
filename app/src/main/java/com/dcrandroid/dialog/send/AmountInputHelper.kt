@@ -70,6 +70,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
     init {
         layout.send_amount.addTextChangedListener(this)
+        layout.send_amount.setOnFocusChangeListener { _, _ ->
+            setBackground()
+        }
+
         layout.iv_expand_fees.setOnClickListener(this)
         layout.swap_currency.setOnClickListener(this)
         fetchExchangeRate()
@@ -83,6 +87,22 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         println("Getting exchange rate")
         val userAgent = "" // TODO
         GetExchangeRate(userAgent, this).execute()
+    }
+
+    private fun setBackground() = GlobalScope.launch(Dispatchers.Main) {
+        var backgroundResource: Int
+
+        backgroundResource = if(layout.send_amount.hasFocus()){
+            R.drawable.input_background_active
+        }else{
+            R.drawable.input_background
+        }
+
+        if(layout.amount_error_text.text.isNotEmpty()){
+            backgroundResource = R.drawable.input_background_error
+        }
+
+        layout.amount_input_container.setBackgroundResource(backgroundResource)
     }
 
     override fun onClick(v: View?) {
@@ -160,7 +180,9 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
     fun setError(error: String?) = GlobalScope.launch(Dispatchers.Main){
         if(error == null){
+            layout.amount_error_text.text = null
             layout.amount_error_text.hide()
+            setBackground()
             return@launch
         }
 
@@ -168,6 +190,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             text = error
             show()
         }
+        setBackground()
     }
 
     var amountChanged: ((byUser :Boolean) -> Unit?)? = null

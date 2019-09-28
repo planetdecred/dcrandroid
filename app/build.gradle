@@ -83,11 +83,8 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.0-alpha01'
     implementation 'androidx.core:core:1.0.1'
 
-    // QR code scanner
+    // QR code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-
-    // QR code generator
-    implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
     // Crash report sender
     implementation 'ch.acra:acra:4.11', {

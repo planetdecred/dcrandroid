@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSheetDialog(), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
+class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSheetDialog(null), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.transaction_details, container, false)

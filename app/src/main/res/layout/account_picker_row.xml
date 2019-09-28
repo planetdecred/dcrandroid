@@ -28,7 +28,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginLeft="@dimen/margin_padding_size_16"
         android:layout_marginStart="@dimen/margin_padding_size_16"
         android:orientation="vertical">
 
@@ -59,7 +58,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_padding_size_16"
         android:layout_marginStart="@dimen/margin_padding_size_16"
         android:orientation="vertical">
 
@@ -87,5 +85,11 @@
             android:includeFontPadding="false"
             android:id="@+id/account_row_spendable_balance" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        />
 
 </LinearLayout>

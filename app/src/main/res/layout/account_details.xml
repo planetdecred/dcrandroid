@@ -7,6 +7,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -61,13 +62,11 @@
             app:srcCompat="@drawable/ic_accounts"
             android:id="@+id/account_details_icon"
             android:layout_marginTop="4dp"
-            android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginStart="@dimen/margin_padding_size_16"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginStart="@dimen/margin_padding_size_16"
             android:orientation="vertical"
             >
@@ -76,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/account_details_total_balance"
-                android:text="7.51464806 DCR"
+                tools:text="7.51464806 DCR"
                 android:textSize="32sp"
                 app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
@@ -97,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/account_details_spendable"
-                android:text="7.51464806 DCR"
+                tools:text="7.51464806 DCR"
                 android:textSize="20sp"
                 app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"

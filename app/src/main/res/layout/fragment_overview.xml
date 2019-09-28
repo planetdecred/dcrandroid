@@ -93,11 +93,10 @@
                     android:id="@+id/tv_online_offline_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="@dimen/margin_padding_size_4"
                     android:text="@string/online"
                     android:textColor="#091440"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/edit_text_size_12"
                     app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>

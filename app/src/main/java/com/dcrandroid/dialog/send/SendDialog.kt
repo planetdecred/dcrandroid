@@ -6,6 +6,9 @@
 
 package com.dcrandroid.dialog.send
 
+import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -22,9 +25,10 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.util.AccountCustomSpinner
+import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
+import com.dcrandroid.view.util.SCAN_QR_REQUEST_CODE
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.TxAuthor
 import dcrlibwallet.TxFeeAndSize
@@ -33,10 +37,11 @@ import kotlinx.android.synthetic.main.send_page_sheet.*
 import kotlinx.coroutines.*
 import java.util.*
 
-class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChangedListener {
+class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
+        FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
 
     lateinit var sourceAccountSpinner: AccountCustomSpinner
-    lateinit var destinationAddressHelper: DestinationAddressHelper
+    lateinit var destinationAddressCard: DestinationAddressCard
 
     lateinit var amountHelper: AmountInputHelper
 
@@ -45,13 +50,13 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
     private val validForConstruct: Boolean
         get() {
             return (amountHelper.dcrAmount != null || sendMax) &&
-                    destinationAddressHelper.estimationAddress != null
+                    destinationAddressCard.estimationAddress != null
         }
 
     private val validForSend: Boolean
         get() {
             return (amountHelper.dcrAmount != null || sendMax) &&
-                    destinationAddressHelper.destinationAddress != null
+                    destinationAddressCard.destinationAddress != null
         }
 
     private var authoredTxData: AuthoredTxData? = null
@@ -68,10 +73,13 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
         }
 
         sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager,
-                source_account_spinner, sourceAccountChanged)
+                source_account_spinner, R.string.source_account_picker_title, sourceAccountChanged)
 
-        destinationAddressHelper = DestinationAddressHelper(context!!, dest_address_card)
-        destinationAddressHelper.validateAddress = validateAddress
+        destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
+            addressChanged = this@SendDialog.addressChanged
+            destinationAddressHelper.addressChanged = this@SendDialog.addressChanged
+            destinationAccountSpinner.selectedAccountChanged = destAccountChanged
+        }
 
         send_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
 
@@ -100,8 +108,8 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
 
                 sourceAccount = sourceAccountSpinner.selectedAccount!!
 
-                destinationAddress = destinationAddressHelper.destinationAddress!!
-                destinationAccount = destinationAddressHelper.destinationAccount
+                destinationAddress = destinationAddressCard.destinationAddress!!
+                destinationAccount = destinationAddressCard.destinationAccount
             }
 
             ConfirmTransaction(sendSuccess)
@@ -133,20 +141,30 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
                 .show()
     }
 
-    val sourceAccountChanged: (Account) -> Unit = {
+    private val sourceAccountChanged: (Account) -> Unit = {
         amountHelper.selectedAccount = it
         constructTransaction()
     }
 
-    val amountChanged: (Boolean) -> Unit = { byUser ->
-        if (byUser) {
-            sendMax = false
-        }
+    private val destAccountChanged: (Account) -> Unit = {
+        constructTransaction()
+    }
 
-        if (amountHelper.dcrAmount != null && amountHelper.dcrAmount!!.toDouble() > 0) {
-            constructTransaction()
-        } else {
-            clearEstimates()
+    private val addressChanged:() -> Unit = {
+        constructTransaction()
+    }
+
+    val amountChanged: (Boolean) -> Unit = { byUser ->
+        if(view != null){
+            if (byUser) {
+                sendMax = false
+            }
+
+            if (amountHelper.dcrAmount != null && amountHelper.dcrAmount!!.toDouble() > 0) {
+                constructTransaction()
+            } else {
+                clearEstimates()
+            }
         }
     }
 
@@ -195,6 +213,7 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
 
     private fun constructTransaction() = GlobalScope.launch(Dispatchers.Main) {
         if (!validForConstruct) {
+            clearEstimates()
             return@launch
         }
 
@@ -248,7 +267,8 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
         try {
             txAuthor = sourceAccountSpinner.wallet.newUnsignedTx(selectedAccount.accountNumber,
                     Constants.REQUIRED_CONFIRMATIONS)// TODO:
-            txAuthor.addSendDestination(destinationAddressHelper.estimationAddress, amountAtom, sendMax)
+            println("Estimation address: ${destinationAddressCard.estimationAddress}")
+            txAuthor.addSendDestination(destinationAddressCard.estimationAddress, amountAtom, sendMax)
             feeAndSize = txAuthor.estimateFeeAndSize()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -296,6 +316,14 @@ class SendDialog : FullScreenBottomSheetDialog(), ViewTreeObserver.OnScrollChang
         }
 
         return txData
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK){
+            val result = data!!.getStringExtra(Constants.RESULT).replace("decred:", "")
+            destinationAddressCard.destinationAddressHelper.scanQRSuccess(result)
+        }
     }
 }
 

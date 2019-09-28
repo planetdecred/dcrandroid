@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/app_bar"
         app:cardBackgroundColor="@color/colorBackground"
-        app:cardElevation="@dimen/margin_padding_size_4"
+        app:cardElevation="0dp"
         >
 
         <LinearLayout
@@ -68,7 +68,7 @@
                     android:layout_height="40dp"
                     android:id="@+id/iv_options"
                     android:padding="@dimen/margin_padding_size_8"
-                    app:srcCompat="@drawable/ic_more"
+                    app:srcCompat="@drawable/ic_options"
                     android:focusable="true"
                     android:clickable="true"
                     android:background="@drawable/circular_transparent_ripple" />
@@ -133,8 +133,9 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_marginStart="@dimen/margin_padding_size_16"
                         android:includeFontPadding="false"
                         android:text="@string/to"
@@ -143,11 +144,12 @@
                         app:fontFamily="@font/source_sans_pro" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/send_dest_toggle"
                         android:layout_marginEnd="@dimen/margin_padding_size_16"
                         android:gravity="end"
-                        android:text="@string/send_to_address"
+                        android:text="@string/send_to_account"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro" />
@@ -155,11 +157,17 @@
                 </LinearLayout>
 
                 <include
+                    android:id="@+id/destination_address_container"
+                    layout="@layout/address_input" />
+
+                <include
                     layout="@layout/account_custom_spinner"
+                    android:visibility="gone"
                     android:id="@+id/destination_account_spinner" />
 
             </LinearLayout>
 
+            <!-- TODO: cards sections into files -->
             <LinearLayout
                 android:id="@+id/amount_card"
                 android:layout_width="match_parent"
@@ -205,12 +213,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:id="@+id/amount_input_container"
                     android:background="@drawable/input_background"
                     android:paddingStart="@dimen/margin_padding_size_16"
-                    android:paddingLeft="@dimen/margin_padding_size_16"
                     android:paddingTop="@dimen/margin_padding_size_16"
                     android:paddingBottom="@dimen/margin_padding_size_16"
-                    android:paddingRight="@dimen/margin_padding_size_4"
                     android:paddingEnd="@dimen/margin_padding_size_4">
 
                     <LinearLayout
@@ -254,7 +261,6 @@
                                     android:text="@string/dcr"
                                     android:textAllCaps="true"
                                     android:includeFontPadding="false"
-                                    android:layout_marginLeft="@dimen/margin_padding_size_4"
                                     android:layout_marginStart="@dimen/margin_padding_size_4"
                                     app:fontFamily="@font/source_sans_pro" />
 
@@ -266,7 +272,6 @@
                             android:layout_height="40dp"
                             android:id="@+id/iv_send_max"
                             android:padding="@dimen/margin_padding_size_8"
-                            android:layout_marginLeft="@dimen/margin_padding_size_4"
                             android:layout_marginStart="@dimen/margin_padding_size_4"
                             android:background="@drawable/circular_transparent_ripple"
                             app:srcCompat="@drawable/ic_send_max" />
@@ -298,8 +303,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:background="#e6eaed"
-                                android:layout_marginLeft="@dimen/margin_padding_size_8"
-                                android:layout_marginStart="@dimen/margin_padding_size_8" />
+                                android:layout_marginStart="@dimen/margin_padding_size_8"
+                                android:layout_marginEnd="@dimen/margin_padding_size_12"
+                                />
                         </LinearLayout>
 
                         <TextView
@@ -310,7 +316,7 @@
                             android:textColor="#596d81"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false"
-                            android:text="90 USD" />
+                            tools:text="90 USD" />
 
                     </LinearLayout>
 
@@ -322,7 +328,6 @@
                     android:id="@+id/amount_error_text"
                     android:layout_marginTop="@dimen/margin_padding_size_4"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:layout_marginLeft="@dimen/margin_padding_size_16"
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:textSize="@dimen/edit_text_size_12"
                     android:textColor="@color/orangeTextColor"

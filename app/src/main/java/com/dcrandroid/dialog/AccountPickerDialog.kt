@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.AccountPickerAdapter
@@ -21,7 +22,7 @@ import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
 import kotlinx.android.synthetic.main.account_picker_sheet.app_bar
 
-class AccountPickerDialog(val accountSelected:(account: Account) -> Unit?): CollapsedBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, val accountSelected:(account: Account) -> Unit?): CollapsedBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
     private var layoutManager: LinearLayoutManager? = null
@@ -32,6 +33,8 @@ class AccountPickerDialog(val accountSelected:(account: Account) -> Unit?): Coll
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        account_picker_title.setText(title)
 
         val multiWallet = WalletData.multiWallet!!
         val wallets = multiWallet.openedWalletsList()

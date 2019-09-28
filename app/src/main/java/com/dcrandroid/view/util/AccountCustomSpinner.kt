@@ -7,16 +7,19 @@
 package com.dcrandroid.util
 
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.AccountPickerDialog
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
+import com.dcrandroid.extensions.show
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 
 class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
-                           var sourceAccountChanged: ((Account) -> Unit?)? = null) : View.OnClickListener {
+                           @StringRes val pickerTitle: Int, var selectedAccountChanged: ((Account) -> Unit?)? = null) : View.OnClickListener {
 
     val context = spinnerLayout.context
 
@@ -38,15 +41,15 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         wallet = multiWallet!!.openedWalletsList()[0]
         // TODO: Remove required confimation param
         selectedAccount = Account.from(wallet.getAccount(Constants.DEFAULT_ACCOUNT_NUMBER, Constants.REQUIRED_CONFIRMATIONS))
-        sourceAccountChanged?.let { it1 -> it1(selectedAccount!!) }
+        selectedAccountChanged?.let { it1 -> it1(selectedAccount!!) }
         spinnerLayout.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        AccountPickerDialog{
+        AccountPickerDialog(pickerTitle){
             wallet = multiWallet!!.getWallet(it.walletID)
             selectedAccount = it
-            sourceAccountChanged?.let { it1 -> it1(it) }
+            selectedAccountChanged?.let { it1 -> it1(it) }
         }.show(fragmentManager, null)
     }
 
@@ -57,4 +60,17 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     fun getNewAddress(): String{
         return wallet.nextAddress(selectedAccount!!.accountNumber)
     }
+
+    fun isVisible(): Boolean{
+        return spinnerLayout.visibility == View.VISIBLE
+    }
+
+    fun show(){
+        spinnerLayout.show()
+    }
+
+    fun hide(){
+        spinnerLayout.hide()
+    }
+
 }

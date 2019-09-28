@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.ReceiveDialog
 import com.dcrandroid.dialog.send.SendDialog
 import com.dcrandroid.dialog.WiFiSyncDialog
@@ -33,6 +34,7 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.fragments.*
+import com.dcrandroid.fragments.more.MoreFragment
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
 import com.dcrandroid.util.PreferenceUtil
@@ -53,9 +55,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     private lateinit var adapter: NavigationTabsAdapter
     private lateinit var notificationManager: NotificationManager
     internal lateinit var util: PreferenceUtil
-    private lateinit var alertSound: SoundPool
-    private lateinit var currentFragment: Fragment
 
+    private lateinit var currentFragment: Fragment
+    private var currentBottomSheet: FullScreenBottomSheetDialog? = null
 
     private val multiWallet = WalletData.instance.multiWallet
 
@@ -73,22 +75,17 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         registerNotificationChannel()
 
-        alertSound = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val builder = SoundPool.Builder().setMaxStreams(3)
-            val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
-                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build()
-            builder.setAudioAttributes(attributes)
-            builder.build()
-        } else {
-            SoundPool(3, AudioManager.STREAM_NOTIFICATION, 0)
-        }
-
+        val builder = SoundPool.Builder().setMaxStreams(3)
+        val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build()
+        builder.setAudioAttributes(attributes)
+        val alertSound = builder.build()
         blockNotificationSound = alertSound.load(this, R.raw.beep, 1)
 
         try {
             multiWallet!!.removeSyncProgressListener(TAG)
-            multiWallet!!.addSyncProgressListener(this, TAG)
+            multiWallet.addSyncProgressListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -98,12 +95,18 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         checkWifiSync()
 
         fab_receive.setOnClickListener {
-            ReceiveDialog().show(supportFragmentManager, null)
+            currentBottomSheet = ReceiveDialog(bottomSheetDismissed)
+            currentBottomSheet!!.show(this)
         }
 
         fab_send.setOnClickListener {
-            SendDialog().show(supportFragmentManager, null)
+            currentBottomSheet = SendDialog(bottomSheetDismissed)
+            currentBottomSheet!!.show(this)
         }
+    }
+
+    val bottomSheetDismissed = DialogInterface.OnDismissListener {
+        currentBottomSheet = null
     }
 
     override fun onDestroy() {
@@ -211,7 +214,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
                 }
             }
             2 -> WalletsFragment()
-            else -> Fragment()
+            else -> MoreFragment()
         }
 
         supportFragmentManager
@@ -228,12 +231,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
         toolbar_title.text = title
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            app_bar.elevation = if (showShadow) {
-                resources.getDimension(R.dimen.app_bar_elevation)
-            } else {
-                0f
-            }
+        app_bar.elevation = if (showShadow) {
+            resources.getDimension(R.dimen.app_bar_elevation)
+        } else {
+            0f
         }
     }
 
@@ -280,6 +281,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         sendBroadcast(Intent(Constants.SYNCED))
         val syncIntent = Intent(this, SyncService::class.java)
         startService(syncIntent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        currentBottomSheet?.onActivityResult(requestCode, resultCode, data)
     }
 
     // -- Block Notification
