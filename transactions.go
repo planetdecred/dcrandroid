@@ -68,8 +68,7 @@ func (lw *LibWallet) GetTransactionRaw(txHash []byte) (*Transaction, error) {
 }
 
 func (lw *LibWallet) GetTransactions(offset, limit, txFilter int32) (string, error) {
-	var transactions []Transaction
-	err := lw.txDB.Read(offset, limit, txFilter, &transactions)
+	transactions, err := lw.GetTransactionsRaw(offset, limit, txFilter)
 	if err != nil {
 		return "", err
 	}
@@ -80,6 +79,11 @@ func (lw *LibWallet) GetTransactions(offset, limit, txFilter int32) (string, err
 	}
 
 	return string(jsonEncodedTransactions), nil
+}
+
+func (lw *LibWallet) GetTransactionsRaw(offset, limit, txFilter int32) (transactions []*Transaction, err error) {
+	err = lw.txDB.Read(offset, limit, txFilter, &transactions)
+	return
 }
 
 func (lw *LibWallet) CountTransactions(txFilter int32) (int, error) {

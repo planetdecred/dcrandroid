@@ -3,6 +3,7 @@ package dcrlibwallet
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/asdine/storm"
@@ -30,14 +31,28 @@ type LibWallet struct {
 	cancelFuncs  []context.CancelFunc
 }
 
-func NewLibWallet(defaultAppDataDir, walletDbDriver string, netType string) (*LibWallet, error) {
+func NewLibWallet(appDataDir, walletDbDriver string, netType string) (*LibWallet, error) {
+	// initialize logger before returning any error
+	errors.Separator = ":: "
+	initLogRotator(filepath.Join(appDataDir, logFileName))
+
 	activeNet := utils.NetParams(netType)
 	if activeNet == nil {
 		return nil, fmt.Errorf("unsupported network type: %s", netType)
 	}
 
-	configDbPath := filepath.Join(defaultAppDataDir, userConfigDbFilename)
-	configDB, err := storm.Open(configDbPath)
+	lw := &LibWallet{
+		activeNet:     activeNet,
+		walletDataDir: filepath.Join(appDataDir, activeNet.Name),
+	}
+
+	err := os.MkdirAll(lw.walletDataDir, 0700)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create wallet db directory: %v", err)
+	}
+
+	configDbPath := filepath.Join(lw.walletDataDir, userConfigDbFilename)
+	lw.configDB, err = storm.Open(configDbPath)
 	if err != nil {
 		if err == bolt.ErrTimeout {
 			// timeout error occurs if storm fails to acquire a lock on the database file
@@ -46,27 +61,6 @@ func NewLibWallet(defaultAppDataDir, walletDbDriver string, netType string) (*Li
 		return nil, fmt.Errorf("error opening settings db store: %s", err.Error())
 	}
 
-	lw := &LibWallet{
-		activeNet: activeNet,
-		configDB:  configDB,
-	}
-
-	var appDataDir string
-
-	err = lw.ReadUserConfigValue(AppDataDirConfigKey, &appDataDir)
-	if err != nil {
-		return nil, fmt.Errorf("error reading app data dir from settings db: %s", err.Error())
-	}
-
-	if appDataDir == "" {
-		lw.walletDataDir = filepath.Join(defaultAppDataDir, activeNet.Name)
-	} else {
-		lw.walletDataDir = filepath.Join(appDataDir, activeNet.Name)
-	}
-
-	errors.Separator = ":: "
-
-	initLogRotator(filepath.Join(lw.walletDataDir, logFileName))
 	logLevel := lw.ReadStringConfigValueForKey(LogLevelConfigKey)
 	SetLogLevels(logLevel)
 

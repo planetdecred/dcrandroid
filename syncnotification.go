@@ -267,7 +267,7 @@ func (lw *LibWallet) updateAddressDiscoveryProgress() {
 					// avoid logging same message multiple times
 					if totalProgressPercent != lastTotalPercent || totalTimeRemainingSeconds != lastTimeRemaining {
 						log.Infof("Syncing %d%%, %s remaining, discovering used addresses.\n",
-							totalProgressPercent, calculateTotalTimeRemaining(totalTimeRemainingSeconds))
+							totalProgressPercent, CalculateTotalTimeRemaining(totalTimeRemainingSeconds))
 
 						lastTotalPercent = totalProgressPercent
 						lastTimeRemaining = totalTimeRemainingSeconds
@@ -395,7 +395,7 @@ func (lw *LibWallet) rescanProgress(rescannedThrough int32) {
 	if lw.syncData.showLogs && lw.syncData.syncing {
 		log.Infof("Syncing %d%%, %s remaining, scanning %d of %d block headers.\n",
 			lw.activeSyncData.headersRescanProgress.TotalSyncProgress,
-			calculateTotalTimeRemaining(lw.activeSyncData.headersRescanProgress.TotalTimeRemainingSeconds),
+			CalculateTotalTimeRemaining(lw.activeSyncData.headersRescanProgress.TotalTimeRemainingSeconds),
 			lw.activeSyncData.headersRescanProgress.CurrentRescanHeight,
 			lw.activeSyncData.headersRescanProgress.TotalHeadersToScan,
 		)

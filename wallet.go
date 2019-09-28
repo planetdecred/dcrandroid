@@ -9,6 +9,10 @@ import (
 	"github.com/decred/dcrwallet/walletseed"
 )
 
+func (lw *LibWallet) NetType() string {
+	return lw.activeNet.Name
+}
+
 func (lw *LibWallet) WalletExists() (bool, error) {
 	return lw.walletLoader.WalletExists()
 }

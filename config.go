@@ -8,8 +8,7 @@ const (
 	userConfigDbFilename = "config.db"
 	userConfigBucketName = "user_config"
 
-	AppDataDirConfigKey = "app_data_dir"
-	LogLevelConfigKey   = "log_level"
+	LogLevelConfigKey = "log_level"
 
 	NewWalletSetUpConfigKey                 = "new_wallet_set_up"
 	InitialSyncCompletedConfigKey           = "initial_sync_complete"
