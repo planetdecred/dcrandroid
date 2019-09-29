@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.util
+package com.dcrandroid.view.util
 
 import android.view.View
 import androidx.annotation.StringRes
@@ -15,6 +15,8 @@ import com.dcrandroid.dialog.AccountPickerDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 

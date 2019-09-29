@@ -7,6 +7,7 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.security.ValidateAddress
+import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.RenameAccountDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
@@ -108,6 +111,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                     PopupItem(R.string.rename_wallet),
                     PopupItem(R.string.change_spending_pass),
                     PopupItem(R.string.view_property),
+                    PopupItem(R.string.validate_addresses),
                     PopupItem(R.string.remove_wallet, R.color.orangeTextColor)
             )
 
@@ -130,8 +134,18 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                         }.show(activity.supportFragmentManager, null)
                     }
                     3 -> {
+                        val intent = Intent(context, ValidateAddress::class.java)
+                        intent.putExtra(Constants.WALLET_ID, wallet.walletID)
+                        context.startActivity(intent)
+                    }
+                    4 -> {
                         println("Deleting Wallet")
-                        multiWallet!!.deleteWallet(wallet.walletID, "".toByteArray())
+                        if(!multiWallet!!.isSyncing && !multiWallet.isSynced){
+                            multiWallet.deleteWallet(wallet.walletID, "".toByteArray())
+                        }else{
+                            SnackBar.showError(context, R.string.cancel_sync_create_wallet)
+                        }
+
                     }
                 }
             }

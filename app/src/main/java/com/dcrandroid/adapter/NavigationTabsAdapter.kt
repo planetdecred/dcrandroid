@@ -29,7 +29,7 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
         tabs.add(NavigationTab(R.string.overview, R.drawable.ic_overview, R.drawable.ic_overview_inactive))
         tabs.add(NavigationTab(R.string.transactions, R.drawable.ic_transactions, R.drawable.ic_transactions_inactive))
         tabs.add(NavigationTab(R.string.wallets, R.drawable.ic_wallet, R.drawable.ic_wallet02))
-        tabs.add(NavigationTab(R.string.settings, R.drawable.ic_settings, R.drawable.ic_settings_inactive))
+        tabs.add(NavigationTab(R.string.more, R.drawable.ic_menu, R.drawable.ic_menu_inactive))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NavigationTabViewHolder {

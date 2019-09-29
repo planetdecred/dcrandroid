@@ -12,27 +12,27 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.view.util.AccountCustomSpinner
-import com.dcrandroid.view.util.DestinationAddressHelper
+import com.dcrandroid.view.util.AddressInputHelper
 import kotlinx.android.synthetic.main.send_page_sheet.view.*
 
 class DestinationAddressCard(context: Context, val layout: LinearLayout, validateAddress:(String) -> Boolean) {
 
     lateinit var addressChanged:() -> Unit
     internal val destinationAccountSpinner: AccountCustomSpinner
-    internal val destinationAddressHelper: DestinationAddressHelper
+    internal val addressInputHelper: AddressInputHelper
     init {
         val activity = context as AppCompatActivity
         destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager, layout.destination_account_spinner, R.string.dest_account_picker_title)
-        destinationAddressHelper = DestinationAddressHelper(context, layout.destination_address_container, validateAddress)
+        addressInputHelper = AddressInputHelper(context, layout.destination_address_container, validateAddress)
 
         layout.send_dest_toggle.setOnClickListener {
             if(destinationAccountSpinner.isVisible()){
                 layout.send_dest_toggle.setText(R.string.send_to_account)
                 destinationAccountSpinner.hide()
-                destinationAddressHelper.show()
+                addressInputHelper.show()
             }else{
                 layout.send_dest_toggle.setText(R.string.send_to_address)
-                destinationAddressHelper.hide()
+                addressInputHelper.hide()
                 destinationAccountSpinner.show()
             }
 
@@ -46,12 +46,12 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
             return destinationAccountSpinner.getCurrentAddress()
         }
 
-        return destinationAddressHelper.destinationAddress
+        return addressInputHelper.address
     }
 
     val estimationAddress: String?
     get() {
-        if(destinationAddressHelper.isVisible() && destinationAddressHelper.isInvalid()){  // entered address is invalid
+        if(addressInputHelper.isVisible() && addressInputHelper.isInvalid()){  // entered address is invalid
             return null
         }else if(destinationAddress != null){
             return destinationAddress

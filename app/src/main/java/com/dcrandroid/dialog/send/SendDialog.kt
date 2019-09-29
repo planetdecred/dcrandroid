@@ -77,7 +77,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
 
         destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
             addressChanged = this@SendDialog.addressChanged
-            destinationAddressHelper.addressChanged = this@SendDialog.addressChanged
+            addressInputHelper.addressChanged = this@SendDialog.addressChanged
             destinationAccountSpinner.selectedAccountChanged = destAccountChanged
         }
 
@@ -322,7 +322,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK){
             val result = data!!.getStringExtra(Constants.RESULT).replace("decred:", "")
-            destinationAddressCard.destinationAddressHelper.scanQRSuccess(result)
+            destinationAddressCard.addressInputHelper.scanQRSuccess(result)
         }
     }
 }

@@ -9,9 +9,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_margin="4dp"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:layout_marginBottom="@dimen/margin_padding_size_4"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
     android:background="@drawable/card_bg"
-    app:elevation="4dp"
     android:elevation="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -26,10 +28,8 @@
         android:focusable="true"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:paddingLeft="@dimen/margin_padding_size_16"
         android:paddingStart="@dimen/margin_padding_size_16"
         android:paddingEnd="@dimen/margin_padding_size_8"
-        android:paddingRight="@dimen/margin_padding_size_8"
         android:gravity="center_vertical">
 
         <ImageView
@@ -96,7 +96,7 @@
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/circular_transparent_ripple"
-            app:srcCompat="@drawable/ic_more" />
+            app:srcCompat="@drawable/ic_options" />
 
     </LinearLayout>
 

@@ -31,7 +31,6 @@ class VerifySeedActivity : BaseActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     private var wallet: LibWallet? = null
-    private var multiWallet: MultiWallet = WalletData.multiWallet!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

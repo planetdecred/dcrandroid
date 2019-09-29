@@ -59,19 +59,17 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     private lateinit var currentFragment: Fragment
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
 
-    private val multiWallet = WalletData.instance.multiWallet
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
-
         setSupportActionBar(toolbar)
 
-        util = PreferenceUtil(this)
-        if(multiWallet == null){
+        if(walletData.multiWallet == null){
             println("Restarting app")
             Utils.restartApp(this)
         }
+
+        util = PreferenceUtil(this)
 
         registerNotificationChannel()
 
@@ -84,7 +82,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         blockNotificationSound = alertSound.load(this, R.raw.beep, 1)
 
         try {
-            multiWallet!!.removeSyncProgressListener(TAG)
+            multiWallet.removeSyncProgressListener(TAG)
             multiWallet.addSyncProgressListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -115,7 +113,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val syncIntent = Intent(this, SyncService::class.java)
         stopService(syncIntent)
 
-        multiWallet?.shutdown()
+        multiWallet.shutdown()
         finish()
         exitProcess(1)
     }
@@ -206,10 +204,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         currentFragment = when (position) {
             0 -> Overview()
             1 ->{
-                if(multiWallet!!.openedWalletsCount() > 1){
+                if(multiWallet.openedWalletsCount() > 1){
                     MultiWalletTransactions()
                 }else{
-                    val wallet = multiWallet!!.openedWalletsList()[0]
+                    val wallet = multiWallet.openedWalletsList()[0]
                     TransactionsFragment().setWalletID(wallet.walletID)
                 }
             }
@@ -253,7 +251,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     private fun showWifiNotice() {
         val wifiSyncDialog = WiFiSyncDialog(this)
-                .setPositiveButton(DialogInterface.OnClickListener { dialog, which ->
+                .setPositiveButton(DialogInterface.OnClickListener { dialog, _ ->
                     startSyncing()
 
                     val syncDialog = dialog as WiFiSyncDialog
@@ -269,7 +267,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun startSyncing() {
-        for (w in multiWallet!!.openedWalletsList()){
+        for (w in multiWallet.openedWalletsList()){
             w.walletExists()
             if(!w.hasDiscoveredAccounts() && w.isLocked){
                 ResumeAccountDiscovery()

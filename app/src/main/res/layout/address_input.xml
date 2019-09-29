@@ -6,6 +6,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="@dimen/margin_padding_size_16"
     android:paddingStart="@dimen/margin_padding_size_16"
     android:paddingEnd="@dimen/margin_padding_size_16"
@@ -62,6 +63,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:visibility="gone"
+        android:id="@+id/dest_address_error_layout"
         android:layout_below="@id/destination_address_layout"
         android:layout_marginStart="@dimen/margin_padding_size_16"
         android:layout_marginTop="@dimen/margin_padding_size_4"
@@ -71,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/send_dest_error"
-            android:textColor="@color/orangeTextColor"
+            android:textColor="@color/colorError"
             android:textSize="@dimen/edit_text_size_14"
             android:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false" />
