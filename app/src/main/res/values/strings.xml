@@ -748,5 +748,7 @@
     <string name="clear_all">Clear All</string>
     <string name="verify_message">Verify Message</string>
     <string name="invalid_base64_string">Not a base64 string.</string>
+    <string name="help_description">For more information, please visit the Decred documentation.</string>
+    <string name="see_documentations">See documentations</string>
 
 </resources>

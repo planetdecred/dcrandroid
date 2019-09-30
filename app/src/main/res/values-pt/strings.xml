@@ -46,7 +46,6 @@
     <string name="build">construir</string>
     <string name="copy_on_tap">(copiar em um toque)</string>
     <string name="for_more_information_please_visit">Para mais informações visite</string>
-    <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
     <string name="exit_app_prompt_title">Sair da carteira?</string>
     <string name="exit_app_prompt_message">Voce tem certeza que deseja sair?</string>
     <string name="delete_wallet_prompt_title">Apagar carteira?</string>

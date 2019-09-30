@@ -50,7 +50,6 @@
     <string name="build">Construir</string>
     <string name="copy_on_tap">(Toque para copiar)</string>
     <string name="for_more_information_please_visit">Para más información por favor visita</string>
-    <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
     <string name="exit_app_prompt_title">¿Salir de la billetera?</string>
     <string name="exit_app_prompt_message">¿Esta seguro de querer salir de la billetera?</string>
     <string name="delete_wallet_prompt_title">¿Eliminar la billetera?</string>

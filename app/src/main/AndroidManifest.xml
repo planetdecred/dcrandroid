@@ -145,6 +145,12 @@
             android:launchMode="singleTask"
             android:theme="@style/LightTheme.NoActionBar" />
 
+        <activity
+            android:name=".activities.HelpActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/LightTheme.NoActionBar" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -85,6 +85,7 @@
         android:layout_margin="@dimen/margin_padding_size_8"
         android:paddingStart="@dimen/margin_padding_size_16"
         android:paddingEnd="@dimen/margin_padding_size_16"
+        android:paddingTop="9dp"
         android:background="@drawable/card_bg"
         android:elevation="4dp"
         android:orientation="vertical">
