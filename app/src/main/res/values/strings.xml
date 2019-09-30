@@ -465,13 +465,14 @@
     <!--Security Fragment-->
     <string name="security">Security</string>
     <string name="sign_message">Sign Message</string>
+    <string name="sign">Sign</string>
     <string name="address_colon">Address:</string>
-    <string name="message_colon">Message:</string>
+    <string name="message">Message</string>
     <string name="this_field_is_required">This field is required.</string>
     <string name="signature_colon">Signature:</string>
     <string name="valid_signature">This signature verifies against the message and address.</string>
     <string name="invalid_signature">This signature does not verify against the message and address.</string>
-    <string name="sign_message_description">Here you can verify the validity of an address, sign messages to prove your ownership of an address, and verify signatures.</string>
+    <string name="sign_message_description">Signing a message with an address\' private key allows you to prove that you are the owner of a given address to a possible counterpart.</string>
     <!--/Security Fragment-->
 
     <!--Send Fragment-->
@@ -739,6 +740,8 @@
     <string name="internal_valid_address">Owned by this wallet</string>
     <string name="address">Address</string>
     <string name="sign_message_instruction">Enter an address and message to sign:</string>
-
+    <string name="signature_copied">Signature copied</string>
+    <string name="confirm_to_sign">Confirm to sign</string>
+    <string name="sign_using_external_address_error">Address does not belong to wallet</string>
 
 </resources>

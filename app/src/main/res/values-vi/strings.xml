@@ -391,7 +391,7 @@
     <string name="security">Bảo mật</string>
     <string name="sign_message">Ký tin nhắn</string>
     <string name="address_colon">Địa chỉ:</string>
-    <string name="message_colon">Tin nhắn:</string>
+    <string name="message">Tin nhắn</string>
     <string name="this_field_is_required">Dữ liệu này là bắt buộc.</string>
     <string name="signature_colon">Chữ ký:</string>
     <string name="valid_signature">Chữ ký này xác minh đối với tin nhắn và địa chỉ.</string>

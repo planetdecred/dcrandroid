@@ -77,7 +77,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
 
         destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
             addressChanged = this@SendDialog.addressChanged
-            addressInputHelper.addressChanged = this@SendDialog.addressChanged
+            addressInputHelper.textChanged = this@SendDialog.addressChanged
             destinationAccountSpinner.selectedAccountChanged = destAccountChanged
         }
 

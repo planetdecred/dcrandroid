@@ -390,7 +390,7 @@
        <string name="security">安全</string>
        <string name="sign_message">签署消息</string>
        <string name="address_colon">地址:</string>
-       <string name="message_colon">消息:</string>
+       <string name="message">消息</string>
        <string name="this_field_is_required">必填字段。</string>
        <string name="signature_colon">签名:</string>
        <string name="valid_signature">这个签名可以验证这个消息和地址。</string>

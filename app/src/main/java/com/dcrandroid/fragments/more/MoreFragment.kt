@@ -16,20 +16,20 @@ import com.dcrandroid.activities.security.SecurityTools
 import com.dcrandroid.fragments.BaseFragment
 
 class MoreFragment : BaseFragment() {
-
-    var items= arrayOf(
-            ListItem(R.string.settings, R.drawable.ic_settings, Intent(context, Settings::class.java)),
-            ListItem(R.string.security, R.drawable.ic_security, Intent(context, SecurityTools::class.java)),
-            ListItem(R.string.help, R.drawable.ic_question_mark),
-            ListItem(R.string.about, R.drawable.ic_info1),
-            ListItem(R.string.debug, R.drawable.ic_debug))
-
     lateinit var recyclerView: RecyclerView
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         setToolbarTitle(R.string.more, false)
+
+        var items= arrayOf(
+                ListItem(R.string.settings, R.drawable.ic_settings, Intent(context, Settings::class.java)),
+                ListItem(R.string.security, R.drawable.ic_security, Intent(context, SecurityTools::class.java)),
+                ListItem(R.string.help, R.drawable.ic_question_mark),
+                ListItem(R.string.about, R.drawable.ic_info1),
+                ListItem(R.string.debug, R.drawable.ic_debug))
+
 
         val adapter = ListAdapter(context!!, items)
         recyclerView.layoutManager = LinearLayoutManager(context)

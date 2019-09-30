@@ -436,7 +436,7 @@
     <string name="security">Segurança</string>
     <string name="sign_message">Assinar Mensagem</string>
     <string name="address_colon">Endereço:</string>
-    <string name="message_colon">Mensagem:</string>
+    <string name="message">Mensagem</string>
     <string name="this_field_is_required">Esse campo é necessário.</string>
     <string name="signature_colon">Assinatura:</string>
     <string name="valid_signature">Essa assinatura verifica contra a mensagem e o endereço.</string>

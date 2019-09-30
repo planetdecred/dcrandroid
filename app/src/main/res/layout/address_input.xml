@@ -6,10 +6,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="@dimen/margin_padding_size_16"
-    android:paddingStart="@dimen/margin_padding_size_16"
-    android:paddingEnd="@dimen/margin_padding_size_16"
     android:clipToPadding="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -28,11 +25,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/send_dest_et"
+            android:hyphenationFrequency="none"
+            android:breakStrategy="simple"
             android:background="@null"
-            android:textCursorDrawable="@null"
+            android:textCursorDrawable="@color/blue"
             android:fontFamily="@font/source_sans_pro"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_16" />
+
+        <!-- Used to preserve parent height when paste and qr buttons are hidden -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +67,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:visibility="gone"
         android:id="@+id/dest_address_error_layout"
         android:layout_below="@id/destination_address_layout"
         android:layout_marginStart="@dimen/margin_padding_size_16"

@@ -444,7 +444,7 @@
     <string name="security">Seguridad</string>
     <string name="sign_message">Firmar Mensaje</string>
     <string name="address_colon">Dirección:</string>
-    <string name="message_colon">Mensaje:</string>
+    <string name="message">Mensaje</string>
     <string name="this_field_is_required">Este campo es obligatorio.</string>
     <string name="signature_colon">Firma:</string>
     <string name="valid_signature">Esta firma verifica mensaje y dirección.</string>

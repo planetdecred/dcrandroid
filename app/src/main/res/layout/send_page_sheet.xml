@@ -125,6 +125,8 @@
                 android:elevation="4dp"
                 android:background="@drawable/card_bg"
                 android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="@dimen/margin_padding_size_16"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -136,7 +138,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="@dimen/margin_padding_size_16"
                         android:includeFontPadding="false"
                         android:text="@string/to"
                         android:textColor="@color/darkerBlueGrayTextColor"
@@ -147,7 +148,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/send_dest_toggle"
-                        android:layout_marginEnd="@dimen/margin_padding_size_16"
                         android:gravity="end"
                         android:text="@string/send_to_account"
                         android:textColor="@color/blue"

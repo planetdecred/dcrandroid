@@ -325,27 +325,32 @@ public class Utils {
         return Dcrlibwallet.amountAtom(signed.doubleValue());
     }
 
-    public static void copyToClipboard(View v, String copyText, @StringRes int successMessage) {
-
-        Context ctx = v.getContext();
+    private static void saveToClipboard(Context context, String text){
 
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null) {
-                clipboard.setText(copyText);
+                clipboard.setText(text);
             }
         } else {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager)
-                    ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+                    context.getSystemService(Context.CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData
-                    .newPlainText(ctx.getString(R.string.your_address), copyText);
+                    .newPlainText(context.getString(R.string.your_address), text);
             if (clipboard != null)
                 clipboard.setPrimaryClip(clip);
         }
+    }
 
+    public static void copyToClipboard(View v, String text, @StringRes int successMessage) {
+        saveToClipboard(v.getContext(), text);
         SnackBar.Companion.showText(v, successMessage, Toast.LENGTH_SHORT);
+    }
 
+    public static void copyToClipboard(Context context, String text, @StringRes int successMessage) {
+        saveToClipboard(context, text);
+        SnackBar.Companion.showText(context, successMessage, Toast.LENGTH_SHORT);
     }
 
     public static String readFromClipboard(Context context) {

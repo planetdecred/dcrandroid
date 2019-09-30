@@ -34,10 +34,9 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
             // no validation for address input
             true
         }
-        addressInputHelper.hideErrorRow()
         addressInputHelper.setHint(getString(R.string.address))
 
-        addressInputHelper.addressChanged = {
+        addressInputHelper.textChanged = {
             result_layout.hide()
             tv_validate.isEnabled = !addressInputHelper.address.isNullOrBlank()
         }
@@ -88,7 +87,7 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
                 iv_result_icon.setImageResource(icon)
             }
 
-            R.id.tv_clear -> addressInputHelper.addressEditText.text = null
+            R.id.tv_clear -> addressInputHelper.editText.text = null
 
             else -> finish() // R.id.go_back
         }

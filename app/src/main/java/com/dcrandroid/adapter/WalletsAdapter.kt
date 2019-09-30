@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.security.SignMessage
 import com.dcrandroid.activities.security.ValidateAddress
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.RenameAccountDialog
@@ -112,6 +113,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                     PopupItem(R.string.change_spending_pass),
                     PopupItem(R.string.view_property),
                     PopupItem(R.string.validate_addresses),
+                    PopupItem(R.string.sign_message),
                     PopupItem(R.string.remove_wallet, R.color.orangeTextColor)
             )
 
@@ -139,6 +141,11 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                         context.startActivity(intent)
                     }
                     4 -> {
+                        val intent = Intent(context, SignMessage::class.java)
+                        intent.putExtra(Constants.WALLET_ID, wallet.walletID)
+                        context.startActivity(intent)
+                    }
+                    5 -> {
                         println("Deleting Wallet")
                         if(!multiWallet!!.isSyncing && !multiWallet.isSynced){
                             multiWallet.deleteWallet(wallet.walletID, "".toByteArray())

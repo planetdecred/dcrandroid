@@ -41,6 +41,7 @@
     <dimen name="margin_padding_size_24">24dp</dimen>
     <dimen name="margin_padding_size_32">32dp</dimen>
     <dimen name="margin_padding_size_40">40dp</dimen>
+    <dimen name="margin_padding_size_48">48dp</dimen>
     <dimen name="margin_padding_size_56">56dp</dimen>
     <dimen name="margin_padding_size_64">64dp</dimen>
     <dimen name="margin_padding_size_80">80dp</dimen>

@@ -314,7 +314,7 @@
     <string name="security">Безопасность</string>
     <string name="sign_message">Подписать сообщение</string>
     <string name="address_colon">Адрес:</string>
-    <string name="message_colon">Сообщение:</string>
+    <string name="message">Сообщение</string>
     <string name="this_field_is_required">Это поле обязательно для заполнения.</string>
     <string name="signature_colon">Подпись:</string>
     <string name="valid_signature">Эта подпись сопоставляет с сообщением и адресом.</string>
