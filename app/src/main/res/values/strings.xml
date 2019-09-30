@@ -469,10 +469,11 @@
     <string name="address_colon">Address:</string>
     <string name="message">Message</string>
     <string name="this_field_is_required">This field is required.</string>
-    <string name="signature_colon">Signature:</string>
+    <string name="signature">Signature</string>
     <string name="valid_signature">This signature verifies against the message and address.</string>
     <string name="invalid_signature">This signature does not verify against the message and address.</string>
-    <string name="sign_message_description">Signing a message with an address\' private key allows you to prove that you are the owner of a given address to a possible counterpart.</string>
+    <string name="sign_message_description">Signing a message with an address\' private key allows you to prove that you are the owner of a given address to a possible counterparty.</string>
+    <string name="verify_message_description"><![CDATA[After you or your counterparty has generated a signature, you can use this form to verify the validity of the signature.<br/><br/>Once you have entered the address, the message and the corresponding signature, you will see <font color="#41be53">VALID</font> if the signature appropriately matches the address and message, otherwise <font color="#ed6d47">INVALID</font>.]]></string>
     <!--/Security Fragment-->
 
     <!--Send Fragment-->
@@ -743,5 +744,9 @@
     <string name="signature_copied">Signature copied</string>
     <string name="confirm_to_sign">Confirm to sign</string>
     <string name="sign_using_external_address_error">Address does not belong to wallet</string>
+    <string name="verify_message_instruction">Enter the address, signature, and message to verify:</string>
+    <string name="clear_all">Clear All</string>
+    <string name="verify_message">Verify Message</string>
+    <string name="invalid_base64_string">Not a base64 string.</string>
 
 </resources>

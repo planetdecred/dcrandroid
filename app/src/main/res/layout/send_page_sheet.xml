@@ -158,7 +158,7 @@
 
                 <include
                     android:id="@+id/destination_address_container"
-                    layout="@layout/address_input" />
+                    layout="@layout/custom_input" />
 
                 <include
                     layout="@layout/account_custom_spinner"

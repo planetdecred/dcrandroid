@@ -8,32 +8,38 @@ package com.dcrandroid.fragments.more
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.activities.Settings
 import com.dcrandroid.activities.security.SecurityTools
 import com.dcrandroid.fragments.BaseFragment
+import kotlinx.android.synthetic.main.fragment_more.*
 
 class MoreFragment : BaseFragment() {
-    lateinit var recyclerView: RecyclerView
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_more, container, false)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         setToolbarTitle(R.string.more, false)
 
-        var items= arrayOf(
+        val items= arrayOf(
                 ListItem(R.string.settings, R.drawable.ic_settings, Intent(context, Settings::class.java)),
                 ListItem(R.string.security, R.drawable.ic_security, Intent(context, SecurityTools::class.java)),
                 ListItem(R.string.help, R.drawable.ic_question_mark),
                 ListItem(R.string.about, R.drawable.ic_info1),
                 ListItem(R.string.debug, R.drawable.ic_debug))
 
-
         val adapter = ListAdapter(context!!, items)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
+        more_recycler_view.layoutManager = LinearLayoutManager(context)
+        more_recycler_view.adapter = adapter
 
     }
 

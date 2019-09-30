@@ -91,7 +91,7 @@
 
         <include
             android:id="@+id/address_container"
-            layout="@layout/address_input" />
+            layout="@layout/custom_input" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,7 +127,6 @@
                 android:paddingBottom="@dimen/margin_padding_size_12"
                 android:paddingStart="@dimen/margin_padding_size_16"
                 android:paddingEnd="@dimen/margin_padding_size_16" />
-
 
         </LinearLayout>
 

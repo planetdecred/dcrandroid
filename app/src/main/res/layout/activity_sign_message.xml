@@ -91,6 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_8"
         android:layout_marginStart="@dimen/margin_padding_size_24"
+        android:layout_marginEnd="@dimen/margin_padding_size_24"
         android:includeFontPadding="false"
         android:text="@string/sign_message_instruction"
         android:textColor="@color/darkerBlueGrayTextColor"
@@ -101,6 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_padding_size_8"
+        android:paddingTop="9dp"
         android:paddingStart="@dimen/margin_padding_size_16"
         android:paddingEnd="@dimen/margin_padding_size_16"
         android:paddingBottom="@dimen/margin_padding_size_16"
@@ -110,12 +112,12 @@
 
         <include
             android:id="@+id/address_container"
-            layout="@layout/address_input"
+            layout="@layout/custom_input"
             />
 
         <include
             android:id="@+id/message_container"
-            layout="@layout/address_input"
+            layout="@layout/custom_input"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             />
@@ -131,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_clear"
-                android:text="@string/clear"
+                android:text="@string/clear_all"
                 android:textStyle="bold"
                 android:textSize="@dimen/edit_text_size_16"
                 android:layout_marginEnd="@dimen/margin_padding_size_8"
@@ -183,10 +185,10 @@
 
             <include
                 android:id="@+id/signature_container"
-                layout="@layout/address_input"
+                layout="@layout/custom_input"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/margin_padding_size_8" />
+                android:layout_marginTop="9dp" />
 
             <TextView
                 style="@style/textViewButton"

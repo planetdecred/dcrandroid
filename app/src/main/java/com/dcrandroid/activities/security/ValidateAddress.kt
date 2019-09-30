@@ -13,13 +13,13 @@ import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
-import com.dcrandroid.view.util.AddressInputHelper
+import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.activity_validate_address.*
 
 class ValidateAddress: BaseActivity(), View.OnClickListener {
 
-    lateinit var addressInputHelper: AddressInputHelper
+    lateinit var addressInputHelper: InputHelper
 
     lateinit var wallet: LibWallet
 
@@ -30,15 +30,15 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         wallet = multiWallet.getWallet(walletID)
 
-        addressInputHelper = AddressInputHelper(this, address_container){
+        addressInputHelper = InputHelper(this, address_container){
             // no validation for address input
             true
         }
-        addressInputHelper.setHint(getString(R.string.address))
+        addressInputHelper.setHint(R.string.address)
 
         addressInputHelper.textChanged = {
             result_layout.hide()
-            tv_validate.isEnabled = !addressInputHelper.address.isNullOrBlank()
+            tv_validate.isEnabled = !addressInputHelper.validatedInput.isNullOrBlank()
         }
 
         tv_clear.setOnClickListener(this)
@@ -52,7 +52,7 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
             R.id.tv_validate -> {
                 result_layout.show()
 
-                val address = addressInputHelper.address!!
+                val address = addressInputHelper.validatedInput!!
 
                 val icon: Int
                 val titleText: Int

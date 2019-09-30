@@ -17,11 +17,10 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
-import com.dcrandroid.view.util.AddressInputHelper
+import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
-import kotlinx.android.synthetic.main.activity_security.*
-import kotlinx.android.synthetic.main.tx_details_list_header.*
+import kotlinx.android.synthetic.main.activity_sign_message.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,36 +28,35 @@ import kotlinx.coroutines.withContext
 
 class SignMessage: BaseActivity(), View.OnClickListener {
 
-    private lateinit var addressInputHelper: AddressInputHelper
-    private lateinit var messageInputHelper: AddressInputHelper
-    private lateinit var signatureHelper: AddressInputHelper
+    private lateinit var addressInputHelper: InputHelper
+    private lateinit var messageInputHelper: InputHelper
+    private lateinit var signatureHelper: InputHelper
 
     private lateinit var wallet: LibWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_security)
+        setContentView(R.layout.activity_sign_message)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         wallet = multiWallet.getWallet(walletID)
 
 
-        addressInputHelper = AddressInputHelper(this, address_container){
+        addressInputHelper = InputHelper(this, address_container){
             wallet.isAddressValid(it)
         }
-        addressInputHelper.setHint(getString(R.string.address))
-//        addressInputHelper.hideErrorRow()
+        addressInputHelper.setHint(R.string.address)
         addressInputHelper.textChanged = textChanged
 
 
-        messageInputHelper = AddressInputHelper(this, message_container){true}
-        messageInputHelper.setHint(getString(R.string.message))
+        messageInputHelper = InputHelper(this, message_container){true}
+        messageInputHelper.setHint(R.string.message)
         messageInputHelper.hideQrScanner()
         messageInputHelper.textChanged = textChanged
 
 
-        signatureHelper = AddressInputHelper(this, signature_container){true}.apply {
-            setHint(getString(R.string.signature_colon))
+        signatureHelper = InputHelper(this, signature_container){true}.apply {
+            setHint(R.string.signature)
             hidePasteButton()
             hideQrScanner()
             textChanged = {}
@@ -105,7 +103,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
 
     private val textChanged = {
         result_layout.hide()
-        val address = addressInputHelper.address
+        val address = addressInputHelper.validatedInput
 
         if(address.isNullOrBlank()){
             tv_sign.isEnabled = false
@@ -136,7 +134,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
     private fun beginSignMessage(passphrase: String) = GlobalScope.launch(Dispatchers.Default) {
         toggleViews(false)
 
-        val address = addressInputHelper.address!!
+        val address = addressInputHelper.validatedInput!!
         val message = messageInputHelper.editText.text.toString()
 
         try{

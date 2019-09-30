@@ -9,7 +9,7 @@ package com.dcrandroid.view.util
 import android.animation.AnimatorSet
 import android.content.Context
 import android.view.View
-import kotlinx.android.synthetic.main.address_input.view.*
+import kotlinx.android.synthetic.main.custom_input.view.*
 import android.util.TypedValue
 import com.dcrandroid.R
 import android.animation.ValueAnimator
@@ -18,6 +18,7 @@ import android.text.Editable
 import android.text.TextPaint
 import android.text.TextWatcher
 import android.view.ViewTreeObserver
+import androidx.annotation.StringRes
 import com.dcrandroid.activities.ReaderActivity
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
@@ -29,33 +30,35 @@ const val SCAN_QR_REQUEST_CODE = 100
 
 /*
     Using this class for a normal input
-    - always return true for validateAddress
+    - always return true for validateInput
     - hideQrScanner()
     - optionally hideErrorRow()
  */
-class AddressInputHelper(private val context: Context, private val container: View,
-                         val validateAddress:(String) -> Boolean) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
+class InputHelper(private val context: Context, private val container: View,
+                  val validateInput:(String) -> Boolean) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
 
     lateinit var textChanged:() -> Unit
-    val address: String?
+    val validatedInput: String?
     get() {
         val enteredAddress = editText.text.toString()
-        if(validateAddress(enteredAddress)){
+        if(validateInput(enteredAddress)){
             return enteredAddress
         }
 
         return null
     }
 
-    val pasteTextView = container.send_dest_paste
+    val pasteTextView = container.custom_input_paste
     var pasteHidden = false
 
     val addressLayoutDefaultHeight = context.resources.getDimension(R.dimen.margin_padding_size_48)
-    val addressLayout = container.destination_address_layout
+    val addressLayout = container.input_layout
 
-    val hintTextView = container.send_dest_hint
-    val errorTextView =  container.send_dest_error
-    val editText = container.send_dest_et
+    var validationMessage: Int = R.string.invalid_address
+    val errorTextView =  container.custom_input_error
+
+    val hintTextView = container.custom_input_hint
+    val editText = container.custom_input_et
     val qrScanImageView = container.iv_scan
 
     init {
@@ -84,41 +87,37 @@ class AddressInputHelper(private val context: Context, private val container: Vi
     fun setupLayout(){
         val active = editText.hasFocus() || editText.text.isNotEmpty()
 
-        val fontSizeTarget: Float
-        val translationYTarget: Float
-
-        if(active){
-
-            fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_14)
-            translationYTarget = - (hintTextView.height.toFloat() / 2)
-
-        }else{
-
-            fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_16)
-
-            val textPaint = TextPaint(hintTextView.paint)
-            textPaint.textSize = fontSizeTarget
-
-            val textHeight = textPaint.descent() - textPaint.ascent()
-            translationYTarget = (addressLayoutDefaultHeight / 2) - (textHeight / 2)
-        }
-
         val textColor: Int
         val backgroundResource: Int
+        val fontSizeTarget: Float
 
         when {
             errorTextView.text.isNotEmpty() -> {
                 backgroundResource = R.drawable.input_background_error
                 textColor = context.resources.getColor(R.color.orangeTextColor)
+                fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_14)
             }
             editText.hasFocus() -> {
                 textColor = context.resources.getColor(R.color.blue)
                 backgroundResource = R.drawable.input_background_active
+                fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_14)
             }
             else -> {
                 textColor = context.resources.getColor(R.color.lightGrayTextColor)
                 backgroundResource = R.drawable.input_background
+                fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_16)
             }
+        }
+
+        val translationYTarget =if(active){
+            - (hintTextView.height.toFloat() / 2)
+        }else{
+
+            val textPaint = TextPaint(hintTextView.paint)
+            textPaint.textSize = fontSizeTarget
+
+            val textHeight = textPaint.descent() - textPaint.ascent()
+            (addressLayoutDefaultHeight / 2) - (textHeight / 2)
         }
 
         val fontSizeAnimator = ValueAnimator.ofFloat(hintTextView.textSize, fontSizeTarget)
@@ -139,7 +138,7 @@ class AddressInputHelper(private val context: Context, private val container: Vi
         animatorSet.start()
 
         hintTextView.setTextColor(textColor)
-        container.destination_address_layout.setBackgroundResource(backgroundResource)
+        container.input_layout.setBackgroundResource(backgroundResource)
     }
 
     private fun setupPasteButton(){
@@ -156,7 +155,7 @@ class AddressInputHelper(private val context: Context, private val container: Vi
 
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.send_dest_paste -> {
+            R.id.custom_input_paste -> {
                 val clip = Utils.readFromClipboard(context)
                 if(clip.isNotBlank()){
                     editText.setText(clip)
@@ -183,10 +182,10 @@ class AddressInputHelper(private val context: Context, private val container: Vi
             setupPasteButton()
         }else{
             val enteredAddress = s.toString()
-            if(validateAddress(enteredAddress)){ // address is valid
+            if(validateInput(enteredAddress)){ // address is valid
                 setError(null)
             }else{
-                setError(context.getString(R.string.invalid_address))
+                setError(context.getString(validationMessage))
             }
 
             setupLayout()
@@ -202,12 +201,12 @@ class AddressInputHelper(private val context: Context, private val container: Vi
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     }
 
-    fun setHint(hint: String){
-        hintTextView.text = hint
+    fun setHint(@StringRes hint: Int){
+        hintTextView.setText(hint)
     }
 
     fun setError(error: String?){
-        container.send_dest_error.text = error
+        container.custom_input_error.text = error
         setupLayout()
     }
 
@@ -215,14 +214,14 @@ class AddressInputHelper(private val context: Context, private val container: Vi
     fun isInvalid(): Boolean {
         val enteredAddress = editText.text.toString()
         if(enteredAddress.isNotEmpty()){
-            return !validateAddress(enteredAddress)
+            return !validateInput(enteredAddress)
         }
 
         return false
     }
 
     fun hideErrorRow(){
-        container.dest_address_error_layout.hide()
+        container.custom_input_error_layout.hide()
     }
 
     fun hideQrScanner(){

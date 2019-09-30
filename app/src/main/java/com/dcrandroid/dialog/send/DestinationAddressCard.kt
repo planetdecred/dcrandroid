@@ -12,18 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.view.util.AccountCustomSpinner
-import com.dcrandroid.view.util.AddressInputHelper
+import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.send_page_sheet.view.*
 
 class DestinationAddressCard(context: Context, val layout: LinearLayout, validateAddress:(String) -> Boolean) {
 
     lateinit var addressChanged:() -> Unit
     internal val destinationAccountSpinner: AccountCustomSpinner
-    internal val addressInputHelper: AddressInputHelper
+    internal val addressInputHelper: InputHelper
     init {
         val activity = context as AppCompatActivity
         destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager, layout.destination_account_spinner, R.string.dest_account_picker_title)
-        addressInputHelper = AddressInputHelper(context, layout.destination_address_container, validateAddress)
+        addressInputHelper = InputHelper(context, layout.destination_address_container, validateAddress)
 
         layout.send_dest_toggle.setOnClickListener {
             if(destinationAccountSpinner.isVisible()){
@@ -46,7 +46,7 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
             return destinationAccountSpinner.getCurrentAddress()
         }
 
-        return addressInputHelper.address
+        return addressInputHelper.validatedInput
     }
 
     val estimationAddress: String?
