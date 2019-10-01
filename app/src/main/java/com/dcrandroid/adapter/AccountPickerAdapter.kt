@@ -19,7 +19,7 @@ import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
 
-class AccountPickerAdapter(val items:Array<Any>, val context: Context,
+class AccountPickerAdapter(val items:Array<Any>, val context: Context, val currentAccount: Account,
                            val accountSelected:(account: Account) -> Unit?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -56,6 +56,12 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context,
                 holder.itemView.account_row_icon.setImageResource(R.drawable.ic_accounts_locked)
             }else{
                 holder.itemView.account_row_icon.setImageResource(R.drawable.ic_accounts)
+            }
+
+            if(item.accountNumber == currentAccount.accountNumber && item.walletID == currentAccount.walletID){
+                holder.itemView.iv_selected_account.setImageResource(R.drawable.ic_checkmark03)
+            }else{
+                holder.itemView.iv_selected_account.setImageBitmap(null)
             }
 
             holder.itemView.account_name.apply {

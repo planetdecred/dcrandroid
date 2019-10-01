@@ -124,7 +124,7 @@ public class SplashScreen extends BaseActivity {
             e.printStackTrace();
         }
 
-        String homeDir = getFilesDir() + "/wallet";
+        String homeDir = getFilesDir() + "/wallets";
         walletData.setMultiWallet(new MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType));
         Dcrlibwallet.setLogLevels(util.get(Constants.LOGGING_LEVEL));
 

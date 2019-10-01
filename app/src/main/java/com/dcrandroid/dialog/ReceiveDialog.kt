@@ -20,7 +20,6 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
-import com.dcrandroid.data.Account
 import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
@@ -28,7 +27,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.receive_page_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,10 +40,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullScreenBottomSheetDialog(dismissListener) {
-
-    private var wallet: LibWallet? = null
-
-    private var selectedAccount: Account? = null
 
     private val qrHints = HashMap<EncodeHintType, Any>()
     private var generatedUri: Uri? = null
@@ -68,9 +62,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         qr_image.setOnClickListener { copyAddress() }
 
         sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner, R.string.dest_account_picker_title) {
-            selectedAccount = it
-            wallet = multiWallet.getWallet(it.walletID)
-            setAddress(wallet!!.currentAddress(it.accountNumber))
+            setAddress(it.getCurrentAddress())
             return@AccountCustomSpinner Unit
         }
     }
@@ -127,15 +119,13 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
                 e.printStackTrace()
             }
         }
-
-
     }
 
     private fun generateNewAddress(){
         val oldAddress = tv_address.text.toString()
-        var newAddress = wallet!!.nextAddress(selectedAccount!!.accountNumber)
+        var newAddress = sourceAccountSpinner.getNewAddress()
         if(oldAddress == newAddress){
-            newAddress = wallet!!.nextAddress(selectedAccount!!.accountNumber)
+            newAddress = sourceAccountSpinner.getNewAddress()
         }
 
         setAddress(newAddress)

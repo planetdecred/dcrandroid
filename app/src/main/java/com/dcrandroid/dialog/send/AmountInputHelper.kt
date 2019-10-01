@@ -20,7 +20,7 @@ import com.dcrandroid.util.GetExchangeRate
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fee_layout.view.*
-import kotlinx.android.synthetic.main.send_page_sheet.view.*
+import kotlinx.android.synthetic.main.send_page_amount_card.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -76,6 +76,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
         layout.iv_expand_fees.setOnClickListener(this)
         layout.swap_currency.setOnClickListener(this)
+        layout.exchange_error_retry.setOnClickListener(this)
         fetchExchangeRate()
     }
 
@@ -121,6 +122,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             }
 
             R.id.swap_currency -> {
+                if(exchangeDecimal == null){
+                    return
+                }
+
                 if(currencyIsDCR){
                     layout.currency_label.setText(R.string.usd)
                 }else{
@@ -147,6 +152,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
                 displayEquivalentValue()
                 amountChanged?.invoke(false)
+            }
+            R.id.exchange_error_retry -> {
+                layout.exchange_layout.hide()
+                fetchExchangeRate()
             }
         }
     }
@@ -253,7 +262,12 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
     override fun onExchangeRateSuccess(rate: GetExchangeRate.BittrexRateParser) {
         exchangeDecimal = rate.usdRate
-        layout.exchange_layout.show()
+
+        GlobalScope.launch(Dispatchers.Main){
+            layout.exchange_error_layout.hide()
+            layout.send_equivalent_value.show()
+            layout.exchange_layout.show()
+        }
 
         if(dcrAmount != null){
             usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
@@ -265,6 +279,13 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
     override fun onExchangeRateError(e: Exception) {
         e.printStackTrace()
+
+        GlobalScope.launch(Dispatchers.Main){
+            layout.exchange_error_layout.show()
+
+            layout.send_equivalent_value.hide()
+            layout.exchange_layout.show()
+        }
     }
 }
 

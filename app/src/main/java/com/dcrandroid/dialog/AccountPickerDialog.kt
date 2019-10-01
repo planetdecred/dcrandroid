@@ -22,7 +22,7 @@ import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
 import kotlinx.android.synthetic.main.account_picker_sheet.app_bar
 
-class AccountPickerDialog(@StringRes val title: Int, val accountSelected:(account: Account) -> Unit?): CollapsedBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, val accountSelected:(account: Account) -> Unit?): CollapsedBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
     private var layoutManager: LinearLayoutManager? = null
@@ -48,7 +48,7 @@ class AccountPickerDialog(@StringRes val title: Int, val accountSelected:(accoun
             items.addAll(accounts)
         }
 
-        val adapter = AccountPickerAdapter(items.toTypedArray(), context!!) {
+        val adapter = AccountPickerAdapter(items.toTypedArray(), context!!, currentAccount) {
             dismiss()
             accountSelected(it)
         }

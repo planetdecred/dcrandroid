@@ -33,6 +33,7 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.TxAuthor
 import dcrlibwallet.TxFeeAndSize
 import kotlinx.android.synthetic.main.fee_layout.*
+import kotlinx.android.synthetic.main.send_page_amount_card.*
 import kotlinx.android.synthetic.main.send_page_sheet.*
 import kotlinx.coroutines.*
 import java.util.*
@@ -40,10 +41,10 @@ import java.util.*
 class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
         FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
 
-    lateinit var sourceAccountSpinner: AccountCustomSpinner
-    lateinit var destinationAddressCard: DestinationAddressCard
+    private lateinit var sourceAccountSpinner: AccountCustomSpinner
+    private lateinit var destinationAddressCard: DestinationAddressCard
 
-    lateinit var amountHelper: AmountInputHelper
+    private lateinit var amountHelper: AmountInputHelper
 
     private var sendMax = false
 
@@ -141,12 +142,12 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
                 .show()
     }
 
-    private val sourceAccountChanged: (Account) -> Unit = {
-        amountHelper.selectedAccount = it
+    private val sourceAccountChanged: (AccountCustomSpinner) -> Unit = {
+        amountHelper.selectedAccount = it.selectedAccount
         constructTransaction()
     }
 
-    private val destAccountChanged: (Account) -> Unit = {
+    private val destAccountChanged: (AccountCustomSpinner) -> Unit = {
         constructTransaction()
     }
 

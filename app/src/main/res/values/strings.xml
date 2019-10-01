@@ -750,5 +750,7 @@
     <string name="invalid_base64_string">Not a base64 string.</string>
     <string name="help_description">For more information, please visit the Decred documentation.</string>
     <string name="see_documentations">See documentations</string>
+    <string name="exchange_rate_fetch_error">Exchange rate not fetched</string>
+    <string name="retry">Retry</string>
 
 </resources>

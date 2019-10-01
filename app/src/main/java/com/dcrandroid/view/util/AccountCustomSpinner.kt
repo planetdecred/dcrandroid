@@ -21,7 +21,7 @@ import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 
 class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
-                           @StringRes val pickerTitle: Int, var selectedAccountChanged: ((Account) -> Unit?)? = null) : View.OnClickListener {
+                           @StringRes val pickerTitle: Int, var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null) : View.OnClickListener {
 
     val context = spinnerLayout.context
 
@@ -41,17 +41,17 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         // Set default selected account as "default"
         // account from the first opened wallet
         wallet = multiWallet!!.openedWalletsList()[0]
-        // TODO: Remove required confimation param
+        // TODO: Remove required confirmation param
         selectedAccount = Account.from(wallet.getAccount(Constants.DEFAULT_ACCOUNT_NUMBER, Constants.REQUIRED_CONFIRMATIONS))
-        selectedAccountChanged?.let { it1 -> it1(selectedAccount!!) }
+        selectedAccountChanged?.let { it1 -> it1(this) }
         spinnerLayout.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        AccountPickerDialog(pickerTitle){
+        AccountPickerDialog(pickerTitle, selectedAccount!!){
             wallet = multiWallet!!.getWallet(it.walletID)
             selectedAccount = it
-            selectedAccountChanged?.let { it1 -> it1(it) }
+            selectedAccountChanged?.let { it1 -> it1(this) }
         }.show(fragmentManager, null)
     }
 

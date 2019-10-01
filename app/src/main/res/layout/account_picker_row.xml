@@ -89,7 +89,7 @@
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginStart="@dimen/margin_padding_size_16"
-        />
+        android:id="@+id/iv_selected_account"
+        android:layout_marginStart="@dimen/margin_padding_size_16" />
 
 </LinearLayout>
