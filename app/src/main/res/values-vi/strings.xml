@@ -333,7 +333,7 @@
     <string name="network_mode">Chế độ mạng</string>
     <string name="connect_to_peer">Kết nối tới Peer</string>
     <string name="server_address">Địa chỉ máy chủ</string>
-    <string name="wallet_log">Nhật ký ví</string>
+    <string name="check_wallets_log">Nhật ký ví</string>
     <string name="crash_title">Sự cố bắt buộc</string>
     <string name="remote_address_invalid">Địa chỉ từ xa không hợp lệ</string>
     <string name="new_block_notification_description">Bíp cho các khối mới.</string>

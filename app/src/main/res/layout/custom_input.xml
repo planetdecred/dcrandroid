@@ -24,6 +24,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingStart="@dimen/margin_padding_size_4"
+            android:paddingEnd="0dp"
             android:id="@+id/custom_input_et"
             android:hyphenationFrequency="none"
             android:breakStrategy="simple"

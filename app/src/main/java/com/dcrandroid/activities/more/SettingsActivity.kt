@@ -4,16 +4,17 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.more
 
 import android.os.Bundle
 import android.view.ViewTreeObserver
 import com.dcrandroid.R
+import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.preference.SwitchPreference
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.settings_activity.*
 
-class Settings: BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
+class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

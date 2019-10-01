@@ -21,6 +21,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import com.dcrandroid.BuildConfig;
 import com.dcrandroid.HomeActivity;
 import com.dcrandroid.R;
+import com.dcrandroid.activities.more.SettingsActivity;
 import com.dcrandroid.data.Constants;
 import com.dcrandroid.dialog.InfoDialog;
 import com.dcrandroid.util.PreferenceUtil;

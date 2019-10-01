@@ -333,7 +333,7 @@
        <string name="network_mode">网络模式</string>
        <string name="connect_to_peer">连接到节点</string>
        <string name="server_address">服务器地址</string>
-       <string name="wallet_log">钱包日志</string>
+       <string name="check_wallets_log">钱包日志</string>
        <string name="crash_title">强制崩溃</string>
        <string name="remote_address_invalid">远程节点地址无效</string>
        <string name="new_block_notification_description">新区块通知说明</string>

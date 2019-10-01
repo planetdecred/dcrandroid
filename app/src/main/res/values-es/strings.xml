@@ -360,7 +360,7 @@
     <string name="network_mode">Modo de Red</string>
     <string name="connect_to_peer">Conectado al par</string>
     <string name="server_address">Dirección del servidor</string>
-    <string name="wallet_log">Registro de la billetera</string>
+    <string name="check_wallets_log">Registro de la billetera</string>
     <string name="crash_title">Forzar en error</string>
     <string name="remote_address_invalid">Dirección remota inválida</string>
     <string name="new_block_notification_description">Bip para nuevos bloques.</string>

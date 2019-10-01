@@ -96,7 +96,7 @@
     <PreferenceCategory android:title="Debug">
         <Preference
             android:key="dcrwallet_log"
-            android:title="@string/wallet_log"
+            android:title="@string/check_wallets_log"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="info"

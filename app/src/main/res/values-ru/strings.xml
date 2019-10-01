@@ -277,7 +277,7 @@
     <string name="network_mode">Режим сети</string>
     <string name="connect_to_peer">Подсоединиться к узлу</string>
     <string name="server_address">Адрес сервера</string>
-    <string name="wallet_log">Лог кошелька</string>
+    <string name="check_wallets_log">Лог кошелька</string>
     <string name="crash_title">Спровоцировать сбой</string>
     <string name="remote_address_invalid">Удалённый адрес недействителен</string>
     <string name="new_block_notification_description">Звуковой сигнал для новых блоков.</string>

@@ -263,7 +263,9 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         amountChanged?.invoke(false)
     }
 
-    override fun onExchangeRateError(e: Exception) {}
+    override fun onExchangeRateError(e: Exception) {
+        e.printStackTrace()
+    }
 }
 
 fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String{

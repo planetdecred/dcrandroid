@@ -303,7 +303,7 @@
     <!--/Transaction-->
 
     <!--Block chain-->
-    <string name="rescan_block">Rescan Blockchain</string>
+    <string name="rescan_blockchain">Rescan Blockchain</string>
     <string name="starting_height">starting height</string>
     <string name="current_height">Current height</string>
     <string name="rescan_blocks_confirmation">Are you sure? This could take some time.</string>
@@ -377,11 +377,11 @@
     <string name="build_date_system" translatable="false">build_date_system</string>
     <string name="delete_wallet" translatable="false">delete_wallet</string>
     <string name="delete_wallet_title">Delete Wallet</string>
-    <string name="logging_level">Logging Level</string>
+    <string name="logging_level">Logging level (restart required)</string>
     <string name="network_mode">Network Mode</string>
     <string name="connect_to_peer">Connect to Peer</string>
     <string name="server_address">Server Address</string>
-    <string name="wallet_log">Wallet Log</string>
+    <string name="check_wallets_log">Check Wallets Log</string>
     <string name="crash_title">Force Crash</string>
     <string name="remote_address_invalid">Remote address is invalid</string>
     <string name="key_rescan_block" translatable="false">rescan_block</string>

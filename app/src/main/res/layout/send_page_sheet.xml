@@ -158,6 +158,9 @@
 
                 <include
                     android:id="@+id/destination_address_container"
+                    android:layout_marginTop="9dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     layout="@layout/custom_input" />
 
                 <include

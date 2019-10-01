@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_help.*
 import android.content.Intent
 import android.net.Uri
 
-
 class HelpActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

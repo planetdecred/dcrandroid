@@ -93,8 +93,8 @@ class InputHelper(private val context: Context, private val container: View,
 
         when {
             errorTextView.text.isNotEmpty() -> {
-                backgroundResource = R.drawable.input_background_error
                 textColor = context.resources.getColor(R.color.orangeTextColor)
+                backgroundResource = R.drawable.input_background_error
                 fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_14)
             }
             editText.hasFocus() -> {
@@ -105,7 +105,11 @@ class InputHelper(private val context: Context, private val container: View,
             else -> {
                 textColor = context.resources.getColor(R.color.lightGrayTextColor)
                 backgroundResource = R.drawable.input_background
-                fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_16)
+                fontSizeTarget = if(editText.text.isNotEmpty()){
+                    context.resources.getDimension(R.dimen.edit_text_size_14)
+                }else{
+                    context.resources.getDimension(R.dimen.edit_text_size_16)
+                }
             }
         }
 

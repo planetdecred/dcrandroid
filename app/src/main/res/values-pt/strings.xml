@@ -352,7 +352,7 @@
     <string name="network_mode">Modo rede</string>
     <string name="connect_to_peer">Conectar para o nó</string>
     <string name="server_address">Endereço Do Servidor</string>
-    <string name="wallet_log">Registro Da Carteira</string>
+    <string name="check_wallets_log">Registro Da Carteira</string>
     <string name="crash_title">Forçar Quebra</string>
     <string name="remote_address_invalid">Endereço Remoto inválido</string>
     <string name="new_block_notification_description">Apitar ao um novo bloco.</string>
