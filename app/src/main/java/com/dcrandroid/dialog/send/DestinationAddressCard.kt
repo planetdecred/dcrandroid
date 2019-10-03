@@ -69,4 +69,11 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
 
         return null
     }
+
+    fun clear(){
+        // this would trigger addressChanged whether address is visible or not
+        // but that won't be an issue since the account selector would always have
+        // a valid address
+        addressInputHelper.editText.text = null
+    }
 }

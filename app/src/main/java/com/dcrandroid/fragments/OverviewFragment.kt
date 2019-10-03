@@ -164,6 +164,9 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 
     override fun onSyncCompleted() {
+        GlobalScope.launch(Dispatchers.Main){
+            balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
+        }
         loadTransactions()
     }
 }

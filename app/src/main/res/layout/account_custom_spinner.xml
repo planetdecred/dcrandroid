@@ -12,8 +12,6 @@
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/margin_padding_size_16"
-    android:paddingEnd="@dimen/margin_padding_size_8"
     android:paddingTop="@dimen/margin_padding_size_16"
     android:paddingBottom="@dimen/margin_padding_size_18" >
 
@@ -26,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/margin_padding_size_24"
         android:layout_marginStart="@dimen/margin_padding_size_24" >
 
         <TextView

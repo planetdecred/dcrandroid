@@ -126,6 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingEnd="@dimen/margin_padding_size_12"
+                android:paddingStart="0dp"
                 android:id="@+id/exchange_layout"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -166,6 +167,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/exchange_error_layout"
+                    android:gravity="center_vertical"
                     android:visibility="gone"
                     android:orientation="horizontal">
 

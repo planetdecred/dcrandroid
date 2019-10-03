@@ -55,8 +55,6 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                         dismiss()
-                    }else if(newState != BottomSheetBehavior.STATE_EXPANDED){
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
             })

@@ -722,8 +722,8 @@
     <string name="pm">pm</string>
     <string name="paste">Paste</string>
     <string name="qr_code_scan_hint">Place QR code in the frame</string>
-    <string name="source_account_picker_title">Choose a sending account</string>
-    <string name="dest_account_picker_title">Choose a receiving account</string>
+    <string name="source_account_picker_title">Sending account</string>
+    <string name="dest_account_picker_title">Receiving account</string>
     <string name="none">None</string>
     <string name="notifications">Notifications</string>
     <string name="incoming_transactions">Incoming transactions</string>
@@ -752,5 +752,6 @@
     <string name="see_documentations">See documentations</string>
     <string name="exchange_rate_fetch_error">Exchange rate not fetched</string>
     <string name="retry">Retry</string>
+    <string name="message_signed">Message signed</string>
 
 </resources>

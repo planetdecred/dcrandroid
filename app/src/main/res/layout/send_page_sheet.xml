@@ -113,6 +113,10 @@
 
                 <include
                     layout="@layout/account_custom_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_padding_size_8"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:id="@+id/source_account_spinner" />
 
             </LinearLayout>
@@ -126,12 +130,14 @@
                 android:background="@drawable/card_bg"
                 android:paddingTop="@dimen/margin_padding_size_16"
                 android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16"
+                android:paddingEnd="@dimen/margin_padding_size_8"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/margin_padding_size_8"
                     android:orientation="horizontal">
 
                     <TextView
@@ -159,8 +165,10 @@
                 <include
                     android:id="@+id/destination_address_container"
                     android:layout_marginTop="9dp"
+                    android:layout_marginEnd="@dimen/margin_padding_size_8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="visible"
                     layout="@layout/custom_input" />
 
                 <include

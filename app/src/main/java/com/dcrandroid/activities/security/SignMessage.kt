@@ -144,6 +144,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
             withContext(Dispatchers.Main){
                 result_layout.show()
                 signatureHelper.editText.setText(signatureStr)
+                SnackBar.showText(this@SignMessage, R.string.message_signed)
             }
         }catch (e: Exception){
             e.printStackTrace()

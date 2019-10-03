@@ -131,6 +131,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
 
             // clear fields
             amountHelper.setAmountDcr(0) // clear
+            destinationAddressCard.clear()
         }
     }
 
