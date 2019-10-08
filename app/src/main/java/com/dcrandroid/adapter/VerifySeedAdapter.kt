@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.verify_seed_list_row.view.*
 
-data class MultiSeed(val seeds: Array<InputSeed>, var selectedIndex:Int = -1)
+data class InputSeed(val number: Int, var phrase: String)
+data class ShuffledSeeds(val seeds: Array<InputSeed>, var selectedIndex:Int = -1)
 
-class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<MultiSeed>,
+class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<ShuffledSeeds>,
                         private val seedTapped:(seedIndex:Int) -> Unit) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
 
-    val enteredSeeds = Array(33) {""}
+    val enteredSeeds = Array(SEED_COUNT) {""}
     var allSeedsSelected = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeedViewHolder {

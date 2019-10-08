@@ -6,35 +6,40 @@
 
 package com.dcrandroid.adapter
 
-import android.content.Context
+import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.recover_wallet_list_row.view.*
+import android.widget.ArrayAdapter
+import android.util.DisplayMetrics
 
-data class InputSeed(val number: Int, var phrase: String)
+const val SEED_COUNT = 33
 
-class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val allStringSeedArray: ArrayList<String>,
-                           val context: Context, val saveSeed: (InputSeed) -> Unit, val removeSeed: (InputSeed) -> Unit,
-                           var isAllSeedsEntered: (Boolean) -> Unit) : RecyclerView.Adapter<RestoreWalletAdapter.ViewHolder>() {
+class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<String>) : RecyclerView.Adapter<RestoreWalletAdapter.ViewHolder>() {
 
-    private var seedsCounter = 0
+    private var suggestionsAdapter =
+            SuggestionsTextAdapter(context, R.layout.dropdown_item_1, allSeedWords)
+
+    val enteredSeeds = ArrayList<String>().apply {
+        for(i in 0 until SEED_COUNT){
+            this.add("")
+        }
+    }
+    private var allValid = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.recover_wallet_list_row, parent, false)
+        val view = LayoutInflater.from(context)
+                .inflate(R.layout.recover_wallet_list_row, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return seedItems.size
+        return SEED_COUNT
     }
 
     override fun getItemId(position: Int): Long {
@@ -42,120 +47,75 @@ class RestoreWalletAdapter(private val seedItems: List<InputSeed>, private val a
         return position.toLong()
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
+    var seedChanged: ((Int, Boolean) -> Unit?)? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentSeed = seedItems[holder.adapterPosition]
-        val str = "Word #${currentSeed.number + 1}"
-        var enteredSeed = ""
-        val hintAdapter = SuggestionsTextAdapter(context, R.layout.dropdown_item_1line, allStringSeedArray)
-        getHintView(context)
-        holder.positionOfSeed.text = str
-        holder.savedSeed.completionHint = context.getString(R.string.tap_to_select)
-        holder.savedSeed.setSingleLine()
-        holder.savedSeed.setAdapter(hintAdapter)
-        holder.savedSeed.imeOptions = EditorInfo.IME_ACTION_NEXT
+        holder.itemView.seed_index.text = (position+1).toString()
 
-
-        holder.savedSeed.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
-            val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
-            enteredSeed = holder.savedSeed.text.toString()
-            currentSeed.phrase = enteredSeed
-            saveSeed(currentSeed)
-            seedsCounter++
-            if (seedsCounter >= 33) {
-                isAllSeedsEntered(true)
-            } else if (holder.adapterPosition < 32) {
-                view.requestFocus()
-            }
+        holder.itemView.seed_et.apply {
+            dropDownVerticalOffset = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_12)
+            setAdapter(suggestionsAdapter)
         }
 
+        holder.itemView.seed_et.setOnFocusChangeListener { v, hasFocus ->
 
-        holder.savedSeed.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
-                val view = holder.savedSeed.focusSearch(View.FOCUS_DOWN)
+            var backgroundResource: Int
+            var indexBackground: Int
+            var indexTextColor: Int
 
-                when {
-                    s!!.isNotEmpty() -> holder.ivClearText.setImageResource(R.drawable.ic_clear)
-                    s.isNullOrEmpty() -> holder.ivClearText.setImageResource(0)
-                }
-                if (enteredSeed.isNotEmpty() && enteredSeed == s.toString() && holder.savedSeed.isFocused && position < 32) {
-                    view.requestFocus()
+             if(hasFocus) {
+                backgroundResource = R.drawable.input_background_active
+                 indexBackground = R.drawable.seed_index_bg_active
+                 indexTextColor = R.color.blue
+            }else{
+                 backgroundResource = R.drawable.input_background
+                 indexBackground = R.drawable.seed_index_bg
+                 indexTextColor = R.color.darkerBlueGrayTextColor
+            }
+
+            if(!hasFocus){
+                val seed = holder.itemView.seed_et.text.toString()
+
+                 if(allSeedWords.indexOf(seed) < 0){
+                    backgroundResource = R.drawable.input_background_error
+                     indexBackground = R.drawable.seed_index_bg_error
+                     indexTextColor = R.color.colorError
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            holder.itemView.setBackgroundResource(backgroundResource)
+            holder.itemView.seed_index.setBackgroundResource(indexBackground)
+            holder.itemView.seed_index.setTextColor(context.getColor(indexTextColor))
+            holder.itemView.seed_et.setTextColor(context.getColor(indexTextColor))
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        holder.itemView.seed_et.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+                val seed = s.toString()
+                enteredSeeds[position] = seed
+
+                allValid = true
+                enteredSeeds.forEach {
+                    if(allSeedWords.indexOf(it) < 0){
+                        allValid = false
+                    }
+                }
+
+                seedChanged?.invoke(position, allValid)
+            }
+
         })
-
-        holder.ivClearText.setOnClickListener {
-            holder.savedSeed.text.clear()
-            removeSeed(seedItems[holder.adapterPosition])
-            if (seedsCounter > 0) {
-                seedsCounter--
-            }
-            isAllSeedsEntered(false)
-        }
-
-
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val seedIsValid = allStringSeedArray.containsPrefix(holder.savedSeed.text.toString())
-
-                if (!seedIsValid) {
-                    holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
-                } else {
-                    holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
-                    holder.ivClearText.setImageResource(0)
-                }
-            }
-
-        }
-
-        holder.savedSeed.addTextChangedListener(textWatcher)
-
-        holder.savedSeed.setOnFocusChangeListener { _, isFocused ->
-
-            val seedIsValid = allStringSeedArray.contains(holder.savedSeed.text.toString())
-
-            if (!seedIsValid) {
-                holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.orangeTextColor))
-            } else {
-                holder.savedSeed.setTextColor(ContextCompat.getColor(context, R.color.darkBlueTextColor))
-                holder.ivClearText.setImageResource(0)
-            }
-
-            if (isFocused && holder.savedSeed.text.isNotEmpty()) {
-                holder.ivClearText.setImageResource(R.drawable.ic_clear)
-            }
-        }
-
     }
 
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val positionOfSeed = view.tvPositionOfSeed!!
-        var savedSeed = view.tvSavedSeed!!
-        val ivClearText = view.ivClearText!!
-    }
-
-    private fun getHintView(context: Context): View? {
-        val hintView = LayoutInflater.from(context).inflate(R.layout.completion_hint_view, null).findViewById(android.R.id.text1) as TextView
-        hintView.setText(R.string.tap_to_select)
-        return hintView
-    }
-
-    private fun ArrayList<String>.containsPrefix(prefix: String): Boolean {
-        val seed = this.find { it.startsWith(prefix, ignoreCase = true) }
-        return seed != null
-    }
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 }

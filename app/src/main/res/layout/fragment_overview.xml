@@ -45,8 +45,6 @@
 
         </LinearLayout>
 
-        <include layout="@layout/backup_seed_prompt_layout" />
-
         <include layout="@layout/transactions_overview_layout" />
 
         <LinearLayout

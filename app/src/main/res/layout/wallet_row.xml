@@ -134,7 +134,6 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="@dimen/margin_padding_size_16"
                 android:layout_marginStart="@dimen/margin_padding_size_16">
 
                 <TextView
@@ -148,7 +147,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/verify_seed_phrase"
+                    android:text="@string/verify_seed_info"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:layout_marginTop="8dp"

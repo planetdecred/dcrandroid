@@ -7,7 +7,6 @@
 package com.dcrandroid.activities
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +15,7 @@ import com.dcrandroid.adapter.*
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
-import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
-import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
 import java.lang.Exception
 
@@ -48,12 +45,10 @@ class VerifySeedActivity : BaseActivity() {
 
             val firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                app_bar.elevation = if (firstVisibleItem != 0) {
-                    resources.getDimension(R.dimen.app_bar_elevation)
-                } else {
-                    0f
-                }
+            app_bar.elevation = if (firstVisibleItem != 0) {
+                resources.getDimension(R.dimen.app_bar_elevation)
+            } else {
+                0f
             }
         }
 
@@ -89,8 +84,8 @@ class VerifySeedActivity : BaseActivity() {
         }
     }
 
-    private fun getMultiSeedList(): ArrayList<MultiSeed> {
-        val multiSeedList = ArrayList<MultiSeed>()
+    private fun getMultiSeedList(): ArrayList<ShuffledSeeds> {
+        val multiSeedList = ArrayList<ShuffledSeeds>()
         for (seed in seeds) {
             multiSeedList.add(getMultiSeed(allSeeds.indexOf(seed)))
         }
@@ -98,7 +93,7 @@ class VerifySeedActivity : BaseActivity() {
         return multiSeedList
     }
 
-    private fun getMultiSeed(realSeedIndex: Int): MultiSeed {
+    private fun getMultiSeed(realSeedIndex: Int): ShuffledSeeds {
 
         val list = (0 until 33).toMutableList()
         list.remove(realSeedIndex)
@@ -113,7 +108,7 @@ class VerifySeedActivity : BaseActivity() {
         val realInputSeed = InputSeed(realSeedIndex, allSeeds[realSeedIndex])
 
         val arr = arrayListOf(firstInputSeed, secondInputSeed, realInputSeed).apply { shuffle() }.toTypedArray()
-        return MultiSeed(arr)
+        return ShuffledSeeds(arr)
     }
 
     private fun initSeedAdapter() {

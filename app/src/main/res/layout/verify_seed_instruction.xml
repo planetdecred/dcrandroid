@@ -35,9 +35,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/margin_padding_size_16"
                 android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingRight="0dp"
                 android:paddingEnd="0dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
@@ -45,7 +43,7 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="8dp"
+                    android:padding="@dimen/margin_padding_size_8"
                     android:background="@drawable/circular_transparent_ripple"
                     android:focusable="true"
                     android:clickable="true"
@@ -55,14 +53,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Keep in mind"
+                        android:text="@string/keep_in_mind"
                         android:textSize="@dimen/edit_text_size_20"
                         android:textColor="@color/darkBlueTextColor"
                         app:fontFamily="@font/source_sans_pro" />
@@ -109,7 +106,6 @@
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="#3d5873"
                     app:fontFamily="@font/source_sans_pro"
-                    android:layout_marginLeft="@dimen/margin_padding_size_24"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
             </LinearLayout>
@@ -138,7 +134,6 @@
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="#3d5873"
                     app:fontFamily="@font/source_sans_pro"
-                    android:layout_marginLeft="@dimen/margin_padding_size_24"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
             </LinearLayout>
@@ -167,7 +162,6 @@
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="#3d5873"
                     app:fontFamily="@font/source_sans_pro"
-                    android:layout_marginLeft="@dimen/margin_padding_size_24"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
             </LinearLayout>
@@ -196,7 +190,6 @@
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="#3d5873"
                     app:fontFamily="@font/source_sans_pro"
-                    android:layout_marginLeft="@dimen/margin_padding_size_24"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
             </LinearLayout>
@@ -225,7 +218,6 @@
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="#3d5873"
                     app:fontFamily="@font/source_sans_pro"
-                    android:layout_marginLeft="@dimen/margin_padding_size_24"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
             </LinearLayout>

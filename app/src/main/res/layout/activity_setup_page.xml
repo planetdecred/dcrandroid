@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_padding_size_8"
-                android:elevation="4dp"
+                android:elevation="@dimen/shadow_spread"
                 android:padding="@dimen/margin_padding_size_16"
                 android:gravity="center_vertical"
                 android:background="@drawable/blue_ripple_corners_8dp"
@@ -75,12 +75,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/margin_padding_size_16"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:text="@string/create_a_new_wallet"
                     android:textColor="@color/white"
                     android:textSize="@dimen/edit_text_size_16"
+                    android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
@@ -95,7 +94,8 @@
                 android:layout_marginBottom="@dimen/margin_padding_size_8"
                 android:layout_marginLeft="@dimen/margin_padding_size_8"
                 android:layout_marginRight="@dimen/margin_padding_size_8"
-                android:elevation="4dp"
+                android:gravity="center_vertical"
+                android:elevation="@dimen/shadow_spread"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal">
@@ -109,12 +109,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:text="@string/restore_existing_wallet"
-                    android:layout_marginLeft="@dimen/margin_padding_size_16"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:textColor="@color/white"
                     android:textSize="@dimen/edit_text_size_16"
+                    android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>

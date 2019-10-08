@@ -9,4 +9,6 @@
     <item name="pref_title" type="id"/>
     <item name="pref_subtitle" type="id"/>
     <item name="pref_switch" type="id"/>
+
+    <item name="list_layout" type="id"/>
 </resources>

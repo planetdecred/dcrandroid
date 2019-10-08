@@ -204,7 +204,7 @@
     <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
     <string name="backup_wallet_instruction">Back up your wallet</string>
     <string name="backup_seed_phrase">Back up seed phrase</string>
-    <string name="verify_seed_phrase">Verify your seed phrase backup so you can recover your funds when needed.</string>
+    <string name="verify_seed_info">Verify your seed phrase backup so you can recover your funds when needed.</string>
 
     <!--/Seed-->
 
@@ -613,6 +613,7 @@
     <string name="block_header_fetched">Block header fetched</string>
     <string name="step_1_3" tools:ignore="TypographyFractions">Step 1/3</string>
     <string name="step_2_3">Step 2/3</string>
+    <string name="step_2_2">Step 2/2</string>
     <string name="step_3_3">Step 3/3</string>
     <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
@@ -753,5 +754,11 @@
     <string name="exchange_rate_fetch_error">Exchange rate not fetched</string>
     <string name="retry">Retry</string>
     <string name="message_signed">Message signed</string>
+    <string name="restore_wallet_title">Restore from seed phrase</string>
+    <string name="verify_seed_phrase">Verify seed phrase</string>
+    <string name="restore">Restore</string>
+    <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
+    <string name="keep_in_mind">Keep in mind</string>
+    <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
 
 </resources>

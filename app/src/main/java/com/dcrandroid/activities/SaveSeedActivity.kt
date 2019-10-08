@@ -22,6 +22,8 @@ import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.save_seed_page.*
 import kotlin.math.*
 
+const val SEEDS_PER_ROW = 17
+
 class SaveSeedActivity : BaseActivity() {
 
     private var walletId: Long? = null
@@ -76,10 +78,7 @@ class SaveSeedActivity : BaseActivity() {
 
         val items = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        var seedRowHeight = resources.getDimension(R.dimen.seed_row_height)
-        seedRowHeight += resources.getDimension(R.dimen.margin_padding_size_8) // divider height
-
-        val layoutManager = GridLayoutManager(applicationContext, 17, GridLayoutManager.HORIZONTAL, false)
+        val layoutManager = GridLayoutManager(applicationContext, SEEDS_PER_ROW, GridLayoutManager.HORIZONTAL, false)
 
         val verticalDivider = VerticalDividerItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_padding_size_8), true)
         val horizontalItemDecoration = VerticalDividerItemDecoration(resources.getDimensionPixelSize(R.dimen.seed_horizontal_margin), false)

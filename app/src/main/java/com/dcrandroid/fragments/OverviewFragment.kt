@@ -50,8 +50,6 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     private lateinit var syncLayout: LinearLayout
     private var syncLayoutUtil: SyncLayoutUtil? = null
 
-    private lateinit var backupSeedLayout: RelativeLayout
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
@@ -65,8 +63,6 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         transactionsLayout = view.findViewById(R.id.transactions_view)
 
         syncLayout = view.findViewById(R.id.sync_layout)
-
-        backupSeedLayout = view.findViewById(R.id.backup_seed_prompt_layout)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
