@@ -7,6 +7,7 @@
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -77,6 +78,41 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:text="@string/create_a_new_wallet"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/edit_text_size_16"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_create_watch_only"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:layout_marginBottom="@dimen/margin_padding_size_8"
+                android:layout_marginLeft="@dimen/margin_padding_size_8"
+                android:layout_marginRight="@dimen/margin_padding_size_8"
+                android:elevation="@dimen/shadow_spread"
+                android:padding="@dimen/margin_padding_size_16"
+                android:gravity="center_vertical"
+                android:background="@drawable/blue_ripple_corners_8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_create_wallet_24px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:text="@string/create_watch_only_wallet"
                     android:textColor="@color/white"
                     android:textSize="@dimen/edit_text_size_16"
                     android:includeFontPadding="false"

@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+// TODO: Hide restore button while keyboard is visible
 class RestoreWalletActivity: BaseActivity() {
 
     var allSeedWords = ArrayList<String>()

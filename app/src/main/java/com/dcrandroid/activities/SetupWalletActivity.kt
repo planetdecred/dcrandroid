@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.PreferenceUtil
 import dcrlibwallet.Dcrlibwallet
@@ -35,7 +36,13 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         preferenceUtil = PreferenceUtil(this)
 
         ll_create_wallet.setOnClickListener{
-            showPassWordPinDialog()
+            PasswordPinDialogFragment().show(this)
+        }
+
+        ll_create_watch_only.setOnClickListener {
+            CreateWatchOnlyWallet {walletID ->
+                navigateToMainActivity(walletID)
+            }.show(this)
         }
 
         ll_restore_wallet.setOnClickListener{
@@ -59,20 +66,8 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         }
     }
 
-    /**
-     * Shows the spending pin and password bottom sheet dialog
-     */
-    private fun showPassWordPinDialog() {
-        val passwordPinDialog = PasswordPinDialogFragment()
-        passwordPinDialog.show(supportFragmentManager, "passwordPinDialog")
-    }
 
-    /**
-     * Navigates user to main activity
-     *
-     * @param spendingKey - spending password or pin
-     */
-    private fun navigateToMainActivity(spendingKey: String, walletID: Long) {
+    private fun navigateToMainActivity(walletID: Long) {
 
         runOnUiThread {
 
@@ -83,7 +78,6 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
                 finish()
             } else {
                 val intent = Intent(this@SetupWalletActivity, HomeActivity::class.java)
-                intent.putExtra(Constants.PASSPHRASE, spendingKey)
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
                 startActivity(intent)
@@ -102,10 +96,11 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         newSingleThreadExecutor().execute {
             try {
                 preferenceUtil!!.setBoolean(Constants.RESTORE_WALLET, false)
+                val seed = "miser stupendous backward inception slowdown Capricorn uncut visitor slowdown caravan blockade hemisphere repay article necklace hazardous cobra inferno python suspicious minnow Norwegian chairlift backwater surmount impetus cement stupendous snowslide sympathy fallout embezzle afflict"
+                val wallet = multiWallet.restoreWallet(seed, spendingKey, type)
+                wallet.unlockWallet(spendingKey.toByteArray())
 
-                val wallet = multiWallet.createNewWallet(spendingKey, type)
-
-                navigateToMainActivity(spendingKey, wallet.walletID)
+                navigateToMainActivity(wallet.walletID)
 
             } catch (e: Exception) {
                 e.printStackTrace()

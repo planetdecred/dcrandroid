@@ -760,5 +760,11 @@
     <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
     <string name="keep_in_mind">Keep in mind</string>
     <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
+    <string name="create_watch_only_wallet">Create Watch Only Wallet</string>
+    <string name="extended_public_key">Extended Public Key</string>
+    <string name="wallet_name_exists">Wallet name exists</string>
+    <string name="reserved_wallet_name">\'wallet-\' is a reserved prefix</string>
+    <string name="invalid_key">Key is invalid</string>
+    <string name="unusable_key">Key is unusable</string>
 
 </resources>

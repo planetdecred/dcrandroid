@@ -83,7 +83,6 @@ public class Utils {
         }
     }
 
-
     public static byte[] getHash(String hash) {
         List<String> hashList = new ArrayList<>();
         String[] split = hash.split("");
@@ -110,89 +109,6 @@ public class Utils {
                     + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
-    }
-
-    public static String getRemoteCertificate(Context context) {
-        try {
-            File path = new File(context.getFilesDir() + "/savedata");
-            if (!path.exists()) {
-                path.mkdirs();
-            }
-            File file = new File(path, "remote rpc.cert");
-            if (file.exists()) {
-                FileInputStream fin = new FileInputStream(file);
-                StringBuilder sb = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
-                String s;
-                while ((s = reader.readLine()) != null) {
-                    sb.append(s);
-                    sb.append("\n");
-                }
-                fin.close();
-                //System.out.println("Cert: "+sb.toString());
-                return sb.toString();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public static void setRemoteCetificate(Context context, String certificate) {
-        try {
-            File path = new File(context.getFilesDir() + "/savedata");
-            if (!path.exists()) {
-                path.mkdirs();
-            }
-            File file = new File(path, "remote rpc.cert");
-            if (file.exists()) {
-                file.delete();
-            }
-            FileOutputStream fout = new FileOutputStream(file);
-            byte[] buff = certificate.getBytes();
-            fout.write(buff, 0, buff.length);
-            fout.flush();
-            fout.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String getNetworkAddress(Context context) {
-        PreferenceUtil util = new PreferenceUtil(context);
-        String addr = util.get(Constants.REMOTE_NODE_ADDRESS);
-        System.out.println("Util is using remote server: " + addr);
-        return addr;
-    }
-
-    public static String calculateDays(long seconds, Context context) {
-        if (context == null) {
-            return "";
-        }
-
-        long days = TimeUnit.SECONDS.toDays(seconds);
-        if (days == 0) {
-            return context.getString(R.string.less_than_one_day);
-        } else if (days == 1) {
-            return context.getString(R.string.one_day);
-        }
-
-        return context.getString(R.string.multiple_days, days);
-    }
-
-    public static String calculateDaysAgo(long seconds, Context context) {
-        long days = TimeUnit.SECONDS.toDays(seconds);
-        if (days == 0) {
-            return context.getString(R.string.less_than_one_day_ago);
-        } else if (days == 1) {
-            return context.getString(R.string.one_day_ago);
-        }
-
-        return context.getString(R.string.multiple_days_ago, days);
     }
 
     public static String getDaysBehind(long seconds, Context context) {
@@ -306,25 +222,6 @@ public class Utils {
         return format.format(amount);
     }
 
-    public static long signedSizeToAtom(long signedSize) {
-        BigDecimal signed = new BigDecimal(signedSize);
-        signed = signed.setScale(9, RoundingMode.HALF_UP);
-
-        BigDecimal bytesPerKb = new BigDecimal(1000);
-        bytesPerKb = bytesPerKb.setScale(9, RoundingMode.HALF_UP);
-
-        // convert bytes to kb
-        signed = signed.divide(bytesPerKb, RoundingMode.HALF_UP);
-
-        BigDecimal feePerKb = new BigDecimal(0.0001);
-        feePerKb = feePerKb.setScale(9, RoundingMode.HALF_UP);
-
-        // multiply signed size(in kb) by fee per kb
-        signed = signed.multiply(feePerKb, MathContext.DECIMAL128);
-
-        return Dcrlibwallet.amountAtom(signed.doubleValue());
-    }
-
     private static void saveToClipboard(Context context, String text){
 
         int sdk = android.os.Build.VERSION.SDK_INT;
@@ -365,18 +262,6 @@ public class Utils {
                 return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
         }
         return "";
-    }
-
-    public static void showMessage(Context ctx, String message, int duration) {
-        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View vi = inflater.inflate(R.layout.toast, null);
-        TextView tv = vi.findViewById(android.R.id.message);
-        tv.setText(message);
-        Toast toast = new Toast(ctx);
-        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 50);
-        toast.setDuration(duration);
-        toast.setView(vi);
-        toast.show();
     }
 
     public static String translateError(Context ctx, Exception e) {
@@ -428,23 +313,6 @@ public class Utils {
 
     private static double log2(double a) {
         return Math.log(a) / Math.log(2);
-    }
-
-    public static void clearApplicationData(Context context) {
-        deleteDir(context.getFilesDir()); //clear files directory
-
-        File cache = context.getCacheDir();
-        File appDir = new File(cache.getParent());
-        if (appDir.exists()) {
-            String[] children = appDir.list();
-            for (String s : children) {
-                if (!s.equals("lib")) {
-                    deleteDir(new File(appDir, s));
-                }
-            }
-        }
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        sp.edit().clear().commit();
     }
 
     static boolean deleteDir(File dir) {

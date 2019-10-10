@@ -150,7 +150,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun refreshNavigationTabs(){
-        adapter.backupsNeeded = multiWallet!!.backupsNeeded
+        adapter.backupsNeeded = multiWallet.backupsNeeded
         adapter.notifyItemChanged(2) // Wallets Page
     }
 

@@ -81,8 +81,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/settings_scroll_view"
-        >
+        android:id="@+id/settings_scroll_view" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -372,39 +371,6 @@
                         android:layout_height="wrap_content"
                         android:id="@id/pref_switch"
                         android:theme="@style/Switch" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_padding_size_16"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="@drawable/curved_bottom_ripple"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@id/pref_title"
-                        android:includeFontPadding="false"
-                        android:text="@string/network_mode"
-                        android:textColor="@color/darkBlueTextColor"
-                        android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@id/pref_subtitle"
-                        android:includeFontPadding="false"
-                        android:layout_marginTop="@dimen/margin_padding_size_4"
-                        android:text="SPV (Simplified Payment Verification)"
-                        tools:text="SPV (Simplified Payment Verification)"
-                        android:textColor="@color/blueGraySecondTextColor"
-                        android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_14"/>
 
                 </LinearLayout>
 

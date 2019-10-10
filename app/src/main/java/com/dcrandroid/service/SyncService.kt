@@ -74,15 +74,9 @@ class SyncService : Service(), SyncProgressListener {
         multiWallet?.removeSyncProgressListener(TAG)
         multiWallet?.addSyncProgressListener(this, TAG)
 
-        if (Integer.parseInt(preferenceUtil!!.get(Constants.NETWORK_MODES, "0")) == 0) {
-            val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
-            Log.d(TAG, "Starting SPV Sync")
-            multiWallet?.spvSync(peerAddresses)
-        } else {
-//            val remoteNodeAddress = preferenceUtil!!.get(Constants.REMOTE_NODE_ADDRESS)
-//            Log.d(TAG, "Starting RPC Sync")
-//            multiWallet!!.rpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).toByteArray())
-        }
+        val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
+        Log.d(TAG, "Starting SPV Sync")
+        multiWallet?.spvSync(peerAddresses)
 
         return super.onStartCommand(intent, flags, startId)
     }

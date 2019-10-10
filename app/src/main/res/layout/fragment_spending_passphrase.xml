@@ -122,7 +122,6 @@
             android:layout_width="83dp"
             android:layout_height="40dp"
             android:layout_marginStart="@dimen/margin_padding_size_8"
-            android:layout_marginLeft="@dimen/margin_padding_size_8"
             android:gravity="center"
             android:background="@drawable/default_app_button_bg"
             android:enabled="false"

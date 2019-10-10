@@ -37,12 +37,12 @@ const val SCAN_QR_REQUEST_CODE = 100
 class InputHelper(private val context: Context, private val container: View,
                   val validateInput:(String) -> Boolean) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
 
-    lateinit var textChanged:() -> Unit
+    var textChanged:() -> Unit = {}
     val validatedInput: String?
     get() {
-        val enteredAddress = editText.text.toString()
-        if(validateInput(enteredAddress)){
-            return enteredAddress
+        val enteredText = editText.text.toString()
+        if(validateInput(enteredText)){
+            return enteredText
         }
 
         return null
@@ -233,6 +233,7 @@ class InputHelper(private val context: Context, private val container: View,
     }
 
     fun hidePasteButton(){
+        pasteHidden = true
         pasteTextView.hide()
     }
 
