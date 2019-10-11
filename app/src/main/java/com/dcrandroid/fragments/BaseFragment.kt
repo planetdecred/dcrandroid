@@ -90,5 +90,5 @@ open class BaseFragment : Fragment(), SyncProgressListener {
 
     override fun onTransactionConfirmed(walletID: Long, hash: String?) {}
 
-    override fun onTransaction(transaction: String?) {}
+    override fun onTransaction(transactionJson: String?) {}
 }

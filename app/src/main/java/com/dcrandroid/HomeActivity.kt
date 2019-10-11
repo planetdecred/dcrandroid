@@ -20,12 +20,14 @@ import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.ReceiveDialog
 import com.dcrandroid.dialog.send.SendDialog
@@ -40,8 +42,10 @@ import com.dcrandroid.util.NetworkUtil
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
+import com.google.gson.Gson
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
+import java.text.DecimalFormat
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
@@ -162,7 +166,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
             var leftMargin = tabWidth * adapter.activeTab
             leftMargin += ((tabWidth - tabIndicatorWidth) / 2f).roundToInt()
 
-            ObjectAnimator.ofFloat(tab_indicator, "translationX", leftMargin.toFloat()).apply {
+            ObjectAnimator.ofFloat(tab_indicator, View.TRANSLATION_X, leftMargin.toFloat()).apply {
                 duration = 350
                 start()
             }
@@ -173,9 +177,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         send_receive_layout.post {
             if(position < 2){ // show send and receive buttons for overview & transactions page
                 send_receive_layout.show()
-                ObjectAnimator.ofFloat(send_receive_layout, "translationY", 0f).setDuration(350).start() // bring view down
+                ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, 0f).setDuration(350).start() // bring view down
             }else{
-                val objectAnimator = ObjectAnimator.ofFloat(send_receive_layout, "translationY", send_receive_layout.height.toFloat())
+                val objectAnimator = ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, send_receive_layout.height.toFloat())
 
                 objectAnimator.addListener(object : Animator.AnimatorListener{
                     override fun onAnimationRepeat(animation: Animator?) {
@@ -291,7 +295,17 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     override fun onTransactionConfirmed(walletID: Long, hash: String?) {
     }
 
-    override fun onTransaction(transaction: String?) {
+    override fun onTransaction(transactionJson: String?) {
+        val gson = Gson()
+        val transaction = gson.fromJson(transactionJson, Transaction::class.java)
+
+        val dcrFormat = DecimalFormat("#.######## DCR")
+
+        val amount = Dcrlibwallet.amountCoin(transaction.amount)
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
+                transaction.timestampMillis.toInt(), multiWallet.openedWalletsCount() > 1, transaction.walletName)
     }
 
     // -- Sync Progress Listener

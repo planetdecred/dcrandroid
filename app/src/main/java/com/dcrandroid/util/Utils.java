@@ -340,12 +340,22 @@ public class Utils {
         }
     }
 
-    public static void sendTransactionNotification(Context context, NotificationManager manager, String amount, int nonce) {
+    public static void sendTransactionNotification(Context context, NotificationManager manager, String amount,
+                                                   int nonce, boolean multiWallet, String walletName) {
+
+
+        String title;
+        if(multiWallet) {
+            title = context.getString(R.string.wallet_new_transaction, walletName);
+        }else{
+            title = context.getString(R.string.new_transaction);
+        }
+
         Intent launchIntent = new Intent(context, HomeActivity.class);
         launchIntent.setAction(Constants.NEW_TRANSACTION_NOTIFICATION);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(context, "new transaction")
-                .setContentTitle(context.getString(R.string.new_transaction))
+                .setContentTitle(title)
                 .setContentText(amount)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setOngoing(false)
@@ -354,6 +364,7 @@ public class Utils {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(launchPendingIntent)
                 .build();
+
         Notification groupSummary = new NotificationCompat.Builder(context, "new transaction")
                 .setContentTitle(context.getString(R.string.new_transaction))
                 .setContentText(context.getString(R.string.new_transaction))

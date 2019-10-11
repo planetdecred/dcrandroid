@@ -289,6 +289,7 @@
     <string name="amount_invalid_decimal_places">Amount has more then %1$d decimal places</string>
     <string name="invalid_amount">Amount is not valid</string>
     <string name="new_transaction">New Transaction</string>
+    <string name="wallet_new_transaction">[%1$s] New Transaction</string>
     <string name="latest_block">Latest Block</string>
     <string name="copy_raw_transaction">Copy raw transaction</string>
     <string name="tap_this_to_copy_raw_transaction_hex">Tap this to copy raw transaction hex</string>

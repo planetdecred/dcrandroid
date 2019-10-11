@@ -23,6 +23,7 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.util.*
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
@@ -30,6 +31,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+
+const val MAX_TRANSACTIONS = 3
 
 class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
@@ -117,7 +121,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
-        val jsonResult = multiWallet.getTransactions(0, 3, Dcrlibwallet.TxFilterRegular, true)
+        val jsonResult = multiWallet.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterRegular, true)
         var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (tempTxList == null) {
@@ -157,6 +161,22 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         }
 
         return false
+    }
+
+    override fun onTransaction(transactionJson: String?) {
+        val transaction = gson.fromJson(transactionJson, Transaction::class.java)
+        transaction.animate = true
+
+        GlobalScope.launch(Dispatchers.Main){
+            transactions.add(0, transaction)
+
+            // remove last item if more than max
+            if(transactions.size > MAX_TRANSACTIONS){
+                transactions.removeAt(transactions.size - 1)
+            }
+
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     override fun onSyncCompleted() {
