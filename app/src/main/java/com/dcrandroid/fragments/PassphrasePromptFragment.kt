@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import com.dcrandroid.util.Utils
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_spending_passphrase.*
 
 class PassphrasePromptFragment(private var clickListener: DialogButtonListener, private var isSpendingPassword: Boolean) : Fragment() {
@@ -62,7 +63,7 @@ class PassphrasePromptFragment(private var clickListener: DialogButtonListener, 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
-            val progress = (Utils.getShannonEntropy(s.toString()) / 4) * 100
+            val progress = (Dcrlibwallet.shannonEntropy(s.toString()) / 4) * 100
             if (progress > 70) {
                 pin_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_strong)
             } else {

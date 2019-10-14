@@ -40,7 +40,14 @@ public class Constants {
             WIFI_SYNC = "wifi_sync",
             LICENSE = "license",
             WALLET_ID = "wallet_id",
-            RESULT = "result";
+            RESULT = "result",
+            ANDROID_KEY_STORE = "AndroidKeyStore",
+            TRANSFORMATION = "AES/GCM/NoPadding",
+            ENCRYPTION_DATA = "encryption_data",
+            ENCRYPTION_IV = "encryption_iv",
+            OFF = "off",
+            FINGERPRINT = "fingerprint",
+            FINGERPRINT_PASS = "fingerprint_pass";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2, DEFAULT_ACCOUNT_NUMBER = 0;
 }

@@ -15,6 +15,7 @@ import com.dcrandroid.adapter.*
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
 import java.lang.Exception
@@ -38,7 +39,7 @@ class VerifySeedActivity : BaseActivity() {
         linearLayoutManager = LinearLayoutManager(this)
         recycler_view_seeds.layoutManager = linearLayoutManager
 
-        allSeeds = Utils.getWordList(this).split(" ").toTypedArray()
+        allSeeds = Dcrlibwallet.AlternatingWords.split("\n").toTypedArray()
         prepareData()
 
         recycler_view_seeds.viewTreeObserver.addOnScrollChangedListener{

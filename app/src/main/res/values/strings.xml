@@ -320,7 +320,6 @@
     <string name="left_minute_sync_eta">%1$d%% completed, %2$d min left.</string>
     <string name="left_seconds_sync_eta">%1$d%% completed, %2$d sec left.</string>
     <string name="left_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds left.</string>
-    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.</string>
     <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
     <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
     <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
@@ -556,7 +555,6 @@
     <string name="startup_pin_password">Startup PIN/Password</string>
     <string name="encrypt_wallet_summary">A pin/password will be required at startup.</string>
     <string name="change_startup_pin_password">Change Startup PIN/Password</string>
-    <string name="password_pin">Password/PIN</string>
     <string name="spending_pin_password">Spending PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
     <string name="changing_pin">Changing PIN…</string>
@@ -567,6 +565,8 @@
     <string name="or_a_spending_pin">or a Spending PIN</string>
     <string name="or_a_spending_password">or a Spending Password</string>
     <string name="digit_zero">0</string>
+    <string name="use_biometric_auth">Use Biometric Authentication</string>
+    <string name="biometric_pref_summary">Fingerprint or iris scanner where supported.</string>
 
     <!--/Security-->
 
@@ -598,7 +598,20 @@
     <string name="welcome_android_title">Welcome to\nDecred Android Wallet</string>
     <string name="view_source_code">View source code on GitHub</string>
     <!--Landing page-->
-    
+
+    <!--Time-->
+    <string name="time_left_minutes">%1$d min left</string>
+    <string name="time_left_seconds">%1$d sec left</string>
+    <string name="days_behind">%1$d days behind</string>
+    <string name="one_days_behind">1 day behind</string>
+    <string name="am">am</string>
+    <string name="pm">pm</string>
+    <string name="x_days">%1$d days</string>
+    <string name="x_hours">%1$d hours</string>
+    <string name="x_minutes">%1$d minutes</string>
+    <string name="x_seconds">%1$d seconds</string>
+    <!--/Time-->
+
     <string name="connected_peers_count">Connected peers count</string>
     <string name="wallet_status">Wallet Status</string>
     <string name="offline">Offline</string>
@@ -620,11 +633,7 @@
     <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="syncing_progress">Syncing progress</string>
-    <string name="days_behind">%1$d days behind</string>
-    <string name="one_days_behind">1 day behind</string>
     <string name="percentage">%1$d%%</string>
-    <string name="time_left_minutes">%1$d min left</string>
-    <string name="time_left_seconds">%1$d sec left</string>
     <string name="syncing_state">Syncing…</string>
     <string name="block_header_fetched_count">%1$d of %2$d</string>
     <string name="blocks_left">%1$d blocks left</string>
@@ -720,8 +729,6 @@
     <string name="x_output_created">%1$d Outputs created</string>
     <string name="previous_outpoint_copied">Previous outpoint copied</string>
     <string name="to_address">To address</string>
-    <string name="am">am</string>
-    <string name="pm">pm</string>
     <string name="paste">Paste</string>
     <string name="qr_code_scan_hint">Place QR code in the frame</string>
     <string name="source_account_picker_title">Sending account</string>
@@ -767,5 +774,8 @@
     <string name="reserved_wallet_name">\'wallet-\' is a reserved prefix</string>
     <string name="invalid_key">Key is invalid</string>
     <string name="unusable_key">Key is unusable</string>
+    <string name="authentication_required">Authentication Required</string>
+    <string name="biometric_lockout_error">Too many attempts. Try again later.</string>
+    <string name="biometric_permanent_lockout_error">Biometric disabled. Unlock your device with a strong authentication (PIN/Pattern/Password)</string>
 
 </resources>

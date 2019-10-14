@@ -61,7 +61,7 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
                         dismiss()
                         accountCreated(accountNumber)
                     }catch (e: Exception){
-                        new_account_name.error = Utils.translateError(context, e)
+                        new_account_name.error = Utils.translateError(context!!, e)
                     }
                 }
 

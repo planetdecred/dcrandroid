@@ -53,7 +53,7 @@ class Transaction : Serializable {
         }
 
     val hashBytes: ByteArray
-        get() = Utils.getHash(hash)
+        get() = Utils.getHash(hash)!!
 
     val walletName: String?
         get() {

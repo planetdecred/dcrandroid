@@ -76,12 +76,13 @@ dependencies {
 
     // Android support library
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0-beta01'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
-    implementation 'androidx.core:core:1.0.1'
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.biometric:biometric:1.0.0-rc01'
+    implementation 'androidx.core:core:1.1.0'
 
     // QR code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -92,7 +93,7 @@ dependencies {
     }
 
     // JSON serialization & deserialization
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1', {

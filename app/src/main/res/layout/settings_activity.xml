@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="@string/password_pin"
+                    android:text="@string/security"
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
@@ -235,6 +235,56 @@
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/biometric_authentication"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@id/pref_title"
+                            android:includeFontPadding="false"
+                            android:text="@string/use_biometric_auth"
+                            android:textColor="@color/darkBlueTextColor"
+                            android:fontFamily="@font/source_sans_pro"
+                            android:textSize="@dimen/edit_text_size_16"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@id/pref_subtitle"
+                            android:includeFontPadding="false"
+                            android:layout_marginTop="@dimen/margin_padding_size_4"
+                            android:text="@string/biometric_pref_summary"
+                            android:textColor="@color/blueGraySecondTextColor"
+                            android:fontFamily="@font/source_sans_pro"
+                            android:textSize="@dimen/edit_text_size_14"/>
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_switch"
+                        android:theme="@style/Switch" />
 
                 </LinearLayout>
 

@@ -249,7 +249,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
         } catch (e: Exception) {
             e.printStackTrace()
 
-            amountHelper.setError(Utils.translateError(context, e))
+            amountHelper.setError(Utils.translateError(context!!, e))
             clearEstimates()
         }
     }

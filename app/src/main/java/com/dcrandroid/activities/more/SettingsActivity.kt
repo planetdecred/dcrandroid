@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.view.ViewTreeObserver
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
+import com.dcrandroid.extensions.show
 import com.dcrandroid.preference.SwitchPreference
+import com.dcrandroid.util.BiometricUtils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.settings_activity.*
 
@@ -21,6 +23,12 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         setContentView(R.layout.settings_activity)
 
         SwitchPreference(this, Dcrlibwallet.SpendUnconfirmedConfigKey, spend_unconfirmed_funds)
+
+        if(BiometricUtils.isFingerprintEnrolled(this)){
+            biometric_authentication.show()
+            SwitchPreference(this, Dcrlibwallet.UseBiometricAuthConfigKey, biometric_authentication, biometricCheckChange)
+        }
+
         SwitchPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, incoming_transactions)
         SwitchPreference(this, Dcrlibwallet.BeepNewBlocksConfigKey, beep_new_blocks)
         SwitchPreference(this, Dcrlibwallet.SyncOnCellularConfigKey, wifi_sync)
@@ -30,6 +38,11 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         }
 
         settings_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
+    }
+
+    val biometricCheckChange: (checked: Boolean) -> Boolean = {
+
+        false
     }
 
     override fun onScrollChanged() {
