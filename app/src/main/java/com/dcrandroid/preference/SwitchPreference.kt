@@ -15,7 +15,7 @@ class SwitchPreference(context: Context, val key: String, val view: View, val ch
     : Preference(context, key, view), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     init {
-        view.pref_switch.isChecked = multiWallet!!.readBoolConfigValueForKey(key)
+        view.pref_switch.isChecked = multiWallet!!.readBoolConfigValueForKey(key, false)
         view.setOnClickListener(this)
         view.pref_switch.setOnCheckedChangeListener(this)
     }

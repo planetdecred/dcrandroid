@@ -91,6 +91,9 @@
     <string name="connected_to_n_peer">Connected to %1$d peer</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
+    <string name="user_agent_dialog_title">Set up user agent</string>
+    <string name="peer_ip_dialog_title">Set up persistent peers</string>
+    <string name="peer_ip_pref_hint">IP Address</string>
     <string name="log_file_not_found">Log file not found</string>
     <string name="wallet_log_copied">Wallet log copied successfully</string>
     <string name="dismiss">Dismiss</string>
@@ -102,7 +105,7 @@
     <string name="one_day_ago">1 day ago</string>
     <string name="multiple_days">%1$d days</string>
     <string name="multiple_days_ago">%1$d days ago</string>
-    <string name="copy">Copy</string>
+    <string name="_copy">Copy</string>
     <string name="copied_successfully">Copied successfully.</string>
     <string name="all">All</string>
     <string name="re_establishing_connection">Re-establishing connection</string>
@@ -394,31 +397,11 @@
     <string name="setting_startup_pin">Setting startup PIN…</string>
     <string name="setting_startup_password">Setting startup password…</string>
 
-    <string-array name="network_modes">
-        <item>Simplified Payment Verification (SPV)</item>
-        <item>Remote Full Node</item>
-    </string-array>
-    <string-array name="network_modes_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
     <string-array name="currency_conversion">
         <item>None</item>
         <item>USD (bittrex)</item>
     </string-array>
-    <string-array name="currency_conversion_source" translatable="false">
-        <item />
-        <item>bittrex</item>
-    </string-array>
-    <string-array name="currency_conversion_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="currency_conversion_abbrv" translatable="false">
-        <item />
-        <item>USD</item>
-    </string-array>
+
 
     <string-array name="logging_levels" translatable="false">
         <item>Trace</item>
@@ -427,6 +410,15 @@
         <item>Warn</item>
         <item>Error</item>
         <item>Critical</item>
+    </string-array>
+    
+    
+    <string-array name="notification_options">
+        <item>None</item>
+        <item>Silent</item>
+        <item>Vibration only</item>
+        <item>Sound only</item>
+        <item>Sound and Vibration</item>
     </string-array>
     <!--/Preference-->
 
@@ -777,5 +769,6 @@
     <string name="authentication_required">Authentication Required</string>
     <string name="biometric_lockout_error">Too many attempts. Try again later.</string>
     <string name="biometric_permanent_lockout_error">Biometric disabled. Unlock your device with a strong authentication (PIN/Pattern/Password)</string>
+    <string name="invalid_peer_ip">Enter a valid ip address</string>
 
 </resources>

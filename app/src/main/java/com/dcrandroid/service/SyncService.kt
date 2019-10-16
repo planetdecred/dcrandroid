@@ -74,9 +74,8 @@ class SyncService : Service(), SyncProgressListener {
         multiWallet?.removeSyncProgressListener(TAG)
         multiWallet?.addSyncProgressListener(this, TAG)
 
-        val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
         Log.d(TAG, "Starting SPV Sync")
-        multiWallet?.spvSync(peerAddresses)
+        multiWallet?.spvSync()
 
         return super.onStartCommand(intent, flags, startId)
     }

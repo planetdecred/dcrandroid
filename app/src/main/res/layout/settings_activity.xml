@@ -144,6 +144,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/currency_conversion"
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
@@ -198,28 +199,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_padding_size_16"
                     android:layout_marginTop="@dimen/margin_padding_size_8"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="@drawable/curved_bottom_ripple"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@id/pref_title"
-                        android:includeFontPadding="false"
-                        android:text="@string/spending_pin_password"
-                        android:textColor="@color/darkBlueTextColor"
-                        android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
@@ -333,12 +313,6 @@
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16"/>
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@id/pref_switch"
-                        android:theme="@style/Switch" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -427,6 +401,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/spv_peer_ip"
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
@@ -449,7 +424,6 @@
                         android:id="@id/pref_subtitle"
                         android:includeFontPadding="false"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
-                        android:text="10.0.2.2"
                         tools:text="10.0.2.2"
                         android:textColor="@color/blueGraySecondTextColor"
                         android:fontFamily="@font/source_sans_pro"
@@ -460,6 +434,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/user_agent"
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"

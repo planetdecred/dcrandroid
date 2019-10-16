@@ -49,5 +49,10 @@ public class Constants {
             FINGERPRINT = "fingerprint",
             FINGERPRINT_PASS = "fingerprint_pass";
 
-    public static final int TRANSACTION_SUMMARY_ID = 5552478, REQUIRED_CONFIRMATIONS = 2, DEFAULT_ACCOUNT_NUMBER = 0;
+    public static final int TRANSACTION_SUMMARY_ID = 5552478,
+            REQUIRED_CONFIRMATIONS = 2,
+            DEFAULT_ACCOUNT_NUMBER = 0,
+            DEFAULT_TX_NOTIFICATION = 2, // Vibrations Only
+            DEFAULT_CURRENCY_CONVERSION = 0; // None
+
 }
