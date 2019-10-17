@@ -13,13 +13,16 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_spending_passphrase.*
 
-class PassphrasePromptFragment(private var clickListener: DialogButtonListener, private var isSpendingPassword: Boolean) : Fragment() {
+data class PassphrasePromptParams(var passphraseType: Int, @StringRes var positiveButtonTitle: Int)
+
+class PassphrasePromptFragment(private var clickListener: DialogButtonListener, var params: PassphrasePromptParams) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -29,7 +32,7 @@ class PassphrasePromptFragment(private var clickListener: DialogButtonListener, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(isSpendingPassword){
+        if(params.passphraseType == Dcrlibwallet.SpendingPassphraseTypePass){
             pin_layout.hint = getString(R.string.spending_password)
             ed_pin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             pin_strength_title.setText(R.string.password_strength)
@@ -42,6 +45,8 @@ class PassphrasePromptFragment(private var clickListener: DialogButtonListener, 
         ed_confirm_pin.addTextChangedListener(pinWatcher)
 
         btn_cancel.setOnClickListener { clickListener.onClickCancel() }
+
+        btn_create.setText(params.positiveButtonTitle)
         btn_create.setOnClickListener {
             it.visibility = View.GONE
             ed_pin.isFocusable = false
@@ -81,15 +86,18 @@ class PassphrasePromptFragment(private var clickListener: DialogButtonListener, 
 
         override fun afterTextChanged(editable: Editable) {
 
+            btn_create.isEnabled = ed_pin.text!!.isNotBlank() && ed_pin.text.toString() == ed_confirm_pin.text.toString()
+
             if (ed_confirm_pin.text.toString() == "") {
                 til_confirm_pin.error = null
             } else {
                 if (ed_pin.text.toString() != ed_confirm_pin.text.toString()) {
-                    til_confirm_pin.error = if (isSpendingPassword) getString(R.string.mismatch_password) else getString(R.string.mismatch_passcode)
-                    btn_create.isEnabled = false
+                    til_confirm_pin.error = when(params.passphraseType) {
+                        Dcrlibwallet.SpendingPassphraseTypePass -> getString(R.string.mismatch_password)
+                        else -> getString(R.string.mismatch_passcode)
+                    }
                 } else {
                     til_confirm_pin.error = null
-                    btn_create.isEnabled = true
                 }
             }
         }

@@ -85,6 +85,9 @@
                 android:layout_marginStart="@dimen/margin_padding_size_24"
                 android:layout_marginEnd="@dimen/margin_padding_size_24"
                 android:layout_marginBottom="@dimen/margin_padding_size_8"
+                android:textColor="@color/darkerBlueGrayTextColor"
+                android:textSize="@dimen/edit_text_size_16"
+                android:fontFamily="@font/source_sans_pro"
                 android:text="@string/restore_wallet_instruction" />
 
             <androidx.recyclerview.widget.RecyclerView

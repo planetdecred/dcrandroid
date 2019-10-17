@@ -770,5 +770,7 @@
     <string name="biometric_lockout_error">Too many attempts. Try again later.</string>
     <string name="biometric_permanent_lockout_error">Biometric disabled. Unlock your device with a strong authentication (PIN/Pattern/Password)</string>
     <string name="invalid_peer_ip">Enter a valid ip address</string>
+    <string name="your_wallet_is_successfully_restored">Your wallet is successfully restored</string>
+    <string name="get_started">Get started</string>
 
 </resources>

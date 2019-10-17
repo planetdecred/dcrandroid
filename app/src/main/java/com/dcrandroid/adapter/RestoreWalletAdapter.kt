@@ -62,6 +62,7 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
             var backgroundResource: Int
             var indexBackground: Int
             var indexTextColor: Int
+            var editTextColor: Int = R.color.darkBlueTextColor
 
              if(hasFocus) {
                 backgroundResource = R.drawable.input_background_active
@@ -80,13 +81,16 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
                     backgroundResource = R.drawable.input_background_error
                      indexBackground = R.drawable.seed_index_bg_error
                      indexTextColor = R.color.colorError
+                     editTextColor = R.color.colorError
                 }
             }
 
             holder.itemView.setBackgroundResource(backgroundResource)
+
             holder.itemView.seed_index.setBackgroundResource(indexBackground)
             holder.itemView.seed_index.setTextColor(context.getColor(indexTextColor))
-            holder.itemView.seed_et.setTextColor(context.getColor(indexTextColor))
+
+            holder.itemView.seed_et.setTextColor(context.getColor(editTextColor))
         }
 
         holder.itemView.seed_et.addTextChangedListener(object : TextWatcher{
