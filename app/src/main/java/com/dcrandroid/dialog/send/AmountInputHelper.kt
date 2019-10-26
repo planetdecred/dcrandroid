@@ -12,12 +12,14 @@ import android.view.View
 import android.widget.LinearLayout
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
+import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.GetExchangeRate
 import com.dcrandroid.util.Utils
+import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fee_layout.view.*
 import kotlinx.android.synthetic.main.send_page_amount_card.view.*
@@ -81,12 +83,17 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     }
 
     private fun fetchExchangeRate(){
+        val multiWallet = WalletData.multiWallet!!
+        val currencyConversion = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
+
+        exchangeEnabled = currencyConversion > 0
+
         if(!exchangeEnabled){
             return
         }
 
         println("Getting exchange rate")
-        val userAgent = "" // TODO
+        val userAgent = multiWallet.readStringConfigValueForKey(Dcrlibwallet.UserAgentConfigKey)
         GetExchangeRate(userAgent, this).execute()
     }
 

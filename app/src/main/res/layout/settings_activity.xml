@@ -203,7 +203,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/curved_bottom_ripple"
+                    android:background="@drawable/ripple"
                     android:orientation="vertical">
 
                     <TextView

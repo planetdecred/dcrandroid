@@ -35,7 +35,12 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val multiWallet = WalletData.multiWallet
-    val util = PreferenceUtil(context)
+
+    val spendUnconfirmedFunds: Boolean
+
+    init {
+        spendUnconfirmedFunds = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
         val view = layoutInflater.inflate(R.layout.transaction_row, parent, false)
@@ -60,7 +65,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         if (transaction.confirmations == 0) {
             holder.status.setPending()
             holder.statusImg.setImageResource(R.drawable.ic_pending)
-        }else if (transaction.confirmations > 1 || util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)){
+        }else if (transaction.confirmations > 1 || spendUnconfirmedFunds){
             holder.status.setConfirmed(transaction.timestamp)
             holder.statusImg.setImageResource(R.drawable.ic_confirmed)
         }

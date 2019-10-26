@@ -32,8 +32,7 @@ class Transaction : Serializable {
     var fee: Long = 0
     @SerializedName("amount")
     var amount: Long = 0
-    var totalInput: Long = 0
-    var totalOutput: Long = 0
+
     @SerializedName("timestamp")
     var timestamp: Long = 0
     val confirmations: Int

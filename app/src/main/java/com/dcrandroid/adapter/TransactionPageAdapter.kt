@@ -22,13 +22,21 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
+import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_page_row.view.*
 
 class TransactionPageAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    private val util = PreferenceUtil(context)
+    private val requiredConfirmations: Int
+
+    init {
+        requiredConfirmations = when {
+            WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
+            else -> Constants.REQUIRED_CONFIRMATIONS
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
         val view = layoutInflater.inflate(R.layout.transaction_page_row, parent, false)
@@ -68,7 +76,6 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
 
 
         val transaction = transactions[position]
-        val requiredConfs = if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0 else Constants.REQUIRED_CONFIRMATIONS
 
         holder.icon.setImageResource(transaction.iconResource)
 
@@ -76,7 +83,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
         holder.itemView.days_to_vote.hide()
         holder.itemView.vote_reward.hide()
 
-        if (transaction.confirmations < requiredConfs) {
+        if (transaction.confirmations < requiredConfirmations) {
             holder.status.setPending()
             holder.statusImg.setImageResource(R.drawable.ic_pending)
         } else {

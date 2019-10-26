@@ -12,18 +12,14 @@ package com.dcrandroid.data;
 
 public class Constants {
     public static final String
-            PEER_IP = "peer_ip",
-            SPEND_UNCONFIRMED_FUNDS = "spend_unconfirmed_funds",
             TRANSACTION_NOTIFICATION_GROUP = "com.dcrandroid.NEW_TRANSACTIONS",
             ADDRESS = "Address",
-            LOGGING_LEVEL = "logging_level",
             NEW_TRANSACTION_NOTIFICATION = "new_transaction_notification",
             NBSP = " ",
             PASSPHRASE = "passphrase",
             HIDE_WALLET = "hide_wallet",
             EXTERNAL = "external",
             SYNCED = "synced",
-            RESTORE_WALLET = "restore_wallet",
             BADGER_DB = "badgerdb",
             TESTNET_HD_PATH = "m / 44' / 1' / ",
             LEGACY_TESTNET_HD_PATH = "m / 44' / 11' / ",
@@ -51,8 +47,11 @@ public class Constants {
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             REQUIRED_CONFIRMATIONS = 2,
-            DEFAULT_ACCOUNT_NUMBER = 0,
-            DEFAULT_TX_NOTIFICATION = 2, // Vibrations Only
-            DEFAULT_CURRENCY_CONVERSION = 0; // None
+            DEF_ACCOUNT_NUMBER = 0,
+            DEF_LOG_LEVEL = 2,
+            DEF_TX_NOTIFICATION = 2, // Vibrations Only
+            DEF_CURRENCY_CONVERSION = 0; // None
+
+    public static final boolean DEF_SPEND_UNCONFIRMED = false;
 
 }

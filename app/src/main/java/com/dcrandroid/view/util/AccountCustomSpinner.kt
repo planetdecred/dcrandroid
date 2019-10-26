@@ -17,6 +17,7 @@ import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 
@@ -38,11 +39,18 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     }
 
     init {
+
+        val requiredConfirmations = if(multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)){
+            0
+        }else{
+            Constants.REQUIRED_CONFIRMATIONS
+        }
+
         // Set default selected account as "default"
         // account from the first opened wallet
-        wallet = multiWallet!!.openedWalletsList()[0]
-        // TODO: Remove required confirmation param
-        selectedAccount = Account.from(wallet.getAccount(Constants.DEFAULT_ACCOUNT_NUMBER, Constants.REQUIRED_CONFIRMATIONS))
+        wallet = multiWallet.openedWalletsList()[0]
+
+        selectedAccount = Account.from(wallet.getAccount(Constants.DEF_ACCOUNT_NUMBER, requiredConfirmations))
         selectedAccountChanged?.let { it1 -> it1(this) }
         spinnerLayout.setOnClickListener(this)
     }

@@ -31,6 +31,8 @@ import com.dcrandroid.util.Utils
 
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.MultiWallet
+import kotlinx.android.synthetic.main.activity_debug.*
+import kotlinx.android.synthetic.main.activity_debug.view.*
 
 /**
  * Created by Macsleven on 24/12/2017.
@@ -114,7 +116,10 @@ class SplashScreen : BaseActivity() {
 
         val homeDir = "$filesDir/wallets"
         walletData.multiWallet = MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType)
-        Dcrlibwallet.setLogLevels(util!!.get(Constants.LOGGING_LEVEL))
+
+        val logLevels = resources.getStringArray(R.array.logging_levels)
+        val logLevelIndex = walletData.multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL)
+        Dcrlibwallet.setLogLevels(logLevels[logLevelIndex])
 
         if (walletData.multiWallet!!.loadedWalletsCount() == 0) {
             loadThread = object : Thread() {

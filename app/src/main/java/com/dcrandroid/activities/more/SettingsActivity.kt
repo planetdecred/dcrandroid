@@ -40,11 +40,11 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         SwitchPreference(this, Dcrlibwallet.SyncOnCellularConfigKey, wifi_sync)
 
 
-        ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEFAULT_TX_NOTIFICATION,
+        ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions)
 
-        setCurrencyConversionSummary(multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEFAULT_CURRENCY_CONVERSION))
-        ListPreference(this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEFAULT_CURRENCY_CONVERSION,
+        setCurrencyConversionSummary(multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION))
+        ListPreference(this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION,
                 R.array.currency_conversion, currency_conversion){
             setCurrencyConversionSummary(it)
         }

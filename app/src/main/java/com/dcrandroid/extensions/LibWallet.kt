@@ -11,6 +11,8 @@ import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.parseAccounts
 import com.dcrandroid.util.PreferenceUtil
+import com.dcrandroid.util.WalletData
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 
 fun LibWallet.walletAccounts(requiredConfirmations: Int) : ArrayList<Account>{
@@ -21,8 +23,10 @@ fun LibWallet.visibleWalletAccounts(context: Context) : List<Account>{
 
     val util = PreferenceUtil(context)
 
-    val requiredConfirmations= if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0
-    else Constants.REQUIRED_CONFIRMATIONS
+    val requiredConfirmations= when {
+        WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
+        else -> Constants.REQUIRED_CONFIRMATIONS
+    }
 
     return this.walletAccounts(requiredConfirmations).filter { !util.getBoolean(Constants.HIDE_WALLET + it.accountNumber) }
 }

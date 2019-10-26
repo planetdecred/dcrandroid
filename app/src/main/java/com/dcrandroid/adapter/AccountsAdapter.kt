@@ -19,6 +19,7 @@ import com.dcrandroid.dialog.AccountDetailsDialog
 import com.dcrandroid.dialog.AddAccountDialog
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.*
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.account_row.view.*
 import java.lang.Exception
@@ -30,9 +31,10 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
     private val requiredConfirmations: Int
 
     init {
-        val util = PreferenceUtil(context)
-        requiredConfirmations = if (util.getBoolean(Constants.SPEND_UNCONFIRMED_FUNDS)) 0
-        else Constants.REQUIRED_CONFIRMATIONS
+        requiredConfirmations = when {
+            WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
+            else -> Constants.REQUIRED_CONFIRMATIONS
+        }
 
         wallet = WalletData.multiWallet!!.getWallet(walletID)
         accounts = wallet.walletAccounts(requiredConfirmations)

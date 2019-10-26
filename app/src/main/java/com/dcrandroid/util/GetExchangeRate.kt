@@ -31,7 +31,7 @@ class GetExchangeRate(private val userAgent: String,
             connection.doInput = true
             connection.readTimeout = 7000
             connection.connectTimeout = 7000
-            connection.setRequestProperty(Constants.USER_AGENT, userAgent)
+            connection.setRequestProperty("User-Agent", userAgent)
             val br = BufferedReader(InputStreamReader(connection.inputStream))
             val result = StringBuilder()
             br.lineSequence().forEach {

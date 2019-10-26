@@ -380,7 +380,7 @@
     <string name="build_date_system" translatable="false">build_date_system</string>
     <string name="delete_wallet" translatable="false">delete_wallet</string>
     <string name="delete_wallet_title">Delete Wallet</string>
-    <string name="logging_level">Logging level (restart required)</string>
+    <string name="logging_level">Logging level</string>
     <string name="network_mode">Network Mode</string>
     <string name="connect_to_peer">Connect to Peer</string>
     <string name="server_address">Server Address</string>
@@ -419,6 +419,12 @@
         <item>Vibration only</item>
         <item>Sound only</item>
         <item>Sound and Vibration</item>
+    </string-array>
+
+    <string-array name="biometrics_prefs_summary">
+        <item>Fingerprint or iris scanner where supported</item>
+        <item>Fingerprint</item>
+        <item>Finger + Pass</item>
     </string-array>
     <!--/Preference-->
 
