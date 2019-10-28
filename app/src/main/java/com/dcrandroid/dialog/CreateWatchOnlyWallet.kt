@@ -64,7 +64,7 @@ class CreateWatchOnlyWallet(val walletCreated:(walletID: Long) -> Unit): Collaps
 
             if(!it.isBlank()){
                 try{
-                    Dcrlibwallet.validateExPubKey(it)
+                    multiWallet!!.validateExPubKey(it)
                     return@InputHelper true
                 }catch (e: Exception){
                     e.printStackTrace()
