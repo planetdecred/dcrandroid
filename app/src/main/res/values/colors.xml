@@ -96,6 +96,5 @@
 
 
     <!-- PinView -->
-    <color name="pinview_inactive_color">#fff</color>
     <color name="pinview_active_color">#2DD8A3</color>
 </resources>

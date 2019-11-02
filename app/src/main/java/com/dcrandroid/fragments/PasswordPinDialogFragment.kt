@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dcrandroid.R
-import com.dcrandroid.dialog.CollapsedBottomSheetDialog
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
@@ -27,23 +27,21 @@ interface DialogButtonListener {
     fun onClickCancel()
 }
 
-class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinListener, @StringRes var positiveButtonTitle: Int) : CollapsedBottomSheetDialog(), DialogButtonListener {
+class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinListener, @StringRes var positiveButtonTitle: Int) : FullScreenBottomSheetDialog(), DialogButtonListener {
 
-    private lateinit var spendingPasswordFragment: PassphrasePromptFragment
-    private lateinit var spendingPinFragment: PassphrasePromptFragment
+    private lateinit var spendingPasswordFragment: PasswordPromptFragment
+    private lateinit var spendingPinFragment: PinPromptFragment
 
-    private lateinit var fragmentList: List<PassphrasePromptFragment>
+    private lateinit var fragmentList: List<Fragment>
     private lateinit var tabsTitleList: List<String>
     private lateinit var titleList: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val passwordParams = PassphrasePromptParams(Dcrlibwallet.SpendingPassphraseTypePass, positiveButtonTitle)
-        spendingPasswordFragment = PassphrasePromptFragment(this, passwordParams)
+        spendingPasswordFragment = PasswordPromptFragment(this, positiveButtonTitle)
 
-        val pinParams = PassphrasePromptParams(Dcrlibwallet.SpendingPassphraseTypePin, positiveButtonTitle)
-        spendingPinFragment = PassphrasePromptFragment(this, pinParams)
+        spendingPinFragment = PinPromptFragment(this, positiveButtonTitle)
 
         fragmentList = listOf(spendingPasswordFragment, spendingPinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
@@ -73,11 +71,14 @@ class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinList
                 } else {
                     tv_title.text = titleList[1]
                 }
+                view_pager.requestLayout()
             }
         })
     }
 
     override fun onClickOk(spendingKey: String) {
+        isCancelable = false
+
         val normalColor = Color.parseColor("#c4cbd2")
         tab_layout.setSelectedTabIndicatorColor(normalColor)
         tab_layout.setTabTextColors(normalColor, normalColor)
@@ -104,7 +105,7 @@ class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinList
     }
 
     class ViewPagerAdapter(fragmentManager: FragmentManager,
-                           private val fragmentList: List<PassphrasePromptFragment>,
+                           private val fragmentList: List<Fragment>,
                            private val tabsTitles: List<String>) : FragmentPagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {

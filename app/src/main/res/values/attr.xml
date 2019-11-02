@@ -9,8 +9,8 @@
     <declare-styleable name="PinView">
         <attr name="pin_size" format="dimension" />
         <attr name="active_color" format="color" />
-        <attr name="inactive_color" format="color" />
         <attr name="auto_space" format="boolean" />
         <attr name="horizontal_spacing" format="dimension" />
+        <attr name="vertical_spacing" format="dimension" />
     </declare-styleable>
 </resources>

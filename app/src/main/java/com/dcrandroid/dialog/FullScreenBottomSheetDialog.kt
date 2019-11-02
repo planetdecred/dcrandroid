@@ -25,7 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener?): BottomSheetDialogFragment(){
+open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null): BottomSheetDialogFragment(){
 
     protected val multiWallet = WalletData.multiWallet!!
 
