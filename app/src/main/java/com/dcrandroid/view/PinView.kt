@@ -7,9 +7,7 @@
 package com.dcrandroid.view
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -22,11 +20,19 @@ import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.math.*
+import androidx.core.content.res.ResourcesCompat
 
 class PinView : TextView, View.OnClickListener {
 
-    private var circlePaint: Paint? = null
-    private var hintPaint: TextPaint? = null
+    private lateinit var circlePaint: Paint
+    private lateinit var hintPaint: TextPaint
+
+    private var errorString: String? = ""
+    private lateinit var errorCirclePaint: Paint
+    private lateinit var errorTextPaint: TextPaint
+
+    private var circleRect: RectF? = null
+    private val textRect = Rect()
 
     private val lock: ReentrantLock = ReentrantLock()
 
@@ -45,8 +51,6 @@ class PinView : TextView, View.OnClickListener {
 
     private var mContext: Context? = null
 
-    private var circleRect: RectF? = null
-
     var counterTextView: TextView? = null
 
     fun setHint(hint: String){
@@ -63,9 +67,27 @@ class PinView : TextView, View.OnClickListener {
         invalidate()
     }
 
+    fun setError(error: String?){
+        lock.lock()
+
+        if(error != null){
+            counterTextView?.setTextColor(context.getColor(R.color.colorError))
+        }else{
+            counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
+        }
+
+        this.errorString = error
+
+        lock.unlock()
+
+        requestLayout()
+        invalidate()
+    }
+
     fun reset(){
         lock.lock()
 
+        errorString = null
         counterTextView?.text = "0"
         passCodeLength = 0
         showHint = true
@@ -115,20 +137,29 @@ class PinView : TextView, View.OnClickListener {
         values.recycle()
 
         circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        circlePaint!!.style = Paint.Style.FILL
-        circlePaint!!.color = dotColor
+        circlePaint.style = Paint.Style.FILL
+        circlePaint.color = dotColor
+
+        val customTypeface = ResourcesCompat.getFont(context, R.font.source_sans_pro)
 
         hintPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        hintPaint!!.textSize = context.resources.getDimension(R.dimen.edit_text_size_16)
-        hintPaint!!.textAlign = Paint.Align.CENTER
-        hintPaint!!.color = context.resources.getColor(R.color.lightGrayTextColor)
+        hintPaint.textSize = context.resources.getDimension(R.dimen.edit_text_size_16)
+        hintPaint.textAlign = Paint.Align.CENTER
+        hintPaint.color = context.resources.getColor(R.color.lightGrayTextColor)
+        hintPaint.typeface = customTypeface
+
+        errorCirclePaint = Paint(circlePaint)
+        errorCirclePaint.color = context.getColor(R.color.colorError)
+
+        errorTextPaint = TextPaint(hintPaint)
+        errorTextPaint.color = context.resources.getColor(R.color.colorError)
+        errorTextPaint.textSize = context.resources.getDimension(R.dimen.edit_text_size_12)
 
         circleRect = RectF()
 
         this.post {
             showKeyboard()
         }
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -148,6 +179,11 @@ class PinView : TextView, View.OnClickListener {
             heightSize = pinSize + paddingBottom
         }
 
+        if (errorString != null) {
+            errorTextPaint.getTextBounds(errorString, 0, errorString!!.length, textRect)
+            heightSize += pinSize + textRect.height() // topMargin + textHeight
+        }
+
 
         setMeasuredDimension(widthSize, heightSize.toInt())
     }
@@ -165,8 +201,8 @@ class PinView : TextView, View.OnClickListener {
 
         if(showHint){
             val xPos = usableWidth.toFloat() / 2
-            val yPos = (usableHeight / 2 - (hintPaint!!.descent() + hintPaint!!.ascent()) / 2)
-            canvas.drawText(hint, xPos, yPos, hintPaint!!)
+            val yPos = (usableHeight / 2 - (hintPaint.descent() + hintPaint.ascent()) / 2)
+            canvas.drawText(hint, xPos, yPos, hintPaint)
             return
         }
 
@@ -179,6 +215,12 @@ class PinView : TextView, View.OnClickListener {
         var startX = (usableWidth / 2) - ((dotWidthPlusPadding / 2) * currentRowDotCount) + horizontalSpacing
         var startY = 0f
 
+        val dotPaint = if(errorString != null){
+            errorCirclePaint
+        }else{
+            circlePaint
+        }
+
         var currentRowDots = 0
         for (i in 1..passCodeLength) {
 
@@ -187,7 +229,7 @@ class PinView : TextView, View.OnClickListener {
             circleRect!!.right = startX + pinSize
             circleRect!!.bottom = startY + pinSize
 
-            canvas.drawArc(circleRect!!, circleRect!!.left, 360f, true, circlePaint!!)
+            canvas.drawArc(circleRect!!, circleRect!!.left, 360f, true, dotPaint)
 
 
             currentRowDots++
@@ -200,9 +242,15 @@ class PinView : TextView, View.OnClickListener {
                 startY += dotHeightPlusPadding
                 currentRowDots = 0
 
-            }else{
+            }else {
                 startX += dotWidthPlusPadding
             }
+        }
+
+        if(errorString != null){
+            val xPos = usableWidth/2
+
+            canvas.drawText(errorString!!, xPos.toFloat(), usableHeight.toFloat(), errorTextPaint)
         }
     }
 
@@ -301,6 +349,17 @@ class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength:
         pinStrength?.progress = 0
     }
 
-    fun showHint(@StringRes hint: Int) = pinView.setHint(context.getString(hint))
+    fun showHint(@StringRes hint: Int){
+        pinStrength?.progress = 0
+        pinView.setHint(context.getString(hint))
+    }
+
+    fun showError(@StringRes error: Int?) {
+        if(error == null){
+            pinView.setError(null)
+        }else{
+            pinView.setError(context.getString(error))
+        }
+    }
 }
 

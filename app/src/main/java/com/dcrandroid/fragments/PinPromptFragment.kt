@@ -95,8 +95,7 @@ class PinPromptFragment(private var clickListener: DialogButtonListener, @String
             else -> {
                 currentPassCode = null
                 pinViewUtil.pinView.rejectInput = true
-                pinViewUtil.reset()
-                pinViewUtil.showHint(R.string.mismatch_passcode)
+                pinViewUtil.showError(R.string.mismatch_passcode)
 
                 btn_create.setText(R.string.next)
                 btn_create.isEnabled = false
@@ -105,6 +104,8 @@ class PinPromptFragment(private var clickListener: DialogButtonListener, @String
                 GlobalScope.launch(Dispatchers.Default){
                     delay(2000)
                     withContext(Dispatchers.Main){
+                        pinViewUtil.showError(null)
+                        pinViewUtil.reset()
                         pinViewUtil.showHint(R.string.enter_spending_pin)
                         togglePasswordStrength(true)
                         pinViewUtil.pinView.rejectInput = false
@@ -118,10 +119,10 @@ class PinPromptFragment(private var clickListener: DialogButtonListener, @String
         val pinBottomPadding: Int
 
         if(show){
-            pass_strength.visibility = View.VISIBLE
+            pass_strength?.visibility = View.VISIBLE
             pinBottomPadding = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_128)
         }else{
-            pass_strength.visibility = View.GONE
+            pass_strength?.visibility = View.GONE
             pinBottomPadding = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_96)
         }
 
@@ -130,8 +131,8 @@ class PinPromptFragment(private var clickListener: DialogButtonListener, @String
         bottomBarParams.topMargin = bottomBarTopMargin
         bottom_bar.layoutParams = bottomBarParams
 
-        pin_view.setPadding(pin_view.paddingLeft, pin_view.paddingTop, pin_view.paddingRight, pinBottomPadding)
-        pin_counter.setPadding(pin_counter.paddingLeft, pin_counter.paddingTop, pin_counter.paddingRight, pinBottomPadding)
+        pin_view?.setPadding(pin_view.paddingLeft, pin_view.paddingTop, pin_view.paddingRight, pinBottomPadding)
+        pin_counter?.setPadding(pin_counter.paddingLeft, pin_counter.paddingTop, pin_counter.paddingRight, pinBottomPadding)
 
 
     }

@@ -64,7 +64,7 @@ class CreateWatchOnlyWallet(val walletCreated:(walletID: Long) -> Unit): Collaps
 
             if(!it.isBlank()){
                 try{
-                    multiWallet!!.validateExPubKey(it)
+                    multiWallet!!.validateExtPubKey(it)
                     return@InputHelper true
                 }catch (e: Exception){
                     e.printStackTrace()
