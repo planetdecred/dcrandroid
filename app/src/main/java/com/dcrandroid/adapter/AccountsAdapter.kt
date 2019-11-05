@@ -86,7 +86,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
                     }
 
                     null
-                }.show()
+                }.show(context)
             }
         }else{
             holder.itemView.setOnClickListener {

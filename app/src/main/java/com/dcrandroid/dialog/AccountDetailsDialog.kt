@@ -6,11 +6,11 @@
 
 package com.dcrandroid.dialog
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
@@ -18,38 +18,38 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
-import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.account_details.*
 import java.lang.Exception
 
-class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account, val renameAccount:(newName: String) -> Exception?) : Dialog(ctx, R.style.FullWidthDialog) {
+class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account,
+                           val renameAccount:(newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
 
     private var wallet: LibWallet? = null
-    private var multiWallet: MultiWallet = WalletData.multiWallet!!
 
     init {
-        this.wallet = multiWallet.getWallet(walletID)
+        this.wallet = multiWallet!!.getWallet(walletID)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if(wallet == null){
-            error("WalletID = null")
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.account_details, container, false)
+    }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.account_details)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         tv_account_name.text = account.accountName
         account_details_total_balance.text = CoinFormat.format(account.totalBalance, 0.625f)
-        account_details_spendable.text = CoinFormat.format(account.balance.spendable, 0.7f)
+        account_details_spendable.text = CoinFormat.format(account.balance.spendable)
+        account_details_imm_rewards.text = CoinFormat.format(account.balance.immatureReward)
+        account_details_locked_by_tickets.text = CoinFormat.format(account.balance.lockedByTickets)
+        account_details_voting_authority.text = CoinFormat.format(account.balance.votingAuthority)
+        account_details_imm_stake_gen.text = CoinFormat.format(account.balance.immatureStakeGeneration)
 
         // properties
         account_details_number.text = account.accountNumber.toString()
         account_details_path.text = account.hdPath
-        account_details_keys.text = context.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
+        account_details_keys.text = context!!.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
 
         if(account.accountNumber == Int.MAX_VALUE){ // imported account
             default_account_row.hide()
@@ -60,8 +60,8 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
         // click listeners
         tv_toggle_properties.setOnClickListener {
             tv_toggle_properties.text = if (account_details_properties.toggleVisibility() == View.VISIBLE) {
-                context.getString(R.string.hide_properties)
-            }else context.getString(R.string.show_properties)
+                context!!.getString(R.string.hide_properties)
+            }else context!!.getString(R.string.show_properties)
         }
 
         iv_close.setOnClickListener { dismiss() }
@@ -82,7 +82,15 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
             }.show(activity.supportFragmentManager, null)
         }
 
-    }
 
+        account_details_sv.viewTreeObserver.addOnScrollChangedListener {
+            top_bar.elevation = if (account_details_sv.scrollY == 0) {
+                0f
+            } else {
+                resources.getDimension(R.dimen.app_bar_elevation)
+            }
+        }
+
+    }
 
 }

@@ -213,7 +213,7 @@
 
     <!--Balance-->
     <string name="label_spendable">Spendable</string>
-    <string name="immature_stake_generation">Immature Stake Generation</string>
+    <string name="immature_stake_generation">Immature Stake Gen</string>
     <string name="label_immature_rewards">Immature Rewards</string>
     <string name="label_locked_by_tickets">Locked by Tickets</string>
     <string name="label_voting_authority">Voting Authority</string>
