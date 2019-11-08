@@ -38,13 +38,21 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val balance = account.balance
+
         tv_account_name.text = account.accountName
         account_details_total_balance.text = CoinFormat.format(account.totalBalance, 0.625f)
-        account_details_spendable.text = CoinFormat.format(account.balance.spendable)
-        account_details_imm_rewards.text = CoinFormat.format(account.balance.immatureReward)
-        account_details_locked_by_tickets.text = CoinFormat.format(account.balance.lockedByTickets)
-        account_details_voting_authority.text = CoinFormat.format(account.balance.votingAuthority)
-        account_details_imm_stake_gen.text = CoinFormat.format(account.balance.immatureStakeGeneration)
+        account_details_spendable.text = CoinFormat.format(balance.spendable)
+
+        val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
+        if(stakeSum > 0){
+            account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
+            account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
+            account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
+            account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
+        }else{
+            staking_balance.hide()
+        }
 
         // properties
         account_details_number.text = account.accountNumber.toString()

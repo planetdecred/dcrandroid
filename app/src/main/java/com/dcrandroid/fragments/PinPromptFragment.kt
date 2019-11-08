@@ -54,6 +54,8 @@ class PinPromptFragment(private var clickListener: DialogButtonListener, @String
             currentPassCode = null
             pinViewUtil.reset()
             pinViewUtil.showHint(R.string.enter_spending_pin)
+            pinViewUtil.showHint(R.string.enter_spending_pin)
+            togglePasswordStrength(true)
             btn_create.setText(R.string.next)
             btn_create.isEnabled = false
 
@@ -104,7 +106,6 @@ class PinPromptFragment(private var clickListener: DialogButtonListener, @String
                 GlobalScope.launch(Dispatchers.Default){
                     delay(2000)
                     withContext(Dispatchers.Main){
-                        pinViewUtil.showError(null)
                         pinViewUtil.reset()
                         pinViewUtil.showHint(R.string.enter_spending_pin)
                         togglePasswordStrength(true)

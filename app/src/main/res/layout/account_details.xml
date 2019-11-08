@@ -45,7 +45,7 @@
             tools:text="Default"
             android:layout_gravity="center_vertical"
             android:fontFamily="@font/source_sans_pro"
-            />
+            android:layout_marginStart="@dimen/margin_padding_size_8" />
 
         <ImageView
             android:layout_width="40dp"
@@ -145,116 +145,124 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/margin_padding_size_16">
+                        android:id="@+id/staking_balance"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/account_details_imm_rewards"
-                            tools:text="0 DCR"
-                            android:textSize="20sp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:textColor="@color/darkBlueTextColor"
-                            />
+                            android:orientation="vertical"
+                            android:layout_marginTop="@dimen/margin_padding_size_16">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/account_details_imm_rewards"
+                                tools:text="0 DCR"
+                                android:textSize="20sp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/darkBlueTextColor"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/blueGraySecondTextColor"
+                                android:layout_marginTop="4dp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:text="@string/label_immature_rewards"
+                                android:textSize="@dimen/edit_text_size_14" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
-                            android:layout_marginTop="4dp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:text="@string/label_immature_rewards"
-                            android:textSize="@dimen/edit_text_size_14" />
+                            android:orientation="vertical"
+                            android:layout_marginTop="@dimen/margin_padding_size_16">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/account_details_locked_by_tickets"
+                                tools:text="0 DCR"
+                                android:textSize="20sp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/darkBlueTextColor"
+                                />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/margin_padding_size_16">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/blueGraySecondTextColor"
+                                android:layout_marginTop="4dp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:text="@string/label_locked_by_tickets"
+                                android:textSize="@dimen/edit_text_size_14" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/account_details_locked_by_tickets"
-                            tools:text="0 DCR"
-                            android:textSize="20sp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:textColor="@color/darkBlueTextColor"
-                            />
+                            android:orientation="vertical"
+                            android:layout_marginTop="@dimen/margin_padding_size_16">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/account_details_voting_authority"
+                                tools:text="0 DCR"
+                                android:textSize="20sp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/darkBlueTextColor"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/blueGraySecondTextColor"
+                                android:layout_marginTop="4dp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:text="@string/label_voting_authority"
+                                android:textSize="@dimen/edit_text_size_14" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
-                            android:layout_marginTop="4dp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:text="@string/label_locked_by_tickets"
-                            android:textSize="@dimen/edit_text_size_14" />
+                            android:orientation="vertical"
+                            android:layout_marginTop="@dimen/margin_padding_size_16">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/account_details_imm_stake_gen"
+                                tools:text="0 DCR"
+                                android:textSize="20sp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/darkBlueTextColor"
+                                />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/margin_padding_size_16">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/blueGraySecondTextColor"
+                                android:layout_marginTop="4dp"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false"
+                                android:text="@string/immature_stake_generation"
+                                android:textSize="@dimen/edit_text_size_14" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/account_details_voting_authority"
-                            tools:text="0 DCR"
-                            android:textSize="20sp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:textColor="@color/darkBlueTextColor"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
-                            android:layout_marginTop="4dp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:text="@string/label_voting_authority"
-                            android:textSize="@dimen/edit_text_size_14" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/margin_padding_size_16">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/account_details_imm_stake_gen"
-                            tools:text="0 DCR"
-                            android:textSize="20sp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:textColor="@color/darkBlueTextColor"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
-                            android:layout_marginTop="4dp"
-                            app:fontFamily="@font/source_sans_pro"
-                            android:includeFontPadding="false"
-                            android:text="@string/immature_stake_generation"
-                            android:textSize="@dimen/edit_text_size_14" />
+                        </LinearLayout>
 
                     </LinearLayout>
 

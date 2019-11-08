@@ -159,7 +159,6 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                         }else{
                             SnackBar.showError(context, R.string.cancel_sync_create_wallet)
                         }
-
                     }
                 }
             }
