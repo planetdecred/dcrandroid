@@ -19,6 +19,7 @@ import androidx.annotation.ArrayRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import kotlinx.android.synthetic.main.activity_debug.view.*
 import kotlinx.android.synthetic.main.list_preference_dialog.*
 import kotlinx.android.synthetic.main.list_preference_row.view.*
 
@@ -40,6 +41,8 @@ class ListPreference(val context: Context, val key: String, val defaultValue: In
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setContentView(R.layout.list_preference_dialog)
+
+            dialog_title.text = this@ListPreference.view.pref_title.text
 
             val adapter = ListPreferenceAdapter(context).apply {
                 selectedItem = multiWallet!!.readInt32ConfigValueForKey(key, defaultValue)

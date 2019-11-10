@@ -90,7 +90,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
         }
 
         if(WalletData.instance.multiWallet!!.openedWalletsCount() > 1){
-            unlock_title.text = getString(R.string.multi_resume_account_discovery_title, wallet!!.walletName)
+            unlock_title.text = getString(R.string.multi_resume_account_discovery_title, wallet!!.name)
         }
 
         resume_restore_pass.addTextChangedListener(object : TextWatcher {

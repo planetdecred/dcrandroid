@@ -305,7 +305,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
                 syncLayout.syncing_layout_wallet_name.show()
 
                 val wallet = multiWallet.getWallet(addressDiscoveryProgress!!.walletID)
-                syncLayout.tv_syncing_layout_wallet_name.text = wallet.walletName
+                syncLayout.tv_syncing_layout_wallet_name.text = wallet.name
             }else{
                 syncLayout.syncing_layout_wallet_name.hide()
             }
@@ -338,7 +338,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
                 syncLayout.syncing_layout_wallet_name.show()
 
                 val wallet = multiWallet.getWallet(headersRescanProgress.walletID)
-                syncLayout.tv_syncing_layout_wallet_name.text = wallet.walletName
+                syncLayout.tv_syncing_layout_wallet_name.text = wallet.name
             }else{
                 syncLayout.syncing_layout_wallet_name.hide()
             }

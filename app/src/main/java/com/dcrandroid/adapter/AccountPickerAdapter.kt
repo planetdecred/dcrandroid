@@ -49,7 +49,7 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context, val curre
 
         val item = items[position]
         if(item is LibWallet){
-            holder.itemView.wallet_name.text = item.walletName
+            holder.itemView.wallet_name.text = item.name
         }else if(item is Account){
 
             if (item.accountNumber == Int.MAX_VALUE){

@@ -47,7 +47,7 @@ class MultiWalletTransactions: BaseFragment() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return wallets[position].walletName
+            return wallets[position].name
         }
 
     }

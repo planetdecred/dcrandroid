@@ -33,7 +33,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     var selectedAccount: Account? = null
     set(value) {
         spinnerLayout.spinner_account_name.text = value!!.accountName
-        spinnerLayout.spinner_wallet_name.text =  wallet.walletName
+        spinnerLayout.spinner_wallet_name.text =  wallet.name
         spinnerLayout.spinner_total_balance.text = CoinFormat.format(value.totalBalance)
 
         field = value

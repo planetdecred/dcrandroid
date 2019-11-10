@@ -54,7 +54,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
     override fun onBindViewHolder(holder: WalletsViewHolder, position: Int) {
         val wallet = wallets[position]
 
-        holder.walletName.text = wallet.walletName
+        holder.walletName.text = wallet.name
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 Utils.formatDecredWithComma(wallet.totalWalletBalance(context)))
 
@@ -124,7 +124,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                 when(index){
                     0 -> { // rename wallet
                         val activity = context as AppCompatActivity
-                        RenameAccountDialog(wallet.walletName, true){newName ->
+                        RenameAccountDialog(wallet.name, true){newName ->
 
                             try{
                                 multiWallet!!.renameWallet(wallet.walletID, newName)

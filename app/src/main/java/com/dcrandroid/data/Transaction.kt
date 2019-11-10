@@ -56,7 +56,7 @@ class Transaction : Serializable {
 
     val walletName: String?
         get() {
-            return WalletData.multiWallet!!.getWallet(walletID)?.walletName
+            return WalletData.multiWallet!!.getWallet(walletID)?.name
         }
 
     val timestampMillis: Long

@@ -53,7 +53,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
 
     fun setWalletID(walletID: Long): TransactionsFragment{
         wallet = multiWallet.getWallet(walletID)
-        TAG = wallet!!.walletName
+        TAG = wallet!!.name
         return this
     }
 

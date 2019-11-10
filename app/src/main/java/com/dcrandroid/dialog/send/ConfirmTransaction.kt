@@ -53,7 +53,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
 
         // set up layout
         send_from_account_name.text = HtmlCompat.fromHtml(getString(R.string.send_from_account,
-                selectedAccount.accountName, wallet.walletName), 0)
+                selectedAccount.accountName, wallet.name), 0)
 
         val dcrAmount = dcrFormat.format(transactionData.dcrAmount.setScale(8, RoundingMode.HALF_EVEN).toDouble())
         val amountStr = if(transactionData.exchangeDecimal != null) {
@@ -84,7 +84,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
             val destinationAccount = transactionData.destinationAccount!!
             val receivingWallet = multiWallet!!.getWallet(destinationAccount.walletID)
             address_account_name.text = HtmlCompat.fromHtml(getString(R.string.selected_account_name,
-                    destinationAccount.accountName, receivingWallet.walletName), 0)
+                    destinationAccount.accountName, receivingWallet.name), 0)
         }
 
         send_btn.setOnClickListener {

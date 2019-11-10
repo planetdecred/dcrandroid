@@ -38,7 +38,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val wallet = multiWallet.getWallet(openedWallets[position])
 
-        holder.walletName.text = wallet.walletName
+        holder.walletName.text = wallet.name
 
         if(wallet.isWaiting){
             holder.walletStatus.let {
