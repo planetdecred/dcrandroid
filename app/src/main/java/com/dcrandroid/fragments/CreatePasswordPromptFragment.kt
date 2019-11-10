@@ -16,13 +16,13 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
-import kotlinx.android.synthetic.main.create_spending_password_sheet.*
+import kotlinx.android.synthetic.main.create_password_sheet.*
 
-class PasswordPromptFragment(private var clickListener: DialogButtonListener, @StringRes var positiveButtonTitle: Int) : Fragment() {
+class CreatePasswordPromptFragment(private var clickListener: DialogButtonListener, @StringRes var positiveButtonTitle: Int) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.create_spending_password_sheet, container, false)
+        return inflater.inflate(R.layout.create_password_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -12,9 +12,11 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.dialog.PromptPassphraseDialog
+import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.InputHelper
@@ -82,11 +84,12 @@ class SignMessage: BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id){
             R.id.tv_sign -> {
-                PromptPassphraseDialog(wallet.walletID, R.string.confirm_to_sign){
+                val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
+                PassPromptUtil(this, wallet.walletID, true, title){
                     if(it != null){
                         beginSignMessage(it)
                     }
-                }.show(this)
+                }.show()
             }
             R.id.tv_copy -> {
                 Utils.copyToClipboard(this,  signatureHelper.editText.text.toString(), R.string.signature_copied)
@@ -150,7 +153,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
             e.printStackTrace()
             if(e.message == Dcrlibwallet.ErrInvalidPassphrase){
 
-                val err = if(wallet.spendingPassphraseType == Dcrlibwallet.SpendingPassphraseTypePin){
+                val err = if(wallet.spendingPassphraseType == Dcrlibwallet.PassphraseTypePin){
                     R.string.invalid_pin
                 }else{
                     R.string.invalid_password

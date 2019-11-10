@@ -18,12 +18,12 @@ import androidx.annotation.StringRes
 import com.dcrandroid.R
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
-import kotlinx.android.synthetic.main.spending_passphrase_prompt_sheet.*
+import kotlinx.android.synthetic.main.password_prompt_sheet.*
 
-class PromptPassphraseDialog(val walletID: Long, @StringRes val dialogTitle: Int, val passEntered:(passphrase: String?) -> Unit): CollapsedBottomSheetDialog() {
+class PasswordPromptDialog(val walletID: Long, @StringRes val dialogTitle: Int, val passEntered:(passphrase: String?) -> Unit): CollapsedBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.spending_passphrase_prompt_sheet, container, false)
+        return inflater.inflate(R.layout.password_prompt_sheet, container, false)
     }
 
     var confirmed = false
@@ -32,12 +32,6 @@ class PromptPassphraseDialog(val walletID: Long, @StringRes val dialogTitle: Int
         super.onActivityCreated(savedInstanceState)
 
         dialog_title.setText(dialogTitle)
-
-        val wallet = WalletData.multiWallet!!.getWallet(walletID)
-        if(wallet.spendingPassphraseType == Dcrlibwallet.SpendingPassphraseTypePass){
-            spending_pin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            spending_pass_layout.hint = getString(R.string.spending_password)
-        }
 
         spending_pin.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

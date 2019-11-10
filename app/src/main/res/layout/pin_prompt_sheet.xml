@@ -6,28 +6,37 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingTop="@dimen/margin_padding_size_24"
-    android:paddingStart="@dimen/margin_padding_size_24"
-    android:paddingEnd="@dimen/margin_padding_size_24">
+    android:paddingEnd="@dimen/margin_padding_size_24"
+    android:paddingStart="@dimen/margin_padding_size_24" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sheet_title"
+        android:text="@string/confirm_to_send"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:includeFontPadding="false"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_20" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/margin_padding_size_8"
+        android:paddingTop="@dimen/margin_padding_size_32"
         android:paddingStart="@dimen/margin_padding_size_40"
-        android:paddingEnd="0dp" >
+        android:paddingEnd="0dp"
+        android:orientation="horizontal">
 
         <com.dcrandroid.view.PinView
             android:id="@+id/pin_view"
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_padding_size_96"
             android:layout_weight="1"
-            android:paddingBottom="@dimen/margin_padding_size_128"
             android:inputType="numberPassword"
             android:focusable="true"
             android:focusableInTouchMode="true" />
@@ -36,7 +45,7 @@
             android:id="@+id/pin_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/margin_padding_size_128"
+            android:paddingBottom="@dimen/margin_padding_size_96"
             android:layout_gravity="center_vertical"
             android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro"
@@ -49,54 +58,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bottom_bar"
-        android:layout_marginTop="-128dp"
-        android:orientation="vertical">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_padding_size_32">
-
-            <ProgressBar
-                android:id="@+id/pass_strength"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginBottom="@dimen/margin_padding_size_24"
-                android:indeterminateOnly="false"
-                android:max="100"
-                android:progress="40"
-                android:progressDrawable="@drawable/password_strength_bar_weak" />
-
-        </LinearLayout>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/btn_back"
-                    style="@style/textViewButton.Outline"
-                    android:layout_width="68dp"
-                    android:layout_height="40dp"
-                    android:includeFontPadding="false"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    android:gravity="center"
-                    android:text="@string/back"
-                    android:textSize="@dimen/edit_text_size_16"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+        android:layout_height="40dp"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:layout_marginTop="-64dp" >
 
             <TextView
                 android:id="@+id/btn_cancel"
@@ -109,7 +74,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/btn_create"
+                android:id="@+id/btn_confirm"
                 style="@style/textViewButton"
                 android:layout_width="83dp"
                 android:layout_height="40dp"
@@ -117,7 +82,7 @@
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:textStyle="bold"
                 android:enabled="false"
-                android:text="@string/next"
+                android:text="@string/confirm"
                 android:textSize="@dimen/edit_text_size_16" />
 
             <ProgressBar
@@ -129,8 +94,6 @@
                 android:indeterminate="true"
                 android:theme="@style/CircularProgressBar"
                 android:visibility="gone" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </LinearLayout>
 

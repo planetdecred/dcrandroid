@@ -39,7 +39,6 @@ import com.dcrandroid.fragments.*
 import com.dcrandroid.fragments.more.MoreFragment
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
-import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
@@ -58,7 +57,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     private lateinit var adapter: NavigationTabsAdapter
     private lateinit var notificationManager: NotificationManager
-    internal lateinit var util: PreferenceUtil
 
     private lateinit var currentFragment: Fragment
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
@@ -72,8 +70,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
             println("Restarting app")
             Utils.restartApp(this)
         }
-
-        util = PreferenceUtil(this)
 
         registerNotificationChannel()
 
@@ -241,7 +237,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun checkWifiSync() {
-        if (!util.getBoolean(Constants.WIFI_SYNC, false)) {
+        if (!multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, Constants.DEF_SYNC_ON_CELLULAR)) {
             // Check if wifi is connected
             val isWifiConnected = this.let { NetworkUtil.isWifiConnected(it) }
             if (!isWifiConnected) {
@@ -259,7 +255,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
                     startSyncing()
 
                     val syncDialog = dialog as WiFiSyncDialog
-                    util.setBoolean(Constants.WIFI_SYNC, syncDialog.checked)
+                    multiWallet.setBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, syncDialog.checked)
 
                 })
 

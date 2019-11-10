@@ -52,6 +52,7 @@ public class Constants {
             DEF_TX_NOTIFICATION = 2, // Vibrations Only
             DEF_CURRENCY_CONVERSION = 0; // None
 
-    public static final boolean DEF_SPEND_UNCONFIRMED = false;
+    public static final boolean DEF_SPEND_UNCONFIRMED = false,
+                                DEF_SYNC_ON_CELLULAR = false;
 
 }

@@ -16,10 +16,11 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.CollapsedBottomSheetDialog
-import com.dcrandroid.dialog.PromptPassphraseDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
 import dcrlibwallet.LibWallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
@@ -90,10 +91,11 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
         send_btn.setOnClickListener {
             showProcessing()
 
-            PromptPassphraseDialog(wallet.walletID, R.string.confirm_to_send){pass ->
+            val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
+            PassPromptUtil(context!!, wallet.walletID, true, title){pass ->
                 if(pass == null){
                     showSendButton()
-                    return@PromptPassphraseDialog
+                    return@PassPromptUtil
                 }
 
                 GlobalScope.launch(Dispatchers.Default){
@@ -106,8 +108,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
                         e.printStackTrace()
                     }
                 }
-
-            }.show(activity!!.supportFragmentManager, null)
+            }.show()
         }
     }
 

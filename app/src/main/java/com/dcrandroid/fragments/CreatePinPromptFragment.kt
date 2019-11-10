@@ -17,19 +17,19 @@ import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.PinViewUtil
-import kotlinx.android.synthetic.main.create_spending_pin_sheet.*
-import kotlinx.android.synthetic.main.create_spending_pin_sheet.btn_cancel
-import kotlinx.android.synthetic.main.create_spending_pin_sheet.pass_strength
+import kotlinx.android.synthetic.main.create_pin_sheet.*
+import kotlinx.android.synthetic.main.create_pin_sheet.btn_cancel
+import kotlinx.android.synthetic.main.create_pin_sheet.pass_strength
 import kotlinx.coroutines.*
 
-class PinPromptFragment(private var clickListener: DialogButtonListener, @StringRes var positiveButtonTitle: Int): Fragment() {
+class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @StringRes var positiveButtonTitle: Int): Fragment() {
 
     private var currentPassCode: String? = null
     private lateinit var pinViewUtil: PinViewUtil
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.create_spending_pin_sheet, container, false)
+        return inflater.inflate(R.layout.create_pin_sheet, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

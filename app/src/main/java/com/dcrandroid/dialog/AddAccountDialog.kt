@@ -13,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dcrandroid.R
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.LibWallet
@@ -52,7 +54,8 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
         btn_create.setOnClickListener{
             setEnabled(false)
 
-            PromptPassphraseDialog(walletID, R.string.confirm_to_create_account) { passphrase ->
+            val title = PassPromptTitle(R.string.confirm_to_create_account, R.string.confirm_to_create_account, R.string.confirm_to_create_account)
+            PassPromptUtil(context!!, walletID, true, title) { passphrase ->
 
                 if(passphrase != null){
                     val newName = new_account_name.text.toString()
@@ -66,7 +69,7 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
                 }
 
                 setEnabled(true)
-            }.show(activity!!.supportFragmentManager, null)
+            }.show()
         }
     }
 

@@ -29,8 +29,8 @@ interface DialogButtonListener {
 
 class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinListener, @StringRes var positiveButtonTitle: Int) : FullScreenBottomSheetDialog(), DialogButtonListener {
 
-    private lateinit var spendingPasswordFragment: PasswordPromptFragment
-    private lateinit var spendingPinFragment: PinPromptFragment
+    private lateinit var spendingCreatePasswordFragment: CreatePasswordPromptFragment
+    private lateinit var spendingCreatePinFragment: CreatePinPromptFragment
 
     private lateinit var fragmentList: List<Fragment>
     private lateinit var tabsTitleList: List<String>
@@ -39,11 +39,11 @@ class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        spendingPasswordFragment = PasswordPromptFragment(this, positiveButtonTitle)
+        spendingCreatePasswordFragment = CreatePasswordPromptFragment(this, positiveButtonTitle)
 
-        spendingPinFragment = PinPromptFragment(this, positiveButtonTitle)
+        spendingCreatePinFragment = CreatePinPromptFragment(this, positiveButtonTitle)
 
-        fragmentList = listOf(spendingPasswordFragment, spendingPinFragment)
+        fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
         titleList = listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
     }
@@ -89,9 +89,9 @@ class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinList
         }
 
         val passphraseType = if (view_pager.currentItem == 0){
-            Dcrlibwallet.SpendingPassphraseTypePass
+            Dcrlibwallet.PassphraseTypePass
         }else{
-            Dcrlibwallet.SpendingPassphraseTypePin
+            Dcrlibwallet.PassphraseTypePin
         }
         passwordPinListener.onEnterPasswordOrPin(spendingKey, passphraseType)
     }

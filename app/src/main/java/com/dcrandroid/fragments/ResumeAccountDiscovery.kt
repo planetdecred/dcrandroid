@@ -84,7 +84,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(wallet!!.spendingPassphraseType == Dcrlibwallet.SpendingPassphraseTypePin){
+        if(wallet!!.spendingPassphraseType == Dcrlibwallet.PassphraseTypePin){
             input_layout.hint = getString(R.string.spending_pin)
             resume_restore_pass.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         }
@@ -131,7 +131,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
             e.printStackTrace()
 
             if (e.message!! == Dcrlibwallet.ErrInvalidPassphrase){
-                input_layout.error = if (wallet!!.spendingPassphraseType == Dcrlibwallet.SpendingPassphraseTypePin){
+                input_layout.error = if (wallet!!.spendingPassphraseType == Dcrlibwallet.PassphraseTypePin){
                     getString(R.string.invalid_pin)
                 }else{
                     getString(R.string.invalid_pin)

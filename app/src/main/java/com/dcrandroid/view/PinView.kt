@@ -110,9 +110,6 @@ class PinView : TextView, View.OnClickListener {
         init(context, attrs, defStyleAttr, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(context, attrs, defStyleAttr, defStyleRes)
-    }
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
         this.mContext = context
