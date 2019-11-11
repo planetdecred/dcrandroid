@@ -4,13 +4,14 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.more
 
 import android.os.Bundle
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.activity_help.*
 import android.content.Intent
 import android.net.Uri
+import com.dcrandroid.activities.BaseActivity
 
 class HelpActivity: BaseActivity() {
 

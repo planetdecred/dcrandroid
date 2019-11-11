@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.activities.more.AboutActivity
-import com.dcrandroid.activities.HelpActivity
+import com.dcrandroid.activities.more.HelpActivity
 import com.dcrandroid.activities.more.DebugActivity
 import com.dcrandroid.activities.more.SettingsActivity
 import com.dcrandroid.fragments.BaseFragment

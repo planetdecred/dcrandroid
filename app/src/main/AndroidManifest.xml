@@ -140,7 +140,7 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.HelpActivity"
+            android:name=".activities.more.HelpActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
 
