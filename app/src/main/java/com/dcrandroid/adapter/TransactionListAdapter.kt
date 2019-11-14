@@ -62,12 +62,13 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         }else{
             holder.walletName.hide()
         }
-        if (transaction.confirmations == 0) {
-            holder.status.setPending()
-            holder.statusImg.setImageResource(R.drawable.ic_pending)
-        }else if (transaction.confirmations > 1 || spendUnconfirmedFunds){
+
+        if (transaction.confirmations > 1 || spendUnconfirmedFunds){
             holder.status.setConfirmed(transaction.timestamp)
             holder.statusImg.setImageResource(R.drawable.ic_confirmed)
+        }else {
+            holder.status.setPending()
+            holder.statusImg.setImageResource(R.drawable.ic_pending)
         }
 
         if(transaction.animate){

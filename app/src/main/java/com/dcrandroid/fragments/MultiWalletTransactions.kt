@@ -43,7 +43,7 @@ class MultiWalletTransactions: BaseFragment() {
 
         override fun getItem(position: Int): Fragment {
             return TransactionsFragment()
-                    .setWalletID(wallets[position].walletID)
+                    .setWalletID(wallets[position].id)
         }
 
         override fun getPageTitle(position: Int): CharSequence? {

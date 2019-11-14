@@ -15,7 +15,7 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.Utils
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
 
@@ -36,7 +36,7 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context, val curre
 
     override fun getItemViewType(position: Int): Int {
         return when(items[position]){
-            is LibWallet -> 0
+            is Wallet -> 0
             else -> 1 // is account
         }
     }
@@ -48,7 +48,7 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context, val curre
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val item = items[position]
-        if(item is LibWallet){
+        if(item is Wallet){
             holder.itemView.wallet_name.text = item.name
         }else if(item is Account){
 

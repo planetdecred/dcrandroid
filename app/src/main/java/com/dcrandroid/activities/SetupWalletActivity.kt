@@ -88,7 +88,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
             val wallet = multiWallet.createNewWallet(spendingKey, type)
-            navigateToHomeActivity(wallet.walletID)
+            navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()
         }

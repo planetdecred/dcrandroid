@@ -14,21 +14,21 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.util.InputHelper
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_validate_address.*
 
 class ValidateAddress: BaseActivity(), View.OnClickListener {
 
     lateinit var addressInputHelper: InputHelper
 
-    lateinit var wallet: LibWallet
+    lateinit var wallet: Wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_validate_address)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.getWallet(walletID)
+        wallet = multiWallet.walletWithID(walletID)
 
         addressInputHelper = InputHelper(this, address_container){
             // no validation for address input

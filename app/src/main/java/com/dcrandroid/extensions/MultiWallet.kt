@@ -9,23 +9,23 @@ package com.dcrandroid.extensions
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import dcrlibwallet.MultiWallet
 
-fun MultiWallet.openedWalletsList(): ArrayList<LibWallet> {
-    val wallets = ArrayList<LibWallet>()
+fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
+    val wallets = ArrayList<Wallet>()
 
-    val openedWalletsJson = this.openedWallets()
+    val openedWalletsJson = this.openedWalletIDs()
     val gson = Gson()
     val listType = object : TypeToken<ArrayList<Long>>() {}.type
     val openedWalletsTemp = gson.fromJson<ArrayList<Long>>(openedWalletsJson, listType)
 
     for(walletId in openedWalletsTemp){
-        val wallet = this.getWallet(walletId)
+        val wallet = this.walletWithID(walletId)
         wallets.add(wallet)
     }
 
-    wallets.sortBy { it.walletID }
+    wallets.sortBy { it.id }
 
     return wallets
 }

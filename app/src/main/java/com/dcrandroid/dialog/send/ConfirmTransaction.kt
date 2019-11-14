@@ -22,14 +22,14 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
 import java.math.RoundingMode
 
 class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog() {
 
-    lateinit var wallet: LibWallet
+    lateinit var wallet: Wallet
 
 
     private val selectedAccount: Account
@@ -41,7 +41,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
     fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): CollapsedBottomSheetDialog{
         this.transactionData = transactionData
         this.authoredTxData = authoredTxData
-        this.wallet = multiWallet!!.getWallet(transactionData.sourceAccount.walletID)
+        this.wallet = multiWallet!!.walletWithID(transactionData.sourceAccount.walletID)
         return this
     }
 
@@ -83,7 +83,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
             confirm_dest_type.setText(R.string.to_self)
 
             val destinationAccount = transactionData.destinationAccount!!
-            val receivingWallet = multiWallet!!.getWallet(destinationAccount.walletID)
+            val receivingWallet = multiWallet!!.walletWithID(destinationAccount.walletID)
             address_account_name.text = HtmlCompat.fromHtml(getString(R.string.selected_account_name,
                     destinationAccount.accountName, receivingWallet.name), 0)
         }
@@ -92,7 +92,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
             showProcessing()
 
             val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(context!!, wallet.walletID, true, title){pass ->
+            PassPromptUtil(context!!, wallet.id, true, title){pass ->
                 if(pass == null){
                     showSendButton()
                     return@PassPromptUtil

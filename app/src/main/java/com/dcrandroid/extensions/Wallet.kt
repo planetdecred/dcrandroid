@@ -13,13 +13,13 @@ import com.dcrandroid.data.parseAccounts
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 
-fun LibWallet.walletAccounts(requiredConfirmations: Int) : ArrayList<Account>{
+fun Wallet.walletAccounts(requiredConfirmations: Int) : ArrayList<Account>{
     return parseAccounts(this.getAccounts(requiredConfirmations)).accounts
 }
 
-fun LibWallet.visibleWalletAccounts(context: Context) : List<Account>{
+fun Wallet.visibleWalletAccounts(context: Context) : List<Account>{
 
     val util = PreferenceUtil(context)
 
@@ -31,7 +31,7 @@ fun LibWallet.visibleWalletAccounts(context: Context) : List<Account>{
     return this.walletAccounts(requiredConfirmations).filter { !util.getBoolean(Constants.HIDE_WALLET + it.accountNumber) }
 }
 
-fun LibWallet.totalWalletBalance(context: Context): Long{
+fun Wallet.totalWalletBalance(context: Context): Long{
     val visibleAccounts = this.visibleWalletAccounts(context)
 
    return visibleAccounts.map { it.balance.total }.reduce { sum, element -> sum + element}

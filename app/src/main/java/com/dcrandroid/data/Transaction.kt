@@ -44,9 +44,8 @@ class Transaction : Serializable {
             }
         }
 
-    val confirmationIcon: Int
-        get() {
-            return if(confirmations > 1)
+    fun getConfirmationIconRes(spendUnconfirmedFunds: Boolean): Int {
+            return if(confirmations > 1 || spendUnconfirmedFunds)
                 R.drawable.ic_confirmed
             else R.drawable.ic_pending
         }
@@ -56,7 +55,7 @@ class Transaction : Serializable {
 
     val walletName: String?
         get() {
-            return WalletData.multiWallet!!.getWallet(walletID)?.name
+            return WalletData.multiWallet!!.walletWithID(walletID)?.name
         }
 
     val timestampMillis: Long

@@ -83,7 +83,7 @@ class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordP
 
             val intent = Intent(this@RestoreWalletActivity, RestoreSuccessActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
-            intent.putExtra(Constants.WALLET_ID, wallet.walletID)
+            intent.putExtra(Constants.WALLET_ID, wallet.id)
             startActivity(intent)
 
             finish()

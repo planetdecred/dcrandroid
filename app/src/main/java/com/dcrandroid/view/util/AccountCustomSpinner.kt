@@ -19,7 +19,7 @@ import com.dcrandroid.extensions.visibleWalletAccounts
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 
 class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
@@ -28,7 +28,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     val context = spinnerLayout.context
 
     private val multiWallet = WalletData.multiWallet
-    var wallet: LibWallet
+    var wallet: Wallet
 
     var selectedAccount: Account? = null
     set(value) {
@@ -66,7 +66,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
 
     override fun onClick(v: View?) {
         AccountPickerDialog(pickerTitle, selectedAccount!!){
-            wallet = multiWallet!!.getWallet(it.walletID)
+            wallet = multiWallet!!.walletWithID(it.walletID)
             selectedAccount = it
             selectedAccountChanged?.let { it1 -> it1(this) }
         }.show(fragmentManager, null)

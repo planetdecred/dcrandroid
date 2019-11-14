@@ -33,6 +33,7 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.activity_debug.*
 import kotlinx.android.synthetic.main.activity_debug.view.*
+import kotlin.system.exitProcess
 
 /**
  * Created by Macsleven on 24/12/2017.
@@ -173,13 +174,13 @@ class SplashScreen : BaseActivity() {
                         val infoDialog = InfoDialog(this@SplashScreen)
                                 .setDialogTitle(getString(R.string.failed_to_open_wallet))
                                 .setMessage(Utils.translateError(this@SplashScreen, e))
-                                .setPositiveButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> finish() })
+                                .setPositiveButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
 
                         if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                             if (util!!.get(Constants.STARTUP_PASSPHRASE_TYPE) == Constants.PIN) {
                                 infoDialog.setMessage(getString(R.string.invalid_pin))
                             }
-                            infoDialog.setNegativeButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> finish() })
+                            infoDialog.setNegativeButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
                                     .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
                                         // TODO: Retry unlock wallet
                             })
@@ -195,6 +196,13 @@ class SplashScreen : BaseActivity() {
         }
         loadThread!!.start()
     }
+
+    private fun endProcess(){
+        multiWallet.shutdown()
+        finish()
+        exitProcess(1)
+    }
+
 
     private fun checkEncryption() {
         if (util!!.getBoolean(Constants.ENCRYPT)) {

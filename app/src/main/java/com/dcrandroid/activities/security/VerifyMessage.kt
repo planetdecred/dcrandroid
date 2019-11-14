@@ -17,12 +17,12 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_verify_message.*
 
 class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
-    private lateinit var wallet: LibWallet
+    private lateinit var wallet: Wallet
 
     lateinit var addressInputHelper: InputHelper
     lateinit var messageInputHelper: InputHelper
@@ -33,7 +33,7 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         setContentView(R.layout.activity_verify_message)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.getWallet(walletID)
+        wallet = multiWallet.walletWithID(walletID)
 
         addressInputHelper = InputHelper(this, address_container) {
             wallet.isAddressValid(it)

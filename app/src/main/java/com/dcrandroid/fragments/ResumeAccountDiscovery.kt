@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_discovery_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,11 +36,11 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
 
-    private var wallet: LibWallet? = null
+    private var wallet: Wallet? = null
 
     fun setWalletID(walletID: Long): ResumeAccountDiscovery{
         val multiWallet = WalletData.instance.multiWallet
-        this.wallet = multiWallet!!.getWallet(walletID)
+        this.wallet = multiWallet!!.walletWithID(walletID)
         return this
     }
 
@@ -84,7 +84,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(wallet!!.spendingPassphraseType == Dcrlibwallet.PassphraseTypePin){
+        if(wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
             input_layout.hint = getString(R.string.spending_pin)
             resume_restore_pass.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         }
@@ -131,7 +131,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
             e.printStackTrace()
 
             if (e.message!! == Dcrlibwallet.ErrInvalidPassphrase){
-                input_layout.error = if (wallet!!.spendingPassphraseType == Dcrlibwallet.PassphraseTypePin){
+                input_layout.error = if (wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
                     getString(R.string.invalid_pin)
                 }else{
                     getString(R.string.invalid_pin)

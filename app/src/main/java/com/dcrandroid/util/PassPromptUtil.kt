@@ -17,9 +17,9 @@ class PassPromptUtil(val context: Context, val walletID: Long, val isSpendingPas
 
     fun show(){
         val multiWallet = WalletData.multiWallet!!
-        val wallet = multiWallet.getWallet(walletID)
+        val wallet = multiWallet.walletWithID(walletID)
 
-        val passType = wallet.spendingPassphraseType // TODO: Startup security
+        val passType = wallet.privatePassphraseType // TODO: Startup security
         if(passType == Dcrlibwallet.PassphraseTypePass){
             val passwordPromptDialog = PasswordPromptDialog(walletID, title.passwordTitle, passEntered)
             passwordPromptDialog.isCancelable = false

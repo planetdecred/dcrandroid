@@ -27,12 +27,12 @@ import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
 
 class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
-    private var wallets: ArrayList<LibWallet>
+    private var wallets: ArrayList<Wallet>
     private val multiWallet = WalletData.multiWallet
     private var expanded = -1
 
@@ -58,7 +58,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 Utils.formatDecredWithComma(wallet.totalWalletBalance(context)))
 
-        if(wallet.walletSeed.isNullOrBlank()){
+        if(wallet.seed.isNullOrBlank()){
             holder.backupNeeded.hide()
             holder.backupWarning.hide()
         }else{
@@ -66,12 +66,12 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
             holder.backupWarning.show()
 
             holder.backupWarning.setOnClickListener {
-                backupSeedClick(wallet.walletID)
+                backupSeedClick(wallet.id)
             }
         }
 
         if(expanded == position){
-            val adapter = AccountsAdapter(context, wallet.walletID)
+            val adapter = AccountsAdapter(context, wallet.id)
 
             holder.accountsList.layoutManager = LinearLayoutManager(context)
             holder.accountsList.isNestedScrollingEnabled = false
@@ -127,7 +127,7 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                         RenameAccountDialog(wallet.name, true){newName ->
 
                             try{
-                                multiWallet!!.renameWallet(wallet.walletID, newName)
+                                multiWallet!!.renameWallet(wallet.id, newName)
                             }catch (e: Exception){
                                 return@RenameAccountDialog e
                             }
@@ -139,23 +139,23 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                     }
                     3 -> {
                         val intent = Intent(context, ValidateAddress::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.walletID)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }
                     4 -> {
                         val intent = Intent(context, SignMessage::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.walletID)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }
                     5 -> {
                         val intent = Intent(context, VerifyMessage::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.walletID)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }
                     6 -> {
                         println("Deleting Wallet")
                         if(!multiWallet!!.isSyncing && !multiWallet.isSynced){
-                            multiWallet.deleteWallet(wallet.walletID, "".toByteArray())
+                            multiWallet.deleteWallet(wallet.id, "".toByteArray())
                         }else{
                             SnackBar.showError(context, R.string.cancel_sync_create_wallet)
                         }
@@ -166,15 +166,15 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
     }
 
     fun addWallet(walletID: Long){
-        val wallet = multiWallet!!.getWallet(walletID)
+        val wallet = multiWallet!!.walletWithID(walletID)
         wallets.add(wallet)
         notifyItemInserted(wallets.size - 1)
     }
 
     fun walletBackupVerified(walletID: Long){
         wallets.forEachIndexed { index, wallet ->
-            if(wallet.walletID == walletID){
-                wallets[index] = multiWallet!!.getWallet(walletID)
+            if(wallet.id == walletID){
+                wallets[index] = multiWallet!!.walletWithID(walletID)
                 notifyItemChanged(index)
                 return
             }

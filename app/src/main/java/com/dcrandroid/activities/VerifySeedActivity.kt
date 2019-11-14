@@ -16,7 +16,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
 import java.lang.Exception
 
@@ -28,7 +28,7 @@ class VerifySeedActivity : BaseActivity() {
     private lateinit var verifySeedAdapter: VerifySeedAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    private var wallet: LibWallet? = null
+    private var wallet: Wallet? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +56,9 @@ class VerifySeedActivity : BaseActivity() {
         btn_verify.setOnClickListener {
             val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
             try{
-                multiWallet.verifySeed(wallet!!.walletID, seedMnemonic)
+                multiWallet.verifySeedForWallet(wallet!!.id, seedMnemonic)
                 val data = Intent(this, SeedBackupSuccess::class.java)
-                data.putExtra(Constants.WALLET_ID, wallet!!.walletID)
+                data.putExtra(Constants.WALLET_ID, wallet!!.id)
                 data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
                 startActivity(data)
                 finish()
@@ -76,10 +76,10 @@ class VerifySeedActivity : BaseActivity() {
     private fun prepareData() {
 
         val walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.getWallet(walletId)
+        wallet = multiWallet.walletWithID(walletId)
 
-        if (wallet!!.walletSeed.isNotBlank()){
-            val seed = wallet!!.walletSeed
+        if (wallet!!.seed.isNotBlank()){
+            val seed = wallet!!.seed
             seeds = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             initSeedAdapter()
         }

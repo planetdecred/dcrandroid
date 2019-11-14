@@ -36,7 +36,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val wallet = multiWallet.getWallet(openedWallets[position])
+        val wallet = multiWallet.walletWithID(openedWallets[position])
 
         holder.walletName.text = wallet.name
 

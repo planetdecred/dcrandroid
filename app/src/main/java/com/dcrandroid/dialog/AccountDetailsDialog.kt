@@ -18,17 +18,17 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_details.*
 import java.lang.Exception
 
 class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account,
                            val renameAccount:(newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
 
-    private var wallet: LibWallet? = null
+    private var wallet: Wallet? = null
 
     init {
-        this.wallet = multiWallet!!.getWallet(walletID)
+        this.wallet = multiWallet!!.walletWithID(walletID)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

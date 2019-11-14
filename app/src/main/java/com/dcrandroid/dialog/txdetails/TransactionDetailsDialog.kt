@@ -42,7 +42,6 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
         super.onActivityCreated(savedInstanceState)
 
         tx_details_icon.setImageResource(transaction.iconResource)
-        status_icon.setImageResource(transaction.confirmationIcon)
         tx_details_amount.text = CoinFormat.format(transaction.amount, 0.625f)
 
         val sdf = SimpleDateFormat("MMM dd, yyyy hh:mma", Locale.getDefault())
@@ -53,7 +52,11 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
         val timestamp = sdf.format(transaction.timestampMillis)
         tx_timestamp.text = timestamp
 
-        if(transaction.confirmations > 1){
+        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+
+        status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
+
+        if(transaction.confirmations > 1 || spendUnconfirmedFunds){
             tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_confirmations, transaction.confirmations), 0)
 
             tx_block_row.show()

@@ -140,7 +140,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.backupsNeeded) {position ->
+        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet.neededBackupCount) {position ->
             switchFragment(position)
         }
         recycler_view_tabs.adapter = adapter
@@ -150,7 +150,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun refreshNavigationTabs(){
-        adapter.backupsNeeded = multiWallet.backupsNeeded
+        adapter.backupsNeeded = multiWallet.neededBackupCount
         adapter.notifyItemChanged(2) // Wallets Page
     }
 
@@ -208,7 +208,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
                     MultiWalletTransactions()
                 }else{
                     val wallet = multiWallet.openedWalletsList()[0]
-                    TransactionsFragment().setWalletID(wallet.walletID)
+                    TransactionsFragment().setWalletID(wallet.id)
                 }
             }
             2 -> WalletsFragment()
@@ -268,9 +268,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     fun startSyncing() {
         for (w in multiWallet.openedWalletsList()){
-            if(!w.hasDiscoveredAccounts() && w.isLocked){
+            if(!w.hasDiscoveredAccounts && w.isLocked){
                 ResumeAccountDiscovery()
-                        .setWalletID(w.walletID)
+                        .setWalletID(w.id)
                         .show(supportFragmentManager, ResumeAccountDiscovery::javaClass.name)
                 return
             }

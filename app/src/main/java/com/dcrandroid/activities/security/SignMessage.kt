@@ -21,7 +21,7 @@ import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_sign_message.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,14 +34,14 @@ class SignMessage: BaseActivity(), View.OnClickListener {
     private lateinit var messageInputHelper: InputHelper
     private lateinit var signatureHelper: InputHelper
 
-    private lateinit var wallet: LibWallet
+    private lateinit var wallet: Wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_message)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.getWallet(walletID)
+        wallet = multiWallet.walletWithID(walletID)
 
 
         addressInputHelper = InputHelper(this, address_container){
@@ -85,7 +85,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         when (v!!.id){
             R.id.tv_sign -> {
                 val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
-                PassPromptUtil(this, wallet.walletID, true, title){
+                PassPromptUtil(this, wallet.id, true, title){
                     if(it != null){
                         beginSignMessage(it)
                     }
@@ -153,7 +153,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
             e.printStackTrace()
             if(e.message == Dcrlibwallet.ErrInvalidPassphrase){
 
-                val err = if(wallet.spendingPassphraseType == Dcrlibwallet.PassphraseTypePin){
+                val err = if(wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
                     R.string.invalid_pin
                 }else{
                     R.string.invalid_password

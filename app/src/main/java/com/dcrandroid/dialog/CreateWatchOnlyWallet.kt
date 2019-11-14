@@ -105,7 +105,7 @@ class CreateWatchOnlyWallet(val walletCreated:(walletID: Long) -> Unit): Collaps
                 try{
                     val wallet = multiWallet!!.createWatchOnlyWallet(walletName, extendedPublicKey)
                     dismiss()
-                    walletCreated(wallet.walletID)
+                    walletCreated(wallet.id)
                 }catch (e: Exception){
                     e.printStackTrace()
 

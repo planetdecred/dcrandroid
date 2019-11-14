@@ -13,14 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.WalletsAdapter
-import com.dcrandroid.util.WalletData
 import com.dcrandroid.activities.SetupWalletActivity
 import android.content.Intent
 import android.widget.Toast
 import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.SnackBar
-import dcrlibwallet.MultiWallet
 
 const val CREATE_WALLET_REQUEST_CODE = 100
 const val VERIFY_SEED_REQUEST_CODE = 200

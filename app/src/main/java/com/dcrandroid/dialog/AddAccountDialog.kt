@@ -17,7 +17,7 @@ import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.add_account_sheet.*
 import kotlinx.android.synthetic.main.add_account_sheet.btn_cancel
 import kotlinx.android.synthetic.main.add_account_sheet.new_account_name
@@ -25,7 +25,7 @@ import java.lang.Exception
 
 class AddAccountDialog(private val walletID: Long, private val accountCreated:(accountNumber: Int) -> Unit): CollapsedBottomSheetDialog() {
 
-    private var wallet: LibWallet = WalletData.multiWallet!!.getWallet(walletID)
+    private var wallet: Wallet = WalletData.multiWallet!!.walletWithID(walletID)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.add_account_sheet, container, false)

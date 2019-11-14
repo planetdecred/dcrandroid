@@ -23,7 +23,7 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.single_wallet_transactions_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,7 +37,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     private val loading = AtomicBoolean(false)
     private val initialLoadingDone = AtomicBoolean(false)
 
-    private var wallet: LibWallet? = null
+    private var wallet: Wallet? = null
 
     private var layoutManager: LinearLayoutManager? = null
     private val transactions: ArrayList<Transaction> = ArrayList()
@@ -52,7 +52,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     private var txTypeSortAdapter: ArrayAdapter<String>? = null
 
     fun setWalletID(walletID: Long): TransactionsFragment{
-        wallet = multiWallet.getWallet(walletID)
+        wallet = multiWallet.walletWithID(walletID)
         TAG = wallet!!.name
         return this
     }
@@ -197,9 +197,9 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
 
     private fun showHideList()  = GlobalScope.launch(Dispatchers.Main){
         if(transactions.size > 0){
-            recycler_view.show()
+            recycler_view?.show()
         }else{
-            recycler_view.hide()
+            recycler_view?.hide()
         }
     }
 

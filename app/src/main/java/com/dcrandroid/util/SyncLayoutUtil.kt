@@ -95,7 +95,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
     }
 
     private fun loadOpenedWallets(){
-        val openedWalletsJson = multiWallet.openedWallets()
+        val openedWalletsJson = multiWallet.openedWalletIDs()
         val gson = Gson()
         val listType = object : TypeToken<ArrayList<Long>>() {}.type
 
@@ -304,7 +304,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             if(multiWallet.openedWalletsCount() > 1){
                 syncLayout.syncing_layout_wallet_name.show()
 
-                val wallet = multiWallet.getWallet(addressDiscoveryProgress!!.walletID)
+                val wallet = multiWallet.walletWithID(addressDiscoveryProgress!!.walletID)
                 syncLayout.tv_syncing_layout_wallet_name.text = wallet.name
             }else{
                 syncLayout.syncing_layout_wallet_name.hide()
@@ -337,7 +337,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess:()
             if(multiWallet.openedWalletsCount() > 1){
                 syncLayout.syncing_layout_wallet_name.show()
 
-                val wallet = multiWallet.getWallet(headersRescanProgress.walletID)
+                val wallet = multiWallet.walletWithID(headersRescanProgress.walletID)
                 syncLayout.tv_syncing_layout_wallet_name.text = wallet.name
             }else{
                 syncLayout.syncing_layout_wallet_name.hide()

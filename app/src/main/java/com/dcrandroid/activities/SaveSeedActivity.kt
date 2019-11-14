@@ -68,9 +68,9 @@ class SaveSeedActivity : BaseActivity() {
 
     private fun populateList(){
         walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
-        val wallet = WalletData.multiWallet!!.getWallet(walletId!!)
+        val wallet = WalletData.multiWallet!!.walletWithID(walletId!!)
 
-        val seed = wallet.walletSeed
+        val seed = wallet.seed
         if(seed.isBlank()){
             finish()
             return

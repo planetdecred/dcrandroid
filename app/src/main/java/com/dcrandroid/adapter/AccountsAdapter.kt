@@ -20,14 +20,14 @@ import com.dcrandroid.dialog.AddAccountDialog
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.LibWallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_row.view.*
 import java.lang.Exception
 
 class AccountsAdapter(private val context: Context, private val walletID: Long): RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
 
     private val accounts: ArrayList<Account>
-    private val wallet: LibWallet
+    private val wallet: Wallet
     private val requiredConfirmations: Int
 
     init {
@@ -36,7 +36,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
             else -> Constants.REQUIRED_CONFIRMATIONS
         }
 
-        wallet = WalletData.multiWallet!!.getWallet(walletID)
+        wallet = WalletData.multiWallet!!.walletWithID(walletID)
         accounts = wallet.walletAccounts(requiredConfirmations)
     }
 
