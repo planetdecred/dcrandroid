@@ -49,6 +49,48 @@ func (lw *LibWallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, err
 	}, nil
 }
 
+func (lw *LibWallet) AccountsIterator(requiredConfirmations int32) (*AccountsIterator, error) {
+	resp, err := lw.wallet.Accounts()
+	if err != nil {
+		return nil, err
+	}
+	accounts := make([]*Account, len(resp.Accounts))
+	for i, account := range resp.Accounts {
+		balance, err := lw.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
+		if err != nil {
+			return nil, err
+		}
+
+		accounts[i] = &Account{
+			Number:           int32(account.AccountNumber),
+			Name:             account.AccountName,
+			TotalBalance:     int64(account.TotalBalance),
+			Balance:          balance,
+			ExternalKeyCount: int32(account.LastUsedExternalIndex + 20),
+			InternalKeyCount: int32(account.LastUsedInternalIndex + 20),
+			ImportedKeyCount: int32(account.ImportedKeyCount),
+		}
+	}
+
+	return &AccountsIterator{
+		currentIndex: 0,
+		accounts:     accounts,
+	}, nil
+}
+
+func (accountsInterator *AccountsIterator) Next() *Account {
+	if accountsInterator.currentIndex < len(accountsInterator.accounts) {
+		account := accountsInterator.accounts[accountsInterator.currentIndex]
+		accountsInterator.currentIndex++
+		return account
+	}
+	return nil
+}
+
+func (accountsInterator *AccountsIterator) Reset() {
+	accountsInterator.currentIndex = 0
+}
+
 func (lw *LibWallet) GetAccountBalance(accountNumber int32, requiredConfirmations int32) (*Balance, error) {
 	balance, err := lw.wallet.CalculateAccountBalance(uint32(accountNumber), requiredConfirmations)
 	if err != nil {

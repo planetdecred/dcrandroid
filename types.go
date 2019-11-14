@@ -40,6 +40,11 @@ type Account struct {
 	ImportedKeyCount int32
 }
 
+type AccountsIterator struct {
+	currentIndex int
+	accounts     []*Account
+}
+
 type Accounts struct {
 	Count              int
 	ErrorMessage       string
