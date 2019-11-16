@@ -89,6 +89,13 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
                 }.show(context)
             }
         }else{
+
+            val background = when {
+                wallet.seed.isNullOrBlank() -> R.drawable.curved_bottom_ripple
+                else -> R.drawable.ripple
+            }
+            holder.itemView.setBackgroundResource(background)
+
             holder.itemView.setOnClickListener {
                 val activity = context as AppCompatActivity
                 AddAccountDialog(walletID) {newAccountNumber ->

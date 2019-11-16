@@ -107,74 +107,69 @@
         android:visibility="gone"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/backup_warning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="44dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginEnd="13dp"
-            android:layout_marginBottom="16dp"
-            android:padding="@dimen/margin_padding_size_16"
-            android:visibility="gone"
-            android:background="@drawable/backup_seed_bg"
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:clickable="true">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_wallet_alert" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_padding_size_16">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/backup_seed_phrase"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/source_sans_pro" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/verify_seed_info"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:layout_marginTop="8dp"
-                    app:fontFamily="@font/source_sans_pro" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/ic_next" />
-
-        </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#e6eaed"
-            android:layout_marginLeft="44dp"
             android:layout_marginStart="44dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/account_list_rv"
-            />
+            android:id="@+id/account_list_rv" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backup_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_padding_size_16"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/backup_seed_bg"
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_wallet_alert" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_padding_size_16">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/backup_seed_phrase"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verify_seed_info"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_next" />
 
     </LinearLayout>
 
