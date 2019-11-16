@@ -179,6 +179,27 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         }
     }
 
+    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+        GlobalScope.launch(Dispatchers.Main) {
+
+            for(i in 0 until transactions.size){
+                if(transactions[i].hash == hash && transactions[i].walletID == walletID){
+                    transactions[i].height = blockHeight
+                    adapter?.notifyItemChanged(i)
+                }
+            }
+        }
+    }
+
+    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val unconfirmedTransactions = transactions.filter { it.confirmations <= 2 }.count()
+            if (unconfirmedTransactions > 0) {
+                adapter?.notifyDataSetChanged()
+            }
+        }
+    }
+
     override fun onSyncCompleted() {
         GlobalScope.launch(Dispatchers.Main){
             balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))

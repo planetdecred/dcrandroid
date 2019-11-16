@@ -287,7 +287,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
     // -- Block Notification
 
-    override fun onTransactionConfirmed(walletID: Long, hash: String?) {
+    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+    }
+
+    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
     }
 
     override fun onTransaction(transactionJson: String?) {

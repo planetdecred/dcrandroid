@@ -33,7 +33,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
 
         if(BiometricUtils.isFingerprintEnrolled(this)){
             biometric_authentication.show()
-            SwitchPreference(this, Dcrlibwallet.UseBiometricAuthConfigKey, biometric_authentication, biometricCheckChange)
+            SwitchPreference(this, Constants.USE_BIOMETRIC_AUTH, biometric_authentication, biometricCheckChange)
         }
 
         SwitchPreference(this, Dcrlibwallet.BeepNewBlocksConfigKey, beep_new_blocks)

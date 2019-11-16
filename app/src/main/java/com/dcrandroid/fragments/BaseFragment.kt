@@ -88,7 +88,9 @@ open class BaseFragment : Fragment(), SyncProgressListener {
     override fun debug(debugInfo: DebugInfo?) {}
 
 
-    override fun onTransactionConfirmed(walletID: Long, hash: String?) {}
+    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {}
+
+    override fun onBlockAttached(walletID: Long, blockHeight: Int) {}
 
     override fun onTransaction(transactionJson: String?) {}
 }

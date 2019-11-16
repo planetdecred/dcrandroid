@@ -227,8 +227,8 @@
     <!--Wallet-->
     <string name="setting_up_dcrandroid">Setting Up Decred Wallet</string>
     <string name="create_wallet">Create Wallet</string>
-    <string name="create_a_new_wallet">Create a new Wallet</string>
-    <string name="restore_existing_wallet">Restore an existing Wallet</string>
+    <string name="create_a_new_wallet">Create a new wallet</string>
+    <string name="restore_existing_wallet">Restore an existing wallet</string>
     <string name="recover_wallet">Recover Wallet</string>
     <string name="private_passphrase">Private Passphrase</string>
     <string name="opening_wallet">Opening wallet…</string>
@@ -767,7 +767,7 @@
     <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
     <string name="keep_in_mind">Keep in mind</string>
     <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
-    <string name="create_watch_only_wallet">Create Watch Only Wallet</string>
+    <string name="create_watch_only_wallet">Create watch only wallet</string>
     <string name="extended_public_key">Extended Public Key</string>
     <string name="wallet_name_exists">Wallet name exists</string>
     <string name="reserved_wallet_name">\'wallet-\' is a reserved prefix</string>

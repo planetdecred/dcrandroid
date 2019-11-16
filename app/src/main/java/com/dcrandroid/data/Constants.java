@@ -41,6 +41,7 @@ public class Constants {
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
             ENCRYPTION_IV = "encryption_iv",
+            USE_BIOMETRIC_AUTH = "use_biometric_auth",
             OFF = "off",
             FINGERPRINT = "fingerprint",
             FINGERPRINT_PASS = "fingerprint_pass";
