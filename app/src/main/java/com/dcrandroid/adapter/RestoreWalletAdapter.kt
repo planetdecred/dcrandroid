@@ -7,6 +7,7 @@
 package com.dcrandroid.adapter
 
 import android.app.Activity
+import android.graphics.Point
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -32,6 +33,8 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
     }
     private var allValid = false
 
+    var nextFocusPosition = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context)
                 .inflate(R.layout.recover_wallet_list_row, parent, false)
@@ -53,8 +56,16 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
         holder.itemView.seed_index.text = (position+1).toString()
 
         holder.itemView.seed_et.apply {
-            dropDownVerticalOffset = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_12)
+            setDropDownBackgroundResource(android.R.color.transparent)
+            dropDownVerticalOffset = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_14)
+            dropDownWidth = ViewGroup.LayoutParams.MATCH_PARENT
             setAdapter(suggestionsAdapter)
+        }
+
+        if(nextFocusPosition == position){
+            nextFocusPosition = -1
+            holder.itemView.seed_et.requestFocus()
+            holder.itemView.seed_et.isCursorVisible = true
         }
 
         holder.itemView.seed_et.setOnFocusChangeListener { v, hasFocus ->
@@ -118,6 +129,13 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
             }
 
         })
+
+        holder.itemView.seed_et.setOnItemClickListener { _, _, _, _ ->
+            if(position+1 < itemCount){
+                nextFocusPosition = position+1
+                notifyItemChanged(nextFocusPosition)
+            }
+        }
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

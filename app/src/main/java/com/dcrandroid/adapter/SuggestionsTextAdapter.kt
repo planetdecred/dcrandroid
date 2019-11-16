@@ -12,9 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import com.dcrandroid.R
+import kotlinx.android.synthetic.main.dropdown_item_1.view.*
 
 class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val suggestions: List<String>) :
         ArrayAdapter<String>(context, layoutResource, suggestions) {
@@ -34,6 +36,22 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
 
         val suggestionTextView = view!!.findViewById<TextView>(android.R.id.text1)
         suggestionTextView.text = filteredArray[position]
+
+        val layoutParams = suggestionTextView.layoutParams as LinearLayout.LayoutParams
+        if(position == count-1){
+            layoutParams.bottomMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+        }else{
+            layoutParams.bottomMargin = 0
+        }
+        suggestionTextView.layoutParams = layoutParams
+
+        val backgroundResource = when (position) {
+            0 -> R.drawable.curved_top_4dp_ripple
+            count - 1 -> R.drawable.curved_bottom_4dp_ripple
+            else -> R.drawable.bg_white_ripple
+        }
+
+        suggestionTextView.setBackgroundResource(backgroundResource)
 
         return view
     }

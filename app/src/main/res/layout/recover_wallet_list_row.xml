@@ -49,6 +49,7 @@
         android:layout_marginStart="@dimen/margin_padding_size_8"
         android:imeOptions="actionNext"
         android:maxLines="1"
+        android:nextFocusDown="@+id/seed_et"
         tools:text="tolerance" />
 
 </LinearLayout>
