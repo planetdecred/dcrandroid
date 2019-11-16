@@ -50,6 +50,9 @@
     <dimen name="margin_padding_size_96">96dp</dimen>
     <dimen name="margin_padding_size_128">128dp</dimen>
 
+
+    <dimen name="wallets_menu_width">152dp</dimen>
+
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="bottom_sheet_corner_radius_8">8dp</dimen>

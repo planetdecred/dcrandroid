@@ -52,9 +52,18 @@ class WalletsFragment: BaseFragment() {
             startActivityForResult(intent, VERIFY_SEED_REQUEST_CODE)
         }
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = adapter
+
+        recyclerView.viewTreeObserver.addOnScrollChangedListener {
+            if(layoutManager.findFirstCompletelyVisibleItemPosition() == 0){
+                setToolbarTitle(R.string.wallets, false)
+            }else{
+                setToolbarTitle(R.string.wallets, true)
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

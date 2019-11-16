@@ -76,7 +76,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
     }
 
     override fun showOptionsMenu(v: View) {
-        val items = arrayOf(
+        val items: Array<Any> = arrayOf(
                 PopupItem(R.string.generate_new_address)
         )
 

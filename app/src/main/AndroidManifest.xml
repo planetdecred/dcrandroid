@@ -160,6 +160,10 @@
             android:name=".activities.RestoreSuccessActivity"
             android:launchMode="singleTask" />
 
+        <activity
+            android:name=".activities.WalletSettings"
+            android:launchMode="singleTask" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -20,7 +20,6 @@ import androidx.core.text.HtmlCompat
 import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
-import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
@@ -122,7 +121,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
     }
 
     override fun showOptionsMenu(v: View) {
-        val items = arrayOf(
+        val items: Array<Any> = arrayOf(
                 PopupItem(R.string.clear_fields)
         )
 

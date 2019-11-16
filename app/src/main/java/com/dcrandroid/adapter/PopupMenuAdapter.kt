@@ -21,43 +21,57 @@ import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.popup_layout_row.view.*
 
 class PopupItem(@StringRes val title: Int, @ColorRes val color: Int = R.color.darkBlueTextColor)
+class PopupDivider(val widthPixels: Int)
 
-class PopupMenuAdapter(private val context: Context, private val items: Array<PopupItem>, private val itemClicked:(position: Int) -> Unit): RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
+const val VIEW_TYPE_ROW = 0
+const val VIEW_TYPE_DIVIDER = 1
+
+class PopupMenuAdapter(private val context: Context, private val items: Array<Any>, private val itemClicked:(position: Int) -> Unit): RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layout = when(viewType){
+            VIEW_TYPE_ROW -> R.layout.popup_layout_row
+            else -> R.layout.popup_layout_divider
+        }
+
         return ViewHolder(
                 LayoutInflater
                         .from(context)
-                        .inflate(R.layout.popup_layout_row, parent, false))
+                        .inflate(layout, parent, false))
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if(items[position] is PopupDivider) {
+            VIEW_TYPE_DIVIDER
+        } else VIEW_TYPE_ROW
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.setText(items[position].title)
-        holder.textView.setTextColor(context.resources.getColor(items[position].color))
+        val item = items[position]
+        if(item is PopupItem) {
+            holder.itemView.popup_text.setText(item.title)
+            holder.itemView.popup_text.setTextColor(context.resources.getColor(item.color))
 
-        when (position) {
-            0 -> holder.itemView.setBackgroundResource(R.drawable.curved_top_ripple)
-            itemCount - 1 -> holder.itemView.setBackgroundResource(R.drawable.curved_bottom_ripple)
-            else -> holder.itemView.setBackgroundResource(R.drawable.ripple)
-        }
-
-        holder.itemView.setOnClickListener {
-            itemClicked(position)
+            holder.itemView.setOnClickListener {
+                itemClicked(position)
+            }
+        }else if (item is PopupDivider){
+            val layoutParams = holder.itemView.layoutParams
+            layoutParams.width = item.widthPixels
+            holder.itemView.layoutParams = layoutParams
         }
     }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val textView = itemView.popup_text
-    }
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 }
 
 class PopupUtil {
     companion object {
-        fun showPopup(anchorView: View, items: Array<PopupItem>, itemClicked: (window: PopupWindow, position: Int) -> Unit) {
+        fun showPopup(anchorView: View, items: Array<Any>, itemClicked: (window: PopupWindow, position: Int) -> Unit) {
             val context = anchorView.context
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.popup_layout, null)

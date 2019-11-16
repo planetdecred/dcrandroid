@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/ripple"
     android:clickable="true"
     android:focusable="true"
@@ -18,9 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/popup_text"
-        android:text="Rename wallet"
+        tools:text="Rename wallet"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="#091440"
-        app:fontFamily="@font/source_sans_pro"/>
+        android:textColor="@color/darkBlueTextColor"
+        android:fontFamily="@font/source_sans_pro"/>
 
 </LinearLayout>

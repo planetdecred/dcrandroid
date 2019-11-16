@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
 import com.dcrandroid.activities.security.ValidateAddress
 import com.dcrandroid.activities.security.VerifyMessage
@@ -109,20 +110,32 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
         // popup menu
         holder.more.setOnClickListener {
 
+            val dividerWidth = context.resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
+
             val items = arrayOf(
-                    PopupItem(R.string.rename_wallet),
-                    PopupItem(R.string.change_spending_pass),
-                    PopupItem(R.string.view_property),
-                    PopupItem(R.string.validate_addresses),
                     PopupItem(R.string.sign_message),
                     PopupItem(R.string.verify_message),
-                    PopupItem(R.string.remove_wallet, R.color.orangeTextColor)
+                    PopupDivider(dividerWidth),
+                    PopupItem(R.string.view_property),
+                    PopupDivider(dividerWidth),
+                    PopupItem(R.string.rename),
+                    PopupItem(R.string.settings)
             )
 
             PopupUtil.showPopup(it, items){window, index ->
                window.dismiss()
                 when(index){
-                    0 -> { // rename wallet
+                    0 -> {
+                        val intent = Intent(context, SignMessage::class.java)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
+                        context.startActivity(intent)
+                    }
+                    1 -> {
+                        val intent = Intent(context, VerifyMessage::class.java)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
+                        context.startActivity(intent)
+                    }
+                    5 -> { // rename wallet
                         val activity = context as AppCompatActivity
                         RenameAccountDialog(wallet.name, true){newName ->
 
@@ -137,29 +150,24 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                             return@RenameAccountDialog null
                         }.show(activity.supportFragmentManager, null)
                     }
-                    3 -> {
-                        val intent = Intent(context, ValidateAddress::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.id)
-                        context.startActivity(intent)
-                    }
-                    4 -> {
-                        val intent = Intent(context, SignMessage::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.id)
-                        context.startActivity(intent)
-                    }
-                    5 -> {
-                        val intent = Intent(context, VerifyMessage::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.id)
-                        context.startActivity(intent)
-                    }
                     6 -> {
-                        println("Deleting Wallet")
-                        if(!multiWallet!!.isSyncing && !multiWallet.isSynced){
-                            multiWallet.deleteWallet(wallet.id, "".toByteArray())
-                        }else{
-                            SnackBar.showError(context, R.string.cancel_sync_create_wallet)
-                        }
+                        val intent = Intent(context, WalletSettings::class.java)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
+                        context.startActivity(intent)
                     }
+//                    3 -> {
+//                        val intent = Intent(context, ValidateAddress::class.java)
+//                        intent.putExtra(Constants.WALLET_ID, wallet.id)
+//                        context.startActivity(intent)
+//                    }
+//                    6 -> {
+//                        println("Deleting Wallet")
+//                        if(!multiWallet!!.isSyncing && !multiWallet.isSynced){
+//                            multiWallet.deleteWallet(wallet.id, "".toByteArray())
+//                        }else{
+//                            SnackBar.showError(context, R.string.cancel_sync_create_wallet)
+//                        }
+//                    }
                 }
             }
         }

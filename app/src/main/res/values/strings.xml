@@ -541,7 +541,7 @@
     <string name="create_startup_pin">Create Startup PIN</string>
     <string name="enter_spending_password">Enter Spending Password</string>
     <string name="create_startup_password">Create Startup Password</string>
-    <string name="change_spending_pin_password">Change Spending PIN/Password</string>
+    <string name="change_spending_pin_password">Change spending PIN/Password</string>
     <string name="required_to_send_funds">Required to send funds.</string>
     <string name="enter_current_pin">Enter Current PIN</string>
     <string name="confirm_startup_password">Confirm Startup Password</string>
@@ -780,5 +780,6 @@
     <string name="your_wallet_is_successfully_restored">Your wallet is successfully restored</string>
     <string name="get_started">Get started</string>
     <string name="back">Back</string>
+    <string name="use_fingerprint">Use fingerprint</string>
 
 </resources>
