@@ -7,23 +7,23 @@
 package com.dcrandroid.fragments
 
 import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
-import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.activities.SetupWalletActivity
-import android.content.Intent
-import android.widget.Toast
-import com.dcrandroid.activities.VerifySeedInstruction
+import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.SnackBar
 
 const val CREATE_WALLET_REQUEST_CODE = 100
 const val VERIFY_SEED_REQUEST_CODE = 200
+const val WALLET_SETTINGS_REQUEST_CODE = 300
 
-class WalletsFragment: BaseFragment() {
+class WalletsFragment : BaseFragment() {
 
     private lateinit var adapter: WalletsAdapter
     private lateinit var recyclerView: RecyclerView
@@ -46,10 +46,8 @@ class WalletsFragment: BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = WalletsAdapter(context!!){walletID ->
-            val intent = Intent(context, VerifySeedInstruction::class.java)
-            intent.putExtra(Constants.WALLET_ID, walletID)
-            startActivityForResult(intent, VERIFY_SEED_REQUEST_CODE)
+        adapter = WalletsAdapter(context!!) { intent, requestCode ->
+            startActivityForResult(intent, requestCode)
         }
 
         val layoutManager = LinearLayoutManager(context)
@@ -58,9 +56,9 @@ class WalletsFragment: BaseFragment() {
         recyclerView.adapter = adapter
 
         recyclerView.viewTreeObserver.addOnScrollChangedListener {
-            if(layoutManager.findFirstCompletelyVisibleItemPosition() == 0){
+            if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
                 setToolbarTitle(R.string.wallets, false)
-            }else{
+            } else {
                 setToolbarTitle(R.string.wallets, true)
             }
         }
@@ -68,14 +66,23 @@ class WalletsFragment: BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == CREATE_WALLET_REQUEST_CODE && resultCode == RESULT_OK){
+
+        if (requestCode == CREATE_WALLET_REQUEST_CODE && resultCode == RESULT_OK) {
+
             val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID)
             refreshNavigationTabs()
             SnackBar.showText(context!!, R.string.wallet_created)
-        }else if(requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK){
+
+        } else if (requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK) {
+
             val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
             adapter.walletBackupVerified(walletID)
+            refreshNavigationTabs()
+
+        } else if (requestCode == WALLET_SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
+
+            adapter.reloadList()
             refreshNavigationTabs()
         }
     }
@@ -86,9 +93,9 @@ class WalletsFragment: BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.add_new_wallet -> {
-                if(multiWallet.isSyncing || multiWallet.isSynced){
+                if (multiWallet.isSyncing || multiWallet.isSynced) {
                     Toast.makeText(context!!, R.string.cancel_sync_create_wallet, Toast.LENGTH_SHORT).show()
                     return false
                 }

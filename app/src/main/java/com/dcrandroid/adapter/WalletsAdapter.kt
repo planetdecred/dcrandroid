@@ -6,6 +6,7 @@
 
 package com.dcrandroid.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -15,9 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
-import com.dcrandroid.activities.security.ValidateAddress
 import com.dcrandroid.activities.security.VerifyMessage
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.RenameAccountDialog
@@ -25,13 +26,15 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
+import com.dcrandroid.fragments.VERIFY_SEED_REQUEST_CODE
+import com.dcrandroid.fragments.WALLET_SETTINGS_REQUEST_CODE
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
 
-class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
+class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, requestCode: Int) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
     private var wallets: ArrayList<Wallet>
     private val multiWallet = WalletData.multiWallet
@@ -39,6 +42,13 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
 
     init {
         wallets = multiWallet!!.openedWalletsList()
+    }
+
+    fun reloadList(){
+        println("Reloadinng list")
+        wallets.clear()
+        wallets.addAll(multiWallet!!.openedWalletsList())
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsViewHolder {
@@ -67,7 +77,9 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
             holder.backupWarning.show()
 
             holder.backupWarning.setOnClickListener {
-                backupSeedClick(wallet.id)
+                val intent = Intent(context, VerifySeedInstruction::class.java)
+                intent.putExtra(Constants.WALLET_ID, wallet.id)
+                launchIntent(intent, VERIFY_SEED_REQUEST_CODE)
             }
         }
 
@@ -153,7 +165,8 @@ class WalletsAdapter(val context: Context, val backupSeedClick:(walletID: Long) 
                     6 -> {
                         val intent = Intent(context, WalletSettings::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
-                        context.startActivity(intent)
+                        launchIntent(intent, WALLET_SETTINGS_REQUEST_CODE)
+
                     }
 //                    3 -> {
 //                        val intent = Intent(context, ValidateAddress::class.java)

@@ -30,7 +30,10 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
     private var message: CharSequence? = null
 
     private var btnPositiveText: String? = null
+    var btnPositiveColor: Int = R.color.blue
+
     private var btnNegativeText: String? = null
+    var btnNegativeColor: Int = R.color.blue
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +57,14 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         if (btnPositiveText != null) {
             btnPositive.visibility = View.VISIBLE
             btnPositive.text = btnPositiveText
+            btnPositive.setTextColor(context.getColor(btnPositiveColor))
             btnPositive.setOnClickListener(this)
         }
 
         if (btnNegativeText != null) {
             btnNegative.visibility = View.VISIBLE
             btnNegative.text = btnNegativeText
+            btnNegative.setTextColor(context.getColor(btnNegativeColor))
             btnNegative.setOnClickListener(this)
         }
 

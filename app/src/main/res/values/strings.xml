@@ -130,7 +130,11 @@
     <string name="wallet_name">Wallet Name</string>
     <string name="change_spending_pass">Change spending password/PIN</string>
     <string name="view_property">View property</string>
+    <string name="remove">Remove</string>
+    <string name="confirm_to_remove">Confirm to remove</string>
     <string name="remove_wallet">Remove wallet from device</string>
+    <string name="remove_wallet_prompt">Remove wallet from device?</string>
+    <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
 
     <string-array name="nav_list_titles">
         <item>Overview</item>
@@ -689,6 +693,7 @@
     <string name="got_it">Got It</string>
     <string name="tap_to_copy">(Tap to copy)</string>
     <string name="cancel_sync_create_wallet">Cancel sync before creating wallet</string>
+    <string name="cancel_sync_delete_wallet">Cancel sync before deleting wallet</string>
     <string name="wallet_created">Wallet created</string>
     <string name="amount">Amount</string>
     <string name="processing_time">Processing time</string>
