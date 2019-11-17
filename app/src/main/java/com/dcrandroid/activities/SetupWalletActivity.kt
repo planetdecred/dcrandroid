@@ -71,7 +71,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
     }
 
     private fun navigateToHomeActivity(walletID: Long) = GlobalScope.launch(Dispatchers.Main) {
-        if (multiWallet.openedWalletsCount() > 1) {
+        if (multiWallet!!.openedWalletsCount() > 1) {
             val data = Intent()
             data.putExtra(Constants.WALLET_ID, walletID)
             setResult(Activity.RESULT_OK, data)
@@ -87,7 +87,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet.createNewWallet(spendingKey, type)
+            val wallet = multiWallet!!.createNewWallet(spendingKey, type)
             navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()

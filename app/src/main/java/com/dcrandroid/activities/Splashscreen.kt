@@ -31,8 +31,6 @@ import com.dcrandroid.util.Utils
 
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.MultiWallet
-import kotlinx.android.synthetic.main.activity_debug.*
-import kotlinx.android.synthetic.main.activity_debug.view.*
 import kotlin.system.exitProcess
 
 /**
@@ -198,7 +196,7 @@ class SplashScreen : BaseActivity() {
     }
 
     private fun endProcess(){
-        multiWallet.shutdown()
+        multiWallet?.shutdown()
         finish()
         exitProcess(1)
     }

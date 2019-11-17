@@ -43,13 +43,13 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions)
 
-        setCurrencyConversionSummary(multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION))
+        setCurrencyConversionSummary(multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION))
         ListPreference(this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION,
                 R.array.currency_conversion, currency_conversion){
             setCurrencyConversionSummary(it)
         }
 
-        setPeerIP(multiWallet.readStringConfigValueForKey(Dcrlibwallet.SpvPersistentPeerAddressesConfigKey))
+        setPeerIP(multiWallet!!.readStringConfigValueForKey(Dcrlibwallet.SpvPersistentPeerAddressesConfigKey))
         EditTextPreference(this, Dcrlibwallet.SpvPersistentPeerAddressesConfigKey, R.string.peer_ip_dialog_title,
                 R.string.peer_ip_pref_hint, R.string.invalid_peer_ip, spv_peer_ip, validateIPAddress){
             setPeerIP(it)

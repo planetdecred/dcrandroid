@@ -82,8 +82,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         blockNotificationSound = alertSound.load(this, R.raw.beep, 1)
 
         try {
-            multiWallet.removeSyncProgressListener(TAG)
-            multiWallet.addSyncProgressListener(this, TAG)
+            multiWallet?.removeSyncProgressListener(TAG)
+            multiWallet?.addSyncProgressListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -110,10 +110,14 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     override fun onDestroy() {
         super.onDestroy()
 
+        if(multiWallet == null || multiWallet?.openedWalletsCount() == 0){
+            return
+        }
+
         val syncIntent = Intent(this, SyncService::class.java)
         stopService(syncIntent)
 
-        multiWallet.shutdown()
+        multiWallet?.shutdown()
         finish()
         exitProcess(1)
     }
@@ -140,7 +144,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet.neededBackupCount) {position ->
+        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.neededBackupCount) {position ->
             switchFragment(position)
         }
         recycler_view_tabs.adapter = adapter
@@ -150,7 +154,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun refreshNavigationTabs(){
-        adapter.backupsNeeded = multiWallet.neededBackupCount
+        adapter.backupsNeeded = multiWallet!!.neededBackupCount
         adapter.notifyItemChanged(2) // Wallets Page
     }
 
@@ -204,10 +208,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         currentFragment = when (position) {
             0 -> Overview()
             1 ->{
-                if(multiWallet.openedWalletsCount() > 1){
+                if(multiWallet!!.openedWalletsCount() > 1){
                     MultiWalletTransactions()
                 }else{
-                    val wallet = multiWallet.openedWalletsList()[0]
+                    val wallet = multiWallet!!.openedWalletsList()[0]
                     TransactionsFragment().setWalletID(wallet.id)
                 }
             }
@@ -237,7 +241,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun checkWifiSync() {
-        if (!multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, Constants.DEF_SYNC_ON_CELLULAR)) {
+        if (!multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, Constants.DEF_SYNC_ON_CELLULAR)) {
             // Check if wifi is connected
             val isWifiConnected = this.let { NetworkUtil.isWifiConnected(it) }
             if (!isWifiConnected) {
@@ -255,7 +259,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
                     startSyncing()
 
                     val syncDialog = dialog as WiFiSyncDialog
-                    multiWallet.setBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, syncDialog.checked)
+                    multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, syncDialog.checked)
 
                 })
 
@@ -267,7 +271,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun startSyncing() {
-        for (w in multiWallet.openedWalletsList()){
+        for (w in multiWallet!!.openedWalletsList()){
             if(!w.hasDiscoveredAccounts && w.isLocked){
                 ResumeAccountDiscovery()
                         .setWalletID(w.id)
@@ -303,7 +307,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
-                transaction.timestampMillis.toInt(), multiWallet.openedWalletsCount() > 1, transaction.walletName)
+                transaction.timestampMillis.toInt(), multiWallet!!.openedWalletsCount() > 1, transaction.walletName)
     }
 
     // -- Sync Progress Listener

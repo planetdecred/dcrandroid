@@ -41,7 +41,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_sign_message)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.walletWithID(walletID)
+        wallet = multiWallet!!.walletWithID(walletID)
 
 
         addressInputHelper = InputHelper(this, address_container){

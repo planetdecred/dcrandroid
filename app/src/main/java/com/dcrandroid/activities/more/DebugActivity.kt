@@ -23,7 +23,7 @@ class DebugActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_debug)
 
-        setLogLevelSummary(multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL))
+        setLogLevelSummary(multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL))
         ListPreference(this, Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL,
                 R.array.logging_levels, logging_level){
             setLogLevelSummary(it)

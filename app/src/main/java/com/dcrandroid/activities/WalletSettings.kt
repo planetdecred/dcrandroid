@@ -8,6 +8,7 @@ package com.dcrandroid.activities
 
 import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
@@ -34,17 +35,17 @@ class WalletSettings: BaseActivity() {
         setContentView(R.layout.activity_wallet_settings)
 
         walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.walletWithID(walletID)
+        wallet = multiWallet!!.walletWithID(walletID)
 
         val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
-        setTxNotificationSummary(multiWallet.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
+        setTxNotificationSummary(multiWallet!!.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
         ListPreference(this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions){
             setTxNotificationSummary(it)
         }
 
         remove_wallet.setOnClickListener {
-            if(multiWallet.isSyncing || multiWallet.isSynced){
+            if(multiWallet!!.isSyncing || multiWallet!!.isSynced){
                 SnackBar.showError(this, R.string.cancel_sync_delete_wallet)
                 return@setOnClickListener
             }
@@ -58,7 +59,6 @@ class WalletSettings: BaseActivity() {
                         PassPromptUtil(this, walletID, true, title){
                             if(it != null){
                                 deleteWallet(it)
-
                             }
 
                         }.show()
@@ -75,9 +75,16 @@ class WalletSettings: BaseActivity() {
 
     private fun deleteWallet(pass: String) = GlobalScope.launch(Dispatchers.IO){
         try{
-            multiWallet.deleteWallet(walletID, pass.toByteArray())
-            setResult(Activity.RESULT_OK)
-            finish()
+            multiWallet!!.deleteWallet(walletID, pass.toByteArray())
+            if(multiWallet!!.openedWalletsCount() == 0){
+                multiWallet!!.shutdown()
+                walletData.multiWallet = null
+                startActivity(Intent(this@WalletSettings, SplashScreen::class.java))
+                finishAffinity()
+            }else{
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
         }catch (e: Exception){
             e.printStackTrace()
             if(e.message == Dcrlibwallet.ErrInvalidPassphrase){

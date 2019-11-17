@@ -28,7 +28,7 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_validate_address)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.walletWithID(walletID)
+        wallet = multiWallet!!.walletWithID(walletID)
 
         addressInputHelper = InputHelper(this, address_container){
             // no validation for address input

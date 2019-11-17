@@ -23,7 +23,7 @@ class RestoreSuccessActivity: BaseActivity() {
 
         tv_get_started.setOnClickListener {
 
-            if (multiWallet.openedWalletsCount() > 1) {
+            if (multiWallet!!.openedWalletsCount() > 1) {
 
                 val walletID = intent.getLongExtra(Constants.WALLET_ID, 0)
 

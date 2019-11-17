@@ -6,7 +6,6 @@
 
 package com.dcrandroid.util
 
-import dcrlibwallet.Wallet
 import dcrlibwallet.MultiWallet
 
 /**
@@ -14,7 +13,6 @@ import dcrlibwallet.MultiWallet
  */
 
 class WalletData {
-    lateinit var wallet: Wallet
     var synced = false
     var peers = 0
 

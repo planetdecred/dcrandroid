@@ -56,7 +56,7 @@ class VerifySeedActivity : BaseActivity() {
         btn_verify.setOnClickListener {
             val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
             try{
-                multiWallet.verifySeedForWallet(wallet!!.id, seedMnemonic)
+                multiWallet!!.verifySeedForWallet(wallet!!.id, seedMnemonic)
                 val data = Intent(this, SeedBackupSuccess::class.java)
                 data.putExtra(Constants.WALLET_ID, wallet!!.id)
                 data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
@@ -76,7 +76,7 @@ class VerifySeedActivity : BaseActivity() {
     private fun prepareData() {
 
         val walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.walletWithID(walletId)
+        wallet = multiWallet!!.walletWithID(walletId)
 
         if (wallet!!.seed.isNotBlank()){
             val seed = wallet!!.seed

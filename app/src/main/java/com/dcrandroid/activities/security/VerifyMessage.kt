@@ -33,7 +33,7 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         setContentView(R.layout.activity_verify_message)
 
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet.walletWithID(walletID)
+        wallet = multiWallet!!.walletWithID(walletID)
 
         addressInputHelper = InputHelper(this, address_container) {
             wallet.isAddressValid(it)

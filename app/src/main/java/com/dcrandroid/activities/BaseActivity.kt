@@ -24,8 +24,8 @@ import dcrlibwallet.MultiWallet
 open class BaseActivity : AppCompatActivity() {
 
     internal val walletData: WalletData = WalletData.instance
-    internal val multiWallet: MultiWallet
-        get() = walletData.multiWallet!!
+    internal val multiWallet: MultiWallet?
+        get() = walletData.multiWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
