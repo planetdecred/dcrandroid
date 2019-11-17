@@ -59,7 +59,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/_default"
+                        android:id="@+id/tv_subtitle"
+                        tools:text="@string/_default"
                         android:textSize="@dimen/edit_text_size_14"
                         android:textColor="@color/blueGraySecondTextColor"
                         android:includeFontPadding="false"
@@ -181,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="@string/spending_pin_password"
+                    android:text="@string/notifications"
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"

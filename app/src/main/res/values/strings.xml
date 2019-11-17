@@ -466,7 +466,7 @@
 
     <!--Security Fragment-->
     <string name="security">Security</string>
-    <string name="sign_message">Sign Message</string>
+    <string name="sign_message">Sign message</string>
     <string name="sign">Sign</string>
     <string name="address_colon">Address:</string>
     <string name="message">Message</string>
@@ -759,7 +759,7 @@
     <string name="sign_using_external_address_error">Address does not belong to wallet</string>
     <string name="verify_message_instruction">Enter the address, signature, and message to verify:</string>
     <string name="clear_all">Clear All</string>
-    <string name="verify_message">Verify Message</string>
+    <string name="verify_message">Verify message</string>
     <string name="invalid_base64_string">Not a base64 string.</string>
     <string name="help_description">For more information, please visit the Decred documentation.</string>
     <string name="see_documentations">See documentations</string>
@@ -786,5 +786,9 @@
     <string name="get_started">Get started</string>
     <string name="back">Back</string>
     <string name="use_fingerprint">Use fingerprint</string>
+    <string name="overview_backup_seed_instruction">It is recommended to write down the seed phrase for each wallet as a backup so that you can recover your funds when needed.</string>
+    <string name="go_to_wallets">Go to Wallets</string>
+    <string name="n_wallets_need_backup">%1$d wallets need backup</string>
+    <string name="a_wallet_needs_backup">A wallet needs backup</string>
 
 </resources>

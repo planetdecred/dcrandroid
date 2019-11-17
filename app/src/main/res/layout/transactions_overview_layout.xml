@@ -9,11 +9,13 @@
     android:id="@+id/transactions_overview_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginBottom="@dimen/margin_padding_size_8"
     android:elevation="4dp"
     android:background="@drawable/card_bg"
-    android:orientation="vertical"
-    app:elevation="4dp">
+    android:orientation="vertical" >
 
     <TextView
         android:layout_width="wrap_content"

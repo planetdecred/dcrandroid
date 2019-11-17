@@ -11,7 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +24,9 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.util.*
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dcrlibwallet.*
+import dcrlibwallet.Dcrlibwallet
+import kotlinx.android.synthetic.main.overview_backup_warning.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -90,11 +91,24 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         btn_view_all_transactions.setOnClickListener {
             switchFragment(1) // Transactions Fragment
         }
+
+        if (multiWallet.neededBackupCount > 0) {
+            backup_warning_layout?.show()
+
+            backup_warning_title?.text = when (multiWallet.neededBackupCount) {
+                1 -> getString(R.string.a_wallet_needs_backup)
+                else -> getString(R.string.n_wallets_need_backup, multiWallet.neededBackupCount)
+            }
+
+            go_to_wallets_btn?.setOnClickListener {
+                switchFragment(2) // Wallets Fragment
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        syncLayoutUtil = SyncLayoutUtil(syncLayout, {restartSyncProcess()}, {
+        syncLayoutUtil = SyncLayoutUtil(syncLayout, { restartSyncProcess() }, {
             scrollView.postDelayed({
                 scrollView.smoothScrollTo(0, scrollView.bottom)
             }, 200)
@@ -167,11 +181,11 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
         transaction.animate = true
 
-        GlobalScope.launch(Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             transactions.add(0, transaction)
 
             // remove last item if more than max
-            if(transactions.size > MAX_TRANSACTIONS){
+            if (transactions.size > MAX_TRANSACTIONS) {
                 transactions.removeAt(transactions.size - 1)
             }
 
@@ -182,8 +196,8 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
         GlobalScope.launch(Dispatchers.Main) {
 
-            for(i in 0 until transactions.size){
-                if(transactions[i].hash == hash && transactions[i].walletID == walletID){
+            for (i in 0 until transactions.size) {
+                if (transactions[i].hash == hash && transactions[i].walletID == walletID) {
                     transactions[i].height = blockHeight
                     adapter?.notifyItemChanged(i)
                 }
@@ -201,7 +215,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 
     override fun onSyncCompleted() {
-        GlobalScope.launch(Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
         }
         loadTransactions()

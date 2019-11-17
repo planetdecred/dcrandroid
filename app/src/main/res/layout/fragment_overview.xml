@@ -19,8 +19,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginStart="@dimen/margin_padding_size_24"
+            android:layout_marginBottom="@dimen/margin_padding_size_4"
             android:orientation="vertical">
 
             <TextView
@@ -44,6 +44,8 @@
                 app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>
+
+        <include layout="@layout/overview_backup_warning" />
 
         <include layout="@layout/transactions_overview_layout" />
 

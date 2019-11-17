@@ -37,6 +37,8 @@ class WalletSettings: BaseActivity() {
         walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         wallet = multiWallet!!.walletWithID(walletID)
 
+        tv_subtitle?.text = wallet.name
+
         val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
         setTxNotificationSummary(multiWallet!!.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
         ListPreference(this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
