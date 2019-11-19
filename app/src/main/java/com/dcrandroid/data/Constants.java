@@ -44,14 +44,21 @@ public class Constants {
             USE_BIOMETRIC_AUTH = "use_biometric_auth",
             OFF = "off",
             FINGERPRINT = "fingerprint",
-            FINGERPRINT_PASS = "fingerprint_pass";
+            FINGERPRINT_PASS = "fingerprint_pass",
+            TRANSACTION_CHANNEL_ID = "new transaction";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             REQUIRED_CONFIRMATIONS = 2,
             DEF_ACCOUNT_NUMBER = 0,
             DEF_LOG_LEVEL = 2,
-            DEF_TX_NOTIFICATION = 2, // Vibrations Only
+            TX_NOTIFICATION_NONE = 0,
+            TX_NOTIFICATION_SILENT = 1,
+            TX_NOTIFICATION_VIBRATE_ONLY = 2,
+            TX_NOTIFICATION_SOUND_ONLY = 3,
+            TX_NOTIFICATION_SOUND_VIBRATE = 4,
+            DEF_TX_NOTIFICATION = TX_NOTIFICATION_VIBRATE_ONLY,
             DEF_CURRENCY_CONVERSION = 0; // None
+
 
     public static final boolean DEF_SPEND_UNCONFIRMED = false,
                                 DEF_SYNC_ON_CELLULAR = false;

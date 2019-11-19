@@ -19,6 +19,7 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
+import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -56,7 +57,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     private var blockNotificationSound: Int = 0
 
     private lateinit var adapter: NavigationTabsAdapter
-    private lateinit var notificationManager: NotificationManager
 
     private lateinit var currentFragment: Fragment
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
@@ -71,7 +71,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
             Utils.restartApp(this)
         }
 
-        registerNotificationChannel()
+        Utils.registerTransactionNotificationChannel(this)
 
         val builder = SoundPool.Builder().setMaxStreams(3)
         val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -120,18 +120,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         multiWallet?.shutdown()
         finish()
         exitProcess(1)
-    }
-
-    private fun registerNotificationChannel() {
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("new transaction", getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
-            channel.enableLights(true)
-            channel.enableVibration(true)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.importance = NotificationManager.IMPORTANCE_LOW
-            notificationManager.createNotificationChannel(channel)
-        }
     }
 
     private fun initNavigationTabs() {
@@ -307,7 +295,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
-                transaction.timestampMillis.toInt(), multiWallet!!.openedWalletsCount() > 1, transaction.walletName)
+                transaction.timestampMillis.toInt(), transaction.walletID)
     }
 
     // -- Sync Progress Listener

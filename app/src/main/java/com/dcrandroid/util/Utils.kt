@@ -6,10 +6,15 @@
 
 package com.dcrandroid.util
 
+import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -40,6 +45,8 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.spec.GCMParameterSpec
 
+
+const val TRANSACTION_CHANNEL_ID = "new transaction"
 
 object Utils {
 
@@ -235,31 +242,62 @@ object Utils {
         }
     }
 
-    fun sendTransactionNotification(context: Context, manager: NotificationManager, amount: String,
-                                    nonce: Int, multiWallet: Boolean, walletName: String?) {
+    fun registerTransactionNotificationChannel(context: Context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.importance = NotificationManager.IMPORTANCE_LOW
 
-        val title: String
-        if (multiWallet) {
-            title = context.getString(R.string.wallet_new_transaction, walletName)
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun sendTransactionNotification(context: Context, manager: NotificationManager, amount: String,
+                                    nonce: Int, walletID: Long) {
+
+        val multiWallet = WalletData.multiWallet!!
+        val wallet = multiWallet.walletWithID(walletID)
+
+        val title = if (multiWallet.openedWalletsCount() > 1) {
+            context.getString(R.string.wallet_new_transaction, wallet.name)
         } else {
-            title = context.getString(R.string.new_transaction)
+            context.getString(R.string.new_transaction)
+        }
+
+        val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
+        val incomingNotificationConfig = multiWallet.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION)
+
+        val notificationSound = when(incomingNotificationConfig){
+            Constants.TX_NOTIFICATION_SOUND_ONLY,
+            Constants.TX_NOTIFICATION_SOUND_VIBRATE -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            else -> null
+        }
+
+        val vibration = when(incomingNotificationConfig){
+            Constants.TX_NOTIFICATION_VIBRATE_ONLY,
+            Constants.TX_NOTIFICATION_SOUND_VIBRATE -> arrayOf(0L, 100, 100, 100).toLongArray()
+            else -> null
         }
 
         val launchIntent = Intent(context, HomeActivity::class.java)
         launchIntent.action = Constants.NEW_TRANSACTION_NOTIFICATION
         val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val notification = NotificationCompat.Builder(context, "new transaction")
+        val notificationBuilder = NotificationCompat.Builder(context, Constants.TRANSACTION_CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(amount)
                 .setSmallIcon(R.drawable.ic_notification_icon)
+                .setSound(notificationSound)
+                .setVibrate(vibration)
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(launchPendingIntent)
-                .build()
 
-        val groupSummary = NotificationCompat.Builder(context, "new transaction")
+        val groupSummary = NotificationCompat.Builder(context, Constants.TRANSACTION_CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.new_transaction))
                 .setContentText(context.getString(R.string.new_transaction))
                 .setSmallIcon(R.drawable.ic_notification_icon)
@@ -269,6 +307,7 @@ object Utils {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build()
 
+        val notification = notificationBuilder.build()
         manager.notify(nonce, notification)
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary)
     }
