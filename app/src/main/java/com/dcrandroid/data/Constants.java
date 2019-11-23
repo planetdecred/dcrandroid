@@ -61,6 +61,7 @@ public class Constants {
 
 
     public static final boolean DEF_SPEND_UNCONFIRMED = false,
+                                DEF_STARTUP_SECURITY_SET = false,
                                 DEF_SYNC_ON_CELLULAR = false;
 
 }

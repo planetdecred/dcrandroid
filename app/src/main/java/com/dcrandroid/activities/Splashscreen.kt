@@ -6,7 +6,6 @@
 
 package com.dcrandroid.activities
 
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -26,6 +25,8 @@ import com.dcrandroid.activities.more.SettingsActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 
@@ -38,7 +39,6 @@ import kotlin.system.exitProcess
  */
 
 const val DOUBLE_CLICK_TIME_DELTA: Long = 300 //milliseconds
-const val PASSWORD_REQUEST_CODE = 1
 
 class SplashScreen : BaseActivity() {
 
@@ -134,7 +134,7 @@ class SplashScreen : BaseActivity() {
             }
             loadThread!!.start()
         } else {
-            checkEncryption()
+            checkStartupPass()
         }
     }
 
@@ -146,6 +146,27 @@ class SplashScreen : BaseActivity() {
         val i = Intent(this@SplashScreen, SetupWalletActivity::class.java)
         startActivity(i)
         finish()
+    }
+
+    private fun checkStartupPass() {
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
+            requestStartupPass()
+        } else {
+            openWallet(Constants.INSECURE_PUB_PASSPHRASE)
+        }
+    }
+
+    private fun requestStartupPass(){
+        val title = PassPromptTitle(R.string.enter_startup_password, R.string.enter_startup_pin, R.string.enter_startup_pin)
+        PassPromptUtil(this, null, title) { _, pass ->
+            if(pass != null){
+                openWallet(pass)
+            }else{
+                endProcess()
+            }
+
+            true
+        }.show()
     }
 
     private fun openWallet(publicPass: String) {
@@ -175,12 +196,13 @@ class SplashScreen : BaseActivity() {
                                 .setPositiveButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
 
                         if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                            if (util!!.get(Constants.STARTUP_PASSPHRASE_TYPE) == Constants.PIN) {
+                            if (multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
+                                    == Dcrlibwallet.PassphraseTypePin) {
                                 infoDialog.setMessage(getString(R.string.invalid_pin))
                             }
                             infoDialog.setNegativeButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
                                     .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
-                                        // TODO: Retry unlock wallet
+                                        requestStartupPass()
                             })
                         }
 
@@ -201,23 +223,10 @@ class SplashScreen : BaseActivity() {
         exitProcess(1)
     }
 
-
-    private fun checkEncryption() {
-        if (util!!.getBoolean(Constants.ENCRYPT)) {
-            // TODO: check startup password
-        } else {
-            openWallet(Constants.INSECURE_PUB_PASSPHRASE)
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 2) {
             startup()
-        } else if (requestCode == PASSWORD_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                openWallet(data!!.getStringExtra(Constants.PASSPHRASE))
-            }
         }
     }
 

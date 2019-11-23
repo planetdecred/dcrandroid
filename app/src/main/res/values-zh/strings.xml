@@ -387,7 +387,6 @@
        <!--/Error Messages-->
 
        <!--Security Fragment-->
-       <string name="security">安全</string>
        <string name="sign_message">签署消息</string>
        <string name="address_colon">地址:</string>
        <string name="message">消息</string>
@@ -461,7 +460,6 @@
        <string name="password_strength">密码强度</string>
        <string name="pin_strength">PIN码强度</string>
        <string name="enter_startup_pin">输入启动PIN码</string>
-       <string name="confirm_startup_pin">确认启动PIN码</string>
        <string name="create_startup_pin">创建启动PIN码</string>
        <string name="enter_spending_password">输入支付密码</string>
        <string name="create_startup_password">创建启动密码</string>
@@ -469,8 +467,6 @@
        <string name="required_to_send_funds">请求发送资金。</string>
        <string name="enter_current_pin">输入当前PIN码</string>
        <string name="confirm_startup_password">确认启动密码</string>
-       <string name="enter_current_spending_password">输入当前支付密码</string>
-       <string name="enter_current_startup_password">输入当前启动密码</string>
        <string name="enter_startup_password">输入启动密码</string>
        <string name="removing_startup_pass">移除启动密码…</string>
        <string name="removing_startup_pin">移除启动pin码…</string>

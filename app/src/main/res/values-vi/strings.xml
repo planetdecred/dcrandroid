@@ -388,7 +388,6 @@
     <!--/Error Messages-->
 
     <!--Security Fragment-->
-    <string name="security">Bảo mật</string>
     <string name="sign_message">Ký tin nhắn</string>
     <string name="address_colon">Địa chỉ:</string>
     <string name="message">Tin nhắn</string>
@@ -462,7 +461,6 @@
     <string name="password_strength">MẬT KHẨU MẠNH</string>
     <string name="pin_strength">PIN MẠNH</string>
     <string name="enter_startup_pin">Nhập mã PIN khởi động</string>
-    <string name="confirm_startup_pin">Xác nhận mã PIN khởi động</string>
     <string name="create_startup_pin">Tạo mã PIN khởi động</string>
     <string name="enter_spending_password">Nhập mật khẩu chi tiêu</string>
     <string name="create_startup_password">Tạo mật khẩu khởi động</string>
@@ -470,8 +468,6 @@
     <string name="required_to_send_funds">Yêu cầu gửi tiền.</string>
     <string name="enter_current_pin">Nhập mã PIN hiện tại</string>
     <string name="confirm_startup_password">Xác nhận mật khẩu khởi động</string>
-    <string name="enter_current_spending_password">Nhập mật khẩu chi tiêu hiện tại</string>
-    <string name="enter_current_startup_password">Nhập mật khẩu khởi động hiện tại</string>
     <string name="enter_startup_password">Nhập mật khẩu khởi động</string>
     <string name="removing_startup_pass">Xóa mật khẩu khởi động…</string>
     <string name="removing_startup_pin">Xóa pin khởi động…</string>

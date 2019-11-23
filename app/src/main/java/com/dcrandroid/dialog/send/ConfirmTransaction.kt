@@ -92,10 +92,10 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
             showProcessing()
 
             val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(context!!, wallet.id, true, title){pass ->
+            PassPromptUtil(context!!, wallet.id, title){_, pass ->
                 if(pass == null){
                     showSendButton()
-                    return@PassPromptUtil
+                    return@PassPromptUtil true
                 }
 
                 GlobalScope.launch(Dispatchers.Default){
@@ -108,6 +108,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
                         e.printStackTrace()
                     }
                 }
+                true
             }.show()
         }
     }

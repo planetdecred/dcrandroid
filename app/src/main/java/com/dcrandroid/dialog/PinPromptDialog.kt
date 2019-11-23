@@ -12,12 +12,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import com.dcrandroid.R
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.view.PinViewUtil
 import kotlinx.android.synthetic.main.pin_prompt_sheet.*
+import kotlinx.coroutines.*
 
-class PinPromptDialog(val walletID: Long, @StringRes val dialogTitle: Int, val isSpendingPass: Boolean, val passEntered:(passphrase: String?) -> Unit): CollapsedBottomSheetDialog() {
+class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boolean,
+                      val passEntered:(dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean): CollapsedBottomSheetDialog() {
 
     var confirmed = false
+    var hint = R.string.enter_spending_pin
     private lateinit var pinViewUtil: PinViewUtil
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,22 +45,51 @@ class PinPromptDialog(val walletID: Long, @StringRes val dialogTitle: Int, val i
             onEnter()
         }
 
-        if(isSpendingPass){
-            pinViewUtil.showHint(R.string.enter_spending_pin)
+        hint = if(isSpendingPass){
+            R.string.enter_spending_pin
+        }else{
+            R.string.enter_startup_pin
         }
+
+        pinViewUtil.showHint(hint)
 
         btn_confirm.setOnClickListener {
             onEnter()
         }
 
         btn_cancel.setOnClickListener {
-            passEntered(null)
+            passEntered(this, null)
             dismiss()
         }
     }
 
+    fun showError() = GlobalScope.launch(Dispatchers.Main){
+        pinViewUtil.pinView.rejectInput = true
+        pinViewUtil.showError(R.string.invalid_pin)
+        btn_cancel.isEnabled = false
+        btn_confirm.isEnabled = false
+        btn_confirm.show()
+        progress_bar.hide()
+
+        delay(2000)
+        withContext(Dispatchers.Main){
+            pinViewUtil.reset()
+            pinViewUtil.showHint(hint)
+            pinViewUtil.pinView.rejectInput = false
+
+            btn_cancel.isEnabled = true
+        }
+
+    }
+
     private fun onEnter(){
-        passEntered(pinViewUtil.passCode)
-        dismiss()
+        val dismissDialog = passEntered(this, pinViewUtil.passCode)
+        if(dismissDialog){
+            dismiss()
+        }else{
+            btn_cancel.isEnabled = false
+            progress_bar.show()
+            btn_confirm.hide()
+        }
     }
 }

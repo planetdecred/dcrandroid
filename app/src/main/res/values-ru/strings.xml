@@ -311,7 +311,6 @@
     <!--/Error Messages-->
 
     <!--Security Fragment-->
-    <string name="security">Безопасность</string>
     <string name="sign_message">Подписать сообщение</string>
     <string name="address_colon">Адрес:</string>
     <string name="message">Сообщение</string>
@@ -376,23 +375,13 @@
     <string name="enter_spending_pin">Введите PIN для расходов</string>
     <string name="password_strength">НАДЁЖНОСТЬ ПАРОЛЯ</string>
     <string name="pin_strength">НАДЁЖНОСТЬ PIN</string>
-    <string name="enter_encryption_pin">Введите PIN для шифрования</string>
-    <string name="confirm_encryption_pin">Подтвердите PIN для шифрования</string>
-    <string name="create_encryption_pin">Создайте PIN для шифрования</string>
     <string name="enter_spending_password">Введите пароль для расходов</string>
-    <string name="create_encryption_password">Создайте пароль для расходов</string>
     <string name="change_spending_pin_password">Измените PIN/ пароль для расходов</string>
     <string name="required_to_send_funds">Требуется для отправки средств</string>
     <string name="enter_current_pin">Введите текущий PIN</string>
-    <string name="confirm_encryption_password">Подтвердите пароль для шифрования</string>
-    <string name="enter_current_spending_password">Введите текущий пароль для расходов</string>
-    <string name="enter_current_encryption_password">Введите текущий пароль для шифрования</string>
-    <string name="enter_encryption_password">Введите пароль для шифрования</string>
-    <string name="removing_wallet_encryption">Отмена шифрования кошелька…</string>
     <string name="changing_password">Меняется пароль…</string>
     <string name="encrypt_wallet">Зашифровать кошелёк</string>
     <string name="encrypt_wallet_summary">Нужно будет ввести пароль при запуске.</string>
-    <string name="change_encryption_pin_password">Изменить PIN/пароль для шифрования</string>
     <string name="required_to_enter_app">Требуется для входа в приложение.</string>
     <string name="changing_pin">Меняется PIN…</string>
     <!--/Security-->

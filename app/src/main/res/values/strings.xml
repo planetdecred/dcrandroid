@@ -465,7 +465,6 @@
     <!--/Error Messages-->
 
     <!--Security Fragment-->
-    <string name="security">Security</string>
     <string name="sign_message">Sign message</string>
     <string name="sign">Sign</string>
     <string name="address_colon">Address:</string>
@@ -540,24 +539,22 @@
     <string name="enter_spending_pin_again">Enter Spending PIN Again</string>
     <string name="password_strength">Password strength</string>
     <string name="pin_strength">PIN strength</string>
-    <string name="enter_startup_pin">Enter Startup Pin</string>
-    <string name="confirm_startup_pin">Confirm Startup PIN</string>
-    <string name="create_startup_pin">Create Startup PIN</string>
+    <string name="enter_startup_pin">Enter Startup PIN</string>
+    <string name="enter_startup_pin_again">Enter Startup PIN Again</string>
+    <string name="create_startup_pin">Create a Startup PIN</string>
     <string name="enter_spending_password">Enter Spending Password</string>
-    <string name="create_startup_password">Create Startup Password</string>
+    <string name="create_startup_password">Create a Startup Password</string>
     <string name="change_spending_pin_password">Change spending PIN/Password</string>
     <string name="required_to_send_funds">Required to send funds.</string>
     <string name="enter_current_pin">Enter Current PIN</string>
     <string name="confirm_startup_password">Confirm Startup Password</string>
-    <string name="enter_current_spending_password">Enter Current Spending Password</string>
-    <string name="enter_current_startup_password">Enter Current Startup Password</string>
     <string name="enter_startup_password">Enter Startup Password</string>
     <string name="removing_startup_pass">Removing startup password…</string>
     <string name="removing_startup_pin">Removing startup pin…</string>
     <string name="changing_password">Changing password…</string>
     <string name="startup_pin_password">Startup PIN/Password</string>
     <string name="encrypt_wallet_summary">A pin/password will be required at startup.</string>
-    <string name="change_startup_pin_password">Change Startup PIN/Password</string>
+    <string name="change_startup_pin_password">Change startup PIN/password</string>
     <string name="spending_pin_password">Spending PIN/Password</string>
     <string name="required_to_enter_app">Required to enter app.</string>
     <string name="changing_pin">Changing PIN…</string>
@@ -790,5 +787,7 @@
     <string name="go_to_wallets">Go to Wallets</string>
     <string name="n_wallets_need_backup">%1$d wallets need backup</string>
     <string name="a_wallet_needs_backup">A wallet needs backup</string>
+    <string name="startup_password">Startup Password</string>
+    <string name="remove_startup_security">Remove startup security</string>
 
 </resources>

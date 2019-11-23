@@ -7,25 +7,33 @@
 package com.dcrandroid.util
 
 import android.content.Context
+import com.dcrandroid.dialog.CollapsedBottomSheetDialog
 import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import dcrlibwallet.Dcrlibwallet
 
 data class PassPromptTitle(val passwordTitle: Int, val pinTitle: Int, val fingerprintTitle: Int)
-class PassPromptUtil(val context: Context, val walletID: Long, val isSpendingPass: Boolean,
-                     val title: PassPromptTitle, val passEntered:(passphrase: String?) -> Unit) {
+
+class PassPromptUtil(val context: Context, val walletID: Long?, val title: PassPromptTitle,
+                     val passEntered:(dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean) {
 
     fun show(){
         val multiWallet = WalletData.multiWallet!!
-        val wallet = multiWallet.walletWithID(walletID)
 
-        val passType = wallet.privatePassphraseType // TODO: Startup security
+        val passType = if(walletID != null){
+            multiWallet.walletWithID(walletID).privatePassphraseType
+        }else{
+            multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
+        }
+
+        val isSpendingPass = walletID != null
+
         if(passType == Dcrlibwallet.PassphraseTypePass){
-            val passwordPromptDialog = PasswordPromptDialog(walletID, title.passwordTitle, passEntered)
+            val passwordPromptDialog = PasswordPromptDialog(title.passwordTitle, isSpendingPass, passEntered)
             passwordPromptDialog.isCancelable = false
             passwordPromptDialog.show(context)
         }else{
-            val pinPromptDialog = PinPromptDialog(walletID, title.passwordTitle, isSpendingPass, passEntered)
+            val pinPromptDialog = PinPromptDialog(title.pinTitle, isSpendingPass, passEntered)
             pinPromptDialog.isCancelable = false
             pinPromptDialog.show(context)
         }

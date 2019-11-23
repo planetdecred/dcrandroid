@@ -11,19 +11,30 @@ import android.view.ViewTreeObserver
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.preference.EditTextPreference
 import com.dcrandroid.preference.ListPreference
 import com.dcrandroid.preference.SwitchPreference
 import com.dcrandroid.util.BiometricUtils
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.settings_activity.*
 import kotlinx.android.synthetic.main.settings_activity.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 const val IP_ADDRESS_REGEX = "^(?:(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-5])\\.){3}(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-‌​5])(?:[:]\\d+)?$"
 
 class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
+
+    private lateinit var enableStartupSecurity: SwitchPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +42,20 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
 
         SwitchPreference(this, Dcrlibwallet.SpendUnconfirmedConfigKey, spend_unconfirmed_funds)
 
-        if(BiometricUtils.isFingerprintEnrolled(this)){
-            biometric_authentication.show()
-            SwitchPreference(this, Constants.USE_BIOMETRIC_AUTH, biometric_authentication, biometricCheckChange)
-        }
-
         SwitchPreference(this, Dcrlibwallet.BeepNewBlocksConfigKey, beep_new_blocks)
         SwitchPreference(this, Dcrlibwallet.SyncOnCellularConfigKey, wifi_sync)
 
+        enableStartupSecurity = SwitchPreference(this, Dcrlibwallet.IsStartupSecuritySetConfigKey, startup_pin_password){ newValue ->
+            if(newValue){
+                setupStartupSecurity()
+            }else{
+                removeStartupSecurity()
+            }
+
+            return@SwitchPreference !newValue
+        }
+
+        loadStartupSecurity()
 
         ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions)
@@ -86,6 +103,79 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
             spv_peer_ip.pref_subtitle.show()
             spv_peer_ip.pref_subtitle.text = ip
         }
+    }
+
+    private fun loadStartupSecurity(){
+        if(multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)){
+            change_startup_security.show()
+            enableStartupSecurity.setChecked(true)
+        }else{
+            change_startup_security.hide()
+            enableStartupSecurity.setChecked(false)
+        }
+    }
+
+    private fun setupStartupSecurity(){
+        var dialog: PasswordPinDialogFragment? = null
+        dialog = PasswordPinDialogFragment(R.string.create, false, object : PasswordPinDialogFragment.PasswordPinListener {
+
+            override fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int) {
+                GlobalScope.launch(Dispatchers.IO){
+                    try{
+                        multiWallet!!.changeStartupPassphrase(ByteArray(0), spendingKey.toByteArray())
+                        multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
+                        multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
+
+                        withContext(Dispatchers.Main){
+                            dialog?.dismiss()
+                            loadStartupSecurity()
+                        }
+                    }catch (e: Exception){
+                        e.printStackTrace()
+
+                        withContext(Dispatchers.Main){
+                            dialog?.dismiss()
+                        }
+                    }
+
+                }
+            }
+
+        })
+
+        dialog.show(this)
+    }
+
+    private fun removeStartupSecurity(){
+        val title = PassPromptTitle(R.string.remove_startup_security, R.string.remove_startup_security, R.string.remove_startup_security)
+        PassPromptUtil(this, null, title){dialog, pass ->
+
+            if(pass == null){
+                return@PassPromptUtil true
+            }
+
+            GlobalScope.launch(Dispatchers.IO){
+                try{
+                    multiWallet!!.changeStartupPassphrase(pass.toByteArray(), ByteArray(0))
+                    multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, false)
+
+                    withContext(Dispatchers.Main){
+                        dialog.dismiss()
+                        loadStartupSecurity()
+                    }
+                }catch (e: Exception){
+                    e.printStackTrace()
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase){
+                        if(dialog is PinPromptDialog){
+                            dialog.showError()
+                        }
+                    }
+                }
+
+            }
+
+            false
+        }.show()
     }
 
     override fun onScrollChanged() {

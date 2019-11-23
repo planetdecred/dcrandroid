@@ -85,10 +85,11 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         when (v!!.id){
             R.id.tv_sign -> {
                 val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
-                PassPromptUtil(this, wallet.id, true, title){
-                    if(it != null){
-                        beginSignMessage(it)
+                PassPromptUtil(this, wallet.id, title){_, pass ->
+                    if(pass != null){
+                        beginSignMessage(pass)
                     }
+                    true
                 }.show()
             }
             R.id.tv_copy -> {

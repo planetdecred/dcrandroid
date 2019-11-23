@@ -81,6 +81,7 @@
                 android:elevation="4dp"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_8"
                 android:background="@drawable/card_bg" >
 
                 <TextView
@@ -131,7 +132,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/curved_bottom_ripple"
+                    android:background="@drawable/ripple"
                     android:orientation="vertical">
 
                     <TextView
@@ -166,14 +167,14 @@
                 android:elevation="4dp"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"
-                android:background="@drawable/card_bg"
-                >
+                android:paddingBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg" >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="@string/security"
+                    android:text="@string/startup_pin_password"
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
@@ -182,31 +183,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/startup_pin_password"
                     android:layout_marginTop="@dimen/margin_padding_size_8"
-                    android:padding="@dimen/margin_padding_size_16"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="@drawable/ripple"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@id/pref_title"
-                        android:includeFontPadding="false"
-                        android:text="@string/startup_pin_password"
-                        android:textColor="@color/darkBlueTextColor"
-                        android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/biometric_authentication"
-                    android:visibility="gone"
-                    tools:visibility="visible"
                     android:padding="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"
                     android:focusable="true"
@@ -214,40 +192,78 @@
                     android:background="@drawable/ripple"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@id/pref_title"
-                            android:includeFontPadding="false"
-                            android:text="@string/use_biometric_auth"
-                            android:textColor="@color/darkBlueTextColor"
-                            android:fontFamily="@font/source_sans_pro"
-                            android:textSize="@dimen/edit_text_size_16"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@id/pref_subtitle"
-                            android:includeFontPadding="false"
-                            android:layout_marginTop="@dimen/margin_padding_size_4"
-                            android:text="@string/biometric_pref_summary"
-                            android:textColor="@color/blueGraySecondTextColor"
-                            android:fontFamily="@font/source_sans_pro"
-                            android:textSize="@dimen/edit_text_size_14"/>
-
-                    </LinearLayout>
+                        android:id="@id/pref_title"
+                        android:layout_weight="1"
+                        android:includeFontPadding="false"
+                        android:text="@string/startup_pin_password"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16"/>
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@id/pref_switch"
                         android:theme="@style/Switch" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/startup_security_fingerprint"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:layout_weight="1"
+                        android:includeFontPadding="false"
+                        android:text="@string/use_fingerprint"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_switch"
+                        android:theme="@style/Switch" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/change_startup_security"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:layout_weight="1"
+                        android:includeFontPadding="false"
+                        android:text="@string/change_startup_pin_password"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16"/>
 
                 </LinearLayout>
 
@@ -260,8 +276,8 @@
                 android:elevation="4dp"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"
-                android:background="@drawable/card_bg"
-                >
+                android:paddingBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -337,6 +353,7 @@
                 android:elevation="4dp"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_8"
                 android:background="@drawable/card_bg"
                 >
 
@@ -388,7 +405,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/curved_bottom_ripple"
+                    android:background="@drawable/ripple"
                     android:orientation="vertical">
 
                     <TextView
@@ -421,7 +438,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/curved_bottom_ripple"
+                    android:background="@drawable/ripple"
                     android:orientation="vertical">
 
                     <TextView

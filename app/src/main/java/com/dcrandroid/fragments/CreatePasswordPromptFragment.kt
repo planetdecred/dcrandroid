@@ -18,7 +18,7 @@ import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.create_password_sheet.*
 
-class CreatePasswordPromptFragment(private var clickListener: DialogButtonListener, @StringRes var positiveButtonTitle: Int) : Fragment() {
+class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int, private var clickListener: DialogButtonListener) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -27,6 +27,11 @@ class CreatePasswordPromptFragment(private var clickListener: DialogButtonListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(!isSpending){
+            pass_layout.hint = getString(R.string.startup_password)
+            til_confirm_pass.hint = getString(R.string.confirm_startup_password)
+        }
 
         ed_pass.addTextChangedListener(pinWatcher)
         ed_pass.addTextChangedListener(passwordStrengthWatcher)

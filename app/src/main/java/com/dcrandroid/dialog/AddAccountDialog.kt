@@ -55,7 +55,7 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
             setEnabled(false)
 
             val title = PassPromptTitle(R.string.confirm_to_create_account, R.string.confirm_to_create_account, R.string.confirm_to_create_account)
-            PassPromptUtil(context!!, walletID, true, title) { passphrase ->
+            PassPromptUtil(context!!, walletID, title) { _, passphrase ->
 
                 if(passphrase != null){
                     val newName = new_account_name.text.toString()
@@ -69,6 +69,7 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
                 }
 
                 setEnabled(true)
+                true
             }.show()
         }
     }

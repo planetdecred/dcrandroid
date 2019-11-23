@@ -12,6 +12,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.CollapsedBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.preference.ListPreference
 import com.dcrandroid.util.PassPromptTitle
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_wallet_settings.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WalletSettings: BaseActivity() {
 
@@ -57,12 +59,15 @@ class WalletSettings: BaseActivity() {
                     .setMessage(getString(R.string.remove_wallet_message))
                     .setNegativeButton(getString(R.string.cancel), null)
                     .setPositiveButton(getString(R.string.remove), DialogInterface.OnClickListener { _, _ ->
+
                         val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
-                        PassPromptUtil(this, walletID, true, title){
-                            if(it != null){
-                                deleteWallet(it)
+
+                        PassPromptUtil(this, walletID, title){dialog, pass ->
+                            if(pass != null){
+                                deleteWallet(pass, dialog)
                             }
 
+                            false
                         }.show()
                     })
 
@@ -75,9 +80,12 @@ class WalletSettings: BaseActivity() {
         }
     }
 
-    private fun deleteWallet(pass: String) = GlobalScope.launch(Dispatchers.IO){
+    private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog) = GlobalScope.launch(Dispatchers.IO){
         try{
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
+            withContext(Dispatchers.Main){
+                dialog.dismiss()
+            }
             if(multiWallet!!.openedWalletsCount() == 0){
                 multiWallet!!.shutdown()
                 walletData.multiWallet = null

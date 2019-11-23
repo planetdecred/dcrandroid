@@ -37,7 +37,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         preferenceUtil = PreferenceUtil(this)
 
         ll_create_wallet.setOnClickListener{
-            PasswordPinDialogFragment(this, R.string.create).show(this)
+            PasswordPinDialogFragment(R.string.create, true, this).show(this)
         }
 
         ll_create_watch_only.setOnClickListener {
@@ -87,7 +87,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet!!.createNewWallet(spendingKey, type)
+            val wallet = multiWallet!!.createNewWallet(Constants.INSECURE_PUB_PASSPHRASE, spendingKey, type)
             navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()

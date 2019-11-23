@@ -22,10 +22,14 @@ import kotlinx.android.synthetic.main.create_pin_sheet.btn_cancel
 import kotlinx.android.synthetic.main.create_pin_sheet.pass_strength
 import kotlinx.coroutines.*
 
-class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @StringRes var positiveButtonTitle: Int): Fragment() {
+class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int,
+                              private var clickListener: DialogButtonListener): Fragment() {
 
     private var currentPassCode: String? = null
     private lateinit var pinViewUtil: PinViewUtil
+
+    private var hint = R.string.enter_spending_pin
+    private var confirmHint = R.string.enter_spending_pin_again
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,6 +38,11 @@ class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        if(!isSpending){
+            hint = R.string.enter_startup_pin
+            confirmHint = R.string.enter_startup_pin_again
+        }
 
         pinViewUtil = PinViewUtil(pin_view, pin_counter, pass_strength)
 
@@ -53,8 +62,7 @@ class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @
         btn_back.setOnClickListener {
             currentPassCode = null
             pinViewUtil.reset()
-            pinViewUtil.showHint(R.string.enter_spending_pin)
-            pinViewUtil.showHint(R.string.enter_spending_pin)
+            pinViewUtil.showHint(hint)
             togglePasswordStrength(true)
             btn_create.setText(R.string.next)
             btn_create.isEnabled = false
@@ -66,7 +74,7 @@ class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @
             onEnter()
         }
 
-        pinViewUtil.showHint(R.string.enter_spending_pin)
+        pinViewUtil.showHint(hint)
     }
 
     private fun onEnter(){
@@ -75,7 +83,7 @@ class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @
                 togglePasswordStrength(false)
                 currentPassCode = pinViewUtil.passCode
                 pinViewUtil.reset()
-                pinViewUtil.showHint(R.string.enter_spending_pin_again)
+                pinViewUtil.showHint(confirmHint)
                 btn_create.setText(positiveButtonTitle)
                 btn_create.isEnabled = false
 
@@ -107,7 +115,7 @@ class CreatePinPromptFragment(private var clickListener: DialogButtonListener, @
                     delay(2000)
                     withContext(Dispatchers.Main){
                         pinViewUtil.reset()
-                        pinViewUtil.showHint(R.string.enter_spending_pin)
+                        pinViewUtil.showHint(hint)
                         togglePasswordStrength(true)
                         pinViewUtil.pinView.rejectInput = false
                     }

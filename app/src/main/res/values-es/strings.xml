@@ -440,7 +440,6 @@
     <!--/Error Messages-->
 
     <!--Security Fragment-->
-    <string name="security">Seguridad</string>
     <string name="sign_message">Firmar Mensaje</string>
     <string name="address_colon">Dirección:</string>
     <string name="message">Mensaje</string>
@@ -514,7 +513,6 @@
     <string name="password_strength">Nivel de seguridad de la contraseña</string>
     <string name="pin_strength">Nivel de seguridad del PIN</string>
     <string name="enter_startup_pin">Ingresa PIN de inicio</string>
-    <string name="confirm_startup_pin">Confirmar PIN de inicio</string>
     <string name="create_startup_pin">Crear PIN de inicio</string>
     <string name="enter_spending_password">Ingresa la contraseña de gasto</string>
     <string name="create_startup_password">Crear una contraseña de inicio</string>
@@ -522,8 +520,6 @@
     <string name="required_to_send_funds">Requerido para enviar fondos.</string>
     <string name="enter_current_pin">Ingrese el PIN actual</string>
     <string name="confirm_startup_password">Confirma la contraseña de inicio</string>
-    <string name="enter_current_spending_password">Ingresa la contraseña de gasto actual</string>
-    <string name="enter_current_startup_password">Ingresa la contraseña de inicio actual</string>
     <string name="enter_startup_password">Ingresa una contraseña de inicio</string>
     <string name="removing_startup_pass">Eliminando contraseña de inicio…</string>
     <string name="removing_startup_pin">Eliminando PIN de inicio…</string>

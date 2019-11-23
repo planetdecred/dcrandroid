@@ -132,7 +132,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.neededBackupCount) {position ->
+        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.numWalletsNeedingSeedBackup()) {position ->
             switchFragment(position)
         }
         recycler_view_tabs.adapter = adapter
@@ -142,7 +142,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
     }
 
     fun refreshNavigationTabs(){
-        adapter.backupsNeeded = multiWallet!!.neededBackupCount
+        adapter.backupsNeeded = multiWallet!!.numWalletsNeedingSeedBackup()
         adapter.notifyItemChanged(2) // Wallets Page
     }
 

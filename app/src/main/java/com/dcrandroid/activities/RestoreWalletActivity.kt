@@ -60,7 +60,7 @@ class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordP
                 return@setOnClickListener
             }
 
-            PasswordPinDialogFragment(this, R.string.create).show(this)
+            PasswordPinDialogFragment(R.string.create, true, this).show(this)
         }
 
         go_back.setOnClickListener { finish() }
@@ -78,7 +78,7 @@ class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordP
 
     private fun createWallet(spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet!!.restoreWallet(seed, spendingKey, spendingPassType)
+            val wallet = multiWallet!!.restoreWallet(seed, Constants.INSECURE_PUB_PASSPHRASE, spendingKey, spendingPassType)
             wallet.unlockWallet(spendingKey.toByteArray())
 
             val intent = Intent(this@RestoreWalletActivity, RestoreSuccessActivity::class.java)

@@ -27,7 +27,8 @@ interface DialogButtonListener {
     fun onClickCancel()
 }
 
-class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinListener, @StringRes var positiveButtonTitle: Int) : FullScreenBottomSheetDialog(), DialogButtonListener {
+class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isSpending: Boolean,
+                                private val passwordPinListener: PasswordPinListener) : FullScreenBottomSheetDialog(), DialogButtonListener {
 
     private lateinit var spendingCreatePasswordFragment: CreatePasswordPromptFragment
     private lateinit var spendingCreatePinFragment: CreatePinPromptFragment
@@ -39,13 +40,17 @@ class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        spendingCreatePasswordFragment = CreatePasswordPromptFragment(this, positiveButtonTitle)
+        spendingCreatePasswordFragment = CreatePasswordPromptFragment(isSpending, positiveButtonTitle, this)
 
-        spendingCreatePinFragment = CreatePinPromptFragment(this, positiveButtonTitle)
+        spendingCreatePinFragment = CreatePinPromptFragment(isSpending, positiveButtonTitle, this)
 
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
-        titleList = listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
+        titleList = if(isSpending){
+            listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
+        }else{
+            listOf(context!!.getString(R.string.create_startup_password), context!!.getString(R.string.create_startup_pin))
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -74,6 +79,8 @@ class PasswordPinDialogFragment(private val passwordPinListener: PasswordPinList
                 view_pager.requestLayout()
             }
         })
+
+        tv_title.text = titleList[view_pager.currentItem]
     }
 
     override fun onClickOk(spendingKey: String) {

@@ -88,6 +88,7 @@ class PinView : TextView, View.OnClickListener {
         lock.lock()
 
         errorString = null
+        counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
         counterTextView?.text = "0"
         passCodeLength = 0
         showHint = true
