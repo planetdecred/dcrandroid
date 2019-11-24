@@ -107,7 +107,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
 
             holder.itemView.ticket_price.hide()
 
-        } else if(Dcrlibwallet.txMatchesFilter(Dcrlibwallet.TxFilterStaking, transaction.type, transaction.direction)){
+        } else if(Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)){
 
             holder.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
 

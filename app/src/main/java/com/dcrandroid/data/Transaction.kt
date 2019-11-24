@@ -70,7 +70,7 @@ class Transaction : Serializable {
             }
 
             // replace icon for staking tx types
-            if (Dcrlibwallet.txMatchesFilter(Dcrlibwallet.TxFilterStaking, type, direction)) {
+            if (Dcrlibwallet.txMatchesFilter(type, direction, Dcrlibwallet.TxFilterStaking)) {
 
                 res = when (type) {
                     Dcrlibwallet.TxTypeTicketPurchase -> {

@@ -26,7 +26,11 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/margin_padding_size_16">
+        android:paddingTop="@dimen/margin_padding_size_8"
+        android:paddingBottom="@dimen/margin_padding_size_8"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_8"
+        >
 
         <ImageView
             android:layout_width="@dimen/margin_padding_size_24"
@@ -44,6 +48,18 @@
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_18"
             tools:text="2 wallets need backup" />
+
+        <ImageView
+            android:layout_width="@dimen/margin_padding_size_40"
+            android:layout_height="@dimen/margin_padding_size_40"
+            android:id="@+id/iv_close_backup_warning"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:background="@drawable/orange_ripple"
+            android:padding="@dimen/margin_padding_size_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/close_backup_warning"
+            android:src="@drawable/ic_close03" />
 
     </LinearLayout>
 

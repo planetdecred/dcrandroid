@@ -6,6 +6,7 @@
 
 package com.dcrandroid.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
+import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
@@ -37,6 +39,10 @@ import kotlinx.coroutines.withContext
 const val MAX_TRANSACTIONS = 3
 
 class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
+
+    companion object{
+        private var closedBackupWarning = false
+    }
 
     private lateinit var util: PreferenceUtil
 
@@ -92,7 +98,7 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
             switchFragment(1) // Transactions Fragment
         }
 
-        if (multiWallet.numWalletsNeedingSeedBackup() > 0) {
+        if (multiWallet.numWalletsNeedingSeedBackup() > 0 && !closedBackupWarning) {
             backup_warning_layout?.show()
 
             backup_warning_title?.text = when (multiWallet.numWalletsNeedingSeedBackup()) {
@@ -102,6 +108,16 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
             go_to_wallets_btn?.setOnClickListener {
                 switchFragment(2) // Wallets Fragment
+            }
+
+            iv_close_backup_warning?.setOnClickListener {
+                InfoDialog(context!!)
+                        .setMessage(getString(R.string.close_backup_warning_dialog_message))
+                        .setPositiveButton(getString(R.string.got_it), DialogInterface.OnClickListener { _, _ ->
+                            closedBackupWarning = true
+                            backup_warning_layout?.hide()
+                        })
+                        .show()
             }
         }
     }

@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.dcrandroid.R
+import com.dcrandroid.extensions.show
 
 class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
 
@@ -47,7 +48,11 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         val tvTitle = findViewById<TextView>(R.id.title)
         val tvMessage = findViewById<TextView>(R.id.message)
 
-        tvTitle.text = dialogTitle
+        if(dialogTitle != null){
+            tvTitle.show()
+            tvTitle.text = dialogTitle
+        }
+
         tvMessage.text = message
 
         if (messageClick != null) {

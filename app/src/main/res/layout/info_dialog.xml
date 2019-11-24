@@ -27,6 +27,9 @@
             android:includeFontPadding="false"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_20"
+            android:layout_marginBottom="@dimen/margin_padding_size_16"
+            android:visibility="gone"
+            tools:visibility="visible"
             app:fontFamily="@font/source_sans_pro_semibold"
             tools:text="Receive DCR" />
 
@@ -34,7 +37,6 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_padding_size_16"
             android:textColor="@color/darkerBlueGrayTextColor"
             android:textSize="@dimen/edit_text_size_16"
             app:fontFamily="@font/source_sans_pro"

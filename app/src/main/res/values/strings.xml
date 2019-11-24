@@ -789,5 +789,7 @@
     <string name="a_wallet_needs_backup">A wallet needs backup</string>
     <string name="startup_password">Startup Password</string>
     <string name="remove_startup_security">Remove startup security</string>
+    <string name="close_backup_warning">Close backup warning</string>
+    <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
 
 </resources>
