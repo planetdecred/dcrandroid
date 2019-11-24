@@ -98,7 +98,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
 
             holder.itemView.setOnClickListener {
                 val activity = context as AppCompatActivity
-                AddAccountDialog(walletID) {newAccountNumber ->
+                AddAccountDialog(activity, walletID) {newAccountNumber ->
                     val account = wallet.getAccount(newAccountNumber, requiredConfirmations)
 
                     val index = accounts.size - 1 // there's always at least 2 accounts(default & imported)

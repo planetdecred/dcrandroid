@@ -27,10 +27,8 @@ public class Constants {
             LEGACY_MAINNET_HD_PATH = "m / 44’ / 20’ / ",
             USER_AGENT = "user_agent",
             SPENDING_PASSPHRASE_TYPE = "spending_passphrase_type",
-            STARTUP_PASSPHRASE_TYPE = "encrypt_passphrase_type",
+            STARTUP_PASSPHRASE = "startup_passphrase",
             PIN = "pin",
-            PASSWORD = "password",
-            ENCRYPT = "encrypt",
             INSECURE_PUB_PASSPHRASE = "public",
             APP_VERSION = "app_version",
             WIFI_SYNC = "wifi_sync",
@@ -62,6 +60,7 @@ public class Constants {
 
     public static final boolean DEF_SPEND_UNCONFIRMED = false,
                                 DEF_STARTUP_SECURITY_SET = false,
+                                DEF_USE_FINGERPRINT = false,
                                 DEF_SYNC_ON_CELLULAR = false;
 
 }

@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.core.text.HtmlCompat
+import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
@@ -37,7 +38,7 @@ import kotlinx.android.synthetic.main.send_page_sheet.*
 import kotlinx.coroutines.*
 import java.util.*
 
-class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
+class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: DialogInterface.OnDismissListener) :
         FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var sourceAccountSpinner: AccountCustomSpinner
@@ -112,7 +113,7 @@ class SendDialog(dismissListener: DialogInterface.OnDismissListener) :
                 destinationAccount = destinationAddressCard.destinationAccount
             }
 
-            ConfirmTransaction(sendSuccess)
+            ConfirmTransaction(fragmentActivity, sendSuccess)
                     .setTxData(transactionData, authoredTxData!!)
                     .show(activity!!.supportFragmentManager, null)
         }

@@ -791,5 +791,10 @@
     <string name="remove_startup_security">Remove startup security</string>
     <string name="close_backup_warning">Close backup warning</string>
     <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
+    <string name="startup_pin_prompt_title">Unlock with startup PIN</string>
+    <string name="startup_password_prompt_title">Unlock with startup password</string>
+    <string name="startup_fingerprint_prompt_title">Unlock with fingerprint</string>
+    <string name="use_password">Use password</string>
+    <string name="use_pin">Use PIN</string>
 
 </resources>

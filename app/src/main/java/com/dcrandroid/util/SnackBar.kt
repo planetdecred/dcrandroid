@@ -22,23 +22,23 @@ import kotlinx.coroutines.launch
 
 class SnackBar {
 
-    companion object{
-        fun showText(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+    companion object {
+        fun showText(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT) {
             val position = IntArray(2)
             anchorView.getLocationOnScreen(position)
 
             showText(position[1], anchorView.context, text, length)
         }
 
-        fun showText(context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+        fun showText(context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT) {
             showText(0, context, text, length)
         }
 
-        fun showError(context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+        fun showError(context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT) {
             showText(0, context, text, length, R.drawable.orange_bg_corners_4dp)
         }
 
-        fun showError(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT){
+        fun showError(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT) {
             val position = IntArray(2)
             anchorView.getLocationOnScreen(position)
 
@@ -46,7 +46,7 @@ class SnackBar {
         }
 
         private fun showText(x: Int = 0, context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT,
-                            @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp) = GlobalScope.launch(Dispatchers.Main){
+                             @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp) = GlobalScope.launch(Dispatchers.Main) {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.snackbar, null)
             view.setBackgroundResource(backgroundResource)
@@ -61,9 +61,9 @@ class SnackBar {
             }
 
             val topMargin = context.resources.getDimensionPixelSize(R.dimen.margin_padding_size_64)
-            val viewY = if (x > 0){
+            val viewY = if (x > 0) {
                 (x - statusBarHeight) + topMargin
-            }else{
+            } else {
                 topMargin
             }
             view.translationY = viewY.toFloat()

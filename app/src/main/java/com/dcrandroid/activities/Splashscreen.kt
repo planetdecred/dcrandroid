@@ -157,8 +157,8 @@ class SplashScreen : BaseActivity() {
     }
 
     private fun requestStartupPass(){
-        val title = PassPromptTitle(R.string.enter_startup_password, R.string.enter_startup_pin, R.string.enter_startup_pin)
-        PassPromptUtil(this, null, title) { _, pass ->
+        val title = PassPromptTitle(R.string.startup_password_prompt_title, R.string.startup_pin_prompt_title, R.string.startup_fingerprint_prompt_title)
+        PassPromptUtil(this, null, title, allowFingerprint = true) { _, pass ->
             if(pass != null){
                 openWallet(pass)
             }else{

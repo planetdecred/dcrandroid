@@ -8,7 +8,6 @@ package com.dcrandroid.util
 
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import dcrlibwallet.Dcrlibwallet
 import java.util.regex.Pattern
@@ -22,10 +21,10 @@ class CoinFormat {
             return formatSpannable(spannable, relativeSize)
         }
 
-        fun formatSpannable(spannable: Spannable, relativeSize: Float = 0.7f): Spannable{
+        fun formatSpannable(spannable: Spannable, relativeSize: Float = 0.7f): Spannable {
 
             val removeRelativeSpan = spannable.getSpans(0, spannable.length, RelativeSizeSpan::class.java)
-            for(span in removeRelativeSpan){
+            for (span in removeRelativeSpan) {
                 spannable.removeSpan(span)
             }
 
@@ -41,21 +40,21 @@ class CoinFormat {
                 startIndex = noDecimal.end()
             }
 
-            if(oneDecimalPlace.find()){
+            if (oneDecimalPlace.find()) {
                 val start = spannable.indexOf(".", oneDecimalPlace.start())
-                if(start <= startIndex || startIndex == -1){
-                    startIndex = start  + 2
+                if (start <= startIndex || startIndex == -1) {
+                    startIndex = start + 2
                 }
             }
 
-            if(doubleOrMoreDecimalPlaces.find()){
+            if (doubleOrMoreDecimalPlaces.find()) {
                 val start = spannable.indexOf(".", doubleOrMoreDecimalPlaces.start())
-                if(start <= startIndex || startIndex == -1){
-                    startIndex = start  + 3
+                if (start <= startIndex || startIndex == -1) {
+                    startIndex = start + 3
                 }
             }
 
-            if(startIndex == -1){
+            if (startIndex == -1) {
                 return spannable
             }
 

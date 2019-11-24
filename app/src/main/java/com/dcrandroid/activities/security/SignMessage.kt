@@ -85,7 +85,7 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         when (v!!.id){
             R.id.tv_sign -> {
                 val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
-                PassPromptUtil(this, wallet.id, title){_, pass ->
+                PassPromptUtil(this, wallet.id, title, allowFingerprint = true){_, pass ->
                     if(pass != null){
                         beginSignMessage(pass)
                     }

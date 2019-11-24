@@ -13,7 +13,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.widget.Toast
@@ -22,28 +21,14 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import dcrlibwallet.Dcrlibwallet
+import java.io.*
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.ArrayList
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
-
-import dcrlibwallet.Dcrlibwallet
-import java.io.*
-import android.security.keystore.KeyProperties
-import android.security.keystore.KeyGenParameterSpec
-import androidx.biometric.BiometricConstants
-import androidx.biometric.BiometricPrompt
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
-import androidx.fragment.app.FragmentActivity
-import java.nio.charset.StandardCharsets
-import java.security.KeyStore
-import java.util.concurrent.Executors
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.spec.GCMParameterSpec
 
 
 const val TRANSACTION_CHANNEL_ID = "new transaction"
@@ -97,7 +82,7 @@ object Utils {
             if (minutes > 59) {
 
                 // convert to hours
-                val hours =  minutes / 60
+                val hours = minutes / 60
 
                 if (hours > 23) {
 
@@ -242,7 +227,7 @@ object Utils {
         }
     }
 
-    fun registerTransactionNotificationChannel(context: Context){
+    fun registerTransactionNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
             channel.enableLights(true)
@@ -270,13 +255,13 @@ object Utils {
         val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
         val incomingNotificationConfig = multiWallet.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION)
 
-        val notificationSound = when(incomingNotificationConfig){
+        val notificationSound = when (incomingNotificationConfig) {
             Constants.TX_NOTIFICATION_SOUND_ONLY,
             Constants.TX_NOTIFICATION_SOUND_VIBRATE -> RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             else -> null
         }
 
-        val vibration = when(incomingNotificationConfig){
+        val vibration = when (incomingNotificationConfig) {
             Constants.TX_NOTIFICATION_VIBRATE_ONLY,
             Constants.TX_NOTIFICATION_SOUND_VIBRATE -> arrayOf(0L, 100, 100, 100).toLongArray()
             else -> null
@@ -351,100 +336,3 @@ object Utils {
         bin.close()
     }
 }
-
-object BiometricUtils {
-
-    fun getFilePath(context: Context, fileName: String): String {
-        val path = File(context.filesDir.toString() + "/auth/")
-        if (!path.exists()) {
-            path.mkdir()
-        }
-        return path.absolutePath + fileName
-    }
-
-    @Throws(Exception::class)
-    fun readFromFile(context: Context, fileName: String): ByteArray {
-        val path = getFilePath(context, fileName)
-        return Utils.readFileToBytes(path)
-    }
-
-    @Throws(Exception::class)
-    fun saveToFile(context: Context, fileName: String, output: ByteArray) {
-        val path = getFilePath(context, fileName)
-        Utils.writeBytesToFile(output, path)
-    }
-
-    @Throws(Exception::class)
-    fun savePassToKeystore(context: Context, pass: String, alias: String) {
-        val keyGenerator = KeyGenerator
-                .getInstance(KeyProperties.KEY_ALGORITHM_AES, Constants.ANDROID_KEY_STORE)
-
-        val keyGenParameterSpec = KeyGenParameterSpec.Builder(alias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .build()
-
-        keyGenerator.init(keyGenParameterSpec)
-        val secretKey = keyGenerator.generateKey()
-
-        val cipher = Cipher.getInstance(Constants.TRANSFORMATION)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-
-        val iv = cipher.getIV()
-        saveToFile(context, Constants.ENCRYPTION_IV, iv)
-
-        val encryption = cipher.doFinal(pass.toByteArray(StandardCharsets.UTF_8))
-        saveToFile(context, Constants.ENCRYPTION_DATA, encryption)
-    }
-
-    @Throws(Exception::class)
-    fun getPassFromKeystore(context: Context, alias: String): String {
-
-        val encryptionIv = readFromFile(context, Constants.ENCRYPTION_IV)
-        val encryptedData = readFromFile(context, Constants.ENCRYPTION_DATA)
-
-        val keyStore = KeyStore.getInstance(Constants.ANDROID_KEY_STORE)
-        keyStore.load(null)
-
-        val secretKeyEntry = keyStore.getEntry(alias, null)  as KeyStore.SecretKeyEntry
-        val secretKey = secretKeyEntry.secretKey
-        val cipher = Cipher.getInstance(Constants.TRANSFORMATION)
-        val spec =  GCMParameterSpec(128, encryptionIv)
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
-
-        val decodedData = cipher.doFinal(encryptedData)
-        return String(decodedData, StandardCharsets.UTF_8)
-    }
-
-     fun isFingerprintEnrolled(context: Context) :Boolean {
-        val fingerprintManager = FingerprintManagerCompat.from(context)
-        return fingerprintManager.hasEnrolledFingerprints()
-     }
-
-
-    fun displayBiometricPrompt(activity: FragmentActivity, callback: BiometricPrompt.AuthenticationCallback): Boolean {
-        if (isFingerprintEnrolled(activity)) {
-            val executor = Executors.newSingleThreadExecutor()
-            val biometricPrompt = BiometricPrompt(activity, executor, callback);
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(activity.getString(R.string.authentication_required))
-                    .setNegativeButtonText(activity.getString(R.string.cancel))
-                    .build()
-
-            biometricPrompt.authenticate(promptInfo)
-            return true
-        }
-
-        return false
-    }
-
-    fun translateError(context: Context, errorCode: Int): String? {
-        return when (errorCode) {
-            BiometricConstants.ERROR_LOCKOUT ->  context.getString(R.string.biometric_lockout_error)
-            BiometricConstants.ERROR_LOCKOUT_PERMANENT -> context.getString(R.string.biometric_permanent_lockout_error)
-            else -> null
-        }
-    }
-}
-

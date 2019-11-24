@@ -62,7 +62,7 @@ class WalletSettings: BaseActivity() {
 
                         val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
 
-                        PassPromptUtil(this, walletID, title){dialog, pass ->
+                        PassPromptUtil(this, walletID, title, false){dialog, pass ->
                             if(pass != null){
                                 deleteWallet(pass, dialog)
                             }
@@ -80,11 +80,11 @@ class WalletSettings: BaseActivity() {
         }
     }
 
-    private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog) = GlobalScope.launch(Dispatchers.IO){
+    private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO){
         try{
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
             withContext(Dispatchers.Main){
-                dialog.dismiss()
+                dialog?.dismiss()
             }
             if(multiWallet!!.openedWalletsCount() == 0){
                 multiWallet!!.shutdown()

@@ -98,7 +98,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
         }
 
         fab_send.setOnClickListener {
-            currentBottomSheet = SendDialog(bottomSheetDismissed)
+            currentBottomSheet = SendDialog(this, bottomSheetDismissed)
             currentBottomSheet!!.show(this)
         }
     }

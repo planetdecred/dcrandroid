@@ -12,6 +12,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.add_account_sheet.btn_cancel
 import kotlinx.android.synthetic.main.add_account_sheet.new_account_name
 import java.lang.Exception
 
-class AddAccountDialog(private val walletID: Long, private val accountCreated:(accountNumber: Int) -> Unit): CollapsedBottomSheetDialog() {
+class AddAccountDialog(private val fragmentActivity: FragmentActivity, private val walletID: Long, private val accountCreated:(accountNumber: Int) -> Unit): CollapsedBottomSheetDialog() {
 
     private var wallet: Wallet = WalletData.multiWallet!!.walletWithID(walletID)
 
@@ -55,7 +56,7 @@ class AddAccountDialog(private val walletID: Long, private val accountCreated:(a
             setEnabled(false)
 
             val title = PassPromptTitle(R.string.confirm_to_create_account, R.string.confirm_to_create_account, R.string.confirm_to_create_account)
-            PassPromptUtil(context!!, walletID, title) { _, passphrase ->
+            PassPromptUtil(fragmentActivity, walletID, title, allowFingerprint = true) { _, passphrase ->
 
                 if(passphrase != null){
                     val newName = new_account_name.text.toString()

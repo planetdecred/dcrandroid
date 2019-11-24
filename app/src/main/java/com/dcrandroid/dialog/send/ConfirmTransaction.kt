@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.TransactionData
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
 import java.math.RoundingMode
 
-class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog() {
+class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess:() -> Unit): CollapsedBottomSheetDialog() {
 
     lateinit var wallet: Wallet
 
@@ -92,7 +93,7 @@ class ConfirmTransaction(val sendSuccess:() -> Unit): CollapsedBottomSheetDialog
             showProcessing()
 
             val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(context!!, wallet.id, title){_, pass ->
+            PassPromptUtil(fragmentActivity, wallet.id, title, allowFingerprint = true){_, pass ->
                 if(pass == null){
                     showSendButton()
                     return@PassPromptUtil true

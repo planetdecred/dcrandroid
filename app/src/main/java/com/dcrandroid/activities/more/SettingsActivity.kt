@@ -6,6 +6,7 @@
 
 package com.dcrandroid.activities.more
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.ViewTreeObserver
 import com.dcrandroid.R
@@ -35,6 +36,7 @@ const val IP_ADDRESS_REGEX = "^(?:(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-5])\\.){3
 class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var enableStartupSecurity: SwitchPreference
+    private lateinit var useFingerprint: SwitchPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +56,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
 
             return@SwitchPreference !newValue
         }
-
+        useFingerprint = SwitchPreference(this, Dcrlibwallet.UseFingerprintConfigKey, startup_security_fingerprint)
         loadStartupSecurity()
 
         ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEF_TX_NOTIFICATION,
@@ -85,12 +87,6 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         it.isBlank() || it.matches(Regex(IP_ADDRESS_REGEX))
     }
 
-
-    val biometricCheckChange: (checked: Boolean) -> Boolean = {
-
-        false
-    }
-
     private fun setCurrencyConversionSummary(index: Int){
         val preferenceSummary = resources.getStringArray(R.array.currency_conversion)[index]
         currency_conversion.pref_subtitle.text = preferenceSummary
@@ -109,8 +105,16 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         if(multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)){
             change_startup_security.show()
             enableStartupSecurity.setChecked(true)
+
+            if(BiometricUtils.isFingerprintEnrolled(this)){
+                startup_security_fingerprint.show()
+            }
         }else{
             change_startup_security.hide()
+            startup_security_fingerprint.hide()
+
+            multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)
+            useFingerprint.setChecked(false)
             enableStartupSecurity.setChecked(false)
         }
     }
@@ -122,6 +126,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
             override fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int) {
                 GlobalScope.launch(Dispatchers.IO){
                     try{
+                        BiometricUtils.saveToKeystore(this@SettingsActivity, spendingKey, Constants.STARTUP_PASSPHRASE)
                         multiWallet!!.changeStartupPassphrase(ByteArray(0), spendingKey.toByteArray())
                         multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
                         multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
@@ -148,7 +153,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
 
     private fun removeStartupSecurity(){
         val title = PassPromptTitle(R.string.remove_startup_security, R.string.remove_startup_security, R.string.remove_startup_security)
-        PassPromptUtil(this, null, title){dialog, pass ->
+        PassPromptUtil(this, null, title, false){dialog, pass ->
 
             if(pass == null){
                 return@PassPromptUtil true
@@ -156,18 +161,19 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
 
             GlobalScope.launch(Dispatchers.IO){
                 try{
+                    BiometricUtils.saveToKeystore(this@SettingsActivity, "", Constants.STARTUP_PASSPHRASE)
                     multiWallet!!.changeStartupPassphrase(pass.toByteArray(), ByteArray(0))
                     multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, false)
 
                     withContext(Dispatchers.Main){
-                        dialog.dismiss()
+                        dialog?.dismiss()
                         loadStartupSecurity()
                     }
                 }catch (e: Exception){
                     e.printStackTrace()
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase){
                         if(dialog is PinPromptDialog){
-                            dialog.showError()
+                            dialog.showError() // TODO
                         }
                     }
                 }
