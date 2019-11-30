@@ -19,20 +19,20 @@ import kotlinx.coroutines.withContext
 class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletID: Long?) : PasswordPinDialogFragment.PasswordPinListener {
 
     private lateinit var passwordPinDialogFragment: PasswordPinDialogFragment
-    private var passphrase = ""
+    private var oldPassphrase = ""
 
-    fun begin(){
+    fun begin() {
         passwordPinDialogFragment = PasswordPinDialogFragment(R.string.change, walletID != null, true, this)
 
         val title = PassPromptTitle(R.string.confirm_to_change, R.string.confirm_to_change, R.string.confirm_to_change)
         var passPromptUtil: PassPromptUtil? = null
-        passPromptUtil = PassPromptUtil(fragmentActivity, walletID, title, false){ _, pass ->
-            if(pass != null){
-                passphrase = pass
+        passPromptUtil = PassPromptUtil(fragmentActivity, walletID, title, false) { _, pass ->
+            if (pass != null) {
+                oldPassphrase = pass
 
-                passwordPinDialogFragment.tabIndex = if(passPromptUtil!!.passType == Dcrlibwallet.PassphraseTypePass){
+                passwordPinDialogFragment.tabIndex = if (passPromptUtil!!.passType == Dcrlibwallet.PassphraseTypePass) {
                     0
-                }else 1
+                } else 1
 
                 passwordPinDialogFragment.show(fragmentActivity)
 
@@ -45,39 +45,53 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
     }
 
     override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
-        GlobalScope.launch(Dispatchers.IO){
+        GlobalScope.launch(Dispatchers.IO) {
             val multiWallet = WalletData.multiWallet!!
-            try{
-                multiWallet.changeStartupPassphrase(passphrase.toByteArray(), newPassphrase.toByteArray())
-                multiWallet.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
 
-                // saving after a successful change to avoid saving a wrong passphrase
-                BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
+            if (walletID == null) {
+                try {
+                    multiWallet.changeStartupPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray())
+                    multiWallet.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
 
-                withContext(Dispatchers.Main){
-                    passwordPinDialogFragment.dismiss()
+                    // saving after a successful change to avoid saving a wrong oldPassphrase
+                    BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
+
                     SnackBar.showText(fragmentActivity, R.string.startup_security_changed)
-                }
-            }catch (e: Exception){
-                e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
 
-                val passType = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
-                if(e.message == Dcrlibwallet.ErrInvalidPassphrase){
-                    val err = if(passType == Dcrlibwallet.PassphraseTypePass){
-                        R.string.invalid_password
-                    }else{
-                        R.string.invalid_pin
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                        val passType = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
+                        showError(passType)
                     }
-
-
-                    withContext(Dispatchers.Main){
-                        passwordPinDialogFragment.dismiss()
-                        SnackBar.showError(fragmentActivity, err)
-                    }
-
                 }
+            }else{
+                try{
+                    multiWallet.changePrivatePassphrase(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
+                    SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
+                }catch (e: Exception){
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                        val wallet = multiWallet.walletWithID(walletID)
+                        showError(wallet.privatePassphraseType)
+                    }
+                }
+
+            }
+
+            withContext(Dispatchers.Main) {
+                passwordPinDialogFragment.dismiss()
             }
 
         }
+    }
+
+    private fun showError(passType: Int){
+        val err = if (passType == Dcrlibwallet.PassphraseTypePass) {
+            R.string.invalid_password
+        } else {
+            R.string.invalid_pin
+        }
+
+        SnackBar.showError(fragmentActivity, err)
     }
 }

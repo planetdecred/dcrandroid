@@ -801,5 +801,6 @@
     <string name="use_password">Use password</string>
     <string name="use_pin">Use PIN</string>
     <string name="startup_security_changed">Startup PIN/password changed</string>
+    <string name="spending_passphrase_changed">Spending PIN/password changed</string>
 
 </resources>

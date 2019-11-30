@@ -15,6 +15,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CollapsedBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.preference.ListPreference
+import com.dcrandroid.util.ChangePassUtil
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
@@ -46,6 +47,10 @@ class WalletSettings: BaseActivity() {
         ListPreference(this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions){
             setTxNotificationSummary(it)
+        }
+
+        change_spending_pass.setOnClickListener {
+            ChangePassUtil(this, walletID).begin()
         }
 
         remove_wallet.setOnClickListener {
