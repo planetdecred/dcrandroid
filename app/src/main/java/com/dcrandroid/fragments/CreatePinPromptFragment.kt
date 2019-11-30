@@ -40,8 +40,8 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
         super.onActivityCreated(savedInstanceState)
 
         if(!isSpending){
-            hint = R.string.enter_startup_pin
-            confirmHint = R.string.enter_startup_pin_again
+            hint = R.string.enter_new_startup_pin
+            confirmHint = R.string.enter_new_startup_pin_again
         }
 
         pinViewUtil = PinViewUtil(pin_view, pin_counter, pass_strength)

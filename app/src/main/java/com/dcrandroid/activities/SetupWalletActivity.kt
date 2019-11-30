@@ -17,7 +17,9 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.fragments.PasswordPinDialogFragment
+import com.dcrandroid.util.BiometricUtils
 import com.dcrandroid.util.PreferenceUtil
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_setup_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,7 +39,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         preferenceUtil = PreferenceUtil(this)
 
         ll_create_wallet.setOnClickListener{
-            PasswordPinDialogFragment(R.string.create, true, this).show(this)
+            PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false, passwordPinListener = this).show(this)
         }
 
         ll_create_watch_only.setOnClickListener {
@@ -63,11 +65,11 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
     /**
      * Callback when the user submits spending password or pin
      *
-     * @param spendingKey - either a spending password or pin
+     * @param newPassphrase - either a spending password or pin
      * @param passphraseType  - flag to tell whether its a password or pin
      */
-    override fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int) {
-        createWallet(spendingKey, passphraseType)
+    override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
+        createWallet(newPassphrase, passphraseType)
     }
 
     private fun navigateToHomeActivity(walletID: Long) = GlobalScope.launch(Dispatchers.Main) {
@@ -87,7 +89,14 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet!!.createNewWallet(Constants.INSECURE_PUB_PASSPHRASE, spendingKey, type)
+
+            val startupPassword = if(multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)){
+                BiometricUtils.readFromKeystore(this@SetupWalletActivity, Constants.STARTUP_PASSPHRASE)
+            }else{
+                Constants.INSECURE_PUB_PASSPHRASE
+            }
+
+            val wallet = multiWallet!!.createNewWallet(startupPassword, spendingKey, type)
             navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()

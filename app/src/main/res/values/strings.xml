@@ -128,7 +128,6 @@
     <string name="rename_wallet">Rename Wallet</string>
     <string name="rename_wallet_sheet_title">Rename wallet</string>
     <string name="wallet_name">Wallet Name</string>
-    <string name="change_spending_pass">Change spending password/PIN</string>
     <string name="view_property">View property</string>
     <string name="remove">Remove</string>
     <string name="confirm_to_remove">Confirm to remove</string>
@@ -398,6 +397,7 @@
     <string name="requires_restart">Requires restart.</string>
     <string name="user_agent_summary">For exchange rate fetching</string>
     <string name="changing">Changing…</string>
+    <string name="change">Change</string>
     <string name="setting_startup_pin">Setting startup PIN…</string>
     <string name="setting_startup_password">Setting startup password…</string>
 
@@ -521,13 +521,13 @@
     <string name="toConfirmEnterYourPassword">To confirm, enter your password:</string>
 
     <!--Security-->
-    <string name="erase_char">⌫</string>
     <string name="pin">PIN</string>
     <string name="confirm_spending_pin">Confirm Spending PIN</string>
-    <string name="confirm_spending_password">Confirm Spending Password</string>
-    <string name="create_spending_pin">Create a Spending PIN</string>
-    <string name="create_spending_pass">Create a Spending Password</string>
-    <string name="create_security_pass">Create Spending Password</string>
+    <string name="confirm_spending_password">Confirm spending password</string>
+    <string name="create_spending_pin">Create a spending PIN</string>
+    <string name="create_spending_pass">Create a spending Password</string>
+    <string name="change_spending_pass">Change spending password</string>
+    <string name="change_spending_pin">Change spending PIN</string>
     <string name="mismatch_passcode">PINs do not match</string>
     <string name="create_wallet_uninitialized">Cannot create wallet, MultiWallet not initialized</string>
     <string name="mismatch_password">Password do not match</string>
@@ -535,20 +535,21 @@
     <string name="password_match">PASSWORDS MATCH</string>
     <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="password">Password</string>
-    <string name="enter_spending_pin">Enter Spending PIN</string>
-    <string name="enter_spending_pin_again">Enter Spending PIN Again</string>
+    <string name="enter_spending_pin">Enter spending PIN</string>
+    <string name="enter_spending_pin_again">Enter spending PIN again</string>
     <string name="password_strength">Password strength</string>
     <string name="pin_strength">PIN strength</string>
-    <string name="enter_startup_pin">Enter Startup PIN</string>
-    <string name="enter_startup_pin_again">Enter Startup PIN Again</string>
-    <string name="create_startup_pin">Create a Startup PIN</string>
+    <string name="enter_startup_pin">Enter startup PIN</string>
+    <string name="enter_new_startup_pin">Enter new startup PIN</string>
+    <string name="enter_new_startup_pin_again">Enter new startup PIN again</string>
+    <string name="create_startup_pin">Create a startup PIN</string>
     <string name="enter_spending_password">Enter Spending Password</string>
-    <string name="create_startup_password">Create a Startup Password</string>
+    <string name="create_startup_password">Create a startup Password</string>
+    <string name="change_startup_password">Change startup password</string>
+    <string name="change_startup_pin">Change startup PIN</string>
     <string name="change_spending_pin_password">Change spending PIN/Password</string>
     <string name="required_to_send_funds">Required to send funds.</string>
     <string name="enter_current_pin">Enter Current PIN</string>
-    <string name="confirm_startup_password">Confirm Startup Password</string>
-    <string name="enter_startup_password">Enter Startup Password</string>
     <string name="removing_startup_pass">Removing startup password…</string>
     <string name="removing_startup_pin">Removing startup pin…</string>
     <string name="changing_password">Changing password…</string>
@@ -561,7 +562,7 @@
     <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
     <string name="field_cannot_be_empty">Field cannot be empty</string>
     <string name="spending_pin">Spending PIN</string>
-    <string name="spending_password">Spending Password</string>
+    <string name="spending_password">Spending password</string>
     <string name="or_a_spending_pin">or a Spending PIN</string>
     <string name="or_a_spending_password">or a Spending Password</string>
     <string name="digit_zero">0</string>
@@ -753,6 +754,7 @@
     <string name="sign_message_instruction">Enter an address and message to sign:</string>
     <string name="signature_copied">Signature copied</string>
     <string name="confirm_to_sign">Confirm to sign</string>
+    <string name="confirm_to_change">Confirm to change</string>
     <string name="sign_using_external_address_error">Address does not belong to wallet</string>
     <string name="verify_message_instruction">Enter the address, signature, and message to verify:</string>
     <string name="clear_all">Clear All</string>
@@ -788,6 +790,8 @@
     <string name="n_wallets_need_backup">%1$d wallets need backup</string>
     <string name="a_wallet_needs_backup">A wallet needs backup</string>
     <string name="startup_password">Startup Password</string>
+    <string name="new_startup_password">New startup password</string>
+    <string name="confirm_new_startup_password">Confirm new startup password</string>
     <string name="remove_startup_security">Remove startup security</string>
     <string name="close_backup_warning">Close backup warning</string>
     <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
@@ -796,5 +800,6 @@
     <string name="startup_fingerprint_prompt_title">Unlock with fingerprint</string>
     <string name="use_password">Use password</string>
     <string name="use_pin">Use PIN</string>
+    <string name="startup_security_changed">Startup PIN/password changed</string>
 
 </resources>

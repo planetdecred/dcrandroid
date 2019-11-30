@@ -6,7 +6,6 @@
 
 package com.dcrandroid.activities.more
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.ViewTreeObserver
 import com.dcrandroid.R
@@ -20,6 +19,7 @@ import com.dcrandroid.preference.EditTextPreference
 import com.dcrandroid.preference.ListPreference
 import com.dcrandroid.preference.SwitchPreference
 import com.dcrandroid.util.BiometricUtils
+import com.dcrandroid.util.ChangePassUtil
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import dcrlibwallet.Dcrlibwallet
@@ -58,6 +58,9 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
         }
         useFingerprint = SwitchPreference(this, Dcrlibwallet.UseFingerprintConfigKey, startup_security_fingerprint)
         loadStartupSecurity()
+        change_startup_security.setOnClickListener {
+            ChangePassUtil(this, null).begin()
+        }
 
         ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions)
@@ -121,7 +124,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
 
     private fun setupStartupSecurity(){
         var dialog: PasswordPinDialogFragment? = null
-        dialog = PasswordPinDialogFragment(R.string.create, false, object : PasswordPinDialogFragment.PasswordPinListener {
+        dialog = PasswordPinDialogFragment(R.string.create, false, isChange = false, passwordPinListener = object : PasswordPinDialogFragment.PasswordPinListener {
 
             override fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int) {
                 GlobalScope.launch(Dispatchers.IO){

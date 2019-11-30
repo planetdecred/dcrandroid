@@ -23,11 +23,11 @@ import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
 
 interface DialogButtonListener {
-    fun onClickOk(spendingKey: String)
+    fun onClickOk(newPassphrase: String)
     fun onClickCancel()
 }
 
-class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isSpending: Boolean,
+class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isSpending: Boolean, var isChange: Boolean,
                                 private val passwordPinListener: PasswordPinListener) : FullScreenBottomSheetDialog(), DialogButtonListener {
 
     private lateinit var spendingCreatePasswordFragment: CreatePasswordPromptFragment
@@ -36,6 +36,8 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
     private lateinit var fragmentList: List<Fragment>
     private lateinit var tabsTitleList: List<String>
     private lateinit var titleList: List<String>
+
+    var tabIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +49,18 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
         titleList = if(isSpending){
-            listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
+            if(isChange){
+                listOf(context!!.getString(R.string.change_spending_pass), context!!.getString(R.string.change_spending_pin))
+            }else{
+                listOf(context!!.getString(R.string.create_spending_pass),  context!!.getString(R.string.create_spending_pin))
+            }
+
         }else{
-            listOf(context!!.getString(R.string.create_startup_password), context!!.getString(R.string.create_startup_pin))
+            if(isChange){
+                listOf(context!!.getString(R.string.change_startup_password), context!!.getString(R.string.change_startup_pin))
+            }else{
+                listOf(context!!.getString(R.string.create_startup_password), context!!.getString(R.string.create_startup_pin))
+            }
         }
     }
 
@@ -81,6 +92,10 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         })
 
         tv_title.text = titleList[view_pager.currentItem]
+
+        view_pager.post {
+            view_pager.setCurrentItem(tabIndex, false)
+        }
     }
 
     override fun onClickOk(spendingKey: String) {
@@ -108,7 +123,7 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
     }
 
     interface PasswordPinListener {
-        fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int)
+        fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int)
     }
 
     class ViewPagerAdapter(fragmentManager: FragmentManager,

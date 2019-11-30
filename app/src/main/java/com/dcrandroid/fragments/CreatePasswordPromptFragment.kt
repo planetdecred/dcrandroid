@@ -29,8 +29,8 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
         super.onViewCreated(view, savedInstanceState)
 
         if(!isSpending){
-            pass_layout.hint = getString(R.string.startup_password)
-            til_confirm_pass.hint = getString(R.string.confirm_startup_password)
+            pass_layout.hint = getString(R.string.new_startup_password)
+            til_confirm_pass.hint = getString(R.string.confirm_new_startup_password)
         }
 
         ed_pass.addTextChangedListener(pinWatcher)

@@ -60,7 +60,7 @@ class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordP
                 return@setOnClickListener
             }
 
-            PasswordPinDialogFragment(R.string.create, true, this).show(this)
+            PasswordPinDialogFragment(R.string.create, true, isChange = false, passwordPinListener = this).show(this)
         }
 
         go_back.setOnClickListener { finish() }
