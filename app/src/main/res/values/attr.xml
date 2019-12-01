@@ -13,4 +13,9 @@
         <attr name="horizontal_spacing" format="dimension" />
         <attr name="vertical_spacing" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="PasswordInput">
+        <attr name="counter_enabled" format="boolean"/>
+        <attr name="hint" format="reference"/>
+    </declare-styleable>
 </resources>

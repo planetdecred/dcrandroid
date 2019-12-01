@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/sheet_title"
         android:text="@string/confirm_to_send"
+        android:layout_marginBottom="@dimen/margin_padding_size_24"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:includeFontPadding="false"
         android:textColor="@color/darkBlueTextColor"

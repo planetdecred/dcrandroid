@@ -8,8 +8,6 @@ package com.dcrandroid
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
@@ -17,9 +15,7 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
-import android.os.Build
 import android.os.Bundle
-import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -31,6 +27,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.ReceiveDialog
+import com.dcrandroid.dialog.ResumeAccountDiscovery
 import com.dcrandroid.dialog.send.SendDialog
 import com.dcrandroid.dialog.WiFiSyncDialog
 import com.dcrandroid.extensions.hide

@@ -7,16 +7,16 @@
 package com.dcrandroid.dialog
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dcrandroid.R
+import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.rename_account_sheet.*
 import java.lang.Exception
 
-class RenameAccountDialog(private val currentName: String, private val isWallet:Boolean = false, private val renameAccount:(newName: String) -> Exception?): CollapsedBottomSheetDialog() {
+// can also rename a wallet
+class RenameAccountDialog(private val currentName: String, private val isWallet:Boolean = false, private val rename:(newName: String) -> Exception?): CollapsedBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.rename_account_sheet, container, false)
@@ -27,23 +27,25 @@ class RenameAccountDialog(private val currentName: String, private val isWallet:
 
         if(isWallet){
             sheet_title.setText(R.string.rename_wallet_sheet_title)
-            account_name_input.hint = getString(R.string.wallet_name)
         }
 
-        new_account_name.setText(currentName)
-
-        new_account_name.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
-                new_account_name.error = null
-                btn_confirm.isEnabled = !s.isNullOrBlank() && s.toString() != currentName
+        val accountNameInput = InputHelper(context!!, account_name_input){
+            btn_confirm.isEnabled = !it.isNullOrBlank() && it != currentName
+            true
+        }.apply {
+            hidePasteButton()
+            hideQrScanner()
+            if(isWallet){
+                setHint(R.string.wallet_name)
+            }else{
+                setHint(R.string.account_name)
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            editText.setText(currentName)
+            editText.requestFocus()
+            editText.setSelection(0, currentName.length)
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
+        }
 
         btn_cancel.setOnClickListener {
             dismiss()
@@ -52,14 +54,14 @@ class RenameAccountDialog(private val currentName: String, private val isWallet:
         btn_confirm.setOnClickListener {
             it.isEnabled = false
             btn_cancel.isEnabled = false
-            new_account_name.isEnabled = false
+            accountNameInput.editText.isEnabled = false
 
-            val exception = renameAccount(new_account_name.text.toString())
+            val exception = rename(accountNameInput.validatedInput!!)
             if (exception != null) {
                 it.isEnabled = true
                 btn_cancel.isEnabled = true
-                new_account_name.isEnabled = true
-                new_account_name.error = exception.message
+                accountNameInput.editText.isEnabled = true
+                accountNameInput.setError(exception.message)
             }else{
                 dismiss()
             }

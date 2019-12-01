@@ -4,32 +4,28 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.fragments
+package com.dcrandroid.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.WalletData
+import com.dcrandroid.view.PinViewUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_discovery_sheet.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.lang.Exception
 
 class ResumeAccountDiscovery: BottomSheetDialogFragment() {
@@ -38,7 +34,9 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
 
     private var wallet: Wallet? = null
 
-    fun setWalletID(walletID: Long): ResumeAccountDiscovery{
+    private lateinit var pinViewUtil: PinViewUtil
+
+    fun setWalletID(walletID: Long): ResumeAccountDiscovery {
         val multiWallet = WalletData.instance.multiWallet
         this.wallet = multiWallet!!.walletWithID(walletID)
         return this
@@ -84,40 +82,53 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        pinViewUtil = PinViewUtil(resume_restore_pin, null)
+
         if(wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
-            input_layout.hint = getString(R.string.spending_pin)
-            resume_restore_pass.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            resume_restore_pass.hide()
+            resume_restore_pin.show()
+
+            pinViewUtil.showHint(R.string.enter_spending_pin)
+
+            val bottomRowTopMargin = - resources.getDimensionPixelOffset(R.dimen.margin_padding_size_64)
+            val bottomBarParams = bottom_row.layoutParams as LinearLayout.LayoutParams
+            bottomBarParams.topMargin = bottomRowTopMargin
+            bottom_row.layoutParams = bottomBarParams
         }
 
         if(WalletData.instance.multiWallet!!.openedWalletsCount() > 1){
             unlock_title.text = getString(R.string.multi_resume_account_discovery_title, wallet!!.name)
         }
 
-        resume_restore_pass.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                tv_create.isEnabled = !resume_restore_pass.text.isNullOrEmpty()
-            }
+        pinViewUtil.pinChanged = {
+            btn_unlock.isEnabled = it.isNotBlank()
+            Unit
+        }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        resume_restore_pass.validateInput = {
+            btn_unlock.isEnabled = it.isNotBlank()
+            true
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
-
-        tv_create.setOnClickListener{unlockWallet()}
+        btn_unlock.setOnClickListener{unlockWallet()}
     }
 
     private fun unlockWallet() = GlobalScope.launch(Dispatchers.Main){
 
         try{
-            input_layout.error = null
-            tv_create.hide()
+            resume_restore_pass.setError(null)
+            btn_unlock.hide()
             resume_restore_pass.isEnabled = false
             discovery_progress_bar.show()
 
             withContext(Dispatchers.Default){
-                val pass = resume_restore_pass.text.toString()
+
+                val pass = if(resume_restore_pass.isShown){
+                    resume_restore_pass.textString
+                }else{
+                    pinViewUtil.passCode
+                }
+
                 wallet?.unlockWallet(pass.toByteArray())
             }
 
@@ -131,15 +142,32 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
             e.printStackTrace()
 
             if (e.message!! == Dcrlibwallet.ErrInvalidPassphrase){
-                input_layout.error = if (wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
-                    getString(R.string.invalid_pin)
+
+                val error = if (wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePass){
+                    getString(R.string.invalid_password)
                 }else{
                     getString(R.string.invalid_pin)
                 }
+
+                if(resume_restore_pass.isShown){
+                    resume_restore_pass.setError(error)
+                }else{
+                    pinViewUtil.pinView.rejectInput = true
+                    pinViewUtil.showError(R.string.invalid_pin)
+                    btn_unlock.isEnabled = false
+
+                    delay(2000)
+                    withContext(Dispatchers.Main){
+                        pinViewUtil.reset()
+                        pinViewUtil.showHint(R.string.enter_spending_pin)
+                        pinViewUtil.pinView.rejectInput = false
+                    }
+                }
+
             }
         }
 
-        tv_create.show()
+        btn_unlock.show()
         resume_restore_pass.isEnabled = true
         discovery_progress_bar.hide()
 

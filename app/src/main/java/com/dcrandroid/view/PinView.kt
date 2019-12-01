@@ -53,70 +53,24 @@ class PinView : TextView, View.OnClickListener {
 
     var counterTextView: TextView? = null
 
-    fun setHint(hint: String){
-        lock.lock()
-
-        counterTextView?.text = null
-        this.hint = hint
-        passCodeLength = 0
-        showHint = true
-
-        lock.unlock()
-
-        requestLayout()
-        invalidate()
-    }
-
-    fun setError(error: String?){
-        lock.lock()
-
-        if(error != null){
-            counterTextView?.setTextColor(context.getColor(R.color.colorError))
-        }else{
-            counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
-        }
-
-        this.errorString = error
-
-        lock.unlock()
-
-        requestLayout()
-        invalidate()
-    }
-
-    fun reset(){
-        lock.lock()
-
-        errorString = null
-        counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
-        counterTextView?.text = "0"
-        passCodeLength = 0
-        showHint = true
-
-        lock.unlock()
-
-        requestLayout()
-        invalidate()
-    }
-
     constructor(context: Context) : super(context) {
-        init(context, null, 0, 0)
+        init(context, null, 0)
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init(context, attrs, 0, 0)
+        init(context, attrs, 0)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context, attrs, defStyleAttr, 0)
+        init(context, attrs, defStyleAttr)
     }
 
 
-    private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
+    private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         this.mContext = context
         this.setOnClickListener(this)
 
-        val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, defStyleRes)
+        val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
 
         try {
             pinSize = values.getDimension(R.styleable.PinView_pin_size, resources.getDimension(R.dimen.pinview_pin_size))
@@ -300,6 +254,52 @@ class PinView : TextView, View.OnClickListener {
         this.requestFocus()
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    fun setHint(hint: String){
+        lock.lock()
+
+        counterTextView?.text = null
+        this.hint = hint
+        passCodeLength = 0
+        showHint = true
+
+        lock.unlock()
+
+        requestLayout()
+        invalidate()
+    }
+
+    fun setError(error: String?){
+        lock.lock()
+
+        if(error != null){
+            counterTextView?.setTextColor(context.getColor(R.color.colorError))
+        }else{
+            counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
+        }
+
+        this.errorString = error
+
+        lock.unlock()
+
+        requestLayout()
+        invalidate()
+    }
+
+    fun reset(){
+        lock.lock()
+
+        errorString = null
+        counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
+        counterTextView?.text = "0"
+        passCodeLength = 0
+        showHint = true
+
+        lock.unlock()
+
+        requestLayout()
+        invalidate()
     }
 }
 

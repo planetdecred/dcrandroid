@@ -29,13 +29,30 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
         super.onViewCreated(view, savedInstanceState)
 
         if(!isSpending){
-            pass_layout.hint = getString(R.string.new_startup_password)
-            til_confirm_pass.hint = getString(R.string.confirm_new_startup_password)
+            ed_pass.setHint(R.string.new_startup_password)
+            ed_confirm_pass.setHint(R.string.confirm_new_startup_password)
         }
 
-        ed_pass.addTextChangedListener(pinWatcher)
-        ed_pass.addTextChangedListener(passwordStrengthWatcher)
-        ed_confirm_pass.addTextChangedListener(pinWatcher)
+        ed_pass.validateInput = {
+
+            pinWatcher.afterTextChanged(null)
+
+            val progress = (Dcrlibwallet.shannonEntropy(it) / 4) * 100
+            if (progress > 70) {
+                pass_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_strong)
+            } else {
+                pass_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_weak)
+            }
+
+            pass_strength.progress = progress.toInt()
+
+            true
+        }
+
+        ed_confirm_pass.validateInput = {
+            pinWatcher.afterTextChanged(null)
+            true
+        }
 
         btn_cancel.setOnClickListener { clickListener.onClickCancel() }
 
@@ -49,24 +66,7 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
             btn_cancel.setTextColor(resources.getColor(R.color.colorDisabled))
             progress_bar.visibility = View.VISIBLE
 
-            clickListener.onClickOk(ed_pass.text.toString())
-        }
-    }
-
-    private val passwordStrengthWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            val progress = (Dcrlibwallet.shannonEntropy(s.toString()) / 4) * 100
-            if (progress > 70) {
-                pass_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_strong)
-            } else {
-                pass_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_weak)
-            }
-
-            pass_strength.progress = progress.toInt()
+            clickListener.onClickOk(ed_pass.textString)
         }
     }
 
@@ -75,17 +75,17 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
-        override fun afterTextChanged(editable: Editable) {
+        override fun afterTextChanged(editable: Editable?) {
 
-            btn_create.isEnabled = ed_pass.text!!.isNotBlank() && ed_pass.text.toString() == ed_confirm_pass.text.toString()
+            btn_create.isEnabled = ed_pass.textString.isNotBlank() && ed_pass.textString == ed_confirm_pass.textString
 
-            if (ed_confirm_pass.text.toString() == "") {
-                til_confirm_pass.error = null
+            if (ed_confirm_pass.textString == "") {
+                ed_confirm_pass.setError(null)
             } else {
-                if (ed_pass.text.toString() != ed_confirm_pass.text.toString()) {
-                    til_confirm_pass.error = getString(R.string.mismatch_password)
+                if (ed_pass.textString != ed_confirm_pass.textString) {
+                    ed_confirm_pass.setError(getString(R.string.mismatch_password))
                 } else {
-                    til_confirm_pass.error = null
+                    ed_confirm_pass.setError(null)
                 }
             }
         }

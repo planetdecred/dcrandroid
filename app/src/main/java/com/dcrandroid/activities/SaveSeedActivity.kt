@@ -38,12 +38,10 @@ class SaveSeedActivity : BaseActivity() {
             val vto = scroll_view_seeds.viewTreeObserver
             if(vto.isAlive){
                 vto.addOnScrollChangedListener {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        app_bar.elevation = if (scroll_view_seeds.scrollY != 0) {
-                            resources.getDimension(R.dimen.app_bar_elevation)
-                        } else {
-                            0f
-                        }
+                    app_bar.elevation = if (scroll_view_seeds.scrollY != 0) {
+                        resources.getDimension(R.dimen.app_bar_elevation)
+                    } else {
+                        0f
                     }
                 }
             }

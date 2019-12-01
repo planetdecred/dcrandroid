@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_24"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
@@ -37,31 +38,18 @@
             android:textSize="@dimen/edit_text_size_16"
             android:textColor="@color/darkerBlueGrayTextColor"
             app:fontFamily="@font/source_sans_pro"
-            android:layout_marginLeft="@dimen/margin_padding_size_8"
             android:layout_marginStart="@dimen/margin_padding_size_8"
             android:includeFontPadding="false"
             android:text="@string/create_account_warning" />
 
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutStyle"
-        android:layout_width="match_parent"
+    <include
         android:layout_height="wrap_content"
-        android:hint="@string/account_name"
+        android:layout_width="match_parent"
+        android:id="@+id/account_name_input"
         android:layout_marginTop="@dimen/margin_padding_size_24"
-        app:fontFamily="@font/source_sans_pro">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_account_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textCursorDrawable="@null"
-            android:textColor="@color/darkBlueTextColor"
-            android:textSize="@dimen/edit_text_size_16"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        layout="@layout/custom_input"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
@@ -82,7 +70,6 @@
             android:focusable="true"
             android:clickable="true"
             app:fontFamily="@font/source_sans_pro_semibold"
-            android:layout_marginRight="@dimen/margin_padding_size_8"
             android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
         <TextView

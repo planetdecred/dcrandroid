@@ -32,27 +32,21 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        dialog_title.setText(dialogTitle)
+
         if(!isSpending){
-            spending_pass_layout.hint = getString(R.string.startup_password)
-            dialog_title.setText(dialogTitle)
+            password_input.setHint(R.string.startup_password)
         }
 
-        spending_pin.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                btn_confirm.isEnabled = !s.isNullOrBlank()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
+        password_input.validateInput = {
+            btn_confirm.isEnabled = !it.isBlank()
+            true
+        }
 
         btn_cancel.setOnClickListener{dismiss()}
         btn_confirm.setOnClickListener {
             confirmed = true
-            passEntered(this, spending_pin.text.toString())
+            passEntered(this, password_input.textString)
             dismiss()
         }
     }

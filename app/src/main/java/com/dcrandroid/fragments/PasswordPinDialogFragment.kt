@@ -98,7 +98,7 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         }
     }
 
-    override fun onClickOk(spendingKey: String) {
+    override fun onClickOk(newPassphrase: String) {
         isCancelable = false
 
         val normalColor = Color.parseColor("#c4cbd2")
@@ -115,7 +115,7 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         }else{
             Dcrlibwallet.PassphraseTypePin
         }
-        passwordPinListener.onEnterPasswordOrPin(spendingKey, passphraseType)
+        passwordPinListener.onEnterPasswordOrPin(newPassphrase, passphraseType)
     }
 
     override fun onClickCancel() {
