@@ -130,7 +130,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
                 GlobalScope.launch(Dispatchers.IO){
                     try{
                         BiometricUtils.saveToKeystore(this@SettingsActivity, spendingKey, Constants.STARTUP_PASSPHRASE)
-                        multiWallet!!.changeStartupPassphrase(ByteArray(0), spendingKey.toByteArray())
+                        multiWallet!!.changePublicPassphrase(ByteArray(0), spendingKey.toByteArray())
                         multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
                         multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
 
@@ -165,7 +165,7 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
             GlobalScope.launch(Dispatchers.IO){
                 try{
                     BiometricUtils.saveToKeystore(this@SettingsActivity, "", Constants.STARTUP_PASSPHRASE)
-                    multiWallet!!.changeStartupPassphrase(pass.toByteArray(), ByteArray(0))
+                    multiWallet!!.changePublicPassphrase(pass.toByteArray(), ByteArray(0))
                     multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, false)
 
                     withContext(Dispatchers.Main){

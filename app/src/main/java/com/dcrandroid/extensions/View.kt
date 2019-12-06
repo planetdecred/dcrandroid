@@ -13,7 +13,7 @@ fun View.toggleVisibility(): Int {
     return this.visibility
 }
 
-fun View.show() {
+fun View. show() {
     this.visibility = View.VISIBLE
 }
 

@@ -50,7 +50,7 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
 
             if (walletID == null) {
                 try {
-                    multiWallet.changeStartupPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray())
+                    multiWallet.changePublicPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray())
                     multiWallet.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
 
                     // saving after a successful change to avoid saving a wrong oldPassphrase
@@ -67,7 +67,7 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
                 }
             }else{
                 try{
-                    multiWallet.changePrivatePassphrase(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
+                    multiWallet.changePrivatePassphraseForWallet(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
                     SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
                 }catch (e: Exception){
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
