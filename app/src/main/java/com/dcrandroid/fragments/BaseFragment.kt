@@ -12,7 +12,7 @@ import com.dcrandroid.HomeActivity
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
 
-open class BaseFragment : Fragment(), SyncProgressListener {
+open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificationListener {
 
     var TAG = this.javaClass.name
 
@@ -23,7 +23,10 @@ open class BaseFragment : Fragment(), SyncProgressListener {
     override fun onStart() {
         super.onStart()
         multiWallet.removeSyncProgressListener(TAG)
+        multiWallet.removeTxAndBlockNotificationListener(TAG)
+
         multiWallet.addSyncProgressListener(this, TAG)
+        multiWallet.addTxAndBlockNotificationListener(this, TAG)
     }
 
     override fun onStop() {

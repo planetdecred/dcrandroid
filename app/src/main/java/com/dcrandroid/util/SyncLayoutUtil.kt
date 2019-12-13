@@ -376,13 +376,4 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     }
 
     override fun debug(debugInfo: DebugInfo?) {}
-
-
-    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
-    }
-
-    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
-    }
-
-    override fun onTransaction(transaction: String?) {}
 }

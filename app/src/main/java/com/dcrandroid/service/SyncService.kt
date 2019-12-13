@@ -14,7 +14,6 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.R
-import com.dcrandroid.data.Constants
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
@@ -163,11 +162,4 @@ class SyncService : Service(), SyncProgressListener {
     }
 
     override fun debug(debugInfo: DebugInfo?) {}
-
-    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {}
-
-    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
-    }
-
-    override fun onTransaction(transaction: String?) {}
 }

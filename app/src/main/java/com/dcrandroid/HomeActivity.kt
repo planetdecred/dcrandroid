@@ -48,7 +48,7 @@ import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), SyncProgressListener {
+class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -80,7 +80,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener {
 
         try {
             multiWallet?.removeSyncProgressListener(TAG)
+            multiWallet?.removeTxAndBlockNotificationListener(TAG)
+
             multiWallet?.addSyncProgressListener(this, TAG)
+            multiWallet?.addTxAndBlockNotificationListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
