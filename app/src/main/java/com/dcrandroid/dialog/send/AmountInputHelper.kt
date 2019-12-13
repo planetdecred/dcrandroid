@@ -166,15 +166,15 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         }
     }
 
-    fun setAmountDcr(dcr: Long) {
-        if (dcr > 0) {
+    fun setAmountDCR(coin: Double) {
+        if (coin > 0) {
             layout.send_amount.removeTextChangedListener(this)
 
-            val coin = Dcrlibwallet.amountCoin(dcr)
             dcrAmount = BigDecimal(coin)
             usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
 
             if (currencyIsDCR) {
+                val dcr = Dcrlibwallet.amountAtom(coin)
                 val amountString = Utils.formatDecredWithoutComma(dcr)
                 layout.send_amount.setText(CoinFormat.format(amountString, AmountRelativeSize))
             } else {
@@ -192,6 +192,8 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
         displayEquivalentValue()
     }
+
+    fun setAmountDCR(dcr: Long) = setAmountDCR(Dcrlibwallet.amountCoin(dcr))
 
     fun setError(error: String?) = GlobalScope.launch(Dispatchers.Main) {
         if (error == null) {

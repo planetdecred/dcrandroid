@@ -109,3 +109,49 @@ fun parseBalanceArray(json: String): ArrayList<Balance> {
     val listType = object : TypeToken<ArrayList<Balance>>() {}.type
     return gson.fromJson(json, listType)
 }
+
+class DecredAddressURI {
+
+    var address: String = ""
+    var amount: Double? = null
+
+    companion object {
+        fun from(uriString: String): DecredAddressURI {
+
+            val addressURI = DecredAddressURI()
+
+            var address: String = uriString
+            var amount: Double? = null
+
+            val schemeSeparatedParts = uriString.split(":")
+            if (schemeSeparatedParts.size == 2 && schemeSeparatedParts[0] == "decred") {
+
+                val addressAndQuery = schemeSeparatedParts[1].split("?")
+
+                address = addressAndQuery[0]
+                if (addressAndQuery.size >= 2) {
+
+                    // get amount from query
+                    val queryParameters = addressAndQuery[1].split("&")
+                    for (query in queryParameters) {
+                        val nameValuePair = query.split("=")
+                        val queryName = nameValuePair[0]
+                        if (nameValuePair.size == 2 && queryName == Constants.AMOUNT) {
+                            val amountStr = nameValuePair[1]
+                            if (amountStr.trim().isNotEmpty()) {
+                                amount = amountStr.toDouble()
+                            }
+
+                            break
+                        }
+                    }
+                }
+            }
+
+            addressURI.address = address
+            addressURI.amount = amount
+
+            return addressURI
+        }
+    }
+}

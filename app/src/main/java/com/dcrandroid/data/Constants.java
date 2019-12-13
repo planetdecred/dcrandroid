@@ -30,6 +30,7 @@ public class Constants {
             LICENSE = "license",
             WALLET_ID = "wallet_id",
             RESULT = "result",
+            AMOUNT = "amount",
             ANDROID_KEY_STORE = "AndroidKeyStore",
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
