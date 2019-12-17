@@ -9,6 +9,7 @@ package com.dcrandroid.activities
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import android.widget.Toast
 
@@ -16,6 +17,7 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
+import kotlinx.android.synthetic.main.activity_log_viewer.*
 import kotlinx.coroutines.*
 
 import java.io.File
@@ -23,7 +25,7 @@ import java.lang.Exception
 
 const val MENU_ITEM = 1
 
-class LogViewer : BaseActivity() {
+class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var updateJob: Job
     private var logTextView: TextView? = null
@@ -34,6 +36,9 @@ class LogViewer : BaseActivity() {
 
         setContentView(R.layout.activity_log_viewer)
         logTextView = findViewById(R.id.log_text)
+
+        go_back.setOnClickListener { finish() }
+        log_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
 
         updateJob = GlobalScope.launch(Dispatchers.IO){
            try{
@@ -70,7 +75,8 @@ class LogViewer : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(Menu.NONE, MENU_ITEM, Menu.NONE, "Copy").setIcon(R.drawable.ic_copy).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        menu.add(Menu.NONE, MENU_ITEM, Menu.NONE, R.string._copy).setIcon(R.drawable.ic_copy)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         return true
     }
 
@@ -82,6 +88,14 @@ class LogViewer : BaseActivity() {
             }
 
             else -> false
+        }
+    }
+
+    override fun onScrollChanged() {
+        app_bar.elevation = if(log_scroll_view.scrollY > 0){
+            resources.getDimension(R.dimen.app_bar_elevation)
+        }else{
+            0f
         }
     }
 

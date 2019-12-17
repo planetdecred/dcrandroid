@@ -28,10 +28,6 @@ import java.math.MathContext
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
-
-
-const val TRANSACTION_CHANNEL_ID = "new transaction"
 
 object Utils {
 
@@ -64,83 +60,6 @@ object Utils {
         return data
     }
 
-    fun getDaysBehind(seconds: Long, context: Context): String {
-        val days = TimeUnit.SECONDS.toDays(seconds)
-        return if (days == 1L) {
-            context.getString(R.string.one_days_behind)
-        } else context.getString(R.string.days_behind, days)
-
-    }
-
-    fun calculateTime(seconds: Long, context: Context): String {
-        var secs = seconds
-        if (secs > 59) {
-
-            // convert to minutes
-            val minutes = secs / 60
-
-            if (minutes > 59) {
-
-                // convert to hours
-                val hours = minutes / 60
-
-                if (hours > 23) {
-
-                    // convert to days
-                    val days = hours / 24
-
-                    //days
-                    return context.getString(R.string.x_days, days)
-                }
-                //hour
-                return context.getString(R.string.x_hours, hours)
-            }
-
-            //minutes
-            return context.getString(R.string.x_minutes, minutes)
-        }
-
-        if (secs < 0) {
-            secs = 0
-        }
-
-        //seconds
-        return context.getString(R.string.x_seconds, secs)
-    }
-
-    fun getSyncTimeRemaining(seconds: Long, percentageCompleted: Int, useLeft: Boolean, ctx: Context): String {
-        if (seconds > 1) {
-
-            if (seconds > 60) {
-                val minutes = seconds / 60
-                return if (useLeft) {
-                    ctx.getString(R.string.left_minute_sync_eta, percentageCompleted, minutes)
-                } else ctx.getString(R.string.remaining_minute_sync_eta, percentageCompleted, minutes)
-
-            }
-
-            return if (useLeft) {
-                ctx.getString(R.string.left_seconds_sync_eta, percentageCompleted, seconds)
-            } else ctx.getString(R.string.remaining_seconds_sync_eta, percentageCompleted, seconds)
-
-        }
-
-        return if (useLeft) {
-            ctx.getString(R.string.left_sync_eta_less_than_seconds, percentageCompleted)
-        } else ctx.getString(R.string.remaining_sync_eta_less_than_seconds, percentageCompleted)
-
-    }
-
-    fun getSyncTimeRemaining(seconds: Long, ctx: Context): String {
-        if (seconds > 60) {
-            val minutes = seconds / 60
-
-            return ctx.getString(R.string.time_left_minutes, minutes)
-        }
-
-        return ctx.getString(R.string.time_left_seconds, seconds)
-    }
-
     fun removeTrailingZeros(dcr: Double): String {
         val format = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
         format.applyPattern("#,###,###,##0.########")
@@ -164,8 +83,8 @@ object Utils {
 
     private fun saveToClipboard(context: Context, text: String) {
 
-        val sdk = android.os.Build.VERSION.SDK_INT
-        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+        val sdk = Build.VERSION.SDK_INT
+        if (sdk < Build.VERSION_CODES.HONEYCOMB) {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager
             clipboard.text = text
         } else {
@@ -187,8 +106,8 @@ object Utils {
     }
 
     fun readFromClipboard(context: Context): String {
-        val sdk = android.os.Build.VERSION.SDK_INT
-        if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+        val sdk = Build.VERSION.SDK_INT
+        if (sdk < Build.VERSION_CODES.HONEYCOMB) {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager
             return clipboard.text.toString()
         } else {
@@ -233,7 +152,7 @@ object Utils {
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.importance = NotificationManager.IMPORTANCE_LOW
+            channel.importance = NotificationManager.IMPORTANCE_HIGH
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)

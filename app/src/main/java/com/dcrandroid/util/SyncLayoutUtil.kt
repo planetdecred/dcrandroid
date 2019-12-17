@@ -156,7 +156,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         val blockInfo = multiWallet.bestBlock
         val currentTimeSeconds = System.currentTimeMillis() / 1000
         val lastBlockRelativeTime = currentTimeSeconds - blockInfo.timestamp
-        val formattedLastBlockTime = Utils.calculateTime(lastBlockRelativeTime, syncLayout.context)
+        val formattedLastBlockTime = TimeUtils.calculateTime(lastBlockRelativeTime, syncLayout.context)
 
         val latestBlock: String
         latestBlock = if (multiWallet.isSynced) {
@@ -246,7 +246,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     private fun publishSyncProgress(syncProgress: GeneralSyncProgress) = GlobalScope.launch(Dispatchers.Main) {
         syncLayout.pb_sync_progress.progress = syncProgress.totalSyncProgress
         syncLayout.tv_percentage.text = context.getString(R.string.percentage, syncProgress.totalSyncProgress)
-        syncLayout.tv_time_left.text = Utils.getSyncTimeRemaining(syncProgress.totalTimeRemainingSeconds, context)
+        syncLayout.tv_time_left.text = TimeUtils.getSyncTimeRemaining(syncProgress.totalTimeRemainingSeconds, context)
 
         // connected peers count
         syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
@@ -277,7 +277,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
                 // syncing progress
                 syncLayout.tv_progress.setText(R.string.syncing_progress)
                 val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - headersFetchProgress.currentHeaderTimestamp
-                syncLayout.tv_days.text = Utils.getDaysBehind(lastHeaderRelativeTime, context)
+                syncLayout.tv_days.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
 
             } else {
                 showMultiWalletSyncLayout()

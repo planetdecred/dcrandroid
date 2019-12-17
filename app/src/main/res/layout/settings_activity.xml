@@ -292,31 +292,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/incoming_transactions"
-                    android:layout_marginTop="@dimen/margin_padding_size_8"
-                    android:padding="@dimen/margin_padding_size_16"
-                    android:gravity="center_vertical"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="@drawable/ripple"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@id/pref_title"
-                        android:layout_weight="1"
-                        android:includeFontPadding="false"
-                        android:text="@string/incoming_transactions"
-                        android:textColor="@color/darkBlueTextColor"
-                        android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/beep_new_blocks"
                     android:padding="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"

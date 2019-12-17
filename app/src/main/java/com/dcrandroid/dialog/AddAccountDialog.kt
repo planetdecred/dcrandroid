@@ -42,6 +42,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
             btn_create.isEnabled = !it.isNullOrBlank()
             true
         }.apply {
+            editText.setSingleLine(true)
             hidePasteButton()
             hideQrScanner()
             setHint(R.string.account_name)
@@ -57,7 +58,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
             val title = PassPromptTitle(R.string.confirm_to_create_account, R.string.confirm_to_create_account, R.string.confirm_to_create_account)
             PassPromptUtil(fragmentActivity, walletID, title, allowFingerprint = true) { dialog, passphrase ->
 
-                val newName = accountNameInput.validatedInput.toString()
+                val newName = accountNameInput.validatedInput!!.trim()
 
                 GlobalScope.launch(Dispatchers.IO){
                     if(passphrase != null){

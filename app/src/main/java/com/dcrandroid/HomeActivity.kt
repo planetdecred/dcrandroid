@@ -52,6 +52,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
+    private lateinit var alertSound: SoundPool
 
     private lateinit var adapter: NavigationTabsAdapter
 
@@ -75,7 +76,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
                 .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build()
         builder.setAudioAttributes(attributes)
-        val alertSound = builder.build()
+
+        alertSound = builder.build()
         blockNotificationSound = alertSound.load(this, R.raw.beep, 1)
 
         try {
@@ -283,19 +285,25 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        val beepNewBlocks =  multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
+        if(beepNewBlocks && !multiWallet!!.isSyncing){
+            alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
+        }
     }
 
     override fun onTransaction(transactionJson: String?) {
         val gson = Gson()
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
 
-        val dcrFormat = DecimalFormat("#.######## DCR")
+        if(transaction.direction == Dcrlibwallet.TxDirectionReceived){
+            val dcrFormat = DecimalFormat("#.######## DCR")
 
-        val amount = Dcrlibwallet.amountCoin(transaction.amount)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val amount = Dcrlibwallet.amountCoin(transaction.amount)
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
-                transaction.timestampMillis.toInt(), transaction.walletID)
+            Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
+                    transaction.timestampMillis.toInt(), transaction.walletID)
+        }
     }
 
     // -- Sync Progress Listener

@@ -36,9 +36,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/margin_padding_size_16"
                 android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingRight="0dp"
                 android:paddingEnd="0dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
@@ -56,8 +54,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/margin_padding_size_18"
                     android:orientation="vertical"
                     android:gravity="center_vertical"
                     >
@@ -65,7 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Write down seed phrase"
+                        android:text="@string/write_down_seed_phrase"
                         android:textSize="@dimen/edit_text_size_20"
                         android:textColor="@color/darkBlueTextColor"
                         android:includeFontPadding="false"
@@ -74,7 +71,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Step 1/2"
+                        android:text="@string/step_1_2"
                         android:layout_marginTop="4dp"
                         android:textSize="@dimen/edit_text_size_14"
                         android:textColor="@color/blueGraySecondTextColor"
@@ -113,9 +110,7 @@
                 android:textSize="@dimen/edit_text_size_16"
                 android:textColor="#3d5873"
                 app:fontFamily="@font/source_sans_pro"
-                android:layout_marginLeft="@dimen/margin_padding_size_20"
                 android:layout_marginStart="@dimen/margin_padding_size_20"
-                android:layout_marginRight="@dimen/margin_padding_size_4"
                 android:layout_marginEnd="@dimen/margin_padding_size_4" />
 
             <androidx.cardview.widget.CardView
@@ -144,7 +139,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your 33-word seed phrase"
+                        android:text="@string/your_33_word_seed_phrase"
                         android:textColor="#3d5873"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro" />
@@ -163,15 +158,13 @@
 
     </ScrollView>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="@dimen/margin_padding_size_4"
         android:padding="@dimen/margin_padding_size_16"
-        android:gravity="center_horizontal"
-        >
+        android:gravity="center_horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -193,7 +186,7 @@
             android:paddingTop="@dimen/margin_padding_size_16"
             android:paddingBottom="@dimen/margin_padding_size_16"
             android:background="@drawable/default_app_button_bg"
-            android:text="I have wrote down all 33 words"
+            android:text="@string/i_have_wrote_down_all_33_words"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_18"
             android:focusable="true"
@@ -201,7 +194,6 @@
             android:includeFontPadding="false"
             app:fontFamily="@font/source_sans_pro"
             android:visibility="visible" />
-
 
     </RelativeLayout>
 

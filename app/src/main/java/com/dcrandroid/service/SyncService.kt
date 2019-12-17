@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.R
 import com.dcrandroid.util.PreferenceUtil
+import com.dcrandroid.util.TimeUtils
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
@@ -116,7 +117,7 @@ class SyncService : Service(), SyncProgressListener {
 
     private fun publishProgress(remainingTime: Long, syncProgress: Int){
         contentTitle = getString(R.string.synchronizing)
-        contentText = Utils.getSyncTimeRemaining(remainingTime, syncProgress, false, this)
+        contentText = TimeUtils.getSyncTimeRemaining(remainingTime, syncProgress, this)
         showNotification()
     }
 

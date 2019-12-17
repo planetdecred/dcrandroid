@@ -6,7 +6,6 @@
 
 package com.dcrandroid.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -45,7 +44,6 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
     }
 
     fun reloadList(){
-        println("Reloadinng list")
         wallets.clear()
         wallets.addAll(multiWallet!!.openedWalletsList())
         notifyDataSetChanged()
@@ -166,21 +164,7 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
                         val intent = Intent(context, WalletSettings::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         launchIntent(intent, WALLET_SETTINGS_REQUEST_CODE)
-
                     }
-//                    3 -> {
-//                        val intent = Intent(context, ValidateAddress::class.java)
-//                        intent.putExtra(Constants.WALLET_ID, wallet.id)
-//                        context.startActivity(intent)
-//                    }
-//                    6 -> {
-//                        println("Deleting Wallet")
-//                        if(!multiWallet!!.isSyncing && !multiWallet.isSynced){
-//                            multiWallet.deleteWallet(wallet.id, "".toByteArray())
-//                        }else{
-//                            SnackBar.showError(context, R.string.cancel_sync_create_wallet)
-//                        }
-//                    }
                 }
             }
         }

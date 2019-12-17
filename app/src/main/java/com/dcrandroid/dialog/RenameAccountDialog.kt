@@ -41,6 +41,7 @@ class RenameAccountDialog(private val currentName: String, private val isWallet:
                 setHint(R.string.account_name)
             }
 
+            editText.setSingleLine(true)
             editText.setText(currentName)
             editText.requestFocus()
             editText.setSelection(0, currentName.length)
@@ -56,7 +57,7 @@ class RenameAccountDialog(private val currentName: String, private val isWallet:
             btn_cancel.isEnabled = false
             accountNameInput.editText.isEnabled = false
 
-            val exception = rename(accountNameInput.validatedInput!!)
+            val exception = rename(accountNameInput.validatedInput!!.trim())
             if (exception != null) {
                 it.isEnabled = true
                 btn_cancel.isEnabled = true

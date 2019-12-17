@@ -164,6 +164,10 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
             loadedAll = true
             loading.set(false)
             showHideList()
+
+            if(!loadMore){
+                transactions.clear()
+            }
             return@launch
         }
 

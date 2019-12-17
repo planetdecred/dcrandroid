@@ -62,9 +62,6 @@ class SettingsActivity: BaseActivity(), ViewTreeObserver.OnScrollChangedListener
             ChangePassUtil(this, null).begin()
         }
 
-        ListPreference(this, Dcrlibwallet.IncomingTxNotificationsConfigKey, Constants.DEF_TX_NOTIFICATION,
-                R.array.notification_options, incoming_transactions)
-
         setCurrencyConversionSummary(multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION))
         ListPreference(this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION,
                 R.array.currency_conversion, currency_conversion){

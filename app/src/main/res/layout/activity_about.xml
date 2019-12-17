@@ -7,7 +7,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/colorBackground"
     android:layout_width="match_parent"
@@ -57,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/app_bar_title"
                     android:text="@string/about"
-                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="@color/darkBlueTextColor"
                     android:includeFontPadding="false"

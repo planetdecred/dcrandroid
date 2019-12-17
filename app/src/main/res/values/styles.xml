@@ -8,8 +8,7 @@
     <!-- LightTheme -->
     <style name="LightTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/turquoise</item>
         <item name="colorControlHighlight">@color/whiteRipple</item>

@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.multi_wallet_fetch_headers.view.*
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.TimeUtils
 import com.dcrandroid.util.Utils
 
 class MultiWalletSyncDetailsAdapter(private val context: Context, private var openedWallets: List<Long>): RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
@@ -53,7 +54,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
 
                 // ## days behind
                 val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - wallet.bestBlockTimeStamp
-                holder.daysBehind.text = Utils.getDaysBehind(lastHeaderRelativeTime, context)
+                holder.daysBehind.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
             }
 
         }else{
@@ -69,7 +70,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
 
                 // ## days behind
                 val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - fetchProgressReport!!.currentHeaderTimestamp
-                holder.daysBehind.text = Utils.getDaysBehind(lastHeaderRelativeTime, context)
+                holder.daysBehind.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
             }
         }
 

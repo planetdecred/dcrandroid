@@ -99,12 +99,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="welcome_title">Welcome to Decred Wallet.</string>
     <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual. The wallet will connect to p2p nodes to download the blockchain headers, and will fetch only the blocks that you need while preserving your privacy.</string>
-    <string name="less_than_one_day">&lt;1 day</string>
-    <string name="less_than_one_day_ago">&lt;1 day ago</string>
-    <string name="one_day">1 day</string>
-    <string name="one_day_ago">1 day ago</string>
-    <string name="multiple_days">%1$d days</string>
-    <string name="multiple_days_ago">%1$d days ago</string>
     <string name="_copy">Copy</string>
     <string name="copied_successfully">Copied successfully.</string>
     <string name="all">All</string>
@@ -323,11 +317,6 @@
     <string name="remaining_minute_sync_eta">%1$d%% completed, %2$d min remaining.</string>
     <string name="remaining_seconds_sync_eta">%1$d%% completed, %2$d sec remaining.</string>
     <string name="remaining_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds remaining.</string>
-    <string name="left_minute_sync_eta">%1$d%% completed, %2$d min left.</string>
-    <string name="left_seconds_sync_eta">%1$d%% completed, %2$d sec left.</string>
-    <string name="left_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds left.</string>
-    <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
-    <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
     <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
     <string name="overview_rescan_height_format">Scanning %1$d of %2$d block headers.\n%3$d%% through step 3 of 3.</string>
     <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$d%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
@@ -601,16 +590,20 @@
     <!--Landing page-->
 
     <!--Time-->
+    <string name="am">am</string>
+    <string name="pm">pm</string>
     <string name="time_left_minutes">%1$d min left</string>
     <string name="time_left_seconds">%1$d sec left</string>
     <string name="days_behind">%1$d days behind</string>
-    <string name="one_days_behind">1 day behind</string>
-    <string name="am">am</string>
-    <string name="pm">pm</string>
+    <string name="one_day_behind">1 day behind</string>
     <string name="x_days">%1$d days</string>
+    <string name="one_day">1 day</string>
     <string name="x_hours">%1$d hours</string>
+    <string name="one_hour">1 hours</string>
     <string name="x_minutes">%1$d minutes</string>
+    <string name="one_minute">1 minute</string>
     <string name="x_seconds">%1$d seconds</string>
+    <string name="one_second">1 second</string>
     <!--/Time-->
 
     <string name="connected_peers_count">Connected peers count</string>
@@ -802,5 +795,10 @@
     <string name="use_pin">Use PIN</string>
     <string name="startup_security_changed">Startup PIN/password changed</string>
     <string name="spending_passphrase_changed">Spending PIN/password changed</string>
+    <string name="wallets_log">Wallets log</string>
+    <string name="write_down_seed_phrase">Write down seed phrase</string>
+    <string name="step_1_2">Step 1/2</string>
+    <string name="your_33_word_seed_phrase">Your 33-word seed phrase</string>
+    <string name="i_have_wrote_down_all_33_words">I have wrote down all 33 words</string>
 
 </resources>
