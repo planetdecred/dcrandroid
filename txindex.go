@@ -1,19 +1,17 @@
 package dcrlibwallet
 
 import (
-	"context"
-
 	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrwallet/wallet"
+	w "github.com/decred/dcrwallet/wallet/v3"
 	"github.com/raedahgroup/dcrlibwallet/txindex"
 )
 
-func (lw *LibWallet) IndexTransactions(afterIndexing func()) error {
-	ctx, _ := lw.contextWithShutdownCancel(context.Background())
+func (wallet *Wallet) IndexTransactions() error {
+	ctx := wallet.shutdownContext()
 
 	var totalIndex int32
 	var txEndHeight uint32
-	rangeFn := func(block *wallet.Block) (bool, error) {
+	rangeFn := func(block *w.Block) (bool, error) {
 		for _, transaction := range block.Transactions {
 
 			var blockHash *chainhash.Hash
@@ -24,14 +22,14 @@ func (lw *LibWallet) IndexTransactions(afterIndexing func()) error {
 				blockHash = nil
 			}
 
-			tx, err := lw.decodeTransactionWithTxSummary(&transaction, blockHash)
+			tx, err := wallet.decodeTransactionWithTxSummary(&transaction, blockHash)
 			if err != nil {
 				return false, err
 			}
 
-			err = lw.txDB.SaveOrUpdate(&Transaction{}, tx)
+			_, err = wallet.txDB.SaveOrUpdate(&Transaction{}, tx)
 			if err != nil {
-				log.Errorf("Index tx replace tx err :%v", err)
+				log.Errorf("[%d] Index tx replace tx err : %v", wallet.ID, err)
 				return false, err
 			}
 
@@ -40,13 +38,13 @@ func (lw *LibWallet) IndexTransactions(afterIndexing func()) error {
 
 		if block.Header != nil {
 			txEndHeight = block.Header.Height
-			err := lw.txDB.SaveLastIndexPoint(int32(txEndHeight))
+			err := wallet.txDB.SaveLastIndexPoint(int32(txEndHeight))
 			if err != nil {
-				log.Errorf("Set tx index end block height error: ", err)
+				log.Errorf("[%d] Set tx index end block height error: ", wallet.ID, err)
 				return false, err
 			}
 
-			log.Infof("Index saved for transactions in block %d", txEndHeight)
+			log.Debugf("[%d] Index saved for transactions in block %d", wallet.ID, txEndHeight)
 		}
 
 		select {
@@ -57,27 +55,26 @@ func (lw *LibWallet) IndexTransactions(afterIndexing func()) error {
 		}
 	}
 
-	beginHeight, err := lw.txDB.ReadIndexingStartBlock()
+	beginHeight, err := wallet.txDB.ReadIndexingStartBlock()
 	if err != nil {
-		log.Errorf("Get tx indexing start point error: %v", err)
+		log.Errorf("[%d] Get tx indexing start point error: %v", wallet.ID, err)
 		return err
 	}
 
-	endHeight := lw.GetBestBlock()
+	endHeight := wallet.GetBestBlock()
 
-	startBlock := wallet.NewBlockIdentifierFromHeight(beginHeight)
-	endBlock := wallet.NewBlockIdentifierFromHeight(endHeight)
+	startBlock := w.NewBlockIdentifierFromHeight(beginHeight)
+	endBlock := w.NewBlockIdentifierFromHeight(endHeight)
 
 	defer func() {
-		afterIndexing()
-		count, err := lw.txDB.Count(txindex.TxFilterAll, &Transaction{})
+		count, err := wallet.txDB.Count(txindex.TxFilterAll, &Transaction{})
 		if err != nil {
-			log.Errorf("Post-indexing tx count error :%v", err)
-			return
+			log.Errorf("[%d] Post-indexing tx count error :%v", wallet.ID, err)
+		} else if count > 0 {
+			log.Debugf("[%d] Transaction index finished at %d, %d transaction(s) indexed in total", wallet.ID, txEndHeight, count)
 		}
-		log.Infof("Transaction index finished at %d, %d transaction(s) indexed in total", txEndHeight, count)
 	}()
 
-	log.Infof("Indexing transactions start height: %d, end height: %d", beginHeight, endHeight)
-	return lw.wallet.GetTransactions(rangeFn, startBlock, endBlock)
+	log.Debugf("[%d] Indexing transactions start height: %d, end height: %d", wallet.ID, beginHeight, endHeight)
+	return wallet.internal.GetTransactions(ctx, rangeFn, startBlock, endBlock)
 }

@@ -26,13 +26,18 @@ func (db *DB) ReadIndexingStartBlock() (int32, error) {
 // Read queries the db for `limit` count transactions that match the specified `txFilter`
 // starting from the specified `offset`; and saves the transactions found to the received `transactions` object.
 // `transactions` should be a pointer to a slice of Transaction objects.
-func (db *DB) Read(offset, limit, txFilter int32, transactions interface{}) error {
+func (db *DB) Read(offset, limit, txFilter int32, newestFirst bool, transactions interface{}) error {
 	query := db.prepareTxQuery(txFilter)
 	if offset > 0 {
 		query = query.Skip(int(offset))
 	}
 	if limit > 0 {
 		query = query.Limit(int(limit))
+	}
+	if newestFirst {
+		query = query.OrderBy("Timestamp").Reverse()
+	} else {
+		query = query.OrderBy("Timestamp")
 	}
 
 	err := query.Find(transactions)

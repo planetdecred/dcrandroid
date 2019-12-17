@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/decred/dcrwallet/errors"
+	"github.com/decred/dcrwallet/errors/v2"
 )
 
-func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
-	accountsResponse, err := lw.GetAccountsRaw(requiredConfirmations)
+func (wallet *Wallet) GetAccounts(requiredConfirmations int32) (string, error) {
+	accountsResponse, err := wallet.GetAccountsRaw(requiredConfirmations)
 	if err != nil {
 		return "", nil
 	}
@@ -17,19 +17,20 @@ func (lw *LibWallet) GetAccounts(requiredConfirmations int32) (string, error) {
 	return string(result), nil
 }
 
-func (lw *LibWallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, error) {
-	resp, err := lw.wallet.Accounts()
+func (wallet *Wallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, error) {
+	resp, err := wallet.internal.Accounts(wallet.shutdownContext())
 	if err != nil {
 		return nil, err
 	}
 	accounts := make([]*Account, len(resp.Accounts))
 	for i, account := range resp.Accounts {
-		balance, err := lw.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
+		balance, err := wallet.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
 		if err != nil {
 			return nil, err
 		}
 
 		accounts[i] = &Account{
+			WalletID:         wallet.ID,
 			Number:           int32(account.AccountNumber),
 			Name:             account.AccountName,
 			TotalBalance:     int64(account.TotalBalance),
@@ -45,18 +46,42 @@ func (lw *LibWallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, err
 		CurrentBlockHash:   resp.CurrentBlockHash[:],
 		CurrentBlockHeight: resp.CurrentBlockHeight,
 		Acc:                accounts,
-		ErrorOccurred:      false,
 	}, nil
 }
 
-func (lw *LibWallet) AccountsIterator(requiredConfirmations int32) (*AccountsIterator, error) {
-	resp, err := lw.wallet.Accounts()
+func (wallet *Wallet) GetAccount(accountNumber int32, requiredConfirmations int32) (*Account, error) {
+	props, err := wallet.internal.AccountProperties(wallet.shutdownContext(), uint32(accountNumber))
+	if err != nil {
+		return nil, err
+	}
+
+	balance, err := wallet.GetAccountBalance(accountNumber, requiredConfirmations)
+	if err != nil {
+		return nil, err
+	}
+
+	account := &Account{
+		WalletID:         wallet.ID,
+		Number:           accountNumber,
+		Name:             props.AccountName,
+		TotalBalance:     balance.Total,
+		Balance:          balance,
+		ExternalKeyCount: int32(props.LastUsedExternalIndex + 20),
+		InternalKeyCount: int32(props.LastUsedInternalIndex + 20),
+		ImportedKeyCount: int32(props.ImportedKeyCount),
+	}
+
+	return account, nil
+}
+
+func (wallet *Wallet) AccountsIterator(requiredConfirmations int32) (*AccountsIterator, error) {
+	resp, err := wallet.internal.Accounts(wallet.shutdownContext())
 	if err != nil {
 		return nil, err
 	}
 	accounts := make([]*Account, len(resp.Accounts))
 	for i, account := range resp.Accounts {
-		balance, err := lw.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
+		balance, err := wallet.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
 		if err != nil {
 			return nil, err
 		}
@@ -84,6 +109,7 @@ func (accountsInterator *AccountsIterator) Next() *Account {
 		accountsInterator.currentIndex++
 		return account
 	}
+
 	return nil
 }
 
@@ -91,8 +117,8 @@ func (accountsInterator *AccountsIterator) Reset() {
 	accountsInterator.currentIndex = 0
 }
 
-func (lw *LibWallet) GetAccountBalance(accountNumber int32, requiredConfirmations int32) (*Balance, error) {
-	balance, err := lw.wallet.CalculateAccountBalance(uint32(accountNumber), requiredConfirmations)
+func (wallet *Wallet) GetAccountBalance(accountNumber int32, requiredConfirmations int32) (*Balance, error) {
+	balance, err := wallet.internal.CalculateAccountBalance(wallet.shutdownContext(), uint32(accountNumber), requiredConfirmations)
 	if err != nil {
 		return nil, err
 	}
@@ -108,8 +134,8 @@ func (lw *LibWallet) GetAccountBalance(accountNumber int32, requiredConfirmation
 	}, nil
 }
 
-func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations int32) (int64, error) {
-	bals, err := lw.wallet.CalculateAccountBalance(uint32(account), requiredConfirmations)
+func (wallet *Wallet) SpendableForAccount(account int32, requiredConfirmations int32) (int64, error) {
+	bals, err := wallet.internal.CalculateAccountBalance(wallet.shutdownContext(), uint32(account), requiredConfirmations)
 	if err != nil {
 		log.Error(err)
 		return 0, translateError(err)
@@ -117,16 +143,7 @@ func (lw *LibWallet) SpendableForAccount(account int32, requiredConfirmations in
 	return int64(bals.Spendable), nil
 }
 
-func (lw *LibWallet) NextAccount(accountName string, privPass []byte) error {
-	_, err := lw.NextAccountRaw(accountName, privPass)
-	if err != nil {
-		log.Error(err)
-		return err
-	}
-	return nil
-}
-
-func (lw *LibWallet) NextAccountRaw(accountName string, privPass []byte) (uint32, error) {
+func (wallet *Wallet) NextAccount(accountName string, privPass []byte) (int32, error) {
 	lock := make(chan time.Time, 1)
 	defer func() {
 		for i := range privPass {
@@ -134,22 +151,30 @@ func (lw *LibWallet) NextAccountRaw(accountName string, privPass []byte) (uint32
 		}
 		lock <- time.Time{} // send matters, not the value
 	}()
-	err := lw.wallet.Unlock(privPass, lock)
+
+	ctx := wallet.shutdownContext()
+	err := wallet.internal.Unlock(ctx, privPass, lock)
 	if err != nil {
 		log.Error(err)
 		return 0, errors.New(ErrInvalidPassphrase)
 	}
 
-	return lw.wallet.NextAccount(accountName)
+	accountNumber, err := wallet.internal.NextAccount(ctx, accountName)
+
+	return int32(accountNumber), err
 }
 
-func (lw *LibWallet) RenameAccount(accountNumber int32, newName string) error {
-	err := lw.wallet.RenameAccount(uint32(accountNumber), newName)
-	return err
+func (wallet *Wallet) RenameAccount(accountNumber int32, newName string) error {
+	err := wallet.internal.RenameAccount(wallet.shutdownContext(), uint32(accountNumber), newName)
+	if err != nil {
+		return translateError(err)
+	}
+
+	return nil
 }
 
-func (lw *LibWallet) AccountName(accountNumber int32) string {
-	name, err := lw.AccountNameRaw(uint32(accountNumber))
+func (wallet *Wallet) AccountName(accountNumber int32) string {
+	name, err := wallet.AccountNameRaw(uint32(accountNumber))
 	if err != nil {
 		log.Error(err)
 		return "Account not found"
@@ -157,10 +182,10 @@ func (lw *LibWallet) AccountName(accountNumber int32) string {
 	return name
 }
 
-func (lw *LibWallet) AccountNameRaw(accountNumber uint32) (string, error) {
-	return lw.wallet.AccountName(accountNumber)
+func (wallet *Wallet) AccountNameRaw(accountNumber uint32) (string, error) {
+	return wallet.internal.AccountName(wallet.shutdownContext(), accountNumber)
 }
 
-func (lw *LibWallet) AccountNumber(accountName string) (uint32, error) {
-	return lw.wallet.AccountNumber(accountName)
+func (wallet *Wallet) AccountNumber(accountName string) (uint32, error) {
+	return wallet.internal.AccountNumber(wallet.shutdownContext(), accountName)
 }

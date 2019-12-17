@@ -2,30 +2,35 @@ package txindex
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/asdine/storm"
-	"reflect"
+	"github.com/decred/dcrwallet/errors/v2"
 )
 
 const KeyEndBlock = "EndBlock"
 
-func (db *DB) SaveOrUpdate(emptyTxPointer, tx interface{}) error {
+// SaveOrUpdate saves a transaction to the database and would overwrite
+// if a transaction with same hash exists
+func (db *DB) SaveOrUpdate(emptyTxPointer, tx interface{}) (overwritten bool, err error) {
 	v := reflect.ValueOf(tx)
 	txHash := reflect.Indirect(v).FieldByName("Hash").String()
-	err := db.txDB.One("Hash", txHash, emptyTxPointer)
+	err = db.txDB.One("Hash", txHash, emptyTxPointer)
 	if err != nil && err != storm.ErrNotFound {
-		return fmt.Errorf("error checking if tx was already indexed: %s", err.Error())
+		err = errors.E("error checking if tx was already indexed: %s", err.Error())
+		return
 	}
 
-	if err == nil {
-		// delete old tx before saving new
-		err = db.txDB.DeleteStruct(emptyTxPointer)
-		if err != nil {
-			return fmt.Errorf("error deleting previously indexed tx: %s", err.Error())
-		}
+	v2 := reflect.ValueOf(emptyTxPointer)
+	timestamp := reflect.Indirect(v2).FieldByName("Timestamp").Int()
+	if timestamp > 0 {
+		overwritten = true
+		// delete old tx before saving new (if it exists)
+		db.txDB.DeleteStruct(emptyTxPointer)
 	}
 
-	return db.txDB.Save(tx)
+	err = db.txDB.Save(tx)
+	return
 }
 
 func (db *DB) SaveLastIndexPoint(endBlockHeight int32) error {

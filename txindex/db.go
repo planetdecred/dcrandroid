@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/asdine/storm"
-	"go.etcd.io/bbolt"
+	bolt "go.etcd.io/bbolt"
 )
 
 const (

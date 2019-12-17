@@ -3,16 +3,18 @@ package dcrlibwallet
 import (
 	"fmt"
 	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrwallet/wallet"
+	w "github.com/decred/dcrwallet/wallet/v3"
 )
 
-func (lw *LibWallet) decodeTransactionWithTxSummary(txSummary *wallet.TransactionSummary,
+const BlockHeightInvalid int32 = -1
+
+func (wallet *Wallet) decodeTransactionWithTxSummary(txSummary *w.TransactionSummary,
 	blockHash *chainhash.Hash) (*Transaction, error) {
 
-	var blockHeight int32 = -1
+	var blockHeight int32 = BlockHeightInvalid
 	if blockHash != nil {
-		blockIdentifier := wallet.NewBlockIdentifierFromHash(blockHash)
-		blockInfo, err := lw.wallet.BlockInfo(blockIdentifier)
+		blockIdentifier := w.NewBlockIdentifierFromHash(blockHash)
+		blockInfo, err := wallet.internal.BlockInfo(wallet.shutdownContext(), blockIdentifier)
 		if err != nil {
 			log.Error(err)
 		} else {
@@ -28,7 +30,7 @@ func (lw *LibWallet) decodeTransactionWithTxSummary(txSummary *wallet.Transactio
 			AmountIn: int64(input.PreviousAmount),
 			WalletAccount: &WalletAccount{
 				AccountNumber: int32(accountNumber),
-				AccountName:   lw.AccountName(accountNumber),
+				AccountName:   wallet.AccountName(accountNumber),
 			},
 		}
 	}
@@ -40,15 +42,16 @@ func (lw *LibWallet) decodeTransactionWithTxSummary(txSummary *wallet.Transactio
 			Index:     int32(output.Index),
 			AmountOut: int64(output.Amount),
 			Internal:  output.Internal,
-			Address:   output.Address.EncodeAddress(),
+			Address:   output.Address.Address(),
 			WalletAccount: &WalletAccount{
 				AccountNumber: accountNumber,
-				AccountName:   lw.AccountName(accountNumber),
+				AccountName:   wallet.AccountName(accountNumber),
 			},
 		}
 	}
 
 	walletTx := &TxInfoFromWallet{
+		WalletID:    wallet.ID,
 		BlockHeight: blockHeight,
 		Timestamp:   txSummary.Timestamp,
 		Hex:         fmt.Sprintf("%x", txSummary.Transaction),
@@ -56,5 +59,5 @@ func (lw *LibWallet) decodeTransactionWithTxSummary(txSummary *wallet.Transactio
 		Outputs:     walletOutputs,
 	}
 
-	return DecodeTransaction(walletTx, lw.activeNet.Params)
+	return DecodeTransaction(walletTx, wallet.chainParams)
 }

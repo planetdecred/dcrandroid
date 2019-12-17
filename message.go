@@ -4,23 +4,24 @@ import (
 	"time"
 
 	"github.com/decred/dcrd/dcrec"
-	"github.com/decred/dcrd/dcrutil"
-	"github.com/decred/dcrwallet/errors"
-	"github.com/decred/dcrwallet/wallet"
-	"github.com/raedahgroup/dcrlibwallet/addresshelper"
+	"github.com/decred/dcrd/dcrutil/v2"
+	"github.com/decred/dcrwallet/errors/v2"
+	w "github.com/decred/dcrwallet/wallet/v3"
 )
 
-func (lw *LibWallet) SignMessage(passphrase []byte, address string, message string) ([]byte, error) {
+func (wallet *Wallet) SignMessage(passphrase []byte, address string, message string) ([]byte, error) {
 	lock := make(chan time.Time, 1)
 	defer func() {
 		lock <- time.Time{}
 	}()
-	err := lw.wallet.Unlock(passphrase, lock)
+
+	ctx := wallet.shutdownContext()
+	err := wallet.internal.Unlock(ctx, passphrase, lock)
 	if err != nil {
 		return nil, translateError(err)
 	}
 
-	addr, err := addresshelper.DecodeForNetwork(address, lw.wallet.ChainParams())
+	addr, err := dcrutil.DecodeAddress(address, wallet.chainParams)
 	if err != nil {
 		return nil, translateError(err)
 	}
@@ -29,14 +30,14 @@ func (lw *LibWallet) SignMessage(passphrase []byte, address string, message stri
 	switch a := addr.(type) {
 	case *dcrutil.AddressSecpPubKey:
 	case *dcrutil.AddressPubKeyHash:
-		if a.DSA(a.Net()) != dcrec.STEcdsaSecp256k1 {
+		if a.DSA() != dcrec.STEcdsaSecp256k1 {
 			return nil, errors.New(ErrInvalidAddress)
 		}
 	default:
 		return nil, errors.New(ErrInvalidAddress)
 	}
 
-	sig, err = lw.wallet.SignMessage(message, addr)
+	sig, err = wallet.internal.SignMessage(ctx, message, addr)
 	if err != nil {
 		return nil, translateError(err)
 	}
@@ -44,10 +45,10 @@ func (lw *LibWallet) SignMessage(passphrase []byte, address string, message stri
 	return sig, nil
 }
 
-func (lw *LibWallet) VerifyMessage(address string, message string, signatureBase64 string) (bool, error) {
+func (wallet *Wallet) VerifyMessage(address string, message string, signatureBase64 string) (bool, error) {
 	var valid bool
 
-	addr, err := dcrutil.DecodeAddress(address)
+	addr, err := dcrutil.DecodeAddress(address, wallet.chainParams)
 	if err != nil {
 		return false, translateError(err)
 	}
@@ -62,14 +63,14 @@ func (lw *LibWallet) VerifyMessage(address string, message string, signatureBase
 	switch a := addr.(type) {
 	case *dcrutil.AddressSecpPubKey:
 	case *dcrutil.AddressPubKeyHash:
-		if a.DSA(a.Net()) != dcrec.STEcdsaSecp256k1 {
+		if a.DSA() != dcrec.STEcdsaSecp256k1 {
 			return false, errors.New(ErrInvalidAddress)
 		}
 	default:
 		return false, errors.New(ErrInvalidAddress)
 	}
 
-	valid, err = wallet.VerifyMessage(message, addr, signature)
+	valid, err = w.VerifyMessage(message, addr, signature, wallet.chainParams)
 	if err != nil {
 		return false, translateError(err)
 	}

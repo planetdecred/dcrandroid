@@ -19,10 +19,10 @@ package dcrlibwallet
 import "strings"
 
 func PGPWordList() []string {
-	return strings.Split(alternatingWords, "\n")
+	return strings.Split(AlternatingWords, "\n")
 }
 
-const alternatingWords = `aardvark
+const AlternatingWords = `aardvark
 adroitness
 absurd
 adviser

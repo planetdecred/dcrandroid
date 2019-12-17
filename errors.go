@@ -1,15 +1,20 @@
 package dcrlibwallet
 
-import "github.com/decred/dcrwallet/errors"
+import "github.com/decred/dcrwallet/errors/v2"
 
 const (
 	// Error Codes
 	ErrInsufficientBalance   = "insufficient_balance"
 	ErrInvalid               = "invalid"
 	ErrWalletNotLoaded       = "wallet_not_loaded"
+	ErrWalletNameExist       = "wallet_name_exists"
+	ErrReservedWalletName    = "wallet_name_reserved"
+	ErrWalletIsWatchOnly     = "watch_only_wallet"
+	ErrUnusableSeed          = "unusable_seed"
 	ErrPassphraseRequired    = "passphrase_required"
 	ErrInvalidPassphrase     = "invalid_passphrase"
 	ErrNotConnected          = "not_connected"
+	ErrExist                 = "exists"
 	ErrNotExist              = "not_exists"
 	ErrEmptySeed             = "empty_seed"
 	ErrInvalidAddress        = "invalid_address"

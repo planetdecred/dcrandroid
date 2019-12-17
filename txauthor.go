@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/decred/dcrd/dcrutil"
-	"github.com/decred/dcrd/txscript"
+	"github.com/decred/dcrd/dcrutil/v2"
+	"github.com/decred/dcrd/txscript/v2"
 	"github.com/decred/dcrd/wire"
-	"github.com/decred/dcrwallet/errors"
-	"github.com/decred/dcrwallet/wallet"
-	"github.com/decred/dcrwallet/wallet/txauthor"
-	"github.com/decred/dcrwallet/wallet/txrules"
+	"github.com/decred/dcrwallet/errors/v2"
+	w "github.com/decred/dcrwallet/wallet/v3"
+	"github.com/decred/dcrwallet/wallet/v3/txauthor"
+	"github.com/decred/dcrwallet/wallet/v3/txrules"
 	"github.com/raedahgroup/dcrlibwallet/txhelper"
 )
 
@@ -19,15 +19,15 @@ type TxAuthor struct {
 	sendFromAccount       uint32
 	destinations          []TransactionDestination
 	requiredConfirmations int32
-	lw                    *LibWallet
+	wallet                *Wallet
 }
 
-func (lw *LibWallet) NewUnsignedTx(sourceAccountNumber, requiredConfirmations int32) *TxAuthor {
+func (wallet *Wallet) NewUnsignedTx(sourceAccountNumber, requiredConfirmations int32) *TxAuthor {
 	return &TxAuthor{
 		sendFromAccount:       uint32(sourceAccountNumber),
 		destinations:          make([]TransactionDestination, 0),
 		requiredConfirmations: requiredConfirmations,
-		lw:                    lw,
+		wallet:                wallet,
 	}
 }
 
@@ -81,7 +81,7 @@ func (tx *TxAuthor) EstimateMaxSendAmount() (*Amount, error) {
 		return nil, err
 	}
 
-	spendableAccountBalance, err := tx.lw.SpendableForAccount(int32(tx.sendFromAccount), tx.requiredConfirmations)
+	spendableAccountBalance, err := tx.wallet.SpendableForAccount(int32(tx.sendFromAccount), tx.requiredConfirmations)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (tx *TxAuthor) Broadcast(privatePassphrase []byte) ([]byte, error) {
 		}
 	}()
 
-	n, err := tx.lw.wallet.NetworkBackend()
+	n, err := tx.wallet.internal.NetworkBackend()
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -137,7 +137,8 @@ func (tx *TxAuthor) Broadcast(privatePassphrase []byte) ([]byte, error) {
 		lock <- time.Time{}
 	}()
 
-	err = tx.lw.wallet.Unlock(privatePassphrase, lock)
+	ctx := tx.wallet.shutdownContext()
+	err = tx.wallet.internal.Unlock(ctx, privatePassphrase, lock)
 	if err != nil {
 		log.Error(err)
 		return nil, errors.New(ErrInvalidPassphrase)
@@ -145,7 +146,7 @@ func (tx *TxAuthor) Broadcast(privatePassphrase []byte) ([]byte, error) {
 
 	var additionalPkScripts map[wire.OutPoint][]byte
 
-	invalidSigs, err := tx.lw.wallet.SignTransaction(&msgTx, txscript.SigHashAll, additionalPkScripts, nil, nil)
+	invalidSigs, err := tx.wallet.internal.SignTransaction(ctx, &msgTx, txscript.SigHashAll, additionalPkScripts, nil, nil)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -171,7 +172,7 @@ func (tx *TxAuthor) Broadcast(privatePassphrase []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	txHash, err := tx.lw.wallet.PublishTransaction(&msgTx, serializedTransaction.Bytes(), n)
+	txHash, err := tx.wallet.internal.PublishTransaction(ctx, &msgTx, serializedTransaction.Bytes(), n)
 	if err != nil {
 		return nil, translateError(err)
 	}
@@ -181,8 +182,10 @@ func (tx *TxAuthor) Broadcast(privatePassphrase []byte) ([]byte, error) {
 func (tx *TxAuthor) constructTransaction() (*txauthor.AuthoredTx, error) {
 	var err error
 	var outputs = make([]*wire.TxOut, 0)
-	var outputSelectionAlgorithm wallet.OutputSelectionAlgorithm = wallet.OutputSelectionAlgorithmDefault
+	var outputSelectionAlgorithm w.OutputSelectionAlgorithm = w.OutputSelectionAlgorithmDefault
 	var changeSource txauthor.ChangeSource
+
+	ctx := tx.wallet.shutdownContext()
 
 	for _, destination := range tx.destinations {
 		// validate the amount to send to this destination address
@@ -197,19 +200,30 @@ func (tx *TxAuthor) constructTransaction() (*txauthor.AuthoredTx, error) {
 
 		if destination.SendMax {
 			// This is a send max destination, set output selection algo to all.
-			outputSelectionAlgorithm = wallet.OutputSelectionAlgorithmAll
+			outputSelectionAlgorithm = w.OutputSelectionAlgorithmAll
 
 			// Use this destination address to make a changeSource rather than a tx output.
-			changeSource, err = txhelper.MakeTxChangeSource(destination.Address)
+			changeSource, err = txhelper.MakeTxChangeSource(destination.Address, tx.wallet.chainParams)
 			if err != nil {
 				log.Errorf("constructTransaction: error preparing change source: %v", err)
 				return nil, fmt.Errorf("max amount change source error: %v", err)
 			}
 
 			continue // do not prepare a tx output for this destination
+		} else {
+			address, err := tx.wallet.internal.NewChangeAddress(ctx, tx.sendFromAccount)
+			if err != nil {
+				return nil, fmt.Errorf("change address error: %v", err)
+			}
+
+			changeSource, err = txhelper.MakeTxChangeSource(address.String(), tx.wallet.chainParams)
+			if err != nil {
+				log.Errorf("constructTransaction: error preparing change source: %v", err)
+				return nil, fmt.Errorf("change source error: %v", err)
+			}
 		}
 
-		output, err := txhelper.MakeTxOutput(destination.Address, destination.AtomAmount)
+		output, err := txhelper.MakeTxOutput(destination.Address, destination.AtomAmount, tx.wallet.chainParams)
 		if err != nil {
 			log.Errorf("constructTransaction: error preparing tx output: %v", err)
 			return nil, fmt.Errorf("make tx output error: %v", err)
@@ -218,6 +232,6 @@ func (tx *TxAuthor) constructTransaction() (*txauthor.AuthoredTx, error) {
 		outputs = append(outputs, output)
 	}
 
-	return tx.lw.wallet.NewUnsignedTransaction(outputs, txrules.DefaultRelayFeePerKb, tx.sendFromAccount,
+	return tx.wallet.internal.NewUnsignedTransaction(ctx, outputs, txrules.DefaultRelayFeePerKb, tx.sendFromAccount,
 		tx.requiredConfirmations, outputSelectionAlgorithm, changeSource)
 }

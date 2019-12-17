@@ -10,8 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/decred/dcrd/dcrutil"
-	"github.com/decred/dcrd/hdkeychain"
+	"github.com/decred/dcrd/dcrutil/v2"
+	"github.com/decred/dcrd/hdkeychain/v2"
+	"github.com/decred/dcrwallet/errors/v2"
 	"github.com/decred/dcrwallet/walletseed"
 )
 
@@ -37,21 +38,32 @@ const (
 	DefaultRequiredConfirmations = 2
 )
 
-func (lw *LibWallet) listenForShutdown() {
+func (mw *MultiWallet) listenForShutdown() {
 
-	lw.cancelFuncs = make([]context.CancelFunc, 0)
-	lw.shuttingDown = make(chan bool)
+	mw.cancelFuncs = make([]context.CancelFunc, 0)
+	mw.shuttingDown = make(chan bool)
 	go func() {
-		<-lw.shuttingDown
-		for _, cancel := range lw.cancelFuncs {
+		<-mw.shuttingDown
+		for _, cancel := range mw.cancelFuncs {
 			cancel()
 		}
 	}()
 }
 
-func (lw *LibWallet) contextWithShutdownCancel(ctx context.Context) (context.Context, context.CancelFunc) {
-	ctx, cancel := context.WithCancel(ctx)
-	lw.cancelFuncs = append(lw.cancelFuncs, cancel)
+func (wallet *Wallet) shutdownContextWithCancel() (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithCancel(context.Background())
+	wallet.cancelFuncs = append(wallet.cancelFuncs, cancel)
+	return ctx, cancel
+}
+
+func (wallet *Wallet) shutdownContext() (ctx context.Context) {
+	ctx, _ = wallet.shutdownContextWithCancel()
+	return
+}
+
+func (mw *MultiWallet) contextWithShutdownCancel() (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithCancel(context.Background())
+	mw.cancelFuncs = append(mw.cancelFuncs, cancel)
 	return ctx, cancel
 }
 
@@ -181,4 +193,17 @@ func CalculateDaysBehind(lastHeaderTime int64) string {
 
 func roundUp(n float64) int32 {
 	return int32(math.Round(n))
+}
+
+func (mw *MultiWallet) ValidateExtPubKey(extendedPubKey string) error {
+	_, err := hdkeychain.NewKeyFromString(extendedPubKey, mw.chainParams)
+	if err != nil {
+		if err == hdkeychain.ErrInvalidChild {
+			return errors.New(ErrUnusableSeed)
+		}
+
+		return errors.New(ErrInvalid)
+	}
+
+	return nil
 }

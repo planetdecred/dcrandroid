@@ -5,117 +5,112 @@ import (
 )
 
 const (
-	userConfigDbFilename = "config.db"
 	userConfigBucketName = "user_config"
 
 	LogLevelConfigKey = "log_level"
 
-	NewWalletSetUpConfigKey                 = "new_wallet_set_up"
-	InitialSyncCompletedConfigKey           = "initial_sync_complete"
-	IsStartupSecuritySetConfigKey           = "startup_security_set"
-	StartupSecurityTypeConfigKey            = "startup_security_type"
-	SpendingPassphraseSecurityTypeConfigKey = "spending_security_type"
-	DefaultWalletConfigKey                  = "default_wallet"
-	HiddenWalletPrefixConfigKey             = "hidden"
+	NewWalletSetUpConfigKey       = "new_wallet_set_up"
+	InitialSyncCompletedConfigKey = "initial_sync_complete"
+	DefaultWalletConfigKey        = "default_wallet"
+	HiddenWalletPrefixConfigKey   = "hidden"
 
-	NetworkModeConfigKey                = "network_mode"
-	SpvPersistentPeerAddressesConfigKey = "spv_peer_addresses"
-	RemoteServerIPConfigKey             = "remote_server_ip"
-	SyncOnCellularConfigKey             = "always_sync"
-
-	SpendUnconfirmedConfigKey = "spend_unconfirmed"
-	NotifyOnNewTxConfigKey    = "tx_notification_enabled"
-	LastTxHashConfigKey       = "last_tx_hash"
-
-	// todo should use this config value to implement cross-platform currency conversion feature
+	SpendUnconfirmedConfigKey   = "spend_unconfirmed"
 	CurrencyConversionConfigKey = "currency_conversion_option"
 
+	IsStartupSecuritySetConfigKey = "startup_security_set"
+	StartupSecurityTypeConfigKey  = "startup_security_type"
+	UseFingerprintConfigKey       = "use_fingerprint"
+
+	IncomingTxNotificationsConfigKey = "tx_notification_enabled"
+	BeepNewBlocksConfigKey           = "beep_new_blocks"
+
+	SyncOnCellularConfigKey             = "always_sync"
+	SpvPersistentPeerAddressesConfigKey = "spv_peer_addresses"
+	UserAgentConfigKey                  = "user_agent"
+
+	LastTxHashConfigKey = "last_tx_hash"
+
 	VSPHostConfigKey = "vsp_host"
+
+	PassphraseTypePin  int32 = 0
+	PassphraseTypePass int32 = 1
 )
 
-func (lw *LibWallet) SaveUserConfigValue(key string, value interface{}) error {
-	return lw.configDB.Set(userConfigBucketName, key, value)
+func (mw *MultiWallet) SaveUserConfigValue(key string, value interface{}) {
+	err := mw.db.Set(userConfigBucketName, key, value)
+	if err != nil {
+		log.Errorf("error setting config value for key: %s, error: %v", key, err)
+	}
 }
 
-func (lw *LibWallet) ReadUserConfigValue(key string, valueOut interface{}) error {
-	err := lw.configDB.Get(userConfigBucketName, key, valueOut)
+func (mw *MultiWallet) ReadUserConfigValue(key string, valueOut interface{}) error {
+	err := mw.db.Get(userConfigBucketName, key, valueOut)
 	if err != nil && err != storm.ErrNotFound {
-		return err
+		log.Errorf("error reading config value for key: %s, error: %v", key, err)
 	}
-	return nil
+	return err
 }
 
-func (lw *LibWallet) SetBoolConfigValueForKey(key string, value bool) {
-	err := lw.SaveUserConfigValue(key, value)
-	if err != nil {
-		log.Errorf("error setting config value: %v", err)
-	}
+func (mw *MultiWallet) SetBoolConfigValueForKey(key string, value bool) {
+	mw.SaveUserConfigValue(key, value)
 }
 
-func (lw *LibWallet) SetDoubleConfigValueForKey(key string, value float64) {
-	err := lw.SaveUserConfigValue(key, value)
-	if err != nil {
-		log.Errorf("error setting config value: %v", err)
-	}
+func (mw *MultiWallet) SetDoubleConfigValueForKey(key string, value float64) {
+	mw.SaveUserConfigValue(key, value)
 }
 
-func (lw *LibWallet) SetIntConfigValueForKey(key string, value int) {
-	err := lw.SaveUserConfigValue(key, value)
-	if err != nil {
-		log.Errorf("error setting config value: %v", err)
-	}
+func (mw *MultiWallet) SetIntConfigValueForKey(key string, value int) {
+	mw.SaveUserConfigValue(key, value)
 }
 
-func (lw *LibWallet) SetLongConfigValueForKey(key string, value int64) {
-	err := lw.SaveUserConfigValue(key, value)
-	if err != nil {
-		log.Errorf("error setting config value: %v", err)
-	}
+func (mw *MultiWallet) SetInt32ConfigValueForKey(key string, value int32) {
+	mw.SaveUserConfigValue(key, value)
 }
 
-func (lw *LibWallet) SetStringConfigValueForKey(key, value string) {
-	err := lw.SaveUserConfigValue(key, value)
-	if err != nil {
-		log.Errorf("error setting config value: %v", err)
-	}
+func (mw *MultiWallet) SetLongConfigValueForKey(key string, value int64) {
+	mw.SaveUserConfigValue(key, value)
 }
 
-func (lw *LibWallet) ReadBoolConfigValueForKey(key string) (valueOut bool) {
-	err := lw.ReadUserConfigValue(key, &valueOut)
-	if err != nil {
-		log.Errorf("error reading config value: %v", err)
+func (mw *MultiWallet) SetStringConfigValueForKey(key, value string) {
+	mw.SaveUserConfigValue(key, value)
+}
+
+func (mw *MultiWallet) ReadBoolConfigValueForKey(key string, defaultValue bool) (valueOut bool) {
+	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
+		valueOut = defaultValue
 	}
 	return
 }
 
-func (lw *LibWallet) ReadDoubleConfigValueForKey(key string) (valueOut float64) {
-	err := lw.ReadUserConfigValue(key, &valueOut)
-	if err != nil {
-		log.Errorf("error reading config value: %v", err)
+func (mw *MultiWallet) ReadDoubleConfigValueForKey(key string, defaultValue float64) (valueOut float64) {
+	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
+		valueOut = defaultValue
 	}
 	return
 }
 
-func (lw *LibWallet) ReadIntConfigValueForKey(key string) (valueOut int) {
-	err := lw.ReadUserConfigValue(key, &valueOut)
-	if err != nil {
-		log.Errorf("error reading config value: %v", err)
+func (mw *MultiWallet) ReadIntConfigValueForKey(key string, defaultValue int) (valueOut int) {
+	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
+		valueOut = defaultValue
 	}
 	return
 }
 
-func (lw *LibWallet) ReadLongConfigValueForKey(key string) (valueOut int64) {
-	err := lw.ReadUserConfigValue(key, &valueOut)
-	if err != nil {
-		log.Errorf("error reading config value: %v", err)
+func (mw *MultiWallet) ReadInt32ConfigValueForKey(key string, defaultValue int32) (valueOut int32) {
+	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
+		valueOut = defaultValue
 	}
 	return
 }
 
-func (lw *LibWallet) ReadStringConfigValueForKey(key string) (valueOut string) {
-	err := lw.ReadUserConfigValue(key, &valueOut)
-	if err != nil {
-		log.Errorf("error reading config value: %v", err)
+func (mw *MultiWallet) ReadLongConfigValueForKey(key string, defaultValue int64) (valueOut int64) {
+	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
+		valueOut = defaultValue
 	}
+	return
+}
+
+func (mw *MultiWallet) ReadStringConfigValueForKey(key string) (valueOut string) {
+	mw.ReadUserConfigValue(key, &valueOut)
 	return
 }

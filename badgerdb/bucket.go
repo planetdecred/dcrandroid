@@ -3,7 +3,7 @@ package badgerdb
 import (
 	"bytes"
 
-	"github.com/decred/dcrwallet/errors"
+	"github.com/decred/dcrwallet/errors/v2"
 	"github.com/dgraph-io/badger"
 )
 

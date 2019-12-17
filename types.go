@@ -1,6 +1,11 @@
 package dcrlibwallet
 
-import "github.com/decred/dcrwallet/wallet"
+import "github.com/decred/dcrwallet/wallet/v3"
+
+type BlockInfo struct {
+	Height    int32
+	Timestamp int64
+}
 
 type Amount struct {
 	AtomValue int64
@@ -31,6 +36,7 @@ type Balance struct {
 }
 
 type Account struct {
+	WalletID         int
 	Number           int32
 	Name             string
 	Balance          *Balance
@@ -47,9 +53,6 @@ type AccountsIterator struct {
 
 type Accounts struct {
 	Count              int
-	ErrorMessage       string
-	ErrorCode          int
-	ErrorOccurred      bool
 	Acc                []*Account
 	CurrentBlockHash   []byte
 	CurrentBlockHeight int32
@@ -58,6 +61,7 @@ type Accounts struct {
 /** begin sync-related types */
 
 type SyncProgressListener interface {
+	OnSyncStarted()
 	OnPeerConnectedOrDisconnected(numberOfConnectedPeers int32)
 	OnHeadersFetchProgress(headersFetchProgress *HeadersFetchProgressReport)
 	OnAddressDiscoveryProgress(addressDiscoveryProgress *AddressDiscoveryProgressReport)
@@ -84,6 +88,7 @@ type HeadersFetchProgressReport struct {
 type AddressDiscoveryProgressReport struct {
 	*GeneralSyncProgress
 	AddressDiscoveryProgress int32 `json:"addressDiscoveryProgress"`
+	WalletID                 int   `json:"walletID"`
 }
 
 type HeadersRescanProgressReport struct {
@@ -92,6 +97,7 @@ type HeadersRescanProgressReport struct {
 	CurrentRescanHeight int32 `json:"currentRescanHeight"`
 	RescanProgress      int32 `json:"rescanProgress"`
 	RescanTimeRemaining int64 `json:"rescanTimeRemaining"`
+	WalletID            int   `json:"walletID"`
 }
 
 type DebugInfo struct {
@@ -105,9 +111,16 @@ type DebugInfo struct {
 
 /** begin tx-related types */
 
+type TxAndBlockNotificationListener interface {
+	OnTransaction(transaction string)
+	OnBlockAttached(walletID int, blockHeight int32)
+	OnTransactionConfirmed(walletID int, hash string, blockHeight int32)
+}
+
 // Transaction is used with storm for tx indexing operations.
 // For faster queries, the `Hash`, `Type` and `Direction` fields are indexed.
 type Transaction struct {
+	WalletID    int    `json:"walletID"`
 	Hash        string `storm:"id,unique" json:"hash"`
 	Type        string `storm:"index" json:"type"`
 	Hex         string `json:"hex"`
@@ -155,6 +168,7 @@ type TxOutput struct {
 // TxInfoFromWallet contains tx data that relates to the querying wallet.
 // This info is used with `DecodeTransaction` to compose the entire details of a transaction.
 type TxInfoFromWallet struct {
+	WalletID    int
 	Hex         string
 	Timestamp   int64
 	BlockHeight int32

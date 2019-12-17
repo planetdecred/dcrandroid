@@ -4,11 +4,11 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/decred/dcrd/blockchain/stake"
-	"github.com/decred/dcrd/chaincfg"
-	"github.com/decred/dcrd/txscript"
+	"github.com/decred/dcrd/blockchain/stake/v2"
+	"github.com/decred/dcrd/chaincfg/v2"
+	"github.com/decred/dcrd/txscript/v2"
 	"github.com/decred/dcrd/wire"
-	"github.com/decred/dcrwallet/wallet"
+	"github.com/decred/dcrwallet/wallet/v3"
 	"github.com/raedahgroup/dcrlibwallet/txhelper"
 )
 
@@ -38,6 +38,7 @@ func DecodeTransaction(walletTx *TxInfoFromWallet, netParams *chaincfg.Params) (
 	ssGenVersion, lastBlockValid, voteBits := voteInfo(msgTx)
 
 	return &Transaction{
+		WalletID:    walletTx.WalletID,
 		Hash:        msgTx.TxHash().String(),
 		Type:        txhelper.FormatTransactionType(txType),
 		Hex:         walletTx.Hex,
@@ -100,7 +101,7 @@ func decodeTxOutputs(mtx *wire.MsgTx, netParams *chaincfg.Params, walletOutputs 
 		if (txType == stake.TxTypeSStx) && (stake.IsStakeSubmissionTxOut(i)) {
 			addr, err := stake.AddrFromSStxPkScrCommitment(txOut.PkScript, netParams)
 			if err == nil {
-				address = addr.EncodeAddress()
+				address = addr.Address()
 			}
 			scriptType = txscript.StakeSubmissionTy.String()
 		} else {
@@ -109,7 +110,7 @@ func decodeTxOutputs(mtx *wire.MsgTx, netParams *chaincfg.Params, walletOutputs 
 			// about it anyways.
 			scriptClass, addrs, _, _ := txscript.ExtractPkScriptAddrs(txOut.Version, txOut.PkScript, netParams)
 			if len(addrs) > 0 {
-				address = addrs[0].EncodeAddress()
+				address = addrs[0].Address()
 			}
 			scriptType = scriptClass.String()
 		}

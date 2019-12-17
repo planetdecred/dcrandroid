@@ -2,16 +2,12 @@ package dcrlibwallet
 
 import (
 	"encoding/json"
+	"sort"
+
 	"github.com/decred/dcrd/chaincfg/chainhash"
 	"github.com/raedahgroup/dcrlibwallet/txhelper"
 	"github.com/raedahgroup/dcrlibwallet/txindex"
 )
-
-type TransactionListener interface {
-	OnTransaction(transaction string)
-	OnTransactionConfirmed(hash string, height int32)
-	OnBlockAttached(height int32, timestamp int64)
-}
 
 const (
 	// Export constants for use in mobile apps
@@ -22,6 +18,7 @@ const (
 	TxFilterTransferred = txindex.TxFilterTransferred
 	TxFilterStaking     = txindex.TxFilterStaking
 	TxFilterCoinBase    = txindex.TxFilterCoinBase
+	TxFilterRegular     = txindex.TxFilterRegular
 
 	TxDirectionInvalid     = txhelper.TxDirectionInvalid
 	TxDirectionSent        = txhelper.TxDirectionSent
@@ -35,15 +32,14 @@ const (
 	TxTypeRevocation     = txhelper.TxTypeRevocation
 )
 
-func (lw *LibWallet) GetTransaction(txHash []byte) (string, error) {
-	transaction, err := lw.GetTransactionRaw(txHash)
+func (wallet *Wallet) GetTransaction(txHash []byte) (string, error) {
+	transaction, err := wallet.GetTransactionRaw(txHash)
 	if err != nil {
 		log.Error(err)
 		return "", err
 	}
 
 	result, err := json.Marshal(transaction)
-
 	if err != nil {
 		return "", err
 	}
@@ -51,24 +47,24 @@ func (lw *LibWallet) GetTransaction(txHash []byte) (string, error) {
 	return string(result), nil
 }
 
-func (lw *LibWallet) GetTransactionRaw(txHash []byte) (*Transaction, error) {
+func (wallet *Wallet) GetTransactionRaw(txHash []byte) (*Transaction, error) {
 	hash, err := chainhash.NewHash(txHash)
 	if err != nil {
 		log.Error(err)
 		return nil, err
 	}
 
-	txSummary, _, blockHash, err := lw.wallet.TransactionSummary(hash)
+	txSummary, _, blockHash, err := wallet.internal.TransactionSummary(wallet.shutdownContext(), hash)
 	if err != nil {
 		log.Error(err)
 		return nil, err
 	}
 
-	return lw.decodeTransactionWithTxSummary(txSummary, blockHash)
+	return wallet.decodeTransactionWithTxSummary(txSummary, blockHash)
 }
 
-func (lw *LibWallet) GetTransactions(offset, limit, txFilter int32) (string, error) {
-	transactions, err := lw.GetTransactionsRaw(offset, limit, txFilter)
+func (wallet *Wallet) GetTransactions(offset, limit, txFilter int32, newestFirst bool) (string, error) {
+	transactions, err := wallet.GetTransactionsRaw(offset, limit, txFilter, newestFirst)
 	if err != nil {
 		return "", err
 	}
@@ -81,15 +77,46 @@ func (lw *LibWallet) GetTransactions(offset, limit, txFilter int32) (string, err
 	return string(jsonEncodedTransactions), nil
 }
 
-func (lw *LibWallet) GetTransactionsRaw(offset, limit, txFilter int32) (transactions []*Transaction, err error) {
-	err = lw.txDB.Read(offset, limit, txFilter, &transactions)
+func (wallet *Wallet) GetTransactionsRaw(offset, limit, txFilter int32, newestFirst bool) (transactions []Transaction, err error) {
+	err = wallet.txDB.Read(offset, limit, txFilter, newestFirst, &transactions)
 	return
 }
 
-func (lw *LibWallet) CountTransactions(txFilter int32) (int, error) {
-	return lw.txDB.Count(txFilter, &Transaction{})
+func (mw *MultiWallet) GetTransactions(offset, limit, txFilter int32, newestFirst bool) (string, error) {
+	transactions := make([]Transaction, 0)
+	for _, wallet := range mw.wallets {
+		walletTransactions, err := wallet.GetTransactionsRaw(offset, limit, txFilter, newestFirst)
+		if err != nil {
+			return "", nil
+		}
+
+		transactions = append(transactions, walletTransactions...)
+	}
+
+	// sort transaction by timestamp in descending order
+	sort.Slice(transactions[:], func(i, j int) bool {
+		if newestFirst {
+			return transactions[i].Timestamp > transactions[j].Timestamp
+		}
+		return transactions[i].Timestamp < transactions[j].Timestamp
+	})
+
+	if len(transactions) > int(limit) && limit > 0 {
+		transactions = transactions[:limit]
+	}
+
+	jsonEncodedTransactions, err := json.Marshal(&transactions)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonEncodedTransactions), nil
 }
 
-func (lw *LibWallet) DetermineTxFilter(txType string, txDirection int32) int32 {
-	return txindex.DetermineTxFilter(txType, txDirection)
+func (wallet *Wallet) CountTransactions(txFilter int32) (int, error) {
+	return wallet.txDB.Count(txFilter, &Transaction{})
+}
+
+func TxMatchesFilter(txType string, txDirection, txFilter int32) bool {
+	return txindex.TxMatchesFilter(txType, txDirection, txFilter)
 }
