@@ -15,7 +15,7 @@ import com.dcrandroid.R
 import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.more_list_row_2.view.*
 
-class ListAdapter(val context: Context, val items: Array<ListItem>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(val context: Context, val items: Array<ListItem>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     var itemTapped: ((position: Int) -> Unit?)? = null
 
@@ -36,7 +36,7 @@ class ListAdapter(val context: Context, val items: Array<ListItem>): RecyclerVie
 
         holder.itemView.tv_title.setText(item.title)
 
-        if(item.subtitle != null){
+        if (item.subtitle != null) {
             holder.itemView.tv_subtitle.apply {
                 text = item.subtitle
                 show()
@@ -47,17 +47,17 @@ class ListAdapter(val context: Context, val items: Array<ListItem>): RecyclerVie
             itemTapped?.invoke(position)
         }
 
-        val background = when{
+        val background = when {
             itemCount == 1 -> R.drawable.ripple_bg_white_corners_8dp
             position == 0 -> R.drawable.curved_top_ripple
-            position ==  itemCount - 1 -> R.drawable.curved_bottom_ripple
+            position == itemCount - 1 -> R.drawable.curved_bottom_ripple
             else -> R.drawable.ripple
         }
 
         holder.itemView.setBackgroundResource(background)
     }
 
-    inner class ViewHolder(v: View): RecyclerView.ViewHolder(v)
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 }
 
 data class ListItem(val title: Int, val subtitle: String? = null)

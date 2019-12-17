@@ -11,17 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dcrandroid.util.WalletData
-import dcrlibwallet.HeadersFetchProgressReport
-import dcrlibwallet.MultiWallet
-import kotlinx.android.synthetic.main.multi_wallet_fetch_headers.view.*
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.TimeUtils
-import com.dcrandroid.util.Utils
+import com.dcrandroid.util.WalletData
+import dcrlibwallet.HeadersFetchProgressReport
+import dcrlibwallet.MultiWallet
+import kotlinx.android.synthetic.main.multi_wallet_fetch_headers.view.*
 
-class MultiWalletSyncDetailsAdapter(private val context: Context, private var openedWallets: List<Long>): RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
+class MultiWalletSyncDetailsAdapter(private val context: Context, private var openedWallets: List<Long>) : RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
 
     private val multiWallet: MultiWallet = WalletData.multiWallet!!
 
@@ -41,13 +40,13 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
 
         holder.walletName.text = wallet.name
 
-        if(wallet.isWaiting){
+        if (wallet.isWaiting) {
             holder.walletStatus.let {
                 it.setTextColor(context.resources.getColor(R.color.lightGray))
                 it.setText(R.string.waiting_for_other_wallets)
             }
 
-            if(fetchProgressReport != null){
+            if (fetchProgressReport != null) {
                 // ## of ######
                 holder.fetchCount.text = context.getString(R.string.block_header_fetched_count,
                         wallet.bestBlock, fetchProgressReport!!.totalHeadersToFetch)
@@ -57,13 +56,13 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
                 holder.daysBehind.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
             }
 
-        }else{
+        } else {
             holder.walletStatus.let {
                 it.setTextColor(context.resources.getColor(R.color.greenTextColor))
                 it.setText(R.string.syncing_ellipsis)
             }
 
-            if(fetchProgressReport != null){
+            if (fetchProgressReport != null) {
                 // ## of ######
                 holder.fetchCount.text = context.getString(R.string.block_header_fetched_count,
                         fetchProgressReport!!.fetchedHeadersCount, fetchProgressReport!!.totalHeadersToFetch)
@@ -74,7 +73,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
             }
         }
 
-        if(fetchProgressReport == null){
+        if (fetchProgressReport == null) {
             // ## of ######
             holder.fetchCount.text = "0"
 
@@ -82,14 +81,14 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
             holder.daysBehind.text = null
         }
 
-        if(position == itemCount - 1){
+        if (position == itemCount - 1) {
             holder.divider.hide()
-        }else{
+        } else {
             holder.divider.show()
         }
     }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val walletName = itemView.wallet_name
         val walletStatus = itemView.wallet_syncing_status
 

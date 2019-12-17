@@ -19,13 +19,13 @@ import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
 
-class AccountPickerAdapter(val items:Array<Any>, val context: Context, val currentAccount: Account,
-                           val accountSelected:(account: Account) -> Unit?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountPickerAdapter(val items: Array<Any>, val context: Context, val currentAccount: Account,
+                           val accountSelected: (account: Account) -> Unit?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
 
-        val layout = when(viewType){
+        val layout = when (viewType) {
             0 -> R.layout.account_picker_header
             else -> R.layout.account_picker_row
         }
@@ -35,7 +35,7 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context, val curre
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(items[position]){
+        return when (items[position]) {
             is Wallet -> 0
             else -> 1 // is account
         }
@@ -48,19 +48,19 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context, val curre
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val item = items[position]
-        if(item is Wallet){
+        if (item is Wallet) {
             holder.itemView.wallet_name.text = item.name
-        }else if(item is Account){
+        } else if (item is Account) {
 
-            if (item.accountNumber == Int.MAX_VALUE){
+            if (item.accountNumber == Int.MAX_VALUE) {
                 holder.itemView.account_row_icon.setImageResource(R.drawable.ic_accounts_locked)
-            }else{
+            } else {
                 holder.itemView.account_row_icon.setImageResource(R.drawable.ic_accounts)
             }
 
-            if(item.accountNumber == currentAccount.accountNumber && item.walletID == currentAccount.walletID){
+            if (item.accountNumber == currentAccount.accountNumber && item.walletID == currentAccount.walletID) {
                 holder.itemView.iv_selected_account.setImageResource(R.drawable.ic_checkmark03)
-            }else{
+            } else {
                 holder.itemView.iv_selected_account.setImageBitmap(null)
             }
 
@@ -80,5 +80,5 @@ class AccountPickerAdapter(val items:Array<Any>, val context: Context, val curre
         }
     }
 
-    inner class ViewHolder(v: View): RecyclerView.ViewHolder(v)
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 }

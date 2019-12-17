@@ -13,14 +13,14 @@ import android.view.View
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 
-class SeedBackupSuccess: BaseActivity() {
+class SeedBackupSuccess : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.seed_verification_success)
     }
 
-    fun backToWallets(v: View){
+    fun backToWallets(v: View) {
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         val data = Intent()
         data.putExtra(Constants.WALLET_ID, walletID)

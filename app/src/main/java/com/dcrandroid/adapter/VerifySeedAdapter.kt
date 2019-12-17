@@ -15,30 +15,30 @@ import com.dcrandroid.R
 import kotlinx.android.synthetic.main.verify_seed_list_row.view.*
 
 data class InputSeed(val number: Int, var phrase: String)
-data class ShuffledSeeds(val seeds: Array<InputSeed>, var selectedIndex:Int = -1)
+data class ShuffledSeeds(val seeds: Array<InputSeed>, var selectedIndex: Int = -1)
 
 class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<ShuffledSeeds>,
-                        private val seedTapped:(seedIndex:Int) -> Unit) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
+                        private val seedTapped: (seedIndex: Int) -> Unit) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
 
-    val enteredSeeds = Array(SEED_COUNT) {""}
+    val enteredSeeds = Array(SEED_COUNT) { "" }
     var allSeedsSelected = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeedViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        if(viewType == 0){
+        if (viewType == 0) {
             return SeedViewHolder(layoutInflater.inflate(R.layout.verify_seed_header, parent, false))
         }
         return SeedViewHolder(layoutInflater.inflate(R.layout.verify_seed_list_row, parent, false))
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(position == 0){
+        return if (position == 0) {
             0
-        }else 1
+        } else 1
     }
 
     override fun getItemCount(): Int {
-        return seeds.size +1
+        return seeds.size + 1
     }
 
     override fun getItemId(position: Int): Long {
@@ -47,7 +47,7 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
     }
 
     override fun onBindViewHolder(holder: SeedViewHolder, position: Int) {
-        if(position == 0){
+        if (position == 0) {
             return
         }
 
@@ -71,7 +71,7 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
             }
         }
 
-        if(multiSeed.selectedIndex != -1 ){
+        if (multiSeed.selectedIndex != -1) {
             holder.seedText[multiSeed.selectedIndex].apply {
                 setTextColor(context.resources.getColor(R.color.blue))
                 setBackgroundResource(R.drawable.verify_seed_selected)
@@ -82,7 +82,7 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
                 setTextColor(context.resources.getColor(R.color.darkerBlueGrayTextColor))
             }
             holder.itemView.selected_seed.text = multiSeed.seeds[multiSeed.selectedIndex].phrase
-        }else{
+        } else {
             holder.itemView.selected_seed.apply {
                 text = "—"
                 setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
@@ -91,12 +91,12 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
 
     }
 
-    private fun saveSeedToArray(seed: String, position: Int){
+    private fun saveSeedToArray(seed: String, position: Int) {
         enteredSeeds[position] = seed
 
         allSeedsSelected = true
         enteredSeeds.forEach {
-            if(it.isEmpty()){
+            if (it.isEmpty()) {
                 allSeedsSelected = false
                 return@forEach
             }

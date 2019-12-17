@@ -13,7 +13,7 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import kotlinx.android.synthetic.main.verify_seed_instruction.*
 
-class VerifySeedInstruction: BaseActivity() {
+class VerifySeedInstruction : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +24,12 @@ class VerifySeedInstruction: BaseActivity() {
         }
     }
 
-    fun verifyChecks(v: View){
+    fun verifyChecks(v: View) {
         btn_verify.isEnabled = seed_check_1.isChecked && seed_check_2.isChecked &&
                 seed_check_3.isChecked && seed_check_4.isChecked && seed_check_5.isChecked
     }
 
-    fun proceedToNextPhase(v: View){
+    fun proceedToNextPhase(v: View) {
         val i = Intent(this, SaveSeedActivity::class.java)
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         i.putExtra(Constants.WALLET_ID, walletID)

@@ -14,7 +14,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.dcrandroid.R
@@ -48,7 +47,7 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         val tvTitle = findViewById<TextView>(R.id.title)
         val tvMessage = findViewById<TextView>(R.id.message)
 
-        if(dialogTitle != null){
+        if (dialogTitle != null) {
             tvTitle.show()
             tvTitle.text = dialogTitle
         }

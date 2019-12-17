@@ -6,14 +6,14 @@
 
 package com.dcrandroid.activities.more
 
-import android.os.Bundle
-import com.dcrandroid.R
-import kotlinx.android.synthetic.main.activity_help.*
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
+import kotlinx.android.synthetic.main.activity_help.*
 
-class HelpActivity: BaseActivity() {
+class HelpActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

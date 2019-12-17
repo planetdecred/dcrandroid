@@ -18,7 +18,6 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
-import com.dcrandroid.dialog.CollapsedBottomSheetDialog
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.show
@@ -32,7 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSheetDialog(null), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
+class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomSheetDialog(null), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.transaction_details, container, false)
@@ -56,12 +55,12 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
 
         status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
 
-        if(transaction.confirmations > 1 || spendUnconfirmedFunds){
+        if (transaction.confirmations > 1 || spendUnconfirmedFunds) {
             tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_confirmations, transaction.confirmations), 0)
 
             tx_block_row.show()
             tx_block.text = transaction.height.toString()
-        }else{
+        } else {
             tv_confirmations.apply {
                 setText(R.string.pending)
                 setTextColor(context.getColor(R.color.lightGrayTextColor))
@@ -75,15 +74,15 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
         tx_details_type.text = transaction.type
         tx_details_fee.text = getString(R.string.x_dcr, Utils.formatDecredWithComma(transaction.fee))
 
-        when(transaction.type){
+        when (transaction.type) {
             Dcrlibwallet.TxTypeRegular -> {
-                when (transaction.direction){
+                when (transaction.direction) {
                     Dcrlibwallet.TxDirectionSent -> {
                         tx_source_row.show()
                         tx_details_source.text = getSourceAccount()
 
                         tx_dest_row.show()
-                        tx_details_dest.apply{
+                        tx_details_dest.apply {
                             text = getDestinationAddress()
                             tx_details_dest.setOnClickListener(this@TransactionDetailsDialog)
                         }
@@ -112,9 +111,9 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
     }
 
     // returns first external output address if any
-    private fun getDestinationAddress(): String?{
-        for(output in transaction.outputs!!){
-            if(output.accountName == Constants.EXTERNAL){
+    private fun getDestinationAddress(): String? {
+        for (output in transaction.outputs!!) {
+            if (output.accountName == Constants.EXTERNAL) {
                 return output.address
             }
         }
@@ -122,8 +121,8 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
     }
 
     private fun getSourceAccount(): String? {
-        for(input in transaction.inputs!!){
-            if(input.accountName != Constants.EXTERNAL){
+        for (input in transaction.inputs!!) {
+            if (input.accountName != Constants.EXTERNAL) {
                 return input.accountName
             }
         }
@@ -133,17 +132,17 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
 
     // returns first internal output address if any
     private fun getReceiveAccount(): String? {
-        for(output in transaction.outputs!!){
-            if(output.accountName != Constants.EXTERNAL){
+        for (output in transaction.outputs!!) {
+            if (output.accountName != Constants.EXTERNAL) {
                 return output.accountName
             }
         }
         return null
     }
 
-    private fun populateInputOutput(){
+    private fun populateInputOutput() {
         val inputs = ArrayList<DropDownItem>()
-        for(input in transaction.inputs!!){
+        for (input in transaction.inputs!!) {
             val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(input.amount), input.accountName)
             inputs.add(DropDownItem(amount, input.previousOutpoint!!))
         }
@@ -151,7 +150,7 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
         InputOutputDropdown(input_dropdown_layout, inputs.toTypedArray(), top_bar)
 
         val outputs = ArrayList<DropDownItem>()
-        for(output in transaction.outputs!!){
+        for (output in transaction.outputs!!) {
             val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(output.amount), output.accountName)
             outputs.add(DropDownItem(amount, output.address!!))
         }
@@ -168,12 +167,12 @@ class TransactionDetailsDialog(val transaction: Transaction): FullScreenBottomSh
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.tv_toggle_details -> {
                 tx_extra_details.toggleVisibility()
-                val strRes = if(tx_extra_details.visibility == View.VISIBLE){
+                val strRes = if (tx_extra_details.visibility == View.VISIBLE) {
                     R.string.hide_details
-                }else{
+                } else {
                     R.string.show_details
                 }
 

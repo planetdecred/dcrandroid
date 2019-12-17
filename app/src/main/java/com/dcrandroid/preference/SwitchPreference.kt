@@ -27,7 +27,7 @@ class SwitchPreference(context: Context, val key: String, val view: View, val ch
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         var newValue = isChecked
 
-        if(checkChange != null){
+        if (checkChange != null) {
             newValue = checkChange.let { it(isChecked) }
         }
 
@@ -36,7 +36,7 @@ class SwitchPreference(context: Context, val key: String, val view: View, val ch
         setChecked(newValue)
     }
 
-    fun setChecked(checked: Boolean){
+    fun setChecked(checked: Boolean) {
         view.pref_switch.setOnCheckedChangeListener(null)
         view.pref_switch.isChecked = checked
         view.pref_switch.setOnCheckedChangeListener(this)

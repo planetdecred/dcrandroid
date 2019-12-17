@@ -8,10 +8,8 @@ package com.dcrandroid.activities
 
 import android.content.Intent
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +18,6 @@ import com.dcrandroid.adapter.SaveSeedAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.save_seed_page.*
-import kotlin.math.*
 
 const val SEEDS_PER_ROW = 17
 
@@ -36,7 +33,7 @@ class SaveSeedActivity : BaseActivity() {
 
         try {
             val vto = scroll_view_seeds.viewTreeObserver
-            if(vto.isAlive){
+            if (vto.isAlive) {
                 vto.addOnScrollChangedListener {
                     app_bar.elevation = if (scroll_view_seeds.scrollY != 0) {
                         resources.getDimension(R.dimen.app_bar_elevation)
@@ -64,12 +61,12 @@ class SaveSeedActivity : BaseActivity() {
         }
     }
 
-    private fun populateList(){
+    private fun populateList() {
         walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
         val wallet = WalletData.multiWallet!!.walletWithID(walletId!!)
 
         val seed = wallet.seed
-        if(seed.isBlank()){
+        if (seed.isBlank()) {
             finish()
             return
         }
@@ -92,9 +89,9 @@ class SaveSeedActivity : BaseActivity() {
 
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
                                     state: RecyclerView.State) {
-            if(verticalOrientation){
+            if (verticalOrientation) {
                 outRect.set(0, 0, 0, space)
-            }else{
+            } else {
                 outRect.set(0, 0, space, 0)
             }
         }

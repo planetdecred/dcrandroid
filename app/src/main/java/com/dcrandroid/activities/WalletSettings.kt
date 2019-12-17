@@ -28,7 +28,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class WalletSettings: BaseActivity() {
+class WalletSettings : BaseActivity() {
 
     private var walletID = -1L
     private lateinit var wallet: Wallet
@@ -45,7 +45,7 @@ class WalletSettings: BaseActivity() {
         val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
         setTxNotificationSummary(multiWallet!!.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
         ListPreference(this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
-                R.array.notification_options, incoming_transactions){
+                R.array.notification_options, incoming_transactions) {
             setTxNotificationSummary(it)
         }
 
@@ -54,7 +54,7 @@ class WalletSettings: BaseActivity() {
         }
 
         remove_wallet.setOnClickListener {
-            if(multiWallet!!.isSyncing || multiWallet!!.isSynced){
+            if (multiWallet!!.isSyncing || multiWallet!!.isSynced) {
                 SnackBar.showError(this, R.string.cancel_sync_delete_wallet)
                 return@setOnClickListener
             }
@@ -67,8 +67,8 @@ class WalletSettings: BaseActivity() {
 
                         val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
 
-                        PassPromptUtil(this, walletID, title, false){dialog, pass ->
-                            if(pass != null){
+                        PassPromptUtil(this, walletID, title, false) { dialog, pass ->
+                            if (pass != null) {
                                 deleteWallet(pass, dialog)
                             }
 
@@ -85,25 +85,25 @@ class WalletSettings: BaseActivity() {
         }
     }
 
-    private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO){
-        try{
+    private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
+        try {
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 dialog?.dismiss()
             }
-            if(multiWallet!!.openedWalletsCount() == 0){
+            if (multiWallet!!.openedWalletsCount() == 0) {
                 multiWallet!!.shutdown()
                 walletData.multiWallet = null
                 startActivity(Intent(this@WalletSettings, SplashScreen::class.java))
                 finishAffinity()
-            }else{
+            } else {
                 setResult(Activity.RESULT_OK)
                 finish()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e.message == Dcrlibwallet.ErrInvalidPassphrase){
-                val errMessage = when(wallet.privatePassphraseType){
+            if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                val errMessage = when (wallet.privatePassphraseType) {
                     Dcrlibwallet.PassphraseTypePin -> R.string.invalid_pin
                     else -> R.string.invalid_password
                 }
@@ -113,7 +113,7 @@ class WalletSettings: BaseActivity() {
     }
 
 
-    private fun setTxNotificationSummary(index: Int){
+    private fun setTxNotificationSummary(index: Int) {
         val preferenceSummary = resources.getStringArray(R.array.notification_options)[index]
         incoming_transactions.pref_subtitle.text = preferenceSummary
     }

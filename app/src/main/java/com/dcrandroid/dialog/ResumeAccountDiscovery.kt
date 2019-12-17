@@ -26,9 +26,8 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_discovery_sheet.*
 import kotlinx.coroutines.*
-import java.lang.Exception
 
-class ResumeAccountDiscovery: BottomSheetDialogFragment() {
+class ResumeAccountDiscovery : BottomSheetDialogFragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
 
@@ -44,7 +43,7 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(wallet == null){
+        if (wallet == null) {
             error("WalletID = null")
         }
     }
@@ -84,19 +83,19 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
 
         pinViewUtil = PinViewUtil(resume_restore_pin, null)
 
-        if(wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
+        if (wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePin) {
             resume_restore_pass.hide()
             resume_restore_pin.show()
 
             pinViewUtil.showHint(R.string.enter_spending_pin)
 
-            val bottomRowTopMargin = - resources.getDimensionPixelOffset(R.dimen.margin_padding_size_64)
+            val bottomRowTopMargin = -resources.getDimensionPixelOffset(R.dimen.margin_padding_size_64)
             val bottomBarParams = bottom_row.layoutParams as LinearLayout.LayoutParams
             bottomBarParams.topMargin = bottomRowTopMargin
             bottom_row.layoutParams = bottomBarParams
         }
 
-        if(WalletData.instance.multiWallet!!.openedWalletsCount() > 1){
+        if (WalletData.instance.multiWallet!!.openedWalletsCount() > 1) {
             unlock_title.text = getString(R.string.multi_resume_account_discovery_title, wallet!!.name)
         }
 
@@ -110,22 +109,22 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
             true
         }
 
-        btn_unlock.setOnClickListener{unlockWallet()}
+        btn_unlock.setOnClickListener { unlockWallet() }
     }
 
-    private fun unlockWallet() = GlobalScope.launch(Dispatchers.Main){
+    private fun unlockWallet() = GlobalScope.launch(Dispatchers.Main) {
 
-        try{
+        try {
             resume_restore_pass.setError(null)
             btn_unlock.hide()
             resume_restore_pass.isEnabled = false
             discovery_progress_bar.show()
 
-            withContext(Dispatchers.Default){
+            withContext(Dispatchers.Default) {
 
-                val pass = if(resume_restore_pass.isShown){
+                val pass = if (resume_restore_pass.isShown) {
                     resume_restore_pass.textString
-                }else{
+                } else {
                     pinViewUtil.passCode
                 }
 
@@ -134,30 +133,30 @@ class ResumeAccountDiscovery: BottomSheetDialogFragment() {
 
             dismiss()
 
-            if(activity is HomeActivity){
+            if (activity is HomeActivity) {
                 val homeActivity = activity as HomeActivity
                 homeActivity.startSyncing()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
 
-            if (e.message!! == Dcrlibwallet.ErrInvalidPassphrase){
+            if (e.message!! == Dcrlibwallet.ErrInvalidPassphrase) {
 
-                val error = if (wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePass){
+                val error = if (wallet!!.privatePassphraseType == Dcrlibwallet.PassphraseTypePass) {
                     getString(R.string.invalid_password)
-                }else{
+                } else {
                     getString(R.string.invalid_pin)
                 }
 
-                if(resume_restore_pass.isShown){
+                if (resume_restore_pass.isShown) {
                     resume_restore_pass.setError(error)
-                }else{
+                } else {
                     pinViewUtil.pinView.rejectInput = true
                     pinViewUtil.showError(R.string.invalid_pin)
                     btn_unlock.isEnabled = false
 
                     delay(2000)
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         pinViewUtil.reset()
                         pinViewUtil.showHint(R.string.enter_spending_pin)
                         pinViewUtil.pinView.rejectInput = false

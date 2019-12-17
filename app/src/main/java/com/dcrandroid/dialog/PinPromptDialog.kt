@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.pin_prompt_sheet.*
 import kotlinx.coroutines.*
 
 class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boolean,
-                      val passEntered:(dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean): CollapsedBottomSheetDialog() {
+                      val passEntered: (dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean) : CollapsedBottomSheetDialog() {
 
     var confirmed = false
     var hint = R.string.enter_spending_pin
@@ -45,9 +45,9 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
             onEnter()
         }
 
-        hint = if(isSpendingPass){
+        hint = if (isSpendingPass) {
             R.string.enter_spending_pin
-        }else{
+        } else {
             R.string.enter_startup_pin
         }
 
@@ -63,7 +63,7 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
         }
     }
 
-    fun showError() = GlobalScope.launch(Dispatchers.Main){
+    fun showError() = GlobalScope.launch(Dispatchers.Main) {
         pinViewUtil.pinView.rejectInput = true
         pinViewUtil.showError(R.string.invalid_pin)
         btn_cancel.isEnabled = false
@@ -72,7 +72,7 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
         progress_bar.hide()
 
         delay(2000)
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.Main) {
             pinViewUtil.reset()
             pinViewUtil.showHint(hint)
             pinViewUtil.pinView.rejectInput = false
@@ -82,11 +82,11 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
 
     }
 
-    private fun onEnter(){
+    private fun onEnter() {
         val dismissDialog = passEntered(this, pinViewUtil.passCode)
-        if(dismissDialog){
+        if (dismissDialog) {
             dismiss()
-        }else{
+        } else {
             btn_cancel.isEnabled = false
             progress_bar.show()
             btn_confirm.hide()

@@ -45,10 +45,10 @@ class Transaction : Serializable {
         }
 
     fun getConfirmationIconRes(spendUnconfirmedFunds: Boolean): Int {
-            return if(confirmations > 1 || spendUnconfirmedFunds)
-                R.drawable.ic_confirmed
-            else R.drawable.ic_pending
-        }
+        return if (confirmations > 1 || spendUnconfirmedFunds)
+            R.drawable.ic_confirmed
+        else R.drawable.ic_pending
+    }
 
     val hashBytes: ByteArray
         get() = Utils.getHash(hash)!!

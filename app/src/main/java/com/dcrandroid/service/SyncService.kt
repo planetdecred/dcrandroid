@@ -16,10 +16,8 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.R
 import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.TimeUtils
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
-import java.lang.Exception
 
 const val NOTIFICATION_ID = 4
 const val TAG = "SyncService"
@@ -115,7 +113,7 @@ class SyncService : Service(), SyncProgressListener {
         println("Task Removed")
     }
 
-    private fun publishProgress(remainingTime: Long, syncProgress: Int){
+    private fun publishProgress(remainingTime: Long, syncProgress: Int) {
         contentTitle = getString(R.string.synchronizing)
         contentText = TimeUtils.getSyncTimeRemaining(remainingTime, syncProgress, this)
         showNotification()
@@ -141,7 +139,7 @@ class SyncService : Service(), SyncProgressListener {
     }
 
     override fun onSyncCanceled(willRestart: Boolean) {
-        if(willRestart){
+        if (willRestart) {
             println("Sync Restarting")
             return
         }

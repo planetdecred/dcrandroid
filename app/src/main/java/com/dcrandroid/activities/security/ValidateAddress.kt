@@ -17,7 +17,7 @@ import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_validate_address.*
 
-class ValidateAddress: BaseActivity(), View.OnClickListener {
+class ValidateAddress : BaseActivity(), View.OnClickListener {
 
     lateinit var addressInputHelper: InputHelper
 
@@ -30,7 +30,7 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         wallet = multiWallet!!.walletWithID(walletID)
 
-        addressInputHelper = InputHelper(this, address_container){
+        addressInputHelper = InputHelper(this, address_container) {
             // no validation for address input
             true
         }
@@ -48,7 +48,7 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
 
-        when (v.id){
+        when (v.id) {
             R.id.tv_validate -> {
                 result_layout.show()
 
@@ -58,21 +58,21 @@ class ValidateAddress: BaseActivity(), View.OnClickListener {
                 val titleText: Int
                 var subtitleText: Int? = null
 
-                if(wallet.isAddressValid(address)){
+                if (wallet.isAddressValid(address)) {
                     tv_title.setTextColor(getColor(R.color.greenTextColor))
                     tv_subtitle.show()
                     icon = R.drawable.ic_checkmark
                     titleText = R.string.valid_address
 
-                    if(wallet.haveAddress(address)){
+                    if (wallet.haveAddress(address)) {
                         subtitleText = R.string.internal_valid_address
                         tv_subtitle.setTextColor(getColor(R.color.greenLightTextColor))
-                    }else{
+                    } else {
                         subtitleText = R.string.external_valid_address
                         tv_subtitle.setTextColor(getColor(R.color.lightGrayTextColor))
                     }
 
-                }else{
+                } else {
                     tv_title.setTextColor(getColor(R.color.colorError))
                     icon = R.drawable.ic_crossmark
                     titleText = R.string.invalid_address

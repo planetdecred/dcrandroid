@@ -24,9 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
-class AddAccountDialog(private val fragmentActivity: FragmentActivity, private val walletID: Long, private val accountCreated:(accountNumber: Int) -> Unit): CollapsedBottomSheetDialog() {
+class AddAccountDialog(private val fragmentActivity: FragmentActivity, private val walletID: Long, private val accountCreated: (accountNumber: Int) -> Unit) : CollapsedBottomSheetDialog() {
 
     private var wallet: Wallet = WalletData.multiWallet!!.walletWithID(walletID)
     private lateinit var accountNameInput: InputHelper
@@ -38,7 +37,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        accountNameInput = InputHelper(fragmentActivity, account_name_input){
+        accountNameInput = InputHelper(fragmentActivity, account_name_input) {
             btn_create.isEnabled = !it.isNullOrBlank()
             true
         }.apply {
@@ -52,7 +51,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
             dismiss()
         }
 
-        btn_create.setOnClickListener{
+        btn_create.setOnClickListener {
             setEnabled(false)
 
             val title = PassPromptTitle(R.string.confirm_to_create_account, R.string.confirm_to_create_account, R.string.confirm_to_create_account)
@@ -60,30 +59,30 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
 
                 val newName = accountNameInput.validatedInput!!.trim()
 
-                GlobalScope.launch(Dispatchers.IO){
-                    if(passphrase != null){
+                GlobalScope.launch(Dispatchers.IO) {
+                    if (passphrase != null) {
                         try {
                             val accountNumber = wallet.nextAccount(newName, passphrase.toByteArray())
 
-                            withContext(Dispatchers.Main){
+                            withContext(Dispatchers.Main) {
                                 dialog?.dismiss()
                                 dismiss()
                                 accountCreated(accountNumber)
                             }
-                        }catch (e: Exception){
+                        } catch (e: Exception) {
                             e.printStackTrace()
 
-                            withContext(Dispatchers.Main){
+                            withContext(Dispatchers.Main) {
                                 dialog?.dismiss()
 
-                                if(e.message == Dcrlibwallet.ErrInvalidPassphrase){
-                                    val err = if(wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePass){
+                                if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                                    val err = if (wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePass) {
                                         R.string.invalid_password
-                                    }else R.string.invalid_pin
+                                    } else R.string.invalid_pin
 
                                     accountNameInput.setError(getString(err))
 
-                                }else{
+                                } else {
                                     accountNameInput.setError(Utils.translateError(context!!, e))
                                 }
 
@@ -98,7 +97,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
         }
     }
 
-    private fun setEnabled(enabled: Boolean){
+    private fun setEnabled(enabled: Boolean) {
         btn_create?.isEnabled = enabled
         btn_cancel?.isEnabled = enabled
         accountNameInput.editText.isEnabled = enabled

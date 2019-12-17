@@ -156,12 +156,12 @@ class SplashScreen : BaseActivity() {
         }
     }
 
-    private fun requestStartupPass(){
+    private fun requestStartupPass() {
         val title = PassPromptTitle(R.string.startup_password_prompt_title, R.string.startup_pin_prompt_title, R.string.startup_fingerprint_prompt_title)
         PassPromptUtil(this, null, title, allowFingerprint = true) { _, pass ->
-            if(pass != null){
+            if (pass != null) {
                 openWallet(pass)
-            }else{
+            } else {
                 endProcess()
             }
 
@@ -203,7 +203,7 @@ class SplashScreen : BaseActivity() {
                             infoDialog.setNegativeButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
                                     .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
                                         requestStartupPass()
-                            })
+                                    })
                         }
 
                         infoDialog.setCancelable(false)
@@ -217,7 +217,7 @@ class SplashScreen : BaseActivity() {
         loadThread!!.start()
     }
 
-    private fun endProcess(){
+    private fun endProcess() {
         multiWallet?.shutdown()
         finish()
         exitProcess(1)

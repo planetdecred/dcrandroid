@@ -7,7 +7,6 @@
 package com.dcrandroid.adapter
 
 import android.app.Activity
-import android.graphics.Point
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -16,8 +15,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.recover_wallet_list_row.view.*
-import android.widget.ArrayAdapter
-import android.util.DisplayMetrics
 
 const val SEED_COUNT = 33
 
@@ -27,7 +24,7 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
             SuggestionsTextAdapter(context, R.layout.dropdown_item_1, allSeedWords)
 
     val enteredSeeds = ArrayList<String>().apply {
-        for(i in 0 until SEED_COUNT){
+        for (i in 0 until SEED_COUNT) {
             this.add("")
         }
     }
@@ -53,7 +50,7 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
     var seedChanged: ((Int, Boolean) -> Unit?)? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.seed_index.text = (position+1).toString()
+        holder.itemView.seed_index.text = (position + 1).toString()
 
         holder.itemView.seed_et.apply {
             setDropDownBackgroundResource(android.R.color.transparent)
@@ -62,7 +59,7 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
             setAdapter(suggestionsAdapter)
         }
 
-        if(nextFocusPosition == position){
+        if (nextFocusPosition == position) {
             nextFocusPosition = -1
             holder.itemView.seed_et.requestFocus()
             holder.itemView.seed_et.isCursorVisible = true
@@ -75,24 +72,24 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
             var indexTextColor: Int
             var editTextColor: Int = R.color.darkBlueTextColor
 
-             if(hasFocus) {
+            if (hasFocus) {
                 backgroundResource = R.drawable.input_background_active
-                 indexBackground = R.drawable.seed_index_bg_active
-                 indexTextColor = R.color.blue
-            }else{
-                 backgroundResource = R.drawable.input_background
-                 indexBackground = R.drawable.seed_index_bg
-                 indexTextColor = R.color.darkerBlueGrayTextColor
+                indexBackground = R.drawable.seed_index_bg_active
+                indexTextColor = R.color.blue
+            } else {
+                backgroundResource = R.drawable.input_background
+                indexBackground = R.drawable.seed_index_bg
+                indexTextColor = R.color.darkerBlueGrayTextColor
             }
 
-            if(!hasFocus){
+            if (!hasFocus) {
                 val seed = holder.itemView.seed_et.text.toString()
 
-                 if(allSeedWords.indexOf(seed) < 0){
+                if (allSeedWords.indexOf(seed) < 0) {
                     backgroundResource = R.drawable.input_background_error
-                     indexBackground = R.drawable.seed_index_bg_error
-                     indexTextColor = R.color.colorError
-                     editTextColor = R.color.colorError
+                    indexBackground = R.drawable.seed_index_bg_error
+                    indexTextColor = R.color.colorError
+                    editTextColor = R.color.colorError
                 }
             }
 
@@ -104,7 +101,7 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
             holder.itemView.seed_et.setTextColor(context.getColor(editTextColor))
         }
 
-        holder.itemView.seed_et.addTextChangedListener(object : TextWatcher{
+        holder.itemView.seed_et.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -120,7 +117,7 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
 
                 allValid = true
                 enteredSeeds.forEach {
-                    if(allSeedWords.indexOf(it) < 0){
+                    if (allSeedWords.indexOf(it) < 0) {
                         allValid = false
                     }
                 }
@@ -131,8 +128,8 @@ class RestoreWalletAdapter(val context: Activity, val allSeedWords: ArrayList<St
         })
 
         holder.itemView.seed_et.setOnItemClickListener { _, _, _, _ ->
-            if(position+1 < itemCount){
-                nextFocusPosition = position+1
+            if (position + 1 < itemCount) {
+                nextFocusPosition = position + 1
                 notifyItemChanged(nextFocusPosition)
             }
         }

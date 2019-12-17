@@ -7,7 +7,6 @@
 package com.dcrandroid.util
 
 import android.os.AsyncTask
-import com.dcrandroid.data.Constants
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import org.json.JSONObject
@@ -54,7 +53,7 @@ class GetExchangeRate(private val userAgent: String,
     override fun onPostExecute(s: String?) {
         super.onPostExecute(s)
 
-        if(s != null){
+        if (s != null) {
             val rate = BittrexRateParser.parse(s)
             callback.onExchangeRateSuccess(rate)
         }
@@ -79,7 +78,7 @@ class GetExchangeRate(private val userAgent: String,
         val usdRate: BigDecimal
             get() = BigDecimal(last)
 
-        companion object{
+        companion object {
             fun parse(resultJsonString: String): BittrexRateParser {
                 val resultJson = JSONObject(resultJsonString)
                 val result = resultJson.getJSONObject("result")

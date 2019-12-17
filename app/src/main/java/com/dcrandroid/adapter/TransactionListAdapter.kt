@@ -22,16 +22,14 @@ import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>): RecyclerView.Adapter<TransactionListViewHolder>() {
+class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val multiWallet = WalletData.multiWallet
@@ -44,7 +42,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
         val view = layoutInflater.inflate(R.layout.transaction_row, parent, false)
-        return  TransactionListViewHolder(view)
+        return TransactionListViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -54,24 +52,24 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
     override fun onBindViewHolder(holder: TransactionListViewHolder, position: Int) {
         val transaction = transactions[position]
 
-        if(multiWallet!!.openedWalletsCount() > 1){
+        if (multiWallet!!.openedWalletsCount() > 1) {
             holder.walletName.apply {
                 show()
                 text = transaction.walletName
             }
-        }else{
+        } else {
             holder.walletName.hide()
         }
 
-        if (transaction.confirmations > 1 || spendUnconfirmedFunds){
+        if (transaction.confirmations > 1 || spendUnconfirmedFunds) {
             holder.status.setConfirmed(transaction.timestamp)
             holder.statusImg.setImageResource(R.drawable.ic_confirmed)
-        }else {
+        } else {
             holder.status.setPending()
             holder.statusImg.setImageResource(R.drawable.ic_pending)
         }
 
-        if(transaction.animate){
+        if (transaction.animate) {
             val blinkAnim = AnimationUtils.loadAnimation(holder.view.context, R.anim.anim_blink)
             holder.view.animation = blinkAnim
             transaction.animate = false
@@ -97,7 +95,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
     }
 }
 
-class TransactionListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+class TransactionListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val icon = view.tx_icon
     val amount = view.amount
     val status = view.status
@@ -105,17 +103,17 @@ class TransactionListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
     val walletName = view.wallet_name
 }
 
-fun TextView.setPending(){
+fun TextView.setPending() {
     this.setText(R.string.pending)
     this.setTextColor(Color.parseColor("#8997a5"))
 }
 
-fun TextView.setConfirmed(timestamp: Long){
+fun TextView.setConfirmed(timestamp: Long) {
     this.text = getTimestamp(timestamp * 1000) // convert seconds to milliseconds
     this.setTextColor(Color.parseColor("#596d81"))
 }
 
-fun getTimestamp(timestamp: Long): String{
+fun getTimestamp(timestamp: Long): String {
     val txDate = GregorianCalendar()
     txDate.time = Date(timestamp)
 

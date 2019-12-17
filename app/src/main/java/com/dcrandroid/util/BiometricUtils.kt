@@ -9,7 +9,6 @@ package com.dcrandroid.util
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import androidx.annotation.StringRes
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat

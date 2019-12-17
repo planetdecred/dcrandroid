@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.send_page_amount_card.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -35,7 +34,7 @@ const val AmountRelativeSize = 0.625f
 val formatter: DecimalFormat = DecimalFormat("#.####")
 val dcrFormat = DecimalFormat("#.########")
 
-class AmountInputHelper(private val layout: LinearLayout, private val scrollToBottom: () -> Unit): TextWatcher, View.OnClickListener, GetExchangeRate.ExchangeRateCallback {
+class AmountInputHelper(private val layout: LinearLayout, private val scrollToBottom: () -> Unit) : TextWatcher, View.OnClickListener, GetExchangeRate.ExchangeRateCallback {
 
     val context = layout.context
 
@@ -53,22 +52,22 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     var usdAmount: BigDecimal? = null
     var dcrAmount: BigDecimal? = null
     val enteredAmount: BigDecimal?
-    get() {
-        val s = layout.send_amount.text.toString()
-        try{
-            return BigDecimal(s)
-        }catch (e: Exception) {
+        get() {
+            val s = layout.send_amount.text.toString()
+            try {
+                return BigDecimal(s)
+            } catch (e: Exception) {
+            }
+            return null
         }
-        return null
-    }
 
     val maxDecimalPlaces: Int
-    get() {
-        return if(currencyIsDCR)
-            8
-        else
-            2
-    }
+        get() {
+            return if (currencyIsDCR)
+                8
+            else
+                2
+        }
 
     init {
         layout.send_amount.addTextChangedListener(this)
@@ -82,13 +81,13 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         fetchExchangeRate()
     }
 
-    private fun fetchExchangeRate(){
+    private fun fetchExchangeRate() {
         val multiWallet = WalletData.multiWallet!!
         val currencyConversion = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
 
         exchangeEnabled = currencyConversion > 0
 
-        if(!exchangeEnabled){
+        if (!exchangeEnabled) {
             return
         }
 
@@ -100,13 +99,13 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     private fun setBackground() = GlobalScope.launch(Dispatchers.Main) {
         var backgroundResource: Int
 
-        backgroundResource = if(layout.send_amount.hasFocus()){
+        backgroundResource = if (layout.send_amount.hasFocus()) {
             R.drawable.input_background_active
-        }else{
+        } else {
             R.drawable.input_background
         }
 
-        if(layout.amount_error_text.text.isNotEmpty()){
+        if (layout.amount_error_text.text.isNotEmpty()) {
             backgroundResource = R.drawable.input_background_error
         }
 
@@ -114,14 +113,14 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
-            R.id.iv_expand_fees ->{
+        when (v!!.id) {
+            R.id.iv_expand_fees -> {
 
                 layout.fee_verbose.toggleVisibility()
                 scrollToBottom()
-                val img = if(layout.fee_verbose.visibility == View.VISIBLE){
+                val img = if (layout.fee_verbose.visibility == View.VISIBLE) {
                     R.drawable.ic_collapse
-                }else{
+                } else {
                     R.drawable.ic_expand
                 }
 
@@ -129,30 +128,30 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             }
 
             R.id.swap_currency -> {
-                if(exchangeDecimal == null){
+                if (exchangeDecimal == null) {
                     return
                 }
 
-                if(currencyIsDCR){
+                if (currencyIsDCR) {
                     layout.currency_label.setText(R.string.usd)
-                }else{
+                } else {
                     layout.currency_label.setText(R.string.dcr)
                 }
 
                 currencyIsDCR = !currencyIsDCR
 
                 layout.send_amount.removeTextChangedListener(this)
-                if(enteredAmount != null){
-                    if(currencyIsDCR){
+                if (enteredAmount != null) {
+                    if (currencyIsDCR) {
                         val dcr = dcrFormat.format(dcrAmount!!.setScale(8, BigDecimal.ROUND_HALF_EVEN).toDouble())
                         layout.send_amount.setText(CoinFormat.format(dcr, AmountRelativeSize))
-                    }else{
+                    } else {
                         val usd = usdAmount!!.setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString()
                         layout.send_amount.setText(usd)
                     }
 
                     layout.send_amount.setSelection(layout.send_amount.text.length) //move cursor to end
-                }else{
+                } else {
                     layout.send_amount.text = null
                 }
                 layout.send_amount.addTextChangedListener(this)
@@ -167,18 +166,18 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         }
     }
 
-    fun setAmountDcr(dcr: Long){
-        if(dcr > 0){
+    fun setAmountDcr(dcr: Long) {
+        if (dcr > 0) {
             layout.send_amount.removeTextChangedListener(this)
 
             val coin = Dcrlibwallet.amountCoin(dcr)
             dcrAmount = BigDecimal(coin)
             usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
 
-            if(currencyIsDCR){
+            if (currencyIsDCR) {
                 val amountString = Utils.formatDecredWithoutComma(dcr)
                 layout.send_amount.setText(CoinFormat.format(amountString, AmountRelativeSize))
-            }else{
+            } else {
                 val usd = usdAmount!!.setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString()
                 layout.send_amount.setText(usd)
             }
@@ -187,15 +186,15 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
             layout.send_amount.addTextChangedListener(this)
             layout.currency_label.setTextColor(context.resources.getColor(R.color.darkBlueTextColor))
-        }else{
+        } else {
             layout.send_amount.text = null
         }
 
         displayEquivalentValue()
     }
 
-    fun setError(error: String?) = GlobalScope.launch(Dispatchers.Main){
-        if(error == null){
+    fun setError(error: String?) = GlobalScope.launch(Dispatchers.Main) {
+        if (error == null) {
             layout.amount_error_text.text = null
             layout.amount_error_text.hide()
             setBackground()
@@ -209,28 +208,28 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         setBackground()
     }
 
-    var amountChanged: ((byUser :Boolean) -> Unit?)? = null
+    var amountChanged: ((byUser: Boolean) -> Unit?)? = null
     override fun afterTextChanged(s: Editable?) {
-        if(s.isNullOrEmpty()){
+        if (s.isNullOrEmpty()) {
             layout.currency_label.setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
-        }else{
+        } else {
             layout.currency_label.setTextColor(context.resources.getColor(R.color.darkBlueTextColor))
-            if(currencyIsDCR){
+            if (currencyIsDCR) {
                 CoinFormat.formatSpannable(s, AmountRelativeSize)
             }
         }
 
         setError(null)
 
-        if(enteredAmount != null){
-            if(currencyIsDCR){
+        if (enteredAmount != null) {
+            if (currencyIsDCR) {
                 dcrAmount = enteredAmount!!
                 usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
-            }else{
+            } else {
                 usdAmount = enteredAmount!!
                 dcrAmount = usdToDCR(exchangeDecimal, usdAmount!!.toDouble())
             }
-        }else{
+        } else {
             dcrAmount = null
             usdAmount = null
         }
@@ -240,9 +239,9 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         amountChanged?.invoke(true)
     }
 
-    private fun displayEquivalentValue(){
+    private fun displayEquivalentValue() {
 
-        if(currencyIsDCR) {
+        if (currencyIsDCR) {
             val usd = if (usdAmount == null) {
                 0.0
             } else {
@@ -251,7 +250,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
             val usdStr = formatter.format(usd)
             layout.send_equivalent_value.text = context.getString(R.string.x_usd, usdStr)
-        }else{
+        } else {
             val dcr = if (dcrAmount == null) {
                 0.0
             } else {
@@ -270,13 +269,13 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     override fun onExchangeRateSuccess(rate: GetExchangeRate.BittrexRateParser) {
         exchangeDecimal = rate.usdRate
 
-        GlobalScope.launch(Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             layout.exchange_error_layout.hide()
             layout.send_equivalent_value.show()
             layout.exchange_layout.show()
         }
 
-        if(dcrAmount != null){
+        if (dcrAmount != null) {
             usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
         }
 
@@ -287,7 +286,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     override fun onExchangeRateError(e: Exception) {
         e.printStackTrace()
 
-        GlobalScope.launch(Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             layout.exchange_error_layout.show()
 
             layout.send_equivalent_value.hide()
@@ -296,7 +295,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     }
 }
 
-fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String{
+fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String {
     return formatter.format(
             dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
 }
@@ -306,8 +305,8 @@ fun dcrToUSD(exchangeDecimal: BigDecimal?, dcr: Double): BigDecimal? {
     return exchangeDecimal?.multiply(dcrDecimal)
 }
 
-fun usdToDCR(exchangeDecimal: BigDecimal?, usd: Double) : BigDecimal? {
-    if(exchangeDecimal == null){
+fun usdToDCR(exchangeDecimal: BigDecimal?, usd: Double): BigDecimal? {
+    if (exchangeDecimal == null) {
         return null
     }
 

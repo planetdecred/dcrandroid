@@ -11,11 +11,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null): BottomSheetDialogFragment(){
+open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null) : BottomSheetDialogFragment() {
 
     protected val multiWallet = WalletData.multiWallet!!
 
@@ -79,8 +76,8 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
         }
     }
 
-    open fun showInfo(){}
-    open fun showOptionsMenu(v: View){}
+    open fun showInfo() {}
+    open fun showOptionsMenu(v: View) {}
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)

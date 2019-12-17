@@ -28,18 +28,18 @@ import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
 import java.math.RoundingMode
 
-class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess:() -> Unit): CollapsedBottomSheetDialog() {
+class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: () -> Unit) : CollapsedBottomSheetDialog() {
 
     lateinit var wallet: Wallet
 
 
     private val selectedAccount: Account
-    get() = transactionData.sourceAccount
+        get() = transactionData.sourceAccount
 
     lateinit var transactionData: TransactionData
     lateinit var authoredTxData: AuthoredTxData
 
-    fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): CollapsedBottomSheetDialog{
+    fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): CollapsedBottomSheetDialog {
         this.transactionData = transactionData
         this.authoredTxData = authoredTxData
         this.wallet = multiWallet!!.walletWithID(transactionData.sourceAccount.walletID)
@@ -58,16 +58,16 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                 selectedAccount.accountName, wallet.name), 0)
 
         val dcrAmount = dcrFormat.format(transactionData.dcrAmount.setScale(8, RoundingMode.HALF_EVEN).toDouble())
-        val amountStr = if(transactionData.exchangeDecimal != null) {
+        val amountStr = if (transactionData.exchangeDecimal != null) {
             val usdAmount = dcrToFormattedUSD(transactionData.exchangeDecimal, transactionData.dcrAmount.toDouble())
             HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, dcrAmount, usdAmount), 0)
-        }else{
+        } else {
             getString(R.string.x_dcr, dcrAmount)
         }
-        if(amountStr is Spannable) {
+        if (amountStr is Spannable) {
             CoinFormat.formatSpannable(amountStr, AmountRelativeSize)
             send_amount.text = amountStr
-        }else{
+        } else {
             send_amount.text = CoinFormat.format(amountStr as String, AmountRelativeSize)
         }
 
@@ -78,9 +78,9 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         send_btn.text = getString(R.string.send_x_dcr, dcrAmount)
 
         // address & account
-        if(transactionData.destinationAccount == null){
+        if (transactionData.destinationAccount == null) {
             address_account_name.text = transactionData.destinationAddress
-        }else{
+        } else {
             confirm_dest_type.setText(R.string.to_self)
 
             val destinationAccount = transactionData.destinationAccount!!
@@ -93,17 +93,17 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
             showProcessing()
 
             val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(fragmentActivity, wallet.id, title, allowFingerprint = true){_, pass ->
-                if(pass == null){
+            PassPromptUtil(fragmentActivity, wallet.id, title, allowFingerprint = true) { _, pass ->
+                if (pass == null) {
                     showSendButton()
                     return@PassPromptUtil true
                 }
 
-                GlobalScope.launch(Dispatchers.Default){
+                GlobalScope.launch(Dispatchers.Default) {
                     try {
                         authoredTxData.txAuthor.broadcast(pass.toByteArray())
                         showSuccess()
-                    }catch (e: Exception){
+                    } catch (e: Exception) {
                         showSendButton()
                         SnackBar.showError(container!!, R.string.send_fail_msg)
                         e.printStackTrace()
@@ -114,7 +114,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         }
     }
 
-    private fun showSendButton() = GlobalScope.launch(Dispatchers.Main){
+    private fun showSendButton() = GlobalScope.launch(Dispatchers.Main) {
         send_btn.show()
         processing_layout.hide()
         success_layout.hide()
@@ -122,21 +122,21 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         isCancelable = true
     }
 
-    private fun showSuccess() = GlobalScope.launch(Dispatchers.Main){
+    private fun showSuccess() = GlobalScope.launch(Dispatchers.Main) {
         success_layout.show()
         send_btn.hide()
         processing_layout.hide()
         go_back.isEnabled = false
         isCancelable = false
 
-        withContext(Dispatchers.Default){
+        withContext(Dispatchers.Default) {
             delay(5000)
             dismiss()
             sendSuccess()
         }
     }
 
-    private fun showProcessing()  = GlobalScope.launch(Dispatchers.Main){
+    private fun showProcessing() = GlobalScope.launch(Dispatchers.Main) {
         processing_layout.show()
         send_btn.hide()
         success_layout.hide()

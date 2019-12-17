@@ -17,7 +17,7 @@ import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_debug.*
 import kotlinx.android.synthetic.main.activity_debug.view.*
 
-class DebugActivity: BaseActivity() {
+class DebugActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class DebugActivity: BaseActivity() {
 
         setLogLevelSummary(multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL))
         ListPreference(this, Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL,
-                R.array.logging_levels, logging_level){
+                R.array.logging_levels, logging_level) {
             setLogLevelSummary(it)
         }
 
@@ -38,7 +38,7 @@ class DebugActivity: BaseActivity() {
         }
     }
 
-    private fun setLogLevelSummary(index: Int){
+    private fun setLogLevelSummary(index: Int) {
         val logLevels = resources.getStringArray(R.array.logging_levels)
         logging_level.pref_subtitle.text = logLevels[index]
         Dcrlibwallet.setLogLevels(logLevels[index])

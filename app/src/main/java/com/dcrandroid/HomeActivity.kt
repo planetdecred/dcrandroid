@@ -28,12 +28,15 @@ import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.ReceiveDialog
 import com.dcrandroid.dialog.ResumeAccountDiscovery
-import com.dcrandroid.dialog.send.SendDialog
 import com.dcrandroid.dialog.WiFiSyncDialog
+import com.dcrandroid.dialog.send.SendDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
-import com.dcrandroid.fragments.*
+import com.dcrandroid.fragments.MultiWalletTransactions
+import com.dcrandroid.fragments.Overview
+import com.dcrandroid.fragments.TransactionsFragment
+import com.dcrandroid.fragments.WalletsFragment
 import com.dcrandroid.fragments.more.MoreFragment
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
@@ -64,7 +67,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         setContentView(R.layout.activity_tabs)
         setSupportActionBar(toolbar)
 
-        if(walletData.multiWallet == null){
+        if (walletData.multiWallet == null) {
             println("Restarting app")
             Utils.restartApp(this)
         }
@@ -112,7 +115,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onDestroy() {
         super.onDestroy()
 
-        if(multiWallet == null || multiWallet?.openedWalletsCount() == 0){
+        if (multiWallet == null || multiWallet?.openedWalletsCount() == 0) {
             return
         }
 
@@ -134,7 +137,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.numWalletsNeedingSeedBackup()) {position ->
+        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.numWalletsNeedingSeedBackup()) { position ->
             switchFragment(position)
         }
         recycler_view_tabs.adapter = adapter
@@ -143,7 +146,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     }
 
-    fun refreshNavigationTabs(){
+    fun refreshNavigationTabs() {
         adapter.backupsNeeded = multiWallet!!.numWalletsNeedingSeedBackup()
         adapter.notifyItemChanged(2) // Wallets Page
     }
@@ -163,15 +166,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
     }
 
-    private fun showOrHideFab(position: Int){
+    private fun showOrHideFab(position: Int) {
         send_receive_layout.post {
-            if(position < 2){ // show send and receive buttons for overview & transactions page
+            if (position < 2) { // show send and receive buttons for overview & transactions page
                 send_receive_layout.show()
                 ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, 0f).setDuration(350).start() // bring view down
-            }else{
+            } else {
                 val objectAnimator = ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, send_receive_layout.height.toFloat())
 
-                objectAnimator.addListener(object : Animator.AnimatorListener{
+                objectAnimator.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(animation: Animator?) {
                     }
 
@@ -197,10 +200,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         currentFragment = when (position) {
             0 -> Overview()
-            1 ->{
-                if(multiWallet!!.openedWalletsCount() > 1){
+            1 -> {
+                if (multiWallet!!.openedWalletsCount() > 1) {
                     MultiWalletTransactions()
-                }else{
+                } else {
                     val wallet = multiWallet!!.openedWalletsList()[0]
                     TransactionsFragment().setWalletID(wallet.id)
                 }
@@ -261,8 +264,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     fun startSyncing() {
-        for (w in multiWallet!!.openedWalletsList()){
-            if(!w.hasDiscoveredAccounts && w.isLocked){
+        for (w in multiWallet!!.openedWalletsList()) {
+            if (!w.hasDiscoveredAccounts && w.isLocked) {
                 ResumeAccountDiscovery()
                         .setWalletID(w.id)
                         .show(supportFragmentManager, ResumeAccountDiscovery::javaClass.name)
@@ -285,8 +288,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
-        val beepNewBlocks =  multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
-        if(beepNewBlocks && !multiWallet!!.isSyncing){
+        val beepNewBlocks = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
+        if (beepNewBlocks && !multiWallet!!.isSyncing) {
             alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
         }
     }
@@ -295,7 +298,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         val gson = Gson()
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
 
-        if(transaction.direction == Dcrlibwallet.TxDirectionReceived){
+        if (transaction.direction == Dcrlibwallet.TxDirectionReceived) {
             val dcrFormat = DecimalFormat("#.######## DCR")
 
             val amount = Dcrlibwallet.amountCoin(transaction.amount)

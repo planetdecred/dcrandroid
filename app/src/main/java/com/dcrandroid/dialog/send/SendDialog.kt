@@ -25,9 +25,9 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
+import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.view.util.SCAN_QR_REQUEST_CODE
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.TxAuthor
@@ -35,7 +35,9 @@ import dcrlibwallet.TxFeeAndSize
 import kotlinx.android.synthetic.main.fee_layout.*
 import kotlinx.android.synthetic.main.send_page_amount_card.*
 import kotlinx.android.synthetic.main.send_page_sheet.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: DialogInterface.OnDismissListener) :
@@ -96,7 +98,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
                 return@setOnClickListener
             }
 
-            if(!multiWallet.isSynced){
+            if (!multiWallet.isSynced) {
                 SnackBar.showError(app_bar, R.string.not_connected)
                 return@setOnClickListener
             }
@@ -152,12 +154,12 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         constructTransaction()
     }
 
-    private val addressChanged:() -> Unit = {
+    private val addressChanged: () -> Unit = {
         constructTransaction()
     }
 
     val amountChanged: (Boolean) -> Unit = { byUser ->
-        if(view != null){
+        if (view != null) {
             if (byUser) {
                 sendMax = false
             }
@@ -188,8 +190,8 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }, 200)
     }
 
-    private val sendSuccess:() -> Unit = {
-        GlobalScope.launch(Dispatchers.Main){
+    private val sendSuccess: () -> Unit = {
+        GlobalScope.launch(Dispatchers.Main) {
             SnackBar.showText(context!!, R.string.transaction_sent)
             dismiss()
         }
@@ -326,7 +328,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK) {
             val result = data!!.getStringExtra(Constants.RESULT).replace("decred:", "")
             destinationAddressCard.addressInputHelper.scanQRSuccess(result)
         }

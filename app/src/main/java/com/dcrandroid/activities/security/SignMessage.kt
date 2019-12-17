@@ -12,7 +12,6 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.PassPromptTitle
@@ -28,7 +27,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignMessage: BaseActivity(), View.OnClickListener {
+class SignMessage : BaseActivity(), View.OnClickListener {
 
     private lateinit var addressInputHelper: InputHelper
     private lateinit var messageInputHelper: InputHelper
@@ -44,20 +43,20 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         wallet = multiWallet!!.walletWithID(walletID)
 
 
-        addressInputHelper = InputHelper(this, address_container){
+        addressInputHelper = InputHelper(this, address_container) {
             wallet.isAddressValid(it)
         }
         addressInputHelper.setHint(R.string.address)
         addressInputHelper.textChanged = textChanged
 
 
-        messageInputHelper = InputHelper(this, message_container){true}
+        messageInputHelper = InputHelper(this, message_container) { true }
         messageInputHelper.setHint(R.string.message)
         messageInputHelper.hideQrScanner()
         messageInputHelper.textChanged = textChanged
 
 
-        signatureHelper = InputHelper(this, signature_container){true}.apply {
+        signatureHelper = InputHelper(this, signature_container) { true }.apply {
             setHint(R.string.signature)
             hidePasteButton()
             hideQrScanner()
@@ -82,18 +81,18 @@ class SignMessage: BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when (v!!.id){
+        when (v!!.id) {
             R.id.tv_sign -> {
                 val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
-                PassPromptUtil(this, wallet.id, title, allowFingerprint = true){_, pass ->
-                    if(pass != null){
+                PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { _, pass ->
+                    if (pass != null) {
                         beginSignMessage(pass)
                     }
                     true
                 }.show()
             }
             R.id.tv_copy -> {
-                Utils.copyToClipboard(this,  signatureHelper.editText.text.toString(), R.string.signature_copied)
+                Utils.copyToClipboard(this, signatureHelper.editText.text.toString(), R.string.signature_copied)
             }
             R.id.iv_info -> {
                 InfoDialog(this)
@@ -109,12 +108,12 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         result_layout.hide()
         val address = addressInputHelper.validatedInput
 
-        if(address.isNullOrBlank()){
+        if (address.isNullOrBlank()) {
             tv_sign.isEnabled = false
-        }else{
-            if(wallet.haveAddress(address)){
+        } else {
+            if (wallet.haveAddress(address)) {
                 tv_sign.isEnabled = true
-            }else{
+            } else {
                 tv_sign.isEnabled = false
                 addressInputHelper.setError(getString(R.string.sign_using_external_address_error))
             }
@@ -126,10 +125,10 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         tv_clear.isEnabled = isEnable
         go_back.isEnabled = isEnable
 
-        if(isEnable){
+        if (isEnable) {
             tv_sign.show()
             progress_bar.hide()
-        }else{
+        } else {
             tv_sign.hide()
             progress_bar.show()
         }
@@ -141,22 +140,22 @@ class SignMessage: BaseActivity(), View.OnClickListener {
         val address = addressInputHelper.validatedInput!!
         val message = messageInputHelper.editText.text.toString()
 
-        try{
+        try {
             val signature = wallet.signMessage(passphrase.toByteArray(), address, message)
             val signatureStr = Dcrlibwallet.encodeBase64(signature)
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 result_layout.show()
                 signatureHelper.editText.setText(signatureStr)
                 SnackBar.showText(this@SignMessage, R.string.message_signed)
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e.message == Dcrlibwallet.ErrInvalidPassphrase){
+            if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
 
-                val err = if(wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
+                val err = if (wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin) {
                     R.string.invalid_pin
-                }else{
+                } else {
                     R.string.invalid_password
                 }
 

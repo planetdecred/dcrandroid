@@ -17,7 +17,7 @@ import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.edit_text_preference_dialog.*
 
 class EditTextPreference(val context: Context, val key: String, val title: Int, val dialogHint: Int, var errorString: Int? = null,
-                         val view: View, val validateInput: ((String) -> Boolean) = {true},
+                         val view: View, val validateInput: ((String) -> Boolean) = { true },
                          val valueChanged: ((newValue: String) -> Unit)? = null) : Preference(context, key, view), View.OnClickListener {
 
     init {
@@ -30,7 +30,7 @@ class EditTextPreference(val context: Context, val key: String, val title: Int, 
 }
 
 class EditTextDialog(val title: Int, val dialogHint: Int, val key: String, var errorString: Int? = null,
-                     val validateInput:(String) -> Boolean, val valueChanged: ((newValue: String) -> Unit)? = null): CollapsedBottomSheetDialog() {
+                     val validateInput: (String) -> Boolean, val valueChanged: ((newValue: String) -> Unit)? = null) : CollapsedBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.edit_text_preference_dialog, container, false)
@@ -42,7 +42,7 @@ class EditTextDialog(val title: Int, val dialogHint: Int, val key: String, var e
         sheet_title.setText(title)
 
         val inputHelper = InputHelper(context!!, et_preference, validateInput).apply {
-            if(errorString != null){
+            if (errorString != null) {
                 validationMessage = errorString!!
             }
             hidePasteButton()

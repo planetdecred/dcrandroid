@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.more_list_row.view.*
 
-class ListAdapter(val context: Context, val items: Array<ListItem>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(val context: Context, val items: Array<ListItem>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -35,13 +35,13 @@ class ListAdapter(val context: Context, val items: Array<ListItem>): RecyclerVie
 
         holder.itemView.setOnClickListener {
             val intent = items[position].intent
-            if(intent != null){
+            if (intent != null) {
                 context.startActivity(intent)
             }
         }
     }
 
-    inner class ViewHolder(v: View): RecyclerView.ViewHolder(v)
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 }
 
 data class ListItem(val title: Int, @DrawableRes val iconResource: Int, var intent: Intent? = null)

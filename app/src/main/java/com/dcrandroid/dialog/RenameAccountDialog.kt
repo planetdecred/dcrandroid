@@ -13,10 +13,9 @@ import android.view.ViewGroup
 import com.dcrandroid.R
 import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.rename_account_sheet.*
-import java.lang.Exception
 
 // can also rename a wallet
-class RenameAccountDialog(private val currentName: String, private val isWallet:Boolean = false, private val rename:(newName: String) -> Exception?): CollapsedBottomSheetDialog() {
+class RenameAccountDialog(private val currentName: String, private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.rename_account_sheet, container, false)
@@ -25,19 +24,19 @@ class RenameAccountDialog(private val currentName: String, private val isWallet:
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(isWallet){
+        if (isWallet) {
             sheet_title.setText(R.string.rename_wallet_sheet_title)
         }
 
-        val accountNameInput = InputHelper(context!!, account_name_input){
+        val accountNameInput = InputHelper(context!!, account_name_input) {
             btn_confirm.isEnabled = !it.isNullOrBlank() && it != currentName
             true
         }.apply {
             hidePasteButton()
             hideQrScanner()
-            if(isWallet){
+            if (isWallet) {
                 setHint(R.string.wallet_name)
-            }else{
+            } else {
                 setHint(R.string.account_name)
             }
 
@@ -63,7 +62,7 @@ class RenameAccountDialog(private val currentName: String, private val isWallet:
                 btn_cancel.isEnabled = true
                 accountNameInput.editText.isEnabled = true
                 accountNameInput.setError(exception.message)
-            }else{
+            } else {
                 dismiss()
             }
         }

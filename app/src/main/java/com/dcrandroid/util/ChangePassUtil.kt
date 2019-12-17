@@ -65,11 +65,11 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
                         showError(passType)
                     }
                 }
-            }else{
-                try{
+            } else {
+                try {
                     multiWallet.changePrivatePassphraseForWallet(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
                     SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                         val wallet = multiWallet.walletWithID(walletID)
                         showError(wallet.privatePassphraseType)
@@ -85,7 +85,7 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
         }
     }
 
-    private fun showError(passType: Int){
+    private fun showError(passType: Int) {
         val err = if (passType == Dcrlibwallet.PassphraseTypePass) {
             R.string.invalid_password
         } else {

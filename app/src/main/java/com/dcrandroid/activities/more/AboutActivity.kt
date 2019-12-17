@@ -12,9 +12,8 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.activities.License
 import com.dcrandroid.dialog.StakeyDialog
-import com.dcrandroid.util.SnackBar
 
-class AboutActivity: ListActivity() {
+class AboutActivity : ListActivity() {
 
     private val tapThreshold = 3000L // 3 seconds
 
@@ -37,13 +36,13 @@ class AboutActivity: ListActivity() {
                     val currentTime = System.currentTimeMillis()
                     val timeDifference = currentTime - lastVersionTap
 
-                    if(timeDifference > tapThreshold){
+                    if (timeDifference > tapThreshold) {
                         versionTaps = 1
                         lastVersionTap = currentTime
-                    }else {
+                    } else {
                         versionTaps++
 
-                        if(versionTaps >= 8){
+                        if (versionTaps >= 8) {
                             versionTaps = 0
                             lastVersionTap = 0
 

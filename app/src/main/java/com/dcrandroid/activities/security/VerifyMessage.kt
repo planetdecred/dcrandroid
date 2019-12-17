@@ -114,9 +114,9 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
             val base64Signature = signatureInputHelper.validatedInput!!
 
             var validSignature = false
-            try{
+            try {
                 validSignature = wallet.verifyMessage(address, message, base64Signature)
-            }catch (e: java.lang.Exception){
+            } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
 
@@ -125,18 +125,18 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
     }
 
 
-    private fun showVerificationResult(valid: Boolean){
+    private fun showVerificationResult(valid: Boolean) {
 
         val titleColor: Int
         val titleText: Int
         val iconResource: Int
 
-        if(valid){
+        if (valid) {
             titleColor = R.color.greenTextColor
             titleText = R.string.valid_signature
             iconResource = R.drawable.ic_checkmark
 
-        }else{
+        } else {
             titleColor = R.color.colorError
             titleText = R.string.invalid_signature
             iconResource = R.drawable.ic_crossmark

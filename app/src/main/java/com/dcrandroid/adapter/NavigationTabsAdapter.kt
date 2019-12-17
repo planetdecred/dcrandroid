@@ -15,12 +15,13 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
-import com.dcrandroid.extensions.*
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.tab_row.view.*
 
 data class NavigationTab(@StringRes val title: Int, @DrawableRes val activeIcon: Int, @DrawableRes val inactiveIcon: Int)
 
-class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int, var backupsNeeded: Int, var tabSelected:(position: Int) -> Unit): RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
+class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int, var backupsNeeded: Int, var tabSelected: (position: Int) -> Unit) : RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private var tabs: ArrayList<NavigationTab> = ArrayList()
@@ -44,17 +45,17 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
     override fun onBindViewHolder(holder: NavigationTabViewHolder, position: Int) {
         holder.title.text = context.getString(tabs[position].title)
 
-        if(activeTab == position){
+        if (activeTab == position) {
             holder.title.setTextColor(Color.parseColor("#091440"))
             holder.icon.setImageResource(tabs[position].activeIcon)
-        }else{
+        } else {
             holder.title.setTextColor(Color.parseColor("#596d81"))
             holder.icon.setImageResource(tabs[position].inactiveIcon)
         }
 
-        if(position == 2 && backupsNeeded > 0){ // Wallets Page
+        if (position == 2 && backupsNeeded > 0) { // Wallets Page
             holder.backupIcon.show()
-        }else{
+        } else {
             holder.backupIcon.hide()
         }
 
@@ -73,8 +74,8 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
         holder.itemView.layoutParams = ViewGroup.LayoutParams(deviceWidth / 4, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    fun changeActiveTab(position: Int){
-        if(activeTab == position){
+    fun changeActiveTab(position: Int) {
+        if (activeTab == position) {
             return
         }
         activeTab = position

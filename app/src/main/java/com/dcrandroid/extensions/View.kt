@@ -13,7 +13,7 @@ fun View.toggleVisibility(): Int {
     return this.visibility
 }
 
-fun View. show() {
+fun View.show() {
     this.visibility = View.VISIBLE
 }
 
@@ -21,6 +21,6 @@ fun View.hide() {
     this.visibility = View.GONE
 }
 
-fun View.isShowing(): Boolean{
+fun View.isShowing(): Boolean {
     return this.visibility == View.VISIBLE
 }

@@ -25,10 +25,10 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.view.util.ANIMATION_DURATION
 import kotlinx.android.synthetic.main.custom_password_input.view.*
 
-class PasswordInput: FrameLayout, TextWatcher {
+class PasswordInput : FrameLayout, TextWatcher {
 
-    val textString:String
-    get() = editText.text.toString()
+    val textString: String
+        get() = editText.text.toString()
 
     private var isMasked = true
 
@@ -72,10 +72,10 @@ class PasswordInput: FrameLayout, TextWatcher {
         }
 
         ivConcealReveal.setOnClickListener {
-            if(isMasked){
+            if (isMasked) {
                 editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 ivConcealReveal.setImageResource(R.drawable.ic_reveal)
-            }else{
+            } else {
                 editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 ivConcealReveal.setImageResource(R.drawable.ic_conceal)
             }
@@ -92,12 +92,12 @@ class PasswordInput: FrameLayout, TextWatcher {
         val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
         val counterEnabled = values.getBoolean(R.styleable.PasswordInput_counter_enabled, false)
 
-        if(counterEnabled){
+        if (counterEnabled) {
             counterTextView.show()
         }
     }
 
-    fun setError(error: String?){
+    fun setError(error: String?) {
         errorTextView.text = error
         setupLayout()
     }
@@ -106,9 +106,9 @@ class PasswordInput: FrameLayout, TextWatcher {
 
     override fun afterTextChanged(s: Editable) {
         val valid = validateInput?.invoke(s.toString())
-        if(valid != null && !valid){
+        if (valid != null && !valid) {
             password_input_error.text = validationMessage
-        }else{
+        } else {
             password_input_error.text = null
         }
 
@@ -123,7 +123,7 @@ class PasswordInput: FrameLayout, TextWatcher {
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     }
 
-    private fun setupLayout(){
+    private fun setupLayout() {
         val active = editText.hasFocus() || editText.text.isNotEmpty()
 
         val textColor: Int
@@ -144,17 +144,17 @@ class PasswordInput: FrameLayout, TextWatcher {
             else -> {
                 textColor = context.resources.getColor(R.color.lightGrayTextColor)
                 backgroundResource = R.drawable.input_background
-                fontSizeTarget = if(editText.text.isNotEmpty()){
+                fontSizeTarget = if (editText.text.isNotEmpty()) {
                     context.resources.getDimension(R.dimen.edit_text_size_14)
-                }else{
+                } else {
                     context.resources.getDimension(R.dimen.edit_text_size_16)
                 }
             }
         }
 
-        val translationYTarget =if(active){
-            - (hintTextView.height.toFloat() / 2)
-        }else{
+        val translationYTarget = if (active) {
+            -(hintTextView.height.toFloat() / 2)
+        } else {
 
             val textPaint = TextPaint(hintTextView.paint)
             textPaint.textSize = fontSizeTarget

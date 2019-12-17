@@ -47,7 +47,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         }
     }
 
-    fun refreshNavigationTabs(){
+    fun refreshNavigationTabs() {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity
             homeActivity.refreshNavigationTabs()
@@ -61,7 +61,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         }
     }
 
-    fun switchFragment(position: Int){
+    fun switchFragment(position: Int) {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity
             homeActivity.switchFragment(position)

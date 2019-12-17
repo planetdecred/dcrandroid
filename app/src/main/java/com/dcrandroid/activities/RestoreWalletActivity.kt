@@ -22,7 +22,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 // TODO: Hide restore button while keyboard is visible
-class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
+class RestoreWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
 
     var allSeedWords = ArrayList<String>()
     lateinit var adapter: RestoreWalletAdapter
@@ -51,11 +51,11 @@ class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordP
 
         loadSeedSuggestions()
 
-        btn_restore.setOnClickListener{
+        btn_restore.setOnClickListener {
             val seed = adapter.enteredSeeds.joinToString(" ")
             val seedValid = Dcrlibwallet.verifySeed(seed)
-            
-            if(!seedValid){
+
+            if (!seedValid) {
                 SnackBar.showError(this, R.string.invalid_restore_seed)
                 return@setOnClickListener
             }
@@ -66,7 +66,7 @@ class RestoreWalletActivity: BaseActivity(), PasswordPinDialogFragment.PasswordP
         go_back.setOnClickListener { finish() }
     }
 
-    private fun loadSeedSuggestions() = GlobalScope.launch(Dispatchers.IO){
+    private fun loadSeedSuggestions() = GlobalScope.launch(Dispatchers.IO) {
         val seedWords = Dcrlibwallet.AlternatingWords.split("\n")
         allSeedWords.addAll(seedWords)
     }

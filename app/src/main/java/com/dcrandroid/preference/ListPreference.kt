@@ -26,15 +26,15 @@ import kotlinx.android.synthetic.main.list_preference_row.view.*
 class ListPreference(val context: Context, val key: String, val defaultValue: Int,
                      @ArrayRes val entries: Int, val view: View, val valueChanged: ((newValue: Int) -> Unit)? = null) : Preference(context, key, view), View.OnClickListener {
 
-    init{
-         view.setOnClickListener(this)
+    init {
+        view.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         ListPreferenceDialog(context).show()
     }
 
-    inner class ListPreferenceDialog(context: Context): Dialog(context) {
+    inner class ListPreferenceDialog(context: Context) : Dialog(context) {
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -60,7 +60,7 @@ class ListPreference(val context: Context, val key: String, val defaultValue: In
         }
     }
 
-    inner class ListPreferenceAdapter(private val context: Context): RecyclerView.Adapter<ListPreferenceAdapter.ViewHolder>() {
+    inner class ListPreferenceAdapter(private val context: Context) : RecyclerView.Adapter<ListPreferenceAdapter.ViewHolder>() {
 
         var selectedItem = 0
 
@@ -79,7 +79,7 @@ class ListPreference(val context: Context, val key: String, val defaultValue: In
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-            val imgResource = when(selectedItem){
+            val imgResource = when (selectedItem) {
                 position -> R.drawable.ic_radial_checked
                 else -> R.drawable.ic_radial
             }
@@ -88,7 +88,7 @@ class ListPreference(val context: Context, val key: String, val defaultValue: In
             holder.itemView.list_preference_label.text = items[position]
 
             holder.itemView.setOnClickListener {
-                if(position == selectedItem){
+                if (position == selectedItem) {
                     return@setOnClickListener
                 }
 
@@ -100,7 +100,7 @@ class ListPreference(val context: Context, val key: String, val defaultValue: In
             }
         }
 
-        inner class ViewHolder(view: View): RecyclerView.ViewHolder(view)
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     }
 

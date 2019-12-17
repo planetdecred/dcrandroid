@@ -18,12 +18,10 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.PinViewUtil
 import kotlinx.android.synthetic.main.create_pin_sheet.*
-import kotlinx.android.synthetic.main.create_pin_sheet.btn_cancel
-import kotlinx.android.synthetic.main.create_pin_sheet.pass_strength
 import kotlinx.coroutines.*
 
 class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int,
-                              private var clickListener: DialogButtonListener): Fragment() {
+                              private var clickListener: DialogButtonListener) : Fragment() {
 
     private var currentPassCode: String? = null
     private lateinit var pinViewUtil: PinViewUtil
@@ -39,7 +37,7 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(!isSpending){
+        if (!isSpending) {
             hint = R.string.enter_new_startup_pin
             confirmHint = R.string.enter_new_startup_pin_again
         }
@@ -47,9 +45,9 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
         pinViewUtil = PinViewUtil(pin_view, pin_counter, pass_strength)
 
         pinViewUtil.pinChanged = {
-            if(currentPassCode == null){
+            if (currentPassCode == null) {
                 btn_create.isEnabled = it.isNotEmpty()
-            }else{
+            } else {
                 btn_create.isEnabled = it == currentPassCode!!
             }
         }
@@ -77,7 +75,7 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
         pinViewUtil.showHint(hint)
     }
 
-    private fun onEnter(){
+    private fun onEnter() {
         when (currentPassCode) {
             null -> {
                 togglePasswordStrength(false)
@@ -111,9 +109,9 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
                 btn_create.isEnabled = false
                 btn_back.hide()
 
-                GlobalScope.launch(Dispatchers.Default){
+                GlobalScope.launch(Dispatchers.Default) {
                     delay(2000)
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         pinViewUtil.reset()
                         pinViewUtil.showHint(hint)
                         togglePasswordStrength(true)
@@ -124,18 +122,18 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
         }
     }
 
-    private fun togglePasswordStrength(show: Boolean){
+    private fun togglePasswordStrength(show: Boolean) {
         val pinBottomPadding: Int
 
-        if(show){
+        if (show) {
             pass_strength?.visibility = View.VISIBLE
             pinBottomPadding = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_128)
-        }else{
+        } else {
             pass_strength?.visibility = View.GONE
             pinBottomPadding = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_96)
         }
 
-        val bottomBarTopMargin = - pinBottomPadding
+        val bottomBarTopMargin = -pinBottomPadding
         val bottomBarParams = bottom_bar.layoutParams as LinearLayout.LayoutParams
         bottomBarParams.topMargin = bottomBarTopMargin
         bottom_bar.layoutParams = bottomBarParams

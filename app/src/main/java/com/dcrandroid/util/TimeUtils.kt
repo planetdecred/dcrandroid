@@ -10,7 +10,7 @@ import android.content.Context
 import com.dcrandroid.R
 import java.util.concurrent.TimeUnit
 
-object TimeUtils{
+object TimeUtils {
     fun getDaysBehind(seconds: Long, context: Context): String {
         val days = TimeUnit.SECONDS.toDays(seconds)
         return if (days == 1L) {
@@ -52,32 +52,32 @@ object TimeUtils{
         return formatSeconds(context, secs)
     }
 
-    private fun formatSeconds(context: Context, seconds: Long): String{
-        if(seconds == 1L){
+    private fun formatSeconds(context: Context, seconds: Long): String {
+        if (seconds == 1L) {
             return context.getString(R.string.one_second)
         }
 
         return context.getString(R.string.x_seconds, seconds)
     }
 
-    private fun formatMinute(context: Context, minutes: Long): String{
-        if(minutes == 1L){
+    private fun formatMinute(context: Context, minutes: Long): String {
+        if (minutes == 1L) {
             return context.getString(R.string.one_minute)
         }
 
         return context.getString(R.string.x_minutes, minutes)
     }
 
-    private fun formatHours(context: Context, hours: Long): String{
-        if(hours == 1L){
+    private fun formatHours(context: Context, hours: Long): String {
+        if (hours == 1L) {
             return context.getString(R.string.one_hour)
         }
 
         return context.getString(R.string.x_hours, hours)
     }
 
-    private fun formatDays(context: Context, days: Long): String{
-        if(days == 1L){
+    private fun formatDays(context: Context, days: Long): String {
+        if (days == 1L) {
             return context.getString(R.string.one_day)
         }
 

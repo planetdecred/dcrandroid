@@ -6,7 +6,6 @@
 
 package com.dcrandroid.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
-class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
+class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
 
     private var loadedAll = false
     private val loading = AtomicBoolean(false)
@@ -51,7 +50,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
 
     private var txTypeSortAdapter: ArrayAdapter<String>? = null
 
-    fun setWalletID(walletID: Long): TransactionsFragment{
+    fun setWalletID(walletID: Long): TransactionsFragment {
         wallet = multiWallet.walletWithID(walletID)
         TAG = wallet!!.name
         return this
@@ -64,7 +63,7 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(multiWallet.openedWalletsCount() == 1){
+        if (multiWallet.openedWalletsCount() == 1) {
             setToolbarTitle(R.string.transactions, false)
         }
 
@@ -85,15 +84,15 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
     }
 
     override fun onScrollChanged() {
-        if(context == null || transactions.size < 5 || !initialLoadingDone.get()) return
+        if (context == null || transactions.size < 5 || !initialLoadingDone.get()) return
 
         val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-        transactions_page_header.elevation = if(firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+        transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
         else 0f
 
         val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-        if(lastVisibleItem >= transactions.size - 5){
-            if(!loadedAll){
+        if (lastVisibleItem >= transactions.size - 5) {
+            if (!loadedAll) {
                 recycler_view.stopScroll()
                 loadTransactions(loadMore = true)
             }
@@ -113,17 +112,17 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         loadTransactions()
     }
 
-    private fun refreshAvailableTxType() =  GlobalScope.launch(Dispatchers.Default) {
+    private fun refreshAvailableTxType() = GlobalScope.launch(Dispatchers.Default) {
         availableTxTypes.clear()
 
         val txCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterAll)
         val sentTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterSent)
-        val receivedTxCount =  wallet!!.countTransactions(Dcrlibwallet.TxFilterReceived)
-        val transferredTxCount =  wallet!!.countTransactions(Dcrlibwallet.TxFilterTransferred)
+        val receivedTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterReceived)
+        val transferredTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterTransferred)
         val stakingTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterStaking)
-        val coinbaseTxCount =  wallet!!.countTransactions(Dcrlibwallet.TxFilterCoinBase)
+        val coinbaseTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterCoinBase)
 
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.Main) {
             availableTxTypes.add(context!!.getString(R.string.tx_sort_all, txCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))
@@ -141,9 +140,9 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         }
     }
 
-    private fun loadTransactions(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default){
+    private fun loadTransactions(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
 
-        if(loading.get()){
+        if (loading.get()) {
             return@launch
         }
 
@@ -165,32 +164,32 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
             loading.set(false)
             showHideList()
 
-            if(!loadMore){
+            if (!loadMore) {
                 transactions.clear()
             }
             return@launch
         }
 
-        if(tempTxs.size < limit){
+        if (tempTxs.size < limit) {
             loadedAll = true
         }
 
-        if(loadMore){
+        if (loadMore) {
             val positionStart = transactions.size
             transactions.addAll(tempTxs)
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 adapter?.notifyItemRangeInserted(positionStart, tempTxs.size)
 
                 // notify previous last item to remove bottom margin
                 adapter?.notifyItemChanged(positionStart - 1)
             }
 
-        }else{
+        } else {
             transactions.let {
                 it.clear()
                 it.addAll(tempTxs)
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 adapter?.notifyDataSetChanged()
             }
         }
@@ -199,27 +198,27 @@ class TransactionsFragment: BaseFragment(), AdapterView.OnItemSelectedListener, 
         showHideList()
     }
 
-    private fun showHideList()  = GlobalScope.launch(Dispatchers.Main){
-        if(transactions.size > 0){
+    private fun showHideList() = GlobalScope.launch(Dispatchers.Main) {
+        if (transactions.size > 0) {
             recycler_view?.show()
-        }else{
+        } else {
             recycler_view?.hide()
         }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if(!initialLoadingDone.get()){
+        if (!initialLoadingDone.get()) {
             return
         }
 
-        if (parent!!.id == R.id.timestamp_sort_spinner){
+        if (parent!!.id == R.id.timestamp_sort_spinner) {
             val newestFirst = position == 0 // "Newest" is the first item
-            if (newestFirst != newestTransactionsFirst){
+            if (newestFirst != newestTransactionsFirst) {
                 newestTransactionsFirst = newestFirst
                 loadTransactions()
             }
-        }else{
-            txFilter = when(position){
+        } else {
+            txFilter = when (position) {
                 0 -> Dcrlibwallet.TxFilterAll
                 1 -> Dcrlibwallet.TxFilterSent
                 2 -> Dcrlibwallet.TxFilterReceived

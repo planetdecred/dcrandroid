@@ -20,7 +20,6 @@ import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
@@ -107,7 +106,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
 
             holder.itemView.ticket_price.hide()
 
-        } else if(Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)){
+        } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
 
             holder.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
 
@@ -117,15 +116,15 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
             }
 
             var title = 0
-            when(transaction.type){
-                Dcrlibwallet.TxTypeTicketPurchase ->{
+            when (transaction.type) {
+                Dcrlibwallet.TxTypeTicketPurchase -> {
                     title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
                         R.string.immature
-                    }else{
+                    } else {
                         R.string.live
                     }
                 }
-                Dcrlibwallet.TxTypeVote ->{
+                Dcrlibwallet.TxTypeVote -> {
                     title = R.string.vote
                     holder.itemView.vote_reward.show()
 
@@ -137,7 +136,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                 }
             }
 
-            if(transaction.type != Dcrlibwallet.TxTypeTicketPurchase){
+            if (transaction.type != Dcrlibwallet.TxTypeTicketPurchase) {
                 holder.itemView.days_to_vote.show()
             }
 

@@ -21,7 +21,7 @@ class WalletData {
     companion object {
         val instance = WalletData()
         val multiWallet
-        get() = instance.multiWallet
+            get() = instance.multiWallet
     }
 
 

@@ -38,17 +38,17 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
         preferenceUtil = PreferenceUtil(this)
 
-        ll_create_wallet.setOnClickListener{
+        ll_create_wallet.setOnClickListener {
             PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false, passwordPinListener = this).show(this)
         }
 
         ll_create_watch_only.setOnClickListener {
-            CreateWatchOnlyWallet {walletID ->
+            CreateWatchOnlyWallet { walletID ->
                 navigateToHomeActivity(walletID)
             }.show(this)
         }
 
-        ll_restore_wallet.setOnClickListener{
+        ll_restore_wallet.setOnClickListener {
             val restoreIntent = Intent(this, RestoreWalletActivity::class.java)
             startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
         }
@@ -56,7 +56,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == RESTORE_WALLET_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == RESTORE_WALLET_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             setResult(Activity.RESULT_OK, data)
             finish()
         }
@@ -90,9 +90,9 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
 
-            val startupPassword = if(multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)){
+            val startupPassword = if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
                 BiometricUtils.readFromKeystore(this@SetupWalletActivity, Constants.STARTUP_PASSPHRASE)
-            }else{
+            } else {
                 Constants.INSECURE_PUB_PASSPHRASE
             }
 

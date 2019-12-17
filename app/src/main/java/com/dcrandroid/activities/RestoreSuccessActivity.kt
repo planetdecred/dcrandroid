@@ -15,7 +15,7 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import kotlinx.android.synthetic.main.activity_wallet_restored.*
 
-class RestoreSuccessActivity: BaseActivity() {
+class RestoreSuccessActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

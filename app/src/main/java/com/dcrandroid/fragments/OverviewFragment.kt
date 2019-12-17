@@ -40,7 +40,7 @@ const val MAX_TRANSACTIONS = 3
 
 class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
-    companion object{
+    companion object {
         private var closedBackupWarning = false
     }
 

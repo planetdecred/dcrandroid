@@ -14,8 +14,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.activities.more.AboutActivity
-import com.dcrandroid.activities.more.HelpActivity
 import com.dcrandroid.activities.more.DebugActivity
+import com.dcrandroid.activities.more.HelpActivity
 import com.dcrandroid.activities.more.SettingsActivity
 import com.dcrandroid.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_more.*
@@ -31,7 +31,7 @@ class MoreFragment : BaseFragment() {
 
         setToolbarTitle(R.string.more, false)
 
-        val items= arrayOf(
+        val items = arrayOf(
                 ListItem(R.string.settings, R.drawable.ic_settings, Intent(context, SettingsActivity::class.java)),
                 ListItem(R.string.help, R.drawable.ic_question_mark, Intent(context, HelpActivity::class.java)),
                 ListItem(R.string.about, R.drawable.ic_info1, Intent(context, AboutActivity::class.java)),

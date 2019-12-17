@@ -14,7 +14,7 @@ import com.dcrandroid.activities.BaseActivity
 import kotlinx.android.synthetic.main.activity_about.*
 
 @SuppressLint("Registered")
-open class ListActivity: BaseActivity() {
+open class ListActivity : BaseActivity() {
 
     open var items = arrayOf<ListItem>()
 

@@ -31,14 +31,14 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
             multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
         }
 
-        if(allowFingerprint && walletID == null && multiWallet.readBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)){
+        if (allowFingerprint && walletID == null && multiWallet.readBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)) {
             showFingerprintDialog()
-        }else {
+        } else {
             showPasswordOrPin()
         }
     }
 
-    private fun showPasswordOrPin(){
+    private fun showPasswordOrPin() {
         val isSpendingPass = walletID != null
 
         if (passType == Dcrlibwallet.PassphraseTypePass) {
@@ -48,33 +48,33 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
         }
     }
 
-    private fun showPinDialog(isSpendingPass: Boolean){
+    private fun showPinDialog(isSpendingPass: Boolean) {
         val pinPromptDialog = PinPromptDialog(title.pinTitle, isSpendingPass, passEntered)
         pinPromptDialog.isCancelable = false
         pinPromptDialog.show(fragmentActivity)
     }
 
-    private fun showPasswordDialog(isSpendingPass: Boolean){
+    private fun showPasswordDialog(isSpendingPass: Boolean) {
         val passwordPromptDialog = PasswordPromptDialog(title.passwordTitle, isSpendingPass, passEntered)
         passwordPromptDialog.isCancelable = false
         passwordPromptDialog.show(fragmentActivity)
     }
 
-    private fun showFingerprintDialog(){
-        if(BiometricUtils.isFingerprintEnrolled(fragmentActivity)){
+    private fun showFingerprintDialog() {
+        if (BiometricUtils.isFingerprintEnrolled(fragmentActivity)) {
 
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                     .setTitle(fragmentActivity.getString(title.fingerprintTitle))
 
-            val negativeButtonText = if(passType == Dcrlibwallet.PassphraseTypePass){
+            val negativeButtonText = if (passType == Dcrlibwallet.PassphraseTypePass) {
                 fragmentActivity.getString(R.string.use_password)
-            }else{
+            } else {
                 fragmentActivity.getString(R.string.use_pin)
             }
 
             promptInfo.setNegativeButtonText(negativeButtonText)
 
-            BiometricUtils.displayBiometricPrompt(fragmentActivity, promptInfo.build(), object : BiometricPrompt.AuthenticationCallback(){
+            BiometricUtils.displayBiometricPrompt(fragmentActivity, promptInfo.build(), object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     val pass = BiometricUtils.readFromKeystore(fragmentActivity, Constants.STARTUP_PASSPHRASE)

@@ -7,7 +7,10 @@
 package com.dcrandroid.view
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -16,11 +19,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.core.content.res.ResourcesCompat
 import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
 import java.util.concurrent.locks.ReentrantLock
-import kotlin.math.*
-import androidx.core.content.res.ResourcesCompat
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.min
 
 class PinView : TextView, View.OnClickListener {
 
@@ -127,7 +132,7 @@ class PinView : TextView, View.OnClickListener {
         var heightSize = (numberOfRows * dotHeightPlusPadding) + paddingBottom
         heightSize -= verticalSpacing // remove padding after last row
 
-        if(passCodeLength == 0){
+        if (passCodeLength == 0) {
             heightSize = pinSize + paddingBottom
         }
 
@@ -151,7 +156,7 @@ class PinView : TextView, View.OnClickListener {
         val usableWidth = width - (pl + pr)
         val usableHeight = height - (pt + pb)
 
-        if(showHint){
+        if (showHint) {
             val xPos = usableWidth.toFloat() / 2
             val yPos = (usableHeight / 2 - (hintPaint.descent() + hintPaint.ascent()) / 2)
             canvas.drawText(hint, xPos, yPos, hintPaint)
@@ -167,9 +172,9 @@ class PinView : TextView, View.OnClickListener {
         var startX = (usableWidth / 2) - ((dotWidthPlusPadding / 2) * currentRowDotCount) + horizontalSpacing
         var startY = 0f
 
-        val dotPaint = if(errorString != null){
+        val dotPaint = if (errorString != null) {
             errorCirclePaint
-        }else{
+        } else {
             circlePaint
         }
 
@@ -185,7 +190,7 @@ class PinView : TextView, View.OnClickListener {
 
 
             currentRowDots++
-            if(currentRowDots >= maxDotsPerRow){
+            if (currentRowDots >= maxDotsPerRow) {
 
                 val remainingDotCount = passCodeLength - i
                 currentRowDotCount = min(maxDotsPerRow.toInt(), remainingDotCount)
@@ -194,13 +199,13 @@ class PinView : TextView, View.OnClickListener {
                 startY += dotHeightPlusPadding
                 currentRowDots = 0
 
-            }else {
+            } else {
                 startX += dotWidthPlusPadding
             }
         }
 
-        if(errorString != null){
-            val xPos = usableWidth/2
+        if (errorString != null) {
+            val xPos = usableWidth / 2
 
             canvas.drawText(errorString!!, xPos.toFloat(), usableHeight.toFloat(), errorTextPaint)
         }
@@ -209,32 +214,32 @@ class PinView : TextView, View.OnClickListener {
     var pinEntered: ((character: Char?, backspace: Boolean) -> Unit?)? = null
     var onEnter: (() -> Unit?)? = null
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if((keyCode <  KeyEvent.KEYCODE_0  || keyCode > KeyEvent.KEYCODE_9)
-                && keyCode != KeyEvent.KEYCODE_DEL && keyCode != KeyEvent.KEYCODE_ENTER){
+        if ((keyCode < KeyEvent.KEYCODE_0 || keyCode > KeyEvent.KEYCODE_9)
+                && keyCode != KeyEvent.KEYCODE_DEL && keyCode != KeyEvent.KEYCODE_ENTER) {
             return false
-        }else if (rejectInput){
+        } else if (rejectInput) {
             return false
         }
 
         lock.lock()
         showHint = false
-        if(keyCode == KeyEvent.KEYCODE_DEL){
-            if(passCodeLength > 0){
+        if (keyCode == KeyEvent.KEYCODE_DEL) {
+            if (passCodeLength > 0) {
                 passCodeLength--
                 pinEntered?.invoke(null, true)
             }
-        }else if (keyCode == KeyEvent.KEYCODE_ENTER){
-            if(passCodeLength > 0){
+        } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            if (passCodeLength > 0) {
                 onEnter?.invoke()
             }
-        }else{
+        } else {
             passCodeLength++
             pinEntered?.invoke(event!!.unicodeChar.toChar(), false)
         }
 
-        if(passCodeLength > 0){
+        if (passCodeLength > 0) {
             counterTextView?.text = passCodeLength.toString()
-        }else{
+        } else {
             counterTextView?.text = null
             showHint = true
         }
@@ -250,13 +255,13 @@ class PinView : TextView, View.OnClickListener {
         showKeyboard()
     }
 
-    private fun showKeyboard(){
+    private fun showKeyboard() {
         this.requestFocus()
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    fun setHint(hint: String){
+    fun setHint(hint: String) {
         lock.lock()
 
         counterTextView?.text = null
@@ -270,12 +275,12 @@ class PinView : TextView, View.OnClickListener {
         invalidate()
     }
 
-    fun setError(error: String?){
+    fun setError(error: String?) {
         lock.lock()
 
-        if(error != null){
+        if (error != null) {
             counterTextView?.setTextColor(context.getColor(R.color.colorError))
-        }else{
+        } else {
             counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
         }
 
@@ -287,7 +292,7 @@ class PinView : TextView, View.OnClickListener {
         invalidate()
     }
 
-    fun reset(){
+    fun reset() {
         lock.lock()
 
         errorString = null
@@ -303,7 +308,7 @@ class PinView : TextView, View.OnClickListener {
     }
 }
 
-class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength: ProgressBar? = null){
+class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength: ProgressBar? = null) {
 
     var passCode: String = ""
     private val context = pinView.context
@@ -316,15 +321,15 @@ class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength:
         pinStrength?.progress = 0
 
         pinView.pinEntered = { c: Char?, backspace: Boolean ->
-            if(backspace){
-                if(passCode.isNotEmpty()){
-                    passCode = passCode.substring(0, passCode.length-1)
+            if (backspace) {
+                if (passCode.isNotEmpty()) {
+                    passCode = passCode.substring(0, passCode.length - 1)
                 }
-            }else{
+            } else {
                 passCode += c.toString()
             }
 
-            if(pinStrength != null){
+            if (pinStrength != null) {
                 val progress = (Dcrlibwallet.shannonEntropy(passCode) / 4) * 100
                 if (progress > 70) {
                     pinStrength.progressDrawable = context.resources.getDrawable(R.drawable.password_strength_bar_strong)
@@ -341,21 +346,21 @@ class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength:
         }
     }
 
-    fun reset(){
+    fun reset() {
         passCode = ""
         pinView.reset()
         pinStrength?.progress = 0
     }
 
-    fun showHint(@StringRes hint: Int){
+    fun showHint(@StringRes hint: Int) {
         pinStrength?.progress = 0
         pinView.setHint(context.getString(hint))
     }
 
     fun showError(@StringRes error: Int?) {
-        if(error == null){
+        if (error == null) {
             pinView.setError(null)
-        }else{
+        } else {
             pinView.setError(context.getString(error))
         }
     }

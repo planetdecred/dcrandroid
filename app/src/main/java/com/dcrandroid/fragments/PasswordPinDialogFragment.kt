@@ -48,17 +48,17 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
 
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
-        titleList = if(isSpending){
-            if(isChange){
+        titleList = if (isSpending) {
+            if (isChange) {
                 listOf(context!!.getString(R.string.change_spending_pass), context!!.getString(R.string.change_spending_pin))
-            }else{
-                listOf(context!!.getString(R.string.create_spending_pass),  context!!.getString(R.string.create_spending_pin))
+            } else {
+                listOf(context!!.getString(R.string.create_spending_pass), context!!.getString(R.string.create_spending_pin))
             }
 
-        }else{
-            if(isChange){
+        } else {
+            if (isChange) {
                 listOf(context!!.getString(R.string.change_startup_password), context!!.getString(R.string.change_startup_pin))
-            }else{
+            } else {
                 listOf(context!!.getString(R.string.create_startup_password), context!!.getString(R.string.create_startup_pin))
             }
         }
@@ -74,7 +74,7 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
 
         view_pager.adapter = ViewPagerAdapter(childFragmentManager, fragmentList, tabsTitleList)
         tab_layout.setupWithViewPager(view_pager)
-        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
 
@@ -110,9 +110,9 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
             tabStrip.getChildAt(i).setOnTouchListener { _, _ -> true }
         }
 
-        val passphraseType = if (view_pager.currentItem == 0){
+        val passphraseType = if (view_pager.currentItem == 0) {
             Dcrlibwallet.PassphraseTypePass
-        }else{
+        } else {
             Dcrlibwallet.PassphraseTypePin
         }
         passwordPinListener.onEnterPasswordOrPin(newPassphrase, passphraseType)

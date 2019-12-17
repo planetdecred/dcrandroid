@@ -33,7 +33,7 @@ import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
 
-class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, requestCode: Int) -> Unit): RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
+class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, requestCode: Int) -> Unit) : RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
     private var wallets: ArrayList<Wallet>
     private val multiWallet = WalletData.multiWallet
@@ -43,7 +43,7 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
         wallets = multiWallet!!.openedWalletsList()
     }
 
-    fun reloadList(){
+    fun reloadList() {
         wallets.clear()
         wallets.addAll(multiWallet!!.openedWalletsList())
         notifyDataSetChanged()
@@ -67,10 +67,10 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 Utils.formatDecredWithComma(wallet.totalWalletBalance(context)))
 
-        if(wallet.seed.isNullOrBlank()){
+        if (wallet.seed.isNullOrBlank()) {
             holder.backupNeeded.hide()
             holder.backupWarning.hide()
-        }else{
+        } else {
             holder.backupNeeded.show()
             holder.backupWarning.show()
 
@@ -81,7 +81,7 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
             }
         }
 
-        if(expanded == position){
+        if (expanded == position) {
             val adapter = AccountsAdapter(context, wallet.id)
 
             holder.accountsList.layoutManager = LinearLayoutManager(context)
@@ -92,7 +92,7 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
 
             holder.expand.setImageResource(R.drawable.ic_collapse02)
             holder.container.setBackgroundResource(R.drawable.curved_top_ripple)
-        }else{
+        } else {
             holder.accountsList.adapter = null
             holder.accountsLayout.hide()
 
@@ -111,7 +111,7 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
                 }
             }
 
-            if(currentlyExpanded != null){
+            if (currentlyExpanded != null) {
                 notifyItemChanged(currentlyExpanded)
             }
             notifyItemChanged(position)
@@ -132,9 +132,9 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
                     PopupItem(R.string.settings)
             )
 
-            PopupUtil.showPopup(it, items){window, index ->
-               window.dismiss()
-                when(index){
+            PopupUtil.showPopup(it, items) { window, index ->
+                window.dismiss()
+                when (index) {
                     0 -> {
                         val intent = Intent(context, SignMessage::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
@@ -147,11 +147,11 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
                     }
                     5 -> { // rename wallet
                         val activity = context as AppCompatActivity
-                        RenameAccountDialog(wallet.name, true){newName ->
+                        RenameAccountDialog(wallet.name, true) { newName ->
 
-                            try{
+                            try {
                                 multiWallet!!.renameWallet(wallet.id, newName)
-                            }catch (e: Exception){
+                            } catch (e: Exception) {
                                 return@RenameAccountDialog e
                             }
                             notifyItemChanged(position)
@@ -170,15 +170,15 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
         }
     }
 
-    fun addWallet(walletID: Long){
+    fun addWallet(walletID: Long) {
         val wallet = multiWallet!!.walletWithID(walletID)
         wallets.add(wallet)
         notifyItemInserted(wallets.size - 1)
     }
 
-    fun walletBackupVerified(walletID: Long){
+    fun walletBackupVerified(walletID: Long) {
         wallets.forEachIndexed { index, wallet ->
-            if(wallet.id == walletID){
+            if (wallet.id == walletID) {
                 wallets[index] = multiWallet!!.walletWithID(walletID)
                 notifyItemChanged(index)
                 return
@@ -186,8 +186,8 @@ class WalletsAdapter(val context: Context, val launchIntent:(intent: Intent, req
         }
     }
 
-    inner class WalletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val walletName =  itemView.wallet_name
+    inner class WalletsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val walletName = itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
         val backupNeeded = itemView.backup_needed
 

@@ -50,7 +50,7 @@ class DeleteWalletDialog(context: Context) : Dialog(context), View.OnClickListen
         if (util.get(Constants.SPENDING_PASSPHRASE_TYPE) == Constants.PIN) {
             passphrase_input.visibility = View.GONE
             btn_positive.isEnabled = true
-            btn_positive.setTextColor(ContextCompat.getColor(getContext(), R.color.blue))
+            btn_positive.setTextColor(ContextCompat.getColor(context, R.color.blue))
         } else {
             passphrase_input.addTextChangedListener(passphraseTextWatcher)
         }

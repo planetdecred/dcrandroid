@@ -15,15 +15,15 @@ import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 
-fun Wallet.walletAccounts(requiredConfirmations: Int) : ArrayList<Account>{
+fun Wallet.walletAccounts(requiredConfirmations: Int): ArrayList<Account> {
     return parseAccounts(this.getAccounts(requiredConfirmations)).accounts
 }
 
-fun Wallet.visibleWalletAccounts(context: Context) : List<Account>{
+fun Wallet.visibleWalletAccounts(context: Context): List<Account> {
 
     val util = PreferenceUtil(context)
 
-    val requiredConfirmations= when {
+    val requiredConfirmations = when {
         WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
         else -> Constants.REQUIRED_CONFIRMATIONS
     }
@@ -31,8 +31,8 @@ fun Wallet.visibleWalletAccounts(context: Context) : List<Account>{
     return this.walletAccounts(requiredConfirmations).filter { !util.getBoolean(Constants.HIDE_WALLET + it.accountNumber) }
 }
 
-fun Wallet.totalWalletBalance(context: Context): Long{
+fun Wallet.totalWalletBalance(context: Context): Long {
     val visibleAccounts = this.visibleWalletAccounts(context)
 
-   return visibleAccounts.map { it.balance.total }.reduce { sum, element -> sum + element}
+    return visibleAccounts.map { it.balance.total }.reduce { sum, element -> sum + element }
 }

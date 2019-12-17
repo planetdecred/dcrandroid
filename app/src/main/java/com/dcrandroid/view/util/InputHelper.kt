@@ -7,23 +7,23 @@
 package com.dcrandroid.view.util
 
 import android.animation.AnimatorSet
-import android.content.Context
-import android.view.View
-import kotlinx.android.synthetic.main.custom_input.view.*
-import android.util.TypedValue
-import com.dcrandroid.R
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.content.Context
 import android.text.Editable
 import android.text.TextPaint
 import android.text.TextWatcher
+import android.util.TypedValue
+import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.StringRes
+import com.dcrandroid.R
 import com.dcrandroid.activities.ReaderActivity
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
 import com.google.zxing.integration.android.IntentIntegrator
+import kotlinx.android.synthetic.main.custom_input.view.*
 
 const val ANIMATION_DURATION = 167L
 const val SCAN_QR_REQUEST_CODE = 100
@@ -35,18 +35,18 @@ const val SCAN_QR_REQUEST_CODE = 100
     - optionally hideErrorRow()
  */
 class InputHelper(private val context: Context, private val container: View,
-                  val validateInput:(String) -> Boolean) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
+                  val validateInput: (String) -> Boolean) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
 
-    var textChanged:() -> Unit = {}
+    var textChanged: () -> Unit = {}
     val validatedInput: String?
-    get() {
-        val enteredText = editText.text.toString()
-        if(validateInput(enteredText)){
-            return enteredText
-        }
+        get() {
+            val enteredText = editText.text.toString()
+            if (validateInput(enteredText)) {
+                return enteredText
+            }
 
-        return null
-    }
+            return null
+        }
 
     val pasteTextView = container.custom_input_paste
     var pasteHidden = false
@@ -55,7 +55,7 @@ class InputHelper(private val context: Context, private val container: View,
     val addressLayout = container.input_layout
 
     var validationMessage: Int = R.string.invalid_address
-    val errorTextView =  container.custom_input_error
+    val errorTextView = container.custom_input_error
 
     val hintTextView = container.custom_input_hint
     val editText = container.custom_input_et
@@ -68,10 +68,10 @@ class InputHelper(private val context: Context, private val container: View,
         qrScanImageView.setOnClickListener(this)
         pasteTextView.setOnClickListener(this)
 
-        if(addressLayout.viewTreeObserver.isAlive){
-            addressLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
+        if (addressLayout.viewTreeObserver.isAlive) {
+            addressLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-                    if(addressLayout.height > 0){
+                    if (addressLayout.height > 0) {
                         addressLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                         setupLayout()
                     }
@@ -84,7 +84,7 @@ class InputHelper(private val context: Context, private val container: View,
         setupPasteButton()
     }
 
-    fun setupLayout(){
+    fun setupLayout() {
         val active = editText.hasFocus() || editText.text.isNotEmpty()
 
         val textColor: Int
@@ -105,17 +105,17 @@ class InputHelper(private val context: Context, private val container: View,
             else -> {
                 textColor = context.resources.getColor(R.color.lightGrayTextColor)
                 backgroundResource = R.drawable.input_background
-                fontSizeTarget = if(editText.text.isNotEmpty()){
+                fontSizeTarget = if (editText.text.isNotEmpty()) {
                     context.resources.getDimension(R.dimen.edit_text_size_14)
-                }else{
+                } else {
                     context.resources.getDimension(R.dimen.edit_text_size_16)
                 }
             }
         }
 
-        val translationYTarget =if(active){
-            - (hintTextView.height.toFloat() / 2)
-        }else{
+        val translationYTarget = if (active) {
+            -(hintTextView.height.toFloat() / 2)
+        } else {
 
             val textPaint = TextPaint(hintTextView.paint)
             textPaint.textSize = fontSizeTarget
@@ -145,24 +145,24 @@ class InputHelper(private val context: Context, private val container: View,
         container.input_layout.setBackgroundResource(backgroundResource)
     }
 
-    private fun setupPasteButton(){
+    private fun setupPasteButton() {
         val clipBoardContent = Utils.readFromClipboard(context)
-        if(validateInput(clipBoardContent) && editText.text.isEmpty() && !pasteHidden){
+        if (validateInput(clipBoardContent) && editText.text.isEmpty() && !pasteHidden) {
             pasteTextView.show()
-        }else{
+        } else {
             pasteTextView.hide()
         }
     }
 
-    fun scanQRSuccess(result: String){
+    fun scanQRSuccess(result: String) {
         editText.setText(result)
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.custom_input_paste -> {
                 val clip = Utils.readFromClipboard(context)
-                if(clip.isNotBlank()){
+                if (clip.isNotBlank()) {
                     editText.setText(clip)
                     editText.setSelection(editText.text.length)
                 }
@@ -182,14 +182,14 @@ class InputHelper(private val context: Context, private val container: View,
 
     override fun afterTextChanged(s: Editable?) {
 
-        if(s.isNullOrEmpty()){
+        if (s.isNullOrEmpty()) {
             setError(null) // this calls setup layout
             setupPasteButton()
-        }else{
+        } else {
             val enteredAddress = s.toString()
-            if(validateInput(enteredAddress)){ // address is valid
+            if (validateInput(enteredAddress)) { // address is valid
                 setError(null)
-            }else{
+            } else {
                 setError(context.getString(validationMessage))
             }
 
@@ -206,11 +206,11 @@ class InputHelper(private val context: Context, private val container: View,
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     }
 
-    fun setHint(@StringRes hint: Int){
+    fun setHint(@StringRes hint: Int) {
         hintTextView.setText(hint)
     }
 
-    fun setError(error: String?){
+    fun setError(error: String?) {
         container.custom_input_error.text = error
         setupLayout()
     }
@@ -218,43 +218,43 @@ class InputHelper(private val context: Context, private val container: View,
     // also returns false if address is empty
     fun isInvalid(): Boolean {
         val enteredAddress = editText.text.toString()
-        if(enteredAddress.isNotEmpty()){
+        if (enteredAddress.isNotEmpty()) {
             return !validateInput(enteredAddress)
         }
 
         return false
     }
 
-    fun hideErrorRow(){
+    fun hideErrorRow() {
         container.custom_input_error_layout.hide()
     }
 
-    fun hideQrScanner(){
+    fun hideQrScanner() {
         qrScanImageView.hide()
     }
 
-    fun hidePasteButton(){
+    fun hidePasteButton() {
         pasteHidden = true
         pasteTextView.hide()
     }
 
-    fun isVisible(): Boolean{
+    fun isVisible(): Boolean {
         return container.visibility == View.VISIBLE
     }
 
-    fun show(){
+    fun show() {
         container.show()
     }
 
-    fun hide(){
+    fun hide() {
         container.hide()
     }
 
-    fun onResume(){
+    fun onResume() {
         setupPasteButton()
     }
 
-    fun onPause(){
+    fun onPause() {
         setupPasteButton()
     }
 }

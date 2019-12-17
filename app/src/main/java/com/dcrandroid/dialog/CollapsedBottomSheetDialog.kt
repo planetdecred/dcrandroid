@@ -13,14 +13,13 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import com.dcrandroid.R
+import com.dcrandroid.util.WalletData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.dcrandroid.util.WalletData
 
-open class CollapsedBottomSheetDialog: BottomSheetDialogFragment() {
+open class CollapsedBottomSheetDialog : BottomSheetDialogFragment() {
 
     protected val multiWallet = WalletData.multiWallet
 

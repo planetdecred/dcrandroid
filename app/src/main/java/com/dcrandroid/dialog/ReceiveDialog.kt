@@ -20,9 +20,9 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
-import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
+import com.dcrandroid.view.util.AccountCustomSpinner
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
@@ -80,18 +80,18 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
                 PopupItem(R.string.generate_new_address)
         )
 
-        PopupUtil.showPopup(v, items){window, _ ->
+        PopupUtil.showPopup(v, items) { window, _ ->
             window.dismiss()
 
             generateNewAddress()
         }
     }
 
-    private fun copyAddress(){
+    private fun copyAddress() {
         Utils.copyToClipboard(top_bar, tv_address.text.toString(), R.string.address_copy_text)
     }
 
-    private fun setAddress(address: String) = GlobalScope.launch(Dispatchers.Main){
+    private fun setAddress(address: String) = GlobalScope.launch(Dispatchers.Main) {
         tv_address.text = address
 
         // Generate QR Code
@@ -102,7 +102,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         qr_image.setImageBitmap(generatedQR)
 
         // generate URI
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             try {
                 val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 val now = Date()
@@ -121,25 +121,25 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         }
     }
 
-    private fun generateNewAddress(){
+    private fun generateNewAddress() {
         val oldAddress = tv_address.text.toString()
         var newAddress = sourceAccountSpinner.getNewAddress()
-        if(oldAddress == newAddress){
+        if (oldAddress == newAddress) {
             newAddress = sourceAccountSpinner.getNewAddress()
         }
 
         setAddress(newAddress)
     }
 
-    private fun shareQrImage(){
-        if(generatedUri != null){
+    private fun shareQrImage() {
+        if (generatedUri != null) {
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             shareIntent.setDataAndType(generatedUri, context!!.contentResolver.getType(generatedUri!!))
             shareIntent.putExtra(Intent.EXTRA_STREAM, generatedUri)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_address_via)))
-        }else{
+        } else {
             SnackBar.showError(context!!, R.string.address_not_found)
         }
 

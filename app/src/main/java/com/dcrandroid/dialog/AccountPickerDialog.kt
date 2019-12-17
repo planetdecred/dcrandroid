@@ -20,9 +20,8 @@ import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.visibleWalletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
-import kotlinx.android.synthetic.main.account_picker_sheet.app_bar
 
-class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, val accountSelected:(account: Account) -> Unit?): CollapsedBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, val accountSelected: (account: Account) -> Unit?) : CollapsedBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
     private var layoutManager: LinearLayoutManager? = null
@@ -41,7 +40,7 @@ class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account
 
         val items = ArrayList<Any>()
 
-        for(wallet in wallets){
+        for (wallet in wallets) {
             items.add(wallet)
             val accounts = wallet.visibleWalletAccounts(context!!)
                     .dropLastWhile { it.accountNumber == Int.MAX_VALUE } // remove imported account

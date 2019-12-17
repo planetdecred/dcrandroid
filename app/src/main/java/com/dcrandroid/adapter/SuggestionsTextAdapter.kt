@@ -16,7 +16,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import com.dcrandroid.R
-import kotlinx.android.synthetic.main.dropdown_item_1.view.*
 
 class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val suggestions: List<String>) :
         ArrayAdapter<String>(context, layoutResource, suggestions) {
@@ -38,9 +37,9 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
         suggestionTextView.text = filteredArray[position]
 
         val layoutParams = suggestionTextView.layoutParams as LinearLayout.LayoutParams
-        if(position == count-1){
+        if (position == count - 1) {
             layoutParams.bottomMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
-        }else{
+        } else {
             layoutParams.bottomMargin = 0
         }
         suggestionTextView.layoutParams = layoutParams

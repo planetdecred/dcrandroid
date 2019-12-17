@@ -8,20 +8,15 @@ package com.dcrandroid.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import com.dcrandroid.R
-import com.dcrandroid.util.WalletData
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.password_prompt_sheet.*
 
 class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Boolean,
-                           val passEntered:(dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean): CollapsedBottomSheetDialog() {
+                           val passEntered: (dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean) : CollapsedBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.password_prompt_sheet, container, false)
@@ -34,7 +29,7 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
 
         dialog_title.setText(dialogTitle)
 
-        if(!isSpending){
+        if (!isSpending) {
             password_input.setHint(R.string.startup_password)
         }
 
@@ -43,7 +38,7 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
             true
         }
 
-        btn_cancel.setOnClickListener{dismiss()}
+        btn_cancel.setOnClickListener { dismiss() }
         btn_confirm.setOnClickListener {
             confirmed = true
             passEntered(this, password_input.textString)
@@ -58,7 +53,7 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        if(!confirmed){
+        if (!confirmed) {
             passEntered(this, null)
         }
     }

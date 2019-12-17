@@ -18,13 +18,15 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.AccountDetailsDialog
 import com.dcrandroid.dialog.AddAccountDialog
 import com.dcrandroid.extensions.walletAccounts
-import com.dcrandroid.util.*
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.Utils
+import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_row.view.*
-import java.lang.Exception
 
-class AccountsAdapter(private val context: Context, private val walletID: Long): RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
+class AccountsAdapter(private val context: Context, private val walletID: Long) : RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
 
     private val accounts: ArrayList<Account>
     private val wallet: Wallet
@@ -45,7 +47,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
 
         val view = if (viewType == 0) {
             inflater.inflate(R.layout.account_row, parent, false)
-        }else{
+        } else {
             inflater.inflate(R.layout.add_account_row, parent, false)
         }
 
@@ -57,16 +59,16 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position != itemCount-1) 0 else 1
+        return if (position != itemCount - 1) 0 else 1
     }
 
     override fun onBindViewHolder(holder: AccountsViewHolder, position: Int) {
-        if(position != accounts.size) {
+        if (position != accounts.size) {
             val account = accounts[position]
 
-            if (account.accountNumber == Int.MAX_VALUE){
+            if (account.accountNumber == Int.MAX_VALUE) {
                 holder.icon.setImageResource(R.drawable.ic_accounts_locked)
-            }else{
+            } else {
                 holder.icon.setImageResource(R.drawable.ic_accounts)
             }
 
@@ -77,18 +79,18 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
 
             holder.itemView.setOnClickListener {
                 AccountDetailsDialog(context, walletID, account) { newName ->
-                    try{
+                    try {
                         wallet.renameAccount(account.accountNumber, newName)
                         account.accountName = newName
                         notifyItemChanged(position)
-                    }catch (e: Exception){
+                    } catch (e: Exception) {
                         return@AccountDetailsDialog e
                     }
 
                     null
                 }.show(context)
             }
-        }else{
+        } else {
 
             val background = when {
                 wallet.seed.isNullOrBlank() -> R.drawable.curved_bottom_ripple
@@ -98,7 +100,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
 
             holder.itemView.setOnClickListener {
                 val activity = context as AppCompatActivity
-                AddAccountDialog(activity, walletID) {newAccountNumber ->
+                AddAccountDialog(activity, walletID) { newAccountNumber ->
                     val account = wallet.getAccount(newAccountNumber, requiredConfirmations)
 
                     val index = accounts.size - 1 // there's always at least 2 accounts(default & imported)
@@ -111,10 +113,10 @@ class AccountsAdapter(private val context: Context, private val walletID: Long):
         }
     }
 
-    inner class AccountsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class AccountsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon = itemView.account_row_icon
         val accountName = itemView.account_name
-        val totalBalance =  itemView.account_row_total_balance
+        val totalBalance = itemView.account_row_total_balance
         val spendableBalance = itemView.account_row_spendable_balance
     }
 }

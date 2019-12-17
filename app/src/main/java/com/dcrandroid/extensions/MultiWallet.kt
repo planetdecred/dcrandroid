@@ -9,8 +9,8 @@ package com.dcrandroid.extensions
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import dcrlibwallet.Wallet
 import dcrlibwallet.MultiWallet
+import dcrlibwallet.Wallet
 
 fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
     val wallets = ArrayList<Wallet>()
@@ -20,7 +20,7 @@ fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
     val listType = object : TypeToken<ArrayList<Long>>() {}.type
     val openedWalletsTemp = gson.fromJson<ArrayList<Long>>(openedWalletsJson, listType)
 
-    for(walletId in openedWalletsTemp){
+    for (walletId in openedWalletsTemp) {
         val wallet = this.walletWithID(walletId)
         wallets.add(wallet)
     }
@@ -30,11 +30,11 @@ fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
     return wallets
 }
 
-fun MultiWallet.totalWalletBalance(context: Context): Long{
+fun MultiWallet.totalWalletBalance(context: Context): Long {
     val wallets = this.openedWalletsList()
-    var totalBalance:Long = 0
+    var totalBalance: Long = 0
 
-    for(wallet in wallets){
+    for (wallet in wallets) {
         totalBalance += wallet.totalWalletBalance(context)
     }
 

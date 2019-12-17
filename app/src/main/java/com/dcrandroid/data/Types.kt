@@ -49,7 +49,7 @@ class Account : Serializable {
     val hdPath: String
         get() = (if (BuildConfig.IS_TESTNET) Constants.TESTNET_HD_PATH else Constants.MAINNET_HD_PATH) + accountNumber + "'"
 
-    companion object{
+    companion object {
         fun from(acc: dcrlibwallet.Account): Account {
             val account = Account()
             return account.apply {
@@ -88,8 +88,8 @@ class Balance : Serializable {
     @SerializedName("UnConfirmed")
     var unConfirmed: Long = 0
 
-    companion object{
-        fun from(bal: dcrlibwallet.Balance): Balance{
+    companion object {
+        fun from(bal: dcrlibwallet.Balance): Balance {
             val balance = Balance()
             return balance.apply {
                 spendable = bal.spendable

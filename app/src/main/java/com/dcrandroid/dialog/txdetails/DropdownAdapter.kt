@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.input_output_row.view.*
 
 data class DropDownItem(val amount: String, val address: String)
 
-class DropdownAdapter(private val items: Array<DropDownItem>): RecyclerView.Adapter<DropdownAdapter.ViewHolder>() {
+class DropdownAdapter(private val items: Array<DropDownItem>) : RecyclerView.Adapter<DropdownAdapter.ViewHolder>() {
 
-    lateinit var addressTapped:(position: Int) -> Unit
+    lateinit var addressTapped: (position: Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,5 +37,5 @@ class DropdownAdapter(private val items: Array<DropDownItem>): RecyclerView.Adap
         }
     }
 
-    inner class ViewHolder(v: View): RecyclerView.ViewHolder(v)
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
 }

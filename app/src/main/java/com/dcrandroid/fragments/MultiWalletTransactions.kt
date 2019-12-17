@@ -17,7 +17,7 @@ import com.dcrandroid.R
 import com.dcrandroid.extensions.openedWalletsList
 import kotlinx.android.synthetic.main.multi_wallet_transactions_page.*
 
-class MultiWalletTransactions: BaseFragment() {
+class MultiWalletTransactions : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.multi_wallet_transactions_page, container, false)
@@ -33,7 +33,7 @@ class MultiWalletTransactions: BaseFragment() {
         transactions_tab.setupWithViewPager(transactions_pager)
     }
 
-    inner class TransactionsTabsAdapter(supportFragmentManager: FragmentManager): FragmentStatePagerAdapter(supportFragmentManager,
+    inner class TransactionsTabsAdapter(supportFragmentManager: FragmentManager) : FragmentStatePagerAdapter(supportFragmentManager,
             BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         private val wallets = multiWallet.openedWalletsList()

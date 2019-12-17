@@ -11,14 +11,14 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
-import com.dcrandroid.adapter.*
+import com.dcrandroid.adapter.InputSeed
+import com.dcrandroid.adapter.ShuffledSeeds
+import com.dcrandroid.adapter.VerifySeedAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
-import java.lang.Exception
 
 class VerifySeedActivity : BaseActivity() {
 
@@ -42,7 +42,7 @@ class VerifySeedActivity : BaseActivity() {
         allSeeds = Dcrlibwallet.AlternatingWords.split("\n").toTypedArray()
         prepareData()
 
-        recycler_view_seeds.viewTreeObserver.addOnScrollChangedListener{
+        recycler_view_seeds.viewTreeObserver.addOnScrollChangedListener {
 
             val firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 
@@ -55,14 +55,14 @@ class VerifySeedActivity : BaseActivity() {
 
         btn_verify.setOnClickListener {
             val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
-            try{
+            try {
                 multiWallet!!.verifySeedForWallet(wallet!!.id, seedMnemonic)
                 val data = Intent(this, SeedBackupSuccess::class.java)
                 data.putExtra(Constants.WALLET_ID, wallet!!.id)
                 data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
                 startActivity(data)
                 finish()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 SnackBar.showError(this, R.string.seed_verification_failed)
             }
@@ -78,7 +78,7 @@ class VerifySeedActivity : BaseActivity() {
         val walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
         wallet = multiWallet!!.walletWithID(walletId)
 
-        if (wallet!!.seed.isNotBlank()){
+        if (wallet!!.seed.isNotBlank()) {
             val seed = wallet!!.seed
             seeds = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             initSeedAdapter()
@@ -114,7 +114,7 @@ class VerifySeedActivity : BaseActivity() {
 
     private fun initSeedAdapter() {
         val allSeedWords = getMultiSeedList()
-        verifySeedAdapter = VerifySeedAdapter(this, allSeedWords){seedIndex ->
+        verifySeedAdapter = VerifySeedAdapter(this, allSeedWords) { seedIndex ->
             linearLayoutManager.scrollToPosition(seedIndex + 2)
             btn_verify.isEnabled = verifySeedAdapter.allSeedsSelected
         }

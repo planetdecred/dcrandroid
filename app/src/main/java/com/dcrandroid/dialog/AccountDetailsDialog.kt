@@ -20,10 +20,9 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_details.*
-import java.lang.Exception
 
 class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account,
-                           val renameAccount:(newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
+                           val renameAccount: (newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
 
     private var wallet: Wallet? = null
 
@@ -45,12 +44,12 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
         account_details_spendable.text = CoinFormat.format(balance.spendable)
 
         val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
-        if(stakeSum > 0){
+        if (stakeSum > 0) {
             account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
             account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
             account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
             account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
-        }else{
+        } else {
             staking_balance.hide()
         }
 
@@ -59,7 +58,7 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
         account_details_path.text = account.hdPath
         account_details_keys.text = context!!.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
 
-        if(account.accountNumber == Int.MAX_VALUE){ // imported account
+        if (account.accountNumber == Int.MAX_VALUE) { // imported account
             default_account_row.hide()
             account_details_icon.setImageResource(R.drawable.ic_accounts_locked)
             iv_rename_account.hide()
@@ -69,7 +68,7 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
         tv_toggle_properties.setOnClickListener {
             tv_toggle_properties.text = if (account_details_properties.toggleVisibility() == View.VISIBLE) {
                 context!!.getString(R.string.hide_properties)
-            }else context!!.getString(R.string.show_properties)
+            } else context!!.getString(R.string.show_properties)
         }
 
         iv_close.setOnClickListener { dismiss() }
@@ -79,9 +78,9 @@ class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Ac
             RenameAccountDialog(account.accountName) {
 
                 val e = renameAccount(it)
-                if (e != null){
+                if (e != null) {
                     return@RenameAccountDialog e
-                }else{
+                } else {
                     tv_account_name.text = it
                     SnackBar.showText(account_details_root, R.string.account_renamed)
                     null

@@ -26,10 +26,10 @@ class PopupDivider(val widthPixels: Int)
 const val VIEW_TYPE_ROW = 0
 const val VIEW_TYPE_DIVIDER = 1
 
-class PopupMenuAdapter(private val context: Context, private val items: Array<Any>, private val itemClicked:(position: Int) -> Unit): RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
+class PopupMenuAdapter(private val context: Context, private val items: Array<Any>, private val itemClicked: (position: Int) -> Unit) : RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layout = when(viewType){
+        val layout = when (viewType) {
             VIEW_TYPE_ROW -> R.layout.popup_layout_row
             else -> R.layout.popup_layout_divider
         }
@@ -45,28 +45,28 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(items[position] is PopupDivider) {
+        return if (items[position] is PopupDivider) {
             VIEW_TYPE_DIVIDER
         } else VIEW_TYPE_ROW
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        if(item is PopupItem) {
+        if (item is PopupItem) {
             holder.itemView.popup_text.setText(item.title)
             holder.itemView.popup_text.setTextColor(context.resources.getColor(item.color))
 
             holder.itemView.setOnClickListener {
                 itemClicked(position)
             }
-        }else if (item is PopupDivider){
+        } else if (item is PopupDivider) {
             val layoutParams = holder.itemView.layoutParams
             layoutParams.width = item.widthPixels
             holder.itemView.layoutParams = layoutParams
         }
     }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
 
 class PopupUtil {

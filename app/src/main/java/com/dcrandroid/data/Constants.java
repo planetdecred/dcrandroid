@@ -16,7 +16,6 @@ public class Constants {
             ADDRESS = "Address",
             NEW_TRANSACTION_NOTIFICATION = "new_transaction_notification",
             NBSP = " ",
-            PASSPHRASE = "passphrase",
             HIDE_WALLET = "hide_wallet",
             EXTERNAL = "external",
             SYNCED = "synced",
@@ -25,7 +24,6 @@ public class Constants {
             LEGACY_TESTNET_HD_PATH = "m / 44’ / 11’ / ",
             MAINNET_HD_PATH = "m / 44’ / 42’ / ",
             LEGACY_MAINNET_HD_PATH = "m / 44’ / 20’ / ",
-            USER_AGENT = "user_agent",
             SPENDING_PASSPHRASE_TYPE = "spending_passphrase_type",
             STARTUP_PASSPHRASE = "startup_passphrase",
             PIN = "pin",
@@ -39,10 +37,6 @@ public class Constants {
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
             ENCRYPTION_IV = "encryption_iv",
-            USE_BIOMETRIC_AUTH = "use_biometric_auth",
-            OFF = "off",
-            FINGERPRINT = "fingerprint",
-            FINGERPRINT_PASS = "fingerprint_pass",
             TRANSACTION_CHANNEL_ID = "new transaction";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
@@ -59,8 +53,8 @@ public class Constants {
 
 
     public static final boolean DEF_SPEND_UNCONFIRMED = false,
-                                DEF_STARTUP_SECURITY_SET = false,
-                                DEF_USE_FINGERPRINT = false,
-                                DEF_SYNC_ON_CELLULAR = false;
+            DEF_STARTUP_SECURITY_SET = false,
+            DEF_USE_FINGERPRINT = false,
+            DEF_SYNC_ON_CELLULAR = false;
 
 }
