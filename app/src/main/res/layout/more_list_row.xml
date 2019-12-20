@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@drawable/ripple_bg_white_corners_8dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:elevation="@dimen/margin_padding_size_4"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:layout_marginBottom="@dimen/margin_padding_size_4"
+    android:padding="@dimen/margin_padding_size_16">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/iv_icon"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        android:includeFontPadding="false"
+        android:text="Settings"
+        android:fontFamily="@font/source_sans_pro"
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="@color/darkBlueTextColor" />
+
+</LinearLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -8,90 +7,103 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@drawable/card_bg"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/margin_padding_size_24">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="10dp">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_marginTop="8dp"
-            android:id="@+id/icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:visibility="visible" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_24"
+        android:layout_marginEnd="@dimen/margin_padding_size_24"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:textColor="@color/greenLightTextColor"
-            android:textSize="18sp"
-            app:fontFamily="@font/source_sans_pro_regular_family" />
+            android:includeFontPadding="false"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="@dimen/edit_text_size_20"
+            android:layout_marginBottom="@dimen/margin_padding_size_16"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:fontFamily="@font/source_sans_pro_semibold"
+            tools:text="Receive DCR" />
 
         <TextView
-            android:padding="8dp"
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:textColor="@color/blueGrayFirstTextColor"
-            android:textSize="16sp"
-            app:fontFamily="@font/source_sans_pro_regular_family"
-            tools:text="HASH: TsbGZiznn5EBcQEBfjmhuFB56XBkxAcTtah" />
+            android:textColor="@color/darkerBlueGrayTextColor"
+            android:textSize="@dimen/edit_text_size_16"
+            app:fontFamily="@font/source_sans_pro"
+            tools:text="Each time you request a payment, a new address is created to protect your privacy." />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/view_layout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
         android:id="@+id/btn_layout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@color/colorPrimary"
-        android:weightSum="2">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:padding="@dimen/margin_padding_size_8">
 
-        <TextView
-            android:id="@+id/btn_negative"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:textColor="@color/darkBlueTextColor"
-            android:textSize="14sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btn_neutral"
+                style="@style/textViewButton.Outline"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="@dimen/margin_padding_size_12"
+                android:paddingEnd="@dimen/margin_padding_size_12"
+                android:textSize="@dimen/edit_text_size_16"
+                android:visibility="invisible"
+                app:fontFamily="@font/source_sans_pro_semibold"
+                tools:text="Neutral"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_negative"
+            style="@style/textViewButton.Outline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="@dimen/margin_padding_size_12"
+            android:paddingEnd="@dimen/margin_padding_size_12"
+            android:textSize="@dimen/edit_text_size_16"
             android:visibility="invisible"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
-            tools:text="test text"
+            app:fontFamily="@font/source_sans_pro_semibold"
+            tools:text="Negative"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/btn_positive"
-            android:layout_width="0dp"
+            style="@style/textViewButton.Outline"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="@dimen/margin_padding_size_12"
+            android:paddingEnd="@dimen/margin_padding_size_12"
+            android:textSize="@dimen/edit_text_size_16"
             android:visibility="invisible"
-            app:fontFamily="@font/source_sans_pro_semibold_family"
-            tools:text="test text"
+            app:fontFamily="@font/source_sans_pro_semibold"
+            tools:text="Positive"
             tools:visibility="visible" />
     </LinearLayout>
 

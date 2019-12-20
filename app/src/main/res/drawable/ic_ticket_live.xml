@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M15.5421,2.6786C15.5421,3.618 15.1689,4.5189 14.5047,5.1832C13.8404,5.8475 12.9394,6.2207 12,6.2207L12,6.2207C11.0606,6.2207 10.1596,5.8475 9.4953,5.1832C8.8311,4.5189 8.4579,3.618 8.4579,2.6786L5.3493,2.6786L5.3493,21.3214L8.458,21.3214C8.458,19.3652 10.0439,17.7793 12.0002,17.7793C13.9564,17.7793 15.5423,19.3652 15.5423,21.3214L18.6507,21.3214L18.6507,2.6786L15.5421,2.6786Z"
+      android:strokeWidth="1"
+      android:fillColor="#2970FF"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M8.0244,12C8.0244,9.8044 9.8044,8.0244 12,8.0244C14.1956,8.0244 15.9756,9.8044 15.9756,12C15.9756,14.1956 14.1956,15.9756 12,15.9756C9.8044,15.9756 8.0244,14.1956 8.0244,12Z"
+      android:strokeWidth="1"
+      android:fillColor="#6B9DFC"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+</vector>

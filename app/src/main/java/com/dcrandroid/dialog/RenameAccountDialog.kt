@@ -6,71 +6,64 @@
 
 package com.dcrandroid.dialog
 
-import android.annotation.SuppressLint
-import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
-import androidx.core.content.ContextCompat
+import android.view.ViewGroup
 import com.dcrandroid.R
-import kotlinx.android.synthetic.main.rename_account.*
+import com.dcrandroid.view.util.InputHelper
+import kotlinx.android.synthetic.main.rename_account_sheet.*
 
-class RenameAccountDialog(context: Context) : Dialog(context), View.OnClickListener {
+// can also rename a wallet
+class RenameAccountDialog(private val currentName: String, private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
 
-    private var btnPositiveClick: DialogInterface.OnClickListener? = null
-
-    @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.rename_account)
-
-        btn_positive.setOnClickListener(this)
-        btn_negative.setOnClickListener(this)
-
-        account_name.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s!!.isNotEmpty()) {
-                    btn_positive.isEnabled = true
-                    btn_positive.setTextColor(ContextCompat.getColor(context, R.color.blue))
-                } else {
-                    btn_positive.isEnabled = false
-                    btn_positive.setTextColor(ContextCompat.getColor(context, R.color.lightGreyBackgroundColor))
-                }
-            }
-
-        })
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.rename_account_sheet, container, false)
     }
 
-    fun setPositiveButton(listener: DialogInterface.OnClickListener?): RenameAccountDialog {
-        btnPositiveClick = listener
-        return this
-    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-    fun getNewName(): String {
-        return account_name.text.toString()
-    }
+        if (isWallet) {
+            sheet_title.setText(R.string.rename_wallet_sheet_title)
+        }
 
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.btn_negative -> {
-                cancel()
+        val accountNameInput = InputHelper(context!!, account_name_input) {
+            btn_confirm.isEnabled = !it.isNullOrBlank() && it != currentName
+            true
+        }.apply {
+            hidePasteButton()
+            hideQrScanner()
+            if (isWallet) {
+                setHint(R.string.wallet_name)
+            } else {
+                setHint(R.string.account_name)
             }
-            R.id.btn_positive -> {
+
+            editText.setSingleLine(true)
+            editText.setText(currentName)
+            editText.requestFocus()
+            editText.setSelection(0, currentName.length)
+
+        }
+
+        btn_cancel.setOnClickListener {
+            dismiss()
+        }
+
+        btn_confirm.setOnClickListener {
+            it.isEnabled = false
+            btn_cancel.isEnabled = false
+            accountNameInput.editText.isEnabled = false
+
+            val exception = rename(accountNameInput.validatedInput!!.trim())
+            if (exception != null) {
+                it.isEnabled = true
+                btn_cancel.isEnabled = true
+                accountNameInput.editText.isEnabled = true
+                accountNameInput.setError(exception.message)
+            } else {
                 dismiss()
-                if (btnPositiveClick != null) {
-                    btnPositiveClick?.onClick(this, DialogInterface.BUTTON_POSITIVE)
-                }
             }
         }
     }

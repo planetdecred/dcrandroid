@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:layout_marginBottom="@dimen/margin_padding_size_4"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:background="@drawable/card_bg"
+    android:elevation="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/container"
+        android:background="@drawable/ripple_bg_white_corners_8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_8"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/expand_icon"
+            app:srcCompat="@drawable/ic_expand02" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_wallet"
+            android:layout_marginLeft="@dimen/margin_padding_size_8"
+            android:layout_marginStart="@dimen/margin_padding_size_8" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_padding_size_16"
+            android:layout_marginStart="@dimen/margin_padding_size_16">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wallet_name"
+                tools:text="Default"
+                android:textSize="@dimen/edit_text_size_16"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro"
+                android:textColor="@color/darkBlueTextColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/backup_needed"
+                android:text="@string/not_backed_up"
+                android:textSize="@dimen/edit_text_size_14"
+                android:layout_marginTop="4dp"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro"
+                android:textColor="@color/orangeTextColor" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wallet_total_balance"
+            android:layout_marginLeft="@dimen/margin_padding_size_8"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            app:fontFamily="@font/source_sans_pro"
+            tools:text="7.51464806 DCR"
+            android:textSize="@dimen/edit_text_size_16"
+            android:textColor="@color/blueGraySecondTextColor" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/circular_transparent_ripple"
+            app:srcCompat="@drawable/ic_options" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/accounts"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e6eaed"
+            android:layout_marginStart="44dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/account_list_rv" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/backup_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_padding_size_16"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/backup_seed_bg"
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_wallet_alert" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_padding_size_16">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/backup_seed_phrase"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontFamily="@font/source_sans_pro" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verify_seed_info"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:layout_gravity="center_vertical"
+            app:srcCompat="@drawable/ic_next" />
+
+    </LinearLayout>
+
+</LinearLayout>

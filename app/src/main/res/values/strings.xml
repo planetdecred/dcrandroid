@@ -4,404 +4,170 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--General-->
     <string name="wallet">Wallet</string>
     <string name="crash_dialog_text">An unexpected error occurred forcing the
     application to stop. Please help us fix this by sending us your device specification and app log,
     all you have to do is click OK. This will help us prevent the error from occurring again</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="label_keys">Keys</string>
-    <string name="label_properties">Properties</string>
-    <string name="require_to_send_fund">Required to send funds</string>
-    <string name="add_an_account">ADD AN ACCOUNT</string>
-    <string name="available_balance">AVAILABLE BALANCE</string>
-    <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
-    <string name="max">SEND MAX</string>
+    <string name="send_dcr_info">Input or scan the destination wallet address and the amount in DCR to send funds.</string>
     <string name="type">Type</string>
     <string name="loading">Loading</string>
-    <string name="loading_ellipsis">Loading…</string>
-    <string name="date">Date</string>
     <string name="dcr" translatable="false">DCR</string>
     <string name="help">Help</string>
-    <string name="history">History</string>
+    <string name="about">About</string>
+    <string name="debug">Debug</string>
     <string name="overview">Overview</string>
     <string name="permission">Permission</string>
     <string name="denied_permission">You denied the permission!!!</string>
-    <string name="error_bundle_null">Error occurred, Bundle is null</string>
     <string name="receive">Receive</string>
-    <string name="tickets">Tickets</string>
-    <string name="amount_dcr">Amount</string>
     <string name="send">Send</string>
-    <string name="sending">Sending</string>
     <string name="cancel">Cancel</string>
-    <string name="done">Done</string>
-    <string name="hash">Hash</string>
     <string name="connection">Connection</string>
-    <string name="certificate">Certificate</string>
-    <string name="confirmations">Confirmation</string>
     <string name="testnet">testnet</string>
     <string name="general">General</string>
-    <string name="view_on_dcrdata">view on dcrdata</string>
-    <string name="build_date">Build Date</string>
-    <string name="build">build</string>
-    <string name="copy_on_tap">(copy on tap)</string>
-    <string name="for_more_information_please_visit">For more information please visit</string>
+    <string name="view_on_dcrdata">View on dcrdata</string>
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
-    <string name="exit_app_prompt_title">Exit wallet?</string>
-    <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
-    <string name="delete_wallet_prompt_title">Delete Wallet?</string>
-    <string name="delete_wallet_prompt_message">Are you sure you want to delete your wallet? Make sure you have your wallet seed saved or your coins moved before deleting. This will also clear all app settings to a default state.</string>
-    <string name="details">Details</string>
-    <string name="setting">Setting</string>
-    <string name="hide_this_account">Hide This Account</string>
-    <string name="account_balance_will_be_ignored">Account balance will be ignored.</string>
     <string name="default_account">Default Account</string>
     <string name="exit_cap">EXIT</string>
-    <string name="hidden">hidden</string>
     <string name="delete">Delete</string>
     <string name="no">No</string>
-    <string name="yes">Yes</string>
     <string name="confirm">Confirm</string>
     <string name="usd" translatable="false">USD</string>
-    <string name="hyphen" translatable="false">-</string>
-    <string name="bittrex_unavailable">Bittrex rate unavailable (tap to retry)</string>
-    <string name="coming_soon">Coming soon…</string>
     <string name="settings">Settings</string>
-    <string name="changes_after_restart">Changes will take effect after app restarts</string>
-    <string name="view_cap">VIEW</string>
-    <string name="close_cap">CLOSE</string>
-    <string name="exchange_rate_error">Exchange failed with error:</string>
-    <string name="exchange_rate_unavailable"> rate unavailable (tap to retry)</string>
-    <string name="ago">ago</string>
-    <string name="now">now</string>
-    <string name="you_received">You received</string>
-    <string name="disconnected">Disconnected</string>
+    <string name="more">More</string>
     <string name="syncing">Syncing</string>
-    <string name="synced_with_one_peer">Synced with 1 peer</string>
-    <string name="syncing_with_one_peer">Syncing with 1 peer</string>
-    <string name="synced_with_multiple_peer">Synced with %1$d peers</string>
-    <string name="syncing_with_multiple_peer">Syncing with %1$d peers</string>
+    <string name="syncing_ellipsis">Syncing…</string>
     <string name="connected_to_a_peer">Connected to a peer</string>
     <string name="connected_to_n_peer">Connected to %1$d peer</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
+    <string name="user_agent_dialog_title">Set up user agent</string>
+    <string name="peer_ip_dialog_title">Set up persistent peer</string>
+    <string name="peer_ip_pref_hint">IP Address</string>
     <string name="log_file_not_found">Log file not found</string>
     <string name="wallet_log_copied">Wallet log copied successfully</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="welcome_title">Welcome to Decred Wallet.</string>
-    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual. The wallet will connect to p2p nodes to download the blockchain headers, and will fetch only the blocks that you need while preserving your privacy.</string>
-    <string name="less_than_one_day">&lt;1 day</string>
-    <string name="less_than_one_day_ago">&lt;1 day ago</string>
-    <string name="one_day">1 day</string>
-    <string name="one_day_ago">1 day ago</string>
-    <string name="multiple_days">%1$d days</string>
-    <string name="multiple_days_ago">%1$d days ago</string>
-    <string name="copy">Copy</string>
-    <string name="copied_successfully">Copied successfully.</string>
-    <string name="all">All</string>
-    <string name="re_establishing_connection">Re-establishing connection</string>
+    <string name="_copy">Copy</string>
     <string name="address_not_found">Address not found.</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="clearAll">Clear All</string>
     <string name="share">Share</string>
     <string name="clear_fields">Clear fields</string>
-    <string name="deleting_wallet">Deleting Wallet…</string>
     <string name="retry_caps">RETRY</string>
     <string name="share_address_via">Share the QR code image to</string>
     <string name="license">License</string>
-    <string name="key_license" translatable="false">license</string>
     <string name="always">Always</string>
-    <string name="not_synced">Not Synced</string>
-    <string name="enter_new_name">Enter new name</string>
     <string name="rename">Rename</string>
     <string name="create">Create</string>
+    <string name="dcr_amount">%1$s DCR</string>
+    <string name="rename_wallet_sheet_title">Rename wallet</string>
+    <string name="wallet_name">Wallet Name</string>
+    <string name="view_property">View property</string>
+    <string name="remove">Remove</string>
+    <string name="confirm_to_remove">Confirm to remove</string>
+    <string name="remove_wallet">Remove wallet from device</string>
+    <string name="remove_wallet_prompt">Remove wallet from device?</string>
+    <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
 
-    <string-array name="nav_list_titles">
-        <item>Overview</item>
-        <item>History</item>
-        <item>Send</item>
-        <item>Receive</item>
-        <item>Accounts</item>
-        <item>Security</item>
-        <item>Settings</item>
-        <item>Help</item>
-    </string-array>
     <!--/General-->
 
     <!--Peers-->
-    <string name="view_peers">View peers</string>
-    <string name="id" translatable="false">Id</string>
-    <string name="address_local" translatable="false">Address local</string>
-    <string name="services">Services</string>
-    <string name="relaytxes" translatable="false">Relaytxes</string>
-    <string name="last_send">Last send</string>
-    <string name="last_receive">Last receive</string>
-    <string name="bytes_sent">Bytes sent</string>
-    <string name="bytes_receive">Bytes receive</string>
-    <string name="conntime" translatable="false">Conntime</string>
-    <string name="time_offset">Time offset</string>
-    <string name="pingtime" translatable="false">Pingtime</string>
     <string name="version">Version</string>
-    <string name="sub_version">Sub version</string>
-    <string name="inbound">Inbound</string>
-    <string name="banscore" translatable="false">Banscore</string>
-    <string name="syncode">Syncode</string>
-    <string name="peer_details">Peer Details</string>
-    <string name="peers">Peers</string>
-    <string name="no_peer_found">No Peer Found</string>
-    <string name="get_peer_info">Get Peers Info</string>
-    <string name="summary_peers">View available peers and details</string>
     <string name="connecting_to_peers">Connecting to peers</string>
-    <string name="invalid_peer_address">Peer address is invalid</string>
-    <string name="subscribe_to_block_notification">Subscribe to block notification</string>
-    <string name="discover_addresses">Discover addresses</string>
-    <string name="connected_to_remote_node">Connected To Remote Node</string>
-    <string name="connecting_to_rpc_server">Connecting to RPC Server</string>
-    <string name="connecting_attempt">Connecting attempt</string>
-    <string name="rpc_connection_failed">RPC Connection Failed:</string>
     <!--/Peers-->
 
     <!--Account-->
-    <string name="account">Account</string>
-    <string name="accounts">Accounts</string>
     <string name="account_number">Account Number</string>
-    <string name="edit_account_name">Edit account name</string>
-    <string name="spinner_account">Account:</string>
-    <string name="input_your_new_account_name_and_enter_your_private_passphrase">Input your new account name and enter your private passphrase</string>
     <string name="account_name">Account Name</string>
-    <string name="create_account">Create Account</string>
-    <string name="add_account">Add account</string>
-    <string name="creating_account">Creating account…</string>
-    <string name="input_account_name">Enter a name for your account</string>
     <string name="hd_path">HD Path</string>
-    <string name="default_account_info">Make this account default for all outgoing and incoming transactions.</string>
-    <string name="external">external</string>
-    <string name="internal">internal</string>
-    <string name="imported">imported</string>
+    <string name="external">External</string>
     <string name="rename_account">Rename Account</string>
     <!--/Account-->
 
     <!--Seed-->
-    <string name="save_seed_instruction">Write down this seed phrase and save it in a secure location. You will require this seed if you ever need to restore your wallet.</string>
-    <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">Each field contains only one correct word. Please confirm your seed by selecting the correct words.</string>
-    <string name="start_typing_the_word_and_tap_correct_from_list">Start typing the word and then tap the correct word from the suggestion list.</string>
-    <string name="enter_your_seed">Enter your seed…</string>
-    <string name="theInputFieldIsEmpty">The input fields is empty. Please, enter the words.</string>
-    <string name="error_seed_not_generated">Error occurred, Seed was not generated</string>
-    <string name="warning_save_seed">Failure to keep this seed safe can result in theft of your entire wallet or inability to recover your wallet.</string>
-    <string name="tap_to_select">Tap to select the word</string>
-    <string name="restore_wallet_incorrect_seed_input">You entered an incorrect seed. Please check your words.</string>
-    <string name="create_wallet_incorrect_seeds_input">You selected an incorrect word. Please recheck.</string>
-    <string name="i_copied_the_seed_phrase">I copied the seed phrase</string>
-    <string name="seed_phrase_verification">Seed Phrase Verification</string>
-    <string name="seed_restore">Seed Restore</string>
-    <string name="notAllSeedsEntered">Not all seeds are entered. Please, check input fields and enter all seeds.</string>
-    <string name="correctWordIs">Word #</string>
-    <string name="backup_wallet_instruction">Back up your wallet</string>
+    <string name="save_seed_instruction">Write down all 33 words in the correct order.</string>
+    <string name="backup_seed_phrase">Back up seed phrase</string>
+    <string name="verify_seed_info">Verify your seed phrase backup so you can recover your funds when needed.</string>
+
     <!--/Seed-->
 
     <!--Balance-->
     <string name="label_spendable">Spendable</string>
-    <string name="immature_stake_generation">Immature Stake Generation</string>
+    <string name="immature_stake_generation">Immature Stake Gen</string>
     <string name="label_immature_rewards">Immature Rewards</string>
     <string name="label_locked_by_tickets">Locked by Tickets</string>
     <string name="label_voting_authority">Voting Authority</string>
     <string name="current_total_balance">Current Total Balance</string>
-    <string name="amount_colon">Amount:</string>
-    <string name="equivalent_colon">Equivalent:</string>
-    <string name="balance_remaining_colon">Balance Remaining:</string>
     <string name="total_balance">Total Balance</string>
     <!--/Balance-->
 
     <!--Wallet-->
-    <string name="setting_up_dcrandroid">Setting Up Decred Wallet</string>
-    <string name="create_wallet">Create Wallet</string>
-    <string name="create_a_new_wallet">Create a new Wallet</string>
-    <string name="restore_existing_wallet">Restore an existing Wallet</string>
-    <string name="recover_wallet">Recover Wallet</string>
-    <string name="private_passphrase">Private Passphrase</string>
+    <string name="create_a_new_wallet">Create a new wallet</string>
+    <string name="restore_existing_wallet">Restore an existing wallet</string>
     <string name="opening_wallet">Opening wallet…</string>
-    <string name="input_private_phrase">Enter your private passphrase</string>
-    <string name="create_or_recover_your_wallet_and_start_managing_your_decred">Create or recover your wallet and\nstart managing your decred.</string>
-    <string name="enter_your_passphrase">Enter your passphrase</string>
+    <string name="opening_wallets">Opening wallets…</string>
     <string name="invalid_passphrase">Passphrase entered was not valid.</string>
     <string name="invalid_pin">PIN entered was not valid.</string>
-    <string name="invalid_current_pin">Current PIN entered was not valid.</string>
     <string name="invalid_password">Password entered was not valid.</string>
-    <string name="invalid_current_password">Current password entered was not valid.</string>
-    <string name="creating_wallet">Creating wallet…</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
     <!--/Wallet-->
 
     <!--Transaction-->
     <string name="recent_transactions">Recent Transactions</string>
-    <string name="receive_funds">Receive Funds</string>
-    <string name="sending_decred">Sending Decred</string>
-    <string name="fee_cap">FEE</string>
-    <string name="from_colon">From:</string>
-    <string name="to_colon">To:</string>
-    <string name="confirmed">Confirmed</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
     <string name="destination_address">Destination Address</string>
-    <string name="estimate_size">Estimate Size:</string>
     <string name="transaction_fee">Transaction fee</string>
     <string name="Transaction_details">Transaction details</string>
-    <string name="transaction_confirmation">Please confirm transaction for</string>
-    <string name="tx_hash_copy">Hash copied to clipboard</string>
-    <string name="tx_notify_title">Incoming Transaction Notifications</string>
-    <string name="no_transactions">No transactions</string>
-    <string name="publish_unmined_transaction">Publish Unmined Transactions</string>
-    <string name="label_hash">HASH:</string>
-    <string name="transaction">Transaction</string>
-    <string name="TxType">Type</string>
-    <string name="status">Status</string>
-    <string name="hash_colon">HASH:</string>
+    <string name="transactions">Transactions</string>
     <string name="pending">Pending</string>
-    <string name="unconfirmed">unconfirmed</string>
-    <string name="change_bracket">(change)</string>
-    <string name="script_bracket">[script]</string>
-    <string name="external_bracket">(external)</string>
-    <string name="null_data_bracket">[null data]</string>
-    <string name="raw_tx_copied">Raw transaction copied to clipboard</string>
     <string name="vote">Vote</string>
     <string name="revoked">Revoked</string>
-    <string name="confirmed_immature">Confirmed / Immature</string>
-    <string name="confirmed_live">Confirmed / Live</string>
-    <string name="ticket">Ticket</string>
-    <string name="empty_destination_address">Destination address can not be empty.</string>
-    <string name="invalid_destination_address">Destination address is not valid.</string>
-    <string name="empty_amount">Amount cannot be empty</string>
-    <string name="processing_colon">Processing…</string>
-    <string name="confirm_send_funds">Please confirm to send funds</string>
-    <string name="transaction_was_successful">Transaction Was Successful</string>
-    <string name="amount_invalid_decimal_places">Amount has more then 8 decimal places</string>
-    <string name="invalid_amount">Amount is not valid</string>
+    <string name="amount_invalid_decimal_places">Amount has more then %1$d decimal places</string>
     <string name="new_transaction">New Transaction</string>
-    <string name="latest_block">Latest Block</string>
-    <string name="copy_raw_transaction">Copy raw transaction</string>
-    <string name="tap_this_to_copy_raw_transaction_hex">Tap this to copy raw transaction hex</string>
-    <string name="tap_this_to_copy_transaction_hash">Tap this to copy transaction hash</string>
-    <string name="copy_hash">Copy hash</string>
+    <string name="wallet_new_transaction">[%1$s] New Transaction</string>
+    <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; %1$d Confirmations]]></string>
+
+    <string-array name="timestamp_sort">
+        <item>Newest</item>
+        <item>Oldest</item>
+    </string-array>
     <!--/Transaction-->
 
     <!--Block chain-->
-    <string name="rescan_block">Rescan Blockchain</string>
-    <string name="starting_height">starting height</string>
-    <string name="current_height">Current height</string>
-    <string name="rescan_blocks_confirmation">Are you sure? This could take some time.</string>
     <!--/Block chain-->
 
     <!--Sync Messages-->
-    <string name="fetching_headers">Fetching block headers.</string>
-    <string name="blocks_behind">%1$d blocks behind.</string>
-    <string name="discovering_used_addresses">Discovering used addresses.</string>
     <string name="remaining_minute_sync_eta">%1$d%% completed, %2$d min remaining.</string>
     <string name="remaining_seconds_sync_eta">%1$d%% completed, %2$d sec remaining.</string>
     <string name="remaining_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds remaining.</string>
-    <string name="left_minute_sync_eta">%1$d%% completed, %2$d min left.</string>
-    <string name="left_seconds_sync_eta">%1$d%% completed, %2$d sec left.</string>
-    <string name="left_sync_eta_less_than_seconds">%1$d%% completed, &lt;1 seconds left.</string>
-    <string name="percentage_completed">%1$.1f%% completed, %2$s min remaining.</string>
-    <string name="rescan_height_format">(3/3) Scanning %1$d of %2$d blocks.</string>
-    <string name="notification_rescan_height_format">Scanning %1$d of %2$d blocks.</string>
-    <string name="status_rescan_height_format">Scanning %1$d of %2$d blocks. (%3$.1f%%)</string>
-    <string name="overview_rescan_height_format">Scanning %1$d of %2$d block headers.\n%3$d%% through step 3 of 3.</string>
-    <string name="fetched_header_format">Fetched %1$d of ~%2$d block headers.\n%3$d%% through step 1 of 3.\nYour wallet is %4$s behind.</string>
-    <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) Fetching Headers</string>
-    <string name="overview_discovering_used_addresses">Discovering used addresses.\n~%1$d%% through step 2 of 3.</string>
-    <string name="overview_discovering_used_addresses_over">Discovering used addresses.\n~%1$d%% (over) through step 2 of 3.</string>
-    <string name="overview_sync_status_mainnet">Syncing with Decred Mainnet</string>
-    <string name="overview_sync_status_testnet">Syncing with Decred Testnet</string>
     <string name="synchronizing">Synchronizing</string>
-    <string name="starting_synchronization">Starting Synchronization…</string>
-    <string name="rescanning_in_progress">Rescanning in progress…</string>
-    <string name="scanning_blocks">Scanning blocks.</string>
-    <string name="check_progress_in_navigation_bar">Check progress in navigation bar.</string>
-    <string name="syncing_peers_testnet">Syncing with %1$d peers on testnet.</string>
-    <string name="one_syncing_peer_testnet">Syncing with 1 peer on testnet.</string>
-    <string name="syncing_peers_mainnet">Syncing with %1$d peers on mainnet.</string>
-    <string name="one_syncing_peer_mainnet">Syncing with 1 peer on mainnet.</string>
-    <string name="sync_status_verbose">All Times\nelapsed: %1$s, remain: %2$s, total: %3$s\n\nStage Times\nelapsed: %4$s, remain: %5$s, total: %6$s</string>
+    <string name="scanned_blocks">Scanned blocks</string>
     <!--/Sync Messages-->
 
     <!--QR Code-->
     <string name="camera_permission_scan">This application needs camera permission to scan QRCode for a wallet address , Please allow the permissions in the next dialog.</string>
-    <string name="scan_info">Scan a QRCode to retrieve a decred wallet address</string>
-    <string name="scan">Scan Address QR Code</string>
-    <string name="qr_code_help_text">Input or scan the destination wallet address\nand the amount in DCR to send funds.</string>
     <!--/QR Code-->
 
     <!--Address-->
-    <string name="notification_discovering_used_addresses">(2/3) Discovering used addresses…</string>
-    <string name="address_copy_text">Address copied to clipboard</string>
+    <string name="address_copy_text">Address copied</string>
     <string name="your_address">Your address</string>
-    <string name="error_occurred_getting_address">Error occurred while trying to get address for account:</string>
     <string name="generate_new_address">Generate new address</string>
     <string name="receive_fund_privacy_info">Each time you request a payment, a new address is created to protect your privacy.</string>
-    <string name="error_not_decred_address">This is not a DCR wallet address</string>
-    <string name="wallet_addr_too_long">Wallet Address Is Too Long</string>
-    <string name="wallet_add_too_short">Wallet Address Is Too Short</string>
     <string name="invalid_address">Not a valid address.</string>
-    <string name="owned_validate_address">Address is valid and you own it.</string>
-    <string name="external_validate_address"><![CDATA[<font color="red">Address is valid and you do <b>NOT</b> own it.</font>]]></string>
-    <string name="paste_from_clipboard">Paste Address From Clipboard</string>
     <!--/Address-->
 
     <!--Preference-->
-    <string name="key_connection_certificate" translatable="false">key_connection_certificate</string>
-    <string name="key_get_peers" translatable="false">key_get_peers</string>
-    <string name="summary_paste_certificate">Paste the certificate for dcrd</string>
-    <string name="title_rescan_blockchain">Rescan Blockchain</string>
-    <string name="title_general">General</string>
-    <string name="remote_node_address" translatable="false">remote_node_address</string>
     <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
-    <string name="build_date_system" translatable="false">build_date_system</string>
-    <string name="delete_wallet" translatable="false">delete_wallet</string>
-    <string name="delete_wallet_title">Delete Wallet</string>
-    <string name="logging_level">Logging Level</string>
-    <string name="network_mode">Network Mode</string>
-    <string name="connect_to_peer">Connect to Peer</string>
-    <string name="server_address">Server Address</string>
-    <string name="wallet_log">Wallet Log</string>
-    <string name="crash_title">Force Crash</string>
-    <string name="remote_address_invalid">Remote address is invalid</string>
-    <string name="key_rescan_block" translatable="false">rescan_block</string>
-    <string name="dcr_to_usd_exchange_url" translatable="false">https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR</string>
-    <string name="new_block_notification_description">Beep for new blocks.</string>
-    <string name="new_block_notification">New Block Notification</string>
+    <string name="logging_level">Logging level</string>
+    <string name="check_wallets_log">Check Wallets Log</string>
     <string name="currency_conversion">Currency Conversion</string>
-    <string name="requires_restart">Requires restart.</string>
-    <string name="user_agent_summary">For exchange rate fetching.</string>
-    <string name="changing">Changing…</string>
-    <string name="setting_startup_pin">Setting startup PIN…</string>
-    <string name="setting_startup_password">Setting startup password…</string>
-
-    <string-array name="network_modes">
-        <item>Simplified Payment Verification (SPV)</item>
-        <item>Remote Full Node</item>
-    </string-array>
-    <string-array name="network_modes_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
+    <string name="user_agent_summary">For exchange rate fetching</string>
+    <string name="change">Change</string>
 
     <string-array name="currency_conversion">
         <item>None</item>
         <item>USD (bittrex)</item>
     </string-array>
-    <string-array name="currency_conversion_source" translatable="false">
-        <item />
-        <item>bittrex</item>
-    </string-array>
-    <string-array name="currency_conversion_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-    <string-array name="currency_conversion_abbrv" translatable="false">
-        <item />
-        <item>USD</item>
-    </string-array>
+
 
     <string-array name="logging_levels" translatable="false">
         <item>Trace</item>
@@ -411,22 +177,25 @@
         <item>Error</item>
         <item>Critical</item>
     </string-array>
+    
+    
+    <string-array name="notification_options">
+        <item>None</item>
+        <item>Silent</item>
+        <item>Vibration only</item>
+        <item>Sound only</item>
+        <item>Sound and Vibration</item>
+    </string-array>
+
     <!--/Preference-->
 
     <!-- Overview Fragment -->
-    <string name="recent_activity">Recent Activity</string>
-    <string name="show_all_transactions">Show All Transactions</string>
-    <string name="tap_for_more_information">Tap for more information.</string>
     <!--/ Overview Fragment -->
 
     <!--History Fragment -->
-    <string name="coinbase" translatable="false">Coinbase</string>
+    <string name="transferred">Transferred</string>
     <string name="sent">Sent</string>
-    <string name="yourself">Yourself</string>
     <string name="received">Received</string>
-    <string name="staking">Staking</string>
-    <string name="no_transactions_have_occurred">No transactions have occurred.</string>
-    <string name="wallet_is_rescanning">Wallet is already rescanning, check progress in navigation bar.</string>
     <!--/History Fragment -->
 
     <!--Error Messages-->
@@ -435,127 +204,61 @@
     <string name="not_connected">Not Connected To Decred Network</string>
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
-    <string name="balance_remaining">Balance Remaining:</string>
-    <string name="failed_to_send_transaction">Failed to send transaction</string>
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
-    <string name="not_connected_error">Not connected to the network.</string>
     <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
-    <string name="invalid_testnet_address">This is not a valid Decred testnet3 address.</string>
-    <string name="invalid_mainnett_address">This is not a valid Decred mainnet address.</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
-    <string name="security">Security</string>
-    <string name="sign_message">Sign Message</string>
-    <string name="address_colon">Address:</string>
-    <string name="message_colon">Message:</string>
-    <string name="this_field_is_required">This field is required.</string>
-    <string name="signature_colon">Signature:</string>
+    <string name="sign_message">Sign message</string>
+    <string name="sign">Sign</string>
+    <string name="message">Message</string>
+    <string name="signature">Signature</string>
     <string name="valid_signature">This signature verifies against the message and address.</string>
     <string name="invalid_signature">This signature does not verify against the message and address.</string>
-    <string name="sign_message_description">Here you can verify the validity of an address, sign messages to prove your ownership of an address, and verify signatures.</string>
+    <string name="sign_message_description">Signing a message with an address\' private key allows you to prove that you are the owner of a given address to a possible counterparty.</string>
+    <string name="verify_message_description"><![CDATA[After you or your counterparty has generated a signature, you can use this form to verify the validity of the signature.<br/><br/>Once you have entered the address, the message and the corresponding signature, you will see <font color="#41be53">VALID</font> if the signature appropriately matches the address and message, otherwise <font color="#ed6d47">INVALID</font>.]]></string>
     <!--/Security Fragment-->
 
     <!--Send Fragment-->
-    <string name="send_in_dcr">Send in DCR:</string>
-    <string name="send_in_usd">Send in USD:</string>
-    <string name="_0_00_dcr">0.00 DCR</string>
-    <string name="_0_00_">0.00 </string>
-    <string name="confirmation_required">Confirmation Required</string>
-    <string name="passphrase_is_empty">Passphrase is empty</string>
-    <string name="_0_dcr">0 DCR</string>
     <string name="_0_bytes">0 bytes</string>
-    <string name="total_sending">Total Sending:</string>
-    <string name="balance_after">Balance After:</string>
-    <string name="amount_is_empty">Amount is empty</string>
-    <string name="_8_decimal_amount_err">Amount has more then 8 decimal places</string>
-    <string name="bytes">bytes</string>
-    <string name="decred_colon">decred:</string>
-    <string name="exchange_rate">Exchange Rate:</string>
-    <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex rate unavailable (tap to retry)</string>
+    <string name="x_bytes">%1$d bytes</string>
     <string name="fee">Fee</string>
-    <string name="estimatedFee">Estimated Fee</string>
-    <string name="link_to_dcr_data">Tab this to see details in Dcrdata</string>
-    <string name="View_on_dcrdata">View On Dcrdata</string>
-    <string name="tap_to_paste">Tap to Paste</string>
-    <string name="sending_transaction">Sending transaction…</string>
     <string name="send_to_account">Send to account</string>
     <string name="send_to_address">Send to address</string>
-    <string name="amount_can_not_be_zero">Amount can not be zero.</string>
-    <string name="amount_must_be_greater_than_zero">Amount must be greater then zero.</string>
-    <string name="network_synchronization">Please wait for network synchronization.</string>
     <!--/Send Fragment-->
 
     <!--Transaction Details View-->
-    <string name="fee_colon">Fee:</string>
-    <string name="inputs">Inputs</string>
-    <string name="outputs">Outputs</string>
-    <string name="ticket_purchase">Ticket Purchase</string>
-    <string name="vote_bits">Vote Bits</string>
-    <string name="last_block_valid">Last Block Valid</string>
-    <string name="menu_view_on_dcrdata">View on Dcrdata</string>
-    <string name="view_dcrdata_description">View this transaction details on Dcrdata</string>
     <!--/Transaction Details View-->
 
-    <!--Confirm Transaction Dialog-->
     <string name="toConfirmEnterYourPassword">To confirm, enter your password:</string>
-    <string name="to">to</string>
-    <string name="withFeeOff">with a fee of</string>
-    <string name="total">Total</string>
-    <string name="to_account">to account \'%1$s\'</string>
-    <!--/Confirm Transaction Dialog-->
 
     <!--Security-->
-    <string name="erase_char">⌫</string>
     <string name="pin">PIN</string>
-    <string name="confirm_spending_pin">Confirm Spending PIN</string>
-    <string name="confirm_spending_password">Confirm Spending Password</string>
-    <string name="create_spending_pin">Create a Spending PIN</string>
-    <string name="create_spending_pass">Create a Spending Password</string>
-    <string name="create_security_pass">Create Spending Password</string>
-    <string name="mismatch_passcode">PIN do not match</string>
-    <string name="create_wallet_uninitialized">Cannot create wallet, LibWallet not initialized</string>
+    <string name="create_spending_pin">Create a spending PIN</string>
+    <string name="create_spending_pass">Create a spending Password</string>
+    <string name="change_spending_pass">Change spending password</string>
+    <string name="change_spending_pin">Change spending PIN</string>
+    <string name="mismatch_passcode">PINs do not match</string>
     <string name="mismatch_password">Password do not match</string>
-    <string name="empty_password">Password cannot be empty</string>
-    <string name="password_match">PASSWORDS MATCH</string>
-    <string name="confirm_password">CONFIRM PASSWORD</string>
     <string name="password">Password</string>
-    <string name="enter_spending_pin">Enter Spending PIN</string>
-    <string name="password_strength">Password strength</string>
-    <string name="pin_strength">PIN strength</string>
-    <string name="enter_startup_pin">Enter Startup Pin</string>
-    <string name="confirm_startup_pin">Confirm Startup PIN</string>
-    <string name="create_startup_pin">Create Startup PIN</string>
-    <string name="enter_spending_password">Enter Spending Password</string>
-    <string name="create_startup_password">Create Startup Password</string>
-    <string name="change_spending_pin_password">Change Spending PIN/Password</string>
-    <string name="required_to_send_funds">Required to send funds.</string>
-    <string name="enter_current_pin">Enter Current PIN</string>
-    <string name="confirm_startup_password">Confirm Startup Password</string>
-    <string name="enter_current_spending_password">Enter Current Spending Password</string>
-    <string name="enter_current_startup_password">Enter Current Startup Password</string>
-    <string name="enter_startup_password">Enter Startup Password</string>
-    <string name="removing_startup_pass">Removing startup password…</string>
-    <string name="removing_startup_pin">Removing startup pin…</string>
-    <string name="changing_password">Changing password…</string>
+    <string name="enter_spending_pin">Enter spending PIN</string>
+    <string name="enter_spending_pin_again">Enter spending PIN again</string>
+    <string name="enter_startup_pin">Enter startup PIN</string>
+    <string name="enter_new_startup_pin">Enter new startup PIN</string>
+    <string name="enter_new_startup_pin_again">Enter new startup PIN again</string>
+    <string name="create_startup_pin">Create a startup PIN</string>
+    <string name="create_startup_password">Create a startup Password</string>
+    <string name="change_startup_password">Change startup password</string>
+    <string name="change_startup_pin">Change startup PIN</string>
+    <string name="change_spending_pin_password">Change spending PIN/Password</string>
     <string name="startup_pin_password">Startup PIN/Password</string>
-    <string name="encrypt_wallet_summary">A pin/password will be required at startup.</string>
-    <string name="change_startup_pin_password">Change Startup PIN/Password</string>
-    <string name="required_to_enter_app">Required to enter app.</string>
-    <string name="changing_pin">Changing PIN…</string>
-    <string name="security_page_wallet_sync">Please wait for your wallet to finish synchronizing.</string>
-    <string name="field_cannot_be_empty">Field cannot be empty</string>
-    <string name="spending_pin">Spending PIN</string>
-    <string name="spending_password">Spending Password</string>
-    <string name="or_a_spending_pin">or a Spending PIN</string>
-    <string name="or_a_spending_password">or a Spending Password</string>
-    <string name="digit_zero">0</string>
+    <string name="change_startup_pin_password">Change startup PIN/password</string>
+    <string name="spending_pin_password">Spending PIN/Password</string>
+    <string name="spending_password">Spending password</string>
 
     <!--/Security-->
 
     <!--Crash Report-->
-    <string name="confirm_crash">Confirm Crash</string>
-    <string name="crash_confirmation_description">This will force the app to crash, and request to send a crash report.</string>
     <string name="dont_send">Don\'t send</string>
     <string name="send_report">Send Report</string>
     <string name="app_crashed">App Crashed</string>
@@ -566,19 +269,221 @@
 
     <!--WIFI Sync-->
     <string name="wifi_data_sync_title">Sync when not on WiFi</string>
-    <string name="connect_to_wifi">Connect to Wi-Fi to sync</string>
-    <string name="no_wifi">No Wi-Fi</string>
     <string name="wifi_sync_notice">Would you like to sync anyways?</string>
     <string name="not_connected_to_wifi">Not connected to WiFi.</string>
+    <string name="sync">Sync</string>
+    <string name="not_now">Not now</string>
     <!--/WIFI Sync-->
 
-    <string name="external_output_amount">%1$s DCR (external)</string>
-    <string name="external_output_account">%1$s DCR (%2$s)</string>
+    <string name="tx_details_account">%1$s DCR (%2$s)</string>
 
     <!--Landing page-->
-    <string name="decred_text">de<b>CRED</b></string>
     <string name="welcome_android_title">Welcome to\nDecred Android Wallet</string>
-    <string name="view_source_code">View source code on GitHub</string>
     <!--Landing page-->
+
+    <!--Time-->
+    <string name="am">am</string>
+    <string name="pm">pm</string>
+    <string name="time_left_minutes">%1$d min left</string>
+    <string name="time_left_seconds">%1$d sec left</string>
+    <string name="days_behind">%1$d days behind</string>
+    <string name="one_day_behind">1 day behind</string>
+    <string name="x_days">%1$d days</string>
+    <string name="one_day">1 day</string>
+    <string name="x_hours">%1$d hours</string>
+    <string name="one_hour">1 hours</string>
+    <string name="x_minutes">%1$d minutes</string>
+    <string name="one_minute">1 minute</string>
+    <string name="x_seconds">%1$d seconds</string>
+    <string name="one_second">1 second</string>
+    <!--/Time-->
+
+    <string name="connected_peers_count">Connected peers count</string>
+    <string name="wallet_status">Wallet Status</string>
+    <string name="offline">Offline</string>
+    <string name="online">Online</string>
+    <string name="no_transactions_yet">No transactions yet.</string>
+    <string name="not_syncing">Not syncing</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
+    <string name="show_details">Show details</string>
+    <string name="hide_details">Hide Details</string>
+    <string name="block_header_fetched">Block header fetched</string>
+    <string name="step_1_3" tools:ignore="TypographyFractions">Step 1/3</string>
+    <string name="step_2_3">Step 2/3</string>
+    <string name="step_2_2">Step 2/2</string>
+    <string name="step_3_3">Step 3/3</string>
+    <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="syncing_progress">Syncing progress</string>
+    <string name="percentage">%1$d%%</string>
+    <string name="syncing_state">Syncing…</string>
+    <string name="block_header_fetched_count">%1$d of %2$d</string>
+    <string name="blocks_left">%1$d blocks left</string>
+    <string name="synced">Synced</string>
+
+    <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
+    <string name="latest_block_time"><![CDATA[Synced to block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
+    <string name="connected_peers"><![CDATA[Connected to <font color="#091440">%1$d</font> peers.]]></string>
+    <string name="no_connected_peers">No connected peers.</string>
+    <string name="_default">Default</string>
+    <string name="starting_up">Starting up</string>
+    <string name="waiting_for_other_wallets">Waiting for other wallets</string>
+    <string name="resume_account_discovery_title">Unlock to resume restoration</string>
+    <string name="multi_resume_account_discovery_title">Unlock %1$s to resume restoration</string>
+    <string name="resume_account_discovery_desc">The restoration process to discover your accounts was interrupted in the last sync.\n\nUnlock the wallet to resume the process.</string>
+    <string name="unlock">Unlock</string>
+    <string name="wallets">Wallets</string>
+    <string name="add_new_account">Add new account</string>
+    <string name="key_count">%1$d external, %2$d internal, %3$d imported</string>
+    <string name="keys">Keys</string>
+    <string name="properties">Properties</string>
+    <string name="show_properties">Show properties</string>
+    <string name="hide_properties">Hide properties</string>
+    <string name="default_account_switch_desc">Default for all transactions</string>
+    <string name="wallet_renamed">Wallet renamed</string>
+    <string name="account_renamed">Account renamed</string>
+    <string name="account_created">Account created</string>
+    <string name="create_account_warning">Accounts CANNOT be deleted once created.</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="confirm_to_create_account">Confirm to create account</string>
+    <string name="not_backed_up">Not backed up</string>
+    <string name="seed_phase_2_briefing">You will be asked to enter the seed phrase on the next screen.</string>
+    <string name="verify">Verify</string>
+    <string name="seed_instruction_1">The <b>33-word seed phrase</b> is EXTREMELY IMPORTANT.</string>
+    <string name="seed_instruction_2">Seed phrase is <b>the only way</b> to restore your wallet.</string>
+    <string name="seed_instruction_3">It is recommended to store your seed phrase in a  (e.g. write down on a paper).</string>
+    <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any  (e.g. screenshot).</string>
+    <string name="seed_instruction_5">Anyone with your seed phrase . DO NOT show it to anyone.</string>
+    <string name="view_seed_phrase">View seed phrase</string>
+    <string name="seed_verification_failed">Failed to verify. Please go through every words and try again.</string>
+    <string name="back_to_wallets">Back to Wallets</string>
+    <string name="tx_sort_all">All (%1$d)</string>
+    <string name="tx_sort_sent">Sent (%1$d)</string>
+    <string name="tx_sort_received">Received (%1$d)</string>
+    <string name="tx_sort_transferred">Transferred (%1$d)</string>
+    <string name="tx_sort_staking">Staking (%1$d)</string>
+    <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
+    <string name="immature">Immature</string>
+    <string name="live">Live</string>
+    <string name="receive_dcr">Receive DCR</string>
+    <string name="selected_account_name">%1$s (%2$s)</string>
+    <string name="decred_qr_address_prefix">decred:%1$s</string>
+    <string name="got_it">Got It</string>
+    <string name="tap_to_copy">(Tap to copy)</string>
+    <string name="cancel_sync_create_wallet">Cancel sync before creating wallet</string>
+    <string name="cancel_sync_delete_wallet">Cancel sync before deleting wallet</string>
+    <string name="wallet_created">Wallet created</string>
+    <string name="amount">Amount</string>
+    <string name="processing_time">Processing time</string>
+    <string name="fee_rate">Fee rate</string>
+    <string name="transaction_size">Transaction size</string>
+    <string name="total_cost">Total cost</string>
+    <string name="next">Next</string>
+    <string name="send_dcr">Send DCR</string>
+    <string name="spendable_bal_format">Spendable: %1$s DCR</string>
+    <string name="send_x_dcr">Send %1$s DCR</string>
+
+    <string name="x_dcr">%1$s DCR</string>
+    <string name="x_usd">%1$s USD</string>
+    <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
+    <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
+    <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">(%2$s USD)</font>]]></string>
+    <string name="balance_after_send">Balance after send</string>
+    <string name="confirm_to_send">Confirm to send</string>
+    <string name="send_from_account"><![CDATA[Sending from <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
+    <string name="send_invalid">Not valid for send</string>
+    <string name="to_destination_address">To destination address</string>
+    <string name="send_dcr_warning">Your DCR will be sent and CANNOT be undone.</string>
+    <string name="to_self">To self</string>
+    <string name="processing_ellipsis">Processing…</string>
+    <string name="success">Success</string>
+    <string name="send_fail_msg">Failed to send. Please try again.</string>
+    <string name="transaction_sent">Transaction sent</string>
+    <string name="from_account">From account</string>
+    <string name="included_in_block">Included in block</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="tx_id_copied">Transaction ID copied</string>
+    <string name="to_account">To account</string>
+    <string name="how_to_copy">How to copy</string>
+    <string name="tx_details_copy_info"><![CDATA[Tap on <font color="#2970FF">blue text</font> to copy the item.]]></string>
+    <string name="x_inputs_consumed">%1$d Inputs consumed</string>
+    <string name="x_output_created">%1$d Outputs created</string>
+    <string name="previous_outpoint_copied">Previous outpoint copied</string>
+    <string name="to_address">To address</string>
+    <string name="paste">Paste</string>
+    <string name="qr_code_scan_hint">Place QR code in the frame</string>
+    <string name="source_account_picker_title">Sending account</string>
+    <string name="dest_account_picker_title">Receiving account</string>
+    <string name="none">None</string>
+    <string name="notifications">Notifications</string>
+    <string name="incoming_transactions">Incoming transactions</string>
+    <string name="beep_for_new_blocks">Beep for new blocks</string>
+    <string name="connect_to_specific_peer">Connect to specific peer</string>
+    <string name="validate_addresses">Validate Addresses</string>
+    <string name="validate_address_instruction">Enter an address to validate:</string>
+    <string name="validate">Validate</string>
+    <string name="clear">Clear</string>
+    <string name="valid_address">Valid address</string>
+    <string name="external_valid_address">NOT owned by this wallet</string>
+    <string name="internal_valid_address">Owned by this wallet</string>
+    <string name="address">Address</string>
+    <string name="sign_message_instruction">Enter an address and message to sign:</string>
+    <string name="signature_copied">Signature copied</string>
+    <string name="confirm_to_sign">Confirm to sign</string>
+    <string name="confirm_to_change">Confirm to change</string>
+    <string name="sign_using_external_address_error">Address does not belong to wallet</string>
+    <string name="verify_message_instruction">Enter the address, signature, and message to verify:</string>
+    <string name="clear_all">Clear All</string>
+    <string name="verify_message">Verify message</string>
+    <string name="invalid_base64_string">Not a base64 string.</string>
+    <string name="help_description">For more information, please visit the Decred documentation.</string>
+    <string name="see_documentations">See documentations</string>
+    <string name="exchange_rate_fetch_error">Exchange rate not fetched</string>
+    <string name="retry">Retry</string>
+    <string name="message_signed">Message signed</string>
+    <string name="restore_wallet_title">Restore from seed phrase</string>
+    <string name="verify_seed_phrase">Verify seed phrase</string>
+    <string name="restore">Restore</string>
+    <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
+    <string name="keep_in_mind">Keep in mind</string>
+    <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
+    <string name="create_watch_only_wallet">Create watch only wallet</string>
+    <string name="extended_public_key">Extended Public Key</string>
+    <string name="wallet_name_exists">Wallet name exists</string>
+    <string name="reserved_wallet_name">\'wallet-\' is a reserved prefix</string>
+    <string name="invalid_key">Key is invalid</string>
+    <string name="unusable_key">Key is unusable</string>
+    <string name="biometric_lockout_error">Too many attempts. Try again later.</string>
+    <string name="biometric_permanent_lockout_error">Biometric disabled. Unlock your device with a strong authentication (PIN/Pattern/Password)</string>
+    <string name="invalid_peer_ip">Enter a valid ip address</string>
+    <string name="your_wallet_is_successfully_restored">Your wallet is successfully restored</string>
+    <string name="get_started">Get started</string>
+    <string name="back">Back</string>
+    <string name="use_fingerprint">Use fingerprint</string>
+    <string name="overview_backup_seed_instruction">It is recommended to write down the seed phrase for each wallet as a backup so that you can recover your funds when needed.</string>
+    <string name="go_to_wallets">Go to Wallets</string>
+    <string name="n_wallets_need_backup">%1$d wallets need backup</string>
+    <string name="a_wallet_needs_backup">A wallet needs backup</string>
+    <string name="startup_password">Startup Password</string>
+    <string name="new_startup_password">New startup password</string>
+    <string name="confirm_new_startup_password">Confirm new startup password</string>
+    <string name="remove_startup_security">Remove startup security</string>
+    <string name="close_backup_warning">Close backup warning</string>
+    <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
+    <string name="startup_pin_prompt_title">Unlock with startup PIN</string>
+    <string name="startup_password_prompt_title">Unlock with startup password</string>
+    <string name="startup_fingerprint_prompt_title">Unlock with fingerprint</string>
+    <string name="use_password">Use password</string>
+    <string name="use_pin">Use PIN</string>
+    <string name="startup_security_changed">Startup PIN/password changed</string>
+    <string name="spending_passphrase_changed">Spending PIN/password changed</string>
+    <string name="wallets_log">Wallets log</string>
+    <string name="write_down_seed_phrase">Write down seed phrase</string>
+    <string name="step_1_2">Step 1/2</string>
+    <string name="your_33_word_seed_phrase">Your 33-word seed phrase</string>
+    <string name="i_have_wrote_down_all_33_words">I have wrote down all 33 words</string>
 
 </resources>

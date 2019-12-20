@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_padding_size_24">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rename_account"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_20"
+        android:id="@+id/sheet_title"
+        android:fontFamily="@font/source_sans_pro_semibold" />
+
+    <include
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/account_name_input"
+        android:layout_marginTop="@dimen/margin_padding_size_24"
+        layout="@layout/custom_input"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/margin_padding_size_8"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/outline_button_bg"
+            android:text="@string/cancel"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/edit_text_size_16"
+            android:focusable="true"
+            android:clickable="true"
+            android:fontFamily="@font/source_sans_pro_semibold"
+            android:layout_marginEnd="@dimen/margin_padding_size_8" />
+
+        <TextView
+            android:id="@+id/btn_confirm"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/default_app_button_bg"
+            android:enabled="false"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="@dimen/edit_text_size_16"
+            android:focusable="true"
+            android:clickable="true"
+            app:fontFamily="@font/source_sans_pro_semibold"
+            android:includeFontPadding="false"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</LinearLayout>

@@ -1,27 +1,12 @@
-<!--
-  ~ Copyright (c) 2018-2019 The Decred developers
-  ~ Use of this source code is governed by an ISC
-  ~ license that can be found in the LICENSE file.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="12dp"
-    android:height="12dp"
-    android:viewportWidth="12.0"
-    android:viewportHeight="12.0">
-    <path
-        android:fillColor="@color/transparentDrawableColor"
-        android:pathData="M6,6m-5.5,0a5.5,5.5 0,1 1,11 0a5.5,5.5 0,1 1,-11 0"
-        android:strokeWidth="1"
-        android:strokeColor="@color/lightBlueDrawableColor" />
-    <path
-        android:fillColor="@color/transparentDrawableColor"
-        android:pathData="M3.098,9.098L9.098,3.098"
-        android:strokeWidth="1"
-        android:strokeColor="@color/lightBlueDrawableColor" />
-    <path
-        android:fillColor="@color/transparentDrawableColor"
-        android:pathData="M9.098,9.098L3.098,3.098"
-        android:strokeWidth="1"
-        android:strokeColor="@color/lightBlueDrawableColor" />
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M12,10.5858l5.2929,-5.2929l1.4142,1.4142l-5.2929,5.2929l5.2929,5.2929l-1.4142,1.4142l-5.2929,-5.2929l-5.2929,5.2929l-1.4142,-1.4142l5.2929,-5.2929l-5.2929,-5.2929l1.4142,-1.4142z"
+      android:strokeWidth="1"
+      android:fillColor="#3D5873"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
 </vector>

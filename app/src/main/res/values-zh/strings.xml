@@ -7,176 +7,175 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
        <!--General-->
        <string name="wallet">钱包</string>
-       <string name="crash_dialog_text">一项意外错误导致应用被强制终止。请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题。这将有助于我们防止错误的再次发生</string>
-       <string name="navigation_drawer_open">打开菜单栏</string>
-       <string name="navigation_drawer_close">关闭菜单栏</string>
-       <string name="label_keys">Keys</string>
-       <string name="label_properties">配置</string>
-       <string name="require_to_send_fund">请求发送金额</string>
-       <string name="add_an_account">添加账户</string>
-       <string name="available_balance">可用余额</string>
-       <string name="input_or_scan_the_destination_transactionfee_and_the_amount_in_dcr_to_send_fund">输入或扫描目标地址并输入发送的DCR数目。</string>
-       <string name="max">发送所有资金</string>
-       <string name="type">类别</string>
-       <string name="loading">加载中</string>
-       <string name="loading_ellipsis">加载中…</string>
-       <string name="date">日期</string>
-       <string name="help">帮助</string>
-       <string name="history">历史</string>
-       <string name="overview">概览</string>
+       <string name="crash_dialog_text">一项意外错误导致应用被强制终止。请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题。这将有助于我们防止错误的再次发生</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="send_dcr_info">输入或扫描目标地址并输入发送的DCR数目。</string><![CDATA[
+       
+       ]]>
+    <string name="type">类别</string>
+       <string name="loading">加载中</string><![CDATA[
+       
+       
+       ]]><string name="help">帮助</string><![CDATA[
+       
+       ]]>
+    <string name="overview">概览</string>
        <string name="permission">权限范围</string>
-       <string name="denied_permission">超出权限范围</string>
-       <string name="error_bundle_null">发生错误，Bundle为空</string>
-       <string name="receive">接收</string>
-       <string name="tickets">选票</string>
-       <string name="amount_dcr">金额</string>
-       <string name="send">发送</string>
-       <string name="sending">发送中</string>
-       <string name="cancel">取消</string>
-       <string name="done">完成</string>
-       <string name="hash">哈希</string>
-       <string name="connection">连接</string>
-       <string name="certificate">证书</string>
-       <string name="confirmations">确认</string>
-       <string name="testnet">测试网</string>
+       <string name="denied_permission">超出权限范围</string><![CDATA[
+       
+       ]]><string name="receive">接收</string><![CDATA[
+       
+       
+       ]]><string name="send">发送</string><![CDATA[
+       
+       ]]><string name="cancel">取消</string><![CDATA[
+       
+       
+       ]]><string name="connection">连接</string><![CDATA[
+       
+       
+       ]]>
+    <string name="testnet">测试网</string>
        <string name="general">通用</string>
-       <string name="view_on_dcrdata">在 dcrdata 查看</string>
-       <string name="build_date">Build Date</string>
-       <string name="build">build</string>
-       <string name="copy_on_tap">(点击复制)</string>
-       <string name="for_more_information_please_visit">查看更多内容请浏览</string>
-       <string name="exit_app_prompt_title">退出钱包？</string>
-       <string name="exit_app_prompt_message">请确定退出</string>
-       <string name="delete_wallet_prompt_title">请确定删除钱包</string>
-       <string name="delete_wallet_prompt_message">您确定删除钱包吗？请确保您已保存钱包种子或已在删除前转移您的币。此操作将恢复默认应用设置。</string>
-       <string name="details">详情</string>
-       <string name="setting">设置</string>
-       <string name="hide_this_account">隐藏账号</string>
-       <string name="account_balance_will_be_ignored">账户余额将被忽略</string>
-       <string name="default_account">默认账号</string>
-       <string name="exit_cap">退出</string>
-       <string name="hidden">隐藏</string>
-       <string name="delete">删除</string>
-       <string name="no">否</string>
-       <string name="yes">是</string>
-       <string name="confirm">确认</string>
-       <string name="bittrex_unavailable">Bittrex 费率不可用（点击重试）</string>
-       <string name="coming_soon">即将到来…</string>
-       <string name="settings">设置</string>
-       <string name="changes_after_restart">更改将在应用重启后生效</string>
-       <string name="view_cap">查看</string>
-       <string name="close_cap">关闭</string>
-       <string name="exchange_rate_error">交易失败错误:</string>
-       <string name="exchange_rate_unavailable"> 费率不可用（点击重试</string>
-       <string name="ago">前</string>
-       <string name="now">当前</string>
-       <string name="you_received">您收到</string>
-       <string name="disconnected">未连接</string>
-       <string name="synced_with_one_peer">与 1 个节点同步</string>
-       <string name="syncing_with_one_peer">与 1 个节点同步中</string>
-       <string name="synced_with_multiple_peer">与 %1$d 节点同步</string>
-       <string name="syncing_with_multiple_peer">与 %1$d 节点同步中</string>
-       <string name="ok">OK</string>
+       <string name="view_on_dcrdata">在 dcrdata 查看</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]>
+    <string name="default_account">默认账号</string>
+       <string name="exit_cap">退出</string><![CDATA[
+       
+       ]]>
+    <string name="delete">删除</string>
+       <string name="no">否</string><![CDATA[
+       
+       ]]><string name="confirm">确认</string><![CDATA[
+       
+       
+       ]]><string name="settings">设置</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]>
+    <string name="ok">OK</string>
        <string name="user_agent">用户代理</string>
        <string name="log_file_not_found">未发现日志文件</string>
-       <string name="wallet_log_copied">钱包日志复制成功</string>
-       <string name="dismiss">关闭</string>
-       <string name="welcome_title">欢迎使用Decred钱包</string>
-       <string name="first_run_notice">您的33个单词种子在您的钱包中，请确保它的安全。如果没有种子您将无法在您的设备丢失或损坏的情况下恢复钱包。\n\n初始化钱包同步会比一般情况下花费更长时间。</string>
-       <string name="less_than_one_day">&lt;1 天内</string>
-       <string name="less_than_one_day_ago">&lt;1 天前</string>
-       <string name="one_day">1 天</string>
-       <string name="one_day_ago">1 天前</string>
-       <string name="multiple_days">%1$d 天</string>
-       <string name="multiple_days_ago">%1$d 天前</string>
-       <string name="copy">复制</string>
-       <string name="copied_successfully">复制成功</string>
-       <string name="all">全部</string>
-       <string name="re_establishing_connection">重新连接中</string>
-       <string name="address_not_found">找不到地址</string>
-       <string name="copied_to_clipboard">复制到粘贴板</string>
-       <string name="clearAll">全部清除</string>
-       <string name="share">分享</string>
-       <string name="clear_fields">清除</string>
-       <string name="deleting_wallet">正在删除钱包…</string>
-       <string name="retry_caps">重试</string>
-       <string name="share_address_via">分享二维码</string>
+       <string name="wallet_log_copied">钱包日志复制成功</string><![CDATA[
+       
+       
+       
+       
+       
+       ]]><string name="one_day">1 天</string><![CDATA[
+       
+       
+       
+       ]]><string name="copy">复制</string><![CDATA[
+       
+       
+       
+       ]]><string name="address_not_found">找不到地址</string><![CDATA[
+       
+       
+       ]]>
+    <string name="share">分享</string>
+       <string name="clear_fields">清除</string><![CDATA[
+       
+       ]]>
+    <string name="retry_caps">重试</string>
+       <string name="share_address_via">分享二维码</string><![CDATA[
 
-       <string-array name="nav_list_titles">
-           <item>概览</item>
-           <item>历史</item>
-           <item>发送</item>
-           <item>接收</item>
-           <item>账户</item>
-           <item>安全</item>
-           <item>设置</item>
-           <item>帮助</item>
-       </string-array>
-       <!--/General-->
+       
+       ]]><!--/General-->
 
-       <!--Peers-->
-       <string name="view_peers">查看节点</string>
-       <string name="services">服务</string>
-       <string name="last_send">上次发送</string>
-       <string name="last_receive">上次接收</string>
-       <string name="bytes_sent">发送 Bytes</string>
-       <string name="bytes_receive">接收 Bytes</string>
-       <string name="time_offset">时间偏移</string>
-       <string name="version">版本</string>
-       <string name="sub_version">子版本</string>
-       <string name="inbound">传入</string>
-       <string name="syncode">同步代码</string>
-       <string name="peer_details">节点详情</string>
-       <string name="peers">节点</string>
-       <string name="no_peer_found">未发现节点</string>
-       <string name="get_peer_info">获取节点信息</string>
-       <string name="summary_peers">查看可用节点和详情</string>
-       <string name="connecting_to_peers">正在连接节点</string>
-       <string name="invalid_peer_address">节点地址不正确</string>
-       <string name="subscribe_to_block_notification">开启区块通知</string>
-       <string name="discover_addresses">发现地址</string>
-       <string name="connected_to_remote_node">已连接到远程节点</string>
-       <string name="connecting_to_rpc_server">正在连接RPC服务器</string>
-       <string name="connecting_attempt">正在尝试连接</string>
-       <string name="rpc_connection_failed">RPC连接失败:</string>
-       <!--/Peers-->
+       <!--Peers--><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="version">版本</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="connecting_to_peers">正在连接节点</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       ]]><!--/Peers-->
 
-       <!--Account-->
-       <string name="account">账户</string>
-       <string name="accounts">账户</string>
-       <string name="account_number">账户序号</string>
-       <string name="edit_account_name">修改账户名字</string>
-       <string name="spinner_account">账户:</string>
-       <string name="input_your_new_account_name_and_enter_your_private_passphrase">输入新账户名及密码</string>
-       <string name="account_name">账户名</string>
-       <string name="create_account">创建账户</string>
-       <string name="add_account">添加账户</string>
-       <string name="creating_account">创建账户中…</string>
-       <string name="input_account_name">输入账户名字</string>
-       <string name="hd_path">HD路径</string>
-       <string name="default_account_info">将本账户设定为默认发送及接受交易账户。</string>
-       <string name="external">外部</string>
-       <string name="internal">内部</string>
-       <string name="imported">导入</string>
-       <!--/Account-->
+       <!--Account--><![CDATA[
+       
+       
+       ]]><string name="account_number">账户序号</string><![CDATA[
+       
+       
+       
+       ]]><string name="account_name">账户名</string><![CDATA[
+       
+       
+       
+       
+       ]]><string name="hd_path">HD路径</string><![CDATA[
+       
+       ]]><string name="external">外部</string><![CDATA[
+       
+       
+       ]]><!--/Account-->
 
        <!--Seed-->
-       <string name="save_seed_instruction">请将种子写下并安全保存。在下个页面及以后需要恢复钱包时都需要输入种子</string>
-       <string name="please_confirm_your_seed_by_typing_and_tapping_each_word_accordingly">每个空格只有一个正确单词。请选择正确的单词以确认您的种子</string>
-       <string name="start_typing_the_word_and_tap_correct_from_list">开始输入单词并在建议列表中点击正确的单词。</string>
-       <string name="enter_your_seed">输入种子…</string>
-       <string name="theInputFieldIsEmpty">请输入单词</string>
-       <string name="error_seed_not_generated">出现错误，未生成种子</string>
-       <string name="warning_save_seed">如果不能保证种子单词的安全可能会导致钱包被盗或无法恢复。</string>
-       <string name="tap_to_select">点击选择单词</string>
-       <string name="restore_wallet_incorrect_seed_input">您输入的种子不正确。请检查输入的单词。</string>
-       <string name="create_wallet_incorrect_seeds_input">您选择了错误的单词。请重新检查。</string>
-       <string name="i_copied_the_seed_phrase">我已复制种子单词</string>
-       <string name="seed_phrase_verification">确认种子</string>
-       <string name="seed_restore">恢复种子</string>
-       <string name="notAllSeedsEntered">没有输入完单词。请检查输入栏并填写所有单词。</string>
-       <string name="correctWordIs">单词 #</string>
-       <!--/Seed-->
+       <string name="save_seed_instruction">请将种子写下并安全保存。在下个页面及以后需要恢复钱包时都需要输入种子</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><!--/Seed-->
 
        <!--Balance-->
        <string name="label_spendable">可用资金</string>
@@ -184,309 +183,317 @@
        <string name="label_immature_rewards">未成熟奖励</string>
        <string name="label_locked_by_tickets">选票锁定</string>
        <string name="label_voting_authority">投票权</string>
-       <string name="current_total_balance">总余额</string>
-       <string name="amount_colon">资金:</string>
-       <string name="equivalent_colon">等同于:</string>
-       <string name="balance_remaining_colon">余额:</string>
-       <string name="total_balance">总余额</string>
+       <string name="current_total_balance">总余额</string><![CDATA[
+       
+       
+       
+       ]]>
+    <string name="total_balance">总余额</string>
        <!--/Balance-->
 
-       <!--Wallet-->
-       <string name="setting_up_dcrandroid">设置Decred钱包</string>
-       <string name="create_wallet">创建钱包</string>
-       <string name="create_a_new_wallet">创建新钱包</string>
-       <string name="restore_existing_wallet">恢复现有钱包</string>
-       <string name="recover_wallet">恢复钱包</string>
-       <string name="private_passphrase">密码</string>
-       <string name="opening_wallet">正在打开钱包…</string>
-       <string name="input_private_phrase">输入密码</string>
-       <string name="create_or_recover_your_wallet_and_start_managing_your_decred">创建或恢复钱包并开始管理您的decred。</string>
-       <string name="enter_your_passphrase">输入密码</string>
-       <string name="invalid_passphrase">密码错误。</string>
-       <string name="invalid_pin">输入的PIN错误。</string>
-       <string name="invalid_current_pin">输入的PIN错误</string>
-       <string name="invalid_password">输入的密码错误。</string>
-       <string name="invalid_current_password">输入的密码错误。</string>
-       <string name="creating_wallet">创建钱包中…</string>
-       <string name="failed_to_open_wallet">打开钱包失败</string>
+       <!--Wallet--><![CDATA[
+       
+       
+       ]]>
+    <string name="create_a_new_wallet">创建新钱包</string>
+       <string name="restore_existing_wallet">恢复现有钱包</string><![CDATA[
+       
+       
+       ]]><string name="opening_wallet">正在打开钱包…</string><![CDATA[
+       
+       
+       
+       ]]>
+    <string name="invalid_passphrase">密码错误。</string>
+       <string name="invalid_pin">输入的PIN错误。</string><![CDATA[
+       
+       ]]><string name="invalid_password">输入的密码错误。</string><![CDATA[
+       
+       
+       ]]>
+    <string name="failed_to_open_wallet">打开钱包失败</string>
        <!--/Wallet-->
 
        <!--Transaction-->
-       <string name="recent_transactions">最近交易</string>
-       <string name="receive_funds">接收资金</string>
-       <string name="sending_decred">发送Decred</string>
-       <string name="fee_cap">费用</string>
-       <string name="from_colon">从:</string>
-       <string name="to_colon">到:</string>
-       <string name="confirmed">已确认</string>
-       <string name="destination_address">目的地址</string>
-       <string name="estimate_size">预计大小:</string>
-       <string name="transaction_fee">交易手续费</string>
-       <string name="Transaction_details">交易详情</string>
-       <string name="transaction_confirmation">请确认交易</string>
-       <string name="tx_hash_copy">哈希值已复制到剪贴板</string>
-       <string name="tx_notify_title">传入交易通知</string>
-       <string name="no_transactions">没有交易</string>
-       <string name="publish_unmined_transaction">发布未确认的交易</string>
-       <string name="label_hash">哈希值:</string>
-       <string name="transaction">交易</string>
-       <string name="TxType">类型</string>
-       <string name="status">状态</string>
-       <string name="hash_colon">哈希值:</string>
-       <string name="pending">等待</string>
-       <string name="unconfirmed">未确认</string>
-       <string name="change_bracket">(找零)</string>
-       <string name="script_bracket">[脚本]</string>
-       <string name="external_bracket">(外部)</string>
-       <string name="null_data_bracket">[空数据]</string>
-       <string name="raw_tx_copied">原始交易数据已复制到剪贴板</string>
-       <string name="vote">已投票</string>
-       <string name="confirmed_immature">已确认 / 未成熟</string>
-       <string name="confirmed_live">已确认 / 成熟</string>
-       <string name="ticket">票</string>
-       <string name="empty_destination_address">目标地址不能为空。</string>
-       <string name="invalid_destination_address">目标地址不正确。</string>
-       <string name="empty_amount">金额不能为空</string>
-       <string name="processing_colon">处理中…</string>
-       <string name="confirm_send_funds">请确认发送金额</string>
-       <string name="transaction_was_successful">交易成功</string>
-       <string name="amount_invalid_decimal_places">金额超过8位小数</string>
-       <string name="invalid_amount">金额不正确</string>
-       <string name="new_transaction">新的交易</string>
-       <string name="latest_block">最新区块</string>
-       <string name="copy_raw_transaction">复制原始交易</string>
-       <string name="tap_this_to_copy_raw_transaction_hex">点击这里复制原始交易数据</string>
-       <string name="tap_this_to_copy_transaction_hash">点击这里复制交易哈希值</string>
-       <string name="copy_hash">复制 哈希值</string>
-       <!--/Transaction-->
+       <string name="recent_transactions">最近交易</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       ]]><string name="destination_address">目的地址</string><![CDATA[
+       
+       ]]>
+    <string name="transaction_fee">交易手续费</string>
+       <string name="Transaction_details">交易详情</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="pending">等待</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       ]]><string name="vote">已投票</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="amount_invalid_decimal_places">金额超过8位小数</string><![CDATA[
+       
+       ]]><string name="new_transaction">新的交易</string><![CDATA[
+       
+       
+       
+       
+       
+       ]]><!--/Transaction-->
 
-       <!--Block chain-->
-       <string name="rescan_block">重新扫描区块</string>
-       <string name="starting_height">起始高度</string>
-       <string name="current_height">当前高度</string>
-       <string name="rescan_blocks_confirmation">您确定吗？这将会花费一些时间。</string>
-       <!--/Block chain-->
+       <!--Block chain--><![CDATA[
+       
+       
+       
+       
+       ]]><!--/Block chain-->
 
-       <!--Sync Messages-->
-       <string name="fetching_headers">获取区块头部。</string>
-       <string name="blocks_behind">落后 %1$d 区块。</string>
-       <string name="discovering_used_addresses">正在发现已使用的地址。</string>
-       <string name="remaining_minute_sync_eta">已完成 %1$d%%, 剩余 %2$d 分钟</string>
+       <!--Sync Messages--><![CDATA[
+       
+       
+       
+       ]]>
+    <string name="remaining_minute_sync_eta">已完成 %1$d%%, 剩余 %2$d 分钟</string>
        <string name="remaining_seconds_sync_eta">已完成 %1$d%%, 剩余 %2$d 秒</string>
-       <string name="remaining_sync_eta_less_than_seconds">已完成 %1$d%%, 剩余 &lt;1 秒</string>
-       <string name="left_minute_sync_eta">已完成 %1$d%%, 剩余 %2$d 分钟</string>
-       <string name="left_seconds_sync_eta">已完成 %1$d%%, 剩余 %2$d sec 秒</string>
-       <string name="left_sync_eta_less_than_seconds">已完成 %1$d%%, 剩余 &lt;1 秒</string>
-       <string name="percentage_completed">已完成 %1$.1f%%, 剩余 %2$s 分钟</string>
-       <string name="rescan_height_format">(3/3) 正扫描 %2$d 区块的  %1$d</string>
-       <string name="notification_rescan_height_format">正扫描 %2$d 区块的 %1$d</string>
-       <string name="status_rescan_height_format">正扫描 %2$d 区块中的 %1$d (%3$.1f%%)</string>
-       <string name="overview_rescan_height_format">正在扫描 %1$d of %2$d 区块头部。\n%3$d%% 当前步骤 3 of 3。</string>
-       <string name="fetched_header_format">已获取 %1$d of ~%2$d 区块头部。\n%3$d%% 当前步骤 1 of 3。\n您的钱包落后 %4$s 。</string>
-       <string name="status_fetching_headers_format" tools:ignore="TypographyFractions">%1$.1f%% (1/3) 获取区块头部</string>
-       <string name="overview_discovering_used_addresses">发现已使用的地址。\n~%1$d%% 当前步骤 2 of 3。</string>
-       <string name="overview_discovering_used_addresses_over">正在发现已使用地址。\n~%1$d%%已完成步骤 2 of 3.</string>
-       <string name="overview_sync_status_mainnet">正在同步 Decred 主网</string>
-       <string name="overview_sync_status_testnet">正在同步 Decred 测试网</string>
-       <string name="synchronizing">正在同步</string>
-       <string name="starting_synchronization">正在开始同步…</string>
-       <string name="rescanning_in_progress">正在重新扫描…</string>
-       <string name="scanning_blocks">正在扫描区块</string>
-       <string name="check_progress_in_navigation_bar">在导航栏查看进度。</string>
-       <string name="syncing_peers_testnet">与 %1$d 的测试网络节点同步。</string>
-       <string name="one_syncing_peer_testnet">与 1 个测试网络节点同步。</string>
-       <string name="syncing_peers_mainnet">与 %1$d 主网节点同步。</string>
-       <string name="one_syncing_peer_mainnet">与 1 个主网节点同步。</string>
-       <string name="sync_status_verbose">总耗时\n已过去: %1$s，剩余%2$s，总共: %3$s\n\n阶段耗时\n已过去: %4$s，剩余: %5$s，总共: %6$s</string>
-       <!--/Sync Messages-->
+       <string name="remaining_sync_eta_less_than_seconds">已完成 %1$d%%, 剩余 &lt;1 秒</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="synchronizing">正在同步</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><!--/Sync Messages-->
 
        <!--QR Code-->
-       <string name="camera_permission_scan">这个应用需要相机权限来扫描钱包地址二维码，请在下个对话中允此权限。</string>
-       <string name="scan_info">扫描二维码获取 decred 钱包地址</string>
-       <string name="scan">扫描二维码地址</string>
-       <string name="qr_code_help_text">输入或扫描目标钱包地址及输入发送 DCR 金额</string>
-       <!--/QR Code-->
+       <string name="camera_permission_scan">这个应用需要相机权限来扫描钱包地址二维码，请在下个对话中允此权限。</string><![CDATA[
+       
+       
+       
+       ]]><!--/QR Code-->
 
-       <!--Address-->
-       <string name="notification_discovering_used_addresses">(2/3) 正在发现已使用的地址…</string>
-       <string name="address_copy_text">地址已复制到剪贴板</string>
-       <string name="your_address">您的地址</string>
-       <string name="error_occurred_getting_address">获取账户地址出现错误:</string>
-       <string name="generate_new_address">生成新地址</string>
-       <string name="receive_fund_privacy_info">每次请求支付都会生成一个新地址以保护您的隐私。</string>
-       <string name="error_not_decred_address">这不是 DCR 钱包地址</string>
-       <string name="wallet_addr_too_long">钱包地址太长</string>
-       <string name="wallet_add_too_short">钱包地址太短</string>
-       <string name="invalid_address">无效地址。</string>
-       <string name="owned_validate_address">地址是正确并属于您的。</string>
-       <string name="external_validate_address"><![CDATA[<font color="red">地址是正确的但是<b>不</b> 属于您。</font>]]></string>
-       <string name="paste_from_clipboard">从剪贴板复制地址</string>
-       <!--/Address-->
+       <!--Address--><![CDATA[
+       
+       ]]>
+    <string name="address_copy_text">地址已复制到剪贴板</string>
+       <string name="your_address">您的地址</string><![CDATA[
+       
+       ]]>
+    <string name="generate_new_address">生成新地址</string>
+       <string name="receive_fund_privacy_info">每次请求支付都会生成一个新地址以保护您的隐私。</string><![CDATA[
+       
+       
+       
+       ]]><string name="invalid_address">无效地址。</string><![CDATA[
+       
+       
+       
+       ]]><!--/Address-->
 
-       <!--Preference-->
-       <string name="summary_paste_certificate">为dcrd粘贴证书</string>
-       <string name="title_rescan_blockchain">重新扫描区块链</string>
-       <string name="title_general">常规</string>
-       <string name="unconfirmed_funds">发送未确认资金</string>
-       <string name="delete_wallet_title">删除钱包</string>
-       <string name="logging_level">日志级别</string>
-       <string name="network_mode">网络模式</string>
-       <string name="connect_to_peer">连接到节点</string>
-       <string name="server_address">服务器地址</string>
-       <string name="wallet_log">钱包日志</string>
-       <string name="crash_title">强制崩溃</string>
-       <string name="remote_address_invalid">远程节点地址无效</string>
-       <string name="new_block_notification_description">新区块通知说明</string>
-       <string name="new_block_notification">新区块通知</string>
-       <string name="currency_conversion">货币转换</string>
-       <string name="requires_restart">请求重启。</string>
-       <string name="user_agent_summary">用来获取交易费率。</string>
-       <string name="changing">更改中…</string>
-       <string name="setting_startup_pin">设置启动PIN码…</string>
-       <string name="setting_startup_password">设置启动密码…</string>
+       <!--Preference--><![CDATA[
+       
+       
+       
+       ]]><string name="unconfirmed_funds">发送未确认资金</string><![CDATA[
+       
+       ]]><string name="logging_level">日志级别</string><![CDATA[
+       
+       
+       
+       ]]><string name="check_wallets_log">钱包日志</string><![CDATA[
+       
+       
+       
+       
+       ]]><string name="currency_conversion">货币转换</string><![CDATA[
+       
+       ]]><string name="user_agent_summary">用来获取交易费率。</string><![CDATA[
+       
+       
+       
 
-       <string-array name="network_modes">
-           <item>简单支付验证 (SPV)</item>
-           <item>远程全节点</item>
-       </string-array>
+       
 
-       <string-array name="currency_conversion">
+       ]]>
+    <string-array name="currency_conversion">
            <item>None</item>
            <item>USD (bittrex)</item>
        </string-array>
        <!--/Preference-->
 
-       <!-- Overview Fragment -->
-       <string name="recent_activity">近期活动</string>
-       <string name="show_all_transactions">显示所有交易</string>
-       <string name="tap_for_more_information">点击获取更多信息</string>
-       <!--/ Overview Fragment -->
+       <!-- Overview Fragment --><![CDATA[
+       
+       
+       
+       ]]><!--/ Overview Fragment -->
 
        <!--History Fragment -->
-       <string name="sent">发送</string>
-       <string name="yourself">自身</string>
-       <string name="received">已接收</string>
-       <string name="staking">权益投票</string>
-       <string name="no_transactions_have_occurred">没有发生交易。</string>
-       <string name="wallet_is_rescanning">钱包正在重新扫描中，具体进度请查看导航栏。</string>
-       <!--/History Fragment -->
+       <string name="sent">发送</string><![CDATA[
+       
+       ]]><string name="received">已接收</string><![CDATA[
+       
+       
+       
+       ]]><!--/History Fragment -->
 
        <!--Error Messages-->
        <string name="not_enough_funds">资金不足。</string>
        <string name="empty_seed">密钥种子空白</string>
        <string name="not_connected">未连接到Decred网络</string>
        <string name="passphrase_required">缺少私人密码</string>
-       <string name="wallet_not_loaded">钱包未加载</string>
-       <string name="balance_remaining">余额:</string>
-       <string name="failed_to_send_transaction">发送交易失败</string>
-       <string name="err_no_peers">由于缺少连接节点Decred网络不可达。</string>
-       <string name="not_connected_error">网络未连接</string>
-       <string name="not_enought_funds_synced">资金不足或未连接网络</string>
-       <string name="invalid_testnet_address">Decred testnet3地址无效。</string>
-       <string name="invalid_mainnett_address">Decred主网地址无效</string>
-       <!--/Error Messages-->
+       <string name="wallet_not_loaded">钱包未加载</string><![CDATA[
+       
+       
+       ]]><string name="err_no_peers">由于缺少连接节点Decred网络不可达。</string><![CDATA[
+       
+       ]]><string name="not_enought_funds_synced">资金不足或未连接网络</string><![CDATA[
+       
+       
+       ]]><!--/Error Messages-->
 
        <!--Security Fragment-->
-       <string name="security">安全</string>
-       <string name="sign_message">签署消息</string>
-       <string name="address_colon">地址:</string>
-       <string name="message_colon">消息:</string>
-       <string name="this_field_is_required">必填字段。</string>
-       <string name="signature_colon">签名:</string>
-       <string name="valid_signature">这个签名可以验证这个消息和地址。</string>
+       <string name="sign_message">签署消息</string><![CDATA[
+       
+       ]]><string name="message">消息</string><![CDATA[
+       
+       
+       ]]>
+    <string name="valid_signature">这个签名可以验证这个消息和地址。</string>
        <string name="invalid_signature">这个签名不能验证这个消息和地址。</string>
        <string name="sign_message_description">此功能可以验证一个地址的合法性，签名消息以证明地址的所有权，和验证签名。</string>
        <!--/Security Fragment-->
 
-       <!--Send Fragment-->
-       <string name="send_in_dcr">使用DCR计价发送:</string>
-       <string name="send_in_usd">使用USD计价发送:</string>
-       <string name="_0_00_dcr">0.00 DCR</string>
-       <string name="_0_00_">0.00 </string>
-       <string name="confirmation_required">请确认</string>
-       <string name="passphrase_is_empty">密码为空</string>
-       <string name="_0_dcr">0 DCR</string>
-       <string name="_0_bytes">0 bytes</string>
-       <string name="total_sending">总共发送:</string>
-       <string name="balance_after">发送后余额:</string>
-       <string name="amount_is_empty">金额为空</string>
-       <string name="_8_decimal_amount_err">金额超过8位小数</string>
-       <string name="bytes">bytes</string>
-       <string name="decred_colon">decred:</string>
-       <string name="exchange_rate">交易所汇率:</string>
-       <string name="bittrex_rate_unavailable_tap_to_retry">Bittrex 汇率 不可用（点击重试）</string>
-       <string name="fee">手续费</string>
-       <string name="estimatedFee">预计手续费</string>
-       <string name="link_to_dcr_data">点击这里在Dcrdata查看交易细节</string>
-       <string name="View_on_dcrdata">在Dcrdata查看</string>
-       <string name="tap_to_paste">点击复制</string>
-       <string name="sending_transaction">发送交易…</string>
-       <string name="send_to_account">发送到账户</string>
-       <string name="send_to_address">发送到地址</string>
-       <string name="amount_can_not_be_zero">金额不能为0。</string>
-       <string name="amount_must_be_greater_than_zero">金额必须大于0。</string>
-       <string name="network_synchronization">请等待网络同步。</string>
-       <!--/Send Fragment-->
+       <!--Send Fragment--><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="_0_bytes">0 bytes</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="fee">手续费</string><![CDATA[
+       
+       
+       
+       
+       
+       ]]>
+    <string name="send_to_account">发送到账户</string>
+       <string name="send_to_address">发送到地址</string><![CDATA[
+       
+       
+       
+       ]]><!--/Send Fragment-->
 
-       <!--Transaction Details View-->
-       <string name="fee_colon">手续费:</string>
-       <string name="inputs">输入</string>
-       <string name="outputs">输出</string>
-       <string name="ticket_purchase">购买选票</string>
-       <string name="vote_bits">投票 Bits</string>
-       <string name="last_block_valid">最新区块有效</string>
-       <string name="menu_view_on_dcrdata">在Dcrdata查看</string>
-       <string name="view_dcrdata_description">在Dcrdata查看交易细节</string>
-       <!--/Transaction Details View-->
+       <!--Transaction Details View--><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       
+       ]]><!--/Transaction Details View-->
 
        <!--Confirm Transaction Dialog-->
        <string name="toConfirmEnterYourPassword">确认输入正确密码:</string>
-       <string name="to">到</string>
-       <string name="withFeeOff">手续费为</string>
-       <string name="total">总共</string>
-       <!--/Confirm Transaction Dialog-->
+       <string name="to">到</string><![CDATA[
+       
+       
+       ]]><!--/Confirm Transaction Dialog-->
 
-       <!--Security-->
-       <string name="erase_char">⌫</string>
-       <string name="confirm_spending_pin">确认支付PIN码</string>
-       <string name="create_spending_pin">创建支付PIN码</string>
-       <string name="create_security_pass">创建支付密码</string>
-       <string name="mismatch_passcode">PIN码不匹配，请重试。</string>
-       <string name="create_wallet_uninitialized">不能创建钱包, LibWallet 未初始化</string>
-       <string name="mismatch_password">密码不匹配</string>
-       <string name="password_match">密码匹配</string>
-       <string name="confirm_password">确认密码</string>
-       <string name="password">密码</string>
-       <string name="enter_spending_pin">输入支付PIN码</string>
-       <string name="password_strength">密码强度</string>
-       <string name="pin_strength">PIN码强度</string>
-       <string name="enter_startup_pin">输入启动PIN码</string>
-       <string name="confirm_startup_pin">确认启动PIN码</string>
-       <string name="create_startup_pin">创建启动PIN码</string>
-       <string name="enter_spending_password">输入支付密码</string>
-       <string name="create_startup_password">创建启动密码</string>
-       <string name="change_spending_pin_password">更改支付PIN码/密码</string>
-       <string name="required_to_send_funds">请求发送资金。</string>
-       <string name="enter_current_pin">输入当前PIN码</string>
-       <string name="confirm_startup_password">确认启动密码</string>
-       <string name="enter_current_spending_password">输入当前支付密码</string>
-       <string name="enter_current_startup_password">输入当前启动密码</string>
-       <string name="enter_startup_password">输入启动密码</string>
-       <string name="removing_startup_pass">移除启动密码…</string>
-       <string name="removing_startup_pin">移除启动pin码…</string>
-       <string name="changing_password">更改密码中…</string>
-       <string name="startup_pin_password">启动PIN码或密码</string>
-       <string name="encrypt_wallet_summary">启动时需要输入pin码或密码</string>
-       <string name="change_startup_pin_password">更改启动PIN码或密码</string>
-       <string name="required_to_enter_app">请求进入app.</string>
-       <string name="changing_pin">正在更换PIN码…</string>
-       <string name="security_page_wallet_sync">请等待钱包完成同步。</string>
-       <!--/Security-->
+       <!--Security--><![CDATA[
+       
+       
+       ]]><string name="create_spending_pin">创建支付PIN码</string><![CDATA[
+       
+       ]]><string name="mismatch_passcode">PIN码不匹配，请重试。</string><![CDATA[
+       
+       ]]><string name="mismatch_password">密码不匹配</string><![CDATA[
+       
+       
+       ]]>
+    <string name="password">密码</string>
+       <string name="enter_spending_pin">输入支付PIN码</string><![CDATA[
+       
+       
+       ]]>
+    <string name="enter_startup_pin">输入启动PIN码</string>
+       <string name="create_startup_pin">创建启动PIN码</string><![CDATA[
+       
+       ]]>
+    <string name="create_startup_password">创建启动密码</string>
+       <string name="change_spending_pin_password">更改支付PIN码/密码</string><![CDATA[
+       
+       
+       
+       
+       
+       
+       
+       ]]><string name="startup_pin_password">启动PIN码或密码</string><![CDATA[
+       
+       ]]><string name="change_startup_pin_password">更改启动PIN码或密码</string><![CDATA[
+       
+       
+       
+       ]]><!--/Security-->
 
-       <!--Crash Report-->
-       <string name="confirm_crash">确认意外关机</string>
-       <string name="crash_confirmation_description">这将强制关闭app，并要求发送意外关机报告</string>
-       <string name="dont_send">不发送</string>
+       <!--Crash Report--><![CDATA[
+       
+       
+       ]]>
+    <string name="dont_send">不发送</string>
        <string name="send_report">发送报告</string>
        <string name="app_crashed">应用程序意外关闭</string>
        <string name="crash_report_copied">已成功复制意外关闭报告</string>
@@ -494,12 +501,14 @@
        <string name="view_report">查看报告</string>
        <!--/Crash Report-->
 
-       <string name="wifi_data_sync_title">未连接WiFi时同步</string>
-       <string name="connect_to_wifi">连接WiFi同步</string>
-       <string name="always">总是</string>
-       <string name="no_wifi">没有WiFi</string>
-       <string name="wifi_sync_notice">是否继续同步？</string>
-       <string name="not_connected_to_wifi">未连接WiFi。</string>
-       <string name="not_synced">未同步</string>
+       <string name="wifi_data_sync_title">未连接WiFi时同步</string><![CDATA[
+       
+       ]]><string name="always">总是</string><![CDATA[
+       
+       ]]>
+    <string name="wifi_sync_notice">是否继续同步？</string>
+       <string name="not_connected_to_wifi">未连接WiFi。</string><![CDATA[
+       
+]]>
 </resources>
 

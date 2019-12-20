@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings"
+                        android:textSize="@dimen/edit_text_size_20"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_subtitle"
+                        tools:text="@string/_default"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/wallet_settings_scroll_view" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_padding_size_4"
+            android:paddingEnd="@dimen/margin_padding_size_4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_4"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/spending_pin_password"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:textColor="@color/darkerBlueGrayTextColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/change_spending_pass"
+                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:layout_weight="1"
+                        android:includeFontPadding="false"
+                        android:text="@string/change_spending_pin_password"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/biometric_authentication"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@id/pref_title"
+                            android:includeFontPadding="false"
+                            android:text="@string/use_fingerprint"
+                            android:textColor="@color/darkBlueTextColor"
+                            android:fontFamily="@font/source_sans_pro"
+                            android:textSize="@dimen/edit_text_size_16"/>
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_switch"
+                        android:theme="@style/Switch" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_4"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/notifications"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:textColor="@color/darkerBlueGrayTextColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/incoming_transactions"
+                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:includeFontPadding="false"
+                        android:text="@string/incoming_transactions"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_subtitle"
+                        android:includeFontPadding="false"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:text="@string/none"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_4"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/margin_padding_size_8"
+                android:paddingBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/remove_wallet"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:includeFontPadding="false"
+                        android:text="@string/remove_wallet"
+                        android:textColor="@color/orangeTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

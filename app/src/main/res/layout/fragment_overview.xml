@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_view_overview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_24"
+            android:layout_marginBottom="@dimen/margin_padding_size_4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_visible_wallet_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.05"
+                android:textColor="#091440"
+                android:textSize="@dimen/visible_balance_text_size"
+                app:fontFamily="@font/source_sans_pro"
+                tools:text="315.08193725 DCR" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/current_total_balance"
+                android:textColor="#596d81"
+                android:textSize="14sp"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+        <include layout="@layout/overview_backup_warning" />
+
+        <include layout="@layout/transactions_overview_layout" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/card_bg"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:id="@+id/sync_layout"
+            app:elevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/wallet_status"
+                    android:textColor="#3d5873"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/source_sans_pro" />
+
+                <View
+                    android:id="@+id/view_online_offline_status"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/online_dot" />
+
+                <TextView
+                    android:id="@+id/tv_online_offline_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_4"
+                    android:text="@string/online"
+                    android:textColor="#091440"
+                    android:textSize="@dimen/edit_text_size_12"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
+
+            <include layout="@layout/synced_unsynced_layout" />
+
+            <include layout="@layout/syncing_layout" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
