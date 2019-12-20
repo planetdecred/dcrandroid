@@ -28,7 +28,10 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!isSpending) {
+        if (isSpending) {
+            ed_pass.setHint(R.string.new_spending_password)
+            ed_confirm_pass.setHint(R.string.confirm_new_spending_password)
+        } else {
             ed_pass.setHint(R.string.new_startup_password)
             ed_confirm_pass.setHint(R.string.confirm_new_startup_password)
         }

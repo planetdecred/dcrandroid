@@ -15,7 +15,7 @@ import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import dcrlibwallet.Dcrlibwallet
 
-data class PassPromptTitle(val passwordTitle: Int, val pinTitle: Int, val fingerprintTitle: Int)
+data class PassPromptTitle(val passwordTitle: Int, val pinTitle: Int, val fingerprintTitle: Int = pinTitle)
 
 class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletID: Long?, val title: PassPromptTitle, private val allowFingerprint: Boolean,
                      private val passEntered: (dialog: FullScreenBottomSheetDialog?, passphrase: String?) -> Boolean) {
@@ -31,8 +31,14 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
             multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
         }
 
-        if (allowFingerprint && walletID == null && multiWallet.readBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)) {
-            showFingerprintDialog()
+        val useFingerPrint = if (walletID == null) {
+            multiWallet.readBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)
+        } else {
+            multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)
+        }
+
+        if (allowFingerprint && useFingerPrint && BiometricUtils.isFingerprintEnrolled(fragmentActivity)) {
+            showFingerprintDialog(walletID)
         } else {
             showPasswordOrPin()
         }
@@ -60,7 +66,7 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
         passwordPromptDialog.show(fragmentActivity)
     }
 
-    private fun showFingerprintDialog() {
+    private fun showFingerprintDialog(walletID: Long?) {
         if (BiometricUtils.isFingerprintEnrolled(fragmentActivity)) {
 
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
@@ -77,7 +83,14 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
             BiometricUtils.displayBiometricPrompt(fragmentActivity, promptInfo.build(), object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    val pass = BiometricUtils.readFromKeystore(fragmentActivity, Constants.STARTUP_PASSPHRASE)
+
+                    val alias = if (walletID == null) {
+                        Constants.STARTUP_PASSPHRASE
+                    } else {
+                        BiometricUtils.getWalletAlias(walletID)
+                    }
+
+                    val pass = BiometricUtils.readFromKeystore(fragmentActivity, alias)
                     passEntered(null, pass)
                 }
 

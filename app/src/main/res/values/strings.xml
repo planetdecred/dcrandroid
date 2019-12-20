@@ -471,7 +471,9 @@
     <string name="a_wallet_needs_backup">A wallet needs backup</string>
     <string name="startup_password">Startup Password</string>
     <string name="new_startup_password">New startup password</string>
+    <string name="new_spending_password">New spending password</string>
     <string name="confirm_new_startup_password">Confirm new startup password</string>
+    <string name="confirm_new_spending_password">Confirm new spending password</string>
     <string name="remove_startup_security">Remove startup security</string>
     <string name="close_backup_warning">Close backup warning</string>
     <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
@@ -495,7 +497,7 @@
     <string name="rescan_blockchain">Rescan blockchain</string>
     <string name="rescan_progress_notification">Check progress in Overview!</string>
     <string name="rescan_blockchain_warning">Are you sure? This could take some time.</string>
-    <string name="err_sync_in_progress">Sync is in progress</string>
-    <string name="err_rescan_in_progress">A rescan is in progress</string>
+    <string name="err_sync_in_progress">Unable to start rescan while sync is in progress</string>
+    <string name="err_rescan_in_progress">Unable to start rescan while another rescan is already running</string>
 
 </resources>

@@ -31,8 +31,11 @@ class SwitchPreference(context: Context, val key: String, val view: View, val ch
             newValue = checkChange.let { it(isChecked) }
         }
 
-        multiWallet!!.setBoolConfigValueForKey(key, newValue)
+        setValue(newValue)
+    }
 
+    fun setValue(newValue: Boolean) {
+        multiWallet!!.setBoolConfigValueForKey(key, newValue)
         setChecked(newValue)
     }
 
