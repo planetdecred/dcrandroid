@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.synced_unsynced_layout.view.*
 import kotlinx.android.synthetic.main.syncing_layout.view.*
 import kotlinx.coroutines.*
 
-class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: () -> Unit, scrollToBottom: () -> Unit) : SyncProgressListener {
+class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: () -> Unit, scrollToBottom: () -> Unit) : SyncProgressListener, BlocksRescanProgressListener {
 
     private val context: Context
         get() = syncLayout.context
@@ -51,6 +51,8 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         multiWallet.removeSyncProgressListener(this.javaClass.name)
         multiWallet.addSyncProgressListener(this, this.javaClass.name)
 
+        multiWallet.setBlocksRescanProgressListener(this)
+
         if (multiWallet.isSyncing) {
             displaySyncingLayout()
             multiWallet.publishLastSyncProgress(this.javaClass.name)
@@ -71,7 +73,13 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         syncLayout.syncing_cancel_layout.setOnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 it.isEnabled = false
-                launch(Dispatchers.Default) { multiWallet.cancelSync() }
+                launch(Dispatchers.Default) {
+                    if (multiWallet.isSyncing) {
+                        multiWallet.cancelSync()
+                    } else if (multiWallet.isRescanning) {
+                        multiWallet.cancelRescan()
+                    }
+                }
                 it.isEnabled = true
             }
         }
@@ -224,6 +232,12 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
         syncLayout.tv_online_offline_status.setText(R.string.online)
         syncLayout.view_online_offline_status.setBackgroundResource(R.drawable.online_dot)
+
+        syncLayout.syncing_layout.syncing_layout_status.text = if (multiWallet.isRescanning) {
+            context.getString(R.string.rescanning_blocks_ellipsis)
+        } else {
+            context.getString(R.string.syncing_state)
+        }
     }
 
     private fun showSyncVerboseExtras() {
@@ -371,9 +385,53 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
                 syncLayout.connected_peers.text = HtmlCompat.fromHtml(context.getString(R.string.connected_peers, multiWallet.connectedPeers()), 0)
             } else if (multiWallet.isSyncing) {
                 syncLayout.tv_syncing_layout_connected_peer.text = numberOfConnectedPeers.toString()
+            } else if (multiWallet.isRescanning) {
+                syncLayout.tv_steps_title.setText(R.string.connected_peers_count)
+                syncLayout.tv_steps.text = multiWallet.connectedPeers().toString()
             }
         }
     }
 
     override fun debug(debugInfo: DebugInfo?) {}
+
+    override fun onBlocksRescanStarted() {
+        displaySyncingLayout()
+    }
+
+    override fun onBlocksRescanEnded(e: java.lang.Exception?) {
+        displaySyncedUnsynced()
+    }
+
+    override fun onBlocksRescanProgress(report: HeadersRescanProgressReport) {
+        GlobalScope.launch(Dispatchers.Main) {
+            // connected peers
+            syncLayout.tv_steps.setText(R.string.connected_peers_count)
+            syncLayout.tv_steps_title.text = multiWallet.connectedPeers().toString()
+
+            syncLayout.syncing_layout_connected_peers_row.hide()
+
+            showSyncVerboseExtras()
+
+            // blocks scanned
+            syncLayout.tv_block_header_fetched.setText(R.string.scanned_blocks)
+            syncLayout.tv_fetch_discover_scan_count.text = report.currentRescanHeight.toString()
+
+            // scan progress
+            syncLayout.tv_progress.setText(R.string.syncing_progress)
+            syncLayout.tv_days.text = context.getString(R.string.blocks_left,
+                    report.totalHeadersToScan - report.currentRescanHeight)
+
+            if (multiWallet.openedWalletsCount() > 1) {
+                syncLayout.syncing_layout_wallet_name.show()
+
+                val wallet = multiWallet.walletWithID(report.walletID)
+                syncLayout.tv_syncing_layout_wallet_name.text = wallet.name
+            } else {
+                syncLayout.syncing_layout_wallet_name.hide()
+            }
+        }
+
+        publishSyncProgress(report.generalSyncProgress)
+        displaySyncingLayoutIfNotShowing()
+    }
 }
