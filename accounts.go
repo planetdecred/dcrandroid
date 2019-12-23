@@ -2,8 +2,10 @@ package dcrlibwallet
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 
+	"github.com/decred/dcrd/chaincfg/v2"
 	"github.com/decred/dcrwallet/errors/v2"
 )
 
@@ -188,4 +190,29 @@ func (wallet *Wallet) AccountNameRaw(accountNumber uint32) (string, error) {
 
 func (wallet *Wallet) AccountNumber(accountName string) (uint32, error) {
 	return wallet.internal.AccountNumber(wallet.shutdownContext(), accountName)
+}
+
+func (wallet *Wallet) HDPathForAccount(accountNumber int32) (string, error) {
+	cointype, err := wallet.internal.CoinType(wallet.shutdownContext())
+	if err != nil {
+		return "", translateError(err)
+	}
+
+	var hdPath string
+	isLegacyCoinType := cointype == wallet.chainParams.LegacyCoinType
+	if wallet.chainParams.Name == chaincfg.MainNetParams().Name {
+		if isLegacyCoinType {
+			hdPath = LegacyMainnetHDPath
+		} else {
+			hdPath = MainnetHDPath
+		}
+	} else {
+		if isLegacyCoinType {
+			hdPath = LegacyTestnetHDPath
+		} else {
+			hdPath = TestnetHDPath
+		}
+	}
+
+	return hdPath + strconv.Itoa(int(accountNumber)), nil
 }

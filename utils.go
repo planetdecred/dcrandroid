@@ -32,8 +32,10 @@ const (
 	MaxAmountAtom = dcrutil.MaxAmount
 	MaxAmountDcr  = dcrutil.MaxAmount / dcrutil.AtomsPerCoin
 
-	TestnetHDPath = "m / 44' / 1' / "
-	MainnetHDPath = "m / 44' / 42' / "
+	TestnetHDPath       = "m / 44' / 1' / "
+	LegacyTestnetHDPath = "m / 44’ / 11’ / "
+	MainnetHDPath       = "m / 44' / 42' / "
+	LegacyMainnetHDPath = "m / 44’ / 20’ / "
 
 	DefaultRequiredConfirmations = 2
 )
