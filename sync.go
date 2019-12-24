@@ -2,11 +2,9 @@ package dcrlibwallet
 
 import (
 	"context"
-	"math"
 	"net"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/decred/dcrd/addrmgr"
 	"github.com/decred/dcrwallet/errors/v2"
@@ -25,6 +23,7 @@ type syncData struct {
 	synced       bool
 	syncing      bool
 	cancelSync   context.CancelFunc
+	cancelRescan context.CancelFunc
 	syncCanceled chan bool
 
 	// Flag to notify syncCanceled callback if the sync was canceled so as to be restarted.
@@ -305,70 +304,6 @@ func (mw *MultiWallet) ConnectedPeers() int32 {
 	defer mw.syncData.mu.RUnlock()
 
 	return mw.syncData.connectedPeers
-}
-
-func (wallet *Wallet) RescanBlocks() error {
-	netBackend, err := wallet.internal.NetworkBackend()
-	if err != nil {
-		return errors.E(ErrNotConnected)
-	}
-
-	if wallet.rescanning {
-		return errors.E(ErrInvalid)
-	}
-
-	go func() {
-		defer func() {
-			wallet.rescanning = false
-		}()
-
-		wallet.rescanning = true
-		ctx := wallet.shutdownContext()
-
-		progress := make(chan w.RescanProgress, 1)
-		go wallet.internal.RescanProgressFromHeight(ctx, netBackend, 0, progress)
-
-		rescanStartTime := time.Now().Unix()
-
-		for p := range progress {
-			if p.Err != nil {
-				log.Error(p.Err)
-				return
-			}
-
-			rescanProgressReport := &HeadersRescanProgressReport{
-				CurrentRescanHeight: p.ScannedThrough,
-				TotalHeadersToScan:  wallet.GetBestBlock(),
-			}
-
-			elapsedRescanTime := time.Now().Unix() - rescanStartTime
-			rescanRate := float64(p.ScannedThrough) / float64(rescanProgressReport.TotalHeadersToScan)
-
-			rescanProgressReport.RescanProgress = int32(math.Round(rescanRate * 100))
-			estimatedTotalRescanTime := int64(math.Round(float64(elapsedRescanTime) / rescanRate))
-			rescanProgressReport.RescanTimeRemaining = estimatedTotalRescanTime - elapsedRescanTime
-
-			select {
-			case <-ctx.Done():
-				log.Info("Rescan cancelled through context")
-				return
-			default:
-				continue
-			}
-		}
-
-		// Trigger sync completed callback.
-		// todo: probably best to have a dedicated rescan listener
-		// with callbacks for rescanStarted, rescanCompleted, rescanError and rescanCancel
-	}()
-
-	return nil
-}
-
-func (mw *MultiWallet) IsScanning() bool {
-	mw.syncData.mu.RLock()
-	defer mw.syncData.mu.RUnlock()
-	return mw.syncData.rescanning
 }
 
 func (mw *MultiWallet) GetBestBlock() *BlockInfo {

@@ -117,6 +117,12 @@ type TxAndBlockNotificationListener interface {
 	OnTransactionConfirmed(walletID int, hash string, blockHeight int32)
 }
 
+type BlocksRescanProgressListener interface {
+	OnBlocksRescanStarted(walletID int)
+	OnBlocksRescanProgress(*HeadersRescanProgressReport)
+	OnBlocksRescanEnded(walletID int, err error)
+}
+
 // Transaction is used with storm for tx indexing operations.
 // For faster queries, the `Hash`, `Type` and `Direction` fields are indexed.
 type Transaction struct {

@@ -33,6 +33,7 @@ type MultiWallet struct {
 	syncData    *syncData
 
 	txAndBlockNotificationListeners map[string]TxAndBlockNotificationListener
+	blocksRescanProgressListener    BlocksRescanProgressListener
 
 	shuttingDown chan bool
 	cancelFuncs  []context.CancelFunc
@@ -109,6 +110,7 @@ func (mw *MultiWallet) Shutdown() {
 	// Trigger shuttingDown signal to cancel all contexts created with `shutdownContextWithCancel`.
 	mw.shuttingDown <- true
 
+	mw.CancelRescan()
 	mw.CancelSync()
 
 	for _, wallet := range mw.wallets {

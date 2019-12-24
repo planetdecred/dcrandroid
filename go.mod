@@ -18,7 +18,7 @@ require (
 	github.com/decred/dcrd/txscript/v2 v2.1.0
 	github.com/decred/dcrd/wire v1.3.0
 	github.com/decred/dcrdata/txhelpers v1.1.0
-	github.com/decred/dcrwallet/errors v1.1.0 // indirect
+	github.com/decred/dcrwallet/errors v1.1.0
 	github.com/decred/dcrwallet/errors/v2 v2.0.0
 	github.com/decred/dcrwallet/p2p/v2 v2.0.0
 	github.com/decred/dcrwallet/rpc/client/dcrd v1.0.0

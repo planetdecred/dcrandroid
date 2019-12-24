@@ -78,3 +78,12 @@ func (wallet *Wallet) IndexTransactions() error {
 	log.Debugf("[%d] Indexing transactions start height: %d, end height: %d", wallet.ID, beginHeight, endHeight)
 	return wallet.internal.GetTransactions(ctx, rangeFn, startBlock, endBlock)
 }
+
+func (wallet *Wallet) reindexTransactions() error {
+	err := wallet.txDB.ClearSavedTransactions(&Transaction{})
+	if err != nil {
+		return err
+	}
+
+	return wallet.IndexTransactions()
+}
