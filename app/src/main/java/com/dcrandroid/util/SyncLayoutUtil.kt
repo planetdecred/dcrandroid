@@ -394,11 +394,11 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
     override fun debug(debugInfo: DebugInfo?) {}
 
-    override fun onBlocksRescanStarted() {
+    override fun onBlocksRescanStarted(walletID: Long) {
         displaySyncingLayout()
     }
 
-    override fun onBlocksRescanEnded(e: java.lang.Exception?) {
+    override fun onBlocksRescanEnded(walletID: Long, e: java.lang.Exception?) {
         displaySyncedUnsynced()
     }
 
