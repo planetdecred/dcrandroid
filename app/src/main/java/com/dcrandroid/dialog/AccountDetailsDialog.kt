@@ -21,13 +21,13 @@ import com.dcrandroid.util.SnackBar
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_details.*
 
-class AccountDetailsDialog(val ctx: Context, val walletID: Long, val account: Account,
-                           val renameAccount: (newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
+class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val account: Account,
+                           val renameAccount: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
 
     private var wallet: Wallet? = null
 
     init {
-        this.wallet = multiWallet!!.walletWithID(walletID)
+        this.wallet = multiWallet.walletWithID(walletID)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

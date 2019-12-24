@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dcrandroid.R
-import com.dcrandroid.dialog.CollapsedBottomSheetDialog
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.edit_text_preference_dialog.*
 
@@ -30,7 +30,7 @@ class EditTextPreference(val context: Context, val key: String, val title: Int, 
 }
 
 class EditTextDialog(val title: Int, val dialogHint: Int, val key: String, var errorString: Int? = null,
-                     val validateInput: (String) -> Boolean, val valueChanged: ((newValue: String) -> Unit)? = null) : CollapsedBottomSheetDialog() {
+                     val validateInput: (String) -> Boolean, val valueChanged: ((newValue: String) -> Unit)? = null) : FullScreenBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.edit_text_preference_dialog, container, false)

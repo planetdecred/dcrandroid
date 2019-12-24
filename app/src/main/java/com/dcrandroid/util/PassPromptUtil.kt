@@ -10,7 +10,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.CollapsedBottomSheetDialog
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import dcrlibwallet.Dcrlibwallet
@@ -18,7 +18,7 @@ import dcrlibwallet.Dcrlibwallet
 data class PassPromptTitle(val passwordTitle: Int, val pinTitle: Int, val fingerprintTitle: Int)
 
 class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletID: Long?, val title: PassPromptTitle, private val allowFingerprint: Boolean,
-                     private val passEntered: (dialog: CollapsedBottomSheetDialog?, passphrase: String?) -> Boolean) {
+                     private val passEntered: (dialog: FullScreenBottomSheetDialog?, passphrase: String?) -> Boolean) {
 
     var passType: Int = Dcrlibwallet.PassphraseTypePass
 

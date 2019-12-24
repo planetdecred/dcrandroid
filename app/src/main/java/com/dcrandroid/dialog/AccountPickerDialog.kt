@@ -21,7 +21,7 @@ import com.dcrandroid.extensions.visibleWalletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
 
-class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, val accountSelected: (account: Account) -> Unit?) : CollapsedBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, val accountSelected: (account: Account) -> Unit?) : FullScreenBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
     private var layoutManager: LinearLayoutManager? = null

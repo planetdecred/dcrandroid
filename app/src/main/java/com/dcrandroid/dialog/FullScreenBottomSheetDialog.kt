@@ -45,7 +45,7 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
             bottomSheetBehavior.peekHeight = metrics.heightPixels
 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 }
 
@@ -85,7 +85,10 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
     }
 
     fun show(context: Context) {
-        val activity = context as AppCompatActivity
-        super.show(activity.supportFragmentManager, javaClass.name)
+        val supportFragmentManager = (context as AppCompatActivity).supportFragmentManager
+        if(supportFragmentManager.findFragmentByTag(this::class.java.name) == null){
+            super.show(supportFragmentManager, javaClass.name)
+        }
+
     }
 }

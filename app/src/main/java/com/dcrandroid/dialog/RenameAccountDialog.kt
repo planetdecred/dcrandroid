@@ -15,7 +15,7 @@ import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.rename_account_sheet.*
 
 // can also rename a wallet
-class RenameAccountDialog(private val currentName: String, private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?) : CollapsedBottomSheetDialog() {
+class RenameAccountDialog(private val currentName: String, private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.rename_account_sheet, container, false)
