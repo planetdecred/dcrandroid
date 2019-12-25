@@ -107,12 +107,26 @@
             android:orientation="vertical"
             android:gravity="center_horizontal"
             >
-            <ImageView
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:padding="@dimen/margin_padding_size_8"
-                android:id="@+id/qr_image" />
+                android:padding="@dimen/margin_padding_size_8">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/qr_image" />
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_qr_dcr"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
