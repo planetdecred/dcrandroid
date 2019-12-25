@@ -6,12 +6,10 @@
 
 package com.dcrandroid.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -21,14 +19,10 @@ import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
-
-interface DialogButtonListener {
-    fun onClickOk(newPassphrase: String)
-    fun onClickCancel()
-}
+import java.lang.Exception
 
 class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isSpending: Boolean, var isChange: Boolean,
-                                private val passwordPinListener: PasswordPinListener) : FullScreenBottomSheetDialog(), DialogButtonListener {
+                                private val passwordPinListener: PasswordPinListener) : FullScreenBottomSheetDialog() {
 
     private lateinit var spendingCreatePasswordFragment: CreatePasswordPromptFragment
     private lateinit var spendingCreatePinFragment: CreatePinPromptFragment
@@ -42,9 +36,9 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        spendingCreatePasswordFragment = CreatePasswordPromptFragment(isSpending, positiveButtonTitle, this)
+        spendingCreatePasswordFragment = CreatePasswordPromptFragment(isSpending, positiveButtonTitle, createWallet)
 
-        spendingCreatePinFragment = CreatePinPromptFragment(isSpending, positiveButtonTitle, this)
+        spendingCreatePinFragment = CreatePinPromptFragment(isSpending, positiveButtonTitle, createWallet)
 
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
@@ -98,28 +92,27 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         }
     }
 
-    override fun onClickOk(newPassphrase: String) {
-        isCancelable = false
-
-        val normalColor = Color.parseColor("#c4cbd2")
-        tab_layout.setSelectedTabIndicatorColor(normalColor)
-        tab_layout.setTabTextColors(normalColor, normalColor)
-        // disable click on any tabs
-        val tabStrip = tab_layout.getChildAt(0) as LinearLayout
-        for (i in 0 until tabStrip.childCount) {
-            tabStrip.getChildAt(i).setOnTouchListener { _, _ -> true }
-        }
-
-        val passphraseType = if (view_pager.currentItem == 0) {
-            Dcrlibwallet.PassphraseTypePass
+    private val createWallet:(passphrase: String?) -> Unit = {passphrase ->
+        if (passphrase == null) {
+            dismiss()
         } else {
-            Dcrlibwallet.PassphraseTypePin
-        }
-        passwordPinListener.onEnterPasswordOrPin(newPassphrase, passphraseType)
-    }
+            isCancelable = false
 
-    override fun onClickCancel() {
-        dismiss()
+            val disabledColor = resources.getColor(R.color.lightGray)
+            tab_layout.setSelectedTabIndicatorColor(disabledColor)
+            tab_layout.setTabTextColors(disabledColor, disabledColor)
+
+            // disable tabs
+            tab_layout.touchables.forEach { it.isEnabled = false }
+
+            val passphraseType = if (view_pager.currentItem == 0) {
+                Dcrlibwallet.PassphraseTypePass
+            } else {
+                Dcrlibwallet.PassphraseTypePin
+            }
+
+            passwordPinListener.onEnterPasswordOrPin(passphrase, passphraseType)
+        }
     }
 
     interface PasswordPinListener {

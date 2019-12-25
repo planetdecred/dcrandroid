@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.create_pin_sheet.*
 import kotlinx.coroutines.*
 
 class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int,
-                              private var clickListener: DialogButtonListener) : Fragment() {
+                              private val createWallet:(passphrase: String?) -> Unit?) : Fragment() {
 
     private var currentPassCode: String? = null
     private lateinit var pinViewUtil: PinViewUtil
@@ -56,7 +56,7 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
             onEnter()
         }
 
-        btn_cancel.setOnClickListener { clickListener.onClickCancel() }
+        btn_cancel.setOnClickListener { createWallet(null) }
         btn_back.setOnClickListener {
             currentPassCode = null
             pinViewUtil.reset()
@@ -97,7 +97,7 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
                 btn_cancel.isEnabled = false
                 btn_cancel.setTextColor(resources.getColor(R.color.colorDisabled))
 
-                clickListener.onClickOk(currentPassCode!!)
+                createWallet(currentPassCode!!)
 
             }
             else -> {

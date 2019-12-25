@@ -18,7 +18,7 @@ import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.create_password_sheet.*
 
-class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int, private var clickListener: DialogButtonListener) : Fragment() {
+class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int, val createWallet:(passphrase: String?) -> Unit) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,19 +54,19 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
             true
         }
 
-        btn_cancel.setOnClickListener { clickListener.onClickCancel() }
+        btn_cancel.setOnClickListener { createWallet(null) }
 
         btn_create.setText(positiveButtonTitle)
         btn_create.setOnClickListener {
             it.visibility = View.GONE
-            ed_pass.isFocusable = false
-            ed_confirm_pass.isFocusable = false
+            ed_pass.isEnabled = false
+            ed_confirm_pass.isEnabled = false
 
             btn_cancel.isEnabled = false
             btn_cancel.setTextColor(resources.getColor(R.color.colorDisabled))
             progress_bar.visibility = View.VISIBLE
 
-            clickListener.onClickOk(ed_pass.textString)
+            createWallet(ed_pass.textString)
         }
     }
 

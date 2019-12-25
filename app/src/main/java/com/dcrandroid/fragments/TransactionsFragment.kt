@@ -123,6 +123,10 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         val coinbaseTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterCoinBase)
 
         withContext(Dispatchers.Main) {
+            if(context == null){
+                return@withContext
+            }
+
             availableTxTypes.add(context!!.getString(R.string.tx_sort_all, txCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))

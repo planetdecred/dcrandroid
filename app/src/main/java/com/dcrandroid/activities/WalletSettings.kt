@@ -14,6 +14,8 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CollapsedBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.dialog.PasswordPromptDialog
+import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.preference.ListPreference
 import com.dcrandroid.util.ChangePassUtil
 import com.dcrandroid.util.PassPromptTitle
@@ -88,9 +90,11 @@ class WalletSettings : BaseActivity() {
     private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
         try {
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
+
             withContext(Dispatchers.Main) {
                 dialog?.dismiss()
             }
+
             if (multiWallet!!.openedWalletsCount() == 0) {
                 multiWallet!!.shutdown()
                 walletData.multiWallet = null
@@ -100,8 +104,17 @@ class WalletSettings : BaseActivity() {
                 setResult(Activity.RESULT_OK)
                 finish()
             }
+
+            SnackBar.showText(this@WalletSettings, R.string.wallet_removed)
         } catch (e: Exception) {
             e.printStackTrace()
+
+            if(dialog is PinPromptDialog){
+                dialog.setProcessing(false)
+            }else if(dialog is PasswordPromptDialog){
+                dialog.setProcessing(false)
+            }
+
             if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                 val errMessage = when (wallet.privatePassphraseType) {
                     Dcrlibwallet.PassphraseTypePin -> R.string.invalid_pin

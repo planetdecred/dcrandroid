@@ -487,5 +487,6 @@
     <string name="i_have_wrote_down_all_33_words">I have wrote down all 33 words</string>
     <string name="security_tools">Security Tools</string>
     <string name="security_tools_message">Various tools that help in different aspects of crypto currency security will be located here.</string>
+    <string name="wallet_removed">Wallet removed</string>
 
 </resources>
