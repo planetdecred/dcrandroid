@@ -121,9 +121,9 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@drawable/receive_qr_logo_bg"
                     android:layout_centerInParent="true"
                     app:cardElevation="0dp"
+                    android:visibility="gone"
                     app:cardCornerRadius="@dimen/margin_padding_size_4">
 
                     <ImageView
