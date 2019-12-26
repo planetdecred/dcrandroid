@@ -36,7 +36,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingStart="@dimen/margin_padding_size_8"
                 android:paddingEnd="0dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
@@ -56,8 +56,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -89,8 +88,7 @@
             android:layout_margin="@dimen/margin_padding_size_4"
             android:elevation="4dp"
             android:orientation="vertical"
-            android:background="@drawable/card_bg"
-            >
+            android:background="@drawable/card_bg">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,7 +108,7 @@
                     android:text="@string/check_wallets_log"
                     android:textColor="@color/darkBlueTextColor"
                     android:fontFamily="@font/source_sans_pro"
-                    android:textSize="@dimen/edit_text_size_16"/>
+                    android:textSize="@dimen/edit_text_size_16" />
 
             </LinearLayout>
 
@@ -133,7 +131,7 @@
                     android:text="@string/logging_level"
                     android:textColor="@color/darkBlueTextColor"
                     android:fontFamily="@font/source_sans_pro"
-                    android:textSize="@dimen/edit_text_size_16"/>
+                    android:textSize="@dimen/edit_text_size_16" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -144,7 +142,7 @@
                     android:text="@string/logging_level"
                     android:textColor="@color/blueGraySecondTextColor"
                     android:fontFamily="@font/source_sans_pro"
-                    android:textSize="@dimen/edit_text_size_14"/>
+                    android:textSize="@dimen/edit_text_size_14" />
 
             </LinearLayout>
 

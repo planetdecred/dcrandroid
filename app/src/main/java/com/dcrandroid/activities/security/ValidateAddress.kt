@@ -10,25 +10,19 @@ import android.os.Bundle
 import android.view.View
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
-import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.util.InputHelper
-import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_validate_address.*
 
 class ValidateAddress : BaseActivity(), View.OnClickListener {
 
     lateinit var addressInputHelper: InputHelper
 
-    lateinit var wallet: Wallet
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_validate_address)
-
-        val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet!!.walletWithID(walletID)
 
         addressInputHelper = InputHelper(this, address_container) {
             // no validation for address input
@@ -49,47 +43,58 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View) {
 
         when (v.id) {
-            R.id.tv_validate -> {
-                result_layout.show()
-
-                val address = addressInputHelper.validatedInput!!
-
-                val icon: Int
-                val titleText: Int
-                var subtitleText: Int? = null
-
-                if (wallet.isAddressValid(address)) {
-                    tv_title.setTextColor(getColor(R.color.greenTextColor))
-                    tv_subtitle.show()
-                    icon = R.drawable.ic_checkmark
-                    titleText = R.string.valid_address
-
-                    if (wallet.haveAddress(address)) {
-                        subtitleText = R.string.internal_valid_address
-                        tv_subtitle.setTextColor(getColor(R.color.greenLightTextColor))
-                    } else {
-                        subtitleText = R.string.external_valid_address
-                        tv_subtitle.setTextColor(getColor(R.color.lightGrayTextColor))
-                    }
-
-                } else {
-                    tv_title.setTextColor(getColor(R.color.colorError))
-                    icon = R.drawable.ic_crossmark
-                    titleText = R.string.invalid_address
-
-                    tv_subtitle.hide()
-                }
-
-                tv_title.setText(titleText)
-                if (subtitleText != null) {
-                    tv_subtitle.setText(subtitleText)
-                }
-                iv_result_icon.setImageResource(icon)
-            }
+            R.id.tv_validate -> validateAddress()
 
             R.id.tv_clear -> addressInputHelper.editText.text = null
 
             else -> finish() // R.id.go_back
         }
+    }
+
+    private fun validateAddress() {
+
+        val wallets = multiWallet!!.openedWalletsList()
+
+        val address = addressInputHelper.validatedInput!!
+
+        var icon = R.drawable.ic_crossmark
+        var titleText = R.string.invalid_address
+        var subtitleText: String? = null
+
+        var foundAddress = false
+
+        for (wallet in wallets) {
+
+            if (wallet.isAddressValid(address)) {
+                foundAddress = true
+
+                tv_title.setTextColor(getColor(R.color.greenTextColor))
+                tv_subtitle.show()
+
+                icon = R.drawable.ic_checkmark
+                titleText = R.string.valid_address
+
+                if (wallet.haveAddress(address)) {
+                    subtitleText = getString(R.string.internal_valid_address, wallet.name)
+                    tv_subtitle.setTextColor(getColor(R.color.greenLightTextColor))
+                    break
+                } else {
+                    subtitleText = getString(R.string.external_valid_address)
+                    tv_subtitle.setTextColor(getColor(R.color.lightGrayTextColor))
+                }
+            }
+        }
+
+        result_layout.show()
+        if (!foundAddress) {
+            tv_title.setTextColor(getColor(R.color.colorError))
+            tv_subtitle.hide()
+        }
+
+        tv_title.setText(titleText)
+        if (subtitleText != null) {
+            tv_subtitle.text = subtitleText
+        }
+        iv_result_icon.setImageResource(icon)
     }
 }

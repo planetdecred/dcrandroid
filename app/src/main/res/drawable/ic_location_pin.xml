@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M20,9.3333C19.9998,6.4752 18.4749,3.8343 15.9996,2.4054C13.5243,0.9764 10.4747,0.9766 7.9996,2.4058C5.5245,3.835 3.9998,6.4761 4,9.3342L4,10.6906C9.2373,16.1491 14.5687,16.2555 20,10.7092L20,9.3333ZM12,12.0008C10.1591,12.0008 8.6667,10.5084 8.6667,8.6675C8.6667,6.8265 10.1591,5.3341 12,5.3341C13.8409,5.3341 15.3333,6.8265 15.3333,8.6675C15.3333,9.5515 14.9821,10.3994 14.357,11.0245C13.7319,11.6496 12.8841,12.0008 12,12.0008L12,12.0008Z"
+      android:strokeWidth="1"
+      android:fillColor="#091440"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M12,2.6667C7.5817,2.6667 4,6.2484 4,10.6667C4,17.3605 12,22.6649 12,22.6649C12,22.6649 20,17.3604 20,10.6667C20,6.2484 16.4183,2.6667 12,2.6667ZM12,13.3333C10.1591,13.3333 8.6667,11.8409 8.6667,10C8.6667,8.1591 10.1591,6.6667 12,6.6667C13.8409,6.6667 15.3333,8.1591 15.3333,10C15.3333,10.8841 14.9821,11.7319 14.357,12.357C13.7319,12.9821 12.8841,13.3333 12,13.3333Z"
+      android:strokeWidth="1"
+      android:fillColor="#C4CBD2"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+</vector>

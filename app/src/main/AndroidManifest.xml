@@ -140,6 +140,10 @@
             android:launchMode="singleTask" />
 
         <activity
+            android:name=".activities.more.SecurityTools"
+            android:launchMode="singleTask" />
+
+        <activity
             android:name=".activities.more.HelpActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
