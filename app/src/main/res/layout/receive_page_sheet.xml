@@ -82,15 +82,15 @@
         android:layout_marginBottom="@dimen/margin_padding_size_8"
         android:background="@drawable/card_bg"
         android:elevation="4dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
-        <include layout="@layout/account_custom_spinner"
+        <include
+            layout="@layout/account_custom_spinner"
             android:id="@+id/source_account_spinner"
             android:layout_marginStart="@dimen/margin_padding_size_16"
             android:layout_marginEnd="@dimen/margin_padding_size_8"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
         <View
             android:layout_width="match_parent"
@@ -105,8 +105,7 @@
             android:paddingStart="@dimen/margin_padding_size_16"
             android:paddingEnd="@dimen/margin_padding_size_16"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            >
+            android:gravity="center_horizontal">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -119,12 +118,20 @@
                     android:layout_height="match_parent"
                     android:id="@+id/qr_image" />
 
-                <ImageView
+                <androidx.cardview.widget.CardView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/ic_qr_dcr"
+                    android:background="@drawable/receive_qr_logo_bg"
                     android:layout_centerInParent="true"
-                    />
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="@dimen/margin_padding_size_4">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_qr_dcr" />
+
+                </androidx.cardview.widget.CardView>
 
             </RelativeLayout>
 
@@ -158,8 +165,7 @@
         android:padding="@dimen/margin_padding_size_16"
         android:elevation="8dp"
         android:background="@color/white"
-        android:layout_marginTop="@dimen/margin_padding_size_16"
-        >
+        android:layout_marginTop="@dimen/margin_padding_size_16">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,13 +175,12 @@
             android:padding="@dimen/margin_padding_size_16"
             android:focusable="true"
             android:clickable="true"
-            android:background="@drawable/default_app_button_bg"
-            >
+            android:background="@drawable/default_app_button_bg">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_share"/>
+                app:srcCompat="@drawable/ic_share" />
 
             <TextView
                 android:layout_width="wrap_content"
