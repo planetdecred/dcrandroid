@@ -6,7 +6,7 @@
 
 package com.dcrandroid.data
 
-import com.dcrandroid.BuildConfig
+import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
@@ -47,7 +47,7 @@ class Account : Serializable {
     var importedKeyCount: Int = 0
 
     val hdPath: String
-        get() = (if (BuildConfig.IS_TESTNET) Constants.TESTNET_HD_PATH else Constants.MAINNET_HD_PATH) + accountNumber + "'"
+        get() = WalletData.multiWallet!!.walletWithID(walletID).hdPathForAccount(accountNumber)
 
     companion object {
         fun from(acc: dcrlibwallet.Account): Account {
