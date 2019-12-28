@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
@@ -122,11 +123,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
         var dialog: PasswordPinDialogFragment? = null
         dialog = PasswordPinDialogFragment(R.string.create, false, isChange = false, passwordPinListener = object : PasswordPinDialogFragment.PasswordPinListener {
 
-            override fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int) {
+            override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        BiometricUtils.saveToKeystore(this@SettingsActivity, spendingKey, Constants.STARTUP_PASSPHRASE)
-                        multiWallet!!.changePublicPassphrase(ByteArray(0), spendingKey.toByteArray())
+                        BiometricUtils.saveToKeystore(this@SettingsActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
+                        multiWallet!!.changePublicPassphrase(ByteArray(0), newPassphrase.toByteArray())
                         multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
                         multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
 
@@ -172,7 +173,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                     e.printStackTrace()
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                         if (dialog is PinPromptDialog) {
-                            dialog.showError() // TODO
+                            dialog.setProcessing(false)
+                            dialog.showError()
+                        }else if(dialog is PasswordPromptDialog){
+                            dialog.setProcessing(false)
+                            dialog.showError()
                         }
                     }
                 }

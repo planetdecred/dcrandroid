@@ -183,4 +183,11 @@ class PasswordInput : FrameLayout, TextWatcher {
         hintTextView.setTextColor(textColor)
         getChildAt(0).input_layout.setBackgroundResource(backgroundResource)
     }
+
+    override fun setEnabled(enabled: Boolean){
+        super.setEnabled(enabled)
+        ivConcealReveal.isEnabled = enabled
+        editText.isEnabled = enabled
+    }
+
 }

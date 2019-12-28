@@ -21,7 +21,6 @@ import kotlinx.coroutines.*
 class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boolean,
                       val passEntered: (dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean) : CollapsedBottomSheetDialog() {
 
-    var confirmed = false
     var hint = R.string.enter_spending_pin
     private lateinit var pinViewUtil: PinViewUtil
 
@@ -79,7 +78,21 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
 
             btn_cancel.isEnabled = true
         }
+    }
 
+    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main){
+        pinViewUtil.pinView.rejectInput = processing
+        btn_cancel.isEnabled = !processing
+
+        if(processing){
+            btn_confirm.hide()
+            progress_bar.show()
+        }else{
+            btn_confirm.show()
+            progress_bar.hide()
+
+            btn_confirm.isEnabled = pinViewUtil.passCode.isNotEmpty()
+        }
     }
 
     private fun onEnter() {
@@ -87,9 +100,7 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
         if (dismissDialog) {
             dismiss()
         } else {
-            btn_cancel.isEnabled = false
-            progress_bar.show()
-            btn_confirm.hide()
+            setProcessing(true)
         }
     }
 }

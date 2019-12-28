@@ -14,6 +14,9 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.password_prompt_sheet.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Boolean,
                            val passEntered: (dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean) : CollapsedBottomSheetDialog() {
@@ -34,16 +37,36 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
         }
 
         password_input.validateInput = {
-            btn_confirm.isEnabled = !it.isBlank()
+            btn_confirm.isEnabled = it.isNotBlank()
             true
         }
 
         btn_cancel.setOnClickListener { dismiss() }
         btn_confirm.setOnClickListener {
             confirmed = true
-            passEntered(this, password_input.textString)
-            dismiss()
+
+            btn_cancel.isEnabled = false
+            btn_confirm.isEnabled = false
+            val dismissDialog = passEntered(this, password_input.textString)
+            if(dismissDialog){
+                dismiss()
+            }else{
+                setProcessing(true)
+            }
         }
+    }
+
+    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main){
+        btn_cancel.isEnabled = !processing
+        password_input.isEnabled = !processing
+
+        if(!processing){
+            btn_confirm.isEnabled = password_input.textString.isNotBlank()
+        }
+    }
+
+    fun showError() = GlobalScope.launch(Dispatchers.Main){
+        password_input.setError(getString(R.string.invalid_password))
     }
 
     override fun onCancel(dialog: DialogInterface) {
