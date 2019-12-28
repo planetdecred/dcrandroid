@@ -22,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : CollapsedBottomSheetDialog() {
+class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullScreenBottomSheetDialog() {
 
     lateinit var walletNameInput: InputHelper
     lateinit var extendedPublicKeyInput: InputHelper
@@ -40,7 +40,7 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : Colla
 
             if (!it.isBlank()) {
                 try {
-                    return@InputHelper !multiWallet!!.walletNameExists(it)
+                    return@InputHelper !multiWallet.walletNameExists(it)
                 } catch (e: Exception) {
                     if (e.message == Dcrlibwallet.ErrReservedWalletName) {
                         walletNameInput.validationMessage = R.string.reserved_wallet_name
@@ -64,7 +64,7 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : Colla
 
             if (!it.isBlank()) {
                 try {
-                    multiWallet!!.validateExtPubKey(it)
+                    multiWallet.validateExtPubKey(it)
                     return@InputHelper true
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -103,7 +103,7 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : Colla
 
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    val wallet = multiWallet!!.createWatchOnlyWallet(Constants.INSECURE_PUB_PASSPHRASE, walletName, extendedPublicKey)
+                    val wallet = multiWallet.createWatchOnlyWallet(Constants.INSECURE_PUB_PASSPHRASE, walletName, extendedPublicKey)
                     dismiss()
                     walletCreated(wallet.id)
                 } catch (e: Exception) {

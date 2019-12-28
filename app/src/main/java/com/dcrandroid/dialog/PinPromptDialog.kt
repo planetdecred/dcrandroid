@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.pin_prompt_sheet.*
 import kotlinx.coroutines.*
 
 class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boolean,
-                      val passEntered: (dialog: CollapsedBottomSheetDialog, passphrase: String?) -> Boolean) : CollapsedBottomSheetDialog() {
+                      val passEntered: (dialog: FullScreenBottomSheetDialog, passphrase: String?) -> Boolean) : FullScreenBottomSheetDialog() {
 
     var hint = R.string.enter_spending_pin
     private lateinit var pinViewUtil: PinViewUtil

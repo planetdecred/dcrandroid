@@ -12,7 +12,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.CollapsedBottomSheetDialog
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
@@ -87,7 +87,7 @@ class WalletSettings : BaseActivity() {
         }
     }
 
-    private fun deleteWallet(pass: String, dialog: CollapsedBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
+    private fun deleteWallet(pass: String, dialog: FullScreenBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
         try {
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
 

@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.TransactionData
-import com.dcrandroid.dialog.CollapsedBottomSheetDialog
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
 import java.math.RoundingMode
 
-class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: () -> Unit) : CollapsedBottomSheetDialog() {
+class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: () -> Unit) : FullScreenBottomSheetDialog() {
 
     lateinit var wallet: Wallet
 
@@ -39,10 +39,10 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
     lateinit var transactionData: TransactionData
     lateinit var authoredTxData: AuthoredTxData
 
-    fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): CollapsedBottomSheetDialog {
+    fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): ConfirmTransaction {
         this.transactionData = transactionData
         this.authoredTxData = authoredTxData
-        this.wallet = multiWallet!!.walletWithID(transactionData.sourceAccount.walletID)
+        this.wallet = multiWallet.walletWithID(transactionData.sourceAccount.walletID)
         return this
     }
 
@@ -84,7 +84,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
             confirm_dest_type.setText(R.string.to_self)
 
             val destinationAccount = transactionData.destinationAccount!!
-            val receivingWallet = multiWallet!!.walletWithID(destinationAccount.walletID)
+            val receivingWallet = multiWallet.walletWithID(destinationAccount.walletID)
             address_account_name.text = HtmlCompat.fromHtml(getString(R.string.selected_account_name,
                     destinationAccount.accountName, receivingWallet.name), 0)
         }

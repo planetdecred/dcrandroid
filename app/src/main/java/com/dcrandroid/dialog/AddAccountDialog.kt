@@ -25,7 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddAccountDialog(private val fragmentActivity: FragmentActivity, private val walletID: Long, private val accountCreated: (accountNumber: Int) -> Unit) : CollapsedBottomSheetDialog() {
+class AddAccountDialog(private val fragmentActivity: FragmentActivity, private val walletID: Long, private val accountCreated: (accountNumber: Int) -> Unit) : FullScreenBottomSheetDialog() {
 
     private var wallet: Wallet = WalletData.multiWallet!!.walletWithID(walletID)
     private lateinit var accountNameInput: InputHelper
