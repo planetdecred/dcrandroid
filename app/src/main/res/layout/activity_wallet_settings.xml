@@ -21,61 +21,60 @@
         android:background="@color/colorBackground"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/margin_padding_size_16"
+            android:paddingEnd="0dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/margin_padding_size_8"
+                android:background="@drawable/circular_transparent_ripple"
+                android:focusable="true"
+                android:clickable="true"
+                android:id="@+id/go_back"
+                app:srcCompat="@drawable/ic_back" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="0dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/circular_transparent_ripple"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:id="@+id/go_back"
-                    app:srcCompat="@drawable/ic_back" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_padding_size_8"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings"
-                        android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
-                        android:includeFontPadding="false"
-                        app:fontFamily="@font/source_sans_pro" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_subtitle"
-                        tools:text="@string/_default"
-                        android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/blueGraySecondTextColor"
-                        android:includeFontPadding="false"
-                        app:fontFamily="@font/source_sans_pro" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_subtitle"
+                    tools:text="@string/_default"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:textColor="@color/blueGraySecondTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
+
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/wallet_settings_scroll_view" >
+        android:id="@+id/wallet_settings_scroll_view">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +91,7 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"
                 android:paddingBottom="@dimen/margin_padding_size_8"
-                android:background="@drawable/card_bg" >
+                android:background="@drawable/card_bg">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -125,7 +124,7 @@
                         android:text="@string/change_spending_pin_password"
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
+                        android:textSize="@dimen/edit_text_size_16" />
 
                 </LinearLayout>
 
@@ -154,7 +153,7 @@
                             android:text="@string/use_fingerprint"
                             android:textColor="@color/darkBlueTextColor"
                             android:fontFamily="@font/source_sans_pro"
-                            android:textSize="@dimen/edit_text_size_16"/>
+                            android:textSize="@dimen/edit_text_size_16" />
 
                     </LinearLayout>
 
@@ -176,7 +175,7 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"
                 android:paddingBottom="@dimen/margin_padding_size_8"
-                android:background="@drawable/card_bg" >
+                android:background="@drawable/card_bg">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -207,7 +206,7 @@
                         android:text="@string/incoming_transactions"
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
+                        android:textSize="@dimen/edit_text_size_16" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -218,7 +217,52 @@
                         android:text="@string/none"
                         android:textColor="@color/blueGraySecondTextColor"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_14"/>
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_4"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_8"
+                android:background="@drawable/card_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/debug"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:textColor="@color/darkerBlueGrayTextColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rescan_blockchain"
+                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/ripple"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:includeFontPadding="false"
+                        android:text="@string/rescan_blockchain"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
 
                 </LinearLayout>
 
@@ -232,7 +276,7 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_8"
                 android:paddingBottom="@dimen/margin_padding_size_8"
-                android:background="@drawable/card_bg" >
+                android:background="@drawable/card_bg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -252,7 +296,7 @@
                         android:text="@string/remove_wallet"
                         android:textColor="@color/orangeTextColor"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textSize="@dimen/edit_text_size_16"/>
+                        android:textSize="@dimen/edit_text_size_16" />
 
                 </LinearLayout>
 

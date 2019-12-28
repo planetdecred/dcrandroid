@@ -32,6 +32,7 @@
     <string name="exit_cap">EXIT</string>
     <string name="delete">Delete</string>
     <string name="no">No</string>
+    <string name="yes">Yes</string>
     <string name="confirm">Confirm</string>
     <string name="usd" translatable="false">USD</string>
     <string name="settings">Settings</string>
@@ -201,7 +202,7 @@
     <!--Error Messages-->
     <string name="not_enough_funds">Not enough funds.</string>
     <string name="empty_seed">Empty Seed</string>
-    <string name="not_connected">Not Connected To Decred Network</string>
+    <string name="not_connected">Not connected to Decred network</string>
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
@@ -316,6 +317,7 @@
     <string name="step_3_3">Step 3/3</string>
     <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="rescanning_blocks"><![CDATA[Rescanning blocks <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="syncing_progress">Syncing progress</string>
     <string name="percentage">%1$d%%</string>
@@ -482,11 +484,18 @@
     <string name="spending_passphrase_changed">Spending PIN/password changed</string>
     <string name="wallets_log">Wallets log</string>
     <string name="write_down_seed_phrase">Write down seed phrase</string>
-    <string name="step_1_2">Step 1/2</string>
+    <string name="step_1_2" tools:ignore="TypographyFractions">Step 1/2</string>
     <string name="your_33_word_seed_phrase">Your 33-word seed phrase</string>
     <string name="i_have_wrote_down_all_33_words">I have wrote down all 33 words</string>
     <string name="security_tools">Security Tools</string>
     <string name="security_tools_message">Various tools that help in different aspects of crypto currency security will be located here.</string>
     <string name="wallet_removed">Wallet removed</string>
+    <string name="rescanning_blocks_ellipsis">Rescanning Blocks…</string>
+    <string name="check_statistics">Check statistics</string>
+    <string name="rescan_blockchain">Rescan blockchain</string>
+    <string name="rescan_progress_notification">Check progress in Overview!</string>
+    <string name="rescan_blockchain_warning">Are you sure? This could take some time.</string>
+    <string name="err_sync_in_progress">Sync is in progress</string>
+    <string name="err_rescan_in_progress">A rescan is in progress</string>
 
 </resources>

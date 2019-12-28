@@ -54,6 +54,27 @@ class WalletSettings : BaseActivity() {
         change_spending_pass.setOnClickListener {
             ChangePassUtil(this, walletID).begin()
         }
+        
+        rescan_blockchain.setOnClickListener {
+            if (multiWallet!!.isSyncing) {
+                SnackBar.showError(this, R.string.err_sync_in_progress)
+            } else if (!multiWallet!!.isSynced) {
+                SnackBar.showError(this, R.string.not_connected)
+            } else if (multiWallet!!.isRescanning) {
+                SnackBar.showError(this, R.string.err_rescan_in_progress)
+            } else {
+                InfoDialog(this)
+                        .setDialogTitle(getString(R.string.rescan_blockchain))
+                        .setMessage(getString(R.string.rescan_blockchain_warning))
+                        .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                            multiWallet!!.rescanBlocks(walletID)
+                            SnackBar.showText(this, R.string.rescan_progress_notification)
+                        })
+                        .setNegativeButton(getString(R.string.no))
+                        .show()
+            }
+
+        }
 
         remove_wallet.setOnClickListener {
             if (multiWallet!!.isSyncing || multiWallet!!.isSynced) {
