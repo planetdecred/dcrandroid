@@ -428,7 +428,7 @@
     <string name="clear">Clear</string>
     <string name="valid_address">Valid address</string>
     <string name="external_valid_address">NOT owned by this wallet</string>
-    <string name="internal_valid_address">Owned by this wallet</string>
+    <string name="internal_valid_address">Owned by %1$s</string>
     <string name="address">Address</string>
     <string name="sign_message_instruction">Enter an address and message to sign:</string>
     <string name="signature_copied">Signature copied</string>
@@ -485,5 +485,7 @@
     <string name="step_1_2">Step 1/2</string>
     <string name="your_33_word_seed_phrase">Your 33-word seed phrase</string>
     <string name="i_have_wrote_down_all_33_words">I have wrote down all 33 words</string>
+    <string name="security_tools">Security Tools</string>
+    <string name="security_tools_message">Various tools that help in different aspects of crypto currency security will be located here.</string>
 
 </resources>

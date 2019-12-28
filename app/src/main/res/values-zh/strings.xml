@@ -4,511 +4,248 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
        <!--General-->
-       <string name="wallet">钱包</string>
-       <string name="crash_dialog_text">一项意外错误导致应用被强制终止。请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题。这将有助于我们防止错误的再次发生</string><![CDATA[
        
-       
-       
-       
-       
-       
-       
-       ]]><string name="send_dcr_info">输入或扫描目标地址并输入发送的DCR数目。</string><![CDATA[
-       
-       ]]>
+    <string name="wallet">钱包</string>
+    <string name="crash_dialog_text">一项意外错误导致应用被强制终止。请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题。这将有助于我们防止错误的再次发生</string>
+    <string name="send_dcr_info">输入或扫描目标地址并输入发送的DCR数目。</string>
     <string name="type">类别</string>
-       <string name="loading">加载中</string><![CDATA[
-       
-       
-       ]]><string name="help">帮助</string><![CDATA[
-       
-       ]]>
+    <string name="loading">加载中</string>
+    <string name="help">帮助</string>
     <string name="overview">概览</string>
-       <string name="permission">权限范围</string>
-       <string name="denied_permission">超出权限范围</string><![CDATA[
-       
-       ]]><string name="receive">接收</string><![CDATA[
-       
-       
-       ]]><string name="send">发送</string><![CDATA[
-       
-       ]]><string name="cancel">取消</string><![CDATA[
-       
-       
-       ]]><string name="connection">连接</string><![CDATA[
-       
-       
-       ]]>
+    <string name="permission">权限范围</string>
+    <string name="denied_permission">超出权限范围</string>
+    <string name="receive">接收</string>
+    <string name="send">发送</string>
+    <string name="cancel">取消</string>
+    <string name="connection">连接</string>
     <string name="testnet">测试网</string>
-       <string name="general">通用</string>
-       <string name="view_on_dcrdata">在 dcrdata 查看</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]>
+    <string name="general">通用</string>
+    <string name="view_on_dcrdata">在 dcrdata 查看</string>
     <string name="default_account">默认账号</string>
-       <string name="exit_cap">退出</string><![CDATA[
-       
-       ]]>
+    <string name="exit_cap">退出</string>
     <string name="delete">删除</string>
-       <string name="no">否</string><![CDATA[
-       
-       ]]><string name="confirm">确认</string><![CDATA[
-       
-       
-       ]]><string name="settings">设置</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]>
+    <string name="no">否</string>
+    <string name="confirm">确认</string>
+    <string name="settings">设置</string>
     <string name="ok">OK</string>
-       <string name="user_agent">用户代理</string>
-       <string name="log_file_not_found">未发现日志文件</string>
-       <string name="wallet_log_copied">钱包日志复制成功</string><![CDATA[
+    <string name="user_agent">用户代理</string>
+    <string name="log_file_not_found">未发现日志文件</string>
        
+    <string name="wallet_log_copied">钱包日志复制成功</string>
+    <string name="one_day">1 天</string>
+    <string name="copy">复制</string>
+    <string name="address_not_found">找不到地址</string>
        
-       
-       
-       
-       ]]><string name="one_day">1 天</string><![CDATA[
-       
-       
-       
-       ]]><string name="copy">复制</string><![CDATA[
-       
-       
-       
-       ]]><string name="address_not_found">找不到地址</string><![CDATA[
-       
-       
-       ]]>
     <string name="share">分享</string>
-       <string name="clear_fields">清除</string><![CDATA[
        
-       ]]>
+    <string name="clear_fields">清除</string>
     <string name="retry_caps">重试</string>
-       <string name="share_address_via">分享二维码</string><![CDATA[
+       
+    <string name="share_address_via">分享二维码</string><!--/General-->
 
+       <!--Peers-->
+    <string name="version">版本</string>
        
-       ]]><!--/General-->
+    <string name="connecting_to_peers">正在连接节点</string><!--/Peers-->
 
-       <!--Peers--><![CDATA[
+       <!--Account-->
        
+    <string name="account_number">账户序号</string>
+    <string name="account_name">账户名</string>
        
-       
-       
-       
-       
-       
-       ]]><string name="version">版本</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><string name="connecting_to_peers">正在连接节点</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       ]]><!--/Peers-->
-
-       <!--Account--><![CDATA[
-       
-       
-       ]]><string name="account_number">账户序号</string><![CDATA[
-       
-       
-       
-       ]]><string name="account_name">账户名</string><![CDATA[
-       
-       
-       
-       
-       ]]><string name="hd_path">HD路径</string><![CDATA[
-       
-       ]]><string name="external">外部</string><![CDATA[
-       
-       
-       ]]><!--/Account-->
+    <string name="hd_path">HD路径</string>
+    <string name="external">外部</string>
+       <!--/Account-->
 
        <!--Seed-->
-       <string name="save_seed_instruction">请将种子写下并安全保存。在下个页面及以后需要恢复钱包时都需要输入种子</string><![CDATA[
        
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><!--/Seed-->
+    <string name="save_seed_instruction">请将种子写下并安全保存。在下个页面及以后需要恢复钱包时都需要输入种子</string>
+       <!--/Seed-->
 
        <!--Balance-->
-       <string name="label_spendable">可用资金</string>
-       <string name="immature_stake_generation">生成未成熟票</string>
-       <string name="label_immature_rewards">未成熟奖励</string>
-       <string name="label_locked_by_tickets">选票锁定</string>
-       <string name="label_voting_authority">投票权</string>
-       <string name="current_total_balance">总余额</string><![CDATA[
        
+    <string name="label_spendable">可用资金</string>
        
+    <string name="immature_stake_generation">生成未成熟票</string>
        
-       ]]>
+    <string name="label_immature_rewards">未成熟奖励</string>
+       
+    <string name="label_locked_by_tickets">选票锁定</string>
+       
+    <string name="label_voting_authority">投票权</string>
+       
+    <string name="current_total_balance">总余额</string>
     <string name="total_balance">总余额</string>
        <!--/Balance-->
 
-       <!--Wallet--><![CDATA[
+       <!--Wallet-->
        
-       
-       ]]>
     <string name="create_a_new_wallet">创建新钱包</string>
-       <string name="restore_existing_wallet">恢复现有钱包</string><![CDATA[
        
+    <string name="restore_existing_wallet">恢复现有钱包</string>
        
-       ]]><string name="opening_wallet">正在打开钱包…</string><![CDATA[
-       
-       
-       
-       ]]>
+    <string name="opening_wallet">正在打开钱包…</string>
     <string name="invalid_passphrase">密码错误。</string>
-       <string name="invalid_pin">输入的PIN错误。</string><![CDATA[
        
-       ]]><string name="invalid_password">输入的密码错误。</string><![CDATA[
+    <string name="invalid_pin">输入的PIN错误。</string>
+    <string name="invalid_password">输入的密码错误。</string>
        
-       
-       ]]>
     <string name="failed_to_open_wallet">打开钱包失败</string>
        <!--/Wallet-->
 
        <!--Transaction-->
-       <string name="recent_transactions">最近交易</string><![CDATA[
        
+    <string name="recent_transactions">最近交易</string>
        
-       
-       
-       
-       
-       ]]><string name="destination_address">目的地址</string><![CDATA[
-       
-       ]]>
+    <string name="destination_address">目的地址</string>
     <string name="transaction_fee">交易手续费</string>
-       <string name="Transaction_details">交易详情</string><![CDATA[
        
+    <string name="Transaction_details">交易详情</string>
        
+    <string name="pending">等待</string>
        
-       
-       
-       
-       
-       
-       
-       
-       ]]><string name="pending">等待</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       ]]><string name="vote">已投票</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><string name="amount_invalid_decimal_places">金额超过8位小数</string><![CDATA[
-       
-       ]]><string name="new_transaction">新的交易</string><![CDATA[
-       
-       
-       
-       
-       
-       ]]><!--/Transaction-->
+    <string name="vote">已投票</string>
+    <string name="amount_invalid_decimal_places">金额超过8位小数</string>
+    <string name="new_transaction">新的交易</string><!--/Transaction-->
 
-       <!--Block chain--><![CDATA[
-       
-       
-       
-       
-       ]]><!--/Block chain-->
+       <!--Block chain-->
+       <!--/Block chain-->
 
-       <!--Sync Messages--><![CDATA[
-       
-       
-       
-       ]]>
+       <!--Sync Messages-->
     <string name="remaining_minute_sync_eta">已完成 %1$d%%, 剩余 %2$d 分钟</string>
-       <string name="remaining_seconds_sync_eta">已完成 %1$d%%, 剩余 %2$d 秒</string>
-       <string name="remaining_sync_eta_less_than_seconds">已完成 %1$d%%, 剩余 &lt;1 秒</string><![CDATA[
        
+    <string name="remaining_seconds_sync_eta">已完成 %1$d%%, 剩余 %2$d 秒</string>
        
+    <string name="remaining_sync_eta_less_than_seconds">已完成 %1$d%%, 剩余 &lt;1 秒</string>
        
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><string name="synchronizing">正在同步</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><!--/Sync Messages-->
+    <string name="synchronizing">正在同步</string><!--/Sync Messages-->
 
        <!--QR Code-->
-       <string name="camera_permission_scan">这个应用需要相机权限来扫描钱包地址二维码，请在下个对话中允此权限。</string><![CDATA[
        
-       
-       
-       ]]><!--/QR Code-->
+    <string name="camera_permission_scan">这个应用需要相机权限来扫描钱包地址二维码，请在下个对话中允此权限。</string><!--/QR Code-->
 
-       <!--Address--><![CDATA[
-       
-       ]]>
+       <!--Address-->
     <string name="address_copy_text">地址已复制到剪贴板</string>
-       <string name="your_address">您的地址</string><![CDATA[
        
-       ]]>
+    <string name="your_address">您的地址</string>
     <string name="generate_new_address">生成新地址</string>
-       <string name="receive_fund_privacy_info">每次请求支付都会生成一个新地址以保护您的隐私。</string><![CDATA[
        
-       
-       
-       ]]><string name="invalid_address">无效地址。</string><![CDATA[
-       
-       
-       
-       ]]><!--/Address-->
+    <string name="receive_fund_privacy_info">每次请求支付都会生成一个新地址以保护您的隐私。</string>
+    <string name="invalid_address">无效地址。</string><!--/Address-->
 
-       <!--Preference--><![CDATA[
+       <!--Preference-->
+    <string name="unconfirmed_funds">发送未确认资金</string>
+    <string name="logging_level">日志级别</string>
+    <string name="check_wallets_log">钱包日志</string>
        
-       
-       
-       ]]><string name="unconfirmed_funds">发送未确认资金</string><![CDATA[
-       
-       ]]><string name="logging_level">日志级别</string><![CDATA[
-       
-       
-       
-       ]]><string name="check_wallets_log">钱包日志</string><![CDATA[
-       
-       
-       
-       
-       ]]><string name="currency_conversion">货币转换</string><![CDATA[
-       
-       ]]><string name="user_agent_summary">用来获取交易费率。</string><![CDATA[
-       
-       
-       
+    <string name="currency_conversion">货币转换</string>
+    <string name="user_agent_summary">用来获取交易费率。</string>
 
        
-
-       ]]>
     <string-array name="currency_conversion">
-           <item>None</item>
-           <item>USD (bittrex)</item>
-       </string-array>
+               
+        <item>None</item>
+               
+        <item>USD (bittrex)</item>
+           
+    </string-array>
        <!--/Preference-->
 
-       <!-- Overview Fragment --><![CDATA[
-       
-       
-       
-       ]]><!--/ Overview Fragment -->
+       <!-- Overview Fragment --><!--/ Overview Fragment -->
 
        <!--History Fragment -->
-       <string name="sent">发送</string><![CDATA[
        
-       ]]><string name="received">已接收</string><![CDATA[
-       
-       
-       
-       ]]><!--/History Fragment -->
+    <string name="sent">发送</string>
+    <string name="received">已接收</string><!--/History Fragment -->
 
        <!--Error Messages-->
-       <string name="not_enough_funds">资金不足。</string>
-       <string name="empty_seed">密钥种子空白</string>
-       <string name="not_connected">未连接到Decred网络</string>
-       <string name="passphrase_required">缺少私人密码</string>
-       <string name="wallet_not_loaded">钱包未加载</string><![CDATA[
        
+    <string name="not_enough_funds">资金不足。</string>
        
-       ]]><string name="err_no_peers">由于缺少连接节点Decred网络不可达。</string><![CDATA[
+    <string name="empty_seed">密钥种子空白</string>
        
-       ]]><string name="not_enought_funds_synced">资金不足或未连接网络</string><![CDATA[
+    <string name="not_connected">未连接到Decred网络</string>
        
+    <string name="passphrase_required">缺少私人密码</string>
        
-       ]]><!--/Error Messages-->
+    <string name="wallet_not_loaded">钱包未加载</string>
+       
+    <string name="err_no_peers">由于缺少连接节点Decred网络不可达。</string>
+    <string name="not_enought_funds_synced">资金不足或未连接网络</string>
+       <!--/Error Messages-->
 
        <!--Security Fragment-->
-       <string name="sign_message">签署消息</string><![CDATA[
        
-       ]]><string name="message">消息</string><![CDATA[
+    <string name="sign_message">签署消息</string>
+    <string name="message">消息</string>
        
-       
-       ]]>
     <string name="valid_signature">这个签名可以验证这个消息和地址。</string>
-       <string name="invalid_signature">这个签名不能验证这个消息和地址。</string>
-       <string name="sign_message_description">此功能可以验证一个地址的合法性，签名消息以证明地址的所有权，和验证签名。</string>
+       
+    <string name="invalid_signature">这个签名不能验证这个消息和地址。</string>
+       
+    <string name="sign_message_description">此功能可以验证一个地址的合法性，签名消息以证明地址的所有权，和验证签名。</string>
        <!--/Security Fragment-->
 
-       <!--Send Fragment--><![CDATA[
+       <!--Send Fragment-->
+    <string name="_0_bytes">0 bytes</string>
        
-       
-       
-       
-       
-       
-       
-       ]]><string name="_0_bytes">0 bytes</string><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><string name="fee">手续费</string><![CDATA[
-       
-       
-       
-       
-       
-       ]]>
+    <string name="fee">手续费</string>
     <string name="send_to_account">发送到账户</string>
-       <string name="send_to_address">发送到地址</string><![CDATA[
        
-       
-       
-       ]]><!--/Send Fragment-->
+    <string name="send_to_address">发送到地址</string><!--/Send Fragment-->
 
-       <!--Transaction Details View--><![CDATA[
-       
-       
-       
-       
-       
-       
-       
-       
-       ]]><!--/Transaction Details View-->
+       <!--Transaction Details View-->
+       <!--/Transaction Details View-->
 
        <!--Confirm Transaction Dialog-->
-       <string name="toConfirmEnterYourPassword">确认输入正确密码:</string>
-       <string name="to">到</string><![CDATA[
        
+    <string name="toConfirmEnterYourPassword">确认输入正确密码:</string>
        
-       ]]><!--/Confirm Transaction Dialog-->
+    <string name="to">到</string>
+       <!--/Confirm Transaction Dialog-->
 
-       <!--Security--><![CDATA[
+       <!--Security-->
        
+    <string name="create_spending_pin">创建支付PIN码</string>
+    <string name="mismatch_passcode">PIN码不匹配，请重试。</string>
+    <string name="mismatch_password">密码不匹配</string>
        
-       ]]><string name="create_spending_pin">创建支付PIN码</string><![CDATA[
-       
-       ]]><string name="mismatch_passcode">PIN码不匹配，请重试。</string><![CDATA[
-       
-       ]]><string name="mismatch_password">密码不匹配</string><![CDATA[
-       
-       
-       ]]>
     <string name="password">密码</string>
-       <string name="enter_spending_pin">输入支付PIN码</string><![CDATA[
        
+    <string name="enter_spending_pin">输入支付PIN码</string>
        
-       ]]>
     <string name="enter_startup_pin">输入启动PIN码</string>
-       <string name="create_startup_pin">创建启动PIN码</string><![CDATA[
        
-       ]]>
+    <string name="create_startup_pin">创建启动PIN码</string>
     <string name="create_startup_password">创建启动密码</string>
-       <string name="change_spending_pin_password">更改支付PIN码/密码</string><![CDATA[
        
-       
-       
-       
-       
-       
-       
-       ]]><string name="startup_pin_password">启动PIN码或密码</string><![CDATA[
-       
-       ]]><string name="change_startup_pin_password">更改启动PIN码或密码</string><![CDATA[
-       
-       
-       
-       ]]><!--/Security-->
+    <string name="change_spending_pin_password">更改支付PIN码/密码</string>
+    <string name="startup_pin_password">启动PIN码或密码</string>
+    <string name="change_startup_pin_password">更改启动PIN码或密码</string><!--/Security-->
 
-       <!--Crash Report--><![CDATA[
-       
-       
-       ]]>
+       <!--Crash Report-->
     <string name="dont_send">不发送</string>
-       <string name="send_report">发送报告</string>
-       <string name="app_crashed">应用程序意外关闭</string>
-       <string name="crash_report_copied">已成功复制意外关闭报告</string>
-       <string name="hide_report">隐藏报告</string>
-       <string name="view_report">查看报告</string>
+       
+    <string name="send_report">发送报告</string>
+       
+    <string name="app_crashed">应用程序意外关闭</string>
+       
+    <string name="crash_report_copied">已成功复制意外关闭报告</string>
+       
+    <string name="hide_report">隐藏报告</string>
+       
+    <string name="view_report">查看报告</string>
        <!--/Crash Report-->
 
-       <string name="wifi_data_sync_title">未连接WiFi时同步</string><![CDATA[
        
-       ]]><string name="always">总是</string><![CDATA[
-       
-       ]]>
+    <string name="wifi_data_sync_title">未连接WiFi时同步</string>
+    <string name="always">总是</string>
     <string name="wifi_sync_notice">是否继续同步？</string>
-       <string name="not_connected_to_wifi">未连接WiFi。</string><![CDATA[
        
-]]>
+    <string name="not_connected_to_wifi">未连接WiFi。</string>
+       
+
 </resources>
 
