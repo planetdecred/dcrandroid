@@ -16,11 +16,10 @@ import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
+import com.dcrandroid.extensions.show
 import com.dcrandroid.preference.ListPreference
-import com.dcrandroid.util.ChangePassUtil
-import com.dcrandroid.util.PassPromptTitle
-import com.dcrandroid.util.PassPromptUtil
-import com.dcrandroid.util.SnackBar
+import com.dcrandroid.preference.SwitchPreference
+import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_wallet_settings.*
@@ -35,6 +34,8 @@ class WalletSettings : BaseActivity() {
     private var walletID = -1L
     private lateinit var wallet: Wallet
 
+    private lateinit var useFingerprint: SwitchPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wallet_settings)
@@ -43,6 +44,22 @@ class WalletSettings : BaseActivity() {
         wallet = multiWallet!!.walletWithID(walletID)
 
         tv_subtitle?.text = wallet.name
+
+        change_spending_pass.setOnClickListener {
+            ChangePassUtil(this, walletID).begin()
+        }
+
+        useFingerprint = SwitchPreference(this, walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, spendable_fingerprint) { newValue ->
+
+            if (newValue) {
+                setupFingerprint()
+                !newValue // ignore new value
+            } else {
+                clearSpendingPassFromKeystore()
+                newValue
+            }
+        }
+        loadFingerprintPreference()
 
         val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
         setTxNotificationSummary(multiWallet!!.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
@@ -108,8 +125,65 @@ class WalletSettings : BaseActivity() {
         }
     }
 
+    private fun loadFingerprintPreference() {
+        if (BiometricUtils.isFingerprintEnrolled(this)) {
+            spendable_fingerprint.show()
+        }
+    }
+
+    private fun setupFingerprint() {
+        val title = PassPromptTitle(R.string.spending_password, R.string.enter_spending_pin)
+        PassPromptUtil(this, walletID, title, false) { dialog, pass ->
+
+            if (pass == null) {
+                return@PassPromptUtil true
+            }
+
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    wallet.unlockWallet(pass.toByteArray())
+                    BiometricUtils.saveToKeystore(this@WalletSettings, pass, BiometricUtils.getWalletAlias(walletID))
+                    wallet.lockWallet()
+
+                    withContext(Dispatchers.Main) {
+                        dialog?.dismiss()
+                        useFingerprint.setValue(true)
+                    }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    val err = if (wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin) {
+                        R.string.invalid_pin
+                    } else {
+                        R.string.invalid_password
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        dialog?.dismiss()
+
+                        SnackBar.showError(this@WalletSettings, err)
+                    }
+                }
+            }
+            false
+        }.show()
+    }
+
+    private fun clearSpendingPassFromKeystore() {
+        BiometricUtils.saveToKeystore(this@WalletSettings, "", BiometricUtils.getWalletAlias(walletID))
+    }
+
+    private fun setTxNotificationSummary(index: Int) {
+        val preferenceSummary = resources.getStringArray(R.array.notification_options)[index]
+        incoming_transactions.pref_subtitle.text = preferenceSummary
+    }
+
     private fun deleteWallet(pass: String, dialog: FullScreenBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
         try {
+            multiWallet!!.unlockWallet(walletID, pass.toByteArray()) // test if pass is correct
+            clearSpendingPassFromKeystore()
+
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
 
             withContext(Dispatchers.Main) {
@@ -144,11 +218,5 @@ class WalletSettings : BaseActivity() {
                 SnackBar.showError(this@WalletSettings, errMessage)
             }
         }
-    }
-
-
-    private fun setTxNotificationSummary(index: Int) {
-        val preferenceSummary = resources.getStringArray(R.array.notification_options)[index]
-        incoming_transactions.pref_subtitle.text = preferenceSummary
     }
 }

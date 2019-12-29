@@ -22,6 +22,7 @@ public class Constants {
             BADGER_DB = "badgerdb",
             SPENDING_PASSPHRASE_TYPE = "spending_passphrase_type",
             STARTUP_PASSPHRASE = "startup_passphrase",
+            SPENDING_PASSPHRASE = "spending_passphrase",
             PIN = "pin",
             INSECURE_PUB_PASSPHRASE = "public",
             APP_VERSION = "app_version",

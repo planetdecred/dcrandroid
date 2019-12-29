@@ -131,7 +131,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/biometric_authentication"
+                    android:id="@+id/spendable_fingerprint"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     android:padding="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"
                     android:focusable="true"

@@ -63,17 +63,17 @@ object BiometricUtils {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
         val iv = cipher.iv
-        saveToFile(context, Constants.ENCRYPTION_IV, iv)
+        saveToFile(context, Constants.ENCRYPTION_IV + alias, iv)
 
         val encryption = cipher.doFinal(content.toByteArray(StandardCharsets.UTF_8))
-        saveToFile(context, Constants.ENCRYPTION_DATA, encryption)
+        saveToFile(context, Constants.ENCRYPTION_DATA + alias, encryption)
     }
 
     @Throws(Exception::class)
     fun readFromKeystore(context: Context, alias: String): String {
 
-        val encryptionIv = readFromFile(context, Constants.ENCRYPTION_IV)
-        val encryptedData = readFromFile(context, Constants.ENCRYPTION_DATA)
+        val encryptionIv = readFromFile(context, Constants.ENCRYPTION_IV + alias)
+        val encryptedData = readFromFile(context, Constants.ENCRYPTION_DATA + alias)
 
         val keyStore = KeyStore.getInstance(Constants.ANDROID_KEY_STORE)
         keyStore.load(null)
@@ -104,6 +104,8 @@ object BiometricUtils {
 
         return false
     }
+
+    fun getWalletAlias(walletID: Long) = walletID.toString() + Constants.SPENDING_PASSPHRASE
 
     fun translateError(context: Context, errorCode: Int): String? {
         return when (errorCode) {

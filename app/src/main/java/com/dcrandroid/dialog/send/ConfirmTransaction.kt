@@ -105,7 +105,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                         showSuccess()
                     } catch (e: Exception) {
                         showSendButton()
-                        SnackBar.showError(container!!, R.string.send_fail_msg)
+                        SnackBar.showError(container!!, R.string.send_fail_msg) //TODO handle incorrect pass
                         e.printStackTrace()
                     }
                 }

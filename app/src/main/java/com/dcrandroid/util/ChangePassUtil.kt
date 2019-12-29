@@ -68,6 +68,9 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
             } else {
                 try {
                     multiWallet.changePrivatePassphraseForWallet(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
+                    if (multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)) {
+                        BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, BiometricUtils.getWalletAlias(walletID))
+                    }
                     SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
                 } catch (e: Exception) {
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
