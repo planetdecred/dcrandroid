@@ -154,10 +154,6 @@ class InputHelper(private val context: Context, private val container: View,
         }
     }
 
-    fun scanQRSuccess(result: String) {
-        editText.setText(result)
-    }
-
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.custom_input_paste -> {

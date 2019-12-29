@@ -22,6 +22,7 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.DecredAddressURI
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
@@ -132,7 +133,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             window.dismiss()
 
             // clear fields
-            amountHelper.setAmountDcr(0) // clear
+            amountHelper.setAmountDCR(0) // clear
             destinationAddressCard.clear()
         }
     }
@@ -158,7 +159,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         constructTransaction()
     }
 
-    val amountChanged: (Boolean) -> Unit = { byUser ->
+    private val amountChanged: (Boolean) -> Unit = { byUser ->
         if (view != null) {
             if (byUser) {
                 sendMax = false
@@ -245,7 +246,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             total_cost.text = authoredTxData!!.totalCost
 
             if (sendMax) {
-                amountHelper.setAmountDcr(authoredTxData!!.amountAtom)
+                amountHelper.setAmountDCR(authoredTxData!!.amountAtom)
             }
 
         } catch (e: Exception) {
@@ -312,7 +313,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             totalCostSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, totalCostString, totalCostUSD), 0)
         }
 
-        val txData = AuthoredTxData().apply {
+        return AuthoredTxData().apply {
             estSignedSize = feeAndSize.estimatedSignedSize
             fee = feeSpanned
             totalCost = totalCostSpanned
@@ -322,15 +323,19 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
             this.txAuthor = txAuthor
         }
-
-        return txData
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK) {
-            val result = data!!.getStringExtra(Constants.RESULT).replace("decred:", "")
-            destinationAddressCard.addressInputHelper.scanQRSuccess(result)
+            val result = data!!.getStringExtra(Constants.RESULT)
+
+            val decredAddressUri = DecredAddressURI.from(result)
+            destinationAddressCard.addressInputHelper.editText.setText(decredAddressUri.address)
+            if (decredAddressUri.amount != null) {
+                sendMax = false
+                amountHelper.setAmountDCR(decredAddressUri.amount!!)
+            }
         }
     }
 }

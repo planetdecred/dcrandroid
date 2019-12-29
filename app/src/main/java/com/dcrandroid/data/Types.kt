@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import java.io.Serializable
+import java.lang.NumberFormatException
 
 class Accounts : Serializable {
 
@@ -108,4 +109,54 @@ fun parseBalanceArray(json: String): ArrayList<Balance> {
     val gson = Gson()
     val listType = object : TypeToken<ArrayList<Balance>>() {}.type
     return gson.fromJson(json, listType)
+}
+
+class DecredAddressURI {
+
+    var address: String = ""
+    var amount: Double? = null
+
+    companion object {
+        fun from(uriString: String): DecredAddressURI {
+
+            val addressURI = DecredAddressURI()
+
+            var address: String = uriString
+            var amount: Double? = null
+
+            val schemeSeparatedParts = uriString.split(":")
+            if (schemeSeparatedParts.size == 2 && schemeSeparatedParts[0] == "decred") {
+
+                val addressAndQuery = schemeSeparatedParts[1].split("?")
+
+                address = addressAndQuery[0]
+                if (addressAndQuery.size >= 2) {
+
+                    // get amount from query
+                    val queryParameters = addressAndQuery[1].split("&")
+                    for (query in queryParameters) {
+                        val nameValuePair = query.split("=")
+                        val queryName = nameValuePair[0]
+                        if (nameValuePair.size == 2 && queryName == Constants.AMOUNT) {
+                            val amountStr = nameValuePair[1]
+                            if (amountStr.trim().isNotEmpty()) {
+                                try {
+                                    amount = amountStr.toDouble()
+                                }catch (e: NumberFormatException){
+                                    e.printStackTrace()
+                                }
+                            }
+
+                            break
+                        }
+                    }
+                }
+            }
+
+            addressURI.address = address
+            addressURI.amount = amount
+
+            return addressURI
+        }
+    }
 }

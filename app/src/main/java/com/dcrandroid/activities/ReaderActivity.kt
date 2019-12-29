@@ -20,15 +20,12 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.ResultPoint
-import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import kotlinx.android.synthetic.main.qr_reader_layout.*
 
 class ReaderActivity : BaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback, BarcodeCallback {
-
-    lateinit var address: String
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,21 +45,6 @@ class ReaderActivity : BaseActivity(), ActivityCompat.OnRequestPermissionsResult
             dialog.show()
         } else {
             startCamera()
-        }
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (requestCode == IntentIntegrator.REQUEST_CODE) {
-            val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent)
-            if (scanResult.contents != null) {
-                address = scanResult.contents
-                intent!!.putExtra(Constants.ADDRESS, address)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            } else {
-                finish()
-            }
         }
     }
 
