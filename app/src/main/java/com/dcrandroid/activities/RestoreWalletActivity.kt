@@ -8,28 +8,84 @@ package com.dcrandroid.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
-import com.dcrandroid.adapter.RestoreWalletAdapter
+import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.view.SeedEditTextLayout
+import com.dcrandroid.view.util.SeedEditTextHelper
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-// TODO: Hide restore button while keyboard is visible
+const val SEED_COUNT = 33
+
 class RestoreWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
 
     var allSeedWords = ArrayList<String>()
-    lateinit var adapter: RestoreWalletAdapter
+    val seedInputHelperList = ArrayList<SeedEditTextHelper>()
+
+    val allSeedIsValid: Boolean
+        get() {
+            for (helper in seedInputHelperList) {
+                if (!validateSeed(helper.getSeed())) {
+                    return false
+                }
+            }
+
+            return true
+        }
+
+    private val enteredSeeds: String
+        get() {
+            val seeds = ArrayList<String>()
+            seedInputHelperList.forEach { seeds.add(it.getSeed()) }
+
+            return seeds.joinToString(" ")
+        }
+
+    private val validateSeed: (seed: String) -> Boolean = {
+        allSeedWords.indexOf(it) > 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restore_wallet)
+
+        loadSeedSuggestions()
+        val suggestionsAdapter = SuggestionsTextAdapter(this, R.layout.dropdown_item_1, allSeedWords)
+
+        for (i in 0 until SEED_COUNT) {
+            val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val seedEditText = SeedEditTextLayout(this)
+            seedEditText.layoutParams = layoutParams
+
+            seed_input_list.addView(seedEditText)
+
+            val seedInputHelper = SeedEditTextHelper(seedEditText, suggestionsAdapter, i)
+
+            seedInputHelper.validateSeed = validateSeed
+
+            seedInputHelper.seedChanged = {
+                btn_restore.isEnabled = true
+                Unit
+            }
+
+            seedInputHelper.moveToNextRow = { currentItem ->
+                val nextRow = currentItem + 1
+                if (nextRow < SEED_COUNT) {
+                    seedInputHelperList[nextRow].requestFocus()
+                }
+            }
+
+            seedInputHelperList.add(seedInputHelper)
+        }
 
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             app_bar.elevation = when {
@@ -38,22 +94,8 @@ class RestoreWalletActivity : BaseActivity(), PasswordPinDialogFragment.Password
             }
         }
 
-        val layoutManager = LinearLayoutManager(this@RestoreWalletActivity)
-        recycler_view_seeds.layoutManager = layoutManager
-
-        adapter = RestoreWalletAdapter(this@RestoreWalletActivity, allSeedWords)
-        recycler_view_seeds.adapter = adapter
-
-        adapter.seedChanged = { _, allValid ->
-            btn_restore.isEnabled = allValid
-            Unit
-        }
-
-        loadSeedSuggestions()
-
         btn_restore.setOnClickListener {
-            val seed = adapter.enteredSeeds.joinToString(" ")
-            val seedValid = Dcrlibwallet.verifySeed(seed)
+            val seedValid = Dcrlibwallet.verifySeed(enteredSeeds)
 
             if (!seedValid) {
                 SnackBar.showError(this, R.string.invalid_restore_seed)
@@ -71,9 +113,8 @@ class RestoreWalletActivity : BaseActivity(), PasswordPinDialogFragment.Password
         allSeedWords.addAll(seedWords)
     }
 
-    override fun onEnterPasswordOrPin(spendingKey: String, passphraseType: Int) {
-        val seed = adapter.enteredSeeds.joinToString(" ") // already verified when restore button was tapped
-        createWallet(spendingKey, passphraseType, seed)
+    override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
+        createWallet(newPassphrase, passphraseType, enteredSeeds)
     }
 
     private fun createWallet(spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {

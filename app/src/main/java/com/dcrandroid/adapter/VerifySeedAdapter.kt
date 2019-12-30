@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.SEED_COUNT
 import kotlinx.android.synthetic.main.verify_seed_list_row.view.*
 
 data class InputSeed(val number: Int, var phrase: String)

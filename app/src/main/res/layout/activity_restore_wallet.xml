@@ -70,8 +70,7 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,51 +83,53 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_padding_size_24"
                 android:layout_marginEnd="@dimen/margin_padding_size_24"
-                android:layout_marginBottom="@dimen/margin_padding_size_8"
                 android:textColor="@color/darkerBlueGrayTextColor"
                 android:textSize="@dimen/edit_text_size_16"
                 android:fontFamily="@font/source_sans_pro"
                 android:text="@string/restore_wallet_instruction" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_seeds"
-                android:layout_margin="@dimen/margin_padding_size_8"
-                android:elevation="@dimen/shadow_spread"
-                android:nestedScrollingEnabled="false"
-                android:paddingTop="@dimen/margin_padding_size_8"
-                android:paddingBottom="@dimen/margin_padding_size_8"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16"
-                android:background="@drawable/card_bg"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/seed_input_list"
+                android:elevation="@dimen/margin_padding_size_4"
+                android:background="@drawable/card_bg"
+
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:layout_marginBottom="@dimen/margin_padding_size_8"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+
+                android:paddingTop="@dimen/margin_padding_size_8"
+                android:paddingLeft="@dimen/margin_padding_size_16"
+                android:paddingRight="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_8" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="@dimen/shadow_spread"
+                android:padding="@dimen/margin_padding_size_16"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/btn_restore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingTop="@dimen/margin_padding_size_16"
+                    android:paddingBottom="@dimen/margin_padding_size_16"
+                    android:gravity="center"
+                    style="@style/textViewButton"
+                    android:text="@string/restore"
+                    android:textSize="@dimen/edit_text_size_18" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="@dimen/shadow_spread"
-        android:padding="@dimen/margin_padding_size_16"
-        android:gravity="center_horizontal" >
-
-        <TextView
-            android:id="@+id/btn_restore"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingTop="@dimen/margin_padding_size_16"
-            android:paddingBottom="@dimen/margin_padding_size_16"
-            android:gravity="center"
-            style="@style/textViewButton"
-            android:text="@string/restore"
-            android:textSize="@dimen/edit_text_size_18" />
-
-    </RelativeLayout>
-
 
 </LinearLayout>
