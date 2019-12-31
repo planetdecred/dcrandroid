@@ -10,15 +10,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.WalletData
 import com.dcrandroid.view.SeedEditTextLayout
 import com.dcrandroid.view.util.SeedEditTextHelper
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +29,10 @@ import kotlinx.coroutines.launch
 
 const val SEED_COUNT = 33
 
-class RestoreWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
+class RestoreWalletActivity : AppCompatActivity(), PasswordPinDialogFragment.PasswordPinListener {
+
+    private val multiWallet: MultiWallet?
+        get() = WalletData.multiWallet
 
     var allSeedWords = ArrayList<String>()
     val seedInputHelperList = ArrayList<SeedEditTextHelper>()
@@ -73,14 +79,16 @@ class RestoreWalletActivity : BaseActivity(), PasswordPinDialogFragment.Password
             seedInputHelper.validateSeed = validateSeed
 
             seedInputHelper.seedChanged = {
-                btn_restore.isEnabled = true
+                btn_restore.isEnabled = allSeedIsValid
                 Unit
             }
 
             seedInputHelper.moveToNextRow = { currentItem ->
                 val nextRow = currentItem + 1
                 if (nextRow < SEED_COUNT) {
-                    seedInputHelperList[nextRow].requestFocus()
+                    val scrollY = seedInputHelperList[nextRow].requestFocus()
+                    nested_scroll_view.scrollTo(0, scrollY)
+
                 }
             }
 

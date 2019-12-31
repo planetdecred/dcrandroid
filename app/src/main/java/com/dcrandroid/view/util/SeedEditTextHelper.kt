@@ -16,7 +16,7 @@ import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.view.SeedEditTextLayout
 import kotlinx.android.synthetic.main.restore_wallet_list_row.view.*
 
-class SeedEditTextHelper(layout: SeedEditTextLayout, adapter: SuggestionsTextAdapter, private val itemPosition: Int) : View.OnFocusChangeListener, TextWatcher, AdapterView.OnItemClickListener {
+class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTextAdapter, private val itemPosition: Int) : View.OnFocusChangeListener, TextWatcher, AdapterView.OnItemClickListener {
 
     private val context = layout.context
 
@@ -43,8 +43,14 @@ class SeedEditTextHelper(layout: SeedEditTextLayout, adapter: SuggestionsTextAda
         editText.onItemClickListener = this
     }
 
-    fun requestFocus() {
+    fun requestFocus() : Int{
         editText.requestFocus()
+        if(editText.text.isNotEmpty()){
+            editText.setSelection(0, editText.text.length)
+            editText.isCursorVisible = true
+        }
+
+        return layout.bottom - context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_24)
     }
 
     fun getSeed() = editText.text.toString().trim()
