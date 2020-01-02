@@ -22,6 +22,14 @@ class VerifySeedInstruction : BaseActivity() {
         go_back.setOnClickListener {
             finish()
         }
+
+        scroll_view.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            app_bar.elevation = if (scrollY > 0) {
+                resources.getDimension(R.dimen.app_bar_elevation)
+            } else {
+                0f
+            }
+        }
     }
 
     fun verifyChecks(v: View) {

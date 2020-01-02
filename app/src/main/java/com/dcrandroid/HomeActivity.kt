@@ -25,16 +25,13 @@ import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.NavigationTabsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
-import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.ReceiveDialog
-import com.dcrandroid.dialog.ResumeAccountDiscovery
-import com.dcrandroid.dialog.WiFiSyncDialog
+import com.dcrandroid.dialog.*
 import com.dcrandroid.dialog.send.SendDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.fragments.MultiWalletTransactions
-import com.dcrandroid.fragments.Overview
+import com.dcrandroid.fragments.OverviewFragment
 import com.dcrandroid.fragments.TransactionsFragment
 import com.dcrandroid.fragments.WalletsFragment
 import com.dcrandroid.fragments.more.MoreFragment
@@ -108,8 +105,23 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
     }
 
-    val bottomSheetDismissed = DialogInterface.OnDismissListener {
+    private val bottomSheetDismissed = DialogInterface.OnDismissListener {
         currentBottomSheet = null
+    }
+
+    override fun onBackPressed() {
+        if (currentFragment is OverviewFragment) {
+            InfoDialog(this)
+                    .setDialogTitle(getString(R.string.exit_app_prompt_title))
+                    .setMessage(getString(R.string.exit_app_prompt_message))
+                    .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                        finish()
+                    })
+                    .setNegativeButton(getString(R.string.no), null)
+                    .show()
+        } else {
+            switchFragment(OverviewFragment.FRAGMENT_POSITION)
+        }
     }
 
     override fun onDestroy() {
@@ -199,7 +211,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     fun switchFragment(position: Int) {
 
         currentFragment = when (position) {
-            0 -> Overview()
+            0 -> OverviewFragment()
             1 -> {
                 if (multiWallet!!.openedWalletsCount() > 1) {
                     MultiWalletTransactions()

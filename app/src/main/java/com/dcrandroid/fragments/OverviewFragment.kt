@@ -35,13 +35,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 const val MAX_TRANSACTIONS = 3
 
-class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
+class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
 
     companion object {
         private var closedBackupWarning = false
+        const val FRAGMENT_POSITION = 0
     }
 
     private lateinit var util: PreferenceUtil
@@ -238,12 +238,12 @@ class Overview : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
     }
 }
 
-fun Overview.showTransactionList() = GlobalScope.launch(Dispatchers.Main) {
+fun OverviewFragment.showTransactionList() = GlobalScope.launch(Dispatchers.Main) {
     noTransactionsTextView.hide()
     transactionsLayout.show()
 }
 
-fun Overview.hideTransactionList() = GlobalScope.launch(Dispatchers.Main) {
+fun OverviewFragment.hideTransactionList() = GlobalScope.launch(Dispatchers.Main) {
     noTransactionsTextView.show()
     transactionsLayout.hide()
 }

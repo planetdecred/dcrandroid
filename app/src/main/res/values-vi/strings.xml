@@ -115,7 +115,7 @@
 
     <string name="unconfirmed_funds">Chi tiêu chưa được xác nhận</string>
     <string name="logging_level">Mức ghi nhật ký</string>
-    <string name="check_wallets_log">Nhật ký ví</string>
+    <string name="view_wallets_log">Nhật ký ví</string>
     <string name="currency_conversion">Chuyển đổi ngoại tệ</string>
     <string name="user_agent_summary">Để tìm nạp tỷ giá hối đoái.</string>
 
@@ -141,7 +141,7 @@
     <string name="passphrase_required">Mật khẩu riêng là bắt buộc</string>
     <string name="wallet_not_loaded">Ví không được tải</string>
     <string name="err_no_peers">Mạng decred bị hủy là không thể truy cập do thiếu các peer.</string>
-    <string name="not_enought_funds_synced">Không đủ tiền (hoặc không được kết nối).</string>
+    <string name="not_enough_funds_synced">Không đủ tiền (hoặc không được kết nối).</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->

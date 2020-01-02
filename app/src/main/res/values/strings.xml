@@ -145,7 +145,7 @@
     <!--/Sync Messages-->
 
     <!--QR Code-->
-    <string name="camera_permission_scan">This application needs camera permission to scan QRCode for a wallet address , Please allow the permissions in the next dialog.</string>
+    <string name="camera_permission_scan">This application needs camera permission to scan QRCode for a wallet address, Please allow the permissions in the next dialog.</string>
     <!--/QR Code-->
 
     <!--Address-->
@@ -159,7 +159,7 @@
     <!--Preference-->
     <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
     <string name="logging_level">Logging level</string>
-    <string name="check_wallets_log">Check Wallets Log</string>
+    <string name="view_wallets_log">View wallets Log</string>
     <string name="currency_conversion">Currency Conversion</string>
     <string name="user_agent_summary">For exchange rate fetching</string>
     <string name="change">Change</string>
@@ -190,9 +190,6 @@
 
     <!--/Preference-->
 
-    <!-- Overview Fragment -->
-    <!--/ Overview Fragment -->
-
     <!--History Fragment -->
     <string name="transferred">Transferred</string>
     <string name="sent">Sent</string>
@@ -206,7 +203,7 @@
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
-    <string name="not_enought_funds_synced">Not enough funds (or not connected).</string>
+    <string name="not_enough_funds_synced">Not enough funds (or not connected).</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -356,9 +353,9 @@
     <string name="verify">Verify</string>
     <string name="seed_instruction_1">The <b>33-word seed phrase</b> is EXTREMELY IMPORTANT.</string>
     <string name="seed_instruction_2">Seed phrase is <b>the only way</b> to restore your wallet.</string>
-    <string name="seed_instruction_3">It is recommended to store your seed phrase in a  (e.g. write down on a paper).</string>
-    <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any  (e.g. screenshot).</string>
-    <string name="seed_instruction_5">Anyone with your seed phrase . DO NOT show it to anyone.</string>
+    <string name="seed_instruction_3">It is recommended to store your seed phrase in a (e.g. write down on a paper).</string>
+    <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any (e.g. screenshot).</string>
+    <string name="seed_instruction_5">Anyone with your seed phrase. DO NOT show it to anyone.</string>
     <string name="view_seed_phrase">View seed phrase</string>
     <string name="seed_verification_failed">Failed to verify. Please go through every words and try again.</string>
     <string name="back_to_wallets">Back to Wallets</string>
@@ -375,8 +372,8 @@
     <string name="decred_qr_address_prefix">decred:%1$s</string>
     <string name="got_it">Got It</string>
     <string name="tap_to_copy">(Tap to copy)</string>
-    <string name="cancel_sync_create_wallet">Cancel sync before creating wallet</string>
-    <string name="cancel_sync_delete_wallet">Cancel sync before deleting wallet</string>
+    <string name="cancel_sync_create_wallet">Cannot create wallet while sync is in progress</string>
+    <string name="cancel_sync_delete_wallet">Cannot delete wallet while sync is in progress</string>
     <string name="wallet_created">Wallet created</string>
     <string name="amount">Amount</string>
     <string name="processing_time">Processing time</string>
@@ -493,11 +490,13 @@
     <string name="security_tools_message">Various tools that help in different aspects of crypto currency security will be located here.</string>
     <string name="wallet_removed">Wallet removed</string>
     <string name="rescanning_blocks_ellipsis">Rescanning Blocks…</string>
-    <string name="check_statistics">Check statistics</string>
+    <string name="view_statistics">View statistics</string>
     <string name="rescan_blockchain">Rescan blockchain</string>
     <string name="rescan_progress_notification">Check progress in Overview!</string>
     <string name="rescan_blockchain_warning">Are you sure? This could take some time.</string>
     <string name="err_sync_in_progress">Unable to start rescan while sync is in progress</string>
     <string name="err_rescan_in_progress">Unable to start rescan while another rescan is already running</string>
+    <string name="exit_app_prompt_title">Exit app?</string>
+    <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
 
 </resources>

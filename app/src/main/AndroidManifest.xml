@@ -158,7 +158,7 @@
 
         <activity
             android:name=".activities.RestoreWalletActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask" />
 
         <activity

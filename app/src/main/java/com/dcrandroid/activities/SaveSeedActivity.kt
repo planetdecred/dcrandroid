@@ -32,17 +32,13 @@ class SaveSeedActivity : BaseActivity() {
         setContentView(R.layout.save_seed_page)
 
         try {
-            val vto = scroll_view_seeds.viewTreeObserver
-            if (vto.isAlive) {
-                vto.addOnScrollChangedListener {
-                    app_bar.elevation = if (scroll_view_seeds.scrollY != 0) {
-                        resources.getDimension(R.dimen.app_bar_elevation)
-                    } else {
-                        0f
-                    }
+            scroll_view_seeds.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                app_bar.elevation = if (scrollY != 0) {
+                    resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    0f
                 }
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
