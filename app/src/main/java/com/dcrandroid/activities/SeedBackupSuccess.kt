@@ -20,12 +20,16 @@ class SeedBackupSuccess : BaseActivity() {
         setContentView(R.layout.seed_verification_success)
     }
 
-    fun backToWallets(v: View) {
+    fun backToWallets(v: View?) {
         val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
         val data = Intent()
         data.putExtra(Constants.WALLET_ID, walletID)
         setResult(Activity.RESULT_OK, data)
         finish()
+    }
+
+    override fun onBackPressed() {
+        backToWallets(null)
     }
 
 }

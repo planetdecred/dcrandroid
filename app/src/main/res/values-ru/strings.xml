@@ -103,7 +103,7 @@
     <!--Preference-->
     <string name="unconfirmed_funds">Потратить неподтверждённые средства</string>
     <string name="logging_level">Уровень логирования</string>
-    <string name="check_wallets_log">Лог кошелька</string>
+    <string name="view_wallets_log">Лог кошелька</string>
     <string name="currency_conversion">Конвертация валют</string>
 
     <string-array name="currency_conversion">
@@ -111,9 +111,6 @@
         <item>USD (bittrex)</item>
     </string-array>
     <!--/Preference-->
-
-    <!-- Overview Fragment -->
-    <!--/ Overview Fragment -->
 
     <!--Error Messages-->
     <string name="not_enough_funds">Недостаточно средств.</string>
@@ -135,9 +132,6 @@
     <string name="_0_bytes">0 bytes</string>
     <string name="fee">Комиссия</string>
     <!--/Send Fragment-->
-
-    <!--Transaction Details View-->
-    <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->
     <string name="toConfirmEnterYourPassword">Чтобы подтвердить, введите ваш пароль:</string>

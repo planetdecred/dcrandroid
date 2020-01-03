@@ -138,7 +138,7 @@
        <!--Preference-->
     <string name="unconfirmed_funds">发送未确认资金</string>
     <string name="logging_level">日志级别</string>
-    <string name="check_wallets_log">钱包日志</string>
+    <string name="view_wallets_log">钱包日志</string>
        
     <string name="currency_conversion">货币转换</string>
     <string name="user_agent_summary">用来获取交易费率。</string>
@@ -173,7 +173,7 @@
     <string name="wallet_not_loaded">钱包未加载</string>
        
     <string name="err_no_peers">由于缺少连接节点Decred网络不可达。</string>
-    <string name="not_enought_funds_synced">资金不足或未连接网络</string>
+    <string name="not_enough_funds_synced">资金不足或未连接网络</string>
        <!--/Error Messages-->
 
        <!--Security Fragment-->

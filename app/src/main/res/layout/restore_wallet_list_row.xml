@@ -8,20 +8,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:background="@drawable/input_background"
-    android:id="@id/list_layout"
+    android:elevation="@dimen/shadow_spread"
 
-    android:paddingStart="@dimen/margin_padding_size_16"
-    android:paddingTop="@dimen/margin_padding_size_12"
-    android:paddingEnd="@dimen/margin_padding_size_24"
-    android:paddingBottom="@dimen/margin_padding_size_12"
-
-    android:layout_marginTop="@dimen/margin_padding_size_8"
-    android:layout_marginBottom="@dimen/margin_padding_size_8"
+    android:paddingTop="@dimen/margin_padding_size_8"
+    android:paddingBottom="@dimen/margin_padding_size_8"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/input_background"
+        android:id="@id/list_layout"
+
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingTop="@dimen/margin_padding_size_12"
+        android:paddingEnd="@dimen/margin_padding_size_24"
+        android:paddingBottom="@dimen/margin_padding_size_12">
 
     <TextView
         android:id="@+id/seed_index"
@@ -49,7 +55,10 @@
         android:layout_marginStart="@dimen/margin_padding_size_8"
         android:imeOptions="actionNext"
         android:maxLines="1"
-        android:nextFocusDown="@+id/seed_et"
+        android:singleLine="true"
+        android:nextFocusDown="@id/seed_et"
         tools:text="tolerance" />
+
+    </LinearLayout>
 
 </LinearLayout>

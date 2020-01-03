@@ -129,9 +129,9 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         go_back.isEnabled = false
         isCancelable = false
 
-        withContext(Dispatchers.Default) {
-            delay(5000)
-            dismiss()
+        delay(5000)
+        withContext(Dispatchers.Main) {
+            dismissAllowingStateLoss()
             sendSuccess()
         }
     }

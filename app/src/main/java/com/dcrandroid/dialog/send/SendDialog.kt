@@ -194,7 +194,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     private val sendSuccess: () -> Unit = {
         GlobalScope.launch(Dispatchers.Main) {
             SnackBar.showText(context!!, R.string.transaction_sent)
-            dismiss()
+            dismissAllowingStateLoss()
         }
     }
 

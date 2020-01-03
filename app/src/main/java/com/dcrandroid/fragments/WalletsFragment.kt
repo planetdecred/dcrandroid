@@ -96,7 +96,7 @@ class WalletsFragment : BaseFragment() {
         when (item.itemId) {
             R.id.add_new_wallet -> {
                 if (multiWallet.isSyncing || multiWallet.isSynced) {
-                    Toast.makeText(context!!, R.string.cancel_sync_create_wallet, Toast.LENGTH_SHORT).show()
+                    SnackBar.showError(context!!, R.string.cancel_sync_create_wallet)
                     return false
                 }
 

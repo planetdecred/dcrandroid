@@ -35,7 +35,7 @@ object TimeUtils {
 
                     // convert to days
                     val days = hours / 24
-                    formatDays(context, days)
+                    return formatDays(context, days)
                 }
 
                 return formatHours(context, hours)

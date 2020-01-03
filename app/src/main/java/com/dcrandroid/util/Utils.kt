@@ -122,7 +122,7 @@ object Utils {
         return when (e.message) {
             Dcrlibwallet.ErrInsufficientBalance -> {
                 if (!WalletData.instance.synced) {
-                    ctx.getString(R.string.not_enought_funds_synced)
+                    ctx.getString(R.string.not_enough_funds_synced)
                 } else ctx.getString(R.string.not_enough_funds)
             }
             Dcrlibwallet.ErrEmptySeed -> ctx.getString(R.string.empty_seed)
