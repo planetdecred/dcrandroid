@@ -750,6 +750,11 @@ func (s *Syncer) lowestRescanPoint(ctx context.Context) (*chainhash.Hash, error)
 		}
 
 		if rescanPoint == nil {
+			hash, tip := w.MainChainTip(ctx)
+			if tip < rescanBlockHeight || rescanBlockHeight == -1 {
+				rescanChainHash = &hash
+				rescanBlockHeight = tip
+			}
 			continue
 		}
 
