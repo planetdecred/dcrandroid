@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"math"
 	"net"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -17,6 +19,8 @@ import (
 )
 
 const (
+	walletDbName = "wallet.db"
+
 	// Approximate time (in seconds) to mine a block in mainnet
 	MainNetTargetTimePerBlock = 300
 
@@ -67,6 +71,19 @@ func (mw *MultiWallet) contextWithShutdownCancel() (context.Context, context.Can
 	ctx, cancel := context.WithCancel(context.Background())
 	mw.cancelFuncs = append(mw.cancelFuncs, cancel)
 	return ctx, cancel
+}
+
+func (mw *MultiWallet) ValidateExtPubKey(extendedPubKey string) error {
+	_, err := hdkeychain.NewKeyFromString(extendedPubKey, mw.chainParams)
+	if err != nil {
+		if err == hdkeychain.ErrInvalidChild {
+			return errors.New(ErrUnusableSeed)
+		}
+
+		return errors.New(ErrInvalid)
+	}
+
+	return nil
 }
 
 func NormalizeAddress(addr string, defaultPort string) (string, error) {
@@ -197,15 +214,22 @@ func roundUp(n float64) int32 {
 	return int32(math.Round(n))
 }
 
-func (mw *MultiWallet) ValidateExtPubKey(extendedPubKey string) error {
-	_, err := hdkeychain.NewKeyFromString(extendedPubKey, mw.chainParams)
+func WalletExistsAt(walletDataDir, netType string) bool {
+	walletDbFilePath := filepath.Join(walletDataDir, netType, walletDbName)
+	exists, err := fileExists(walletDbFilePath)
 	if err != nil {
-		if err == hdkeychain.ErrInvalidChild {
-			return errors.New(ErrUnusableSeed)
-		}
-
-		return errors.New(ErrInvalid)
+		log.Errorf("wallet exists check error: %v", err)
 	}
+	return exists
+}
 
-	return nil
+func fileExists(filePath string) (bool, error) {
+	_, err := os.Stat(filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
 }

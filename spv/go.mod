@@ -6,6 +6,7 @@ require (
 	github.com/decred/dcrd/addrmgr v1.1.0
 	github.com/decred/dcrd/blockchain/stake/v2 v2.0.2
 	github.com/decred/dcrd/chaincfg/chainhash v1.0.2
+	github.com/decred/dcrd/dcrec/secp256k1 v1.0.2 // indirect
 	github.com/decred/dcrd/dcrutil/v2 v2.0.1
 	github.com/decred/dcrd/gcs v1.1.0
 	github.com/decred/dcrd/txscript/v2 v2.1.0

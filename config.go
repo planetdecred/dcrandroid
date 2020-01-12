@@ -43,6 +43,13 @@ func (mw *MultiWallet) SaveUserConfigValue(key string, value interface{}) {
 	}
 }
 
+func (mw *MultiWallet) DeleteUserConfigValue(key string) {
+	err := mw.db.Delete(userConfigBucketName, key)
+	if err != nil {
+		log.Errorf("error deleting config value for key: %s, error: %v", key, err)
+	}
+}
+
 func (mw *MultiWallet) ReadUserConfigValue(key string, valueOut interface{}) error {
 	err := mw.db.Get(userConfigBucketName, key, valueOut)
 	if err != nil && err != storm.ErrNotFound {
