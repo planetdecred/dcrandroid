@@ -1,6 +1,6 @@
 # dcrlibwallet
 
-[![Build Status](https://travis-ci.org/raedahgroup/dcrlibwallet.svg?branch=master)](https://travis-ci.org/raedahgroup/dcrlibwallet)
+[![Build Status](https://img.shields.io/github/workflow/status/raedahgroup/dcrlibwallet/Go)](https://github.com/raedahgroup/dcrlibwallet/actions)
 
 A Decred wallet library written in golang for [dcrwallet](https://github.com/decred/dcrwallet)
 

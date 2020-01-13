@@ -44,3 +44,5 @@ require (
 replace decred.org/dcrwallet => decred.org/dcrwallet v1.2.3-0.20191024200307-d273b5687adf
 
 replace github.com/raedahgroup/dcrlibwallet/spv => ./spv
+
+go 1.13

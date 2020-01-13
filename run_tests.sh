@@ -1,14 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# usage:
-# ./run_tests.sh
-#
+# Usage: ./run_tests.sh [all | build | lint]
 
-set -ex
+set -e
 
-go test
+function build_and_test() {
+    go build
+    go test
+    go vet
+}
 
-golangci-lint run --deadline=10m \
+function lint() {
+    golangci-lint run --deadline=10m \
       --disable-all \
       --enable govet \
       --enable staticcheck \
@@ -18,4 +21,19 @@ golangci-lint run --deadline=10m \
       --enable structcheck \
       --enable goimports \
       --enable misspell \
-      --enable unparam \
+      --enable unparam
+}
+
+option=$1
+if [[ "$option" = "build" ]]; then
+    build_and_test
+elif [[ "$option" = "lint" ]]; then
+    lint
+elif [[ "$option" = "all" ]]; then
+    build_and_test
+    lint
+else
+    echo "Usage: ./run_tests.sh [all | build | lint]"
+fi
+
+
