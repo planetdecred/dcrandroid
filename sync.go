@@ -60,13 +60,6 @@ type activeSyncData struct {
 	totalInactiveSeconds int64
 }
 
-type SyncErrorCode int32
-
-const (
-	ErrorCodeUnexpectedError SyncErrorCode = iota
-	ErrorCodeDeadlineExceeded
-)
-
 const (
 	InvalidSyncStage          = -1
 	HeadersFetchSyncStage     = 0
@@ -237,9 +230,9 @@ func (mw *MultiWallet) SpvSync() error {
 				mw.notifySyncCanceled()
 				mw.syncData.syncCanceled <- true
 			} else if err == context.DeadlineExceeded {
-				mw.notifySyncError(ErrorCodeDeadlineExceeded, errors.E("SPV synchronization deadline exceeded: %v", err))
+				mw.notifySyncError(errors.E("SPV synchronization deadline exceeded: %v", err))
 			} else {
-				mw.notifySyncError(ErrorCodeUnexpectedError, err)
+				mw.notifySyncError(err)
 			}
 		}
 	}()

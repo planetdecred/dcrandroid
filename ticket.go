@@ -172,7 +172,7 @@ func (wallet *Wallet) TicketPrice(ctx context.Context) (*TicketPriceResponse, er
 	_, tipHeight := wallet.internal.MainChainTip(ctx)
 	return &TicketPriceResponse{
 		TicketPrice: int64(ticketPrice),
-		Height:      int32(tipHeight),
+		Height:      tipHeight,
 	}, nil
 }
 

@@ -2,6 +2,7 @@ package addresshelper
 
 import (
 	"fmt"
+
 	chaincfg "github.com/decred/dcrd/chaincfg/v2"
 	dcrutil "github.com/decred/dcrd/dcrutil/v2"
 	txscript "github.com/decred/dcrd/txscript/v2"

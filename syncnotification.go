@@ -474,7 +474,7 @@ func (mw *MultiWallet) estimateBlockHeadersCountAfter(lastHeaderTime int64) int3
 	return int32(math.Ceil(estimatedHeadersDifference))
 }
 
-func (mw *MultiWallet) notifySyncError(code SyncErrorCode, err error) {
+func (mw *MultiWallet) notifySyncError(err error) {
 	mw.resetSyncData()
 
 	mw.syncData.mu.RLock()

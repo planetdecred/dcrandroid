@@ -290,7 +290,7 @@ func (b *Bucket) Delete(key []byte) error {
 		return errors.E(errors.Invalid)
 	}
 
-	return convertErr((*Bucket)(b).delete(key))
+	return convertErr(b.delete(key))
 }
 
 func (b *Bucket) ReadCursor() walletdb.ReadCursor {
@@ -584,7 +584,7 @@ func (db *db) beginTx(writable bool) (*transaction, error) {
 		return nil, errors.E(errors.Invalid)
 	}
 
-	tx := (*badger.DB)(db.DB).NewTransaction(writable)
+	tx := db.DB.NewTransaction(writable)
 	tran := &transaction{badgerTx: tx, writable: writable, db: db}
 	return tran, nil
 }
@@ -621,7 +621,7 @@ func (db *db) Close() error {
 
 	time.Sleep(2 * time.Second) // sleep for 2 seconds to ensure any db operation completes before proceeding
 
-	err := (*badger.DB)(db.DB).Close()
+	err := db.DB.Close()
 	if err != nil {
 		return convertErr(err)
 	}
@@ -675,5 +675,5 @@ func openDB(dbPath string, create bool) (walletdb.DB, error) {
 		}()
 	}
 
-	return (*db)(d), convertErr(err)
+	return d, convertErr(err)
 }
