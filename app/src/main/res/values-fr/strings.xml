@@ -327,7 +327,7 @@
     <string name="no_connected_peers">Pas de pairs connectés.</string>
     <string name="_default">Défaut</string>
     <string name="starting_up">Démarrage</string>
-    <string name="waiting_for_other_wallets">En attente d'autres porte-monnaies</string>
+    <string name="waiting_for_other_wallets">En attente d\'autres porte-monnaies</string>
     <string name="resume_account_discovery_title">Déverouiller pour reprendre la restauration</string>
     <string name="multi_resume_account_discovery_title">Déverouiller %1$s pour reprendre la restauration</string>
     <string name="resume_account_discovery_desc">Le process de restauration pour découvrir vos comptes a été interrompu lors de la dernière synchronisation\n\nDéverouiller le porte-monnaie pour reprendre le process.</string>
@@ -352,7 +352,7 @@
     <string name="seed_instruction_1">La <b>phrase de récupération à 33 mots</b> est EXTRÊMEMENT IMPORTANTE.</string>
     <string name="seed_instruction_2">La phrase de récupération est <b>la seule manière</b> de restaurer votre porte-monnaie.</string>
     <string name="seed_instruction_3">Il est recommandé de stocker votre phrase de récupération dans (ex. l\'écrire sur papier).</string>
-    <string name="seed_instruction_4">Il est fortement découragé de stocker votre phrase de récupération dans (ex. capture d'écran).</string>
+    <string name="seed_instruction_4">Il est fortement découragé de stocker votre phrase de récupération dans (ex. capture d\'écran).</string>
     <string name="seed_instruction_5">N\'importe qui avec votre phrase de récupération. NE PAS la montrer à qui que ce soit.</string>
     <string name="view_seed_phrase">Voir la phrase de récupération</string>
     <string name="seed_verification_failed">Échec de la vérification. Merci de vérifier chacun des mots et de réessayer.</string>
@@ -402,7 +402,7 @@
     <string name="tx_id_copied">Transaction ID copiée</string>
     <string name="to_account">Vers compte</string>
     <string name="how_to_copy">Comment copier</string>
-    <string name="tx_details_copy_info"><![CDATA[Sélectionner <font color="#2970FF">blue text</font> pour copier l'objet.]]></string>
+    <string name="tx_details_copy_info"><![CDATA[Sélectionner <font color="#2970FF">blue text</font> pour copier cet objet.]]></string>
     <string name="x_inputs_consumed">%1$d entrées consommées</string>
     <string name="x_output_created">%1$d sorties créées</string>
     <string name="to_address">Vers adresse</string>
