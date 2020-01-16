@@ -35,5 +35,3 @@ elif [[ "$option" = "all" ]]; then
 else
     echo "Usage: ./run_tests.sh [all | build | lint]"
 fi
-
-

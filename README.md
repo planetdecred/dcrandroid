@@ -1,22 +1,23 @@
 # dcrlibwallet
 
-[![Build Status](https://img.shields.io/github/workflow/status/raedahgroup/dcrlibwallet/Go)](https://github.com/raedahgroup/dcrlibwallet/actions)
+[![Build Status](https://github.com/raedahgroup/dcrlibwallet/workflows/Build/badge.svg)](https://github.com/raedahgroup/dcrlibwallet/actions)
 
 A Decred wallet library written in golang for [dcrwallet](https://github.com/decred/dcrwallet)
 
 ## Build Dependencies
 
 [Go( >= 1.11 )](http://golang.org/doc/install)  
-[Gomobile](https://github.com/golang/go/wiki/Mobile#tools) (correctly init'd with gomobile init)  
+[Gomobile](https://github.com/golang/go/wiki/Mobile#tools) (correctly init'd with gomobile init)
 
 ## Build Instructions using Gomobile
 
-To build this libary, clone the project 
+To build this libary, clone the project
 
 ```bash
 go get -t github.com/raedahgroup/dcrlibwallet
 cd $GOPATH/src/github.com/raedahgroup/dcrlibwallet/
 ```
+
 and run the following commands in dcrlibwallet directory.
 
 ```bash
