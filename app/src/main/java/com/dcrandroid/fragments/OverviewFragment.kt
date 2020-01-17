@@ -48,6 +48,10 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
     private var isForeground: Boolean = false
     private var notificationManager: NotificationManager? = null
 
+    companion object{
+        const val transactionsFileName = "transactions"
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.content_overview, container, false)
     }
@@ -306,9 +310,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 return
             }
 
-            val path = File(context!!.filesDir.toString() + "/" + BuildConfig.NetType + "/" + "savedata/")
-            path.mkdirs()
-            val file = File(path, "transactions")
+            val file = Utils.getTransactionFile(context!!, transactionsFileName)
             file.createNewFile()
             val objectOutputStream = ObjectOutputStream(FileOutputStream(file))
             objectOutputStream.writeObject(transactions)
@@ -324,9 +326,7 @@ class OverviewFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTr
                 return
             }
 
-            val path = File(context!!.filesDir.toString() + "/" + BuildConfig.NetType + "/" + "savedata/")
-            path.mkdirs()
-            val file = File(path, "transactions")
+            val file = Utils.getTransactionFile(context!!, transactionsFileName)
             if (file.exists()) {
                 val objectInputStream = ObjectInputStream(FileInputStream(file))
                 val temp = objectInputStream.readObject() as ArrayList<TransactionsResponse.TransactionItem>

@@ -58,6 +58,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.DecimalFormat;
@@ -947,13 +948,13 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 walletData.syncStartPoint = 0;
                 walletData.syncCurrentPoint = 0;
                 walletData.syncEndPoint = walletData.wallet.getBestBlock();
-                walletData.rescanTime = System.currentTimeMillis();
+                walletData.rescanStartTime = System.currentTimeMillis();
                 break;
             case Dcrlibwallet.PROGRESS:
 
                 float scannedPercentage = ((float) rescannedThrough / walletData.syncEndPoint) * 100;
 
-                long elapsedRescanTime = System.currentTimeMillis() - walletData.rescanTime;
+                long elapsedRescanTime = System.currentTimeMillis() - walletData.rescanStartTime;
                 double totalScanTime = elapsedRescanTime / ((float) rescannedThrough / walletData.syncEndPoint);
                 double totalSyncTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + totalScanTime;
                 double elapsedTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + elapsedRescanTime;
@@ -990,7 +991,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 String log = String.format(Locale.getDefault(), "Discovery, assumed: %ds, actual: %ds (%s%.2f%%)", Math.round(estimatedDiscoveryTime / 1000), Math.round(discoveryTime / 1000), percentageDifference > 0 ? "+" : "", percentageDifference);
                 Dcrlibwallet.log(log);
 
-                double rescanTime = (System.currentTimeMillis() - walletData.rescanTime);
+                double rescanTime = (System.currentTimeMillis() - walletData.rescanStartTime);
                 double estimatedScanTime = walletData.totalFetchTime * RESCAN_PERCENTAGE;
 
                 double estimatePercent = (rescanTime / walletData.totalFetchTime) * 100;
@@ -1001,8 +1002,6 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 Dcrlibwallet.log(log);
 
                 Dcrlibwallet.log("Sync, Initial Estimate: " + Math.round(walletData.initialSyncEstimate / 1000) + "s Actual: " + Math.round((rescanTime + walletData.totalFetchTime + discoveryTime) / 1000) + "s");
-
-
 
                 double totalSync = walletData.totalFetchTime + discoveryTime + rescanTime;
                 log = String.format(Locale.getDefault(), "Fetch: %.2f%%, Discovery: %.2f%%, Rescan %.2f%%", walletData.totalFetchTime / totalSync * 100, discoveryTime / totalSync * 100, rescanTime / totalSync * 100);
@@ -1017,6 +1016,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
                 });
 
                 updatePeerCount();
+
+                if(!walletData.syncing && walletData.wallet.isRescanning()){ // this is a rescan
+                    // delete saved transactions and fetch transactions from wallet to add missing transactions
+                    File overviewTxFile = Utils.getTransactionFile(this, OverviewFragment.transactionsFileName);
+                    if(overviewTxFile.exists()){
+                        overviewTxFile.delete();
+                    }
+
+                    File historyTxFile = Utils.getTransactionFile(this, HistoryFragment.transactionsFileName);
+                    if(historyTxFile.exists()){
+                        historyTxFile.delete();
+                    }
+                }
                 break;
         }
     }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcrandroid.BuildConfig;
 import com.dcrandroid.MainActivity;
 import com.dcrandroid.R;
 import com.dcrandroid.data.Constants;
@@ -502,6 +503,12 @@ public class Utils {
         }
         assert dir != null;
         return dir.delete();
+    }
+
+    public static File getTransactionFile(Context context, String filename) {
+        File path = new File(context.getFilesDir().toString() + "/" + BuildConfig.NetType + "/" + "savedata/");
+        path.mkdirs();
+        return new File(path, filename);
     }
 
     public static void restartApp(Context context) {
