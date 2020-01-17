@@ -34,7 +34,7 @@ android {
             buildConfigField("boolean", "IS_TESTNET", "true")
             buildConfigField("int", "TicketMaturity", "16")
             buildConfigField("int", "TargetTimePerBlock", "120")
-            buildConfigField("String", "LogDir", "\"/wallet/logs/testnet3/dcrwallet.log\"")
+            buildConfigField("String", "LogDir", "\"/wallet/logs/testnet3/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"testnet3\"")
             resValue "string", "app_name", "Decred Wallet Testnet"
             manifestPlaceholders = [
@@ -50,7 +50,7 @@ android {
             buildConfigField("boolean", "IS_TESTNET", "false")
             buildConfigField("int", "TicketMaturity", "256")
             buildConfigField("int", "TargetTimePerBlock", "300")
-            buildConfigField("String", "LogDir", "\"/wallet/logs/mainnet/dcrwallet.log\"")
+            buildConfigField("String", "LogDir", "\"/wallet/logs/mainnet/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"mainnet\"")
             resValue "string", "app_name", "Decred Wallet"
             manifestPlaceholders = [
