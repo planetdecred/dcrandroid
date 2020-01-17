@@ -53,7 +53,7 @@ type activeSyncData struct {
 	addressDiscoveryStartTime int64
 	totalDiscoveryTimeSpent   int64
 
-	addressDiscoveryCompleted chan bool
+	addressDiscoveryCompletedOrCanceled chan bool
 
 	rescanStartTime int64
 
@@ -251,6 +251,11 @@ func (mw *MultiWallet) RestartSpvSync() error {
 func (mw *MultiWallet) CancelSync() {
 	if mw.syncData.cancelSync != nil {
 		log.Info("Canceling sync. May take a while for sync to fully cancel.")
+
+		if mw.syncData.addressDiscoveryCompletedOrCanceled != nil {
+			close(mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled)
+			mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled = nil
+		}
 
 		// Cancel the context used for syncer.Run in spvSync().
 		mw.syncData.cancelSync()

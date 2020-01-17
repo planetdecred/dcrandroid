@@ -190,7 +190,7 @@ func (mw *MultiWallet) discoverAddressesStarted(walletID int) {
 	mw.syncData.mu.Lock()
 	defer mw.syncData.mu.Unlock()
 
-	if !mw.syncData.syncing || mw.syncData.activeSyncData.addressDiscoveryCompleted != nil {
+	if !mw.syncData.syncing || mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled != nil {
 		// ignore if sync is not in progress i.e. !mw.syncData.syncing
 		// or already started address discovery i.e. mw.syncData.activeSyncData.addressDiscoveryCompleted != nil
 		return
@@ -220,7 +220,7 @@ func (mw *MultiWallet) updateAddressDiscoveryProgress() {
 	var lastTimeRemaining int64
 	var lastTotalPercent int32 = -1
 
-	mw.syncData.addressDiscoveryCompleted = make(chan bool)
+	mw.syncData.addressDiscoveryCompletedOrCanceled = make(chan bool)
 
 	go func() {
 		for {
@@ -290,7 +290,7 @@ func (mw *MultiWallet) updateAddressDiscoveryProgress() {
 					}
 				}
 				mw.syncData.mu.Unlock()
-			case <-mw.syncData.addressDiscoveryCompleted:
+			case <-mw.syncData.addressDiscoveryCompletedOrCanceled:
 				mw.syncData.mu.RLock()
 				// stop updating time taken and progress for address discovery
 				everySecondTicker.Stop()
@@ -328,8 +328,8 @@ func (mw *MultiWallet) discoverAddressesFinished(walletID int) {
 	addressDiscoveryFinishTime := time.Now().Unix()
 	mw.syncData.activeSyncData.totalDiscoveryTimeSpent = addressDiscoveryFinishTime - mw.syncData.addressDiscoveryStartTime
 
-	close(mw.syncData.activeSyncData.addressDiscoveryCompleted)
-	mw.syncData.activeSyncData.addressDiscoveryCompleted = nil
+	close(mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled)
+	mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled = nil
 
 	loadedWallet, loaded := mw.wallets[walletID].loader.LoadedWallet()
 	if loaded { // loaded should always be through
@@ -355,9 +355,9 @@ func (mw *MultiWallet) rescanStarted(walletID int) {
 		return
 	}
 
-	if mw.syncData.activeSyncData.addressDiscoveryCompleted != nil {
-		close(mw.syncData.activeSyncData.addressDiscoveryCompleted)
-		mw.syncData.activeSyncData.addressDiscoveryCompleted = nil
+	if mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled != nil {
+		close(mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled)
+		mw.syncData.activeSyncData.addressDiscoveryCompletedOrCanceled = nil
 	}
 
 	mw.syncData.activeSyncData.syncStage = HeadersRescanSyncStage
