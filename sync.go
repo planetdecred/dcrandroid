@@ -230,7 +230,7 @@ func (mw *MultiWallet) SpvSync() error {
 				mw.notifySyncCanceled()
 				mw.syncData.syncCanceled <- true
 			} else if err == context.DeadlineExceeded {
-				mw.notifySyncError(errors.E("SPV synchronization deadline exceeded: %v", err))
+				mw.notifySyncError(errors.Errorf("SPV synchronization deadline exceeded: %v", err))
 			} else {
 				mw.notifySyncError(err)
 			}

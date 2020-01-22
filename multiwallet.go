@@ -37,13 +37,22 @@ type MultiWallet struct {
 }
 
 func NewMultiWallet(rootDir, dbDriver, netType string) (*MultiWallet, error) {
-	rootDir = filepath.Join(rootDir, netType)
-	initLogRotator(filepath.Join(rootDir, logFileName))
 	errors.Separator = ":: "
 
-	chainParams := utils.ChainParams(netType)
-	if chainParams == nil {
-		return nil, errors.E("unsupported network type: %s", netType)
+	chainParams, err := utils.ChainParams(netType)
+	if err != nil {
+		return nil, err
+	}
+
+	rootDir = filepath.Join(rootDir, netType)
+	err = os.MkdirAll(rootDir, os.ModePerm)
+	if err != nil {
+		return nil, errors.Errorf("failed to create rootDir: %v", err)
+	}
+
+	err = initLogRotator(filepath.Join(rootDir, logFileName))
+	if err != nil {
+		return nil, errors.Errorf("failed to init logRotator: %v", err.Error())
 	}
 
 	walletsDb, err := storm.Open(filepath.Join(rootDir, walletsDbName))
@@ -51,9 +60,9 @@ func NewMultiWallet(rootDir, dbDriver, netType string) (*MultiWallet, error) {
 		log.Errorf("Error opening wallets database: %s", err.Error())
 		if err == bolt.ErrTimeout {
 			// timeout error occurs if storm fails to acquire a lock on the database file
-			return nil, errors.E("wallets database is in use by another process")
+			return nil, errors.E(ErrWalletDatabaseInUse)
 		}
-		return nil, errors.E("error opening wallets database: %s", err.Error())
+		return nil, errors.Errorf("error opening wallets database: %s", err.Error())
 	}
 
 	// init database for saving/reading wallet objects

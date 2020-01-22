@@ -8,12 +8,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-const (
-	SyncStateStart    = "start"
-	SyncStateProgress = "progress"
-	SyncStateFinish   = "finish"
-)
-
 func (mw *MultiWallet) spvSyncNotificationCallbacks() *spv.Notifications {
 	return &spv.Notifications{
 		PeerConnected: func(peerCount int32, addr string) {

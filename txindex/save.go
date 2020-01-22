@@ -17,7 +17,7 @@ func (db *DB) SaveOrUpdate(emptyTxPointer, tx interface{}) (overwritten bool, er
 	txHash := reflect.Indirect(v).FieldByName("Hash").String()
 	err = db.txDB.One("Hash", txHash, emptyTxPointer)
 	if err != nil && err != storm.ErrNotFound {
-		err = errors.E("error checking if tx was already indexed: %s", err.Error())
+		err = errors.Errorf("error checking if tx was already indexed: %s", err.Error())
 		return
 	}
 

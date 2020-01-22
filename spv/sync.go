@@ -561,7 +561,7 @@ func (s *Syncer) getTransactionsByHashes(ctx context.Context, txHashes []*chainh
 	for walletID, w := range s.wallets {
 		walletFoundTxs, _, err := w.GetTransactionsByHashes(ctx, txHashes)
 		if err != nil && !errors.Is(err, errors.NotExist) {
-			return nil, nil, errors.E("[%d] Failed to look up transactions for getdata reply to peer: %v", walletID, err)
+			return nil, nil, errors.Errorf("[%d] Failed to look up transactions for getdata reply to peer: %v", walletID, err)
 		}
 
 		if len(walletFoundTxs) != 0 {

@@ -6,12 +6,11 @@
 package dcrlibwallet
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/decred/dcrd/addrmgr"
 	"github.com/decred/dcrd/connmgr/v2"
+	"github.com/decred/dcrwallet/errors"
 	"github.com/decred/dcrwallet/p2p/v2"
 	"github.com/decred/dcrwallet/ticketbuyer/v4"
 	"github.com/decred/dcrwallet/wallet/v3"
@@ -89,30 +88,24 @@ var subsystemLoggers = map[string]slog.Logger{
 // initLogRotator initializes the logging rotater to write logs to logFile and
 // create roll files in the same directory.  It must be called before the
 // package-global log rotater variables are used.
-func initLogRotator(logFile string) {
-	logDir, _ := filepath.Split(logFile)
-	err := os.MkdirAll(logDir, 0700)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to create log directory: %v\n", err)
-		os.Exit(1)
-	}
+func initLogRotator(logFile string) error {
 	r, err := rotator.New(logFile, 10*1024, false, 3)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to create file rotator: %v\n", err)
-		os.Exit(1)
+		return errors.Errorf("failed to create file rotator: %v", err)
 	}
 
 	logRotator = r
+	return nil
 }
 
 // RegisterLogger should be called before logRotator is initialized.
 func RegisterLogger(tag string) (slog.Logger, error) {
 	if logRotator != nil {
-		return nil, fmt.Errorf("cannot register logger after log rotator is initialized")
+		return nil, errors.E(ErrLogRotatorAlreadyInitialized)
 	}
 
 	if _, exists := subsystemLoggers[tag]; exists {
-		return nil, fmt.Errorf("logger already registered for tag: %s", tag)
+		return nil, errors.E(ErrLoggerAlreadyRegistered)
 	}
 
 	logger := backendLog.Logger(tag)
