@@ -19,10 +19,7 @@ import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.preference.EditTextPreference
 import com.dcrandroid.preference.ListPreference
 import com.dcrandroid.preference.SwitchPreference
-import com.dcrandroid.util.BiometricUtils
-import com.dcrandroid.util.ChangePassUtil
-import com.dcrandroid.util.PassPromptTitle
-import com.dcrandroid.util.PassPromptUtil
+import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.settings_activity.*
 import kotlinx.android.synthetic.main.settings_activity.view.*
@@ -56,7 +53,17 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
             return@SwitchPreference !newValue
         }
-        useFingerprint = SwitchPreference(this, Dcrlibwallet.UseFingerprintConfigKey, startup_security_fingerprint)
+
+        useFingerprint = SwitchPreference(this, Dcrlibwallet.UseFingerprintConfigKey, startup_security_fingerprint) { newValue ->
+            if (newValue) {
+                enableStartupFingerprint()
+            } else {
+                // clear passphrase from keystore
+                BiometricUtils.saveToKeystore(this@SettingsActivity, "", Constants.STARTUP_PASSPHRASE)
+            }
+
+            return@SwitchPreference false
+        }
         loadStartupSecurity()
         change_startup_security.setOnClickListener {
             ChangePassUtil(this, null).begin()
@@ -113,10 +120,51 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             change_startup_security.hide()
             startup_security_fingerprint.hide()
 
-            multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)
-            useFingerprint.setChecked(false)
+            useFingerprint.setValue(false)
             enableStartupSecurity.setChecked(false)
         }
+    }
+
+    private fun enableStartupFingerprint() {
+        val title = PassPromptTitle(R.string.enter_startup_password, R.string.enter_startup_pin)
+        PassPromptUtil(this@SettingsActivity, null, title, false) { dialog, passphrase ->
+
+            if (passphrase == null) { // dialog was dismissed/cancelled
+                return@PassPromptUtil true
+            }
+
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    multiWallet!!.verifyStartupPassphrase(passphrase.toByteArray())
+                    BiometricUtils.saveToKeystore(this@SettingsActivity, passphrase, Constants.STARTUP_PASSPHRASE)
+
+                    withContext(Dispatchers.Main) {
+                        useFingerprint.setValue(true)
+                        dialog?.dismiss()
+                    }
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+
+                    if (dialog is PinPromptDialog) {
+                        dialog.setProcessing(false)
+                    } else if (dialog is PasswordPromptDialog) {
+                        dialog.setProcessing(false)
+                    }
+
+                    if (e.message != Dcrlibwallet.ErrInvalidPassphrase) {
+                        val errMessage = when (dialog) {
+                            is PinPromptDialog -> R.string.invalid_pin
+                            else -> R.string.invalid_password
+                        }
+                        SnackBar.showError(this@SettingsActivity, errMessage)
+                    }
+
+                    return@launch
+                }
+            }
+
+            false
+        }.show()
     }
 
     private fun setupStartupSecurity() {
@@ -126,8 +174,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
-                        BiometricUtils.saveToKeystore(this@SettingsActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
-                        multiWallet!!.changePublicPassphrase(ByteArray(0), newPassphrase.toByteArray())
+                        multiWallet!!.setStartupPassphrase(newPassphrase.toByteArray(), passphraseType)
                         multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
                         multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
 
@@ -161,9 +208,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    BiometricUtils.saveToKeystore(this@SettingsActivity, "", Constants.STARTUP_PASSPHRASE)
-                    multiWallet!!.changePublicPassphrase(pass.toByteArray(), ByteArray(0))
-                    multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, false)
+                    multiWallet!!.removeStartupPassphrase(pass.toByteArray())
 
                     withContext(Dispatchers.Main) {
                         dialog?.dismiss()
@@ -175,7 +220,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                         if (dialog is PinPromptDialog) {
                             dialog.setProcessing(false)
                             dialog.showError()
-                        }else if(dialog is PasswordPromptDialog){
+                        } else if (dialog is PasswordPromptDialog) {
                             dialog.setProcessing(false)
                             dialog.showError()
                         }

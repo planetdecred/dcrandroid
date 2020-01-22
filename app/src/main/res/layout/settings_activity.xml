@@ -197,7 +197,7 @@
                         android:id="@id/pref_title"
                         android:layout_weight="1"
                         android:includeFontPadding="false"
-                        android:text="@string/startup_pin_password"
+                        android:text="@string/startup_pin__password"
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />

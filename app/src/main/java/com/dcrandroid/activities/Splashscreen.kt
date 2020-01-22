@@ -152,7 +152,7 @@ class SplashScreen : BaseActivity() {
         if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
             requestStartupPass()
         } else {
-            openWallet(Constants.INSECURE_PUB_PASSPHRASE)
+            openWallet("")
         }
     }
 

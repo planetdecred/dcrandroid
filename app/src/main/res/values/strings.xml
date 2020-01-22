@@ -242,14 +242,16 @@
     <string name="enter_spending_pin">Enter spending PIN</string>
     <string name="enter_spending_pin_again">Enter spending PIN again</string>
     <string name="enter_startup_pin">Enter startup PIN</string>
+    <string name="enter_startup_password">Enter startup password</string>
     <string name="enter_new_startup_pin">Enter new startup PIN</string>
     <string name="enter_new_startup_pin_again">Enter new startup PIN again</string>
     <string name="create_startup_pin">Create a startup PIN</string>
     <string name="create_startup_password">Create a startup Password</string>
     <string name="change_startup_password">Change startup password</string>
     <string name="change_startup_pin">Change startup PIN</string>
-    <string name="change_spending_pin_password">Change spending PIN/Password</string>
+    <string name="change_spending_pin_password">Change spending PIN/password</string>
     <string name="startup_pin_password">Startup PIN/Password</string>
+    <string name="startup_pin__password">Startup PIN/password</string>
     <string name="change_startup_pin_password">Change startup PIN/password</string>
     <string name="spending_pin_password">Spending PIN/Password</string>
     <string name="spending_password">Spending password</string>

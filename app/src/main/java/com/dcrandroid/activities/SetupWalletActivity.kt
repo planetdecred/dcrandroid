@@ -89,14 +89,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-
-            val startupPassword = if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
-                BiometricUtils.readFromKeystore(this@SetupWalletActivity, Constants.STARTUP_PASSPHRASE)
-            } else {
-                Constants.INSECURE_PUB_PASSPHRASE
-            }
-
-            val wallet = multiWallet!!.createNewWallet(startupPassword, spendingKey, type)
+            val wallet = multiWallet!!.createNewWallet(spendingKey, type)
             navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()

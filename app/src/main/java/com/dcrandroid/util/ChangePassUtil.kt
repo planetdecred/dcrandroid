@@ -50,8 +50,7 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
 
             if (walletID == null) {
                 try {
-                    multiWallet.changePublicPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray())
-                    multiWallet.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
+                    multiWallet.changeStartupPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
 
                     // saving after a successful change to avoid saving a wrong oldPassphrase
                     BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)

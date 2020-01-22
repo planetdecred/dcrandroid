@@ -103,7 +103,7 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
 
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    val wallet = multiWallet.createWatchOnlyWallet(Constants.INSECURE_PUB_PASSPHRASE, walletName, extendedPublicKey)
+                    val wallet = multiWallet.createWatchOnlyWallet(walletName, extendedPublicKey)
                     dismiss()
                     walletCreated(wallet.id)
                 } catch (e: Exception) {
