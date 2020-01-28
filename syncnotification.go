@@ -483,9 +483,9 @@ func (mw *MultiWallet) publishDebugInfo(debugInfo *DebugInfo) {
 func (mw *MultiWallet) estimateBlockHeadersCountAfter(lastHeaderTime int64) int32 {
 	// Use the difference between current time (now) and last reported block time,
 	// to estimate total headers to fetch.
-	timeDifference := float64(time.Now().Unix() - lastHeaderTime)
-	targetTimePerBlock := float64(mw.chainParams.TargetTimePerBlock)
-	estimatedHeadersDifference := timeDifference / targetTimePerBlock
+	timeDifferenceInSeconds := float64(time.Now().Unix() - lastHeaderTime)
+	targetTimePerBlockInSeconds := mw.chainParams.TargetTimePerBlock.Seconds()
+	estimatedHeadersDifference := timeDifferenceInSeconds / targetTimePerBlockInSeconds
 
 	// return next integer value (upper limit) if estimatedHeadersDifference is a fraction
 	return int32(math.Ceil(estimatedHeadersDifference))
