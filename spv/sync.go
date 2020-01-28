@@ -292,12 +292,15 @@ func (s *Syncer) highestChainTip(ctx context.Context) (chainhash.Hash, int32, *w
 // Run synchronizes the wallet, returning when synchronization fails or the
 // context is cancelled.
 func (s *Syncer) Run(ctx context.Context) error {
+	log.Infof("Syncing %d wallets", len(s.wallets))
+
 	tipHash, tipHeight, lowestChainWallet := s.lowestChainTip(ctx)
+	log.Infof("Headers synced through block %v height %d", &tipHash, tipHeight)
+
 	lowestRescanPoint, err := s.lowestRescanPoint(ctx)
 	if err != nil {
 		return err
 	}
-	log.Infof("Headers synced through block %v height %d", &tipHash, tipHeight)
 	if lowestRescanPoint != nil {
 		h, err := lowestChainWallet.BlockHeader(ctx, lowestRescanPoint)
 		if err != nil {
@@ -1292,8 +1295,6 @@ func (s *Syncer) fetchMissingCFilters(ctx context.Context, rp *p2p.RemotePeer) e
 }
 
 func (s *Syncer) startupSync(ctx context.Context, rp *p2p.RemotePeer) error {
-	log.Infof("Syncing %d wallets", len(s.wallets))
-
 	_, tipHeight, _ := s.highestChainTip(ctx)
 
 	// Disconnect from the peer if their advertised block height is

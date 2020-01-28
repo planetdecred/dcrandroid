@@ -61,7 +61,7 @@ type Accounts struct {
 /** begin sync-related types */
 
 type SyncProgressListener interface {
-	OnSyncStarted()
+	OnSyncStarted(wasRestarted bool)
 	OnPeerConnectedOrDisconnected(numberOfConnectedPeers int32)
 	OnHeadersFetchProgress(headersFetchProgress *HeadersFetchProgressReport)
 	OnAddressDiscoveryProgress(addressDiscoveryProgress *AddressDiscoveryProgressReport)
@@ -80,8 +80,8 @@ type GeneralSyncProgress struct {
 type HeadersFetchProgressReport struct {
 	*GeneralSyncProgress
 	TotalHeadersToFetch    int32 `json:"totalHeadersToFetch"`
+	CurrentHeaderHeight    int32 `json:"currentHeaderHeight"`
 	CurrentHeaderTimestamp int64 `json:"currentHeaderTimestamp"`
-	FetchedHeadersCount    int32 `json:"fetchedHeadersCount"`
 	HeadersFetchProgress   int32 `json:"headersFetchProgress"`
 }
 

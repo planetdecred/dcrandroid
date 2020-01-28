@@ -21,12 +21,6 @@ import (
 const (
 	walletDbName = "wallet.db"
 
-	// Approximate time (in seconds) to mine a block in mainnet
-	MainNetTargetTimePerBlock = 300
-
-	// Approximate time (in seconds) to mine a block in testnet
-	TestNetTargetTimePerBlock = 120
-
 	// Use 10% of estimated total headers fetch time to estimate rescan time
 	RescanPercentage = 0.1
 

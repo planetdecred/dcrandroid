@@ -33,12 +33,11 @@ func (mw *MultiWallet) RescanBlocks(walletID int) error {
 			mw.syncData.mu.Unlock()
 		}()
 
+		ctx, cancel := wallet.shutdownContextWithCancel()
+
 		mw.syncData.mu.Lock()
 		mw.syncData.rescanning = true
-
-		ctx, cancel := wallet.shutdownContextWithCancel()
 		mw.syncData.cancelRescan = cancel
-
 		mw.syncData.mu.Unlock()
 
 		if mw.blocksRescanProgressListener != nil {
