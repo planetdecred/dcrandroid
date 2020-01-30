@@ -2,6 +2,7 @@ package dcrlibwallet
 
 import (
 	"github.com/asdine/storm"
+	"github.com/decred/dcrwallet/errors/v2"
 )
 
 const (
@@ -9,22 +10,17 @@ const (
 
 	LogLevelConfigKey = "log_level"
 
-	NewWalletSetUpConfigKey       = "new_wallet_set_up"
-	InitialSyncCompletedConfigKey = "initial_sync_complete"
-	DefaultWalletConfigKey        = "default_wallet"
-	HiddenWalletPrefixConfigKey   = "hidden"
-
 	SpendUnconfirmedConfigKey   = "spend_unconfirmed"
 	CurrencyConversionConfigKey = "currency_conversion_option"
 
-	IsStartupSecuritySetConfigKey = "startup_security_set"
-	StartupSecurityTypeConfigKey  = "startup_security_type"
+	isStartupSecuritySetConfigKey = "startup_security_set"
+	startupSecurityTypeConfigKey  = "startup_security_type"
 	UseFingerprintConfigKey       = "use_fingerprint"
 
-	IncomingTxNotificationsConfigKey = "tx_notification_enabled"
-	BeepNewBlocksConfigKey           = "beep_new_blocks"
+	BeepNewBlocksConfigKey = "beep_new_blocks"
 
 	SyncOnCellularConfigKey             = "always_sync"
+	NetworkModeConfigKey                = "network_mode"
 	SpvPersistentPeerAddressesConfigKey = "spv_peer_addresses"
 	UserAgentConfigKey                  = "user_agent"
 
@@ -43,19 +39,26 @@ func (mw *MultiWallet) SaveUserConfigValue(key string, value interface{}) {
 	}
 }
 
-func (mw *MultiWallet) DeleteUserConfigValue(key string) {
-	err := mw.db.Delete(userConfigBucketName, key)
-	if err != nil {
-		log.Errorf("error deleting config value for key: %s, error: %v", key, err)
-	}
-}
-
 func (mw *MultiWallet) ReadUserConfigValue(key string, valueOut interface{}) error {
 	err := mw.db.Get(userConfigBucketName, key, valueOut)
 	if err != nil && err != storm.ErrNotFound {
 		log.Errorf("error reading config value for key: %s, error: %v", key, err)
 	}
 	return err
+}
+
+func (mw *MultiWallet) DeleteUserConfigValueForKey(key string) {
+	err := mw.db.Delete(userConfigBucketName, key)
+	if err != nil {
+		log.Errorf("error deleting config value for key: %s, error: %v", key, err)
+	}
+}
+
+func (mw *MultiWallet) ClearConfig() {
+	err := mw.db.Drop(userConfigBucketName)
+	if err != nil {
+		log.Errorf("error deleting config bucket: %v", err)
+	}
 }
 
 func (mw *MultiWallet) SetBoolConfigValueForKey(key string, value bool) {
@@ -117,7 +120,19 @@ func (mw *MultiWallet) ReadLongConfigValueForKey(key string, defaultValue int64)
 	return
 }
 
-func (mw *MultiWallet) ReadStringConfigValueForKey(key string) (valueOut string) {
-	mw.ReadUserConfigValue(key, &valueOut)
+func (mw *MultiWallet) ReadStringConfigValueForKey(key string, defaultValue string) (valueOut string) {
+	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
+		valueOut = defaultValue
+	}
 	return
+}
+
+func (mw *MultiWallet) UpdateIncomingNotificationsUserPreference(walletID int, notificationsPref string) error {
+	wallet := mw.WalletWithID(walletID)
+	if wallet == nil {
+		return errors.New(ErrNotExist)
+	}
+
+	wallet.IncomingTxNotificationsPref = notificationsPref
+	return translateError(mw.db.Save(wallet))
 }

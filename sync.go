@@ -184,7 +184,7 @@ func (mw *MultiWallet) SpvSync() error {
 	lp := p2p.NewLocalPeer(mw.chainParams, addr, addrManager)
 
 	var validPeerAddresses []string
-	peerAddresses := mw.ReadStringConfigValueForKey(SpvPersistentPeerAddressesConfigKey)
+	peerAddresses := mw.ReadStringConfigValueForKey(SpvPersistentPeerAddressesConfigKey, "")
 	if peerAddresses != "" {
 		addresses := strings.Split(peerAddresses, ";")
 		for _, address := range addresses {

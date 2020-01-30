@@ -17,12 +17,13 @@ import (
 )
 
 type Wallet struct {
-	ID                    int    `storm:"id,increment"`
-	Name                  string `storm:"unique"`
-	DbDriver              string
-	Seed                  string
-	PrivatePassphraseType int32
-	HasDiscoveredAccounts bool
+	ID                          int    `storm:"id,increment"`
+	Name                        string `storm:"unique"`
+	DbDriver                    string
+	Seed                        string
+	HasDiscoveredAccounts       bool
+	PrivatePassphraseType       int32
+	IncomingTxNotificationsPref string
 
 	internal    *w.Wallet
 	chainParams *chaincfg.Params
