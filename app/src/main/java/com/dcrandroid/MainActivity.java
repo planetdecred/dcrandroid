@@ -791,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             case Dcrlibwallet.PROGRESS:
 
                 walletData.syncEndPoint = (int) estimatedBlocks - walletData.syncStartPoint;
-                walletData.syncCurrentPoint += fetchedHeadersCount;
+                walletData.syncCurrentPoint = fetchedHeadersCount;
 
                 int count = walletData.syncCurrentPoint;
                 if (walletData.syncStartPoint > 0) {
