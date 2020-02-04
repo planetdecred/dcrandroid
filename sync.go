@@ -208,6 +208,8 @@ func (mw *MultiWallet) SpvSync() error {
 	wallets := make(map[int]*w.Wallet)
 	for id, wallet := range mw.wallets {
 		wallets[id] = wallet.internal
+		wallet.waiting = true
+		wallet.syncing = true
 	}
 
 	syncer := spv.NewSyncer(wallets, lp)
@@ -297,6 +299,14 @@ func (mw *MultiWallet) CancelSync() {
 
 func (wallet *Wallet) IsWaiting() bool {
 	return wallet.waiting
+}
+
+func (wallet *Wallet) IsSynced() bool {
+	return wallet.synced
+}
+
+func (wallet *Wallet) IsSyncing() bool {
+	return wallet.syncing
 }
 
 func (mw *MultiWallet) IsSynced() bool {

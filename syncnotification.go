@@ -522,6 +522,7 @@ func (mw *MultiWallet) resetSyncData() {
 
 	for _, wallet := range mw.wallets {
 		wallet.waiting = true
+		wallet.LockWallet() // lock wallet if previously unlocked to perform account discovery.
 	}
 }
 
@@ -537,6 +538,7 @@ func (mw *MultiWallet) synced(walletID int, synced bool) {
 	wallet := mw.wallets[walletID]
 	wallet.synced = synced
 	wallet.syncing = false
+	wallet.LockWallet() // lock wallet if previously unlocked to perform account discovery.
 
 	if mw.OpenedWalletsCount() == mw.SyncedWalletsCount() {
 		mw.syncData.mu.Lock()
