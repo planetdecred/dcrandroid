@@ -119,7 +119,7 @@ class SyncService : Service(), SyncProgressListener {
         showNotification()
     }
 
-    override fun onSyncStarted() {
+    override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {

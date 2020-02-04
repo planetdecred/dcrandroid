@@ -149,7 +149,7 @@ class SplashScreen : BaseActivity() {
     }
 
     private fun checkStartupPass() {
-        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
+        if (multiWallet!!.isStartupSecuritySet) {
             requestStartupPass()
         } else {
             openWallet("")
@@ -196,8 +196,7 @@ class SplashScreen : BaseActivity() {
                                 .setPositiveButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
 
                         if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                            if (multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
-                                    == Dcrlibwallet.PassphraseTypePin) {
+                            if (multiWallet!!.startupSecurityType() == Dcrlibwallet.PassphraseTypePin) {
                                 infoDialog.setMessage(getString(R.string.invalid_pin))
                             }
                             infoDialog.setNegativeButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })

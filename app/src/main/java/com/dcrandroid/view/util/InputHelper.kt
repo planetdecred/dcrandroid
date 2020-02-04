@@ -147,7 +147,7 @@ class InputHelper(private val context: Context, private val container: View,
 
     private fun setupPasteButton() {
         val clipBoardContent = Utils.readFromClipboard(context)
-        if (validateInput(clipBoardContent) && editText.text.isEmpty() && !pasteHidden) {
+        if (clipBoardContent.isNotBlank() && validateInput(clipBoardContent) && editText.text.isEmpty() && !pasteHidden) {
             pasteTextView.show()
         } else {
             pasteTextView.hide()

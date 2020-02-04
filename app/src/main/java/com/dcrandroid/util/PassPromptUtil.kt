@@ -28,7 +28,7 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
         passType = if (walletID != null) {
             multiWallet.walletWithID(walletID).privatePassphraseType
         } else {
-            multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
+            multiWallet.startupSecurityType()
         }
 
         val useFingerPrint = if (walletID == null) {

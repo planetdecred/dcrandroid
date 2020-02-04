@@ -60,7 +60,7 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
                     e.printStackTrace()
 
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        val passType = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, Dcrlibwallet.PassphraseTypePass)
+                        val passType = multiWallet.startupSecurityType()
                         showError(passType)
                     }
                 }
