@@ -51,6 +51,32 @@ func (wallet *Wallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, er
 	}, nil
 }
 
+func (wallet *Wallet) AccountsIterator(requiredConfirmations int32) (*AccountsIterator, error) {
+	accounts, err := wallet.GetAccountsRaw(requiredConfirmations)
+	if err != nil {
+		return nil, err
+	}
+
+	return &AccountsIterator{
+		currentIndex: 0,
+		accounts:     accounts.Acc,
+	}, nil
+}
+
+func (accountsInterator *AccountsIterator) Next() *Account {
+	if accountsInterator.currentIndex < len(accountsInterator.accounts) {
+		account := accountsInterator.accounts[accountsInterator.currentIndex]
+		accountsInterator.currentIndex++
+		return account
+	}
+
+	return nil
+}
+
+func (accountsInterator *AccountsIterator) Reset() {
+	accountsInterator.currentIndex = 0
+}
+
 func (wallet *Wallet) GetAccount(accountNumber int32, requiredConfirmations int32) (*Account, error) {
 	props, err := wallet.internal.AccountProperties(wallet.shutdownContext(), uint32(accountNumber))
 	if err != nil {
@@ -74,49 +100,6 @@ func (wallet *Wallet) GetAccount(accountNumber int32, requiredConfirmations int3
 	}
 
 	return account, nil
-}
-
-func (wallet *Wallet) AccountsIterator(requiredConfirmations int32) (*AccountsIterator, error) {
-	resp, err := wallet.internal.Accounts(wallet.shutdownContext())
-	if err != nil {
-		return nil, err
-	}
-	accounts := make([]*Account, len(resp.Accounts))
-	for i, account := range resp.Accounts {
-		balance, err := wallet.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
-		if err != nil {
-			return nil, err
-		}
-
-		accounts[i] = &Account{
-			Number:           int32(account.AccountNumber),
-			Name:             account.AccountName,
-			TotalBalance:     int64(account.TotalBalance),
-			Balance:          balance,
-			ExternalKeyCount: int32(account.LastUsedExternalIndex + 20),
-			InternalKeyCount: int32(account.LastUsedInternalIndex + 20),
-			ImportedKeyCount: int32(account.ImportedKeyCount),
-		}
-	}
-
-	return &AccountsIterator{
-		currentIndex: 0,
-		accounts:     accounts,
-	}, nil
-}
-
-func (accountsInterator *AccountsIterator) Next() *Account {
-	if accountsInterator.currentIndex < len(accountsInterator.accounts) {
-		account := accountsInterator.accounts[accountsInterator.currentIndex]
-		accountsInterator.currentIndex++
-		return account
-	}
-
-	return nil
-}
-
-func (accountsInterator *AccountsIterator) Reset() {
-	accountsInterator.currentIndex = 0
 }
 
 func (wallet *Wallet) GetAccountBalance(accountNumber int32, requiredConfirmations int32) (*Balance, error) {
