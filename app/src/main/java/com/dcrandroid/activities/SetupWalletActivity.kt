@@ -17,8 +17,6 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.fragments.PasswordPinDialogFragment
-import com.dcrandroid.util.BiometricUtils
-import com.dcrandroid.util.PreferenceUtil
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_setup_page.*
 import kotlinx.coroutines.Dispatchers
@@ -29,14 +27,11 @@ const val RESTORE_WALLET_REQUEST_CODE = 1
 
 class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
 
-    private var preferenceUtil: PreferenceUtil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_setup_page)
-
-        preferenceUtil = PreferenceUtil(this)
 
         ll_create_wallet.setOnClickListener {
             PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false, passwordPinListener = this).show(this)

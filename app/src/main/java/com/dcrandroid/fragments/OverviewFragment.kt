@@ -44,8 +44,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         const val FRAGMENT_POSITION = 0
     }
 
-    private lateinit var util: PreferenceUtil
-
     private val transactions: ArrayList<Transaction> = ArrayList()
     private var adapter: TransactionListAdapter? = null
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
@@ -79,8 +77,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        util = PreferenceUtil(context!!)
-
         adapter = TransactionListAdapter(context!!, transactions)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -90,7 +86,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         setToolbarTitle(R.string.overview, false)
         scrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
-        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
+        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
 
         loadTransactions()
 
@@ -178,7 +174,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         val isWifiConnected = context?.let { NetworkUtil.isWifiConnected(it) }
         val isDataConnected = context?.let { NetworkUtil.isMobileDataConnected(it) }
-        val syncAnyways = util.getBoolean(Constants.WIFI_SYNC, false)
+        val syncAnyways = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, false)
 
         // 1. If the user chooses not to sync(means the user syncs only on wifi and wifi is off or the user tapped NO on the dialog)
         if (!isWifiConnected!! && !syncAnyways) {
@@ -232,7 +228,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onSyncCompleted() {
         GlobalScope.launch(Dispatchers.Main) {
-            balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
+            balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
         }
         loadTransactions()
     }

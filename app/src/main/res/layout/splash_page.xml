@@ -24,12 +24,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/splashscreen_icon"
+            android:id="@+id/splashscreen_dcr_symbol"
             android:layout_width="160dp"
             android:layout_height="160dp"
-            app:srcCompat="@drawable/avd_anim"
-            />
-
+            app:srcCompat="@drawable/avd_anim" />
 
         <TextView
             android:id="@+id/tv_testnet"
@@ -52,5 +50,6 @@
             android:textColor="@color/darkBlueTextColor"
             android:textSize="19sp"
             app:fontFamily="@font/source_sans_pro_regular" />
+
     </LinearLayout>
 </RelativeLayout>

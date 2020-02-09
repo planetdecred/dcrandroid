@@ -500,5 +500,6 @@
     <string name="err_rescan_in_progress">Unable to start rescan while another rescan is already running</string>
     <string name="exit_app_prompt_title">Exit app?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
+    <string name="migrating_wallet">Migrating wallet</string>
 
 </resources>
