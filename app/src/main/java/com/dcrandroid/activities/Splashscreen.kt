@@ -100,7 +100,7 @@ class SplashScreen : BaseActivity() {
                 setText(getString(R.string.migrating_wallet))
 
                 MigrateV1Wallet(this, v1WalletPath){
-                    startup() //redo startup
+                    proceedToHomeActivity()
                 }.beginV1WalletMigration()
 
             }else{
@@ -150,12 +150,7 @@ class SplashScreen : BaseActivity() {
 
             multiWallet!!.openWallets(publicPass.toByteArray())
 
-            val i = Intent(this@SplashScreen, HomeActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(i)
-
-            //Finish all the activities before this
-            ActivityCompat.finishAffinity(this@SplashScreen)
+            proceedToHomeActivity()
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -183,6 +178,15 @@ class SplashScreen : BaseActivity() {
                 infoDialog.show()
             }
         }
+    }
+
+    private fun proceedToHomeActivity(){
+        val i = Intent(this@SplashScreen, HomeActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(i)
+
+        //Finish all the activities before this
+        ActivityCompat.finishAffinity(this@SplashScreen)
     }
 
     private fun endProcess() {
