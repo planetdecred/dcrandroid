@@ -6,7 +6,6 @@
 
 package com.dcrandroid.extensions
 
-import android.content.Context
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.parseAccounts

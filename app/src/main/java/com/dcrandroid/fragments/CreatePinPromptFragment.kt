@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.create_pin_sheet.*
 import kotlinx.coroutines.*
 
 class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int,
-                              private val createWallet:(passphrase: String?) -> Unit?) : Fragment() {
+                              private val createWallet: (passphrase: String?) -> Unit?) : Fragment() {
 
     private var currentPassCode: String? = null
     private lateinit var pinViewUtil: PinViewUtil

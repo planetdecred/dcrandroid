@@ -123,7 +123,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         val coinbaseTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterCoinBase)
 
         withContext(Dispatchers.Main) {
-            if(context == null){
+            if (context == null) {
                 return@withContext
             }
 

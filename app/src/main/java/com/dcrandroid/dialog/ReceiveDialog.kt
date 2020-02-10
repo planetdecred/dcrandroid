@@ -9,7 +9,6 @@ package com.dcrandroid.dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.*
-import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -18,9 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.RoundedBitmapDrawable
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
@@ -96,7 +92,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         Utils.copyToClipboard(top_bar, tv_address.text.toString(), R.string.address_copy_text)
     }
 
-    private fun getLogoBitmap(): Bitmap{
+    private fun getLogoBitmap(): Bitmap {
         val logoDrawable = AppCompatResources.getDrawable(context!!, R.drawable.ic_qr_dcr)!!
         val sizePixels = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_80)
         val bitmap = Bitmap.createBitmap(sizePixels, sizePixels, Bitmap.Config.ARGB_8888)
