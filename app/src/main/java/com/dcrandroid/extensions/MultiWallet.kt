@@ -6,7 +6,6 @@
 
 package com.dcrandroid.extensions
 
-import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dcrlibwallet.MultiWallet

@@ -43,9 +43,9 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
         editText.onItemClickListener = this
     }
 
-    fun requestFocus() : Int{
+    fun requestFocus(): Int {
         editText.requestFocus()
-        if(editText.text.isNotEmpty()){
+        if (editText.text.isNotEmpty()) {
             editText.setSelection(0, editText.text.length)
             editText.isCursorVisible = true
         }

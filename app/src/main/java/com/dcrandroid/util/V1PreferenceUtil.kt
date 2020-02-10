@@ -21,20 +21,20 @@ class V1PreferenceUtil private constructor() {
 
     private lateinit var preferences: SharedPreferences
 
-    companion object{
-        fun with(ctx: Context): V1PreferenceUtil{
+    companion object {
+        fun with(ctx: Context): V1PreferenceUtil {
             val util = V1PreferenceUtil()
             util.preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
-            return  util
+            return util
         }
     }
 
-    fun getBoolean(key: String, default: Boolean)= preferences.getBoolean(key, default)
+    fun getBoolean(key: String, default: Boolean) = preferences.getBoolean(key, default)
 
     fun set(key: String, value: Boolean) = preferences.edit().putBoolean(key, value).apply()
 
 
-    fun getString(key: String, default: String) : String = preferences.getString(key, default)!!
+    fun getString(key: String, default: String): String = preferences.getString(key, default)!!
 
     fun set(key: String, value: String) = preferences.edit().putString(key, value).apply()
 }

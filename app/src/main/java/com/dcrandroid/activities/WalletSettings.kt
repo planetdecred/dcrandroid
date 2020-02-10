@@ -71,7 +71,7 @@ class WalletSettings : BaseActivity() {
         change_spending_pass.setOnClickListener {
             ChangePassUtil(this, walletID).begin()
         }
-        
+
         rescan_blockchain.setOnClickListener {
             if (multiWallet!!.isSyncing) {
                 SnackBar.showError(this, R.string.err_sync_in_progress)
@@ -204,9 +204,9 @@ class WalletSettings : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
 
-            if(dialog is PinPromptDialog){
+            if (dialog is PinPromptDialog) {
                 dialog.setProcessing(false)
-            }else if(dialog is PasswordPromptDialog){
+            } else if (dialog is PasswordPromptDialog) {
                 dialog.setProcessing(false)
             }
 

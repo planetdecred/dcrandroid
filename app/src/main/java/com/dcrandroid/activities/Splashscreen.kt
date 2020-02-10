@@ -95,15 +95,15 @@ class SplashScreen : BaseActivity() {
             val v1WalletPath = "$filesDir/$v1WalletDirName/${BuildConfig.NetType}"
             val v1WalletExists = Dcrlibwallet.walletExistsAt(v1WalletPath)
 
-            if(v1WalletExists){
+            if (v1WalletExists) {
 
                 setText(getString(R.string.migrating_wallet))
 
-                MigrateV1Wallet(this, v1WalletPath){
+                MigrateV1Wallet(this, v1WalletPath) {
                     proceedToHomeActivity()
                 }.beginV1WalletMigration()
 
-            }else{
+            } else {
                 launchSetupWalletActivity()
             }
 
@@ -180,7 +180,7 @@ class SplashScreen : BaseActivity() {
         }
     }
 
-    private fun proceedToHomeActivity(){
+    private fun proceedToHomeActivity() {
         val i = Intent(this@SplashScreen, HomeActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(i)

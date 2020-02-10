@@ -19,7 +19,6 @@ import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
-import java.lang.Exception
 
 class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isSpending: Boolean, var isChange: Boolean,
                                 private val passwordPinListener: PasswordPinListener) : FullScreenBottomSheetDialog() {
@@ -92,7 +91,7 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         }
     }
 
-    private val createWallet:(passphrase: String?) -> Unit = {passphrase ->
+    private val createWallet: (passphrase: String?) -> Unit = { passphrase ->
         if (passphrase == null) {
             dismiss()
         } else {

@@ -19,13 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionListAdapter
-import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.util.*
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.Deserializer
+import com.dcrandroid.util.NetworkUtil
+import com.dcrandroid.util.SyncLayoutUtil
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.overview_backup_warning.*

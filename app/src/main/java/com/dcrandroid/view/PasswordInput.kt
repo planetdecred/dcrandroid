@@ -184,7 +184,7 @@ class PasswordInput : FrameLayout, TextWatcher {
         getChildAt(0).input_layout.setBackgroundResource(backgroundResource)
     }
 
-    override fun setEnabled(enabled: Boolean){
+    override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
         ivConcealReveal.isEnabled = enabled
         editText.isEnabled = enabled

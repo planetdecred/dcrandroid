@@ -9,15 +9,12 @@ package com.dcrandroid.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-
 import androidx.core.app.ActivityCompat
-
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.fragments.PasswordPinDialogFragment
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_setup_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
