@@ -71,8 +71,11 @@ class MigrateV1Wallet(val activity: AppCompatActivity, val v1WalletPath: String,
             else -> Dcrlibwallet.PassphraseTypePin
         }
 
+        val peerIP = preferenceUtil.getString(KEY_PEER_IP, "")
+
         try {
             multiWallet!!.linkExistingWallet(v1WalletPath, passphrase, privatePassphraseType)
+            multiWallet.setStringConfigValueForKey(Dcrlibwallet.SpvPersistentPeerAddressesConfigKey, peerIP)
 
             val transactionsFolder = File(activity.filesDir, BuildConfig.NetType)
             if(transactionsFolder.exists()){

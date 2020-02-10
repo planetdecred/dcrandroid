@@ -15,6 +15,7 @@ const val KEY_INSECURE_PUB_PASSPHRASE = "public"
 const val KEY_STARTUP_PASSPHRASE_TYPE = "encrypt_passphrase_type"
 const val KEY_SPENDING_PASSPHRASE_TYPE = "spending_passphrase_type"
 const val KEY_PASSWORD = "password"
+const val KEY_PEER_IP = "peer_ip"
 
 class V1PreferenceUtil private constructor() {
 
