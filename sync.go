@@ -175,7 +175,7 @@ func (mw *MultiWallet) SyncInactiveForPeriod(totalInactiveSeconds int64) {
 
 func (mw *MultiWallet) SpvSync() error {
 	// prevent an attempt to sync when the previous syncing has not been canceled
-	if mw.syncData.cancelSync != nil || mw.syncData.activeSyncData != nil {
+	if mw.IsSyncing() || mw.IsSynced() {
 		return errors.New(ErrSyncAlreadyInProgress)
 	}
 
@@ -184,7 +184,7 @@ func (mw *MultiWallet) SpvSync() error {
 	lp := p2p.NewLocalPeer(mw.chainParams, addr, addrManager)
 
 	var validPeerAddresses []string
-	peerAddresses := mw.ReadStringConfigValueForKey(SpvPersistentPeerAddressesConfigKey, "")
+	peerAddresses := mw.ReadStringConfigValueForKey(SpvPersistentPeerAddressesConfigKey)
 	if peerAddresses != "" {
 		addresses := strings.Split(peerAddresses, ";")
 		for _, address := range addresses {

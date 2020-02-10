@@ -2,6 +2,11 @@ package dcrlibwallet
 
 import "github.com/decred/dcrwallet/wallet/v3"
 
+type WalletsIterator struct {
+	currentIndex int
+	wallets      []*Wallet
+}
+
 type BlockInfo struct {
 	Height    int32
 	Timestamp int64

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/decred/dcrd/dcrutil/v2"
+	"github.com/decred/dcrwallet/errors/v2"
 	w "github.com/decred/dcrwallet/wallet/v3"
 	"github.com/decred/dcrwallet/wallet/v3/udb"
 )
@@ -69,6 +70,10 @@ func (wallet *Wallet) AddressInfo(address string) (*AddressInfo, error) {
 }
 
 func (wallet *Wallet) CurrentAddress(account int32) (string, error) {
+	if wallet.IsRestored && !wallet.HasDiscoveredAccounts {
+		return "", errors.E(ErrAddressDiscoveryNotDone)
+	}
+
 	addr, err := wallet.internal.CurrentAddress(uint32(account))
 	if err != nil {
 		log.Error(err)
@@ -78,6 +83,10 @@ func (wallet *Wallet) CurrentAddress(account int32) (string, error) {
 }
 
 func (wallet *Wallet) NextAddress(account int32) (string, error) {
+	if wallet.IsRestored && !wallet.HasDiscoveredAccounts {
+		return "", errors.E(ErrAddressDiscoveryNotDone)
+	}
+
 	addr, err := wallet.internal.NewExternalAddress(wallet.shutdownContext(), uint32(account), w.WithGapPolicyWrap())
 	if err != nil {
 		log.Error(err)

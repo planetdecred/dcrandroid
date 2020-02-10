@@ -2,7 +2,6 @@ package dcrlibwallet
 
 import (
 	"github.com/asdine/storm"
-	"github.com/decred/dcrwallet/errors/v2"
 )
 
 const (
@@ -13,11 +12,12 @@ const (
 	SpendUnconfirmedConfigKey   = "spend_unconfirmed"
 	CurrencyConversionConfigKey = "currency_conversion_option"
 
-	isStartupSecuritySetConfigKey = "startup_security_set"
-	startupSecurityTypeConfigKey  = "startup_security_type"
+	IsStartupSecuritySetConfigKey = "startup_security_set"
+	StartupSecurityTypeConfigKey  = "startup_security_type"
 	UseFingerprintConfigKey       = "use_fingerprint"
 
-	BeepNewBlocksConfigKey = "beep_new_blocks"
+	IncomingTxNotificationsConfigKey = "tx_notification_enabled"
+	BeepNewBlocksConfigKey           = "beep_new_blocks"
 
 	SyncOnCellularConfigKey             = "always_sync"
 	NetworkModeConfigKey                = "network_mode"
@@ -31,6 +31,23 @@ const (
 	PassphraseTypePin  int32 = 0
 	PassphraseTypePass int32 = 1
 )
+
+type configSaveFn = func(key string, value interface{}) error
+type configReadFn = func(key string, valueOut interface{}) error
+
+func (mw *MultiWallet) walletConfigSetFn(walletID int) configSaveFn {
+	return func(key string, value interface{}) error {
+		walletUniqueKey := WalletUniqueConfigKey(walletID, key)
+		return mw.db.Set(userConfigBucketName, walletUniqueKey, value)
+	}
+}
+
+func (mw *MultiWallet) walletConfigReadFn(walletID int) configReadFn {
+	return func(key string, valueOut interface{}) error {
+		walletUniqueKey := WalletUniqueConfigKey(walletID, key)
+		return mw.db.Get(userConfigBucketName, walletUniqueKey, valueOut)
+	}
+}
 
 func (mw *MultiWallet) SaveUserConfigValue(key string, value interface{}) {
 	err := mw.db.Set(userConfigBucketName, key, value)
@@ -120,19 +137,7 @@ func (mw *MultiWallet) ReadLongConfigValueForKey(key string, defaultValue int64)
 	return
 }
 
-func (mw *MultiWallet) ReadStringConfigValueForKey(key string, defaultValue string) (valueOut string) {
-	if err := mw.ReadUserConfigValue(key, &valueOut); err == storm.ErrNotFound {
-		valueOut = defaultValue
-	}
+func (mw *MultiWallet) ReadStringConfigValueForKey(key string) (valueOut string) {
+	mw.ReadUserConfigValue(key, &valueOut)
 	return
-}
-
-func (mw *MultiWallet) UpdateIncomingNotificationsUserPreference(walletID int, notificationsPref string) error {
-	wallet := mw.WalletWithID(walletID)
-	if wallet == nil {
-		return errors.New(ErrNotExist)
-	}
-
-	wallet.IncomingTxNotificationsPref = notificationsPref
-	return translateError(mw.db.Save(wallet))
 }

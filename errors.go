@@ -29,6 +29,7 @@ const (
 	ErrListenerAlreadyExist         = "listener_already_exist"
 	ErrLoggerAlreadyRegistered      = "logger_already_registered"
 	ErrLogRotatorAlreadyInitialized = "log_rotator_already_initialized"
+	ErrAddressDiscoveryNotDone      = "address_discovery_not_done"
 )
 
 // todo, should update this method to translate more error kinds.
