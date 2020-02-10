@@ -8,6 +8,7 @@ package com.dcrandroid.util
 
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 const val walletsDirName = "wallets"
 const val v1WalletDirName = "wallet"
@@ -71,6 +73,17 @@ class MigrateV1Wallet(val activity: AppCompatActivity, val v1WalletPath: String,
 
         try {
             multiWallet!!.linkExistingWallet(v1WalletPath, passphrase, privatePassphraseType)
+
+            val transactionsFolder = File(activity.filesDir, BuildConfig.NetType)
+            if(transactionsFolder.exists()){
+                Utils.deleteDir(transactionsFolder)
+            }
+
+            val oldWalletFolder = File(activity.filesDir, v1WalletDirName)
+            if(oldWalletFolder.exists()){
+                Utils.deleteDir(oldWalletFolder)
+            }
+
             migrationComplete()
         }catch (e: Exception){
             e.printStackTrace()
