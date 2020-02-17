@@ -94,8 +94,13 @@ class WalletsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_new_wallet -> {
-                if (multiWallet.isSyncing || multiWallet.isSynced) {
+                if (multiWallet.isSyncing) {
                     SnackBar.showError(context!!, R.string.cancel_sync_create_wallet)
+                    return false
+                }
+
+                if (multiWallet.isSynced) {
+                    SnackBar.showError(context!!, R.string.error_create_wallet_while_online)
                     return false
                 }
 

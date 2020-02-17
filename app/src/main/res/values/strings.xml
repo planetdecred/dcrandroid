@@ -376,6 +376,7 @@
     <string name="tap_to_copy">(Tap to copy)</string>
     <string name="cancel_sync_create_wallet">Cannot create wallet while sync is in progress</string>
     <string name="cancel_sync_delete_wallet">Cannot delete wallet while sync is in progress</string>
+    <string name="error_create_wallet_while_online">Cannot create a new wallet while wallet is online</string>
     <string name="wallet_created">Wallet created</string>
     <string name="amount">Amount</string>
     <string name="processing_time">Processing time</string>
