@@ -15,7 +15,7 @@ import com.dcrandroid.dialog.AccountPickerDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.visibleWalletAccounts
+import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
@@ -55,7 +55,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         selectedAccountChanged?.let { it1 -> it1(this) }
         spinnerLayout.setOnClickListener(this)
 
-        val visibleAccounts = wallet.visibleWalletAccounts(context)
+        val visibleAccounts = wallet.walletAccounts()
                 .dropLastWhile { it.accountNumber == Int.MAX_VALUE }.size
 
         if (multiWallet.openedWalletsCount() == 1 && visibleAccounts == 1) {

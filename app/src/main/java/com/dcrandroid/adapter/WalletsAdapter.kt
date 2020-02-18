@@ -65,7 +65,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
         holder.walletName.text = wallet.name
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
-                Utils.formatDecredWithComma(wallet.totalWalletBalance(context)))
+                Utils.formatDecredWithComma(wallet.totalWalletBalance()))
 
         if (wallet.seed.isNullOrBlank()) {
             holder.backupNeeded.hide()

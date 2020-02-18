@@ -127,7 +127,7 @@ class RestoreWalletActivity : AppCompatActivity(), PasswordPinDialogFragment.Pas
 
     private fun createWallet(spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet!!.restoreWallet(seed, Constants.INSECURE_PUB_PASSPHRASE, spendingKey, spendingPassType)
+            val wallet = multiWallet!!.restoreWallet(seed, spendingKey, spendingPassType)
             wallet.unlockWallet(spendingKey.toByteArray())
 
             val intent = Intent(this@RestoreWalletActivity, RestoreSuccessActivity::class.java)

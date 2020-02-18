@@ -9,17 +9,12 @@ package com.dcrandroid.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-
 import androidx.core.app.ActivityCompat
-
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.fragments.PasswordPinDialogFragment
-import com.dcrandroid.util.BiometricUtils
-import com.dcrandroid.util.PreferenceUtil
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_setup_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -29,14 +24,11 @@ const val RESTORE_WALLET_REQUEST_CODE = 1
 
 class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
 
-    private var preferenceUtil: PreferenceUtil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_setup_page)
-
-        preferenceUtil = PreferenceUtil(this)
 
         ll_create_wallet.setOnClickListener {
             PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false, passwordPinListener = this).show(this)
@@ -89,14 +81,7 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
 
     private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-
-            val startupPassword = if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
-                BiometricUtils.readFromKeystore(this@SetupWalletActivity, Constants.STARTUP_PASSPHRASE)
-            } else {
-                Constants.INSECURE_PUB_PASSPHRASE
-            }
-
-            val wallet = multiWallet!!.createNewWallet(startupPassword, spendingKey, type)
+            val wallet = multiWallet!!.createNewWallet(spendingKey, type)
             navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()

@@ -6,7 +6,6 @@
 
 package com.dcrandroid.extensions
 
-import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dcrlibwallet.MultiWallet
@@ -30,12 +29,12 @@ fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
     return wallets
 }
 
-fun MultiWallet.totalWalletBalance(context: Context): Long {
+fun MultiWallet.totalWalletBalance(): Long {
     val wallets = this.openedWalletsList()
     var totalBalance: Long = 0
 
     for (wallet in wallets) {
-        totalBalance += wallet.totalWalletBalance(context)
+        totalBalance += wallet.totalWalletBalance()
     }
 
     return totalBalance

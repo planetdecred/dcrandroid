@@ -266,7 +266,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
     }
 
-    override fun onSyncStarted() {
+    override fun onSyncStarted(wasRestarted: Boolean) {
         displaySyncingLayout()
     }
 
@@ -286,7 +286,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
                 // block headers fetched
                 syncLayout.tv_block_header_fetched.setText(R.string.block_header_fetched)
                 syncLayout.tv_fetch_discover_scan_count.text = context.getString(R.string.block_header_fetched_count,
-                        headersFetchProgress!!.fetchedHeadersCount, headersFetchProgress.totalHeadersToFetch)
+                        headersFetchProgress!!.currentHeaderHeight, headersFetchProgress.totalHeadersToFetch)
 
                 // syncing progress
                 syncLayout.tv_progress.setText(R.string.syncing_progress)

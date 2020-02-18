@@ -11,7 +11,6 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import java.io.Serializable
-import java.lang.NumberFormatException
 
 class Accounts : Serializable {
 
@@ -142,7 +141,7 @@ class DecredAddressURI {
                             if (amountStr.trim().isNotEmpty()) {
                                 try {
                                     amount = amountStr.toDouble()
-                                }catch (e: NumberFormatException){
+                                } catch (e: NumberFormatException) {
                                     e.printStackTrace()
                                 }
                             }

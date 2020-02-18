@@ -10,8 +10,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.dcrandroid.activities.CustomCrashReport;
-import com.dcrandroid.data.Constants;
-import com.dcrandroid.util.PreferenceUtil;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
@@ -34,12 +32,5 @@ public class MainApplication extends Application {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        PreferenceUtil util = new PreferenceUtil(this);
-        util.setInt(Constants.APP_VERSION, BuildConfig.VERSION_CODE);
     }
 }
