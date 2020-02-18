@@ -14,7 +14,7 @@ public class WalletData {
 
     public int syncStartPoint = -1, syncCurrentPoint = -1, syncEndPoint = -1;
     public double syncProgress = 0, accountDiscoveryStartTime, totalDiscoveryTime;
-    public long fetchHeaderTime = -1, totalFetchTime = -1, rescanTime, syncRemainingTime, initialSyncEstimate = -1;
+    public long fetchHeaderTime = -1, totalFetchTime = -1, rescanStartTime, syncRemainingTime, initialSyncEstimate = -1;
     public String syncStatus, syncVerbose;
 
     private WalletData() {

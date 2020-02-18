@@ -51,6 +51,10 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
     private val STAKING: String by lazy { getString(R.string.staking) }
     private val COINBASE: String by lazy { getString(R.string.coinbase) }
 
+    companion object{
+        const val transactionsFileName = "history_transactions"
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.content_history, container, false)
     }
@@ -192,9 +196,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                 return
             }
 
-            val path = File(context!!.filesDir.toString() + "/" + BuildConfig.NetType + "/" + "savedata")
-            path.mkdirs()
-            val file = File(path, "history_transactions")
+            val file = Utils.getTransactionFile(context!!, transactionsFileName)
             file.createNewFile()
 
             val objectOutputStream = ObjectOutputStream(FileOutputStream(file))
@@ -212,9 +214,7 @@ class HistoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, GetTra
                 return
             }
 
-            val path = File(context!!.filesDir.toString() + "/" + BuildConfig.NetType + "/" + "savedata")
-            path.mkdirs()
-            val file = File(path, "history_transactions")
+            val file = Utils.getTransactionFile(context!!, transactionsFileName)
             if (file.exists()) {
                 val objectInputStream = ObjectInputStream(FileInputStream(file))
                 val temp = objectInputStream.readObject() as List<TransactionsResponse.TransactionItem>
