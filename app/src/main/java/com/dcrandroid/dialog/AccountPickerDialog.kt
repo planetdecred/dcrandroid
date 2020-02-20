@@ -17,7 +17,7 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.AccountPickerAdapter
 import com.dcrandroid.data.Account
 import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.extensions.visibleWalletAccounts
+import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
 
@@ -42,7 +42,7 @@ class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account
 
         for (wallet in wallets) {
             items.add(wallet)
-            val accounts = wallet.visibleWalletAccounts(context!!)
+            val accounts = wallet.walletAccounts()
                     .dropLastWhile { it.accountNumber == Int.MAX_VALUE } // remove imported account
             items.addAll(accounts)
         }

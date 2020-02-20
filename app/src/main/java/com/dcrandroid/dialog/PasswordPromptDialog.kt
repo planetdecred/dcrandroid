@@ -48,24 +48,24 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
             btn_cancel.isEnabled = false
             btn_confirm.isEnabled = false
             val dismissDialog = passEntered(this, password_input.textString)
-            if(dismissDialog){
+            if (dismissDialog) {
                 dismiss()
-            }else{
+            } else {
                 setProcessing(true)
             }
         }
     }
 
-    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main){
+    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main) {
         btn_cancel.isEnabled = !processing
         password_input.isEnabled = !processing
 
-        if(!processing){
+        if (!processing) {
             btn_confirm.isEnabled = password_input.textString.isNotBlank()
         }
     }
 
-    fun showError() = GlobalScope.launch(Dispatchers.Main){
+    fun showError() = GlobalScope.launch(Dispatchers.Main) {
         password_input.setError(getString(R.string.invalid_password))
     }
 

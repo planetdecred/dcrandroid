@@ -70,7 +70,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
 
     // -- Sync Progress Listener
 
-    override fun onSyncStarted() {
+    override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {

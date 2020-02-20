@@ -80,14 +80,14 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
         }
     }
 
-    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main){
+    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main) {
         pinViewUtil.pinView.rejectInput = processing
         btn_cancel.isEnabled = !processing
 
-        if(processing){
+        if (processing) {
             btn_confirm.hide()
             progress_bar.show()
-        }else{
+        } else {
             btn_confirm.show()
             progress_bar.hide()
 

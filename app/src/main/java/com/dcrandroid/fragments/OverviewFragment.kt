@@ -19,13 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionListAdapter
-import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.util.*
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.Deserializer
+import com.dcrandroid.util.NetworkUtil
+import com.dcrandroid.util.SyncLayoutUtil
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.overview_backup_warning.*
@@ -43,8 +45,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         private var closedBackupWarning = false
         const val FRAGMENT_POSITION = 0
     }
-
-    private lateinit var util: PreferenceUtil
 
     private val transactions: ArrayList<Transaction> = ArrayList()
     private var adapter: TransactionListAdapter? = null
@@ -79,8 +79,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        util = PreferenceUtil(context!!)
-
         adapter = TransactionListAdapter(context!!, transactions)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -90,7 +88,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         setToolbarTitle(R.string.overview, false)
         scrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
-        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
+        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
 
         loadTransactions()
 
@@ -178,7 +176,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         val isWifiConnected = context?.let { NetworkUtil.isWifiConnected(it) }
         val isDataConnected = context?.let { NetworkUtil.isMobileDataConnected(it) }
-        val syncAnyways = util.getBoolean(Constants.WIFI_SYNC, false)
+        val syncAnyways = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, false)
 
         // 1. If the user chooses not to sync(means the user syncs only on wifi and wifi is off or the user tapped NO on the dialog)
         if (!isWifiConnected!! && !syncAnyways) {
@@ -232,7 +230,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onSyncCompleted() {
         GlobalScope.launch(Dispatchers.Main) {
-            balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance(context!!))
+            balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
         }
         loadTransactions()
     }

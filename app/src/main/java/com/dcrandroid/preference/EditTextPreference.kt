@@ -54,7 +54,7 @@ class EditTextDialog(val title: Int, val dialogHint: Int, val key: String, var e
             btn_confirm.isEnabled = inputHelper.validatedInput != null
         }
 
-        inputHelper.editText.setText(multiWallet!!.readStringConfigValueForKey(key))
+        inputHelper.editText.setText(multiWallet.readStringConfigValueForKey(key))
 
         btn_cancel.setOnClickListener { dismiss() }
 

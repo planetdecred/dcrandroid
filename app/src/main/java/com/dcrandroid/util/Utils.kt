@@ -254,4 +254,14 @@ object Utils {
         fout.close()
         bin.close()
     }
+
+    fun deleteDir(file: File) {
+        val contents = file.listFiles()
+        if (contents != null) {
+            for (f in contents) {
+                deleteDir(f)
+            }
+        }
+        file.delete()
+    }
 }

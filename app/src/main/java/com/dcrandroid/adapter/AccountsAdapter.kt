@@ -39,7 +39,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
         }
 
         wallet = WalletData.multiWallet!!.walletWithID(walletID)
-        accounts = wallet.walletAccounts(requiredConfirmations)
+        accounts = wallet.walletAccounts()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsViewHolder {

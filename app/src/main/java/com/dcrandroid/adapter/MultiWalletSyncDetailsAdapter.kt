@@ -65,7 +65,7 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
             if (fetchProgressReport != null) {
                 // ## of ######
                 holder.fetchCount.text = context.getString(R.string.block_header_fetched_count,
-                        fetchProgressReport!!.fetchedHeadersCount, fetchProgressReport!!.totalHeadersToFetch)
+                        fetchProgressReport!!.currentHeaderHeight, fetchProgressReport!!.totalHeadersToFetch)
 
                 // ## days behind
                 val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - fetchProgressReport!!.currentHeaderTimestamp

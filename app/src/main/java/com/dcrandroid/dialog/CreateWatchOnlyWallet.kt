@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dcrandroid.R
-import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.util.InputHelper
@@ -103,7 +102,7 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
 
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    val wallet = multiWallet.createWatchOnlyWallet(Constants.INSECURE_PUB_PASSPHRASE, walletName, extendedPublicKey)
+                    val wallet = multiWallet.createWatchOnlyWallet(walletName, extendedPublicKey)
                     dismiss()
                     walletCreated(wallet.id)
                 } catch (e: Exception) {

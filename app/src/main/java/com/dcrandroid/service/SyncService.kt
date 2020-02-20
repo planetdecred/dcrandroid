@@ -14,7 +14,6 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.R
-import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.TimeUtils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
@@ -27,7 +26,6 @@ class SyncService : Service(), SyncProgressListener {
     private var notification: Notification? = null
     private var multiWallet: MultiWallet? = null
     private var walletData: WalletData? = null
-    private var preferenceUtil: PreferenceUtil? = null
 
     private var contentTitle: String? = null
     private var contentText: String? = null
@@ -50,8 +48,6 @@ class SyncService : Service(), SyncProgressListener {
             stopSelf()
             return super.onStartCommand(intent, flags, startId)
         }
-
-        preferenceUtil = PreferenceUtil(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -119,7 +115,7 @@ class SyncService : Service(), SyncProgressListener {
         showNotification()
     }
 
-    override fun onSyncStarted() {
+    override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {

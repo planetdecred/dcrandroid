@@ -18,7 +18,7 @@ import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.create_password_sheet.*
 
-class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int, val createWallet:(passphrase: String?) -> Unit) : Fragment() {
+class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int, val createWallet: (passphrase: String?) -> Unit) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

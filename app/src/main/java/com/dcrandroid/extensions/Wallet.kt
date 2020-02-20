@@ -6,33 +6,24 @@
 
 package com.dcrandroid.extensions
 
-import android.content.Context
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.parseAccounts
-import com.dcrandroid.util.PreferenceUtil
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 
-fun Wallet.walletAccounts(requiredConfirmations: Int): ArrayList<Account> {
-    return parseAccounts(this.getAccounts(requiredConfirmations)).accounts
-}
-
-fun Wallet.visibleWalletAccounts(context: Context): List<Account> {
-
-    val util = PreferenceUtil(context)
+fun Wallet.walletAccounts(): ArrayList<Account> {
 
     val requiredConfirmations = when {
         WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
         else -> Constants.REQUIRED_CONFIRMATIONS
     }
-
-    return this.walletAccounts(requiredConfirmations).filter { !util.getBoolean(Constants.HIDE_WALLET + it.accountNumber) }
+    return parseAccounts(this.getAccounts(requiredConfirmations)).accounts
 }
 
-fun Wallet.totalWalletBalance(context: Context): Long {
-    val visibleAccounts = this.visibleWalletAccounts(context)
+fun Wallet.totalWalletBalance(): Long {
+    val visibleAccounts = this.walletAccounts()
 
     return visibleAccounts.map { it.balance.total }.reduce { sum, element -> sum + element }
 }
