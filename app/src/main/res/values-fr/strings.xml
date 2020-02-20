@@ -495,5 +495,7 @@
     <string name="wallet_removed">Porte-monnaie supprimé</string>
     <string name="write_down_seed_phrase">Écrire la phrase de récupération</string>
     <string name="your_33_word_seed_phrase">Votre phrase de récupération à 33 mots</string>
+    <string name="enter_startup_password">Entrer un nouveau mot de passe de démarrage</string>
+    <string name="migrating_wallet">Migration du porte-monnaie</string>
 
 </resources>
