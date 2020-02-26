@@ -23,7 +23,7 @@ require (
 	github.com/decred/dcrwallet/p2p/v2 v2.0.0
 	github.com/decred/dcrwallet/rpc/client/dcrd v1.0.0
 	github.com/decred/dcrwallet/ticketbuyer/v4 v4.0.0
-	github.com/decred/dcrwallet/wallet/v3 v3.0.5
+	github.com/decred/dcrwallet/wallet/v3 v3.2.1-badger
 	github.com/decred/dcrwallet/walletseed v1.0.1
 	github.com/decred/slog v1.0.0
 	github.com/dgraph-io/badger v1.5.4
@@ -41,8 +41,10 @@ require (
 	google.golang.org/appengine v1.5.0 // indirect
 )
 
-replace decred.org/dcrwallet => decred.org/dcrwallet v1.2.3-0.20191024200307-d273b5687adf
-
-replace github.com/raedahgroup/dcrlibwallet/spv => ./spv
+replace (
+	decred.org/dcrwallet => decred.org/dcrwallet v1.2.3-0.20191024200307-d273b5687adf
+	github.com/decred/dcrwallet/wallet/v3 => github.com/raedahgroup/dcrwallet/wallet/v3 v3.2.1-badger
+	github.com/raedahgroup/dcrlibwallet/spv => ./spv
+)
 
 go 1.13

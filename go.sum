@@ -1,5 +1,3 @@
-decred.org/cspp v0.1.3 h1:7l2SikgbzinIHS8EVq+lvOXAby7ZVuIj/hzz/RcNEz0=
-decred.org/cspp v0.1.3/go.mod h1:AluGqqtq580GdsWxH2wbYtCDKi5D5P4sA96waw70D5c=
 decred.org/cspp v0.2.0 h1:SdwdoGT2wZenkczeDxzcKwoAA55Y0Ti3aZslabBORvA=
 decred.org/cspp v0.2.0/go.mod h1:KVnB49sueBFCldRa/ivZCaWZbrPNEiXWwxHCf1jTYKI=
 github.com/AndreasBriese/bbloom v0.0.0-20190306092124-e2d15f34fcf9 h1:HD8gA2tkByhMAwYaFAX9w2l7vxvBQ5NMoxDrkhqhtn4=
@@ -108,8 +106,6 @@ github.com/decred/dcrd/dcrec/secp256k1 v1.0.1 h1:EFWVd1p0t0Y5tnsm/dJujgV0ORogRJ6
 github.com/decred/dcrd/dcrec/secp256k1 v1.0.1/go.mod h1:lhu4eZFSfTJWUnR3CFRcpD+Vta0KUAqnhTsTksHXgy0=
 github.com/decred/dcrd/dcrec/secp256k1 v1.0.2 h1:awk7sYJ4pGWmtkiGHFfctztJjHMKGLV8jctGQhAbKe0=
 github.com/decred/dcrd/dcrec/secp256k1 v1.0.2/go.mod h1:CHTUIVfmDDd0KFVFpNX1pFVCBUegxW387nN0IGwNKR0=
-github.com/decred/dcrd/dcrec/secp256k1 v1.0.3 h1:u4XpHqlscRolxPxt2YHrFBDVZYY1AK+KMV02H1r+HmU=
-github.com/decred/dcrd/dcrec/secp256k1 v1.0.3/go.mod h1:eCL8H4MYYjRvsw2TuANvEOcVMFbmi9rt/6hJUWU5wlU=
 github.com/decred/dcrd/dcrec/secp256k1/v2 v2.0.0 h1:3GIJYXQDAKpLEFriGFN8SbSffak10UXHGdIcFaMPykY=
 github.com/decred/dcrd/dcrec/secp256k1/v2 v2.0.0/go.mod h1:3s92l0paYkZoIHuj4X93Teg/HB7eGM9x/zokGw+u4mY=
 github.com/decred/dcrd/dcrjson/v2 v2.0.0 h1:W0q4Alh36c5N318eUpfmU8kXoCNgImMLI87NIXni9Us=
@@ -201,10 +197,6 @@ github.com/decred/dcrwallet/validate v1.1.1 h1:hoHrHaJTQoANN/ZW37HbeTQSJ+N4rMFFL
 github.com/decred/dcrwallet/validate v1.1.1/go.mod h1:T++tlVcCOh2oSrEq4r5CKCvmftaQdq9uZwO7jSNYZaw=
 github.com/decred/dcrwallet/version v1.0.1 h1:gAz1lDkcJ+oAbg0tOn/J0KwZBVWIlhWmHhSUi9GbB2E=
 github.com/decred/dcrwallet/version v1.0.1/go.mod h1:rXeMsUaI03WtlQrSol7Q7sJ8HBOB+tZvT7YQRXD5Y7M=
-github.com/decred/dcrwallet/wallet/v3 v3.0.0 h1:6izrN1ZF7M7zb54GRb8RTRaO0z2+MjgX/BoJogI0SPw=
-github.com/decred/dcrwallet/wallet/v3 v3.0.0/go.mod h1:4aUyeRVmnT+3jPXMJrfUFppguKjKueZi1q978eYdGfs=
-github.com/decred/dcrwallet/wallet/v3 v3.0.5 h1:v2wVtyhRLomTfjmAKptQl/xhVFf90ZpeC6Oo+7t2acE=
-github.com/decred/dcrwallet/wallet/v3 v3.0.5/go.mod h1:SJ+++gtMdcUeqMv6iIO3gVGlGJfM+4iY2QSaAakhbUw=
 github.com/decred/dcrwallet/walletseed v1.0.1 h1:gxvlj0GRw+H0VumCxTlEysu+/nltcp9+lgzVgzsnI/Y=
 github.com/decred/dcrwallet/walletseed v1.0.1/go.mod h1:ENlwTabC2JVmT4S1eCP44fnwX4+9y2RLsnfSU21CJ+4=
 github.com/decred/go-socks v1.0.0 h1:gd5+vE9LmL+FYiN5cxAMtaAVb791mG8E/+Jo411M/BE=
@@ -261,6 +253,8 @@ github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/raedahgroup/dcrwallet/wallet/v3 v3.2.1-badger h1:VeMaBDPPCLtt/gT7irdR+v26LhC7m6LWdiGGJJBEVIE=
+github.com/raedahgroup/dcrwallet/wallet/v3 v3.2.1-badger/go.mod h1:SJ+++gtMdcUeqMv6iIO3gVGlGJfM+4iY2QSaAakhbUw=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1w=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
