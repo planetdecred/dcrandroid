@@ -375,7 +375,7 @@
     <string name="got_it">Got It</string>
     <string name="tap_to_copy">(Tap to copy)</string>
     <string name="cancel_sync_create_wallet">Disconnect before creating wallet</string>
-    <string name="cancel_sync_delete_wallet">Cannot delete wallet while sync is in progress</string>
+    <string name="cancel_sync_delete_wallet">Disconnect before creating wallet</string>
     <string name="wallet_created">Wallet created</string>
     <string name="amount">Amount</string>
     <string name="processing_time">Processing time</string>
