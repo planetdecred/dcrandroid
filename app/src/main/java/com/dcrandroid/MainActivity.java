@@ -953,11 +953,17 @@ public class MainActivity extends AppCompatActivity implements TransactionListen
             case Dcrlibwallet.PROGRESS:
 
                 float scannedPercentage = ((float) rescannedThrough / walletData.syncEndPoint) * 100;
-
                 long elapsedRescanTime = System.currentTimeMillis() - walletData.rescanStartTime;
                 double totalScanTime = elapsedRescanTime / ((float) rescannedThrough / walletData.syncEndPoint);
-                double totalSyncTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + totalScanTime;
-                double elapsedTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + elapsedRescanTime;
+
+                double totalSyncTime, elapsedTime;
+                if(walletData.wallet.isRescanning()){
+                    totalSyncTime = totalScanTime;
+                    elapsedTime = elapsedRescanTime;
+                }else{
+                    totalSyncTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + totalScanTime;
+                    elapsedTime = walletData.totalFetchTime + walletData.totalDiscoveryTime + elapsedRescanTime;
+                }
 
                 walletData.syncRemainingTime = Math.round(totalScanTime) - elapsedRescanTime;
                 walletData.syncProgress = (elapsedTime / (float) totalSyncTime) * 100;
