@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/app_bar_title"
+                    android:text="@string/statistics"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/stats_scroll_view"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_bg_white_corners_8dp"
+                android:layout_marginTop="@dimen/margin_padding_size_4"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:layout_marginBottom="@dimen/margin_padding_size_4"
+                android:padding="@dimen/margin_padding_size_16"
+                android:elevation="@dimen/margin_padding_size_4"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/build"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_version_name"
+                        tools:text="mainnet 2020-01-01"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/peers_connected"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_connected_peers"
+                        tools:text="8"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/uptime"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_uptime"
+                        tools:text="00:09:41"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/network"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_network"
+                        tools:text="mainnet"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/best_block"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_best_block"
+                        tools:text="231975"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/best_block_timestamp"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_best_block_timestamp"
+                        tools:text="2020-01-01 09:13:50 +0100"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/best_block_age"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_best_block_age"
+                        tools:text="3 min ago"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wallet_data_directory"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_wallet_data_directory"
+                        tools:text="/data/user/0/com.decred.dcrandroid.mainnet/files/wallet/mainnet3/wallet.db"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chain_data"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_chain_data"
+                        tools:text="150.77 Mb"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transactions"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_transaction_count"
+                        tools:text="4"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wallets"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/stats_wallet_count"
+                        tools:text="1"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
