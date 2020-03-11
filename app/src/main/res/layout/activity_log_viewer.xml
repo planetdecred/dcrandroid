@@ -11,6 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     tools:context="com.dcrandroid.activities.LogViewer">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/margin_padding_size_16"
-            android:paddingEnd="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -33,7 +34,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="@dimen/margin_padding_size_8"
-                android:background="@drawable/circular_transparent_ripple"
+                android:background="@drawable/bg_primary_ripple"
                 android:focusable="true"
                 android:clickable="true"
                 android:id="@+id/go_back"
@@ -44,17 +45,28 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/wallets_log"
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="@color/darkBlueTextColor"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
+
+                <ImageView
+                    android:layout_width="@dimen/margin_padding_size_40"
+                    android:layout_height="@dimen/margin_padding_size_40"
+                    android:id="@+id/iv_copy_wallet_log"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:src="@drawable/ic_copy"/>
 
             </LinearLayout>
 
@@ -71,8 +83,12 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:textColor="@color/darkerBlueGrayTextColor"
+            android:textSize="@dimen/edit_text_size_14"
+            android:fontFamily="@font/source_sans_pro"
             android:scrollbars="vertical"
+            android:paddingStart="@dimen/margin_padding_size_16"
+            android:paddingEnd="@dimen/margin_padding_size_16"
             android:id="@+id/log_text" />
 
     </ScrollView>
