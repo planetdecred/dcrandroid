@@ -323,7 +323,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/chain_data"
+                        android:text="@string/wallet_data"
                         android:fontFamily="@font/source_sans_pro"
                         android:textColor="@color/darkBlueTextColor"
                         android:textSize="@dimen/edit_text_size_16"
@@ -332,7 +332,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/stats_chain_data"
+                        android:id="@+id/stats_wallet_data"
                         tools:text="150.77 Mb"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"

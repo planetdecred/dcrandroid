@@ -8,6 +8,7 @@ package com.dcrandroid.activities.more
 
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.text.format.Formatter
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.MainApplication
 import com.dcrandroid.R
@@ -35,7 +36,6 @@ class StatisticsActivity : BaseActivity() {
             }
         }
 
-
         stats_version_name.text = BuildConfig.VERSION_NAME
         stats_connected_peers.text = multiWallet!!.connectedPeers().toString()
 
@@ -54,17 +54,15 @@ class StatisticsActivity : BaseActivity() {
         stats_best_block_age.text = TimeUtils.calculateTime(lastBlockRelativeTime, this)
 
         stats_wallet_data_directory.text = "$filesDir/$walletsDirName"
-        stats_chain_data.text = ""
+        stats_wallet_data.text = Formatter.formatFileSize(this, multiWallet!!.rootDirFileSizeInBytes())
         stats_transaction_count.text = countAllWalletsTransactions().toString()
         stats_wallet_count.text = multiWallet!!.openedWalletsCount().toString()
     }
 
     private fun countAllWalletsTransactions(): Long {
         var count = 0L
-        for (wallet in multiWallet!!.openedWalletsList()) {
-            count += wallet.countTransactions(Dcrlibwallet.TxFilterAll)
-        }
-
+        multiWallet!!.openedWalletsList()
+                .forEach { count += it.countTransactions(Dcrlibwallet.TxFilterAll) }
         return count
     }
 }

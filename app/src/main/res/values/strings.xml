@@ -24,7 +24,7 @@
     <string name="best_block_timestamp">Best block timestamp</string>
     <string name="best_block_age">Best block age</string>
     <string name="wallet_data_directory">Wallet data directory</string>
-    <string name="chain_data">Chain data</string>
+    <string name="wallet_data">Wallet data</string>
     <string name="debug">Debug</string>
     <string name="overview">Overview</string>
     <string name="permission">Permission</string>
