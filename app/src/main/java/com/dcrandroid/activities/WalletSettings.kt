@@ -132,6 +132,8 @@ class WalletSettings : BaseActivity() {
     }
 
     private fun setupFingerprint() {
+        val op = this.javaClass.name + ".setupFingerprint"
+
         val title = PassPromptTitle(R.string.spending_password, R.string.enter_spending_pin)
         PassPromptUtil(this, walletID, title, false) { dialog, pass ->
 
@@ -162,7 +164,7 @@ class WalletSettings : BaseActivity() {
                             dialog.showError()
                         }
                     }else{
-                        Dcrlibwallet.log(e.message)
+                        Dcrlibwallet.logT(op, e.message)
                         dialog?.dismiss()
                         SnackBar.showError(this@WalletSettings, R.string.check_log_error)
                     }

@@ -126,6 +126,8 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun enableStartupFingerprint() {
+        val op = this.javaClass.name + ".enableStartupFingerprint"
+
         val title = PassPromptTitle(R.string.enter_startup_password, R.string.enter_startup_pin)
         PassPromptUtil(this@SettingsActivity, null, title, false) { dialog, passphrase ->
 
@@ -154,7 +156,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                             dialog.showError()
                         }
                     }else{
-                        Dcrlibwallet.log(e.message)
+                        Dcrlibwallet.logT(op, e.message)
                         dialog?.dismiss()
                         SnackBar.showError(this@SettingsActivity, R.string.check_log_error)
                     }
