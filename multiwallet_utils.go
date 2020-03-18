@@ -2,6 +2,8 @@ package dcrlibwallet
 
 import (
 	"context"
+	"os"
+	"path/filepath"
 
 	"github.com/asdine/storm"
 	"github.com/decred/dcrwallet/errors/v2"
@@ -97,4 +99,20 @@ func (mw *MultiWallet) setNetworkBackend(syncer *spv.Syncer) {
 			wallet.internal.SetNetworkBackend(walletBackend)
 		}
 	}
+}
+
+// RootDirFileSizeInBytes returns the total directory size of
+// multiwallet's root directory in bytes.
+func (mw *MultiWallet) RootDirFileSizeInBytes() (int64, error) {
+	var size int64
+	err := filepath.Walk(mw.rootDir, func(_ string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			size += info.Size()
+		}
+		return err
+	})
+	return size, err
 }
