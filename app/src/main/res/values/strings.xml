@@ -16,6 +16,15 @@
     <string name="dcr" translatable="false">DCR</string>
     <string name="help">Help</string>
     <string name="about">About</string>
+    <string name="statistics">Statistics</string>
+    <string name="build">Build</string>
+    <string name="uptime">Uptime</string>
+    <string name="network">Network</string>
+    <string name="best_block">Best block</string>
+    <string name="best_block_timestamp">Best block timestamp</string>
+    <string name="best_block_age">Best block age</string>
+    <string name="wallet_data_directory">Wallet data directory</string>
+    <string name="wallet_data">Wallet data</string>
     <string name="debug">Debug</string>
     <string name="overview">Overview</string>
     <string name="permission">Permission</string>
@@ -330,6 +339,7 @@
     <string name="latest_block_time"><![CDATA[Synced to block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
     <string name="connected_peers"><![CDATA[Connected to <font color="#091440">%1$d</font> peers.]]></string>
     <string name="no_connected_peers">No connected peers.</string>
+    <string name="peers_connected">Peers connected</string>
     <string name="_default">Default</string>
     <string name="starting_up">Starting up</string>
     <string name="waiting_for_other_wallets">Waiting for other wallets</string>
