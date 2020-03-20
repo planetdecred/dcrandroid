@@ -29,6 +29,10 @@ class DebugActivity : BaseActivity() {
             setLogLevelSummary(it)
         }
 
+        check_statistics.setOnClickListener {
+            startActivity(Intent(this, StatisticsActivity::class.java))
+        }
+
         check_wallet_log.setOnClickListener {
             startActivity(Intent(this, LogViewer::class.java))
         }

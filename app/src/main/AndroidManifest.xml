@@ -169,6 +169,10 @@
             android:name=".activities.WalletSettings"
             android:launchMode="singleTask" />
 
+        <activity
+            android:name=".activities.more.StatisticsActivity"
+            android:launchMode="singleTask" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
