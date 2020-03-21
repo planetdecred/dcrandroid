@@ -51,6 +51,9 @@ class InputHelper(private val context: Context, private val container: View,
     val pasteTextView = container.custom_input_paste
     var pasteHidden = false
 
+    val clearBtn = container.custom_input_clear
+    var clearBtnHidden = false
+
     val addressLayoutDefaultHeight = context.resources.getDimension(R.dimen.margin_padding_size_48)
     val addressLayout = container.input_layout
 
@@ -60,6 +63,7 @@ class InputHelper(private val context: Context, private val container: View,
     val hintTextView = container.custom_input_hint
     val editText = container.custom_input_et
     val qrScanImageView = container.iv_scan
+    val pasteQRLayout = container.paste_qr_layout
 
     init {
         hintTextView.minWidth = hintTextView.width
@@ -67,6 +71,7 @@ class InputHelper(private val context: Context, private val container: View,
         editText.addTextChangedListener(this)
         qrScanImageView.setOnClickListener(this)
         pasteTextView.setOnClickListener(this)
+        clearBtn.setOnClickListener(this)
 
         if (addressLayout.viewTreeObserver.isAlive) {
             addressLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -81,7 +86,7 @@ class InputHelper(private val context: Context, private val container: View,
         }
 
         setupLayout()
-        setupPasteButton()
+        setupButtons()
     }
 
     fun setupLayout() {
@@ -145,6 +150,19 @@ class InputHelper(private val context: Context, private val container: View,
         container.input_layout.setBackgroundResource(backgroundResource)
     }
 
+    private fun setupButtons() {
+        if (editText.text.isNotEmpty()) {
+            if (!clearBtnHidden)
+                clearBtn.show()
+
+            pasteQRLayout.hide()
+        } else {
+            clearBtn.hide()
+            setupPasteButton()
+            pasteQRLayout.show()
+        }
+    }
+
     private fun setupPasteButton() {
         val clipBoardContent = Utils.readFromClipboard(context)
         if (clipBoardContent.isNotBlank() && validateInput(clipBoardContent) && editText.text.isEmpty() && !pasteHidden) {
@@ -169,6 +187,9 @@ class InputHelper(private val context: Context, private val container: View,
                 integrator.setRequestCode(SCAN_QR_REQUEST_CODE)
                 integrator.initiateScan()
             }
+            R.id.custom_input_clear -> {
+                editText.text = null
+            }
         }
     }
 
@@ -180,7 +201,7 @@ class InputHelper(private val context: Context, private val container: View,
 
         if (s.isNullOrEmpty()) {
             setError(null) // this calls setup layout
-            setupPasteButton()
+            setupButtons()
         } else {
             val enteredAddress = s.toString()
             if (validateInput(enteredAddress)) { // address is valid
@@ -190,7 +211,7 @@ class InputHelper(private val context: Context, private val container: View,
             }
 
             setupLayout()
-            setupPasteButton()
+            setupButtons()
         }
 
         textChanged()
@@ -234,6 +255,11 @@ class InputHelper(private val context: Context, private val container: View,
         pasteTextView.hide()
     }
 
+    fun hideClearButton() {
+        clearBtnHidden = true
+        clearBtn.hide()
+    }
+
     fun isVisible(): Boolean {
         return container.visibility == View.VISIBLE
     }
@@ -247,10 +273,6 @@ class InputHelper(private val context: Context, private val container: View,
     }
 
     fun onResume() {
-        setupPasteButton()
-    }
-
-    fun onPause() {
-        setupPasteButton()
+        setupButtons()
     }
 }

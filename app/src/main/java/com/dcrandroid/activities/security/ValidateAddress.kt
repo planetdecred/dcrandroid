@@ -40,6 +40,11 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
         go_back.setOnClickListener(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        addressInputHelper.onResume()
+    }
+
     override fun onClick(v: View) {
 
         when (v.id) {
