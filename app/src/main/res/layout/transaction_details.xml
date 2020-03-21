@@ -183,16 +183,12 @@
                             android:textColor="#596d81"
                             app:fontFamily="@font/source_sans_pro" />
 
-                        <!-- Adding for badge -->
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end|center_vertical"
                             android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
 
                             <TextView
                                 android:id="@+id/tx_source_wallet_badge"
@@ -204,7 +200,7 @@
                                 android:paddingBottom="@dimen/margin_padding_size_2"
                                 android:paddingLeft="@dimen/margin_padding_size_4"
                                 android:paddingRight="@dimen/margin_padding_size_4"
-                                android:layout_marginRight="@dimen/margin_padding_size_4"
+                                android:layout_marginEnd="@dimen/margin_padding_size_4"
                                 android:textColor="@color/lightGrayTextColor"
                                 android:textSize="@dimen/edit_text_size_12"
                                 android:visibility="gone"
@@ -245,14 +241,11 @@
                             app:fontFamily="@font/source_sans_pro" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end|center_vertical"
                             android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
 
                             <TextView
                                 android:id="@+id/tx_dest_wallet_badge"
@@ -264,7 +257,7 @@
                                 android:paddingBottom="@dimen/margin_padding_size_2"
                                 android:paddingLeft="@dimen/margin_padding_size_4"
                                 android:paddingRight="@dimen/margin_padding_size_4"
-                                android:layout_marginRight="@dimen/margin_padding_size_4"
+                                android:layout_marginEnd="@dimen/margin_padding_size_4"
                                 android:textColor="@color/lightGrayTextColor"
                                 android:textSize="@dimen/edit_text_size_12"
                                 android:visibility="gone"
@@ -272,7 +265,7 @@
                                 tools:text="Wallet 2" />
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
                                 android:id="@+id/tx_details_dest"

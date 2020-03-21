@@ -18,6 +18,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
@@ -27,14 +28,14 @@
             tools:text="0.67320257 DCR (external)"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_16"
+            android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro" />
-
 
         <TextView
             android:id="@+id/badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_padding_size_4"
+            android:layout_marginStart="@dimen/margin_padding_size_4"
             android:background="@color/grayBackgroundLightColor"
             android:includeFontPadding="false"
             android:paddingTop="@dimen/margin_padding_size_2"
