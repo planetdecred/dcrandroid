@@ -365,9 +365,9 @@
     <string name="verify">Verify</string>
     <string name="seed_instruction_1">The <b>33-word seed phrase</b> is EXTREMELY IMPORTANT.</string>
     <string name="seed_instruction_2">Seed phrase is <b>the only way</b> to restore your wallet.</string>
-    <string name="seed_instruction_3">It is recommended to store your seed phrase in a (e.g. write down on a paper).</string>
-    <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any (e.g. screenshot).</string>
-    <string name="seed_instruction_5">Anyone with your seed phrase. DO NOT show it to anyone.</string>
+    <string name="seed_instruction_3">It is recommended to store your seed phrase in a <b><font color="#71b054">physical format</font></b> (e.g. write down on a paper).</string>
+    <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any <b><font color="#ed6d47">digital format</font></b> (e.g. screenshot).</string>
+    <string name="seed_instruction_5">Anyone with your seed phrase <b><font color="#ed6d47">can steal your funds</font></b>. DO NOT show it to anyone.</string>
     <string name="view_seed_phrase">View seed phrase</string>
     <string name="seed_verification_failed">Failed to verify. Please go through every words and try again.</string>
     <string name="back_to_wallets">Back to Wallets</string>
