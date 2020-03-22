@@ -22,6 +22,8 @@ import org.acra.annotation.ReportsCrashes;
 )
 public class MainApplication extends Application {
 
+    public static long appUpTimeSeconds = System.currentTimeMillis() / 1000;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
