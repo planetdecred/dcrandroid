@@ -7,6 +7,7 @@
 package com.dcrandroid.dialog.send
 
 import android.content.Context
+import android.text.InputType
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
@@ -25,6 +26,7 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
         val activity = context as AppCompatActivity
         destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager, layout.destination_account_spinner, R.string.dest_account_picker_title)
         addressInputHelper = InputHelper(context, layout.destination_address_container, validateAddress)
+        addressInputHelper.editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         layout.send_dest_toggle.setOnClickListener {
             if (destinationAccountSpinner.isVisible()) {
