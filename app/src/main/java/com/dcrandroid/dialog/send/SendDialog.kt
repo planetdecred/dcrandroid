@@ -124,6 +124,11 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         clearEstimates()
     }
 
+    override fun onResume() {
+        super.onResume()
+        destinationAddressCard.addressInputHelper.onResume()
+    }
+
     override fun showOptionsMenu(v: View) {
         val items: Array<Any> = arrayOf(
                 PopupItem(R.string.clear_fields)

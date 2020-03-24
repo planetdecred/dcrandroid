@@ -73,13 +73,14 @@
                 <HorizontalScrollView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:id="@+id/send_amount_layout"
                     android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/margin_padding_size_4"
                     android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/send_amount_layout">
+                        android:layout_height="match_parent">
 
                         <EditText
                             android:layout_width="wrap_content"
@@ -114,9 +115,19 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:id="@+id/iv_send_clear"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:layout_marginEnd="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    app:srcCompat="@drawable/ic_close"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/iv_send_max"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:layout_marginStart="@dimen/margin_padding_size_4"
                     android:background="@drawable/circular_transparent_ripple"
                     app:srcCompat="@drawable/ic_send_max" />
 
@@ -149,8 +160,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#e6eaed"
-                        android:layout_marginStart="@dimen/margin_padding_size_8"
-                        />
+                        android:layout_marginStart="@dimen/margin_padding_size_8" />
                 </LinearLayout>
 
                 <TextView
