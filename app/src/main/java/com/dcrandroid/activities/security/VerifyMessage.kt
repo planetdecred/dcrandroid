@@ -71,6 +71,13 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         setupClickListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        addressInputHelper.onResume()
+        messageInputHelper.onResume()
+        signatureInputHelper.onResume()
+    }
+
     private val textChanged = {
         tv_verify_message.isEnabled = !addressInputHelper.validatedInput.isNullOrBlank()
                 && !signatureInputHelper.validatedInput.isNullOrBlank()

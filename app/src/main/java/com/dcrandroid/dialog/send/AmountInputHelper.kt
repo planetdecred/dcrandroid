@@ -8,6 +8,7 @@ package com.dcrandroid.dialog.send
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import com.dcrandroid.R
@@ -75,9 +76,20 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             setBackground()
         }
 
+        layout.iv_send_clear.setOnClickListener(this)
         layout.iv_expand_fees.setOnClickListener(this)
         layout.swap_currency.setOnClickListener(this)
         layout.exchange_error_retry.setOnClickListener(this)
+
+        layout.send_amount_layout.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                // focus amount input on touch
+                layout.send_amount.requestFocus()
+                return@setOnTouchListener true
+            }
+            return@setOnTouchListener false
+        }
+
         fetchExchangeRate()
     }
 
@@ -163,6 +175,9 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
                 layout.exchange_layout.hide()
                 fetchExchangeRate()
             }
+            R.id.iv_send_clear -> {
+                layout.send_amount.text = null
+            }
         }
     }
 
@@ -191,6 +206,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         }
 
         displayEquivalentValue()
+        hideOrShowClearButton()
     }
 
     fun setAmountDCR(dcr: Long) = setAmountDCR(Dcrlibwallet.amountCoin(dcr))
@@ -214,8 +230,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     override fun afterTextChanged(s: Editable?) {
         if (s.isNullOrEmpty()) {
             layout.currency_label.setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
+            hideOrShowClearButton()
         } else {
             layout.currency_label.setTextColor(context.resources.getColor(R.color.darkBlueTextColor))
+            hideOrShowClearButton()
             if (currencyIsDCR) {
                 CoinFormat.formatSpannable(s, AmountRelativeSize)
             }
@@ -261,6 +279,14 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
             val dcrStr = dcrFormat.format(dcr)
             layout.send_equivalent_value.text = context.getString(R.string.x_dcr, dcrStr)
+        }
+    }
+
+    private fun hideOrShowClearButton(){
+        if(layout.send_amount.text.isEmpty()){
+            layout.iv_send_clear.hide()
+        }else{
+            layout.iv_send_clear.show()
         }
     }
 

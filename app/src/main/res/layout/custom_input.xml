@@ -18,7 +18,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@drawable/input_background"
-        android:padding="@dimen/margin_padding_size_12" >
+        android:padding="@dimen/margin_padding_size_12">
 
         <EditText
             android:layout_width="0dp"
@@ -38,31 +38,47 @@
         <!-- Used to preserve parent height when paste and qr buttons are hidden -->
         <View
             android:layout_width="0dp"
-            android:layout_height="24dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:id="@+id/custom_input_paste"
-            android:text="@string/paste"
-            android:textColor="@color/blue"
-            android:textSize="@dimen/edit_text_size_14"
-            android:fontFamily="@font/source_sans_pro"
-            android:background="@drawable/paste_bg"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginStart="@dimen/margin_padding_size_16"
-            android:paddingLeft="@dimen/margin_padding_size_8"
-            android:paddingRight="@dimen/margin_padding_size_8"
-            android:includeFontPadding="false" />
+            android:visibility="gone"
+            android:layout_height="24dp" />
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/iv_scan"
+            android:layout_width="@dimen/margin_padding_size_24"
+            android:layout_height="@dimen/margin_padding_size_24"
+            android:id="@+id/custom_input_clear"
             android:layout_marginStart="@dimen/margin_padding_size_16"
-            android:src="@drawable/ic_scan" />
+            android:visibility="gone"
+            android:src="@drawable/ic_close" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_padding_size_24"
+            android:id="@+id/paste_qr_layout"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:id="@+id/custom_input_paste"
+                android:text="@string/paste"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/edit_text_size_14"
+                android:fontFamily="@font/source_sans_pro"
+                android:background="@drawable/paste_bg"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingLeft="@dimen/margin_padding_size_8"
+                android:paddingRight="@dimen/margin_padding_size_8"
+                android:includeFontPadding="false" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/iv_scan"
+                android:layout_marginStart="@dimen/margin_padding_size_16"
+                android:src="@drawable/ic_scan" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -72,7 +88,7 @@
         android:id="@+id/custom_input_error_layout"
         android:layout_below="@id/input_layout"
         android:layout_marginStart="@dimen/margin_padding_size_16"
-        android:layout_marginTop="@dimen/margin_padding_size_4" >
+        android:layout_marginTop="@dimen/margin_padding_size_4">
 
         <TextView
             android:layout_width="match_parent"

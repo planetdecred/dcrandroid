@@ -58,6 +58,7 @@ class SignMessage : BaseActivity(), View.OnClickListener {
 
         signatureHelper = InputHelper(this, signature_container) { true }.apply {
             setHint(R.string.signature)
+            hideClearButton()
             hidePasteButton()
             hideQrScanner()
             textChanged = {}
@@ -78,6 +79,13 @@ class SignMessage : BaseActivity(), View.OnClickListener {
         iv_info.setOnClickListener(this)
         tv_copy.setOnClickListener(this)
         tv_sign.setOnClickListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        addressInputHelper.onResume()
+        messageInputHelper.onResume()
+        signatureHelper.onResume()
     }
 
     override fun onClick(v: View?) {
