@@ -23,7 +23,7 @@ func (wallet *Wallet) ReadUserConfigValue(key string, valueOut interface{}) erro
 		return errors.New(ErrFailedPrecondition)
 	}
 
-	err := wallet.readUserConfigValue(key, valueOut)
+	err := wallet.readUserConfigValue(false, key, valueOut)
 	if err != nil && err != storm.ErrNotFound {
 		log.Errorf("error reading config value for key: %s, error: %v", key, err)
 	}

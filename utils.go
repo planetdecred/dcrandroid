@@ -42,6 +42,23 @@ const (
 	DefaultRequiredConfirmations = 2
 )
 
+func (mw *MultiWallet) RequiredConfirmations() int32 {
+	spendUnconfirmed := mw.ReadBoolConfigValueForKey(SpendUnconfirmedConfigKey, false)
+	if spendUnconfirmed {
+		return 0
+	}
+	return DefaultRequiredConfirmations
+}
+
+func (wallet *Wallet) RequiredConfirmations() int32 {
+	var spendUnconfirmed bool
+	wallet.readUserConfigValue(true, SpendUnconfirmedConfigKey, &spendUnconfirmed)
+	if spendUnconfirmed {
+		return 0
+	}
+	return DefaultRequiredConfirmations
+}
+
 func (mw *MultiWallet) listenForShutdown() {
 
 	mw.cancelFuncs = make([]context.CancelFunc, 0)

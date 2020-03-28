@@ -9,8 +9,8 @@ import (
 	"github.com/decred/dcrwallet/errors/v2"
 )
 
-func (wallet *Wallet) GetAccounts(requiredConfirmations int32) (string, error) {
-	accountsResponse, err := wallet.GetAccountsRaw(requiredConfirmations)
+func (wallet *Wallet) GetAccounts() (string, error) {
+	accountsResponse, err := wallet.GetAccountsRaw()
 	if err != nil {
 		return "", nil
 	}
@@ -19,14 +19,14 @@ func (wallet *Wallet) GetAccounts(requiredConfirmations int32) (string, error) {
 	return string(result), nil
 }
 
-func (wallet *Wallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, error) {
+func (wallet *Wallet) GetAccountsRaw() (*Accounts, error) {
 	resp, err := wallet.internal.Accounts(wallet.shutdownContext())
 	if err != nil {
 		return nil, err
 	}
 	accounts := make([]*Account, len(resp.Accounts))
 	for i, account := range resp.Accounts {
-		balance, err := wallet.GetAccountBalance(int32(account.AccountNumber), requiredConfirmations)
+		balance, err := wallet.GetAccountBalance(int32(account.AccountNumber))
 		if err != nil {
 			return nil, err
 		}
@@ -51,8 +51,8 @@ func (wallet *Wallet) GetAccountsRaw(requiredConfirmations int32) (*Accounts, er
 	}, nil
 }
 
-func (wallet *Wallet) AccountsIterator(requiredConfirmations int32) (*AccountsIterator, error) {
-	accounts, err := wallet.GetAccountsRaw(requiredConfirmations)
+func (wallet *Wallet) AccountsIterator() (*AccountsIterator, error) {
+	accounts, err := wallet.GetAccountsRaw()
 	if err != nil {
 		return nil, err
 	}
@@ -77,13 +77,13 @@ func (accountsInterator *AccountsIterator) Reset() {
 	accountsInterator.currentIndex = 0
 }
 
-func (wallet *Wallet) GetAccount(accountNumber int32, requiredConfirmations int32) (*Account, error) {
+func (wallet *Wallet) GetAccount(accountNumber int32) (*Account, error) {
 	props, err := wallet.internal.AccountProperties(wallet.shutdownContext(), uint32(accountNumber))
 	if err != nil {
 		return nil, err
 	}
 
-	balance, err := wallet.GetAccountBalance(accountNumber, requiredConfirmations)
+	balance, err := wallet.GetAccountBalance(accountNumber)
 	if err != nil {
 		return nil, err
 	}
@@ -102,8 +102,8 @@ func (wallet *Wallet) GetAccount(accountNumber int32, requiredConfirmations int3
 	return account, nil
 }
 
-func (wallet *Wallet) GetAccountBalance(accountNumber int32, requiredConfirmations int32) (*Balance, error) {
-	balance, err := wallet.internal.CalculateAccountBalance(wallet.shutdownContext(), uint32(accountNumber), requiredConfirmations)
+func (wallet *Wallet) GetAccountBalance(accountNumber int32) (*Balance, error) {
+	balance, err := wallet.internal.CalculateAccountBalance(wallet.shutdownContext(), uint32(accountNumber), wallet.RequiredConfirmations())
 	if err != nil {
 		return nil, err
 	}
@@ -119,8 +119,8 @@ func (wallet *Wallet) GetAccountBalance(accountNumber int32, requiredConfirmatio
 	}, nil
 }
 
-func (wallet *Wallet) SpendableForAccount(account int32, requiredConfirmations int32) (int64, error) {
-	bals, err := wallet.internal.CalculateAccountBalance(wallet.shutdownContext(), uint32(account), requiredConfirmations)
+func (wallet *Wallet) SpendableForAccount(account int32) (int64, error) {
+	bals, err := wallet.internal.CalculateAccountBalance(wallet.shutdownContext(), uint32(account), wallet.RequiredConfirmations())
 	if err != nil {
 		log.Error(err)
 		return 0, translateError(err)

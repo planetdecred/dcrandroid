@@ -33,7 +33,7 @@ const (
 )
 
 type configSaveFn = func(key string, value interface{}) error
-type configReadFn = func(key string, valueOut interface{}) error
+type configReadFn = func(multiwallet bool, key string, valueOut interface{}) error
 
 func (mw *MultiWallet) walletConfigSetFn(walletID int) configSaveFn {
 	return func(key string, value interface{}) error {
@@ -43,9 +43,11 @@ func (mw *MultiWallet) walletConfigSetFn(walletID int) configSaveFn {
 }
 
 func (mw *MultiWallet) walletConfigReadFn(walletID int) configReadFn {
-	return func(key string, valueOut interface{}) error {
-		walletUniqueKey := WalletUniqueConfigKey(walletID, key)
-		return mw.db.Get(userConfigBucketName, walletUniqueKey, valueOut)
+	return func(multiwallet bool, key string, valueOut interface{}) error {
+		if !multiwallet {
+			key = WalletUniqueConfigKey(walletID, key)
+		}
+		return mw.db.Get(userConfigBucketName, key, valueOut)
 	}
 }
 
