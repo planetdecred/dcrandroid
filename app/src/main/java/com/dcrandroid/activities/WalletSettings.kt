@@ -94,10 +94,6 @@ class WalletSettings : BaseActivity() {
         }
 
         remove_wallet.setOnClickListener {
-            if (multiWallet!!.isSyncing || multiWallet!!.isSynced) {
-                SnackBar.showError(this, R.string.cancel_sync_delete_wallet)
-                return@setOnClickListener
-            }
 
             val dialog = InfoDialog(this)
                     .setDialogTitle(getString(R.string.remove_wallet_prompt))
@@ -163,7 +159,7 @@ class WalletSettings : BaseActivity() {
                             dialog.setProcessing(false)
                             dialog.showError()
                         }
-                    }else{
+                    } else {
                         Dcrlibwallet.logT(op, e.message)
                         dialog?.dismiss()
                         SnackBar.showError(this@WalletSettings, R.string.check_log_error)
@@ -185,10 +181,8 @@ class WalletSettings : BaseActivity() {
 
     private fun deleteWallet(pass: String, dialog: FullScreenBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            multiWallet!!.unlockWallet(walletID, pass.toByteArray()) // test if pass is correct
-            clearSpendingPassFromKeystore()
-
             multiWallet!!.deleteWallet(walletID, pass.toByteArray())
+            clearSpendingPassFromKeystore()
 
             withContext(Dispatchers.Main) {
                 dialog?.dismiss()

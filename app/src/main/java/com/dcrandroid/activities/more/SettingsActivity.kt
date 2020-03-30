@@ -155,7 +155,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                             dialog.setProcessing(false)
                             dialog.showError()
                         }
-                    }else{
+                    } else {
                         Dcrlibwallet.logT(op, e.message)
                         dialog?.dismiss()
                         SnackBar.showError(this@SettingsActivity, R.string.check_log_error)
@@ -170,34 +170,27 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun setupStartupSecurity() {
-        var dialog: PasswordPinDialogFragment? = null
-        dialog = PasswordPinDialogFragment(R.string.create, false, isChange = false, passwordPinListener = object : PasswordPinDialogFragment.PasswordPinListener {
+        PasswordPinDialogFragment(R.string.create, false, isChange = false) { dialog, passphrase, passphraseType ->
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    multiWallet!!.setStartupPassphrase(passphrase.toByteArray(), passphraseType)
+                    multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
+                    multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
 
-            override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        multiWallet!!.setStartupPassphrase(newPassphrase.toByteArray(), passphraseType)
-                        multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
-                        multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
-
-                        withContext(Dispatchers.Main) {
-                            dialog?.dismiss()
-                            loadStartupSecurity()
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-
-                        withContext(Dispatchers.Main) {
-                            dialog?.dismiss()
-                        }
+                    withContext(Dispatchers.Main) {
+                        dialog.dismiss()
+                        loadStartupSecurity()
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
 
+                    withContext(Dispatchers.Main) {
+                        dialog.dismiss()
+                    }
                 }
+
             }
-
-        })
-
-        dialog.show(this)
+        }.show(this)
     }
 
     private fun removeStartupSecurity() {

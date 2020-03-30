@@ -21,7 +21,7 @@ import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_password_pin_dialog.*
 
 class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isSpending: Boolean, var isChange: Boolean,
-                                private val passwordPinListener: PasswordPinListener) : FullScreenBottomSheetDialog() {
+                                private val onPassphraseConfirmed: (dialog: FullScreenBottomSheetDialog, passphrase: String, passphraseType: Int) -> Unit) : FullScreenBottomSheetDialog() {
 
     private lateinit var spendingCreatePasswordFragment: CreatePasswordPromptFragment
     private lateinit var spendingCreatePinFragment: CreatePinPromptFragment
@@ -110,12 +110,8 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
                 Dcrlibwallet.PassphraseTypePin
             }
 
-            passwordPinListener.onEnterPasswordOrPin(passphrase, passphraseType)
+            onPassphraseConfirmed(this, passphrase, passphraseType)
         }
-    }
-
-    interface PasswordPinListener {
-        fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int)
     }
 
     class ViewPagerAdapter(fragmentManager: FragmentManager,
