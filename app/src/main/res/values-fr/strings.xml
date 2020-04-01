@@ -496,5 +496,6 @@
     <string name="your_33_word_seed_phrase">Votre phrase de récupération à 33 mots</string>
     <string name="enter_startup_password">Entrer un nouveau mot de passe de démarrage</string>
     <string name="migrating_wallet">Migration du porte-monnaie</string>
+    <string name="previous_outpoint_copied">Point de sortie précédent copié</string>
 
 </resources>
