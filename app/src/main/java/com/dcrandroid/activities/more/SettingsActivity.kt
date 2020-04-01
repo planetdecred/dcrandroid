@@ -58,7 +58,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             if (newValue) {
                 enableStartupFingerprint()
             } else {
-                // clear passphrase from keystore
+                // clear passphrase from keystore by saving an empty passphrase
                 BiometricUtils.saveToKeystore(this@SettingsActivity, "", Constants.STARTUP_PASSPHRASE)
             }
 
@@ -126,6 +126,8 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun enableStartupFingerprint() {
+        val op = this.javaClass.name + ".enableStartupFingerprint"
+
         val title = PassPromptTitle(R.string.enter_startup_password, R.string.enter_startup_pin)
         PassPromptUtil(this@SettingsActivity, null, title, false) { dialog, passphrase ->
 
@@ -145,18 +147,18 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
 
-                    if (dialog is PinPromptDialog) {
-                        dialog.setProcessing(false)
-                    } else if (dialog is PasswordPromptDialog) {
-                        dialog.setProcessing(false)
-                    }
-
-                    if (e.message != Dcrlibwallet.ErrInvalidPassphrase) {
-                        val errMessage = when (dialog) {
-                            is PinPromptDialog -> R.string.invalid_pin
-                            else -> R.string.invalid_password
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                        if (dialog is PinPromptDialog) {
+                            dialog.setProcessing(false)
+                            dialog.showError()
+                        } else if (dialog is PasswordPromptDialog) {
+                            dialog.setProcessing(false)
+                            dialog.showError()
                         }
-                        SnackBar.showError(this@SettingsActivity, errMessage)
+                    }else{
+                        Dcrlibwallet.logT(op, e.message)
+                        dialog?.dismiss()
+                        SnackBar.showError(this@SettingsActivity, R.string.check_log_error)
                     }
 
                     return@launch

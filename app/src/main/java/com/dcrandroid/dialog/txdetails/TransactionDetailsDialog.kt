@@ -20,6 +20,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
@@ -81,6 +82,9 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                         tx_source_row.show()
                         tx_details_source.text = getSourceAccount()
 
+                        tx_source_wallet_badge.text = multiWallet.walletWithID(transaction.walletID).name
+                        tx_source_wallet_badge.show()
+
                         tx_dest_row.show()
                         tx_details_dest.apply {
                             text = getDestinationAddress()
@@ -98,6 +102,9 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                         tx_details_dest.text = getReceiveAccount()
                         tx_details_dest.setTextColor(resources.getColor(R.color.darkBlueTextColor))
 
+                        tx_dest_wallet_badge.text = multiWallet.walletWithID(transaction.walletID).name
+                        tx_dest_wallet_badge.show()
+
                         toolbar_title.setText(R.string.received)
                     }
                     else -> toolbar_title.setText(R.string.transferred)
@@ -113,7 +120,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     // returns first external output address if any
     private fun getDestinationAddress(): String? {
         for (output in transaction.outputs!!) {
-            if (output.accountName == Constants.EXTERNAL) {
+            if (output.account != null && output.account != -1) {
                 return output.address
             }
         }
@@ -122,7 +129,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
     private fun getSourceAccount(): String? {
         for (input in transaction.inputs!!) {
-            if (input.accountName != Constants.EXTERNAL) {
+            if (input.accountNumber != null && input.accountNumber != -1) {
                 return input.accountName
             }
         }
@@ -133,7 +140,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     // returns first internal output address if any
     private fun getReceiveAccount(): String? {
         for (output in transaction.outputs!!) {
-            if (output.accountName != Constants.EXTERNAL) {
+            if (output.account != null && output.account != -1) {
                 return output.accountName
             }
         }
@@ -144,7 +151,11 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         val inputs = ArrayList<DropDownItem>()
         for (input in transaction.inputs!!) {
             val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(input.amount), input.accountName)
-            inputs.add(DropDownItem(amount, input.previousOutpoint!!))
+            var inputBadge = ""
+            if (input.accountNumber != null && input.accountNumber != -1){
+                inputBadge = multiWallet.walletWithID(transaction.walletID).name
+            }
+            inputs.add(DropDownItem(amount, input.previousOutpoint!!, inputBadge))
         }
 
         InputOutputDropdown(input_dropdown_layout, inputs.toTypedArray(), top_bar)
@@ -152,7 +163,11 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         val outputs = ArrayList<DropDownItem>()
         for (output in transaction.outputs!!) {
             val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(output.amount), output.accountName)
-            outputs.add(DropDownItem(amount, output.address!!))
+            var outputBadge = ""
+            if (output.account != null && output.account != -1){
+                outputBadge = multiWallet.walletWithID(transaction.walletID).name
+            }
+            outputs.add(DropDownItem(amount, output.address!!, outputBadge))
         }
 
         InputOutputDropdown(output_dropdown_layout, outputs.toTypedArray(), isInput = false, toastAnchor = top_bar)

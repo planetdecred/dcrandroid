@@ -115,6 +115,11 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        extendedPublicKeyInput.onResume()
+    }
+
     private fun toggleButtons(enable: Boolean) = GlobalScope.launch(Dispatchers.Main) {
         isCancelable = enable
         btn_cancel.isEnabled = enable

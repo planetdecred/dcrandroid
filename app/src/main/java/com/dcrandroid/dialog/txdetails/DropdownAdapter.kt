@@ -11,9 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.input_output_row.view.*
 
-data class DropDownItem(val amount: String, val address: String)
+data class DropDownItem(val amount: String, val address: String, val badge: String)
 
 class DropdownAdapter(private val items: Array<DropDownItem>) : RecyclerView.Adapter<DropdownAdapter.ViewHolder>() {
 
@@ -31,6 +32,10 @@ class DropdownAdapter(private val items: Array<DropDownItem>) : RecyclerView.Ada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.amount.text = items[position].amount
         holder.itemView.address.text = items[position].address
+        if(items[position].badge.isNotBlank()) {
+            holder.itemView.badge.text = items[position].badge
+            holder.itemView.badge.show()
+        }
 
         holder.itemView.address.setOnClickListener {
             addressTapped(position)
