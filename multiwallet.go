@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/asdine/storm"
 	"github.com/asdine/storm/q"
@@ -29,6 +30,7 @@ type MultiWallet struct {
 	wallets     map[int]*Wallet
 	syncData    *syncData
 
+	notificationListenersMu         sync.RWMutex
 	txAndBlockNotificationListeners map[string]TxAndBlockNotificationListener
 	blocksRescanProgressListener    BlocksRescanProgressListener
 
@@ -296,10 +298,6 @@ func (mw *MultiWallet) RestoreWallet(seedMnemonic, privatePassphrase string, pri
 }
 
 func (mw *MultiWallet) LinkExistingWallet(walletDataDir, originalPubPass string, privatePassphraseType int32) (*Wallet, error) {
-	if mw.IsSyncing() {
-		return nil, errors.New(ErrSyncAlreadyInProgress)
-	}
-
 	// check if `walletDataDir` contains wallet.db
 	if !WalletExistsAt(walletDataDir) {
 		return nil, errors.New(ErrNotExist)
@@ -374,13 +372,9 @@ func (mw *MultiWallet) LinkExistingWallet(walletDataDir, originalPubPass string,
 // - calls the provided `setupWallet` function to perform any necessary creation,
 //   restoration or linking of the just saved wallet
 //
-// Iff all the above operations succeed, the wallet info will be persisted to db
+// IFF all the above operations succeed, the wallet info will be persisted to db
 // and the wallet will be added to `mw.wallets`.
 func (mw *MultiWallet) saveNewWallet(wallet *Wallet, setupWallet func() error) (*Wallet, error) {
-	if mw.IsSyncing() {
-		return nil, errors.New(ErrSyncAlreadyInProgress)
-	}
-
 	exists, err := mw.WalletNameExists(wallet.Name)
 	if err != nil {
 		return nil, err
@@ -388,6 +382,10 @@ func (mw *MultiWallet) saveNewWallet(wallet *Wallet, setupWallet func() error) (
 		return nil, errors.New(ErrExist)
 	}
 
+	if mw.IsConnectedToDecredNetwork() {
+		mw.CancelSync()
+		defer mw.SpvSync()
+	}
 	// Perform database save operations in batch transaction
 	// for automatic rollback if error occurs at any point.
 	err = mw.batchDbTransaction(func(db storm.Node) error {
@@ -445,13 +443,19 @@ func (mw *MultiWallet) RenameWallet(walletID int, newName string) error {
 }
 
 func (mw *MultiWallet) DeleteWallet(walletID int, privPass []byte) error {
-	if mw.IsSyncing() {
-		return errors.New(ErrSyncAlreadyInProgress)
-	}
 
 	wallet := mw.WalletWithID(walletID)
 	if wallet == nil {
 		return errors.New(ErrNotExist)
+	}
+
+	if mw.IsConnectedToDecredNetwork() {
+		mw.CancelSync()
+		defer func() {
+			if mw.OpenedWalletsCount() > 0 {
+				mw.SpvSync()
+			}
+		}()
 	}
 
 	err := wallet.deleteWallet(privPass)

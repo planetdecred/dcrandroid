@@ -309,6 +309,12 @@ func (wallet *Wallet) IsSyncing() bool {
 	return wallet.syncing
 }
 
+func (mw *MultiWallet) IsConnectedToDecredNetwork() bool {
+	mw.syncData.mu.RLock()
+	defer mw.syncData.mu.RUnlock()
+	return mw.syncData.syncing || mw.syncData.synced
+}
+
 func (mw *MultiWallet) IsSynced() bool {
 	mw.syncData.mu.RLock()
 	defer mw.syncData.mu.RUnlock()
