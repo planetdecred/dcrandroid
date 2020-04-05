@@ -40,18 +40,11 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         }
 
     init {
-
-        val requiredConfirmations = if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)) {
-            0
-        } else {
-            Constants.REQUIRED_CONFIRMATIONS
-        }
-
         // Set default selected account as "default"
         // account from the first opened wallet
-        wallet = multiWallet.openedWalletsList()[0]
+        wallet = multiWallet!!.openedWalletsList()[0]
 
-        selectedAccount = Account.from(wallet.getAccount(Constants.DEF_ACCOUNT_NUMBER, requiredConfirmations))
+        selectedAccount = Account.from(wallet.getAccount(Constants.DEF_ACCOUNT_NUMBER))
         selectedAccountChanged?.let { it1 -> it1(this) }
         spinnerLayout.setOnClickListener(this)
 

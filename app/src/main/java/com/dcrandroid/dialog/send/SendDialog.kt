@@ -275,12 +275,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         val feeAndSize: TxFeeAndSize
 
         try {
-            val requiredConfirmations = when {
-                multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
-                else -> Constants.REQUIRED_CONFIRMATIONS
-            }
-
-            txAuthor = sourceAccountSpinner.wallet.newUnsignedTx(selectedAccount.accountNumber, requiredConfirmations)
+            txAuthor = multiWallet.newUnsignedTx(sourceAccountSpinner.wallet, selectedAccount.accountNumber)
             println("Estimation address: ${destinationAddressCard.estimationAddress}")
             txAuthor.addSendDestination(destinationAddressCard.estimationAddress, amountAtom, sendMax)
             feeAndSize = txAuthor.estimateFeeAndSize()

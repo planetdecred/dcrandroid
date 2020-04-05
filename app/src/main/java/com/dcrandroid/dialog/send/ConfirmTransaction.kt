@@ -23,6 +23,7 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
@@ -105,7 +106,10 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                         showSuccess()
                     } catch (e: Exception) {
                         showSendButton()
-                        SnackBar.showError(container!!, R.string.send_fail_msg) //TODO handle incorrect pass
+                        val err = if(wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
+                            R.string.invalid_pin
+                        }else R.string.invalid_password
+                        SnackBar.showError(container!!, err) //TODO: handle other error types
                         e.printStackTrace()
                     }
                 }
