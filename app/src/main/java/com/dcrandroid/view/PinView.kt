@@ -11,23 +11,27 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.text.InputType
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import com.dcrandroid.R
+import com.dcrandroid.view.util.InputConnectionAccommodatingLatinIMETypeNullIssues
 import dcrlibwallet.Dcrlibwallet
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
 
-class PinView : TextView, View.OnClickListener {
+class PinView : View, View.OnClickListener {
 
     private lateinit var circlePaint: Paint
     private lateinit var hintPaint: TextPaint
@@ -70,10 +74,23 @@ class PinView : TextView, View.OnClickListener {
         init(context, attrs, defStyleAttr)
     }
 
+    override fun onCreateInputConnection(outAttrs: EditorInfo?): InputConnection {
+        val baseInputConnection = InputConnectionAccommodatingLatinIMETypeNullIssues(this, false)
+
+        outAttrs?.actionLabel = null
+        outAttrs?.inputType = InputType.TYPE_CLASS_NUMBER
+
+        // This creates a Done key on the IME keyboard if you need one
+        outAttrs?.imeOptions = EditorInfo.IME_ACTION_DONE
+
+        return baseInputConnection
+    }
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         this.mContext = context
         this.setOnClickListener(this)
+        isFocusableInTouchMode = true
+        isFocusable = true
 
         val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
 
