@@ -15,6 +15,7 @@
     <color name="colorPrimaryDark">#838383</color>
     <color name="white">#ffffff</color>
     <color name="blue">#2970FF</color>
+    <color name="primaryRipple">#E6EAED</color>
     <color name="whiteRipple">#EDEFF1</color>
     <color name="blueRipple">#1B41B3</color>
     <color name="orangeRipple">#D32F2F</color>

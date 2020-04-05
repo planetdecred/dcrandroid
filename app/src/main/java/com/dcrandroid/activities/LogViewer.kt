@@ -38,6 +38,9 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         logTextView = findViewById(R.id.log_text)
 
         go_back.setOnClickListener { finish() }
+        iv_copy_wallet_log.setOnClickListener {
+            Utils.copyToClipboard(this, logTextView!!.text.toString(), R.string.wallet_log_copied)
+        }
         log_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
 
         updateJob = GlobalScope.launch(Dispatchers.IO) {
@@ -72,23 +75,6 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     private fun addLine(line: String) = GlobalScope.launch(Dispatchers.Main) {
         logTextView!!.append(line)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(Menu.NONE, MENU_ITEM, Menu.NONE, R.string._copy).setIcon(R.drawable.ic_copy)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            MENU_ITEM -> {
-                Utils.copyToClipboard(this, logTextView!!.text.toString(), R.string.wallet_log_copied) // TODO:
-                true
-            }
-
-            else -> false
-        }
     }
 
     override fun onScrollChanged() {

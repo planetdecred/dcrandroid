@@ -56,7 +56,7 @@
     <string name="peer_ip_dialog_title">Set up persistent peer</string>
     <string name="peer_ip_pref_hint">IP Address</string>
     <string name="log_file_not_found">Log file not found</string>
-    <string name="wallet_log_copied">Wallet log copied successfully</string>
+    <string name="wallet_log_copied">Wallet log copied</string>
     <string name="_copy">Copy</string>
     <string name="address_not_found">Address not found.</string>
     <string name="share">Share</string>
