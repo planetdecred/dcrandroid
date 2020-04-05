@@ -19,7 +19,7 @@ fun Wallet.walletAccounts(): ArrayList<Account> {
         WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
         else -> Constants.REQUIRED_CONFIRMATIONS
     }
-    return parseAccounts(this.getAccounts(requiredConfirmations)).accounts
+    return parseAccounts(this.accounts).accounts
 }
 
 fun Wallet.totalWalletBalance(): Long {
