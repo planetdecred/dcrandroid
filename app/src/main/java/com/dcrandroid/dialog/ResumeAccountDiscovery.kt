@@ -164,12 +164,12 @@ class ResumeAccountDiscovery : BottomSheetDialogFragment() {
                 }
 
             }
+
+            withContext(Dispatchers.Main) {
+                btn_unlock.show()
+                resume_restore_pass.isEnabled = true
+                discovery_progress_bar.hide()
+            }
         }
-
-        btn_unlock.show()
-        resume_restore_pass.isEnabled = true
-        discovery_progress_bar.hide()
-
-
     }
 }

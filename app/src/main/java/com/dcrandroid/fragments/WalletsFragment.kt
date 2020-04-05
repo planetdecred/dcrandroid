@@ -12,13 +12,22 @@ import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
-import com.dcrandroid.activities.SetupWalletActivity
+import com.dcrandroid.activities.RESTORE_WALLET_REQUEST_CODE
+import com.dcrandroid.activities.RestoreWalletActivity
+import com.dcrandroid.adapter.PopupDivider
+import com.dcrandroid.adapter.PopupItem
+import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.util.SnackBar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-const val CREATE_WALLET_REQUEST_CODE = 100
 const val VERIFY_SEED_REQUEST_CODE = 200
 const val WALLET_SETTINGS_REQUEST_CODE = 300
 
@@ -66,14 +75,7 @@ class WalletsFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == CREATE_WALLET_REQUEST_CODE && resultCode == RESULT_OK) {
-
-            val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
-            adapter.addWallet(walletID)
-            refreshNavigationTabs()
-            SnackBar.showText(context!!, R.string.wallet_created)
-
-        } else if (requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == VERIFY_SEED_REQUEST_CODE && resultCode == RESULT_OK) {
 
             val walletID = data!!.getLongExtra(Constants.WALLET_ID, -1)
             adapter.walletBackupVerified(walletID)
@@ -83,6 +85,10 @@ class WalletsFragment : BaseFragment() {
 
             adapter.reloadList()
             refreshNavigationTabs()
+        } else if (requestCode == RESTORE_WALLET_REQUEST_CODE && resultCode == RESULT_OK) {
+            val walletID = data?.getLongExtra(Constants.WALLET_ID, -1)
+            adapter.addWallet(walletID!!)
+            SnackBar.showText(context!!, R.string.wallet_created)
         }
     }
 
@@ -94,17 +100,55 @@ class WalletsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_new_wallet -> {
-                if (multiWallet.isSyncing || multiWallet.isSynced) {
-                    SnackBar.showError(context!!, R.string.cancel_sync_create_wallet)
-                    return false
-                }
+                val dividerWidth = context!!.resources.getDimensionPixelSize(R.dimen.add_wallet_menu_width)
 
-                val i = Intent(context, SetupWalletActivity::class.java)
-                startActivityForResult(i, CREATE_WALLET_REQUEST_CODE)
+                val items = arrayOf(
+                        PopupItem(R.string.create_a_new_wallet),
+                        PopupItem(R.string.import_existing_wallet),
+                        PopupDivider(dividerWidth),
+                        PopupItem(R.string.import_watching_only_wallet, R.color.colorDisabled, false)
+                )
+
+                if (activity is HomeActivity) {
+                    val homeActivity = activity as HomeActivity
+
+                    val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
+                    PopupUtil.showPopup(anchorView, items) { window, index ->
+                        window.dismiss()
+                        when (index) {
+                            0 -> {
+                                PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
+                                    createWallet(dialog, passphrase, passphraseType)
+                                }.show(context!!)
+                            }
+                            1 -> {
+                                val restoreIntent = Intent(context!!, RestoreWalletActivity::class.java)
+                                startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
+                            }
+                            3 -> {
+                                // create watching only wallet
+                            }
+                        }
+                    }
+                }
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+        try {
+            val wallet = multiWallet.createNewWallet(spendingKey, type)
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+                adapter.addWallet(wallet.id)
+                refreshNavigationTabs() // to add the orange backup needed indicator to the tab icon
+                SnackBar.showText(context!!, R.string.wallet_created)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }

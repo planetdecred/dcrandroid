@@ -20,7 +20,7 @@ import com.dcrandroid.R
 import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.popup_layout_row.view.*
 
-class PopupItem(@StringRes val title: Int, @ColorRes val color: Int = R.color.darkBlueTextColor)
+class PopupItem(@StringRes val title: Int, @ColorRes val color: Int = R.color.darkBlueTextColor, val enabled: Boolean = true)
 class PopupDivider(val widthPixels: Int)
 
 const val VIEW_TYPE_ROW = 0
@@ -55,6 +55,7 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
         if (item is PopupItem) {
             holder.itemView.popup_text.setText(item.title)
             holder.itemView.popup_text.setTextColor(context.resources.getColor(item.color))
+            holder.itemView.isEnabled = item.enabled
 
             holder.itemView.setOnClickListener {
                 itemClicked(position)

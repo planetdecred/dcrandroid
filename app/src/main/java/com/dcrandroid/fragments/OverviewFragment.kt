@@ -123,9 +123,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onResume() {
         super.onResume()
         syncLayoutUtil = SyncLayoutUtil(syncLayout, { restartSyncProcess() }, {
-            scrollView.postDelayed({
-                scrollView.smoothScrollTo(0, scrollView.bottom)
-            }, 200)
+            if (multiWallet.isSyncing) {
+                scrollView.postDelayed({
+                    scrollView.smoothScrollTo(0, scrollView.bottom)
+                }, 200)
+            }
         })
     }
 

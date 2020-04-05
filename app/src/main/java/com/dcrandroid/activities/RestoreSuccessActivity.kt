@@ -25,7 +25,7 @@ class RestoreSuccessActivity : BaseActivity() {
 
             if (multiWallet!!.openedWalletsCount() > 1) {
 
-                val walletID = intent.getLongExtra(Constants.WALLET_ID, 0)
+                val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
 
                 val data = Intent()
                 data.putExtra(Constants.WALLET_ID, walletID)

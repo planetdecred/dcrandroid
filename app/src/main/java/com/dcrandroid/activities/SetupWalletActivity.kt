@@ -14,15 +14,17 @@ import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import kotlinx.android.synthetic.main.activity_setup_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 const val RESTORE_WALLET_REQUEST_CODE = 1
 
-class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPinListener {
+class SetupWalletActivity : BaseActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +33,9 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         setContentView(R.layout.activity_setup_page)
 
         ll_create_wallet.setOnClickListener {
-            PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false, passwordPinListener = this).show(this)
+            PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
+                createWallet(dialog, passphrase, passphraseType)
+            }.show(this)
         }
 
         ll_create_watch_only.setOnClickListener {
@@ -54,16 +58,6 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         }
     }
 
-    /**
-     * Callback when the user submits spending password or pin
-     *
-     * @param newPassphrase - either a spending password or pin
-     * @param passphraseType  - flag to tell whether its a password or pin
-     */
-    override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
-        createWallet(newPassphrase, passphraseType)
-    }
-
     private fun navigateToHomeActivity(walletID: Long) = GlobalScope.launch(Dispatchers.Main) {
         if (multiWallet!!.openedWalletsCount() > 1) {
             val data = Intent()
@@ -79,9 +73,12 @@ class SetupWalletActivity : BaseActivity(), PasswordPinDialogFragment.PasswordPi
         }
     }
 
-    private fun createWallet(spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
             val wallet = multiWallet!!.createNewWallet(spendingKey, type)
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+            }
             navigateToHomeActivity(wallet.id)
         } catch (e: Exception) {
             e.printStackTrace()
