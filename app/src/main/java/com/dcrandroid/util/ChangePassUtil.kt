@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.PasswordPromptDialog
+import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.coroutines.Dispatchers
@@ -22,33 +24,70 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
     private lateinit var passwordPinDialogFragment: PasswordPinDialogFragment
     private var oldPassphrase = ""
 
+    private val multiWallet = WalletData.multiWallet!!
+
     fun begin() {
+        val op = this.javaClass.name + ".begin"
         passwordPinDialogFragment = PasswordPinDialogFragment(R.string.change, walletID != null, true) { dialog, passphrase, passphraseType ->
             changePassphrase(dialog, passphrase, passphraseType)
         }
 
         val title = PassPromptTitle(R.string.confirm_to_change, R.string.confirm_to_change, R.string.confirm_to_change)
         var passPromptUtil: PassPromptUtil? = null
-        passPromptUtil = PassPromptUtil(fragmentActivity, walletID, title, false) { _, pass ->
+        passPromptUtil = PassPromptUtil(fragmentActivity, walletID, title, false) { dialog, pass ->
+
             if (pass != null) {
-                oldPassphrase = pass
 
-                passwordPinDialogFragment.tabIndex = if (passPromptUtil!!.passType == Dcrlibwallet.PassphraseTypePass) {
-                    0
-                } else 1
+                GlobalScope.launch(Dispatchers.Default) {
 
-                passwordPinDialogFragment.show(fragmentActivity)
+                    try {
+                        if (walletID == null) {
+                            multiWallet.verifyStartupPassphrase(pass.toByteArray())
+                        } else {
+                            val wallet = multiWallet.walletWithID(walletID)
+                            wallet.unlockWallet(pass.toByteArray())
+                            wallet.lockWallet()
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            dialog?.dismiss()
+                        }
+
+                        oldPassphrase = pass
+
+                        passwordPinDialogFragment.tabIndex = if (passPromptUtil!!.passType == Dcrlibwallet.PassphraseTypePass) {
+                            0
+                        } else 1
+
+                        passwordPinDialogFragment.show(fragmentActivity)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+
+                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                            if (dialog is PinPromptDialog) {
+                                dialog.setProcessing(false)
+                                dialog.showError()
+                            } else if (dialog is PasswordPromptDialog) {
+                                dialog.setProcessing(false)
+                                dialog.showError()
+                            }
+                        } else {
+                            Dcrlibwallet.logT(op, e.message)
+                            dialog?.dismiss()
+                            SnackBar.showError(fragmentActivity, R.string.check_log_error)
+                        }
+                    }
+                }
 
             }
 
-            return@PassPromptUtil true
+            return@PassPromptUtil false
         }
 
         passPromptUtil.show()
     }
 
     private fun changePassphrase(dialog: FullScreenBottomSheetDialog, newPassphrase: String, passphraseType: Int) = GlobalScope.launch(Dispatchers.IO) {
-        val multiWallet = WalletData.multiWallet!!
 
         if (walletID == null) {
             try {
