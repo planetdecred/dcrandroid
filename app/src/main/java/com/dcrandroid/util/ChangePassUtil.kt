@@ -9,6 +9,7 @@ package com.dcrandroid.util
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.coroutines.Dispatchers
@@ -16,13 +17,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletID: Long?) : PasswordPinDialogFragment.PasswordPinListener {
+class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletID: Long?) {
 
     private lateinit var passwordPinDialogFragment: PasswordPinDialogFragment
     private var oldPassphrase = ""
 
     fun begin() {
-        passwordPinDialogFragment = PasswordPinDialogFragment(R.string.change, walletID != null, true, this)
+        passwordPinDialogFragment = PasswordPinDialogFragment(R.string.change, walletID != null, true) { dialog, passphrase, passphraseType ->
+            changePassphrase(dialog, passphrase, passphraseType)
+        }
 
         val title = PassPromptTitle(R.string.confirm_to_change, R.string.confirm_to_change, R.string.confirm_to_change)
         var passPromptUtil: PassPromptUtil? = null
@@ -44,46 +47,43 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
         passPromptUtil.show()
     }
 
-    override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val multiWallet = WalletData.multiWallet!!
+    private fun changePassphrase(dialog: FullScreenBottomSheetDialog, newPassphrase: String, passphraseType: Int) = GlobalScope.launch(Dispatchers.IO) {
+        val multiWallet = WalletData.multiWallet!!
 
-            if (walletID == null) {
-                try {
-                    multiWallet.changeStartupPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
+        if (walletID == null) {
+            try {
+                multiWallet.changeStartupPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
 
-                    // saving after a successful change to avoid saving a wrong oldPassphrase
-                    BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
+                // saving after a successful change to avoid saving a wrong oldPassphrase
+                BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
 
-                    SnackBar.showText(fragmentActivity, R.string.startup_security_changed)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                SnackBar.showText(fragmentActivity, R.string.startup_security_changed)
+            } catch (e: Exception) {
+                e.printStackTrace()
 
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        val passType = multiWallet.startupSecurityType()
-                        showError(passType)
-                    }
+                if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                    val passType = multiWallet.startupSecurityType()
+                    showError(passType)
                 }
-            } else {
-                try {
-                    multiWallet.changePrivatePassphraseForWallet(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
-                    if (multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)) {
-                        BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, BiometricUtils.getWalletAlias(walletID))
-                    }
-                    SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
-                } catch (e: Exception) {
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        val wallet = multiWallet.walletWithID(walletID)
-                        showError(wallet.privatePassphraseType)
-                    }
+            }
+        } else {
+            try {
+                multiWallet.changePrivatePassphraseForWallet(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
+                if (multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)) {
+                    BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, BiometricUtils.getWalletAlias(walletID))
                 }
-
+                SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
+            } catch (e: Exception) {
+                if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                    val wallet = multiWallet.walletWithID(walletID)
+                    showError(wallet.privatePassphraseType)
+                }
             }
 
-            withContext(Dispatchers.Main) {
-                passwordPinDialogFragment.dismiss()
-            }
+        }
 
+        withContext(Dispatchers.Main) {
+            passwordPinDialogFragment.dismiss()
         }
     }
 

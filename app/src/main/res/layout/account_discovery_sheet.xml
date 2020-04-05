@@ -50,10 +50,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/resume_restore_pin"
             android:paddingBottom="88dp"
-            android:visibility="gone"
-            android:inputType="numberPassword"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="83dp"
