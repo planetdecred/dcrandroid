@@ -54,8 +54,19 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
         return AccountsViewHolder(view)
     }
 
+    private val importedAccountIsZero: Boolean
+        get() {
+            val importedAccount = accounts[accounts.size - 1] // imported is always last
+            return importedAccount.totalBalance == 0L
+        }
+
     override fun getItemCount(): Int {
-        return accounts.size + 1 // add account row
+
+        val accountsCount = if (importedAccountIsZero) {
+            accounts.size - 1
+        } else accounts.size
+
+        return accountsCount + 1 // add account row
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -63,7 +74,7 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
     }
 
     override fun onBindViewHolder(holder: AccountsViewHolder, position: Int) {
-        if (position != accounts.size) {
+        if (position != itemCount - 1) {
             val account = accounts[position]
 
             if (account.accountNumber == Int.MAX_VALUE) {
