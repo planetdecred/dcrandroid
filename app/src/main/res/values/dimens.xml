@@ -38,6 +38,7 @@
     <dimen name="margin_padding_size_80">80dp</dimen>
     <dimen name="margin_padding_size_96">96dp</dimen>
     <dimen name="margin_padding_size_128">128dp</dimen>
+    <dimen name="margin_padding_size_180">180dp</dimen>
 
 
     <dimen name="wallets_menu_width">152dp</dimen>

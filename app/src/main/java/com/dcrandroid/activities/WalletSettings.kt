@@ -191,7 +191,7 @@ class WalletSettings : BaseActivity() {
             if (multiWallet!!.openedWalletsCount() == 0) {
                 multiWallet!!.shutdown()
                 walletData.multiWallet = null
-                startActivity(Intent(this@WalletSettings, SplashScreen::class.java))
+                startActivity(Intent(this@WalletSettings, SplashScreenActivity::class.java))
                 finishAffinity()
             } else {
                 setResult(Activity.RESULT_OK)

@@ -93,8 +93,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         initNavigationTabs()
 
-        checkWifiSync()
-
         fab_receive.setOnClickListener {
             if(multiWallet!!.isSyncing){
                 SnackBar.showError(this, R.string.wait_for_sync)
@@ -117,6 +115,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             }
             currentBottomSheet = SendDialog(this, bottomSheetDismissed)
             currentBottomSheet!!.show(this)
+        }
+
+        frame.post {
+            checkWifiSync()
         }
     }
 
