@@ -516,5 +516,8 @@
     <string name="migrating_wallet">Migrating wallet</string>
     <string name="add_new_wallet">Add new wallet</string>
     <string name="wait_for_sync">Wait for sync to complete</string>
+    <string name="welcome_title">Welcome to Decred Wallet.</string>
+    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
+    <string name="welcome_screen_text">Welcome to Decred Wallet, a secure &amp; open-source mobile wallet.</string>
 
 </resources>

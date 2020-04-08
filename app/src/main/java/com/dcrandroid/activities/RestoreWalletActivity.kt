@@ -88,8 +88,11 @@ class RestoreWalletActivity : AppCompatActivity() {
             seedInputHelper.moveToNextRow = { currentItem ->
                 val nextRow = currentItem + 1
                 if (nextRow < SEED_COUNT) {
-                    val scrollY = seedInputHelperList[nextRow].requestFocus()
-                    nested_scroll_view.scrollTo(0, scrollY)
+                    seedInputHelperList[nextRow].requestFocus()
+
+                    var topRow = currentItem - 1
+                    if (topRow < 0) topRow = 0
+                    nested_scroll_view.scrollTo(0, seedInputHelperList[topRow].scrollY)
 
                 }
             }
