@@ -37,6 +37,7 @@ import com.dcrandroid.fragments.WalletsFragment
 import com.dcrandroid.fragments.more.MoreFragment
 import com.dcrandroid.service.SyncService
 import com.dcrandroid.util.NetworkUtil
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
@@ -92,16 +93,32 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         initNavigationTabs()
 
-        checkWifiSync()
-
         fab_receive.setOnClickListener {
+            if(multiWallet!!.isSyncing){
+                SnackBar.showError(this, R.string.wait_for_sync)
+                return@setOnClickListener
+            }else if (!multiWallet!!.isConnectedToDecredNetwork){
+                SnackBar.showError(this, R.string.not_connected)
+                return@setOnClickListener
+            }
             currentBottomSheet = ReceiveDialog(bottomSheetDismissed)
             currentBottomSheet!!.show(this)
         }
 
         fab_send.setOnClickListener {
+            if(multiWallet!!.isSyncing){
+                SnackBar.showError(this, R.string.wait_for_sync)
+                return@setOnClickListener
+            }else if (!multiWallet!!.isConnectedToDecredNetwork){
+                SnackBar.showError(this, R.string.not_connected)
+                return@setOnClickListener
+            }
             currentBottomSheet = SendDialog(this, bottomSheetDismissed)
             currentBottomSheet!!.show(this)
+        }
+
+        frame.post {
+            checkWifiSync()
         }
     }
 

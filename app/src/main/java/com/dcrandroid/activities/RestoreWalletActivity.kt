@@ -15,6 +15,7 @@ import androidx.core.widget.NestedScrollView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
@@ -26,10 +27,11 @@ import kotlinx.android.synthetic.main.activity_restore_wallet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 const val SEED_COUNT = 33
 
-class RestoreWalletActivity : AppCompatActivity(), PasswordPinDialogFragment.PasswordPinListener {
+class RestoreWalletActivity : AppCompatActivity() {
 
     private val multiWallet: MultiWallet?
         get() = WalletData.multiWallet
@@ -86,8 +88,11 @@ class RestoreWalletActivity : AppCompatActivity(), PasswordPinDialogFragment.Pas
             seedInputHelper.moveToNextRow = { currentItem ->
                 val nextRow = currentItem + 1
                 if (nextRow < SEED_COUNT) {
-                    val scrollY = seedInputHelperList[nextRow].requestFocus()
-                    nested_scroll_view.scrollTo(0, scrollY)
+                    seedInputHelperList[nextRow].requestFocus()
+
+                    var topRow = currentItem - 1
+                    if (topRow < 0) topRow = 0
+                    nested_scroll_view.scrollTo(0, seedInputHelperList[topRow].scrollY)
 
                 }
             }
@@ -110,7 +115,9 @@ class RestoreWalletActivity : AppCompatActivity(), PasswordPinDialogFragment.Pas
                 return@setOnClickListener
             }
 
-            PasswordPinDialogFragment(R.string.create, true, isChange = false, passwordPinListener = this).show(this)
+            PasswordPinDialogFragment(R.string.create, true, isChange = false) { dialog, passphrase, passphraseType ->
+                createWallet(dialog, passphrase, passphraseType, enteredSeeds)
+            }.show(this)
         }
 
         go_back.setOnClickListener { finish() }
@@ -121,14 +128,14 @@ class RestoreWalletActivity : AppCompatActivity(), PasswordPinDialogFragment.Pas
         allSeedWords.addAll(seedWords)
     }
 
-    override fun onEnterPasswordOrPin(newPassphrase: String, passphraseType: Int) {
-        createWallet(newPassphrase, passphraseType, enteredSeeds)
-    }
-
-    private fun createWallet(spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
         try {
             val wallet = multiWallet!!.restoreWallet(seed, spendingKey, spendingPassType)
             wallet.unlockWallet(spendingKey.toByteArray())
+
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+            }
 
             val intent = Intent(this@RestoreWalletActivity, RestoreSuccessActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)

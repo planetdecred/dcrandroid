@@ -26,7 +26,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="@dimen/margin_padding_size_8"
-            android:background="@drawable/circular_transparent_ripple"
+            android:background="@drawable/bg_primary_ripple"
             android:focusable="true"
             android:clickable="true"
             android:id="@+id/go_back"
@@ -52,12 +52,11 @@
                 android:layout_height="40dp"
                 android:id="@+id/iv_info"
                 android:padding="@dimen/margin_padding_size_8"
-                android:layout_marginRight="@dimen/margin_padding_size_8"
                 android:layout_marginEnd="@dimen/margin_padding_size_8"
                 app:srcCompat="@drawable/ic_info"
                 android:focusable="true"
                 android:clickable="true"
-                android:background="@drawable/circular_transparent_ripple" />
+                android:background="@drawable/bg_primary_ripple" />
 
             <ImageView
                 android:layout_width="40dp"
@@ -67,7 +66,7 @@
                 app:srcCompat="@drawable/ic_options"
                 android:focusable="true"
                 android:clickable="true"
-                android:background="@drawable/circular_transparent_ripple" />
+                android:background="@drawable/bg_primary_ripple" />
 
         </LinearLayout>
 

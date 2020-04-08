@@ -56,7 +56,7 @@
     <string name="peer_ip_dialog_title">Set up persistent peer</string>
     <string name="peer_ip_pref_hint">IP Address</string>
     <string name="log_file_not_found">Log file not found</string>
-    <string name="wallet_log_copied">Wallet log copied successfully</string>
+    <string name="wallet_log_copied">Wallet log copied</string>
     <string name="_copy">Copy</string>
     <string name="address_not_found">Address not found.</string>
     <string name="share">Share</string>
@@ -112,6 +112,8 @@
     <!--Wallet-->
     <string name="create_a_new_wallet">Create a new wallet</string>
     <string name="restore_existing_wallet">Restore an existing wallet</string>
+    <string name="import_existing_wallet">Import an existing wallet</string>
+    <string name="import_watching_only_wallet">Import a watch-only wallet</string>
     <string name="opening_wallet">Opening wallet…</string>
     <string name="opening_wallets">Opening wallets…</string>
     <string name="invalid_passphrase">Passphrase entered was not valid.</string>
@@ -512,5 +514,10 @@
     <string name="exit_app_prompt_title">Exit app?</string>
     <string name="exit_app_prompt_message">Are you sure you want to exit?</string>
     <string name="migrating_wallet">Migrating wallet</string>
+    <string name="add_new_wallet">Add new wallet</string>
+    <string name="wait_for_sync">Wait for sync to complete</string>
+    <string name="welcome_title">Welcome to Decred Wallet.</string>
+    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
+    <string name="welcome_screen_text">Welcome to Decred Wallet, a secure &amp; open-source mobile wallet.</string>
 
 </resources>

@@ -53,6 +53,9 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
         return layout.bottom - context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_24)
     }
 
+    val scrollY
+        get() = layout.bottom - context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_24)
+
     fun getSeed() = editText.text.toString().trim()
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
