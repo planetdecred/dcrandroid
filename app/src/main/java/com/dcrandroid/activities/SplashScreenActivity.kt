@@ -6,7 +6,10 @@
 
 package com.dcrandroid.activities
 
-import android.animation.*
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
@@ -22,7 +25,6 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
@@ -31,17 +33,16 @@ import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.MultiWallet
-import kotlinx.android.synthetic.main.activity_setup_page.*
 import kotlinx.android.synthetic.main.activity_splash_screen.*
-import kotlinx.android.synthetic.main.activity_splash_screen.ll_create_wallet
-import kotlinx.android.synthetic.main.activity_splash_screen.ll_restore_wallet
 import kotlinx.coroutines.*
 import kotlin.system.exitProcess
 
 const val RESTORE_WALLET_REQUEST_CODE = 1
 
-class SplashScreenActivity: BaseActivity() {
+class SplashScreenActivity : BaseActivity() {
 
+    private var symbolAnim = true
+    private var symbolAnimation: AnimatedVectorDrawableCompat? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!isTaskRoot) {
@@ -71,15 +72,20 @@ class SplashScreenActivity: BaseActivity() {
         }
 
         splashscreen_dcr_symbol.post {
-            val symbolAnimation = AnimatedVectorDrawableCompat.create(applicationContext, R.drawable.avd_anim)
+
+            symbolAnimation = AnimatedVectorDrawableCompat.create(applicationContext, R.drawable.avd_anim)
             symbolAnimation!!.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
                 override fun onAnimationEnd(drawable: Drawable?) {
                     super.onAnimationEnd(drawable)
-                    splashscreen_dcr_symbol.postDelayed({ symbolAnimation.start() }, 750)
+                    splashscreen_dcr_symbol.postDelayed({
+                        if (symbolAnim) {
+                            symbolAnimation?.start()
+                        }
+                    }, 750)
                 }
             })
             splashscreen_dcr_symbol.setImageDrawable(symbolAnimation)
-            symbolAnimation.start()
+            symbolAnimation?.start()
         }
 
         startup()
@@ -105,7 +111,7 @@ class SplashScreenActivity: BaseActivity() {
         }
     }
 
-    private fun setLoadingStatus(@StringRes str: Int)=  GlobalScope.launch(Dispatchers.Main){
+    private fun setLoadingStatus(@StringRes str: Int) = GlobalScope.launch(Dispatchers.Main) {
         loading_status.setText(str)
     }
 
@@ -203,12 +209,13 @@ class SplashScreenActivity: BaseActivity() {
         }
     }
 
-    private fun showSetupWallet() = GlobalScope.launch(Dispatchers.Main){
+    private fun showSetupWallet() = GlobalScope.launch(Dispatchers.Main) {
 
         delay(3000)
         loading_status.hide()
 
-        splashscreen_dcr_symbol.setImageResource(R.drawable.avd_anim)
+        symbolAnim = false
+        symbolAnimation?.stop()
 
         welcome_text.alpha = 0f
         welcome_text.translationY = resources.getDimension(R.dimen.margin_padding_size_40)
