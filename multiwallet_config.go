@@ -14,7 +14,7 @@ const (
 
 	IsStartupSecuritySetConfigKey = "startup_security_set"
 	StartupSecurityTypeConfigKey  = "startup_security_type"
-	UseFingerprintConfigKey       = "use_fingerprint"
+	UseBiometricConfigKey         = "use_biometric"
 
 	IncomingTxNotificationsConfigKey = "tx_notification_enabled"
 	BeepNewBlocksConfigKey           = "beep_new_blocks"
