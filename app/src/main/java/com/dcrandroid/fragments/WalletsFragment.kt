@@ -139,7 +139,7 @@ class WalletsFragment : BaseFragment() {
 
     private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet.createNewWallet(spendingKey, type)
+            val wallet = multiWallet.createNewWallet(getString(R.string.mywallet), spendingKey, type)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
                 adapter.addWallet(wallet.id)

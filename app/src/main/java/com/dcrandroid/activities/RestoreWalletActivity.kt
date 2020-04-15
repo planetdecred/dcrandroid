@@ -130,7 +130,7 @@ class RestoreWalletActivity : AppCompatActivity() {
 
     private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet!!.restoreWallet(seed, spendingKey, spendingPassType)
+            val wallet = multiWallet!!.restoreWallet(getString(R.string.mywallet), seed, spendingKey, spendingPassType)
             wallet.unlockWallet(spendingKey.toByteArray())
 
             withContext(Dispatchers.Main) {
