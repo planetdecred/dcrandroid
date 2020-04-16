@@ -338,15 +338,6 @@ func (mw *MultiWallet) discoverAddressesFinished(walletID int) {
 	}
 
 	mw.stopUpdatingAddressDiscoveryProgress()
-
-	loadedWallet, loaded := mw.wallets[walletID].loader.LoadedWallet()
-	if loaded && !loadedWallet.Locked() { // loaded should always be true
-		loadedWallet.Lock()
-		err := mw.markWalletAsDiscoveredAccounts(walletID)
-		if err != nil {
-			log.Error(err)
-		}
-	}
 }
 
 func (mw *MultiWallet) stopUpdatingAddressDiscoveryProgress() {
@@ -538,7 +529,13 @@ func (mw *MultiWallet) synced(walletID int, synced bool) {
 	wallet := mw.wallets[walletID]
 	wallet.synced = synced
 	wallet.syncing = false
-	wallet.LockWallet() // lock wallet if previously unlocked to perform account discovery.
+	if !wallet.internal.Locked() {
+		wallet.LockWallet() // lock wallet if previously unlocked to perform account discovery.
+		err := mw.markWalletAsDiscoveredAccounts(walletID)
+		if err != nil {
+			log.Error(err)
+		}
+	}
 
 	if mw.OpenedWalletsCount() == mw.SyncedWalletsCount() {
 		mw.syncData.mu.Lock()
