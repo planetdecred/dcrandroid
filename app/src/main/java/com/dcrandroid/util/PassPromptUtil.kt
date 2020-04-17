@@ -32,9 +32,9 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
         }
 
         val useFingerPrint = if (walletID == null) {
-            multiWallet.readBoolConfigValueForKey(Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)
+            multiWallet.readBoolConfigValueForKey(Dcrlibwallet.UseBiometricConfigKey, Constants.DEF_USE_FINGERPRINT)
         } else {
-            multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, Constants.DEF_USE_FINGERPRINT)
+            multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseBiometricConfigKey, Constants.DEF_USE_FINGERPRINT)
         }
 
         if (allowFingerprint && useFingerPrint && BiometricUtils.isFingerprintEnrolled(fragmentActivity)) {

@@ -49,7 +49,7 @@ class WalletSettings : BaseActivity() {
             ChangePassUtil(this, walletID).begin()
         }
 
-        useFingerprint = SwitchPreference(this, walletID.toString() + Dcrlibwallet.UseFingerprintConfigKey, spendable_fingerprint) { newValue ->
+        useFingerprint = SwitchPreference(this, walletID.toString() + Dcrlibwallet.UseBiometricConfigKey, spendable_fingerprint) { newValue ->
 
             if (newValue) {
                 setupFingerprint()
