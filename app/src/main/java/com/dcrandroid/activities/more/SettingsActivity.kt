@@ -54,7 +54,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             return@SwitchPreference !newValue
         }
 
-        useFingerprint = SwitchPreference(this, Dcrlibwallet.UseFingerprintConfigKey, startup_security_fingerprint) { newValue ->
+        useFingerprint = SwitchPreference(this, Dcrlibwallet.UseBiometricConfigKey, startup_security_fingerprint) { newValue ->
             if (newValue) {
                 enableStartupFingerprint()
             } else {
