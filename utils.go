@@ -214,9 +214,9 @@ func CalculateTotalTimeRemaining(timeRemainingInSeconds int64) string {
 }
 
 func CalculateDaysBehind(lastHeaderTime int64) string {
-	hoursBehind := float64(time.Now().Unix()-lastHeaderTime) / 60
-	daysBehind := int(math.Round(hoursBehind / 24))
-	if daysBehind < 1 {
+	diff := time.Since(time.Unix(lastHeaderTime, 0))
+	daysBehind := int(math.Round(diff.Hours() / 24))
+	if daysBehind == 0 {
 		return "<1 day"
 	} else if daysBehind == 1 {
 		return "1 day"
