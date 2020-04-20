@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.annotation.Nullable
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
@@ -41,6 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: DialogInterface.OnDismissListener) :
         FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
@@ -342,6 +344,20 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
                 amountHelper.setAmountDCR(decredAddressUri.amount!!)
             }
         }
+    }
+
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putString("Address", "Welcome back to the fragment")
+        savedInstanceState.putInt("Amount", 1)
+        // etc.
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        val myAddress = savedInstanceState?.getString("Address")
+        val myAmount = savedInstanceState?.getInt("Amount")
     }
 }
 
