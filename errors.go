@@ -10,6 +10,7 @@ const (
 	ErrWalletNotLoaded              = "wallet_not_loaded"
 	ErrWalletNameExist              = "wallet_name_exists"
 	ErrReservedWalletName           = "wallet_name_reserved"
+	ErrWalletIsRestored             = "wallet_is_restored"
 	ErrWalletIsWatchOnly            = "watch_only_wallet"
 	ErrUnusableSeed                 = "unusable_seed"
 	ErrPassphraseRequired           = "passphrase_required"

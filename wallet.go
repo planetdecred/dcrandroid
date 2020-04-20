@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/decred/dcrd/chaincfg/v2"
 	"github.com/decred/dcrwallet/errors/v2"
@@ -16,8 +17,9 @@ import (
 )
 
 type Wallet struct {
-	ID                    int    `storm:"id,increment"`
-	Name                  string `storm:"unique"`
+	ID                    int       `storm:"id,increment"`
+	Name                  string    `storm:"unique"`
+	CreatedAt             time.Time `storm:"index"`
 	DbDriver              string
 	Seed                  string
 	IsRestored            bool
@@ -107,6 +109,16 @@ func (wallet *Wallet) Shutdown() {
 			log.Info("tx db closed successfully")
 		}
 	}
+}
+
+// WalletCreationTimeInMillis returns the wallet creation time for new
+// wallets. Restored wallets would return an error.
+func (wallet *Wallet) WalletCreationTimeInMillis() (int64, error) {
+	if wallet.IsRestored {
+		return 0, errors.New(ErrWalletIsRestored)
+	}
+
+	return wallet.CreatedAt.UnixNano() / int64(time.Millisecond), nil
 }
 
 func (wallet *Wallet) NetType() string {

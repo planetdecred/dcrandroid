@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/asdine/storm"
 	"github.com/asdine/storm/q"
@@ -245,6 +246,7 @@ func (mw *MultiWallet) OpenWallets(startupPassphrase []byte) error {
 func (mw *MultiWallet) CreateWatchOnlyWallet(walletName, extendedPublicKey string) (*Wallet, error) {
 	wallet := &Wallet{
 		Name:                  walletName,
+		IsRestored:            true,
 		HasDiscoveredAccounts: true,
 	}
 
@@ -258,13 +260,15 @@ func (mw *MultiWallet) CreateWatchOnlyWallet(walletName, extendedPublicKey strin
 	})
 }
 
-func (mw *MultiWallet) CreateNewWallet(privatePassphrase string, privatePassphraseType int32) (*Wallet, error) {
+func (mw *MultiWallet) CreateNewWallet(walletName, privatePassphrase string, privatePassphraseType int32) (*Wallet, error) {
 	seed, err := GenerateSeed()
 	if err != nil {
 		return nil, err
 	}
 
 	wallet := &Wallet{
+		Name:                  walletName,
+		CreatedAt:             time.Now(),
 		Seed:                  seed,
 		PrivatePassphraseType: privatePassphraseType,
 		HasDiscoveredAccounts: true,
@@ -280,8 +284,9 @@ func (mw *MultiWallet) CreateNewWallet(privatePassphrase string, privatePassphra
 	})
 }
 
-func (mw *MultiWallet) RestoreWallet(seedMnemonic, privatePassphrase string, privatePassphraseType int32) (*Wallet, error) {
+func (mw *MultiWallet) RestoreWallet(walletName, seedMnemonic, privatePassphrase string, privatePassphraseType int32) (*Wallet, error) {
 	wallet := &Wallet{
+		Name:                  walletName,
 		PrivatePassphraseType: privatePassphraseType,
 		IsRestored:            true,
 		HasDiscoveredAccounts: false,
@@ -297,7 +302,7 @@ func (mw *MultiWallet) RestoreWallet(seedMnemonic, privatePassphrase string, pri
 	})
 }
 
-func (mw *MultiWallet) LinkExistingWallet(walletDataDir, originalPubPass string, privatePassphraseType int32) (*Wallet, error) {
+func (mw *MultiWallet) LinkExistingWallet(walletName, walletDataDir, originalPubPass string, privatePassphraseType int32) (*Wallet, error) {
 	// check if `walletDataDir` contains wallet.db
 	if !WalletExistsAt(walletDataDir) {
 		return nil, errors.New(ErrNotExist)
@@ -311,6 +316,7 @@ func (mw *MultiWallet) LinkExistingWallet(walletDataDir, originalPubPass string,
 	}
 
 	wallet := &Wallet{
+		Name:                  walletName,
 		PrivatePassphraseType: privatePassphraseType,
 		IsRestored:            true,
 		HasDiscoveredAccounts: false, // assume that account discovery hasn't been done
