@@ -156,9 +156,9 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                             dialog.showError()
                         }
                     } else {
-                        Dcrlibwallet.logT(op, e.message)
                         dialog?.dismiss()
-                        SnackBar.showError(this@SettingsActivity, R.string.check_log_error)
+                        Dcrlibwallet.logT(op, e.message)
+                        Utils.showErrorDialog(this@SettingsActivity, op + ": " + e.message)
                     }
 
                     return@launch

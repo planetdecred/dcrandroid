@@ -216,7 +216,6 @@
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
     <string name="not_enough_funds_synced">Not enough funds (or not connected).</string>
-    <string name="check_log_error">Error occurred, check wallets log for details</string>
     <string name="error_occurred">Error occurred</string>
     <!--/Error Messages-->
 

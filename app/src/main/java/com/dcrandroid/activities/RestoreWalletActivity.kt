@@ -6,7 +6,6 @@
 
 package com.dcrandroid.activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.dialog.RenameAccountDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
@@ -173,16 +171,8 @@ class RestoreWalletActivity : AppCompatActivity() {
             e.printStackTrace()
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
-
-                val errString = op + ": " + e.message
-                InfoDialog(this@RestoreWalletActivity)
-                        .setDialogTitle(getString(R.string.error_occurred))
-                        .setMessage(errString)
-                        .setNegativeButton(getString(R.string._copy), DialogInterface.OnClickListener { _, _ ->
-                            Utils.copyToClipboard(this@RestoreWalletActivity, errString, R.string.error_copied)
-                        })
-                        .setPositiveButton(getString(R.string.ok), null)
-                        .show()
+                Dcrlibwallet.logT(op, e.message)
+                Utils.showErrorDialog(this@RestoreWalletActivity, op + ": " + e.message)
             }
         }
     }

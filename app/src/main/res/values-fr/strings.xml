@@ -508,7 +508,6 @@
     <string name="wallet_data">Données du porte-monnaie</string>
     <string name="import_existing_wallet">Importer un porte-monnaie existant</string>
     <string name="import_watching_only_wallet">Importer un porte-monnaie en observation seule</string>
-    <string name="check_log_error">Une erreur s\'est produite, vérifier le logs du porte-monnaie pour plus de détails</string>
     <string name="startup_pin__password">PIN/mot de passe de démarrage</string>
     <string name="peers_connected">Pairs connectés</string>
     <string name="add_new_wallet">Ajouter un nouveau porte-monnaie</string>
