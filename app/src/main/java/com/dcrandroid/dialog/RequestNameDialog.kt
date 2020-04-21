@@ -7,6 +7,7 @@
 package com.dcrandroid.dialog
 
 import android.os.Bundle
+import android.text.InputFilter.LengthFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.dcrandroid.R
 import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.rename_account_sheet.*
+
+const val MAX_NAME_LENGTH = 32
 
 class RequestNameDialog(private val dialogTitle: Int, private val currentName: String,
                         private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
@@ -38,6 +41,9 @@ class RequestNameDialog(private val dialogTitle: Int, private val currentName: S
             } else {
                 setHint(R.string.account_name)
             }
+
+            val filterArray = Array(1) {LengthFilter(MAX_NAME_LENGTH)}
+            editText.filters = filterArray
 
             editText.setSingleLine(true)
             editText.setText(currentName)
