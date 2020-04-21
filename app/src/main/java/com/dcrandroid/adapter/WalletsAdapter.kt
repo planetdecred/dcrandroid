@@ -20,7 +20,7 @@ import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
 import com.dcrandroid.activities.security.VerifyMessage
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.RenameAccountDialog
+import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
@@ -147,17 +147,17 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                     }
                     5 -> { // rename wallet
                         val activity = context as AppCompatActivity
-                        RenameAccountDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
+                        RequestNameDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
 
                             try {
                                 multiWallet!!.renameWallet(wallet.id, newName)
                             } catch (e: Exception) {
-                                return@RenameAccountDialog e
+                                return@RequestNameDialog e
                             }
                             notifyItemChanged(position)
                             SnackBar.showText(context, R.string.wallet_renamed)
 
-                            return@RenameAccountDialog null
+                            return@RequestNameDialog null
                         }.show(activity.supportFragmentManager, null)
                     }
                     6 -> {

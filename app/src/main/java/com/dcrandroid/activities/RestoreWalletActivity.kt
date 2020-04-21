@@ -16,7 +16,7 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.RenameAccountDialog
+import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
@@ -120,18 +120,18 @@ class RestoreWalletActivity : AppCompatActivity() {
             if (multiWallet!!.loadedWalletsCount() == 0) {
                 requestWalletSpendingPass(getString(R.string.mywallet))
             } else {
-                RenameAccountDialog(R.string.wallet_name, "", true) { newName ->
+                RequestNameDialog(R.string.wallet_name, "", true) { newName ->
                     try {
                         if (multiWallet!!.walletNameExists(newName)) {
-                            return@RenameAccountDialog Exception(Dcrlibwallet.ErrExist)
+                            return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
                         }
 
                         requestWalletSpendingPass(newName)
 
                     } catch (e: Exception) {
-                        return@RenameAccountDialog e
+                        return@RequestNameDialog e
                     }
-                    return@RenameAccountDialog null
+                    return@RequestNameDialog null
                 }.show(this)
             }
         }

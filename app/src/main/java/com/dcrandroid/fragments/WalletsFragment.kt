@@ -22,7 +22,7 @@ import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.RenameAccountDialog
+import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.util.SnackBar
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.coroutines.Dispatchers
@@ -121,10 +121,10 @@ class WalletsFragment : BaseFragment() {
                         when (index) {
                             0 -> {
 
-                                RenameAccountDialog(R.string.wallet_name, "", true) { newName ->
+                                RequestNameDialog(R.string.wallet_name, "", true) { newName ->
                                     try {
                                         if (multiWallet.walletNameExists(newName)) {
-                                            return@RenameAccountDialog Exception(Dcrlibwallet.ErrExist)
+                                            return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
                                         }
 
                                         PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
@@ -132,9 +132,9 @@ class WalletsFragment : BaseFragment() {
                                         }.show(context!!)
 
                                     } catch (e: Exception) {
-                                        return@RenameAccountDialog e
+                                        return@RequestNameDialog e
                                     }
-                                    return@RenameAccountDialog null
+                                    return@RequestNameDialog null
                                 }.show(context!!)
                             }
                             1 -> {
