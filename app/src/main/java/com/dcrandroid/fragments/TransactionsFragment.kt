@@ -19,6 +19,8 @@ import com.dcrandroid.adapter.TransactionPageAdapter
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.extensions.totalWalletBalance
+import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
@@ -200,6 +202,47 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
         loading.set(false)
         showHideList()
+    }
+
+    override fun onTransaction(transactionJson: String?) {
+        val transaction = gson.fromJson(transactionJson, Transaction::class.java)
+        if(transaction.walletID == wallet!!.id) {
+            transaction.animate = true
+
+            GlobalScope.launch(Dispatchers.Main) {
+                transactions.add(0, transaction)
+
+                adapter?.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+        if(walletID == wallet!!.id) {
+            GlobalScope.launch(Dispatchers.Main) {
+                for (i in 0 until transactions.size) {
+                    if (transactions[i].hash == hash) {
+                        transactions[i].height = blockHeight
+                        adapter?.notifyItemChanged(i)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        if(walletID == wallet!!.id) {
+            GlobalScope.launch(Dispatchers.Main) {
+                val unconfirmedTransactions = transactions.filter { it.confirmations <= 2 }.count()
+                if (unconfirmedTransactions > 0) {
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    override fun onSyncCompleted() {
+        loadTransactions()
     }
 
     private fun showHideList() = GlobalScope.launch(Dispatchers.Main) {
