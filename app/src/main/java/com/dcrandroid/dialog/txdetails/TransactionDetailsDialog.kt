@@ -120,7 +120,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     // returns first external output address if any
     private fun getDestinationAddress(): String? {
         for (output in transaction.outputs!!) {
-            if (output.account != null && output.account != -1) {
+            if (output.account == -1) {
                 return output.address
             }
         }
@@ -140,7 +140,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     // returns first internal output address if any
     private fun getReceiveAccount(): String? {
         for (output in transaction.outputs!!) {
-            if (output.account != null && output.account != -1) {
+            if (output.account != -1) {
                 return output.accountName
             }
         }
@@ -164,7 +164,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (output in transaction.outputs!!) {
             val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(output.amount), output.accountName)
             var outputBadge = ""
-            if (output.account != null && output.account != -1){
+            if (output.account != -1){
                 outputBadge = multiWallet.walletWithID(transaction.walletID).name
             }
             outputs.add(DropDownItem(amount, output.address!!, outputBadge))
