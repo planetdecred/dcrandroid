@@ -68,6 +68,13 @@ object Utils {
         return format.format(dcr)
     }
 
+    fun formatDecredWithZeros(dcr: Long): String {
+        val convertedDcr = Dcrlibwallet.amountCoin(dcr)
+        val df = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
+        df.applyPattern("#,###,###,##0.00000000")
+        return df.format(convertedDcr)
+    }
+
     fun formatDecredWithComma(dcr: Long): String {
         val convertedDcr = Dcrlibwallet.amountCoin(dcr)
         val df = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat

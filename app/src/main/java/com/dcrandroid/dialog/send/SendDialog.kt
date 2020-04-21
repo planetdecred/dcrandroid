@@ -276,7 +276,6 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
         try {
             txAuthor = multiWallet.newUnsignedTx(sourceAccountSpinner.wallet, selectedAccount.accountNumber)
-            println("Estimation address: ${destinationAddressCard.estimationAddress}")
             txAuthor.addSendDestination(destinationAddressCard.estimationAddress, amountAtom, sendMax)
             feeAndSize = txAuthor.estimateFeeAndSize()
         } catch (e: Exception) {
@@ -291,10 +290,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }
 
         val totalCostAtom = amountAtom + feeAtom
-        val balanceAfterSend = getString(R.string.x_dcr, Utils.formatDecredWithComma(selectedAccount.balance.spendable - totalCostAtom))
+        val balance = selectedAccount.balance.spendable - totalCostAtom
+        val balanceAfterSend = if(balance > 0){
+             getString(R.string.x_dcr, Utils.formatDecredWithZeros(balance))
+        }else {
+            getString(R.string.x_dcr, "0")
+        }
 
-        val feeString = Utils.formatDecredWithComma(feeAtom)
-        val totalCostString = Utils.formatDecredWithComma(totalCostAtom)
+        val feeString = Utils.formatDecredWithZeros(feeAtom)
+        val totalCostString = Utils.formatDecredWithZeros(totalCostAtom)
 
         val feeSpanned: Spanned
         val totalCostSpanned: Spanned
@@ -306,7 +310,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             val feeCoin = Dcrlibwallet.amountCoin(feeAtom)
             val totalCostCoin = Dcrlibwallet.amountCoin(totalCostAtom)
 
-            val feeUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin, 4)
+            val feeUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin)
             val totalCostUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, totalCostCoin, 2)
 
             feeSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, feeString, feeUSD), 0)
