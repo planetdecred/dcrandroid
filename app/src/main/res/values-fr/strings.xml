@@ -15,6 +15,15 @@
     <string name="loading">Chargement</string>
     <string name="help">Aide</string>
     <string name="about">À propos</string>
+    <string name="statistics">Statistiques</string>
+    <string name="build">Build</string>
+    <string name="uptime">Durée de fonctionnement</string>
+    <string name="network">Réseau</string>
+    <string name="best_block">Meilleur bloc</string>
+    <string name="best_block_timestamp">Timestamp du meilleur bloc</string>
+    <string name="best_block_age">Age du meilleur bloc</string>
+    <string name="wallet_data_directory">Dossier de données du porte-monnaie</string>
+    <string name="wallet_data">Données du porte-monnaie</string>
     <string name="debug">Debug</string>
     <string name="overview">Vue d\'ensemble</string>
     <string name="permission">Permission</string>
@@ -100,6 +109,8 @@
     <!--Wallet-->
     <string name="create_a_new_wallet">Créer un nouveau porte-monnaie</string>
     <string name="restore_existing_wallet">Restaurer un porte-monnaie existant</string>
+    <string name="import_existing_wallet">Importer un porte-monnaie existant</string>
+    <string name="import_watching_only_wallet">Importer un porte-monnaie en observation seule</string>
     <string name="opening_wallet">Ouverture du porte-monnaie…</string>
     <string name="opening_wallets">Ouverture des porte-monnaies…</string>
     <string name="invalid_passphrase">La phrase secrète entrée n\'est pas valide.</string>
@@ -201,6 +212,7 @@
     <string name="wallet_not_loaded">Le porte-monnaie n\'est pas chargé</string>
     <string name="err_no_peers">Le réseau Decred est injoignable à cause d\'un manque de pairs.</string>
     <string name="not_enough_funds_synced">Pas assez de fonds (ou pas connecté).</string>
+    <string name="check_log_error">Une erreur s\'est produite, vérifier le logs du porte-monnaie pour plus de détails</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -239,6 +251,7 @@
     <string name="enter_spending_pin">Entrer le PIN de dépense</string>
     <string name="enter_spending_pin_again">Entrer de nouveau le PIN de dépense</string>
     <string name="enter_startup_pin">Entrer le PIN de démarrage</string>
+    <string name="enter_startup_password">Entrer un nouveau mot de passe de démarrage</string>
     <string name="enter_new_startup_pin">Entrer un nouveau PIN de démarrage</string>
     <string name="enter_new_startup_pin_again">Entrer de nouveau le PIN de démarrage</string>
     <string name="create_startup_pin">Créer un PIN de démarrage</string>
@@ -247,6 +260,7 @@
     <string name="change_startup_pin">Changer le PIN de démarrage</string>
     <string name="change_spending_pin_password">Changer PIN/mot de passe de dépense</string>
     <string name="startup_pin_password">PIN/mot de passe de démarrage</string>
+    <string name="startup_pin__password">PIN/mot de passe de démarrage</string>
     <string name="change_startup_pin_password">Changer PIN/password de démarrage</string>
     <string name="spending_pin_password">PIN/mot de passe de dépense</string>
     <string name="spending_password">Mot de passe de dépense</string>
@@ -324,6 +338,7 @@
     <string name="latest_block_time"><![CDATA[Synchronisé au bloc <font color="#091440">%1$d</font> &centerdot; il y a <font color="#091440">%2$s</font>]]></string>
     <string name="connected_peers"><![CDATA[Connecté à <font color="#091440">%1$d</font> pairs.]]></string>
     <string name="no_connected_peers">Pas de pairs connectés.</string>
+    <string name="peers_connected">Pairs connectés</string>
     <string name="_default">Défaut</string>
     <string name="starting_up">Démarrage</string>
     <string name="waiting_for_other_wallets">En attente d\'autres porte-monnaies</string>
@@ -393,9 +408,12 @@
     <string name="send_invalid">Pas valide pour envoi</string>
     <string name="to_destination_address">Vers adresse de destination</string>
     <string name="send_dcr_warning">Vos DCR seront envoyés et cela NE PEUT PAS être annulé.</string>
+    <string name="to_self">Vers soi-même</string>
     <string name="processing_ellipsis">Exécution…</string>
     <string name="success">Succès</string>
+    <string name="send_fail_msg">Échec de l\'envoi. Merci de réessayer.</string>
     <string name="transaction_sent">Transaction envoyée</string>
+    <string name="from_account">Depuis le compte</string>
     <string name="included_in_block">Inclus dans le bloc</string>
     <string name="transaction_id">Transaction ID</string>
     <string name="tx_id_copied">Transaction ID copiée</string>
@@ -404,6 +422,7 @@
     <string name="tx_details_copy_info"><![CDATA[Sélectionner <font color="#2970FF">blue text</font> pour copier cet objet.]]></string>
     <string name="x_inputs_consumed">%1$d entrées consommées</string>
     <string name="x_output_created">%1$d sorties créées</string>
+    <string name="previous_outpoint_copied">Point de sortie précédent copié</string>
     <string name="to_address">Vers adresse</string>
     <string name="paste">Coller</string>
     <string name="qr_code_scan_hint">Placer le QR code dans le cadre</string>
@@ -452,6 +471,7 @@
     <string name="biometric_permanent_lockout_error">Biométrique disactivée. Déverouiller votre appareil avec une authentification forte (PIN/Pattern/Mot de passe)</string>
     <string name="invalid_peer_ip">Entrer une adresse ip valide</string>
     <string name="your_wallet_is_successfully_restored">Votre porte-monnaie est correctement restauré</string>
+    <string name="get_started">Débuter</string>
     <string name="back">Retour</string>
     <string name="use_fingerprint">Utiliser empreinte digitale</string>
     <string name="overview_backup_seed_instruction">Il est recommandé d\'écrire la phrase de récupération de chaque porte-monnaie comme sauvegarde afin de pouvoir récupérer vos fonds si besoin.</string>
@@ -459,6 +479,7 @@
     <string name="n_wallets_need_backup">%1$d porte-monnaies requièrent une sauvegarde</string>
     <string name="a_wallet_needs_backup">Un porte-monnaie requiert une sauvegarde</string>
     <string name="startup_password">Mot de passe de démarrage</string>
+    <string name="new_startup_password">Nouveau mot de passe de démarrage</string>
     <string name="new_spending_password">Nouveau mot de passe de dépense</string>
     <string name="confirm_new_startup_password">Confirmer le nouveau mot de passe de démarrage</string>
     <string name="confirm_new_spending_password">Confirmer le nouveau mot de passe de dépense</string>
@@ -470,14 +491,18 @@
     <string name="startup_fingerprint_prompt_title">Déverrouiller avec empreinte digitale</string>
     <string name="use_password">Utiliser mot de passe</string>
     <string name="use_pin">Utiliser PIN</string>
+    <string name="startup_security_changed">PIN/mot de passe changé</string>
     <string name="spending_passphrase_changed">PIN/mot de passe de dépense changé</string>
     <string name="wallets_log">Log des porte-monnaies</string>
+    <string name="write_down_seed_phrase">Écrire la phrase de récupération</string>
     <string name="step_1_2" tools:ignore="TypographyFractions">Étape 1/2</string>
+    <string name="your_33_word_seed_phrase">Votre phrase de récupération à 33 mots</string>
     <string name="i_have_wrote_down_all_33_words">J\'ai écrits tous les 33 mots</string>
     <string name="security_tools">Outils de Sécurité</string>
     <string name="security_tools_message">Différents outils qui aident à différents aspcects de la sécurité de la crypto-monnaie seront situés ici.</string>
+    <string name="wallet_removed">Porte-monnaie supprimé</string>
     <string name="rescanning_blocks_ellipsis">Rescan des Blocs…</string>
-    <string name="view_statistics">View statistics</string>
+    <string name="view_statistics">Voir les statisques</string>
     <string name="rescan_blockchain">Rescanner blockchain</string>
     <string name="rescan_progress_notification">Suivre l\'avancement dans la vue d\'ensemble!</string>
     <string name="rescan_blockchain_warning">Êtes-vous sûr ? Cela pourrait prendre du temps.</string>
@@ -485,35 +510,11 @@
     <string name="err_rescan_in_progress">Impossible de démarrer le rescan tant qu\'un rescan est déjà en cours</string>
     <string name="exit_app_prompt_title">Quitter l\'application ?</string>
     <string name="exit_app_prompt_message">Êtes-vous sûr de vouloir quitter ?</string>
-    <string name="from_account">Depuis le compte</string>
-    <string name="get_started">Débuter</string>
-    <string name="new_startup_password">Nouveau mot de passe de démarrage</string>
-    <string name="send_fail_msg">Échec de l\'envoi. Merci de réessayer.</string>
-    <string name="startup_security_changed">PIN/mot de passe changé</string>
-    <string name="to_self">Vers soi-même</string>
-    <string name="wallet_removed">Porte-monnaie supprimé</string>
-    <string name="write_down_seed_phrase">Écrire la phrase de récupération</string>
-    <string name="your_33_word_seed_phrase">Votre phrase de récupération à 33 mots</string>
-    <string name="enter_startup_password">Entrer un nouveau mot de passe de démarrage</string>
     <string name="migrating_wallet">Migration du porte-monnaie</string>
-    <string name="previous_outpoint_copied">Point de sortie précédent copié</string>
-    <string name="statistics">Statistiques</string>
-    <string name="build">Build</string>
-    <string name="uptime">Durée de fonctionnement</string>
-    <string name="network">Réseau</string>
-    <string name="best_block">Meilleur bloc</string>
-    <string name="best_block_timestamp">Timestamp du meilleur bloc</string>
-    <string name="best_block_age">Age du meilleur bloc</string>
-    <string name="wallet_data_directory">Dossier de données du porte-monnaie</string>
-    <string name="wallet_data">Données du porte-monnaie</string>
-    <string name="import_existing_wallet">Importer un porte-monnaie existant</string>
-    <string name="import_watching_only_wallet">Importer un porte-monnaie en observation seule</string>
-    <string name="check_log_error">Une erreur s\'est produite, vérifier le logs du porte-monnaie pour plus de détails</string>
-    <string name="startup_pin__password">PIN/mot de passe de démarrage</string>
-    <string name="peers_connected">Pairs connectés</string>
     <string name="add_new_wallet">Ajouter un nouveau porte-monnaie</string>
     <string name="wait_for_sync">Attendre la fin de la synchronisation</string>
     <string name="welcome_title">Bienvenue dans Decred Wall</string>
+    <string name="first_run_notice">Votre phrase de récupération à 33 mots est votre porte-monnaie, convervez-la en sécurité. Sans elle vos fonds ne peuvent pas être récupérés si votre appareil devait être perdu ou détruit. La synchronisaion initiale du porte-monnaie sera plus longue que normalement.</string>
     <string name="welcome_screen_text">Bienvenue dans Decred Wallet, un porte-monnaie mobile sécurisé et open-source.</string>
 
 </resources>
