@@ -75,7 +75,7 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         iv_rename_account.setOnClickListener {
             val activity = ctx as AppCompatActivity
-            RenameAccountDialog(account.accountName) {
+            RenameAccountDialog(R.string.rename_account, account.accountName) {
 
                 val e = renameAccount(it)
                 if (e != null) {

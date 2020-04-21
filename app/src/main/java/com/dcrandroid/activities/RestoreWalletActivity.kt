@@ -6,6 +6,7 @@
 
 package com.dcrandroid.activities
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
@@ -16,8 +17,11 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.dialog.RenameAccountDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.dcrandroid.view.SeedEditTextLayout
 import com.dcrandroid.view.util.SeedEditTextHelper
@@ -115,9 +119,23 @@ class RestoreWalletActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            PasswordPinDialogFragment(R.string.create, true, isChange = false) { dialog, passphrase, passphraseType ->
-                createWallet(dialog, passphrase, passphraseType, enteredSeeds)
-            }.show(this)
+            if (multiWallet!!.loadedWalletsCount() == 0) {
+                requestWalletSpendingPass(getString(R.string.mywallet))
+            } else {
+                RenameAccountDialog(R.string.wallet_name, "", true) { newName ->
+                    try {
+                        if (multiWallet!!.walletNameExists(newName)) {
+                            return@RenameAccountDialog Exception(Dcrlibwallet.ErrExist)
+                        }
+
+                        requestWalletSpendingPass(newName)
+
+                    } catch (e: Exception) {
+                        return@RenameAccountDialog e
+                    }
+                    return@RenameAccountDialog null
+                }.show(this)
+            }
         }
 
         go_back.setOnClickListener { finish() }
@@ -128,9 +146,16 @@ class RestoreWalletActivity : AppCompatActivity() {
         allSeedWords.addAll(seedWords)
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
+    private fun requestWalletSpendingPass(walletName: String) {
+        PasswordPinDialogFragment(R.string.create, true, isChange = false) { dialog, passphrase, passphraseType ->
+            createWallet(dialog, walletName, passphrase, passphraseType, enteredSeeds)
+        }.show(this)
+    }
+
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
+        val op = this@RestoreWalletActivity.javaClass.name + ".createWallet"
         try {
-            val wallet = multiWallet!!.restoreWallet(getString(R.string.mywallet), seed, spendingKey, spendingPassType)
+            val wallet = multiWallet!!.restoreWallet(walletName, seed, spendingKey, spendingPassType)
             wallet.unlockWallet(spendingKey.toByteArray())
 
             withContext(Dispatchers.Main) {
@@ -146,6 +171,19 @@ class RestoreWalletActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+
+                val errString = op + ": " + e.message
+                InfoDialog(this@RestoreWalletActivity)
+                        .setDialogTitle(getString(R.string.error_occurred))
+                        .setMessage(errString)
+                        .setNegativeButton(getString(R.string._copy), DialogInterface.OnClickListener { _, _ ->
+                            Utils.copyToClipboard(this@RestoreWalletActivity, errString, R.string.error_copied)
+                        })
+                        .setPositiveButton(getString(R.string.ok), null)
+                        .show()
+            }
         }
     }
 }

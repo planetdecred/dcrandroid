@@ -147,7 +147,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                     }
                     5 -> { // rename wallet
                         val activity = context as AppCompatActivity
-                        RenameAccountDialog(wallet.name, true) { newName ->
+                        RenameAccountDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
 
                             try {
                                 multiWallet!!.renameWallet(wallet.id, newName)
