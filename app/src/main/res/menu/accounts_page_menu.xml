@@ -8,8 +8,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/add_account"
-        android:icon="@android:drawable/ic_menu_add"
-        android:title="@string/add_account"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/add_new_wallet"
+        android:icon="@drawable/ic_add_new_wallet"
+        android:title="@string/add_new_wallet"
+        app:showAsAction="always"/>
 </menu>

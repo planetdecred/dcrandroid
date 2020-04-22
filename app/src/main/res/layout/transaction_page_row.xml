@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<!-- Shadow Layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/margin_padding_size_8"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginRight="@dimen/margin_padding_size_8"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/ripple_layout"
+    android:elevation="@dimen/margin_padding_size_4">
+
+    <!-- Ripple Color -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/margin_padding_size_8"
+        android:paddingBottom="@dimen/margin_padding_size_8"
+        android:paddingLeft="@dimen/margin_padding_size_16"
+        android:paddingRight="@dimen/margin_padding_size_16"
+        >
+
+        <!-- Background Color -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+           >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_receive"
+                android:id="@+id/tx_icon" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="14dp"
+                android:layout_marginStart="14dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/edit_text_size_20"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:text="Voted"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:id="@+id/amount"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/margin_padding_size_4"
+                        android:layout_marginLeft="@dimen/margin_padding_size_8"
+                        android:layout_marginStart="@dimen/margin_padding_size_8"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_light_green_corners_4dp"
+                        android:text="8.61990311 DCR"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:id="@+id/vote_reward"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ticket_price"
+                    android:layout_marginTop="@dimen/margin_padding_size_4"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:textColor="@color/lightGrayTextColor"
+                    android:text="116.51637184 DCR"
+                    android:visibility="visible"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:includeFontPadding="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Pending"
+                    android:textColor="#8997a5"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:gravity="center_vertical"
+                    android:id="@+id/status" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/days_to_vote"
+                    android:layout_marginTop="@dimen/margin_padding_size_4"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:textColor="@color/lightGray"
+                    android:text="14 days"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:includeFontPadding="false" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:id="@+id/img_status"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:layout_marginLeft="@dimen/margin_padding_size_8"
+                app:srcCompat="@drawable/ic_pending"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

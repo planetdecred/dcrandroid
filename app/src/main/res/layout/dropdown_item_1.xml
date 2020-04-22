@@ -5,13 +5,35 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
-    android:textSize="18sp"
-    android:textColor="@color/darkBlueTextColor"
-    android:gravity="center_vertical"
-    android:padding="5dp"
-    android:singleLine="true"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:ellipsize="marquee" />
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_wrapper">
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_24"
+            android:layout_marginEnd="@dimen/margin_padding_size_24"
+            android:elevation="@dimen/margin_padding_size_4"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:textSize="@dimen/edit_text_size_16"
+            android:textColor="@color/darkBlueTextColor"
+            android:fontFamily="@font/source_sans_pro"
+            android:paddingStart="54dp"
+            android:paddingEnd="@dimen/margin_padding_size_24"
+            android:paddingTop="@dimen/margin_padding_size_16"
+            android:paddingBottom="@dimen/margin_padding_size_16" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/colorBackground"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/colorBackground"
+        android:paddingLeft="@dimen/margin_padding_size_24"
+        android:paddingRight="@dimen/margin_padding_size_24"
+        android:paddingTop="@dimen/margin_padding_size_12"
+        android:paddingBottom="@dimen/margin_padding_size_12"
+        android:id="@+id/transactions_page_header"
+        android:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timestamp_sort_spinner" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tx_type_spinner"
+            android:layout_marginLeft="@dimen/margin_padding_size_16"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="@color/lightGrayTextColor"
+        app:fontFamily="@font/source_sans_pro"
+        android:text="@string/no_transactions_yet"/>
+
+
+</LinearLayout>

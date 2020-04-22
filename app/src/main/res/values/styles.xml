@@ -8,31 +8,39 @@
     <!-- LightTheme -->
     <style name="LightTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/turquoise</item>
+        <item name="colorControlHighlight">@color/whiteRipple</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:navigationBarColor" tools:targetApi="21">@android:color/white</item>
+        <item name="android:textColor">@color/blackFirstTextColor</item>
         <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
     </style>
-
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog" />
 
     <style name="LightTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <!--/LightTheme-->
 
     <!-- button style -->
-    <style name="materialButton" parent="Widget.MaterialComponents.Button">
-        <item name="colorAccent">@color/turquoise</item>
-        <item name="colorButtonNormal">@color/blue</item>
+
+    <style name="textViewButton" parent="TextAppearance.AppCompat">
+        <item name="android:background">@drawable/default_app_button_bg</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/source_sans_pro</item>
+    </style>
+
+    <style name="textViewButton.Outline" parent="textViewButton">
+        <item name="android:background">@drawable/outline_button_bg</item>
+        <item name="android:textColor">@color/blue</item>
     </style>
     <!-- /button style -->
 
@@ -43,7 +51,7 @@
     <!-- TabText Style -->
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/source_sans_pro_regular_family</item>
+        <item name="fontFamily">@font/source_sans_pro</item>
         <item name="textAllCaps">false</item>
     </style>
     <!-- TabText Style -->
@@ -69,5 +77,21 @@
         <item name="android:background">@drawable/bg_rounded_corner_top</item>
     </style>
     <!--/BottomSheetDialog Style -->
+
+    <style name="Switch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/blue</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#FFFFFF</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#c4cbd2</item>
+    </style>
+
+    <style name="TransactionsTabText" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/edit_text_size_16</item>
+    </style>
 
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_output_toggle"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_16"
+        android:paddingTop="@dimen/margin_padding_size_12"
+        android:paddingBottom="@dimen/margin_padding_size_12"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_output_consumed"
+            tools:text="2 Inputs Consumed"
+            android:textSize="@dimen/edit_text_size_14"
+            android:fontFamily="@font/source_sans_pro"
+            android:textColor="@color/blueGraySecondTextColor"
+            android:includeFontPadding="false"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_expand"
+            android:id="@+id/input_output_toggle_icon"
+            android:background="@drawable/circular_transparent_ripple"
+            />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        android:layout_marginEnd="@dimen/margin_padding_size_16"
+        android:layout_marginBottom="@dimen/margin_padding_size_8"
+        android:nestedScrollingEnabled="false"
+        android:visibility="gone"
+        android:id="@+id/rv_input_output"
+        />
+
+</LinearLayout>

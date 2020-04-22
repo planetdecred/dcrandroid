@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/bg_rounded_corner_top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_bar"
+        android:background="@drawable/bg_rounded_corner_top"
+        app:elevation="0dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_padding_size_8"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/margin_padding_size_8"
+                android:background="@drawable/circular_transparent_ripple"
+                android:focusable="true"
+                android:clickable="true"
+                android:id="@+id/go_back"
+                app:srcCompat="@drawable/ic_close" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:id="@+id/toolbar_title"
+                android:text="@string/sent"
+                android:textSize="@dimen/edit_text_size_20"
+                android:textColor="@color/darkBlueTextColor"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/iv_info"
+                android:padding="@dimen/margin_padding_size_8"
+                android:background="@drawable/circular_transparent_ripple"
+                android:focusable="true"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_info" />
+
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/tx_details_scroll"
+        android:fillViewport="true"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/margin_padding_size_16">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_send"
+                    android:id="@+id/tx_details_icon"
+                    android:scaleType="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="@dimen/margin_padding_size_16" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tx_details_amount"
+                        tools:text="7.51464806 DCR"
+                        android:textSize="32sp"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/darkBlueTextColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tx_timestamp"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:includeFontPadding="false"
+                        tools:text="Jan 25, 2019 11:58am"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:id="@+id/status_icon"
+                            app:srcCompat="@drawable/ic_confirmed" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_confirmations"
+                            android:text="@string/tx_details_confirmations"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:layout_marginStart="@dimen/margin_padding_size_4" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/tx_extra_details"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayBackgroundLightColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="0dp"
+                    android:paddingStart="@dimen/margin_padding_size_16"
+                    android:paddingEnd="@dimen/margin_padding_size_16"
+                    android:paddingBottom="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:id="@+id/tx_source_row"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:orientation="horizontal">
+
+                       <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from_account"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end|center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tx_source_wallet_badge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorBackground"
+                                android:includeFontPadding="false"
+                                android:paddingTop="@dimen/margin_padding_size_2"
+                                android:paddingBottom="@dimen/margin_padding_size_2"
+                                android:paddingLeft="@dimen/margin_padding_size_4"
+                                android:paddingRight="@dimen/margin_padding_size_4"
+                                android:layout_marginEnd="@dimen/margin_padding_size_4"
+                                android:textColor="@color/lightGrayTextColor"
+                                android:textSize="@dimen/edit_text_size_12"
+                                android:visibility="gone"
+                                app:fontFamily="@font/source_sans_pro_regular"
+                                tools:text="Wallet 2" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tx_details_source"
+                                android:gravity="end"
+                                tools:text="Default"
+                                android:textSize="@dimen/edit_text_size_18"
+                                android:textColor="@color/darkBlueTextColor"
+                                app:fontFamily="@font/source_sans_pro"
+                                android:includeFontPadding="false" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tx_dest_row"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tx_dest_label"
+                            android:text="@string/to_address"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end|center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tx_dest_wallet_badge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorBackground"
+                                android:includeFontPadding="false"
+                                android:paddingTop="@dimen/margin_padding_size_2"
+                                android:paddingBottom="@dimen/margin_padding_size_2"
+                                android:paddingLeft="@dimen/margin_padding_size_4"
+                                android:paddingRight="@dimen/margin_padding_size_4"
+                                android:layout_marginEnd="@dimen/margin_padding_size_4"
+                                android:textColor="@color/lightGrayTextColor"
+                                android:textSize="@dimen/edit_text_size_12"
+                                android:visibility="gone"
+                                app:fontFamily="@font/source_sans_pro_regular"
+                                tools:text="Wallet 2" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:id="@+id/tx_details_dest"
+                                android:gravity="end"
+                                tools:text="TsR3Hwq4AAmhFreyxazD8VB3nmBgp9j7LG5"
+                                android:ellipsize="middle"
+                                android:textSize="@dimen/edit_text_size_16"
+                                android:textColor="@color/blue"
+                                app:fontFamily="@font/source_sans_pro" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fee"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tx_details_fee"
+                            android:gravity="end"
+                            tools:text="0.00071330 DCR"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:textColor="@color/darkBlueTextColor"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:layout_marginStart="@dimen/margin_padding_size_56" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:id="@+id/tx_block_row"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/included_in_block"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tx_block"
+                            android:gravity="end"
+                            tools:text="328115"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:textColor="@color/darkBlueTextColor"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:layout_marginStart="@dimen/margin_padding_size_56" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/type"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:id="@+id/tx_details_type"
+                            tools:text="Regular"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:textColor="@color/darkBlueTextColor"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:layout_marginStart="@dimen/margin_padding_size_56" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/transaction_id"
+                            android:textSize="@dimen/edit_text_size_14"
+                            android:textColor="#596d81"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tx_details_id"
+                            android:gravity="end"
+                            tools:text="bf17c382bdb88a7b093bb9e30af97fbe18335ee34bd4d82b7e3f60da2af6a7fb"
+                            android:ellipsize="middle"
+                            android:singleLine="true"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:textColor="@color/blue"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:layout_marginStart="@dimen/margin_padding_size_56" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayBackgroundLightColor" />
+
+                <include
+                    layout="@layout/input_output_dropdown"
+                    android:id="@+id/input_dropdown_layout" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayBackgroundLightColor" />
+
+                <include
+                    layout="@layout/input_output_dropdown"
+                    android:id="@+id/output_dropdown_layout" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayBackgroundLightColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view_dcrdata"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/margin_padding_size_12"
+                    android:paddingBottom="@dimen/margin_padding_size_12"
+                    android:paddingLeft="@dimen/margin_padding_size_16"
+                    android:paddingRight="@dimen/margin_padding_size_16"
+                    android:background="@drawable/ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_on_dcrdata"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:includeFontPadding="false"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_open_new" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grayBackgroundLightColor" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_toggle_details"
+        app:fontFamily="@font/source_sans_pro"
+        android:gravity="center"
+        android:text="@string/show_details"
+        android:textSize="@dimen/edit_text_size_16"
+        android:paddingTop="@dimen/margin_padding_size_16"
+        android:paddingBottom="@dimen/margin_padding_size_16"
+        android:textColor="@color/blue"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/curved_bottom_ripple" />
+
+</LinearLayout>

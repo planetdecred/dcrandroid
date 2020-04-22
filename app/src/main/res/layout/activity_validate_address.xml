@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/validate_addresses"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_8"
+        android:layout_marginStart="@dimen/margin_padding_size_24"
+        android:includeFontPadding="false"
+        android:text="@string/validate_address_instruction"
+        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textSize="@dimen/edit_text_size_16"
+        android:fontFamily="@font/source_sans_pro" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_padding_size_8"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_16"
+        android:paddingTop="9dp"
+        android:background="@drawable/card_bg"
+        android:elevation="4dp"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/address_container"
+            layout="@layout/custom_input" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_padding_size_16"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <TextView
+                style="@style/textViewButton.Outline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_clear"
+                android:text="@string/clear"
+                android:textStyle="bold"
+                android:textSize="@dimen/edit_text_size_16"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:paddingTop="@dimen/margin_padding_size_12"
+                android:paddingBottom="@dimen/margin_padding_size_12"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="@dimen/margin_padding_size_16" />
+
+            <TextView
+                style="@style/textViewButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_validate"
+                android:enabled="false"
+                android:text="@string/validate"
+                android:textStyle="bold"
+                android:textSize="@dimen/edit_text_size_16"
+                android:paddingTop="@dimen/margin_padding_size_12"
+                android:paddingBottom="@dimen/margin_padding_size_12"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="@dimen/margin_padding_size_16" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/result_layout"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e6eaed" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingBottom="@dimen/margin_padding_size_16">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/iv_result_icon"
+                    android:src="@drawable/ic_checkmark" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/margin_padding_size_8">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_title"
+                        android:text="@string/valid_address"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/greenTextColor"
+                        android:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_subtitle"
+                        android:text="@string/external_valid_address"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/lightGrayTextColor"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

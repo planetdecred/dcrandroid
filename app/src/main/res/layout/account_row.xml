@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/ripple"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/margin_padding_size_16"
+    android:paddingStart="44dp"
+    android:paddingEnd="@dimen/margin_padding_size_16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            tools:src="@drawable/ic_accounts"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/account_row_icon" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="5"
+                android:textSize="18sp"
+                android:textColor="#091440"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false"
+                android:id="@+id/account_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_marginTop="7dp"
+                android:text="@string/label_spendable"
+                android:textSize="14sp"
+                android:textColor="#596d81"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                tools:text="0 DCR"
+                android:textSize="20sp"
+                android:textColor="#091440"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false"
+                android:id="@+id/account_row_total_balance" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:maxLines="1"
+                android:layout_marginTop="7dp"
+                tools:text="0 DCR"
+                android:textSize="14sp"
+                android:textColor="#596d81"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false"
+                android:id="@+id/account_row_spendable_balance" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e6eaed"
+        android:layout_marginStart="@dimen/margin_padding_size_40"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        />
+
+</LinearLayout>

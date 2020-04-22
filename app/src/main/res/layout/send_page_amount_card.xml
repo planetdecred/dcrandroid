@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/amount_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:layout_marginStart="@dimen/margin_padding_size_4"
+        android:layout_marginEnd="@dimen/margin_padding_size_4"
+        android:layout_marginBottom="@dimen/margin_padding_size_8"
+        android:background="@drawable/card_bg"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_padding_size_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/edit_text_size_14"
+                android:textColor="@color/darkerBlueGrayTextColor"
+                app:fontFamily="@font/source_sans_pro"
+                android:text="@string/amount" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textSize="@dimen/edit_text_size_14"
+                android:textColor="@color/darkerBlueGrayTextColor"
+                app:fontFamily="@font/source_sans_pro"
+                android:gravity="end"
+                android:id="@+id/spendable_balance"
+                tools:text="Spendable: 7.51464806 DCR" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            android:id="@+id/amount_input_container"
+            android:background="@drawable/input_background"
+            android:paddingStart="@dimen/margin_padding_size_16"
+            android:paddingTop="@dimen/margin_padding_size_16"
+            android:paddingBottom="@dimen/margin_padding_size_16"
+            android:paddingEnd="@dimen/margin_padding_size_4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/send_amount_layout"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/margin_padding_size_4"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/send_amount"
+                            android:background="@color/white"
+                            android:textSize="32sp"
+                            android:textColorHint="@color/lightGrayTextColor"
+                            android:textColor="@color/darkBlueTextColor"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:textCursorDrawable="@null"
+                            android:inputType="numberDecimal"
+                            android:includeFontPadding="false"
+                            android:lines="1"
+                            android:hint="0" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/currency_label"
+                            android:textSize="@dimen/edit_text_size_20"
+                            android:textColor="@color/lightGrayTextColor"
+                            android:text="@string/dcr"
+                            android:textAllCaps="true"
+                            android:includeFontPadding="false"
+                            android:layout_marginStart="@dimen/margin_padding_size_4"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/iv_send_clear"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:layout_marginEnd="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    app:srcCompat="@drawable/ic_close"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/iv_send_max"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    app:srcCompat="@drawable/ic_send_max" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/margin_padding_size_12"
+                android:paddingStart="0dp"
+                android:id="@+id/exchange_layout"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:id="@+id/swap_currency"
+                        app:srcCompat="@drawable/ic_swap" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#e6eaed"
+                        android:layout_marginStart="@dimen/margin_padding_size_8" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/send_equivalent_value"
+                    android:textSize="@dimen/edit_text_size_16"
+                    android:textColor="#596d81"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:includeFontPadding="false"
+                    tools:text="90 USD" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/exchange_error_layout"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:includeFontPadding="false"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:textColor="@color/orangeTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:text="@string/exchange_rate_fetch_error" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:id="@+id/exchange_error_retry"
+                        android:text="@string/retry"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:background="@drawable/paste_bg"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginStart="@dimen/margin_padding_size_16"
+                        android:paddingLeft="@dimen/margin_padding_size_8"
+                        android:paddingRight="@dimen/margin_padding_size_8"
+                        android:includeFontPadding="false" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/amount_error_text"
+            android:layout_marginTop="@dimen/margin_padding_size_4"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            app:fontFamily="@font/source_sans_pro_regular"
+            android:textSize="@dimen/edit_text_size_12"
+            android:textColor="@color/orangeTextColor"
+            android:visibility="gone"
+            tools:text="@string/not_enough_funds"
+            tools:visibility="visible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_padding_size_8"
+            android:background="#e6eaed" />
+
+        <include layout="@layout/fee_layout" />
+
+    </LinearLayout>
+
+</LinearLayout>

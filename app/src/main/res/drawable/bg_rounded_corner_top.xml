@@ -12,6 +12,5 @@
         android:topLeftRadius="@dimen/bottom_sheet_corner_radius_8"
         android:topRightRadius="@dimen/bottom_sheet_corner_radius_8" />
 
-    <padding android:top="8dp" />
     <solid android:color="@color/white" />
 </shape>
