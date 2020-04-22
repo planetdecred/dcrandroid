@@ -76,6 +76,7 @@
     <string name="remove_wallet">Remove wallet from device</string>
     <string name="remove_wallet_prompt">Remove wallet from device?</string>
     <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
+    <string name="error_copied">Error copied</string>
 
     <!--/General-->
 
@@ -215,7 +216,7 @@
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
     <string name="not_enough_funds_synced">Not enough funds (or not connected).</string>
-    <string name="check_log_error">Error occurred, check wallets log for details</string>
+    <string name="error_occurred">Error occurred</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -519,5 +520,6 @@
     <string name="welcome_title">Welcome to Decred Wallet.</string>
     <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
     <string name="welcome_screen_text">Welcome to Decred Wallet, a secure &amp; open-source mobile wallet.</string>
+    <string name="mywallet">mywallet</string>
 
 </resources>

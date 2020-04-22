@@ -11,6 +11,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
@@ -21,6 +22,7 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
 import java.io.*
 import java.math.BigDecimal
@@ -133,6 +135,17 @@ object Utils {
             Dcrlibwallet.ErrNoPeers -> ctx.getString(R.string.err_no_peers)
             else -> e.message!!
         }
+    }
+
+    fun showErrorDialog(ctx: Context, err: String) {
+        InfoDialog(ctx)
+                .setDialogTitle(ctx.getString(R.string.error_occurred))
+                .setMessage(err)
+                .setNegativeButton(ctx.getString(R.string._copy), DialogInterface.OnClickListener { _, _ ->
+                    copyToClipboard(ctx, err, R.string.error_copied)
+                })
+                .setPositiveButton(ctx.getString(R.string.ok), null)
+                .show()
     }
 
     fun restartApp(context: Context) {

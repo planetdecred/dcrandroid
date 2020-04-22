@@ -22,7 +22,9 @@ import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.util.SnackBar
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -100,25 +102,39 @@ class WalletsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_new_wallet -> {
-                val dividerWidth = context!!.resources.getDimensionPixelSize(R.dimen.add_wallet_menu_width)
-
-                val items = arrayOf(
-                        PopupItem(R.string.create_a_new_wallet),
-                        PopupItem(R.string.import_existing_wallet),
-                        PopupDivider(dividerWidth),
-                        PopupItem(R.string.import_watching_only_wallet, R.color.colorDisabled, false)
-                )
 
                 if (activity is HomeActivity) {
                     val homeActivity = activity as HomeActivity
-
                     val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
+
+                    val dividerWidth = context!!.resources.getDimensionPixelSize(R.dimen.add_wallet_menu_width)
+
+                    val items = arrayOf(
+                            PopupItem(R.string.create_a_new_wallet),
+                            PopupItem(R.string.import_existing_wallet),
+                            PopupDivider(dividerWidth),
+                            PopupItem(R.string.import_watching_only_wallet, R.color.colorDisabled, false)
+                    )
+
                     PopupUtil.showPopup(anchorView, items) { window, index ->
                         window.dismiss()
                         when (index) {
                             0 -> {
-                                PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
-                                    createWallet(dialog, passphrase, passphraseType)
+
+                                RequestNameDialog(R.string.wallet_name, "", true) { newName ->
+                                    try {
+                                        if (multiWallet.walletNameExists(newName)) {
+                                            return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
+                                        }
+
+                                        PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
+                                            createWallet(dialog, newName, passphrase, passphraseType)
+                                        }.show(context!!)
+
+                                    } catch (e: Exception) {
+                                        return@RequestNameDialog e
+                                    }
+                                    return@RequestNameDialog null
                                 }.show(context!!)
                             }
                             1 -> {
@@ -137,9 +153,9 @@ class WalletsFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val wallet = multiWallet.createNewWallet(spendingKey, type)
+            val wallet = multiWallet.createNewWallet(walletName, spendingKey, type)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
                 adapter.addWallet(wallet.id)

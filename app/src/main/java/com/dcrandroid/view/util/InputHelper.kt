@@ -202,9 +202,11 @@ class InputHelper(private val context: Context, private val container: View,
         if (s.isNullOrEmpty()) {
             setError(null) // this calls setup layout
             setupButtons()
+
+            validateInput("") // trigger validators to show errors if setup
         } else {
-            val enteredAddress = s.toString()
-            if (validateInput(enteredAddress)) { // address is valid
+            val enteredText = s.toString()
+            if (validateInput(enteredText)) { // address is valid
                 setError(null)
             } else {
                 setError(context.getString(validationMessage))
