@@ -16,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import androidx.annotation.Nullable
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
@@ -53,6 +52,10 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     private lateinit var amountHelper: AmountInputHelper
 
     private var sendMax = false
+
+    var savedInstanceState: Bundle? = Bundle()
+
+    var addressG: String? = null
 
     private val validForConstruct: Boolean
         get() {
@@ -130,6 +133,12 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     override fun onResume() {
         super.onResume()
         destinationAddressCard.addressInputHelper.onResume()
+        if (savedInstanceState != null) {
+            val myAddress = savedInstanceState!!.getString("Address")
+            if(!destinationAddressCard.isSendToAccount){
+                destinationAddressCard.addressInputHelper.editText.setText(myAddress)
+            }
+        }
     }
 
     override fun showOptionsMenu(v: View) {
@@ -346,18 +355,20 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(!destinationAddressCard.isSendToAccount){
+            addressG = destinationAddressCard.addressInputHelper.editText.text.toString()
+        }
+        savedInstanceState?.putString("Address", addressG)
+    }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
-        savedInstanceState.putString("Address", "Welcome back to the fragment")
-        savedInstanceState.putInt("Amount", 1)
-        // etc.
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        val myAddress = savedInstanceState?.getString("Address")
-        val myAmount = savedInstanceState?.getInt("Amount")
+        if(!destinationAddressCard.isSendToAccount){
+            addressG = destinationAddressCard.addressInputHelper.editText.text.toString()
+        }
+        savedInstanceState.putString("Address", addressG)
     }
 }
 
