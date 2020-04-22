@@ -17,6 +17,8 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.PasswordPromptDialog
+import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.*
@@ -91,26 +93,43 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
             showProcessing()
 
             val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(fragmentActivity, wallet.id, title, allowFingerprint = true) { _, pass ->
+            PassPromptUtil(this@ConfirmTransaction.fragmentActivity, wallet.id, title, allowFingerprint = true) { passDialog, pass ->
                 if (pass == null) {
                     showSendButton()
                     return@PassPromptUtil true
                 }
 
+                showProcessing()
+
                 GlobalScope.launch(Dispatchers.Default) {
+                    val op = this@ConfirmTransaction.javaClass.name + ": " + this.javaClass.name + ": txAuthor.broadcast"
                     try {
                         authoredTxData.txAuthor.broadcast(pass.toByteArray())
+                        passDialog?.dismiss()
                         showSuccess()
                     } catch (e: Exception) {
-                        showSendButton()
-                        val err = if(wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
-                            R.string.invalid_pin
-                        }else R.string.invalid_password
-                        SnackBar.showError(container!!, err) //TODO: handle other error types
                         e.printStackTrace()
+                        showSendButton()
+
+                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                            if (passDialog is PinPromptDialog) {
+                                passDialog.setProcessing(false)
+                                passDialog.showError()
+                            } else if (passDialog is PasswordPromptDialog) {
+                                passDialog.setProcessing(false)
+                                passDialog.showError()
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                passDialog?.dismiss()
+                                Dcrlibwallet.logT(op, e.message)
+                                Utils.showErrorDialog(context!!, op + ": " + e.message)
+                            }
+                        }
                     }
                 }
-                true
+
+                return@PassPromptUtil false
             }.show()
         }
     }
