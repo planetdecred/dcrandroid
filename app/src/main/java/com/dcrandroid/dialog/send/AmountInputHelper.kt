@@ -78,7 +78,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
         layout.iv_send_clear.setOnClickListener(this)
         layout.iv_expand_fees.setOnClickListener(this)
+
         layout.swap_currency.setOnClickListener(this)
+        layout.send_equivalent_value.setOnClickListener(this)
+
         layout.exchange_error_retry.setOnClickListener(this)
 
         layout.send_amount_layout.setOnTouchListener { v, event ->
@@ -139,7 +142,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
                 layout.iv_expand_fees.setImageResource(img)
             }
 
-            R.id.swap_currency -> {
+            R.id.swap_currency, R.id.send_equivalent_value -> {
                 if (exchangeDecimal == null) {
                     return
                 }
@@ -282,10 +285,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         }
     }
 
-    private fun hideOrShowClearButton(){
-        if(layout.send_amount.text.isEmpty()){
+    private fun hideOrShowClearButton() {
+        if (layout.send_amount.text.isEmpty()) {
             layout.iv_send_clear.hide()
-        }else{
+        } else {
             layout.iv_send_clear.show()
         }
     }
