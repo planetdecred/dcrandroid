@@ -72,9 +72,10 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
                                 dialog.showError()
                             }
                         } else {
-                            Dcrlibwallet.logT(op, e.message)
+
                             dialog?.dismiss()
-                            SnackBar.showError(fragmentActivity, R.string.check_log_error)
+                            Dcrlibwallet.logT(op, e.message)
+                            Utils.showErrorDialog(fragmentActivity, op + ": " + e.message)
                         }
                     }
                 }

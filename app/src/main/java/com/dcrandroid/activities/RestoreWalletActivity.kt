@@ -16,8 +16,10 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.dcrandroid.view.SeedEditTextLayout
 import com.dcrandroid.view.util.SeedEditTextHelper
@@ -115,9 +117,23 @@ class RestoreWalletActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            PasswordPinDialogFragment(R.string.create, true, isChange = false) { dialog, passphrase, passphraseType ->
-                createWallet(dialog, passphrase, passphraseType, enteredSeeds)
-            }.show(this)
+            if (multiWallet!!.loadedWalletsCount() == 0) {
+                requestWalletSpendingPass(getString(R.string.mywallet))
+            } else {
+                RequestNameDialog(R.string.wallet_name, "", true) { newName ->
+                    try {
+                        if (multiWallet!!.walletNameExists(newName)) {
+                            return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
+                        }
+
+                        requestWalletSpendingPass(newName)
+
+                    } catch (e: Exception) {
+                        return@RequestNameDialog e
+                    }
+                    return@RequestNameDialog null
+                }.show(this)
+            }
         }
 
         go_back.setOnClickListener { finish() }
@@ -128,9 +144,16 @@ class RestoreWalletActivity : AppCompatActivity() {
         allSeedWords.addAll(seedWords)
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
+    private fun requestWalletSpendingPass(walletName: String) {
+        PasswordPinDialogFragment(R.string.create, true, isChange = false) { dialog, passphrase, passphraseType ->
+            createWallet(dialog, walletName, passphrase, passphraseType, enteredSeeds)
+        }.show(this)
+    }
+
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
+        val op = this@RestoreWalletActivity.javaClass.name + ".createWallet"
         try {
-            val wallet = multiWallet!!.restoreWallet(seed, spendingKey, spendingPassType)
+            val wallet = multiWallet!!.restoreWallet(walletName, seed, spendingKey, spendingPassType)
             wallet.unlockWallet(spendingKey.toByteArray())
 
             withContext(Dispatchers.Main) {
@@ -146,6 +169,11 @@ class RestoreWalletActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+                Dcrlibwallet.logT(op, e.message)
+                Utils.showErrorDialog(this@RestoreWalletActivity, op + ": " + e.message)
+            }
         }
     }
 }

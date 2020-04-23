@@ -160,9 +160,10 @@ class WalletSettings : BaseActivity() {
                             dialog.showError()
                         }
                     } else {
-                        Dcrlibwallet.logT(op, e.message)
+
                         dialog?.dismiss()
-                        SnackBar.showError(this@WalletSettings, R.string.check_log_error)
+                        Dcrlibwallet.logT(op, e.message)
+                        Utils.showErrorDialog(this@WalletSettings, op + ": " + e.message)
                     }
                 }
             }

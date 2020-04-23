@@ -212,7 +212,6 @@
     <string name="wallet_not_loaded">Le porte-monnaie n\'est pas chargé</string>
     <string name="err_no_peers">Le réseau Decred est injoignable à cause d\'un manque de pairs.</string>
     <string name="not_enough_funds_synced">Pas assez de fonds (ou pas connecté).</string>
-    <string name="check_log_error">Une erreur s\'est produite, vérifier le logs du porte-monnaie pour plus de détails</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -516,5 +515,6 @@
     <string name="welcome_title">Bienvenue dans Decred Wall</string>
     <string name="first_run_notice">Votre phrase de récupération à 33 mots est votre porte-monnaie, convervez-la en sécurité. Sans elle vos fonds ne peuvent pas être récupérés si votre appareil devait être perdu ou détruit. La synchronisaion initiale du porte-monnaie sera plus longue que normalement.</string>
     <string name="welcome_screen_text">Bienvenue dans Decred Wallet, un porte-monnaie mobile sécurisé et open-source.</string>
+    <string name="mywallet">mywallet</string>
 
 </resources>

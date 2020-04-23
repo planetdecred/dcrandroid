@@ -35,9 +35,9 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        spendingCreatePasswordFragment = CreatePasswordPromptFragment(isSpending, positiveButtonTitle, createWallet)
+        spendingCreatePasswordFragment = CreatePasswordPromptFragment(isSpending, positiveButtonTitle, handleCompletion)
 
-        spendingCreatePinFragment = CreatePinPromptFragment(isSpending, positiveButtonTitle, createWallet)
+        spendingCreatePinFragment = CreatePinPromptFragment(isSpending, positiveButtonTitle, handleCompletion)
 
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList = listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
@@ -91,7 +91,7 @@ class PasswordPinDialogFragment(@StringRes var positiveButtonTitle: Int, var isS
         }
     }
 
-    private val createWallet: (passphrase: String?) -> Unit = { passphrase ->
+    private val handleCompletion: (passphrase: String?) -> Unit = { passphrase ->
         if (passphrase == null) {
             dismiss()
         } else {

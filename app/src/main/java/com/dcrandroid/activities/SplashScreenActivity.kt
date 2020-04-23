@@ -93,7 +93,7 @@ class SplashScreenActivity : BaseActivity() {
 
     private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            multiWallet!!.createNewWallet(spendingKey, type)
+            multiWallet!!.createNewWallet(getString(R.string.mywallet), spendingKey, type)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
             }

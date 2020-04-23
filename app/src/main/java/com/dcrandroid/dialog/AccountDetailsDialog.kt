@@ -75,11 +75,11 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         iv_rename_account.setOnClickListener {
             val activity = ctx as AppCompatActivity
-            RenameAccountDialog(account.accountName) {
+            RequestNameDialog(R.string.rename_account, account.accountName) {
 
                 val e = renameAccount(it)
                 if (e != null) {
-                    return@RenameAccountDialog e
+                    return@RequestNameDialog e
                 } else {
                     tv_account_name.text = it
                     SnackBar.showText(account_details_root, R.string.account_renamed)
