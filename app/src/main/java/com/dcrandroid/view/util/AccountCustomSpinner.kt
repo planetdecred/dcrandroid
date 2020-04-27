@@ -27,7 +27,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
 
     val context = spinnerLayout.context
 
-    private val multiWallet = WalletData.multiWallet
+    val multiWallet = WalletData.multiWallet
     var wallet: Wallet
 
     var selectedAccount: Account? = null
