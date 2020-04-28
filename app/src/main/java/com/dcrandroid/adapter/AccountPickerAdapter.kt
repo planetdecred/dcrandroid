@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Utils
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
@@ -72,7 +71,7 @@ class AccountPickerAdapter(val items: Array<Any>, val context: Context, val curr
             holder.itemView.account_row_total_balance.text = CoinFormat.format(item.balance.total)
 
             holder.itemView.account_row_spendable_balance.text = context.getString(R.string.dcr_amount,
-                    Utils.formatDecredWithComma(item.balance.spendable))
+                    CoinFormat.formatDecred(item.balance.spendable))
 
             holder.itemView.setOnClickListener {
                 accountSelected(item)

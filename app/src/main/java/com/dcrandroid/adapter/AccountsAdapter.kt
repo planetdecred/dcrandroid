@@ -20,7 +20,6 @@ import com.dcrandroid.dialog.AddAccountDialog
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
@@ -86,7 +85,8 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
             holder.accountName.text = account.accountName
             holder.accountName.isSelected = true
             holder.totalBalance.text = CoinFormat.format(account.totalBalance)
-            holder.spendableBalance.text = context.getString(R.string.dcr_amount, Utils.formatDecredWithComma(account.balance.spendable))
+            holder.spendableBalance.text = context.getString(R.string.dcr_amount,
+                    CoinFormat.formatDecred(account.balance.spendable))
 
             holder.itemView.setOnClickListener {
                 AccountDetailsDialog(context, walletID, account) { newName ->

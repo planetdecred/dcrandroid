@@ -520,6 +520,11 @@
     <string name="welcome_title">Welcome to Decred Wallet.</string>
     <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
     <string name="welcome_screen_text">Welcome to Decred Wallet, a secure &amp; open-source mobile wallet.</string>
-    <string name="mywallet">mywallet</string>
+    <string name="mywallet">my wallet</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="month_day_format">MMMM dd</string>
+    <string name="date_format">MMMM dd, yyyy</string>
+    <string name="date_time_format">MMM dd, yyyy hh:mma</string>
 
 </resources>

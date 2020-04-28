@@ -20,7 +20,6 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
@@ -44,7 +43,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         tx_details_icon.setImageResource(transaction.iconResource)
         tx_details_amount.text = CoinFormat.format(transaction.amount, 0.625f)
 
-        val sdf = SimpleDateFormat("MMM dd, yyyy hh:mma", Locale.getDefault())
+        val sdf = SimpleDateFormat(getString(R.string.date_time_format), Locale.getDefault())
 
         val symbols = DateFormatSymbols(Locale.getDefault())
         symbols.amPmStrings = arrayOf(getString(R.string.am), getString(R.string.pm))
@@ -73,7 +72,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         tx_details_id.setOnClickListener(this)
         tx_details_id.text = transaction.hash
         tx_details_type.text = transaction.type
-        tx_details_fee.text = getString(R.string.x_dcr, Utils.formatDecredWithComma(transaction.fee))
+        tx_details_fee.text = getString(R.string.x_dcr, CoinFormat.formatDecred(transaction.fee))
 
         when (transaction.type) {
             Dcrlibwallet.TxTypeRegular -> {
@@ -150,7 +149,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     private fun populateInputOutput() {
         val inputs = ArrayList<DropDownItem>()
         for (input in transaction.inputs!!) {
-            val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(input.amount), input.accountName)
+            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), input.accountName)
             var inputBadge = ""
             if (input.accountNumber != null && input.accountNumber != -1){
                 inputBadge = multiWallet.walletWithID(transaction.walletID).name
@@ -162,7 +161,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         val outputs = ArrayList<DropDownItem>()
         for (output in transaction.outputs!!) {
-            val amount = getString(R.string.tx_details_account, Utils.formatDecredWithComma(output.amount), output.accountName)
+            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), output.accountName)
             var outputBadge = ""
             if (output.account != -1){
                 outputBadge = multiWallet.walletWithID(transaction.walletID).name
