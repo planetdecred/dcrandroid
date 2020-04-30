@@ -22,7 +22,6 @@ import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_row.view.*
@@ -34,7 +33,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val multiWallet = WalletData.multiWallet
 
-    val spendUnconfirmedFunds: Boolean
+    private val spendUnconfirmedFunds: Boolean
 
     init {
         spendUnconfirmedFunds = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
@@ -76,13 +75,13 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         }
 
         if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            val strAmount = Utils.formatDecredWithComma(transaction.amount)
+            val strAmount = CoinFormat.formatDecred(transaction.amount)
 
             holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
 
-            val iconRes = when {
-                transaction.direction == 0 -> R.drawable.ic_send
-                transaction.direction == 1 -> R.drawable.ic_receive
+            val iconRes = when (transaction.direction) {
+                0 -> R.drawable.ic_send
+                1 -> R.drawable.ic_receive
                 else -> R.drawable.ic_tx_transferred
             }
             holder.icon.setImageResource(iconRes)
@@ -109,11 +108,11 @@ fun TextView.setPending() {
 }
 
 fun TextView.setConfirmed(timestamp: Long) {
-    this.text = getTimestamp(timestamp * 1000) // convert seconds to milliseconds
+    this.text = getTimestamp(this.context, timestamp * 1000) // convert seconds to milliseconds
     this.setTextColor(Color.parseColor("#596d81"))
 }
 
-fun getTimestamp(timestamp: Long): String {
+fun getTimestamp(context: Context, timestamp: Long): String {
     val txDate = GregorianCalendar()
     txDate.time = Date(timestamp)
 
@@ -126,10 +125,10 @@ fun getTimestamp(timestamp: Long): String {
     val month = week * 4
 
     return when {
-        DateUtils.isToday(timestamp) -> "Today"
-        yesterday > difference -> "Yesterday"
+        DateUtils.isToday(timestamp) -> context.getString(R.string.today)
+        yesterday > difference -> context.getString(R.string.yesterday)
         week > difference -> SimpleDateFormat("EE", Locale.getDefault()).format(timestamp)
-        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat("MMMM dd", Locale.getDefault()).format(timestamp)
-        else -> SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(timestamp)
+        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat(context.getString(R.string.month_day_format), Locale.getDefault()).format(timestamp)
+        else -> SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault()).format(timestamp)
     }
 }

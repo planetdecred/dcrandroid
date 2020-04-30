@@ -17,17 +17,18 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.PasswordPromptDialog
+import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
-import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
-import java.math.RoundingMode
 
 class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: () -> Unit) : FullScreenBottomSheetDialog() {
 
@@ -58,9 +59,9 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         send_from_account_name.text = HtmlCompat.fromHtml(getString(R.string.send_from_account,
                 selectedAccount.accountName, wallet.name), 0)
 
-        val dcrAmount = dcrFormat.format(transactionData.dcrAmount.setScale(8, RoundingMode.HALF_EVEN).toDouble())
+        val dcrAmount = CoinFormat.formatDecred(Dcrlibwallet.amountAtom(transactionData.dcrAmount.toDouble()))
         val amountStr = if (transactionData.exchangeDecimal != null) {
-            val usdAmount = dcrToFormattedUSD(transactionData.exchangeDecimal, transactionData.dcrAmount.toDouble())
+            val usdAmount = dcrToFormattedUSD(transactionData.exchangeDecimal, transactionData.dcrAmount.toDouble(), 2)
             HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, dcrAmount, usdAmount), 0)
         } else {
             getString(R.string.x_dcr, dcrAmount)
@@ -94,26 +95,43 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
             showProcessing()
 
             val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(fragmentActivity, wallet.id, title, allowFingerprint = true) { _, pass ->
+            PassPromptUtil(this@ConfirmTransaction.fragmentActivity, wallet.id, title, allowFingerprint = true) { passDialog, pass ->
                 if (pass == null) {
                     showSendButton()
                     return@PassPromptUtil true
                 }
 
+                showProcessing()
+
                 GlobalScope.launch(Dispatchers.Default) {
+                    val op = this@ConfirmTransaction.javaClass.name + ": " + this.javaClass.name + ": txAuthor.broadcast"
                     try {
                         authoredTxData.txAuthor.broadcast(pass.toByteArray())
+                        passDialog?.dismiss()
                         showSuccess()
                     } catch (e: Exception) {
-                        showSendButton()
-                        val err = if(wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin){
-                            R.string.invalid_pin
-                        }else R.string.invalid_password
-                        SnackBar.showError(container!!, err) //TODO: handle other error types
                         e.printStackTrace()
+                        showSendButton()
+
+                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                            if (passDialog is PinPromptDialog) {
+                                passDialog.setProcessing(false)
+                                passDialog.showError()
+                            } else if (passDialog is PasswordPromptDialog) {
+                                passDialog.setProcessing(false)
+                                passDialog.showError()
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                passDialog?.dismiss()
+                                Dcrlibwallet.logT(op, e.message)
+                                Utils.showErrorDialog(context!!, op + ": " + e.message)
+                            }
+                        }
                     }
                 }
-                true
+
+                return@PassPromptUtil false
             }.show()
         }
     }

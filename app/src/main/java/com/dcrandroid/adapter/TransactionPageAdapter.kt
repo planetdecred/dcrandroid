@@ -20,7 +20,6 @@ import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_page_row.view.*
@@ -97,7 +96,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
         }
 
         if (transaction.type == Dcrlibwallet.TxTypeRegular) run {
-            val strAmount = Utils.formatDecredWithComma(transaction.amount)
+            val strAmount = CoinFormat.formatDecred(transaction.amount)
 
             holder.amount.apply {
                 text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
@@ -128,7 +127,7 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                     title = R.string.vote
                     holder.itemView.vote_reward.show()
 
-                    val reward = Utils.formatDecredWithComma(104044861) // TODO:
+                    val reward = CoinFormat.formatDecred(104044861) // TODO:
                     holder.itemView.vote_reward.text = CoinFormat.format("+$reward DCR", 0.715f)
                 }
                 Dcrlibwallet.TxTypeRevocation -> {

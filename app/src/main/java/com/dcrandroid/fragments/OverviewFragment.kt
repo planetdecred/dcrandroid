@@ -88,8 +88,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         setToolbarTitle(R.string.overview, false)
         scrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
-        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
-
+        loadBalance()
         loadTransactions()
 
         btn_view_all_transactions.setOnClickListener {
@@ -150,6 +149,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         }
     }
 
+    private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
+        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
+    }
+
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
         val jsonResult = multiWallet.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterRegular, true)
         var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
@@ -194,6 +197,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onTransaction(transactionJson: String?) {
+        loadBalance()
+
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
         transaction.animate = true
 
@@ -210,6 +215,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+        loadBalance()
+
         GlobalScope.launch(Dispatchers.Main) {
 
             for (i in 0 until transactions.size) {
@@ -222,6 +229,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        loadBalance()
+
         GlobalScope.launch(Dispatchers.Main) {
             val unconfirmedTransactions = transactions.filter { it.confirmations <= 2 }.count()
             if (unconfirmedTransactions > 0) {
@@ -231,9 +240,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onSyncCompleted() {
-        GlobalScope.launch(Dispatchers.Main) {
-            balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
-        }
+        loadBalance()
         loadTransactions()
     }
 }

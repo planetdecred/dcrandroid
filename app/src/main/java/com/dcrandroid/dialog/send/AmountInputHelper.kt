@@ -19,7 +19,6 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.GetExchangeRate
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fee_layout.view.*
@@ -32,7 +31,8 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 const val AmountRelativeSize = 0.625f
-val formatter: DecimalFormat = DecimalFormat("#.####")
+val usdAmountFormat: DecimalFormat = DecimalFormat("0.0000")
+val usdAmountFormat2: DecimalFormat = DecimalFormat("0.00")
 val dcrFormat = DecimalFormat("#.########")
 
 class AmountInputHelper(private val layout: LinearLayout, private val scrollToBottom: () -> Unit) : TextWatcher, View.OnClickListener, GetExchangeRate.ExchangeRateCallback {
@@ -46,7 +46,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     var selectedAccount: Account? = null
         set(value) {
             layout.spendable_balance.text = context.getString(R.string.spendable_bal_format,
-                    Utils.formatDecredWithComma(value!!.balance.spendable))
+                    CoinFormat.formatDecred(value!!.balance.spendable))
             field = value
         }
 
@@ -84,7 +84,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
         layout.exchange_error_retry.setOnClickListener(this)
 
-        layout.send_amount_layout.setOnTouchListener { v, event ->
+        layout.send_amount_layout.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 // focus amount input on touch
                 layout.send_amount.requestFocus()
@@ -193,7 +193,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
             if (currencyIsDCR) {
                 val dcr = Dcrlibwallet.amountAtom(coin)
-                val amountString = Utils.formatDecredWithoutComma(dcr)
+                val amountString = CoinFormat.formatDecred(dcr, CoinFormat.dcrWithoutCommas)
                 layout.send_amount.setText(CoinFormat.format(amountString, AmountRelativeSize))
             } else {
                 val usd = usdAmount!!.setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString()
@@ -266,12 +266,12 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
         if (currencyIsDCR) {
             val usd = if (usdAmount == null) {
-                0.0
+                0
             } else {
                 usdAmount!!.toDouble()
             }
 
-            val usdStr = formatter.format(usd)
+            val usdStr = usdAmountFormat2.format(usd)
             layout.send_equivalent_value.text = context.getString(R.string.x_usd, usdStr)
         } else {
             val dcr = if (dcrAmount == null) {
@@ -327,7 +327,12 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 }
 
 fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String {
-    return formatter.format(
+    if(scale == 4){
+        return usdAmountFormat.format(
+                dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
+    }
+
+    return usdAmountFormat2.format(
             dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
 }
 

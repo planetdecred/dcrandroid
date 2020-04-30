@@ -25,10 +25,6 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
 import java.io.*
-import java.math.BigDecimal
-import java.math.MathContext
-import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.util.*
 
 object Utils {
@@ -60,27 +56,6 @@ object Utils {
             i += 2
         }
         return data
-    }
-
-    fun removeTrailingZeros(dcr: Double): String {
-        val format = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-        format.applyPattern("#,###,###,##0.########")
-        return format.format(dcr)
-    }
-
-    fun formatDecredWithComma(dcr: Long): String {
-        val convertedDcr = Dcrlibwallet.amountCoin(dcr)
-        val df = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-        df.applyPattern("#,###,###,##0.########")
-        return df.format(convertedDcr)
-    }
-
-    fun formatDecredWithoutComma(dcr: Long): String {
-        val atom = BigDecimal(dcr)
-        val amount = atom.divide(BigDecimal.valueOf(1e8), MathContext(100))
-        val format = NumberFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-        format.applyPattern("#########0.########")
-        return format.format(amount)
     }
 
     private fun saveToClipboard(context: Context, text: String) {
