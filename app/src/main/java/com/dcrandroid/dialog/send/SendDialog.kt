@@ -138,21 +138,13 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             //included this boolean value to avoid insufficient balance error if true onResume
             savedInstanceState?.putBoolean(Constants.SEND_MAX, sendMax)
 
-            //fetch and save the selected from wallet ID and selected from account number
-            val selectedSourceAccountID: Long? = amountHelper.selectedAccount?.walletID
-            val selectedSourceAccountNo: Int? = amountHelper.selectedAccount?.accountNumber
-            savedInstanceState?.putLong(Constants.SELECTED_SOURCE_ACCOUNT_ID, selectedSourceAccountID!!)
-            savedInstanceState?.putInt(Constants.SELECTED_SOURCE_ACCOUNT_NUMBER, selectedSourceAccountNo!!)
+            //fetch and save the selected source account
+            val selectedSourceAccount = amountHelper.selectedAccount
+            savedInstanceState?.putSerializable(Constants.SELECTED_SOURCE_ACCOUNT, selectedSourceAccount)
 
-            //fetch and save the selected to wallet ID and selected to account number
+            //fetch and save the selected destination account
             val selectedDestAccount = destinationAddressCard.destinationAccountSpinner.selectedAccount
-            savedInstanceState?.putSerializable("selectedDestAccount", selectedDestAccount)
-            Log.i(TAG, "----------onPause SelectedDestAccount $selectedDestAccount" )
-
-            val selectedDestAccountID: Long? = destinationAddressCard.destinationAccountSpinner.selectedAccount?.walletID
-            val selectedDestAccountNo: Int? = destinationAddressCard.destinationAccountSpinner.selectedAccount?.accountNumber
-            savedInstanceState?.putLong(Constants.SELECTED_DESTINATION_ACCOUNT_ID, selectedDestAccountID!!)
-            savedInstanceState?.putInt(Constants.SELECTED_DESTINATION_ACCOUNT_NUMBER, selectedDestAccountNo!!)
+            savedInstanceState?.putSerializable(Constants.SELECTED_DESTINATION_ACCOUNT, selectedDestAccount)
 
             //save destination address state depending on if spinner or address input was selected
             if(destinationAddressCard.isSendToAccount){
@@ -173,35 +165,24 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             //fetch saved destination address state
             val spinner = savedInstanceState!!.getBoolean(Constants.SPINNER)
 
-            //fetch saved source and destination accounts wallet IDS
-            val selectedSourceAccountID = savedInstanceState!!.getLong(Constants.SELECTED_SOURCE_ACCOUNT_ID)
-            val selectedDestAccountID = savedInstanceState!!.getLong(Constants.SELECTED_DESTINATION_ACCOUNT_ID)
-
-            //fetch saved source and destination accounts account Numbers
-            val selectedSourceAccountNo = savedInstanceState!!.getInt(Constants.SELECTED_SOURCE_ACCOUNT_NUMBER)
-            val selectedDestAccountNo = savedInstanceState!!.getInt(Constants.SELECTED_DESTINATION_ACCOUNT_NUMBER)
-
-            val selectedDestAccount = savedInstanceState!!.getSerializable("selectedDestAccount")
-            Log.i(TAG, "----------onResume SelectedDestAccount $selectedDestAccount")
-            selectedDestAccount!!.walletID
-
-            //fetch saved currency state
-            val selectedCurrencyIsDCR = savedInstanceState!!.getBoolean(Constants.SELECTED_CURRENCY_IS_DCR)
+            //fetch saved source and destination accounts
+            val selectedSourceAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_SOURCE_ACCOUNT) as Account
+            val selectedDestAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_DESTINATION_ACCOUNT) as Account
 
             //Subtracted 1 to account for ArrayList counting
-            val selectedSourceAccountList = selectedSourceAccountID - 1
-            val selectedDestAccountList = selectedDestAccountID - 1
+            val selectedSourceAccountList = selectedSourceAccount.walletID - 1
+            val selectedDestAccountList = selectedDestAccount.walletID - 1
 
             //Update UI based on previously selected source account
             val sourceWalletID = multiWallet.openedWalletsList()[selectedSourceAccountList.toInt()]
-            val sourceWalletAcc = Account.from(sourceWalletID.getAccount(selectedSourceAccountNo))
+            val sourceWalletAcc = Account.from(sourceWalletID.getAccount(selectedSourceAccount.accountNumber))
             sourceAccountSpinner.wallet = sourceWalletID
             sourceAccountSpinner.selectedAccount = sourceWalletAcc
             sourceAccountSpinner.selectedAccountChanged?.let { it1 -> it1(sourceAccountSpinner)}
 
             //Update UI based on previously selected send to account
             val destWalletID = multiWallet.openedWalletsList()[selectedDestAccountList.toInt()]
-            val destWalletAcc = Account.from(destWalletID.getAccount(selectedDestAccountNo))
+            val destWalletAcc = Account.from(destWalletID.getAccount(selectedDestAccount.accountNumber))
             destinationAddressCard.destinationAccountSpinner.wallet = destWalletID
             destinationAddressCard.destinationAccountSpinner.selectedAccount = destWalletAcc
             destinationAddressCard.destinationAccountSpinner.selectedAccountChanged?.let { it1 -> it1(destinationAddressCard.destinationAccountSpinner)}
