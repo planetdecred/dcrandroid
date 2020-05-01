@@ -12,6 +12,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+
+const val TAG = "SendDialog"
 
 class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: DialogInterface.OnDismissListener) :
         FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
@@ -132,66 +135,72 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     override fun onPause() {
         super.onPause()
         savedInstanceState = Bundle()
-        if (savedInstanceState != null) {
-            //fetch save the selected from wallet ID and selected from account number
+            //included this boolean value to avoid insufficient balance error if true onResume
+            savedInstanceState?.putBoolean(Constants.SEND_MAX, sendMax)
+
+            //fetch and save the selected from wallet ID and selected from account number
             val selectedSourceAccountID: Long? = amountHelper.selectedAccount?.walletID
             val selectedSourceAccountNo: Int? = amountHelper.selectedAccount?.accountNumber
-            savedInstanceState?.putLong("selectedSourceAccountID", selectedSourceAccountID!!)
-            savedInstanceState?.putInt("selectedSourceAccountNo", selectedSourceAccountNo!!)
+            savedInstanceState?.putLong(Constants.SELECTED_SOURCE_ACCOUNT_ID, selectedSourceAccountID!!)
+            savedInstanceState?.putInt(Constants.SELECTED_SOURCE_ACCOUNT_NUMBER, selectedSourceAccountNo!!)
 
             //fetch and save the selected to wallet ID and selected to account number
+            val selectedDestAccount = destinationAddressCard.destinationAccountSpinner.selectedAccount
+            savedInstanceState?.putSerializable("selectedDestAccount", selectedDestAccount)
+            Log.i(TAG, "----------onPause SelectedDestAccount $selectedDestAccount" )
+
             val selectedDestAccountID: Long? = destinationAddressCard.destinationAccountSpinner.selectedAccount?.walletID
             val selectedDestAccountNo: Int? = destinationAddressCard.destinationAccountSpinner.selectedAccount?.accountNumber
-            savedInstanceState?.putLong("selectedDestAccountID", selectedDestAccountID!!)
-            savedInstanceState?.putInt("selectedDestAccountNo", selectedDestAccountNo!!)
+            savedInstanceState?.putLong(Constants.SELECTED_DESTINATION_ACCOUNT_ID, selectedDestAccountID!!)
+            savedInstanceState?.putInt(Constants.SELECTED_DESTINATION_ACCOUNT_NUMBER, selectedDestAccountNo!!)
 
             //save destination address state depending on if spinner or address input was selected
             if(destinationAddressCard.isSendToAccount){
-                destinationAddressCard.addressInputHelper.hide()
-                destinationAddressCard.destinationAccountSpinner.show()
-                savedInstanceState?.putBoolean("Spinner", true)
-                savedInstanceState?.putBoolean("Address", false)
+                savedInstanceState?.putBoolean(Constants.SPINNER, true)
             } else {
-                destinationAddressCard.addressInputHelper.show()
-                destinationAddressCard.destinationAccountSpinner.hide()
-                savedInstanceState?.putBoolean("Spinner", false)
-                savedInstanceState?.putBoolean("Address", true)
+                savedInstanceState?.putBoolean(Constants.SPINNER, false)
             }
-        }
     }
 
     override fun onResume() {
         super.onResume()
         destinationAddressCard.addressInputHelper.onResume()
         if (savedInstanceState != null) {
+            //fetch saved sendMax Value
+            val max = savedInstanceState!!.getBoolean(Constants.SEND_MAX)
+            sendMax = max
+
             //fetch saved destination address state
-            val spinner = savedInstanceState!!.getBoolean("Spinner")
-            val address = savedInstanceState!!.getBoolean("Address")
+            val spinner = savedInstanceState!!.getBoolean(Constants.SPINNER)
 
             //fetch saved source and destination accounts wallet IDS
-            val selectedSourceAccountID = savedInstanceState!!.getLong("selectedSourceAccountID")
-            val selectedDestAccountID = savedInstanceState!!.getLong("selectedDestAccountID")
+            val selectedSourceAccountID = savedInstanceState!!.getLong(Constants.SELECTED_SOURCE_ACCOUNT_ID)
+            val selectedDestAccountID = savedInstanceState!!.getLong(Constants.SELECTED_DESTINATION_ACCOUNT_ID)
 
             //fetch saved source and destination accounts account Numbers
-            val selectedSourceAccountNo = savedInstanceState!!.getInt("selectedSourceAccountNo")
-            val selectedDestAccountNo = savedInstanceState!!.getInt("selectedDestAccountNo")
+            val selectedSourceAccountNo = savedInstanceState!!.getInt(Constants.SELECTED_SOURCE_ACCOUNT_NUMBER)
+            val selectedDestAccountNo = savedInstanceState!!.getInt(Constants.SELECTED_DESTINATION_ACCOUNT_NUMBER)
+
+            val selectedDestAccount = savedInstanceState!!.getSerializable("selectedDestAccount")
+            Log.i(TAG, "----------onResume SelectedDestAccount $selectedDestAccount")
+            selectedDestAccount!!.walletID
 
             //fetch saved currency state
-            val selectedCurrencyIsDCR = savedInstanceState!!.getBoolean("selectedCurrencyIsDCR")
+            val selectedCurrencyIsDCR = savedInstanceState!!.getBoolean(Constants.SELECTED_CURRENCY_IS_DCR)
 
             //Subtracted 1 to account for ArrayList counting
             val selectedSourceAccountList = selectedSourceAccountID - 1
             val selectedDestAccountList = selectedDestAccountID - 1
 
             //Update UI based on previously selected source account
-            val sourceWalletID = sourceAccountSpinner.multiWallet!!.openedWalletsList()[selectedSourceAccountList.toInt()]
+            val sourceWalletID = multiWallet.openedWalletsList()[selectedSourceAccountList.toInt()]
             val sourceWalletAcc = Account.from(sourceWalletID.getAccount(selectedSourceAccountNo))
             sourceAccountSpinner.wallet = sourceWalletID
             sourceAccountSpinner.selectedAccount = sourceWalletAcc
             sourceAccountSpinner.selectedAccountChanged?.let { it1 -> it1(sourceAccountSpinner)}
 
             //Update UI based on previously selected send to account
-            val destWalletID = destinationAddressCard.destinationAccountSpinner.multiWallet!!.openedWalletsList()[selectedDestAccountList.toInt()]
+            val destWalletID = multiWallet.openedWalletsList()[selectedDestAccountList.toInt()]
             val destWalletAcc = Account.from(destWalletID.getAccount(selectedDestAccountNo))
             destinationAddressCard.destinationAccountSpinner.wallet = destWalletID
             destinationAddressCard.destinationAccountSpinner.selectedAccount = destWalletAcc
