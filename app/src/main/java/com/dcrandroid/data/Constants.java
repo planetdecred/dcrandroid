@@ -27,12 +27,12 @@ public class Constants {
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
             ENCRYPTION_IV = "encryption_iv",
-            TRANSACTION_CHANNEL_ID = "new transaction",
-            SELECTED_SOURCE_ACCOUNT = "selectedSourceAccountID",
-            SELECTED_DESTINATION_ACCOUNT = "selectedDestAccountNo",
-            SPINNER = "Spinner",
-            SEND_MAX = "sendMax",
-            SELECTED_CURRENCY_IS_DCR = "selectedCurrencyIsDCR";
+            TRANSACTION_CHANNEL_ID = "new_transaction",
+            SELECTED_SOURCE_ACCOUNT = "selected_source_account_id",
+            SELECTED_DESTINATION_ACCOUNT = "selected_dest_account_no",
+            SEND_TO_ACCOUNT = "send_to_account",
+            SEND_MAX = "send_max",
+            SELECTED_CURRENCY_IS_DCR = "selected_currency_is_dcr";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             REQUIRED_CONFIRMATIONS = 2,
