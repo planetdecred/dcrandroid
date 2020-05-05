@@ -59,6 +59,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private lateinit var currentFragment: Fragment
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
+    private var sendPageSheet: FullScreenBottomSheetDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,8 +114,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
                 SnackBar.showError(this, R.string.not_connected)
                 return@setOnClickListener
             }
-            currentBottomSheet = SendDialog(this, bottomSheetDismissed)
-            currentBottomSheet!!.show(this)
+            if(sendPageSheet == null){
+                sendPageSheet = SendDialog(this, bottomSheetDismissed)
+            }
+            sendPageSheet!!.show(this)
+            currentBottomSheet = sendPageSheet
         }
 
         frame.post {

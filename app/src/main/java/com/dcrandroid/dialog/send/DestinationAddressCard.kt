@@ -43,6 +43,9 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
         }
     }
 
+    val isSendToAccount: Boolean
+        get() = destinationAccountSpinner.isVisible()
+
     val destinationAddress: String?
         get() {
             if (destinationAccountSpinner.isVisible()) {
