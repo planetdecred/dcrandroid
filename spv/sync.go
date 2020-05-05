@@ -753,11 +753,6 @@ func (s *Syncer) lowestRescanPoint(ctx context.Context) (*chainhash.Hash, error)
 		}
 
 		if rescanPoint == nil {
-			hash, tip := w.MainChainTip(ctx)
-			if tip < rescanBlockHeight || rescanBlockHeight == -1 {
-				rescanChainHash = &hash
-				rescanBlockHeight = tip
-			}
 			continue
 		}
 
@@ -799,15 +794,6 @@ func (s *Syncer) handleTxInvs(ctx context.Context, rp *p2p.RemotePeer, hashes []
 	return
 
 ProcessTx:
-	rpt, err := s.lowestRescanPoint(ctx)
-	if err != nil {
-		op := errors.Opf(opf, rp.RemoteAddr())
-		log.Warn(errors.E(op, err))
-		return
-	}
-	if rpt != nil {
-		return
-	}
 
 	// Ignore already-processed transactions
 	unseen := hashes[:0]
