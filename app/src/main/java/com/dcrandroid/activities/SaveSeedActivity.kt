@@ -16,14 +16,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SaveSeedAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.PasswordPromptDialog
+import com.dcrandroid.dialog.PinPromptDialog
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
+import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
+import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.save_seed_page.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 const val SEEDS_PER_ROW = 17
 
 class SaveSeedActivity : BaseActivity() {
 
-    private var walletId: Long? = null
+    private lateinit var wallet: Wallet
+    private var seed: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +55,10 @@ class SaveSeedActivity : BaseActivity() {
             e.printStackTrace()
         }
 
-        populateList()
-
         step_2.setOnClickListener {
             val verifySeedIntent = Intent(this, VerifySeedActivity::class.java)
-            verifySeedIntent.putExtra(Constants.WALLET_ID, walletId)
+            verifySeedIntent.putExtra(Constants.WALLET_ID, wallet.id)
+            verifySeedIntent.putExtra(Constants.SEED, seed)
             verifySeedIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
             startActivity(verifySeedIntent)
         }
@@ -55,19 +66,55 @@ class SaveSeedActivity : BaseActivity() {
         go_back.setOnClickListener {
             finish()
         }
+
+        val walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
+        wallet = WalletData.multiWallet!!.walletWithID(walletId)
+        promptWalletPassphrase()
     }
 
-    private fun populateList() {
-        walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
-        val wallet = WalletData.multiWallet!!.walletWithID(walletId!!)
+    private fun promptWalletPassphrase(){
 
-        val seed = wallet.seed
-        if (seed.isBlank()) {
-            finish()
-            return
-        }
+        val title = PassPromptTitle(R.string.confirm_show_seed, R.string.confirm_show_seed, R.string.confirm_show_seed)
+        PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { passDialog, pass ->
+            if (pass == null) {
+                finish()
+                return@PassPromptUtil true
+            }
 
-        val items = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            GlobalScope.launch(Dispatchers.Default) {
+                val op = this@SaveSeedActivity.javaClass.name + ": " + this.javaClass.name + ": promptWalletPassphrase."
+                try {
+                    seed = wallet.decryptSeed(pass.toByteArray())
+                    populateList(seed!!)
+                    passDialog?.dismiss()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                        if (passDialog is PinPromptDialog) {
+                            passDialog.setProcessing(false)
+                            passDialog.showError()
+                        } else if (passDialog is PasswordPromptDialog) {
+                            passDialog.setProcessing(false)
+                            passDialog.showError()
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            passDialog?.dismiss()
+                            Dcrlibwallet.logT(op, e.message)
+                            Utils.showErrorDialog(this@SaveSeedActivity, op + ": " + e.message)
+                        }
+                    }
+                }
+            }
+
+            return@PassPromptUtil false
+        }.show()
+    }
+
+    private fun populateList(seed: String) = GlobalScope.launch(Dispatchers.Main) {
+
+        val items = seed.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         val layoutManager = GridLayoutManager(applicationContext, SEEDS_PER_ROW, GridLayoutManager.HORIZONTAL, false)
 

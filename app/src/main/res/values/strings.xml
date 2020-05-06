@@ -408,6 +408,8 @@
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
     <string name="balance_after_send">Balance after send</string>
     <string name="confirm_to_send">Confirm to send</string>
+    <string name="confirm_show_seed">"Confirm to show seed"</string>
+    <string name="confirm_verify_seed">"Confirm to verify seed"</string>
     <string name="send_from_account"><![CDATA[Sending from <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
     <string name="send_invalid">Not valid for send</string>
     <string name="to_destination_address">To destination address</string>
