@@ -134,7 +134,7 @@
     <string name="pending">Pending</string>
     <string name="vote">Vote</string>
     <string name="revoked">Revoked</string>
-    <string name="amount_invalid_decimal_places">Amount has more then %1$d decimal places</string>
+    <string name="amount_invalid_decimal_places">Amount has more than %1$d decimal places</string>
     <string name="new_transaction">New Transaction</string>
     <string name="wallet_new_transaction">[%1$s] New Transaction</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; %1$d Confirmations]]></string>
@@ -373,7 +373,7 @@
     <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any <b><font color="#ed6d47">digital format</font></b> (e.g. screenshot).</string>
     <string name="seed_instruction_5">Anyone with your seed phrase <b><font color="#ed6d47">can steal your funds</font></b>. DO NOT show it to anyone.</string>
     <string name="view_seed_phrase">View seed phrase</string>
-    <string name="seed_verification_failed">Failed to verify. Please go through every words and try again.</string>
+    <string name="seed_verification_failed">Failed to verify. Please go through every word and try again.</string>
     <string name="back_to_wallets">Back to Wallets</string>
     <string name="tx_sort_all">All (%1$d)</string>
     <string name="tx_sort_sent">Sent (%1$d)</string>
@@ -501,7 +501,7 @@
     <string name="write_down_seed_phrase">Write down seed phrase</string>
     <string name="step_1_2" tools:ignore="TypographyFractions">Step 1/2</string>
     <string name="your_33_word_seed_phrase">Your 33-word seed phrase</string>
-    <string name="i_have_wrote_down_all_33_words">I have wrote down all 33 words</string>
+    <string name="i_have_wrote_down_all_33_words">I have written down all 33 words</string>
     <string name="security_tools">Security Tools</string>
     <string name="security_tools_message">Various tools that help in different aspects of crypto currency security will be located here.</string>
     <string name="wallet_removed">Wallet removed</string>
