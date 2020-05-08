@@ -21,11 +21,13 @@ import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
+import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.DecredAddressURI
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.AccountCustomSpinner
@@ -36,6 +38,7 @@ import dcrlibwallet.TxFeeAndSize
 import kotlinx.android.synthetic.main.fee_layout.*
 import kotlinx.android.synthetic.main.send_page_amount_card.*
 import kotlinx.android.synthetic.main.send_page_sheet.*
+import kotlinx.android.synthetic.main.send_page_sheet.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,6 +53,8 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     private lateinit var amountHelper: AmountInputHelper
 
     private var sendMax = false
+
+    var savedInstanceState: Bundle? = null
 
     private val validForConstruct: Boolean
         get() {
@@ -124,9 +129,55 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         clearEstimates()
     }
 
+    override fun onPause() {
+        super.onPause()
+        savedInstanceState = Bundle()
+        // Included this boolean value to avoid insufficient balance error if true onResume.
+        savedInstanceState?.putBoolean(Constants.SEND_MAX, sendMax)
+
+        // Fetch and save the selected source account.
+        val selectedSourceAccount = amountHelper.selectedAccount
+        savedInstanceState?.putSerializable(Constants.SELECTED_SOURCE_ACCOUNT, selectedSourceAccount)
+
+        // Fetch and save the selected destination account.
+        val selectedDestAccount = destinationAddressCard.destinationAccountSpinner.selectedAccount
+        savedInstanceState?.putSerializable(Constants.SELECTED_DESTINATION_ACCOUNT, selectedDestAccount)
+
+        // Save destination address state depending on if spinner or address input was selected.
+        savedInstanceState?.putBoolean(Constants.SEND_TO_ACCOUNT, destinationAddressCard.isSendToAccount)
+    }
+
     override fun onResume() {
         super.onResume()
         destinationAddressCard.addressInputHelper.onResume()
+        if (savedInstanceState != null) {
+            // Fetch saved sendMax Value.
+            sendMax = savedInstanceState!!.getBoolean(Constants.SEND_MAX)
+
+            // Update UI based on previously selected send to account.
+            val selectedSourceAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_SOURCE_ACCOUNT) as Account?
+            val selectedDestAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_DESTINATION_ACCOUNT) as Account
+            if (multiWallet.walletWithID(selectedSourceAccount!!.walletID) != null) {
+                sourceAccountSpinner.selectedAccount = selectedSourceAccount
+            }
+            if (multiWallet.walletWithID(selectedDestAccount.walletID) != null) {
+                destinationAddressCard.destinationAccountSpinner.selectedAccount = selectedDestAccount
+            }
+
+            // Show destination address input / spinner depending on which was previously selected.
+            val sendToAccount = savedInstanceState!!.getBoolean(Constants.SEND_TO_ACCOUNT)
+            if (sendToAccount) {
+                destinationAddressCard.addressInputHelper.hide()
+                destinationAddressCard.destinationAccountSpinner.show()
+                destinationAddressCard.layout.send_dest_toggle.setText(R.string.send_to_address)
+            } else {
+                destinationAddressCard.addressInputHelper.show()
+                destinationAddressCard.destinationAccountSpinner.hide()
+                destinationAddressCard.layout.send_dest_toggle.setText(R.string.send_to_account)
+
+            }
+            savedInstanceState = null
+        }
     }
 
     override fun showOptionsMenu(v: View) {
@@ -276,7 +327,6 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
         try {
             txAuthor = multiWallet.newUnsignedTx(sourceAccountSpinner.wallet, selectedAccount.accountNumber)
-            println("Estimation address: ${destinationAddressCard.estimationAddress}")
             txAuthor.addSendDestination(destinationAddressCard.estimationAddress, amountAtom, sendMax)
             feeAndSize = txAuthor.estimateFeeAndSize()
         } catch (e: Exception) {
@@ -291,10 +341,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }
 
         val totalCostAtom = amountAtom + feeAtom
-        val balanceAfterSend = getString(R.string.x_dcr, Utils.formatDecredWithComma(selectedAccount.balance.spendable - totalCostAtom))
+        val balance = selectedAccount.balance.spendable - totalCostAtom
+        val balanceAfterSend = if (balance > 0) {
+            getString(R.string.x_dcr, CoinFormat.formatDecred(balance))
+        } else {
+            getString(R.string.x_dcr, "0")
+        }
 
-        val feeString = Utils.formatDecredWithComma(feeAtom)
-        val totalCostString = Utils.formatDecredWithComma(totalCostAtom)
+        val feeString = CoinFormat.formatDecred(feeAtom)
+        val totalCostString = CoinFormat.formatDecred(totalCostAtom)
 
         val feeSpanned: Spanned
         val totalCostSpanned: Spanned
@@ -306,7 +361,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             val feeCoin = Dcrlibwallet.amountCoin(feeAtom)
             val totalCostCoin = Dcrlibwallet.amountCoin(totalCostAtom)
 
-            val feeUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin, 4)
+            val feeUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin)
             val totalCostUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, totalCostCoin, 2)
 
             feeSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, feeString, feeUSD), 0)

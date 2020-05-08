@@ -27,8 +27,8 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
 import com.dcrandroid.fragments.VERIFY_SEED_REQUEST_CODE
 import com.dcrandroid.fragments.WALLET_SETTINGS_REQUEST_CODE
+import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
@@ -65,7 +65,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
         holder.walletName.text = wallet.name
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
-                Utils.formatDecredWithComma(wallet.totalWalletBalance()))
+                CoinFormat.formatDecred(wallet.totalWalletBalance()))
 
         if (wallet.seed.isNullOrBlank()) {
             holder.backupNeeded.hide()
