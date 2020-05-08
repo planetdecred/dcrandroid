@@ -21,7 +21,7 @@ type Wallet struct {
 	Name                  string    `storm:"unique"`
 	CreatedAt             time.Time `storm:"index"`
 	DbDriver              string
-	Seed                  string
+	EncryptedSeed         []byte
 	IsRestored            bool
 	HasDiscoveredAccounts bool
 	PrivatePassphraseType int32
@@ -268,4 +268,9 @@ func (wallet *Wallet) deleteWallet(privatePassphrase []byte) error {
 
 	log.Info("Deleting Wallet")
 	return os.RemoveAll(wallet.dataDir)
+}
+
+// DecryptSeed decrypts wallet.EncryptedSeed using privatePassphrase
+func (wallet *Wallet) DecryptSeed(privatePassphrase []byte) (string, error) {
+	return decryptWalletSeed(privatePassphrase, wallet.EncryptedSeed)
 }

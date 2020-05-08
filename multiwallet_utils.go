@@ -8,7 +8,10 @@ import (
 	"github.com/asdine/storm"
 	"github.com/decred/dcrwallet/errors/v2"
 	w "github.com/decred/dcrwallet/wallet/v3"
+	"github.com/kevinburke/nacl"
+	"github.com/kevinburke/nacl/secretbox"
 	"github.com/raedahgroup/dcrlibwallet/spv"
+	"golang.org/x/crypto/scrypt"
 )
 
 const (
@@ -110,4 +113,45 @@ func (mw *MultiWallet) RootDirFileSizeInBytes() (int64, error) {
 		return err
 	})
 	return size, err
+}
+
+// naclLoadFromPass derives a nacl.Key from pass using scrypt.Key.
+func naclLoadFromPass(pass []byte) (nacl.Key, error) {
+	defer func() {
+		for i := range pass {
+			pass[i] = 0
+		}
+	}()
+
+	const N, r, p = 1 << 15, 8, 1
+
+	hash, err := scrypt.Key(pass, nil, N, r, p, 32)
+	if err != nil {
+		return nil, err
+	}
+	return nacl.Load(EncodeHex(hash))
+}
+
+// encryptWalletSeed encrypts the seed with secretbox.EasySeal using pass.
+func encryptWalletSeed(pass []byte, seed string) ([]byte, error) {
+	key, err := naclLoadFromPass(pass)
+	if err != nil {
+		return nil, err
+	}
+	return secretbox.EasySeal([]byte(seed), key), nil
+}
+
+// decryptWalletSeed decrypts the encryptedSeed with secretbox.EasyOpen using pass.
+func decryptWalletSeed(pass []byte, encryptedSeed []byte) (string, error) {
+	key, err := naclLoadFromPass(pass)
+	if err != nil {
+		return "", err
+	}
+
+	decryptedSeed, err := secretbox.EasyOpen(encryptedSeed, key)
+	if err != nil {
+		return "", err
+	}
+
+	return string(decryptedSeed), nil
 }

@@ -30,8 +30,9 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20190104051053-3adb47b1fb0f // indirect
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/jrick/logrotate v1.0.0
-	github.com/onsi/ginkgo v1.8.0 // indirect
-	github.com/onsi/gomega v1.5.0 // indirect
+	github.com/kevinburke/nacl v0.0.0-20190829012316-f3ed23dbd7f8
+	github.com/onsi/ginkgo v1.8.0
+	github.com/onsi/gomega v1.5.0
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/raedahgroup/dcrlibwallet/spv v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.3.0 // indirect
