@@ -101,7 +101,7 @@
 
     <!--Balance-->
     <string name="label_spendable">Dostępne do wydania</string>
-    <string name="immature_stake_generation"Niedojrzałe nagrody ze stakingu</string>
+    <string name="immature_stake_generation">Niedojrzałe nagrody ze stakingu</string>
     <string name="label_immature_rewards">Niedojrzałe nagrody</string>
     <string name="label_locked_by_tickets">Zamknięte w biletach</string>
     <string name="label_voting_authority">Upoważnione do głosu</string>
