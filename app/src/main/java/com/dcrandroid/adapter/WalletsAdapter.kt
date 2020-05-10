@@ -67,7 +67,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 CoinFormat.formatDecred(wallet.totalWalletBalance()))
 
-        if (wallet.encryptedSeed != null) {
+        if (wallet.encryptedSeed == null) {
             holder.backupNeeded.hide()
             holder.backupWarning.hide()
         } else {

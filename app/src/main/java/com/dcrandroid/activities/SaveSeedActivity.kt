@@ -101,8 +101,8 @@ class SaveSeedActivity : BaseActivity() {
                     } else {
                         withContext(Dispatchers.Main) {
                             passDialog?.dismiss()
-                            Dcrlibwallet.logT(op, e.message)
                             Utils.showErrorDialog(this@SaveSeedActivity, op + ": " + e.message)
+                            Dcrlibwallet.logT(op, e.message)
                         }
                     }
                 }
@@ -126,6 +126,8 @@ class SaveSeedActivity : BaseActivity() {
         recycler_view_seeds.addItemDecoration(verticalDivider)
         recycler_view_seeds.addItemDecoration(horizontalItemDecoration)
         recycler_view_seeds.adapter = SaveSeedAdapter(items)
+
+        step_2.isEnabled = true
     }
 
     inner class VerticalDividerItemDecoration(private val space: Int, private val verticalOrientation: Boolean) : RecyclerView.ItemDecoration() {

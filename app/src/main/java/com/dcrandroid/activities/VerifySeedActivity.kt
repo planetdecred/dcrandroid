@@ -76,7 +76,6 @@ class VerifySeedActivity : BaseActivity() {
         val title = PassPromptTitle(R.string.confirm_verify_seed, R.string.confirm_verify_seed, R.string.confirm_verify_seed)
         PassPromptUtil(this, wallet!!.id, title, allowFingerprint = true) { passDialog, pass ->
             if (pass == null) {
-                finish()
                 return@PassPromptUtil true
             }
 
@@ -94,21 +93,24 @@ class VerifySeedActivity : BaseActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
 
+                    if (passDialog is PinPromptDialog) {
+                        passDialog.setProcessing(false)
+                    } else if (passDialog is PasswordPromptDialog) {
+                        passDialog.setProcessing(false)
+                    }
+
                     if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                         if (passDialog is PinPromptDialog) {
-                            passDialog.setProcessing(false)
                             passDialog.showError()
                         } else if (passDialog is PasswordPromptDialog) {
-                            passDialog.setProcessing(false)
                             passDialog.showError()
                         }
                     } else {
                         SnackBar.showError(this@VerifySeedActivity, R.string.seed_verification_failed)
-//                        withContext(Dispatchers.Main) {
-//                            passDialog?.dismiss()
-//                            Dcrlibwallet.logT(op, e.message)
-//                            Utils.showErrorDialog(this@VerifySeedActivity, op + ": " + e.message)
-//                        }
+                        withContext(Dispatchers.Main) {
+                            Dcrlibwallet.logT(op, e.message)
+                            Utils.showErrorDialog(this@VerifySeedActivity, op + ": " + e.message)
+                        }
                     }
                 }
             }

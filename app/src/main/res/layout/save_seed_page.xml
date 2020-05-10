@@ -56,8 +56,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_padding_size_18"
                     android:orientation="vertical"
-                    android:gravity="center_vertical"
-                    >
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -124,7 +123,7 @@
                 android:layout_marginTop="@dimen/margin_padding_size_16"
                 android:layout_marginEnd="@dimen/margin_padding_size_4"
                 android:layout_marginRight="@dimen/margin_padding_size_4"
-                android:layout_marginBottom="@dimen/margin_padding_size_4" >
+                android:layout_marginBottom="@dimen/margin_padding_size_4">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -133,8 +132,7 @@
                     android:paddingTop="@dimen/margin_padding_size_16"
                     android:paddingLeft="@dimen/margin_padding_size_16"
                     android:paddingRight="@dimen/margin_padding_size_16"
-                    android:paddingBottom="@dimen/margin_padding_size_8"
-                    >
+                    android:paddingBottom="@dimen/margin_padding_size_8">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -148,7 +146,7 @@
                         android:id="@+id/recycler_view_seeds"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_padding_size_8"/>
+                        android:layout_marginTop="@dimen/margin_padding_size_8" />
 
                 </LinearLayout>
 
@@ -164,7 +162,7 @@
         android:background="@color/white"
         android:elevation="@dimen/margin_padding_size_4"
         android:padding="@dimen/margin_padding_size_16"
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -175,10 +173,12 @@
             app:fontFamily="@font/source_sans_pro"
             android:text="@string/seed_phase_2_briefing" />
 
+        <!-- Disabled until seed list is populated -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/step_2"
+            android:enabled="false"
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/seed_phase_2_briefing"

@@ -92,6 +92,7 @@ class SplashScreenActivity : BaseActivity() {
     }
 
     private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+        val op = this@SplashScreenActivity.javaClass.name + ": createWallet"
         try {
             multiWallet!!.createNewWallet(getString(R.string.mywallet), spendingKey, type)
             withContext(Dispatchers.Main) {
@@ -101,6 +102,12 @@ class SplashScreenActivity : BaseActivity() {
             proceedToHomeActivity()
         } catch (e: Exception) {
             e.printStackTrace()
+
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+                Utils.showErrorDialog(this@SplashScreenActivity, op + ": " + e.message)
+                Dcrlibwallet.logT(op, e.message)
+            }
         }
     }
 
