@@ -105,8 +105,10 @@ class VerifySeedActivity : BaseActivity() {
                         } else if (passDialog is PasswordPromptDialog) {
                             passDialog.showError()
                         }
-                    } else {
+                    }else if(e.message == Dcrlibwallet.ErrInvalid) {
+                        passDialog?.dismiss()
                         SnackBar.showError(this@VerifySeedActivity, R.string.seed_verification_failed)
+                    } else {
                         withContext(Dispatchers.Main) {
                             Dcrlibwallet.logT(op, e.message)
                             Utils.showErrorDialog(this@VerifySeedActivity, op + ": " + e.message)
