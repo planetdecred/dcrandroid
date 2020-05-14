@@ -272,5 +272,9 @@ func (wallet *Wallet) deleteWallet(privatePassphrase []byte) error {
 
 // DecryptSeed decrypts wallet.EncryptedSeed using privatePassphrase
 func (wallet *Wallet) DecryptSeed(privatePassphrase []byte) (string, error) {
+	if wallet.EncryptedSeed == nil {
+		return "", errors.New(ErrInvalid)
+	}
+
 	return decryptWalletSeed(privatePassphrase, wallet.EncryptedSeed)
 }

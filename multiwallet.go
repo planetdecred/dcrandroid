@@ -411,6 +411,19 @@ func (mw *MultiWallet) saveNewWallet(wallet *Wallet, setupWallet func() error) (
 		}
 
 		walletDataDir := filepath.Join(mw.rootDir, strconv.Itoa(wallet.ID))
+
+		dirExists, err := fileExists(walletDataDir)
+		if err != nil {
+			return err
+		} else if dirExists {
+			newDirName, err := backupFile(walletDataDir)
+			if err != nil {
+				return err
+			}
+
+			log.Info("Undocumented file at %s moved to %s", walletDataDir, newDirName)
+		}
+
 		os.MkdirAll(walletDataDir, os.ModePerm) // create wallet dir
 
 		if wallet.Name == "" {
@@ -595,23 +608,39 @@ func (mw *MultiWallet) ChangePrivatePassphraseForWallet(walletID int, oldPrivate
 		return errors.New(ErrInvalid)
 	}
 
+	encryptedSeed := wallet.EncryptedSeed
+	if encryptedSeed != nil {
+		decryptedSeed, err := decryptWalletSeed(oldPrivatePassphrase, encryptedSeed)
+		if err != nil {
+			return err
+		}
+
+		encryptedSeed, err = encryptWalletSeed(newPrivatePassphrase, decryptedSeed)
+		if err != nil {
+			return err
+		}
+	}
+
 	err := wallet.changePrivatePassphrase(oldPrivatePassphrase, newPrivatePassphrase)
 	if err != nil {
 		return translateError(err)
 	}
 
-	decryptedSeed, err := decryptWalletSeed(newPrivatePassphrase, wallet.EncryptedSeed)
-	if err != nil {
-		return err
-	}
-
-	encrytedSeed, err := encryptWalletSeed(newPrivatePassphrase, decryptedSeed)
-	if err != nil {
-		return err
-	}
-
-	wallet.EncryptedSeed = encrytedSeed
-
+	wallet.EncryptedSeed = encryptedSeed
 	wallet.PrivatePassphraseType = privatePassphraseType
-	return mw.db.Save(wallet)
+	err = mw.db.Save(wallet)
+	if err != nil {
+		log.Errorf("error saving wallet-[%d] to database after passphrase change: %v", wallet.ID, err)
+
+		err2 := wallet.changePrivatePassphrase(newPrivatePassphrase, oldPrivatePassphrase)
+		if err2 != nil {
+			log.Errorf("error undoing wallet passphrase change: %v", err2)
+			log.Errorf("error wallet passphrase was changed but passphrase type and newly encrypted seed could not be saved: %v", err)
+			return errors.New(ErrSavingWallet)
+		}
+
+		return errors.New(ErrChangingPassphrase)
+	}
+
+	return nil
 }

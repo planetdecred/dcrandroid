@@ -21,7 +21,6 @@ var _ = Describe("MultiwalletUtils", func() {
 		Context("encryptWalletSeed and decryptWalletSeed", func() {
 			It("encrypts and decrypts the wallet seed properly", func() {
 				pass := genPass()
-				pass2 := bytes.Repeat(pass, 1) // Required because the functions clear the pass memory after use
 				fakePass := genPass()
 				for bytes.Equal(pass, fakePass) {
 					fakePass = genPass()
@@ -39,7 +38,7 @@ var _ = Describe("MultiwalletUtils", func() {
 				Expect(err).ToNot(BeNil())
 
 				By("Decrypting the encrypted seed using the correct password")
-				decrypted, err := decryptWalletSeed(pass2, encrypted)
+				decrypted, err := decryptWalletSeed(pass, encrypted)
 				Expect(err).To(BeNil())
 
 				By("Comparing the decrypted and original seeds")

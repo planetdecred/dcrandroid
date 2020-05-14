@@ -117,11 +117,6 @@ func (mw *MultiWallet) RootDirFileSizeInBytes() (int64, error) {
 
 // naclLoadFromPass derives a nacl.Key from pass using scrypt.Key.
 func naclLoadFromPass(pass []byte) (nacl.Key, error) {
-	defer func() {
-		for i := range pass {
-			pass[i] = 0
-		}
-	}()
 
 	const N, r, p = 1 << 15, 8, 1
 
@@ -150,7 +145,8 @@ func decryptWalletSeed(pass []byte, encryptedSeed []byte) (string, error) {
 
 	decryptedSeed, err := secretbox.EasyOpen(encryptedSeed, key)
 	if err != nil {
-		return "", err
+		log.Errorf("decryptWalletSeed secretbox.EasyOpen error: %v", err)
+		return "", errors.New(ErrInvalidPassphrase)
 	}
 
 	return string(decryptedSeed), nil
