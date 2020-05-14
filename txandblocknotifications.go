@@ -7,58 +7,67 @@ import (
 )
 
 func (mw *MultiWallet) listenForTransactions(walletID int) {
-	wallet := mw.wallets[walletID]
-	n := wallet.internal.NtfnServer.TransactionNotifications()
-	defer n.Done() // disassociate this notification client from server when this function exits.
+	go func() {
 
-	for {
-		v := <-n.C
+		wallet := mw.wallets[walletID]
+		n := wallet.internal.NtfnServer.TransactionNotifications()
 
-		for _, transaction := range v.UnminedTransactions {
-			tempTransaction, err := wallet.decodeTransactionWithTxSummary(&transaction, nil)
-			if err != nil {
-				log.Errorf("[%d] Error ntfn parse tx: %v", wallet.ID, err)
-				return
-			}
-
-			overwritten, err := wallet.txDB.SaveOrUpdate(&Transaction{}, tempTransaction)
-			if err != nil {
-				log.Errorf("[%d] New Tx save err: %v", wallet.ID, err)
-				return
-			}
-
-			if !overwritten {
-				log.Infof("[%d] New Transaction %s", wallet.ID, tempTransaction.Hash)
-
-				result, err := json.Marshal(tempTransaction)
-				if err != nil {
-					log.Error(err)
-				} else {
-					mw.mempoolTransactionNotification(string(result))
-				}
-			}
-		}
-
-		for _, block := range v.AttachedBlocks {
-			blockHash := block.Header.BlockHash()
-			for _, transaction := range block.Transactions {
-				tempTransaction, err := wallet.decodeTransactionWithTxSummary(&transaction, &blockHash)
-				if err != nil {
-					log.Errorf("[%d] Error ntfn parse tx: %v", wallet.ID, err)
+		for {
+			select {
+			case v := <-n.C:
+				if v == nil {
 					return
 				}
+				for _, transaction := range v.UnminedTransactions {
+					tempTransaction, err := wallet.decodeTransactionWithTxSummary(&transaction, nil)
+					if err != nil {
+						log.Errorf("[%d] Error ntfn parse tx: %v", wallet.ID, err)
+						return
+					}
 
-				_, err = wallet.txDB.SaveOrUpdate(&Transaction{}, tempTransaction)
-				if err != nil {
-					log.Errorf("[%d] Incoming block replace tx error :%v", wallet.ID, err)
-					return
+					overwritten, err := wallet.txDB.SaveOrUpdate(&Transaction{}, tempTransaction)
+					if err != nil {
+						log.Errorf("[%d] New Tx save err: %v", wallet.ID, err)
+						return
+					}
+
+					if !overwritten {
+						log.Infof("[%d] New Transaction %s", wallet.ID, tempTransaction.Hash)
+
+						result, err := json.Marshal(tempTransaction)
+						if err != nil {
+							log.Error(err)
+						} else {
+							mw.mempoolTransactionNotification(string(result))
+						}
+					}
 				}
-				mw.publishTransactionConfirmed(wallet.ID, transaction.Hash.String(), int32(block.Header.Height))
-			}
 
-			mw.publishBlockAttached(wallet.ID, int32(block.Header.Height))
+				for _, block := range v.AttachedBlocks {
+					blockHash := block.Header.BlockHash()
+					for _, transaction := range block.Transactions {
+						tempTransaction, err := wallet.decodeTransactionWithTxSummary(&transaction, &blockHash)
+						if err != nil {
+							log.Errorf("[%d] Error ntfn parse tx: %v", wallet.ID, err)
+							return
+						}
+
+						_, err = wallet.txDB.SaveOrUpdate(&Transaction{}, tempTransaction)
+						if err != nil {
+							log.Errorf("[%d] Incoming block replace tx error :%v", wallet.ID, err)
+							return
+						}
+						mw.publishTransactionConfirmed(wallet.ID, transaction.Hash.String(), int32(block.Header.Height))
+					}
+
+					mw.publishBlockAttached(wallet.ID, int32(block.Header.Height))
+				}
+
+			case <-mw.syncData.syncCanceled:
+				n.Done()
+			}
 		}
-	}
+	}()
 }
 
 func (mw *MultiWallet) AddTxAndBlockNotificationListener(txAndBlockNotificationListener TxAndBlockNotificationListener, uniqueIdentifier string) error {

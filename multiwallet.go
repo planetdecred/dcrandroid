@@ -236,8 +236,6 @@ func (mw *MultiWallet) OpenWallets(startupPassphrase []byte) error {
 		if err != nil {
 			return err
 		}
-
-		go mw.listenForTransactions(wallet.ID)
 	}
 
 	return nil
@@ -434,7 +432,6 @@ func (mw *MultiWallet) saveNewWallet(wallet *Wallet, setupWallet func() error) (
 	}
 
 	mw.wallets[wallet.ID] = wallet
-	go mw.listenForTransactions(wallet.ID)
 
 	return wallet, nil
 }
