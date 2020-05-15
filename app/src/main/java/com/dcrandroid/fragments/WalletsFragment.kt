@@ -24,6 +24,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -154,6 +155,7 @@ class WalletsFragment : BaseFragment() {
     }
 
     private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+        val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet.createNewWallet(walletName, spendingKey, type)
             withContext(Dispatchers.Main) {
@@ -164,6 +166,12 @@ class WalletsFragment : BaseFragment() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+                Utils.showErrorDialog(this@WalletsFragment.context!!, op + ": " + e.message)
+                Dcrlibwallet.logT(op, e.message)
+            }
         }
     }
 

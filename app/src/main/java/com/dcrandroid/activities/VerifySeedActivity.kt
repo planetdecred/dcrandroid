@@ -15,10 +15,19 @@ import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.adapter.ShuffledSeeds
 import com.dcrandroid.adapter.VerifySeedAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.PasswordPromptDialog
+import com.dcrandroid.dialog.PinPromptDialog
+import com.dcrandroid.util.PassPromptTitle
+import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class VerifySeedActivity : BaseActivity() {
 
@@ -54,18 +63,7 @@ class VerifySeedActivity : BaseActivity() {
         }
 
         btn_verify.setOnClickListener {
-            val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
-            try {
-                multiWallet!!.verifySeedForWallet(wallet!!.id, seedMnemonic)
-                val data = Intent(this, SeedBackupSuccess::class.java)
-                data.putExtra(Constants.WALLET_ID, wallet!!.id)
-                data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
-                startActivity(data)
-                finish()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                SnackBar.showError(this, R.string.seed_verification_failed)
-            }
+            verifySeed()
         }
 
         go_back.setOnClickListener {
@@ -73,13 +71,64 @@ class VerifySeedActivity : BaseActivity() {
         }
     }
 
+    private fun verifySeed(){
+
+        val title = PassPromptTitle(R.string.confirm_verify_seed, R.string.confirm_verify_seed, R.string.confirm_verify_seed)
+        PassPromptUtil(this, wallet!!.id, title, allowFingerprint = true) { passDialog, pass ->
+            if (pass == null) {
+                return@PassPromptUtil true
+            }
+
+            GlobalScope.launch(Dispatchers.Default) {
+                val op = this@VerifySeedActivity.javaClass.name + ": " + this.javaClass.name + ": verifySeed"
+                try {
+                    val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
+                    multiWallet!!.verifySeedForWallet(wallet!!.id, seedMnemonic, pass.toByteArray())
+                    val data = Intent(this@VerifySeedActivity, SeedBackupSuccess::class.java)
+                    data.putExtra(Constants.WALLET_ID, wallet!!.id)
+                    data.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+                    startActivity(data)
+                    finish()
+                    passDialog?.dismiss()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+
+                    if (passDialog is PinPromptDialog) {
+                        passDialog.setProcessing(false)
+                    } else if (passDialog is PasswordPromptDialog) {
+                        passDialog.setProcessing(false)
+                    }
+
+                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                        if (passDialog is PinPromptDialog) {
+                            passDialog.showError()
+                        } else if (passDialog is PasswordPromptDialog) {
+                            passDialog.showError()
+                        }
+                    }else if(e.message == Dcrlibwallet.ErrInvalid) {
+                        passDialog?.dismiss()
+                        SnackBar.showError(this@VerifySeedActivity, R.string.seed_verification_failed)
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            Dcrlibwallet.logT(op, e.message)
+                            Utils.showErrorDialog(this@VerifySeedActivity, op + ": " + e.message)
+                        }
+                    }
+                }
+            }
+
+            return@PassPromptUtil false
+        }.show()
+    }
+
     private fun prepareData() {
 
         val walletId = intent.getLongExtra(Constants.WALLET_ID, -1)
         wallet = multiWallet!!.walletWithID(walletId)
 
-        if (wallet!!.seed.isNotBlank()) {
-            val seed = wallet!!.seed
+        val seed = intent.getStringExtra(Constants.SEED)
+
+        if (seed.isNotBlank()) {
             seeds = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             initSeedAdapter()
         }

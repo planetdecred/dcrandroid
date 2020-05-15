@@ -23,6 +23,7 @@ public class Constants {
             WALLET_ID = "wallet_id",
             RESULT = "result",
             AMOUNT = "amount",
+            SEED = "seed",
             ANDROID_KEY_STORE = "AndroidKeyStore",
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
@@ -31,8 +32,7 @@ public class Constants {
             SELECTED_SOURCE_ACCOUNT = "selected_source_account_id",
             SELECTED_DESTINATION_ACCOUNT = "selected_dest_account_no",
             SEND_TO_ACCOUNT = "send_to_account",
-            SEND_MAX = "send_max",
-            SELECTED_CURRENCY_IS_DCR = "selected_currency_is_dcr";
+            SEND_MAX = "send_max";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             REQUIRED_CONFIRMATIONS = 2,
