@@ -56,4 +56,6 @@
 
     <dimen name="shadow_spread">4dp</dimen>
     <dimen name="preference_dialog_width">280dp</dimen>
+
+    <dimen name="send_receive_btn_width">124dp</dimen>
 </resources>

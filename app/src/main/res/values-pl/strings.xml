@@ -28,8 +28,8 @@
     <string name="overview">Widok ogólny</string>
     <string name="permission">Pozwolenie</string>
     <string name="denied_permission">Odmówiono udzielenia pozwolenia!!!</string>
-    <string name="receive">Odbierz środki</string>
-    <string name="send">Wyślij środki</string>
+    <string name="receive">Odbierz</string>
+    <string name="send">Wyślij</string>
     <string name="cancel">Anuluj</string>
     <string name="connection">Połączenie</string>
     <string name="testnet">testnet</string>
