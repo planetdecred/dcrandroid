@@ -82,7 +82,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }
 
         sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager,
-                source_account_spinner, R.string.source_account_picker_title, sourceAccountChanged)
+                source_account_spinner, false, R.string.source_account_picker_title, sourceAccountChanged)
 
         destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
             addressChanged = this@SendDialog.addressChanged
@@ -230,7 +230,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     }
 
     private val validateAddress: (String) -> Boolean = {
-        sourceAccountSpinner.wallet.isAddressValid(it)
+        multiWallet.isAddressValid(it)
     }
 
     override fun onScrollChanged() {

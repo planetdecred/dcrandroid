@@ -87,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_padding_size_4"
+                android:id="@+id/spending_password_card"
                 android:elevation="4dp"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/margin_padding_size_16"

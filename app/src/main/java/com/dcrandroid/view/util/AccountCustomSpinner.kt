@@ -12,16 +12,13 @@ import androidx.fragment.app.FragmentManager
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.AccountPickerDialog
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.walletAccounts
+import com.dcrandroid.extensions.*
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 
-class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
+class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View, private val showWatchOnlyWallets: Boolean,
                            @StringRes val pickerTitle: Int, var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null) : View.OnClickListener {
 
     val context = spinnerLayout.context
@@ -49,7 +46,12 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     init {
         // Set default selected account as "default"
         // account from the first opened wallet
-        wallet = multiWallet!!.openedWalletsList()[0]
+        wallet = if (showWatchOnlyWallets) {
+            multiWallet!!.openedWalletsList()[0]
+        } else {
+            multiWallet!!.fullCoinWalletsList()[0]
+        }
+
 
         selectedAccount = Account.from(wallet.getAccount(Constants.DEF_ACCOUNT_NUMBER))
         spinnerLayout.setOnClickListener(this)
@@ -64,7 +66,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     }
 
     override fun onClick(v: View?) {
-        AccountPickerDialog(pickerTitle, selectedAccount!!) {
+        AccountPickerDialog(pickerTitle, selectedAccount!!, showWatchOnlyWallets) {
             selectedAccount = it
             return@AccountPickerDialog Unit
         }.show(fragmentManager, null)

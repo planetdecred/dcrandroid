@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_validate_address.*
 
 class ValidateAddress : BaseActivity(), View.OnClickListener {
 
-    lateinit var addressInputHelper: InputHelper
+    private lateinit var addressInputHelper: InputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,19 +66,15 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
         var titleText = R.string.invalid_address
         var subtitleText: String? = null
 
-        var foundAddress = false
+        val addressIsValid = multiWallet!!.isAddressValid(address)
+        if (addressIsValid) {
+            tv_title.setTextColor(getColor(R.color.greenTextColor))
+            tv_subtitle.show()
 
-        for (wallet in wallets) {
+            icon = R.drawable.ic_checkmark
+            titleText = R.string.valid_address
 
-            if (wallet.isAddressValid(address)) {
-                foundAddress = true
-
-                tv_title.setTextColor(getColor(R.color.greenTextColor))
-                tv_subtitle.show()
-
-                icon = R.drawable.ic_checkmark
-                titleText = R.string.valid_address
-
+            for (wallet in wallets) {
                 if (wallet.haveAddress(address)) {
                     subtitleText = getString(R.string.internal_valid_address, wallet.name)
                     tv_subtitle.setTextColor(getColor(R.color.greenLightTextColor))
@@ -91,7 +87,7 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
         }
 
         result_layout.show()
-        if (!foundAddress) {
+        if (!addressIsValid) {
             tv_title.setTextColor(getColor(R.color.colorError))
             tv_subtitle.hide()
         }

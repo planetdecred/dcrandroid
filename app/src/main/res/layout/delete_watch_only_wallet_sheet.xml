@@ -16,21 +16,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_padding_size_8"
-        android:text="@string/create_watch_only_wallet"
+        android:text="Enter wallet name"
         android:textColor="@color/darkBlueTextColor"
         android:textSize="@dimen/edit_text_size_20"
         app:fontFamily="@font/source_sans_pro_semibold" />
 
-   <include
-       android:id="@+id/wallet_name"
-       layout="@layout/custom_input"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       />
-
-   <include
-       android:id="@+id/extended_public_key"
-       layout="@layout/custom_input"/>
+    <include
+        android:id="@+id/wallet_name"
+        layout="@layout/custom_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
@@ -55,19 +50,19 @@
             android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
         <TextView
-            android:id="@+id/btn_import"
+            android:id="@+id/btn_delete"
             android:layout_width="83dp"
             android:layout_height="40dp"
             android:gravity="center"
             android:background="@drawable/default_app_button_bg"
             android:enabled="false"
-            android:text="@string/_import"
+            android:text="@string/delete"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_16"
             android:focusable="true"
             android:clickable="true"
             app:fontFamily="@font/source_sans_pro_semibold"
-            android:includeFontPadding="false"/>
+            android:includeFontPadding="false" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -107,7 +107,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
 
         fab_send.setOnClickListener {
-            if(multiWallet!!.isSyncing){
+
+            if (multiWallet!!.allWalletsAreWatchOnly()) { // only wallet is watch only
+                SnackBar.showError(this, R.string.watch_only_wallet_error)
+                return@setOnClickListener
+            } else if (multiWallet!!.isSyncing) {
                 SnackBar.showError(this, R.string.wait_for_sync)
                 return@setOnClickListener
             }else if (!multiWallet!!.isConnectedToDecredNetwork){

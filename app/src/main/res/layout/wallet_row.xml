@@ -13,7 +13,7 @@
     android:layout_marginBottom="@dimen/margin_padding_size_4"
     android:layout_marginStart="@dimen/margin_padding_size_8"
     android:layout_marginEnd="@dimen/margin_padding_size_8"
-    android:background="@drawable/card_bg"
+    android:background="@color/white"
     android:elevation="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -36,14 +36,13 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:id="@+id/expand_icon"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
             app:srcCompat="@drawable/ic_expand02" />
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_wallet"
-            android:layout_marginLeft="@dimen/margin_padding_size_8"
-            android:layout_marginStart="@dimen/margin_padding_size_8" />
+            app:srcCompat="@drawable/ic_wallet" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -51,7 +50,6 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginStart="@dimen/margin_padding_size_16">
 
             <TextView
@@ -81,7 +79,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/wallet_total_balance"
-            android:layout_marginLeft="@dimen/margin_padding_size_8"
             android:layout_marginStart="@dimen/margin_padding_size_8"
             app:fontFamily="@font/source_sans_pro"
             tools:text="7.51464806 DCR"

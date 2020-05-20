@@ -44,7 +44,7 @@ class SignMessage : BaseActivity(), View.OnClickListener {
 
 
         addressInputHelper = InputHelper(this, address_container) {
-            wallet.isAddressValid(it)
+            multiWallet!!.isAddressValid(it)
         }
         addressInputHelper.setHint(R.string.address)
         addressInputHelper.textChanged = textChanged
