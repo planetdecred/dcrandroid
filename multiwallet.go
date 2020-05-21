@@ -241,6 +241,20 @@ func (mw *MultiWallet) OpenWallets(startupPassphrase []byte) error {
 	return nil
 }
 
+func (mw *MultiWallet) AllWalletsAreWatchOnly() (bool, error) {
+	if len(mw.wallets) == 0 {
+		return false, errors.New(ErrInvalid)
+	}
+
+	for _, w := range mw.wallets {
+		if !w.IsWatchingOnlyWallet() {
+			return false, nil
+		}
+	}
+
+	return true, nil
+}
+
 func (mw *MultiWallet) CreateWatchOnlyWallet(walletName, extendedPublicKey string) (*Wallet, error) {
 	wallet := &Wallet{
 		Name:                  walletName,

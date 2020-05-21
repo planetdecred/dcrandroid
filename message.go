@@ -45,10 +45,10 @@ func (wallet *Wallet) SignMessage(passphrase []byte, address string, message str
 	return sig, nil
 }
 
-func (wallet *Wallet) VerifyMessage(address string, message string, signatureBase64 string) (bool, error) {
+func (mw *MultiWallet) VerifyMessage(address string, message string, signatureBase64 string) (bool, error) {
 	var valid bool
 
-	addr, err := dcrutil.DecodeAddress(address, wallet.chainParams)
+	addr, err := dcrutil.DecodeAddress(address, mw.chainParams)
 	if err != nil {
 		return false, translateError(err)
 	}
@@ -70,7 +70,7 @@ func (wallet *Wallet) VerifyMessage(address string, message string, signatureBas
 		return false, errors.New(ErrInvalidAddress)
 	}
 
-	valid, err = w.VerifyMessage(message, addr, signature, wallet.chainParams)
+	valid, err = w.VerifyMessage(message, addr, signature, mw.chainParams)
 	if err != nil {
 		return false, translateError(err)
 	}

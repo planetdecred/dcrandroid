@@ -19,8 +19,8 @@ type AddressInfo struct {
 	AccountName   string
 }
 
-func (wallet *Wallet) IsAddressValid(address string) bool {
-	_, err := dcrutil.DecodeAddress(address, wallet.chainParams)
+func (mw *MultiWallet) IsAddressValid(address string) bool {
+	_, err := dcrutil.DecodeAddress(address, mw.chainParams)
 	return err == nil
 }
 
