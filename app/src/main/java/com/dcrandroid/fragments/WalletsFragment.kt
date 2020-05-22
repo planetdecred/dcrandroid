@@ -7,6 +7,8 @@
 package com.dcrandroid.fragments
 
 import android.app.Activity.RESULT_OK
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -23,6 +25,7 @@ import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
@@ -31,6 +34,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.floor
+
 
 const val VERIFY_SEED_REQUEST_CODE = 200
 const val WALLET_SETTINGS_REQUEST_CODE = 300
@@ -105,6 +110,14 @@ class WalletsFragment : BaseFragment() {
         when (item.itemId) {
             R.id.add_new_wallet -> {
 
+                if (multiWallet.openedWalletsCount() >= numOfAllowedWallets()) {
+                    InfoDialog(context!!)
+                            .setMessage(getString(R.string.wallets_limit_error))
+                            .setPositiveButton(getString(R.string.ok))
+                            .show()
+                    return false
+                }
+
                 if (activity is HomeActivity) {
                     val homeActivity = activity as HomeActivity
                     val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
@@ -156,6 +169,14 @@ class WalletsFragment : BaseFragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun numOfAllowedWallets(): Int {
+        val actManager = context!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memInfo = ActivityManager.MemoryInfo()
+        actManager.getMemoryInfo(memInfo)
+
+        return floor(memInfo.totalMem / 1e9).toInt()
     }
 
     private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
