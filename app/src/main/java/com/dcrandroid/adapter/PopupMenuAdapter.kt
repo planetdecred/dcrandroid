@@ -54,7 +54,9 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
         val item = items[position]
         if (item is PopupItem) {
             holder.itemView.popup_text.setText(item.title)
-            holder.itemView.popup_text.setTextColor(context.resources.getColor(item.color))
+
+            val textColor = if (item.enabled) item.color else R.color.colorDisabled
+            holder.itemView.popup_text.setTextColor(context.resources.getColor(textColor))
             holder.itemView.isEnabled = item.enabled
 
             holder.itemView.setOnClickListener {

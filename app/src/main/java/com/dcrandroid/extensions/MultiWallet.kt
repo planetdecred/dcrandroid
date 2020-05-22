@@ -29,6 +29,14 @@ fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
     return wallets
 }
 
+fun MultiWallet.fullCoinWalletsList(): ArrayList<Wallet> {
+    return this.openedWalletsList().filter { !it.isWatchingOnlyWallet } as ArrayList<Wallet>
+}
+
+fun MultiWallet.watchOnlyWalletsList(): ArrayList<Wallet> {
+    return this.openedWalletsList().filter { it.isWatchingOnlyWallet } as ArrayList<Wallet>
+}
+
 fun MultiWallet.totalWalletBalance(): Long {
     val wallets = this.openedWalletsList()
     var totalBalance: Long = 0

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.activities.security.ValidateAddress
+import com.dcrandroid.activities.security.VerifyMessage
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.fragments.more.ListAdapter
 import com.dcrandroid.fragments.more.ListItem
@@ -36,7 +37,9 @@ class SecurityTools : BaseActivity() {
         }
 
         val items = arrayOf(
-                ListItem(R.string.validate_addresses, R.drawable.ic_location_pin, Intent(this, ValidateAddress::class.java)))
+                ListItem(R.string.verify_message, R.drawable.ic_verify_message, Intent(this, VerifyMessage::class.java)),
+                ListItem(R.string.validate_addresses, R.drawable.ic_location_pin, Intent(this, ValidateAddress::class.java))
+        )
 
         val adapter = ListAdapter(this, items)
         security_tools_recycler_view.layoutManager = LinearLayoutManager(this)

@@ -18,13 +18,11 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
-import com.dcrandroid.activities.security.VerifyMessage
+import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.AccountDetailsDialog
 import com.dcrandroid.dialog.RequestNameDialog
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.totalWalletBalance
+import com.dcrandroid.extensions.*
 import com.dcrandroid.fragments.VERIFY_SEED_REQUEST_CODE
 import com.dcrandroid.fragments.WALLET_SETTINGS_REQUEST_CODE
 import com.dcrandroid.util.CoinFormat
@@ -32,37 +30,74 @@ import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+// Item Types
+const val ITEM_TYPE_WALLET = 0
+const val ITEM_TYPE_WATCH_ONLY_WALLET_HEADER = 1
+const val ITEM_TYPE_WATCH_ONLY_WALLET = 2
 
 class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, requestCode: Int) -> Unit) : RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
-    private var wallets: ArrayList<Wallet>
-    private val multiWallet = WalletData.multiWallet
+    private var items: ArrayList<Any> = ArrayList()
+    private val multiWallet = WalletData.multiWallet!!
     private var expanded = -1
 
     init {
-        wallets = multiWallet!!.openedWalletsList()
+        reloadList()
     }
 
     fun reloadList() {
-        wallets.clear()
-        wallets.addAll(multiWallet!!.openedWalletsList())
+        items.clear()
+        items.addAll(multiWallet.fullCoinWalletsList())
+        val watchOnlyWallets = multiWallet.watchOnlyWalletsList()
+        if (watchOnlyWallets.isNotEmpty()) {
+            items.add(WatchOnlyWalletHeader())
+            items.addAll(watchOnlyWallets)
+        }
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        val view = inflater.inflate(R.layout.wallet_row, parent, false)
+        val view: View
+        if (viewType == ITEM_TYPE_WATCH_ONLY_WALLET_HEADER) {
+            view = inflater.inflate(R.layout.watch_only_wallet_list_header, parent, false)
+        } else {
+            view = inflater.inflate(R.layout.wallet_row, parent, false)
+        }
+
         return WalletsViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return wallets.size
+        return items.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val item = items[position]
+        if (item is Wallet) {
+            if (item.isWatchingOnlyWallet) {
+                return ITEM_TYPE_WATCH_ONLY_WALLET
+            }
+
+            return ITEM_TYPE_WALLET
+        }
+
+        return ITEM_TYPE_WATCH_ONLY_WALLET_HEADER
     }
 
     override fun onBindViewHolder(holder: WalletsViewHolder, position: Int) {
-        val wallet = wallets[position]
+        if (getItemViewType(position) != ITEM_TYPE_WATCH_ONLY_WALLET_HEADER) {
+            val wallet = items[position] as Wallet
+            setupWalletRow(wallet, holder, position)
+        }
+    }
 
+    private fun setupWalletRow(wallet: Wallet, holder: WalletsViewHolder, position: Int) {
         holder.walletName.text = wallet.name
         holder.totalBalance.text = context.getString(R.string.dcr_amount,
                 CoinFormat.formatDecred(wallet.totalWalletBalance()))
@@ -81,7 +116,11 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
             }
         }
 
-        if (expanded == position) {
+        val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
+        val containerBackground: Int // this is a transparent ripple
+        val viewBackground: Int
+
+        if (expanded == position) { // this should never hit for watching only wallets
             val adapter = AccountsAdapter(context, wallet.id)
 
             holder.accountsList.layoutManager = LinearLayoutManager(context)
@@ -90,31 +129,69 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
             holder.accountsLayout.show()
 
+            holder.expand.show()
             holder.expand.setImageResource(R.drawable.ic_collapse02)
-            holder.container.setBackgroundResource(R.drawable.curved_top_ripple)
+
+            containerBackground = R.drawable.curved_top_ripple
+            viewBackground = R.drawable.card_bg
         } else {
             holder.accountsList.adapter = null
             holder.accountsLayout.hide()
 
-            holder.expand.setImageResource(R.drawable.ic_expand02)
-            holder.container.setBackgroundResource(R.drawable.ripple_bg_white_corners_8dp)
+            if (wallet.isWatchingOnlyWallet) {
+
+                layoutParams.topMargin = 0
+
+                holder.expand.hide()
+                if (position == itemCount - 1) {
+                    layoutParams.bottomMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+                    viewBackground = R.drawable.card_bg_footer
+                    containerBackground = R.drawable.curved_bottom_ripple
+                } else {
+                    layoutParams.bottomMargin = 0
+                    // ripple won't work, the background is not clickable. Just the white bg is needed
+                    viewBackground = R.drawable.bg_white_ripple
+
+                    containerBackground = R.drawable.ripple
+                }
+            } else {
+                layoutParams.bottomMargin = 0
+                layoutParams.topMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+
+                holder.expand.show()
+                holder.expand.setImageResource(R.drawable.ic_expand02)
+
+                viewBackground = R.drawable.card_bg
+                containerBackground = R.drawable.ripple_bg_white_corners_8dp
+            }
         }
 
+        holder.itemView.setBackgroundResource(viewBackground)
+        holder.container.setBackgroundResource(containerBackground)
+
         holder.container.setOnClickListener {
-            var currentlyExpanded: Int? = null
-            expanded = when (expanded) {
-                position -> -1
-                -1 -> position
-                else -> { // an item is currently expanded
-                    currentlyExpanded = expanded
-                    position
+            if (wallet.isWatchingOnlyWallet) {
+                val account = Account.from(wallet.getAccount(0))
+                AccountDetailsDialog(context, wallet.id, account) {
+                    null
+                }.show(context)
+            } else {
+                var currentlyExpanded: Int? = null
+                expanded = when (expanded) {
+                    position -> -1
+                    -1 -> position
+                    else -> { // an item is currently expanded
+                        currentlyExpanded = expanded
+                        position
+                    }
                 }
+
+                if (currentlyExpanded != null) {
+                    notifyItemChanged(currentlyExpanded)
+                }
+                notifyItemChanged(position)
             }
 
-            if (currentlyExpanded != null) {
-                notifyItemChanged(currentlyExpanded)
-            }
-            notifyItemChanged(position)
         }
 
         // popup menu
@@ -123,10 +200,9 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
             val dividerWidth = context.resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
 
             val items = arrayOf(
-                    PopupItem(R.string.sign_message),
-                    PopupItem(R.string.verify_message),
+                    PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
                     PopupDivider(dividerWidth),
-                    PopupItem(R.string.view_property),
+                    PopupItem(R.string.view_property, R.color.colorDisabled, enabled = false),
                     PopupDivider(dividerWidth),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
@@ -140,17 +216,12 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }
-                    1 -> {
-                        val intent = Intent(context, VerifyMessage::class.java)
-                        intent.putExtra(Constants.WALLET_ID, wallet.id)
-                        context.startActivity(intent)
-                    }
-                    5 -> { // rename wallet
+                    4 -> { // rename wallet
                         val activity = context as AppCompatActivity
                         RequestNameDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
 
                             try {
-                                multiWallet!!.renameWallet(wallet.id, newName)
+                                multiWallet.renameWallet(wallet.id, newName)
                             } catch (e: Exception) {
                                 return@RequestNameDialog e
                             }
@@ -160,7 +231,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                             return@RequestNameDialog null
                         }.show(activity.supportFragmentManager, null)
                     }
-                    6 -> {
+                    5 -> {
                         val intent = Intent(context, WalletSettings::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         launchIntent(intent, WALLET_SETTINGS_REQUEST_CODE)
@@ -170,21 +241,50 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
         }
     }
 
-    fun addWallet(walletID: Long) {
-        val wallet = multiWallet!!.walletWithID(walletID)
-        wallets.add(wallet)
-        notifyItemInserted(wallets.size - 1)
+    fun addWallet(walletID: Long) = GlobalScope.launch(Dispatchers.Main) {
+        val wallet = multiWallet.walletWithID(walletID) ?: return@launch
+
+        var watchOnlyWalletHeaderPosition = -1
+        for (i in 0 until itemCount) {
+            if (items[i] is WatchOnlyWalletHeader) {
+                watchOnlyWalletHeaderPosition = i
+                break
+            }
+        }
+
+        if (watchOnlyWalletHeaderPosition == -1 && wallet.isWatchingOnlyWallet) {
+            items.add(WatchOnlyWalletHeader())
+            notifyItemInserted(items.size - 1)
+        }
+
+        when {
+            !wallet.isWatchingOnlyWallet && watchOnlyWalletHeaderPosition != -1 -> {
+                items.add(watchOnlyWalletHeaderPosition, wallet)
+                notifyItemInserted(watchOnlyWalletHeaderPosition)
+            }
+            else -> {
+                items.add(wallet)
+                notifyItemInserted(items.size - 1)
+                if (wallet.isWatchingOnlyWallet) {
+                    // notify previous last item to remove shadow
+                    notifyItemChanged(items.size - 2)
+                }
+            }
+        }
+
     }
 
     fun walletBackupVerified(walletID: Long) {
-        wallets.forEachIndexed { index, wallet ->
-            if (wallet.id == walletID) {
-                wallets[index] = multiWallet!!.walletWithID(walletID)
+        items.forEachIndexed { index, wallet ->
+            if (wallet is Wallet && wallet.id == walletID) {
+                items[index] = multiWallet.walletWithID(walletID)
                 notifyItemChanged(index)
                 return
             }
         }
     }
+
+    inner class WatchOnlyWalletHeader
 
     inner class WalletsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val walletName = itemView.wallet_name

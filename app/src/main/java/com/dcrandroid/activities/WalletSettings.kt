@@ -12,10 +12,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
+import com.dcrandroid.dialog.*
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.preference.ListPreference
 import com.dcrandroid.preference.SwitchPreference
@@ -45,31 +43,31 @@ class WalletSettings : BaseActivity() {
 
         tv_subtitle?.text = wallet.name
 
-        change_spending_pass.setOnClickListener {
-            ChangePassUtil(this, walletID).begin()
-        }
-
-        useFingerprint = SwitchPreference(this, walletID.toString() + Dcrlibwallet.UseBiometricConfigKey, spendable_fingerprint) { newValue ->
-
-            if (newValue) {
-                setupFingerprint()
-                !newValue // ignore new value
-            } else {
-                clearSpendingPassFromKeystore()
-                newValue
+        if (wallet.isWatchingOnlyWallet) {
+            spending_password_card.hide()
+        } else {
+            change_spending_pass.setOnClickListener {
+                ChangePassUtil(this, walletID).begin()
             }
+
+            useFingerprint = SwitchPreference(this, walletID.toString() + Dcrlibwallet.UseBiometricConfigKey, spendable_fingerprint) { newValue ->
+
+                if (newValue) {
+                    setupFingerprint()
+                    !newValue // ignore new value
+                } else {
+                    clearSpendingPassFromKeystore()
+                    newValue
+                }
+            }
+            loadFingerprintPreference()
         }
-        loadFingerprintPreference()
 
         val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
         setTxNotificationSummary(multiWallet!!.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
         ListPreference(this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
                 R.array.notification_options, incoming_transactions) {
             setTxNotificationSummary(it)
-        }
-
-        change_spending_pass.setOnClickListener {
-            ChangePassUtil(this, walletID).begin()
         }
 
         rescan_blockchain.setOnClickListener {
@@ -101,15 +99,21 @@ class WalletSettings : BaseActivity() {
                     .setNegativeButton(getString(R.string.cancel), null)
                     .setPositiveButton(getString(R.string.remove), DialogInterface.OnClickListener { _, _ ->
 
-                        val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
+                        if (wallet.isWatchingOnlyWallet) {
+                            DeleteWatchOnlyWallet(wallet) {
+                                postDeleteFinishActivity()
+                            }.show(this)
+                        } else {
+                            val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
 
-                        PassPromptUtil(this, walletID, title, false) { dialog, pass ->
-                            if (pass != null) {
-                                deleteWallet(pass, dialog)
-                            }
+                            PassPromptUtil(this, walletID, title, false) { dialog, pass ->
+                                if (pass != null) {
+                                    deleteWallet(pass, dialog)
+                                }
 
-                            false
-                        }.show()
+                                false
+                            }.show()
+                        }
                     })
 
             dialog.btnPositiveColor = R.color.orangeTextColor
@@ -189,17 +193,7 @@ class WalletSettings : BaseActivity() {
                 dialog?.dismiss()
             }
 
-            if (multiWallet!!.openedWalletsCount() == 0) {
-                multiWallet!!.shutdown()
-                walletData.multiWallet = null
-                startActivity(Intent(this@WalletSettings, SplashScreenActivity::class.java))
-                finishAffinity()
-            } else {
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
-
-            SnackBar.showText(this@WalletSettings, R.string.wallet_removed)
+            postDeleteFinishActivity()
         } catch (e: Exception) {
             e.printStackTrace()
 
@@ -217,5 +211,19 @@ class WalletSettings : BaseActivity() {
                 SnackBar.showError(this@WalletSettings, errMessage)
             }
         }
+    }
+
+    private fun postDeleteFinishActivity() {
+        if (multiWallet!!.openedWalletsCount() == 0) {
+            multiWallet!!.shutdown()
+            walletData.multiWallet = null
+            startActivity(Intent(this@WalletSettings, SplashScreenActivity::class.java))
+            finishAffinity()
+        } else {
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+
+        SnackBar.showText(this@WalletSettings, R.string.wallet_removed)
     }
 }

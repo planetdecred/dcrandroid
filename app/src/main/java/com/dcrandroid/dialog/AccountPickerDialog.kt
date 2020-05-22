@@ -16,12 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.AccountPickerAdapter
 import com.dcrandroid.data.Account
+import com.dcrandroid.extensions.fullCoinWalletsList
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
 
-class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, val accountSelected: (account: Account) -> Unit?) : FullScreenBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, private val showWatchOnlyWallets: Boolean,
+                          val accountSelected: (account: Account) -> Unit?) : FullScreenBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
     private var layoutManager: LinearLayoutManager? = null
@@ -36,7 +38,7 @@ class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account
         account_picker_title.setText(title)
 
         val multiWallet = WalletData.multiWallet!!
-        val wallets = multiWallet.openedWalletsList()
+        val wallets = if (showWatchOnlyWallets) multiWallet.openedWalletsList() else multiWallet.fullCoinWalletsList()
 
         val items = ArrayList<Any>()
 

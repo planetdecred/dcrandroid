@@ -150,6 +150,13 @@ class InputHelper(private val context: Context, private val container: View,
         container.input_layout.setBackgroundResource(backgroundResource)
     }
 
+    fun setEnabled(enabled: Boolean) {
+        editText.isEnabled = false
+        clearBtn.isEnabled = enabled
+        qrScanImageView.isEnabled
+        pasteTextView.isEnabled = enabled
+    }
+
     private fun setupButtons() {
         if (editText.text.isNotEmpty()) {
             if (!clearBtnHidden)

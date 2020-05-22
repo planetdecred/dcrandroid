@@ -21,6 +21,7 @@ import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.adapter.WalletsAdapter
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.util.SnackBar
@@ -114,7 +115,7 @@ class WalletsFragment : BaseFragment() {
                             PopupItem(R.string.create_a_new_wallet),
                             PopupItem(R.string.import_existing_wallet),
                             PopupDivider(dividerWidth),
-                            PopupItem(R.string.import_watching_only_wallet, R.color.colorDisabled, false)
+                            PopupItem(R.string.import_watching_only_wallet)
                     )
 
                     PopupUtil.showPopup(anchorView, items) { window, index ->
@@ -143,7 +144,10 @@ class WalletsFragment : BaseFragment() {
                                 startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
                             }
                             3 -> {
-                                // create watching only wallet
+                                CreateWatchOnlyWallet {
+                                    SnackBar.showText(context!!, R.string.watch_only_wallet_created)
+                                    adapter.addWallet(it.id)
+                                }.show(context!!)
                             }
                         }
                     }

@@ -14,17 +14,20 @@ import android.view.ViewGroup
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.create_watch_only_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullScreenBottomSheetDialog() {
+class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullScreenBottomSheetDialog() {
 
-    lateinit var walletNameInput: InputHelper
-    lateinit var extendedPublicKeyInput: InputHelper
+    private var walletNameInput: InputHelper? = null
+    private var extendedPublicKeyInput: InputHelper? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.create_watch_only_sheet, container, false)
@@ -33,33 +36,38 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        walletNameInput = InputHelper(context!!, wallet_name) {
+        if (multiWallet.loadedWalletsCount() > 0) {
+            walletNameInput = InputHelper(context!!, wallet_name) {
+                walletNameInput?.validationMessage = R.string.wallet_name_exists
 
-            walletNameInput.validationMessage = R.string.wallet_name_exists
+                if (!it.isBlank()) {
+                    try {
+                        return@InputHelper !multiWallet.walletNameExists(it)
+                    } catch (e: Exception) {
+                        if (e.message == Dcrlibwallet.ErrReservedWalletName) {
+                            walletNameInput?.validationMessage = R.string.reserved_wallet_name
+                        }
 
-            if (!it.isBlank()) {
-                try {
-                    return@InputHelper !multiWallet.walletNameExists(it)
-                } catch (e: Exception) {
-                    if (e.message == Dcrlibwallet.ErrReservedWalletName) {
-                        walletNameInput.validationMessage = R.string.reserved_wallet_name
+                        return@InputHelper false
                     }
-
-                    return@InputHelper false
                 }
+
+                return@InputHelper true
+
+            }.apply {
+                hintTextView.setText(R.string.wallet_name)
+                hideQrScanner()
+                hidePasteButton()
             }
 
-            return@InputHelper true
-
-        }.apply {
-            hintTextView.setText(R.string.wallet_name)
-            hideQrScanner()
-            hidePasteButton()
+            walletNameInput?.textChanged = this@CreateWatchOnlyWallet.textChanged
+        } else {
+            wallet_name.hide()
         }
 
         extendedPublicKeyInput = InputHelper(context!!, extended_public_key) {
 
-            extendedPublicKeyInput.validationMessage = R.string.invalid_key
+            extendedPublicKeyInput?.validationMessage = R.string.invalid_key
 
             if (!it.isBlank()) {
                 try {
@@ -69,7 +77,7 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
                     e.printStackTrace()
 
                     if (e.message == Dcrlibwallet.ErrUnusableSeed) {
-                        extendedPublicKeyInput.validationMessage = R.string.unusable_key
+                        extendedPublicKeyInput?.validationMessage = R.string.unusable_key
                     }
 
                 }
@@ -86,29 +94,33 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
         }
 
-        walletNameInput.textChanged = this@CreateWatchOnlyWallet.textChanged
-        extendedPublicKeyInput.textChanged = this@CreateWatchOnlyWallet.textChanged
+        extendedPublicKeyInput?.textChanged = this@CreateWatchOnlyWallet.textChanged
 
 
         btn_cancel.setOnClickListener {
             dismiss()
         }
 
-        btn_create.setOnClickListener {
-            toggleButtons(false)
+        btn_import.setOnClickListener {
+            toggleUI(false)
 
-            val walletName = walletNameInput.validatedInput!!
-            val extendedPublicKey = extendedPublicKeyInput.validatedInput!!
+            val walletName = getWalletName()
+            val extendedPublicKey = extendedPublicKeyInput?.validatedInput!!
 
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val wallet = multiWallet.createWatchOnlyWallet(walletName, extendedPublicKey)
                     dismiss()
-                    walletCreated(wallet.id)
+                    walletCreated(wallet)
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    toggleUI(true)
 
-                    toggleButtons(true)
+                    withContext(Dispatchers.Main) {
+                        val op = this@CreateWatchOnlyWallet.javaClass.name + ": createWatchOnlyWallet"
+                        Utils.showErrorDialog(this@CreateWatchOnlyWallet.context!!, op + ": " + e.message)
+                        Dcrlibwallet.logT(op, e.message)
+                    }
                 }
             }
 
@@ -117,24 +129,35 @@ class CreateWatchOnlyWallet(val walletCreated: (walletID: Long) -> Unit) : FullS
 
     override fun onResume() {
         super.onResume()
-        extendedPublicKeyInput.onResume()
+        extendedPublicKeyInput?.onResume()
     }
 
-    private fun toggleButtons(enable: Boolean) = GlobalScope.launch(Dispatchers.Main) {
+    private fun getWalletName(): String {
+        if (multiWallet.loadedWalletsCount() == 0) {
+            return getString(R.string.mywallet)
+        }
+
+        return walletNameInput?.validatedInput!!
+    }
+
+    private fun toggleUI(enable: Boolean) = GlobalScope.launch(Dispatchers.Main) {
         isCancelable = enable
+
+        walletNameInput!!.setEnabled(enable)
+        extendedPublicKeyInput!!.setEnabled(enable)
         btn_cancel.isEnabled = enable
         if (enable) {
-            btn_create.show()
+            btn_import.show()
             progress_bar.hide()
         } else {
-            btn_create.hide()
+            btn_import.hide()
             progress_bar.show()
         }
     }
 
     private val textChanged = {
-        btn_create.isEnabled = !walletNameInput.validatedInput.isNullOrBlank()
-                && !extendedPublicKeyInput.validatedInput.isNullOrBlank()
+        btn_import.isEnabled = (!walletNameInput?.validatedInput.isNullOrBlank() || multiWallet.loadedWalletsCount() == 0)
+                && !extendedPublicKeyInput?.validatedInput.isNullOrBlank()
     }
 
 }

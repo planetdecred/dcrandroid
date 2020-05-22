@@ -67,6 +67,7 @@
     <string name="always">Always</string>
     <string name="rename">Rename</string>
     <string name="create">Create</string>
+    <string name="_import">Import</string>
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet_sheet_title">Rename wallet</string>
     <string name="wallet_name">Wallet Name</string>
@@ -212,6 +213,7 @@
     <string name="not_enough_funds">Not enough funds.</string>
     <string name="empty_seed">Empty Seed</string>
     <string name="not_connected">Not connected to Decred network</string>
+    <string name="watch_only_wallet_error">Only wallet is watching only</string>
     <string name="passphrase_required">Private Passphrase is required</string>
     <string name="wallet_not_loaded">Wallet Not Loaded</string>
     <string name="err_no_peers">Decred network is unreachable due to a lack of peers.</string>
@@ -391,6 +393,7 @@
     <string name="cancel_sync_create_wallet">Disconnect before creating wallet</string>
     <string name="cancel_sync_delete_wallet">Disconnect before deleting wallet</string>
     <string name="wallet_created">Wallet created</string>
+    <string name="watch_only_wallet_created">Watch-only wallet imported</string>
     <string name="amount">Amount</string>
     <string name="processing_time">Processing time</string>
     <string name="fee_rate">Fee rate</string>
@@ -528,5 +531,6 @@
     <string name="month_day_format">MMMM dd</string>
     <string name="date_format">MMMM dd, yyyy</string>
     <string name="date_time_format">MMM dd, yyyy hh:mma</string>
+    <string name="watch_only_wallets">Watch-only Wallets</string>
 
 </resources>

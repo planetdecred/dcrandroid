@@ -24,11 +24,8 @@ import kotlinx.android.synthetic.main.account_details.*
 class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val account: Account,
                            val renameAccount: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
 
-    private var wallet: Wallet? = null
+    private val wallet: Wallet = multiWallet.walletWithID(walletID)
 
-    init {
-        this.wallet = multiWallet.walletWithID(walletID)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.account_details, container, false)
@@ -39,7 +36,10 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         val balance = account.balance
 
-        tv_account_name.text = account.accountName
+        tv_account_name.text = if (wallet.isWatchingOnlyWallet) {
+            wallet.name
+        } else account.accountName
+
         account_details_total_balance.text = CoinFormat.format(account.totalBalance, 0.625f)
         account_details_spendable.text = CoinFormat.format(balance.spendable)
 
@@ -55,13 +55,18 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         // properties
         account_details_number.text = account.accountNumber.toString()
-        account_details_path.text = account.hdPath
         account_details_keys.text = context!!.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
-
-        if (account.accountNumber == Int.MAX_VALUE) { // imported account
-            default_account_row.hide()
-            account_details_icon.setImageResource(R.drawable.ic_accounts_locked)
+        if (wallet.isWatchingOnlyWallet) {
             iv_rename_account.hide()
+            account_number_row.hide()
+            hd_path_row.hide()
+        } else {
+            account_details_path.text = account.hdPath
+        }
+
+        if (account.accountNumber == Int.MAX_VALUE) {
+            iv_rename_account.hide()
+            account_details_icon.setImageResource(R.drawable.ic_accounts_locked)
         }
 
         // click listeners

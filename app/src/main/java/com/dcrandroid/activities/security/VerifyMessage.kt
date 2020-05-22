@@ -11,18 +11,14 @@ import android.view.ViewTreeObserver
 import androidx.core.text.HtmlCompat
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
-import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_verify_message.*
 
 class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
-
-    private lateinit var wallet: Wallet
 
     lateinit var addressInputHelper: InputHelper
     lateinit var messageInputHelper: InputHelper
@@ -32,11 +28,8 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify_message)
 
-        val walletID = intent.getLongExtra(Constants.WALLET_ID, -1)
-        wallet = multiWallet!!.walletWithID(walletID)
-
         addressInputHelper = InputHelper(this, address_container) {
-            wallet.isAddressValid(it)
+            multiWallet!!.isAddressValid(it)
         }.apply {
             setHint(R.string.address)
 
@@ -122,7 +115,7 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
             var validSignature = false
             try {
-                validSignature = wallet.verifyMessage(address, message, base64Signature)
+                validSignature = multiWallet!!.verifyMessage(address, message, base64Signature)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
