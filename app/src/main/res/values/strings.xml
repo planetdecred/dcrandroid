@@ -532,5 +532,6 @@
     <string name="date_format">MMMM dd, yyyy</string>
     <string name="date_time_format">MMM dd, yyyy hh:mma</string>
     <string name="watch_only_wallets">Watch-only Wallets</string>
+    <string name="wallets_limit_error">Limit of 1 wallet per 1 gig of ram on the device</string>
 
 </resources>
