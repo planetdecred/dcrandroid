@@ -63,11 +63,10 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        val view: View
-        if (viewType == ITEM_TYPE_WATCH_ONLY_WALLET_HEADER) {
-            view = inflater.inflate(R.layout.watch_only_wallet_list_header, parent, false)
+        val view = if (viewType == ITEM_TYPE_WATCH_ONLY_WALLET_HEADER) {
+            inflater.inflate(R.layout.watch_only_wallet_list_header, parent, false)
         } else {
-            view = inflater.inflate(R.layout.wallet_row, parent, false)
+            inflater.inflate(R.layout.wallet_row, parent, false)
         }
 
         return WalletsViewHolder(view)
@@ -117,6 +116,9 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
         }
 
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
+        layoutParams.bottomMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+        layoutParams.topMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+
         val containerBackground: Int // this is a transparent ripple
         val viewBackground: Int
 
@@ -144,7 +146,6 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
                 holder.expand.hide()
                 if (position == itemCount - 1) {
-                    layoutParams.bottomMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
                     viewBackground = R.drawable.card_bg_footer
                     containerBackground = R.drawable.curved_bottom_ripple
                 } else {
@@ -155,9 +156,6 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                     containerBackground = R.drawable.ripple
                 }
             } else {
-                layoutParams.bottomMargin = 0
-                layoutParams.topMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
-
                 holder.expand.show()
                 holder.expand.setImageResource(R.drawable.ic_expand02)
 
