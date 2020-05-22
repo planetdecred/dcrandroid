@@ -302,17 +302,11 @@ func (mw *MultiWallet) CreateNewWallet(walletName, privatePassphrase string, pri
 
 func (mw *MultiWallet) RestoreWallet(walletName, seedMnemonic, privatePassphrase string, privatePassphraseType int32) (*Wallet, error) {
 
-	encryptedSeed, err := encryptWalletSeed([]byte(privatePassphrase), seedMnemonic)
-	if err != nil {
-		return nil, err
-	}
-
 	wallet := &Wallet{
 		Name:                  walletName,
 		PrivatePassphraseType: privatePassphraseType,
 		IsRestored:            true,
 		HasDiscoveredAccounts: false,
-		EncryptedSeed:         encryptedSeed,
 	}
 
 	return mw.saveNewWallet(wallet, func() error {
