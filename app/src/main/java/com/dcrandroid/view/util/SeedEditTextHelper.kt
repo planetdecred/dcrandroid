@@ -6,10 +6,12 @@
 
 package com.dcrandroid.view.util
 
+import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
@@ -38,6 +40,9 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
         }
 
         editText.setAdapter(adapter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            editText.imeOptions = EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
+        }
         editText.onFocusChangeListener = this
         editText.addTextChangedListener(this)
         editText.onItemClickListener = this
