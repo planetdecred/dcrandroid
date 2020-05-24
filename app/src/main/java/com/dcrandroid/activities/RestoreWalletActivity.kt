@@ -30,6 +30,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 const val SEED_COUNT = 33
 
@@ -154,6 +156,9 @@ class RestoreWalletActivity : AppCompatActivity() {
         val op = this@RestoreWalletActivity.javaClass.name + ".createWallet"
         try {
             val wallet = multiWallet!!.restoreWallet(walletName, seed, spendingKey, spendingPassType)
+            if(Locale.getDefault().language != Locale.ENGLISH.language){
+                wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, getString(R.string._default))
+            }
             wallet.unlockWallet(spendingKey.toByteArray())
 
             withContext(Dispatchers.Main) {

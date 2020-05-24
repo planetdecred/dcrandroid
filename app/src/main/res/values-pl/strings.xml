@@ -342,7 +342,7 @@
     <string name="connected_peers"><![CDATA[Połączono z <font color="#091440">%1$d</font> peerami.]]></string>
     <string name="no_connected_peers">Brak połączonych peerów.</string>
     <string name="peers_connected">Połączeni peerzy</string>
-    <string name="_default">Domyślne</string>
+    <string name="_default">domyślne</string>
     <string name="starting_up">Uruchamianie</string>
     <string name="waiting_for_other_wallets">Oczekiwanie na pozostałe portfele</string>
     <string name="resume_account_discovery_title">Odblokuj, aby wznowić przywracanie</string>
