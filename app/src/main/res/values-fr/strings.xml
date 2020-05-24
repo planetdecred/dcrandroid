@@ -338,7 +338,7 @@
     <string name="connected_peers"><![CDATA[Connecté à <font color="#091440">%1$d</font> pairs.]]></string>
     <string name="no_connected_peers">Pas de pairs connectés.</string>
     <string name="peers_connected">Pairs connectés</string>
-    <string name="_default">Défaut</string>
+    <string name="_default">défaut</string>
     <string name="starting_up">Démarrage</string>
     <string name="waiting_for_other_wallets">En attente d\'autres porte-monnaies</string>
     <string name="resume_account_discovery_title">Déverouiller pour reprendre la restauration</string>

@@ -345,7 +345,7 @@
     <string name="connected_peers"><![CDATA[Connected to <font color="#091440">%1$d</font> peers.]]></string>
     <string name="no_connected_peers">No connected peers.</string>
     <string name="peers_connected">Peers connected</string>
-    <string name="_default">Default</string>
+    <string name="_default">default</string>
     <string name="starting_up">Starting up</string>
     <string name="waiting_for_other_wallets">Waiting for other wallets</string>
     <string name="resume_account_discovery_title">Unlock to resume restoration</string>

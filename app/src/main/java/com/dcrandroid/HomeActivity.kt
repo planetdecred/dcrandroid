@@ -16,8 +16,11 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
+import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -125,9 +128,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             currentBottomSheet = sendPageSheet
         }
 
-        frame.post {
-            checkWifiSync()
-        }
+        setupLogoAnim()
+        Handler().postDelayed({ checkWifiSync() }, 1000)
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
@@ -374,5 +376,21 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun debug(debugInfo: DebugInfo?) {
+    }
+}
+
+private fun HomeActivity.setupLogoAnim() {
+    val runnable = Runnable {
+        val anim = AnimationUtils.loadAnimation(this, R.anim.logo_anim)
+        home_logo.startAnimation(anim)
+    }
+
+    val handler = Handler()
+    home_logo.setOnTouchListener { v, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> handler.postDelayed(runnable, 10000)
+            MotionEvent.ACTION_UP -> handler.removeCallbacks(runnable)
+        }
+        true
     }
 }
