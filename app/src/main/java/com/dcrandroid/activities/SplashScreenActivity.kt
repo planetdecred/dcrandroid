@@ -25,7 +25,6 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
@@ -67,13 +66,6 @@ class SplashScreenActivity : BaseActivity() {
         ll_restore_wallet.setOnClickListener {
             val restoreIntent = Intent(this, RestoreWalletActivity::class.java)
             startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
-        }
-
-        ll_watch_only_wallet.setOnClickListener {
-            CreateWatchOnlyWallet {
-                SnackBar.showText(this@SplashScreenActivity, R.string.watch_only_wallet_created)
-                proceedToHomeActivity()
-            }.show(this)
         }
 
         if (BuildConfig.IS_TESTNET) {
@@ -246,7 +238,7 @@ class SplashScreenActivity : BaseActivity() {
         val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(welcome_text, pvhX, pvhAlpha)
 
 
-        val bottomMargin = resources.getDimensionPixelOffset(R.dimen.setup_wallet_anim_margin)
+        val bottomMargin = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_180)
         val layoutParams = bottom_bar_layout.layoutParams as LinearLayout.LayoutParams
         layoutParams.bottomMargin = -bottomMargin
         bottom_bar_layout.show()

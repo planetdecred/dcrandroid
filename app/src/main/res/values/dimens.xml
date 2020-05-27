@@ -40,8 +40,6 @@
     <dimen name="margin_padding_size_128">128dp</dimen>
     <dimen name="margin_padding_size_180">180dp</dimen>
 
-    <dimen name="setup_wallet_anim_margin">256dp</dimen>
-
     <dimen name="wallets_menu_width">152dp</dimen>
     <dimen name="add_wallet_menu_width">224dp</dimen>
 
