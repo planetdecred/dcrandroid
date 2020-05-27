@@ -16,6 +16,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.MultiWallet
 
@@ -32,6 +33,8 @@ open class BaseActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val decorView = window.decorView
             decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        } else {
+            window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
         }
     }
 

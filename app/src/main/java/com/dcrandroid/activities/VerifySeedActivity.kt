@@ -71,7 +71,7 @@ class VerifySeedActivity : BaseActivity() {
         }
     }
 
-    private fun verifySeed(){
+    private fun verifySeed() {
 
         val title = PassPromptTitle(R.string.confirm_verify_seed, R.string.confirm_verify_seed, R.string.confirm_verify_seed)
         PassPromptUtil(this, wallet!!.id, title, allowFingerprint = true) { passDialog, pass ->
@@ -105,7 +105,7 @@ class VerifySeedActivity : BaseActivity() {
                         } else if (passDialog is PasswordPromptDialog) {
                             passDialog.showError()
                         }
-                    }else if(e.message == Dcrlibwallet.ErrInvalid) {
+                    } else if (e.message == Dcrlibwallet.ErrInvalid) {
                         passDialog?.dismiss()
                         SnackBar.showError(this@VerifySeedActivity, R.string.seed_verification_failed)
                     } else {

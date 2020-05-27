@@ -30,7 +30,7 @@ import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
 
-class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: () -> Unit) : FullScreenBottomSheetDialog() {
+class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: (shouldExit: Boolean) -> Unit) : FullScreenBottomSheetDialog() {
 
     lateinit var wallet: Wallet
 
@@ -151,10 +151,11 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         go_back.isEnabled = false
         isCancelable = false
 
+        sendSuccess(false) // clear estimates
         delay(5000)
         withContext(Dispatchers.Main) {
             dismissAllowingStateLoss()
-            sendSuccess()
+            sendSuccess(true)
         }
     }
 

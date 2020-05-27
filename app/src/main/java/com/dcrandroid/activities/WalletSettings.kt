@@ -93,6 +93,11 @@ class WalletSettings : BaseActivity() {
 
         remove_wallet.setOnClickListener {
 
+            if (multiWallet!!.isConnectedToDecredNetwork) {
+                SnackBar.showError(this, R.string.disconnect_delete_wallet)
+                return@setOnClickListener
+            }
+
             val dialog = InfoDialog(this)
                     .setDialogTitle(getString(R.string.remove_wallet_prompt))
                     .setMessage(getString(R.string.remove_wallet_message))

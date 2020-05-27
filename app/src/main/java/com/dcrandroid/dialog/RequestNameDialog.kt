@@ -42,7 +42,7 @@ class RequestNameDialog(private val dialogTitle: Int, private val currentName: S
                 setHint(R.string.account_name)
             }
 
-            val filterArray = Array(1) {LengthFilter(MAX_NAME_LENGTH)}
+            val filterArray = Array(1) { LengthFilter(MAX_NAME_LENGTH) }
             editText.filters = filterArray
 
             editText.setSingleLine(true)

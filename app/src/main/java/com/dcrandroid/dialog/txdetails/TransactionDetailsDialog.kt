@@ -151,7 +151,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (input in transaction.inputs!!) {
             val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), input.accountName)
             var inputBadge = ""
-            if (input.accountNumber != null && input.accountNumber != -1){
+            if (input.accountNumber != null && input.accountNumber != -1) {
                 inputBadge = multiWallet.walletWithID(transaction.walletID).name
             }
             inputs.add(DropDownItem(amount, input.previousOutpoint!!, inputBadge))
@@ -163,7 +163,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (output in transaction.outputs!!) {
             val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), output.accountName)
             var outputBadge = ""
-            if (output.account != -1){
+            if (output.account != -1) {
                 outputBadge = multiWallet.walletWithID(transaction.walletID).name
             }
             outputs.add(DropDownItem(amount, output.address!!, outputBadge))

@@ -96,7 +96,7 @@ class SplashScreenActivity : BaseActivity() {
         val op = this@SplashScreenActivity.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet!!.createNewWallet(getString(R.string.mywallet), spendingKey, type)
-            if(Locale.getDefault().language != Locale.ENGLISH.language){
+            if (Locale.getDefault().language != Locale.ENGLISH.language) {
                 wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, getString(R.string._default))
             }
             withContext(Dispatchers.Main) {
@@ -140,6 +140,11 @@ class SplashScreenActivity : BaseActivity() {
 
         val homeDir = "$filesDir/$walletsDirName"
         walletData.multiWallet = MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType)
+
+        // set log level
+        val logLevels = resources.getStringArray(R.array.logging_levels)
+        val logLevel = multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL)
+        Dcrlibwallet.setLogLevels(logLevels[logLevel])
 
         if (multiWallet!!.loadedWalletsCount() == 0) {
 

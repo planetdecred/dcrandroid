@@ -62,7 +62,7 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
 
         if (!processing) {
             btn_confirm.isEnabled = password_input.textString.isNotBlank()
-        }else{
+        } else {
             password_input.setError(null)
         }
     }

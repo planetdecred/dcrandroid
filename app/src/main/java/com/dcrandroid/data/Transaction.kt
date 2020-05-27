@@ -18,18 +18,25 @@ import java.math.BigDecimal
 class Transaction : Serializable {
     @SerializedName("walletID")
     var walletID: Long = 0
+
     @SerializedName("hash")
     var hash: String = ""
+
     @SerializedName("type")
     var type: String = ""
+
     @SerializedName("raw")
     var raw: String = ""
+
     @SerializedName("block_height")
     var height: Int = 0
+
     @SerializedName("direction")
     var direction: Int = 0
+
     @SerializedName("fee")
     var fee: Long = 0
+
     @SerializedName("amount")
     var amount: Long = 0
 
@@ -94,18 +101,23 @@ class Transaction : Serializable {
 
     @SerializedName("outputs")
     var outputs: Array<TransactionOutput>? = null
+
     @SerializedName("inputs")
     var inputs: Array<TransactionInput>? = null
 
     class TransactionInput : Serializable {
         @SerializedName("previous_transaction_index")
         var index: Int = 0
+
         @SerializedName("amount")
         var amount: Long = 0
+
         @SerializedName("account_name")
         var accountName: String? = null
+
         @SerializedName("account_number")
         var accountNumber: Int? = null
+
         @SerializedName("previous_outpoint")
         var previousOutpoint: String? = null
     }
@@ -113,14 +125,19 @@ class Transaction : Serializable {
     class TransactionOutput : Serializable {
         @SerializedName("index")
         var index: Int = 0
+
         @SerializedName("account_number")
         var account: Int = 0
+
         @SerializedName("account_name")
         var accountName: String? = null
+
         @SerializedName("amount")
         var amount: Long = 0
+
         @SerializedName("internal")
         var internal: Boolean = false
+
         @SerializedName("address")
         var address: String? = null
     }

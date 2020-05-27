@@ -156,7 +156,7 @@ class RestoreWalletActivity : AppCompatActivity() {
         val op = this@RestoreWalletActivity.javaClass.name + ".createWallet"
         try {
             val wallet = multiWallet!!.restoreWallet(walletName, seed, spendingKey, spendingPassType)
-            if(Locale.getDefault().language != Locale.ENGLISH.language){
+            if (Locale.getDefault().language != Locale.ENGLISH.language) {
                 wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, getString(R.string._default))
             }
             wallet.unlockWallet(spendingKey.toByteArray())

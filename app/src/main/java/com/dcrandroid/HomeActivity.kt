@@ -56,6 +56,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
+    private var lastBeepHeight: Int = -1
     private lateinit var alertSound: SoundPool
 
     private lateinit var adapter: NavigationTabsAdapter
@@ -98,10 +99,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         initNavigationTabs()
 
         fab_receive.setOnClickListener {
-            if(multiWallet!!.isSyncing){
+            if (multiWallet!!.isSyncing) {
                 SnackBar.showError(this, R.string.wait_for_sync)
                 return@setOnClickListener
-            }else if (!multiWallet!!.isConnectedToDecredNetwork){
+            } else if (!multiWallet!!.isConnectedToDecredNetwork) {
                 SnackBar.showError(this, R.string.not_connected)
                 return@setOnClickListener
             }
@@ -117,11 +118,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             } else if (multiWallet!!.isSyncing) {
                 SnackBar.showError(this, R.string.wait_for_sync)
                 return@setOnClickListener
-            }else if (!multiWallet!!.isConnectedToDecredNetwork){
+            } else if (!multiWallet!!.isConnectedToDecredNetwork) {
                 SnackBar.showError(this, R.string.not_connected)
                 return@setOnClickListener
             }
-            if(sendPageSheet == null){
+            if (sendPageSheet == null) {
                 sendPageSheet = SendDialog(this, bottomSheetDismissed)
             }
             sendPageSheet!!.show(this)
@@ -327,9 +328,12 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
-        val beepNewBlocks = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
-        if (beepNewBlocks && !multiWallet!!.isSyncing) {
-            alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
+        if (lastBeepHeight == -1 || blockHeight > lastBeepHeight) {
+            lastBeepHeight = blockHeight
+            val beepNewBlocks = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
+            if (beepNewBlocks && !multiWallet!!.isSyncing) {
+                alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
+            }
         }
     }
 
