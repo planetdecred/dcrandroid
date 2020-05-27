@@ -406,8 +406,7 @@ func (mw *MultiWallet) saveNewWallet(wallet *Wallet, setupWallet func() error) (
 	}
 
 	if mw.IsConnectedToDecredNetwork() {
-		mw.CancelSync()
-		defer mw.SpvSync()
+		return nil, errors.New(ErrSyncAlreadyInProgress)
 	}
 	// Perform database save operations in batch transaction
 	// for automatic rollback if error occurs at any point.
@@ -424,12 +423,12 @@ func (mw *MultiWallet) saveNewWallet(wallet *Wallet, setupWallet func() error) (
 		if err != nil {
 			return err
 		} else if dirExists {
-			newDirName, err := backupFile(walletDataDir)
+			newDirName, err := backupFile(walletDataDir, 1)
 			if err != nil {
 				return err
 			}
 
-			log.Info("Undocumented file at %s moved to %s", walletDataDir, newDirName)
+			log.Infof("Undocumented file at %s moved to %s", walletDataDir, newDirName)
 		}
 
 		os.MkdirAll(walletDataDir, os.ModePerm) // create wallet dir
@@ -479,18 +478,13 @@ func (mw *MultiWallet) RenameWallet(walletID int, newName string) error {
 
 func (mw *MultiWallet) DeleteWallet(walletID int, privPass []byte) error {
 
+	if mw.IsConnectedToDecredNetwork() {
+		return errors.New(ErrSyncAlreadyInProgress)
+	}
+
 	wallet := mw.WalletWithID(walletID)
 	if wallet == nil {
 		return errors.New(ErrNotExist)
-	}
-
-	if mw.IsConnectedToDecredNetwork() {
-		mw.CancelSync()
-		defer func() {
-			if mw.OpenedWalletsCount() > 0 {
-				mw.SpvSync()
-			}
-		}()
 	}
 
 	err := wallet.deleteWallet(privPass)

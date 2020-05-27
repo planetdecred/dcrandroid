@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -260,13 +261,13 @@ func moveFile(sourcePath, destinationPath string) error {
 	return nil
 }
 
-func backupFile(fileName string) (newName string, err error) {
-	newName = fileName + ".bak"
+func backupFile(fileName string, suffix int) (newName string, err error) {
+	newName = fileName + ".bak" + strconv.Itoa(suffix)
 	exists, err := fileExists(newName)
 	if err != nil {
 		return "", err
 	} else if exists {
-		return backupFile(newName)
+		return backupFile(fileName, suffix+1)
 	}
 
 	err = moveFile(fileName, newName)

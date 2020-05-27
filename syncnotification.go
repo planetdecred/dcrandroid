@@ -458,6 +458,11 @@ func (mw *MultiWallet) rescanFinished(walletID int) {
 	mw.syncData.activeSyncData.headersRescanProgress.WalletID = walletID
 	mw.syncData.activeSyncData.headersRescanProgress.TotalTimeRemainingSeconds = 0
 	mw.syncData.activeSyncData.headersRescanProgress.TotalSyncProgress = 100
+
+	// Reset these value so that address discovery would
+	// not be skipped for the next wallet.
+	mw.syncData.activeSyncData.addressDiscoveryStartTime = -1
+	mw.syncData.activeSyncData.totalDiscoveryTimeSpent = -1
 	mw.syncData.mu.Unlock()
 
 	mw.publishHeadersRescanProgress()

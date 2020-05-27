@@ -294,26 +294,29 @@ func (s *Syncer) highestChainTip(ctx context.Context) (chainhash.Hash, int32, *w
 func (s *Syncer) Run(ctx context.Context) error {
 	log.Infof("Syncing %d wallets", len(s.wallets))
 
-	tipHash, tipHeight, _ := s.lowestChainTip(ctx)
-	log.Infof("Headers synced through block %v height %d", &tipHash, tipHeight)
-
-	lowestRescanPointWallet, lowestRescanPoint, err := s.lowestRescanPoint(ctx)
-	if err != nil {
-		return err
-	}
-	if lowestRescanPoint != nil {
-		h, err := lowestRescanPointWallet.BlockHeader(ctx, lowestRescanPoint)
+	for id, w := range s.wallets {
+		tipHash, tipHeight := w.MainChainTip(ctx)
+		log.Infof("[%d] Headers synced through block %v height %d", id, &tipHash, tipHeight)
+		
+		rescanPoint, err := w.RescanPoint(ctx)
 		if err != nil {
 			return err
 		}
-		// The rescan point is the first block that does not have synced
-		// transactions, so we are synced with the parent.
-		log.Infof("Transactions synced through block %v height %d", &h.PrevBlock, h.Height-1)
-	} else {
-		log.Infof("Transactions synced through block %v height %d", &tipHash, tipHeight)
+		if rescanPoint != nil {
+			h, err := w.BlockHeader(ctx, rescanPoint)
+			if err != nil {
+				return err
+			}
+			// The rescan point is the first block that does not have synced
+			// transactions, so we are synced with the parent.
+			log.Infof("[%d] Transactions synced through block %v height %d", id, &h.PrevBlock, h.Height-1)
+		} else {
+			log.Infof("[%d] Transactions synced through block %v height %d", id, &tipHash, tipHeight)
+		}
 	}
 
-	locators, err := lowestRescanPointWallet.BlockLocators(ctx, nil)
+	_, _, lowestChainWallet := s.lowestChainTip(ctx)
+	locators, err := lowestChainWallet.BlockLocators(ctx, nil)
 	if err != nil {
 		return err
 	}
@@ -741,35 +744,6 @@ func (s *Syncer) handleBlockInvs(ctx context.Context, rp *p2p.RemotePeer, hashes
 	}
 
 	return s.handleBlockAnnouncements(ctx, rp, headers, bmap)
-}
-
-func (s *Syncer) lowestRescanPoint(ctx context.Context) (*wallet.Wallet, *chainhash.Hash, error) {
-	var rescanChainHash *chainhash.Hash
-	var rescanBlockHeight int32 = -1
-	var lowestRescanPointWallet *wallet.Wallet
-	for _, w := range s.wallets {
-		rescanPoint, err := w.RescanPoint(ctx)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		if rescanPoint == nil {
-			continue
-		}
-
-		header, err := w.BlockInfo(ctx, wallet.NewBlockIdentifierFromHash(rescanPoint))
-		if err != nil {
-			return nil, nil, err
-		}
-
-		if header.Height < rescanBlockHeight || rescanBlockHeight == -1 {
-			rescanChainHash = rescanPoint
-			rescanBlockHeight = header.Height
-			lowestRescanPointWallet = w
-		}
-	}
-
-	return lowestRescanPointWallet, rescanChainHash, nil
 }
 
 // handleTxInvs responds to the inv message created by rp by fetching
