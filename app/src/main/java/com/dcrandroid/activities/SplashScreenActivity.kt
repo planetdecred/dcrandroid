@@ -141,6 +141,11 @@ class SplashScreenActivity : BaseActivity() {
         val homeDir = "$filesDir/$walletsDirName"
         walletData.multiWallet = MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType)
 
+        // set log level
+        val logLevels = resources.getStringArray(R.array.logging_levels)
+        val logLevel = multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL)
+        Dcrlibwallet.setLogLevels(logLevels[logLevel])
+
         if (multiWallet!!.loadedWalletsCount() == 0) {
 
             val v1WalletPath = "$filesDir/$v1WalletDirName/${BuildConfig.NetType}"

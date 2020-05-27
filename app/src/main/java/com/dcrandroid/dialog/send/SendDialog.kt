@@ -187,11 +187,13 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
         PopupUtil.showPopup(v, items) { window, _ ->
             window.dismiss()
-
-            // clear fields
-            amountHelper.setAmountDCR(0) // clear
-            destinationAddressCard.clear()
+            clearFields()
         }
+    }
+
+    private fun clearFields() {
+        amountHelper.setAmountDCR(0) // clear
+        destinationAddressCard.clear()
     }
 
     override fun showInfo() {
@@ -247,10 +249,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }, 200)
     }
 
-    private val sendSuccess: () -> Unit = {
+    private val sendSuccess: (shouldExit: Boolean) -> Unit = {
         GlobalScope.launch(Dispatchers.Main) {
-            SnackBar.showText(context!!, R.string.transaction_sent)
-            dismissAllowingStateLoss()
+            if (it) {
+                SnackBar.showText(context!!, R.string.transaction_sent)
+                dismissAllowingStateLoss()
+            } else {
+                clearFields()
+            }
+
         }
     }
 

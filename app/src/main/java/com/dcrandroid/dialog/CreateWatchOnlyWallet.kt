@@ -143,8 +143,8 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
     private fun toggleUI(enable: Boolean) = GlobalScope.launch(Dispatchers.Main) {
         isCancelable = enable
 
-        walletNameInput!!.setEnabled(enable)
-        extendedPublicKeyInput!!.setEnabled(enable)
+        walletNameInput?.setEnabled(enable)
+        extendedPublicKeyInput?.setEnabled(enable)
         btn_cancel.isEnabled = enable
         if (enable) {
             btn_import.show()

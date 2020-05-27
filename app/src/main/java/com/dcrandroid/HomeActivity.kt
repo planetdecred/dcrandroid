@@ -56,6 +56,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
+    private var lastBeepHeight: Int = -1
     private lateinit var alertSound: SoundPool
 
     private lateinit var adapter: NavigationTabsAdapter
@@ -327,9 +328,12 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
-        val beepNewBlocks = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
-        if (beepNewBlocks && !multiWallet!!.isSyncing) {
-            alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
+        if (lastBeepHeight == -1 || blockHeight > lastBeepHeight) {
+            lastBeepHeight = blockHeight
+            val beepNewBlocks = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
+            if (beepNewBlocks && !multiWallet!!.isSyncing) {
+                alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
+            }
         }
     }
 

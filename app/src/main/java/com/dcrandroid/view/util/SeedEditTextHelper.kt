@@ -25,6 +25,7 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
     private val editText = layout.seed_et
     private val editTextBackground = layout.list_layout
     private val indexTv = layout.seed_index
+    private val clearBtn = layout.custom_input_clear
 
     lateinit var seedChanged: () -> Unit?
     lateinit var validateSeed: (seedWord: String) -> Boolean
@@ -46,6 +47,10 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
         editText.onFocusChangeListener = this
         editText.addTextChangedListener(this)
         editText.onItemClickListener = this
+
+        clearBtn.setOnClickListener {
+            editText.text.clear()
+        }
     }
 
     fun requestFocus(): Int {
@@ -93,7 +98,7 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
     }
 
     override fun afterTextChanged(s: Editable?) {
-        val seed = s.toString()
+        clearBtn.visibility = if (s!!.isNotEmpty()) View.VISIBLE else View.INVISIBLE
         seedChanged.invoke()
     }
 
