@@ -187,7 +187,7 @@ class WalletsFragment : BaseFragment() {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet.createNewWallet(walletName, spendingKey, type)
-            if(Locale.getDefault().language != Locale.ENGLISH.language){
+            if (Locale.getDefault().language != Locale.ENGLISH.language) {
                 wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, getString(R.string._default))
             }
             withContext(Dispatchers.Main) {

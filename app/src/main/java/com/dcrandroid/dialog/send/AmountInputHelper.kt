@@ -327,7 +327,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 }
 
 fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String {
-    if(scale == 4){
+    if (scale == 4) {
         return usdAmountFormat.format(
                 dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
     }

@@ -72,7 +72,7 @@ class SaveSeedActivity : BaseActivity() {
         promptWalletPassphrase()
     }
 
-    private fun promptWalletPassphrase(){
+    private fun promptWalletPassphrase() {
 
         val title = PassPromptTitle(R.string.confirm_show_seed, R.string.confirm_show_seed, R.string.confirm_show_seed)
         PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { passDialog, pass ->

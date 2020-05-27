@@ -32,7 +32,7 @@ class DropdownAdapter(private val items: Array<DropDownItem>) : RecyclerView.Ada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.amount.text = items[position].amount
         holder.itemView.address.text = items[position].address
-        if(items[position].badge.isNotBlank()) {
+        if (items[position].badge.isNotBlank()) {
             holder.itemView.badge.text = items[position].badge
             holder.itemView.badge.show()
         }

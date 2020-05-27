@@ -201,7 +201,7 @@ class InputConnectionAccommodatingLatinIMETypeNullIssues(targetView: View?, full
     }
 }
 
-class EditableAccommodatingLatinIMETypeNullIssues() : SpannableStringBuilder("") {
+class EditableAccommodatingLatinIMETypeNullIssues : SpannableStringBuilder("") {
 
     override fun replace(spannableStringStart: Int, spannableStringEnd: Int,
                          replacementSequence: CharSequence?, replacementStart: Int, replacementEnd: Int): SpannableStringBuilder {
