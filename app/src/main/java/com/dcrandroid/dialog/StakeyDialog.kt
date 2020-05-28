@@ -15,13 +15,16 @@ import android.view.Window
 import android.widget.ImageView
 import com.dcrandroid.R
 
-class StakeyDialog(context: Context?) : Dialog(context) {
+class StakeyDialog(context: Context) : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setBackgroundDrawable(
-                ColorDrawable(Color.TRANSPARENT))
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
+
         val stakey = ImageView(context)
         stakey.setImageResource(R.drawable.stakey_deal_with_it)
         setContentView(stakey)

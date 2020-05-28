@@ -6,15 +6,11 @@
 
 package com.dcrandroid.activities
 
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 
-class License : AppCompatActivity() {
+class License : BaseActivity() {
     val license = "ISC License" +
             "\n\n" +
             "Copyright (c) 2018-2019 The Decred developers" +
@@ -33,10 +29,6 @@ class License : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        }
 
         setContentView(R.layout.activity_license)
         findViewById<TextView>(R.id.license_text).text = license

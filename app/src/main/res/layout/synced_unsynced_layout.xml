@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/synced_unsynced_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_padding_size_16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_14"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_padding_size_16"
+        android:paddingRight="@dimen/margin_padding_size_16">
+
+        <ImageView
+            android:id="@+id/sync_state_icon"
+            android:layout_width="@dimen/margin_padding_size_24"
+            android:layout_height="@dimen/margin_padding_size_16"
+            app:srcCompat="@drawable/ic_checkmark" />
+
+        <TextView
+            android:id="@+id/tv_sync_state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="@string/synced"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="@dimen/edit_text_size_20"
+            app:fontFamily="@font/source_sans_pro" />
+
+        <LinearLayout
+            android:id="@+id/reconnect_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/reconnect_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/margin_padding_size_4"
+            android:paddingTop="@dimen/margin_padding_size_4"
+            android:paddingEnd="9dp"
+            android:paddingBottom="@dimen/margin_padding_size_4">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:id="@+id/cancel_icon"
+                app:srcCompat="@drawable/ic_rescan" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_padding_size_4"
+                android:includeFontPadding="false"
+                android:text="@string/reconnect"
+                android:textColor="@color/darkBlueTextColor"
+                android:textSize="@dimen/edit_text_size_14"
+                android:id="@+id/tv_reconnect"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_padding_size_56"
+        android:layout_marginEnd="@dimen/margin_padding_size_16"
+        android:layout_marginTop="@dimen/edit_text_size_14"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_latest_block"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:includeFontPadding="false"
+            tools:text="Latest block 320505．2 min ago"
+            android:textColor="#8997a5"
+            android:textSize="@dimen/edit_text_size_16"
+            app:fontFamily="@font/source_sans_pro" />
+
+        <TextView
+            android:id="@+id/connected_peers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/edit_text_size_14"
+            android:layout_weight="1"
+            android:includeFontPadding="false"
+            android:text="@string/no_connected_peers"
+            android:textColor="#8997a5"
+            android:textSize="@dimen/edit_text_size_14"
+            app:fontFamily="@font/source_sans_pro" />
+
+    </LinearLayout>
+
+</LinearLayout>

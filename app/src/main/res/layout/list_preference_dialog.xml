@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/preference_dialog_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_title"
+        android:layout_marginStart="@dimen/margin_padding_size_24"
+        android:layout_marginEnd="@dimen/margin_padding_size_24"
+        android:layout_marginTop="22dp"
+        android:includeFontPadding="false"
+        android:text="@string/incoming_transactions"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_20"
+        android:fontFamily="@font/source_sans_pro_semibold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="22dp"
+        android:background="#edeff1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_preference_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#edeff1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="@dimen/margin_padding_size_8">
+
+        <TextView
+            android:id="@+id/btn_negative"
+            style="@style/textViewButton.Outline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="@dimen/margin_padding_size_12"
+            android:paddingEnd="@dimen/margin_padding_size_12"
+            android:textSize="@dimen/edit_text_size_16"
+            android:fontFamily="@font/source_sans_pro_semibold"
+            android:text="@string/cancel" />
+
+        <TextView
+            android:id="@+id/btn_positive"
+            style="@style/textViewButton.Outline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="@dimen/margin_padding_size_12"
+            android:paddingEnd="@dimen/margin_padding_size_12"
+            android:textSize="@dimen/edit_text_size_16"
+            android:text="@string/ok"
+            android:fontFamily="@font/source_sans_pro_semibold" />
+    </LinearLayout>
+
+</LinearLayout>

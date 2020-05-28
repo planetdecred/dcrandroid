@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/headerTop"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f3f5f6"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="@dimen/margin_padding_size_8"
+    android:paddingLeft="@dimen/margin_padding_size_24"
+    android:paddingRight="@dimen/margin_padding_size_24">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select the correct words to verify."
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="#3d5873"
+        app:fontFamily="@font/source_sans_pro" />
+
+</LinearLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/ripple"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_padding_size_16">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        tools:src="@drawable/ic_accounts"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/account_row_icon" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="5"
+            android:textSize="18sp"
+            android:textColor="#091440"
+            app:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false"
+            android:id="@+id/account_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="6dp"
+            android:text="@string/label_spendable"
+            android:textSize="14sp"
+            android:textColor="#596d81"
+            app:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            tools:text="0 DCR"
+            android:textSize="20sp"
+            android:textColor="#091440"
+            app:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false"
+            android:id="@+id/account_row_total_balance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:maxLines="1"
+            android:layout_marginTop="6dp"
+            tools:text="0 DCR"
+            android:textSize="14sp"
+            android:textColor="#596d81"
+            app:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false"
+            android:id="@+id/account_row_spendable_balance" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/iv_selected_account"
+        android:layout_marginStart="@dimen/margin_padding_size_16" />
+
+</LinearLayout>

@@ -10,7 +10,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.decred.dcrandroid"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 3
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -40,12 +40,12 @@ android {
             buildConfigField("boolean", "IS_TESTNET", "true")
             buildConfigField("int", "TicketMaturity", "16")
             buildConfigField("int", "TargetTimePerBlock", "120")
-            buildConfigField("String", "LogDir", "\"/wallet/testnet3/dcrlibwallet.log\"")
+            buildConfigField("String", "LogDir", "\"/wallets/testnet3/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"testnet3\"")
             buildConfigField("String", "PoliteiaHost", "\"test-proposals.decred.org\"")
             resValue "string", "app_name", "Decred Wallet Testnet"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher_testnet",
+                    appIcon     : "@mipmap/ic_launcher_testnet",
                     appIconRound: "@mipmap/ic_launcher_round_testnet"
             ]
         }
@@ -57,12 +57,12 @@ android {
             buildConfigField("boolean", "IS_TESTNET", "false")
             buildConfigField("int", "TicketMaturity", "256")
             buildConfigField("int", "TargetTimePerBlock", "300")
-            buildConfigField("String", "LogDir", "\"/wallet/mainnet/dcrlibwallet.log\"")
+            buildConfigField("String", "LogDir", "\"/wallets/mainnet/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"mainnet\"")
             buildConfigField("String", "PoliteiaHost", "\"proposals.decred.org\"")
             resValue "string", "app_name", "Decred Wallet"
             manifestPlaceholders = [
-                    appIcon: "@mipmap/ic_launcher_mainnet",
+                    appIcon     : "@mipmap/ic_launcher_mainnet",
                     appIconRound: "@mipmap/ic_launcher_round_mainnet"
             ]
         }
@@ -72,20 +72,22 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
+    // Kotlin Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+
     // Android support library
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0-beta01'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
-    implementation 'androidx.core:core:1.0.1'
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.biometric:biometric:1.0.0'
+    implementation 'androidx.core:core:1.1.0'
 
-    // QR code scanner
+    // QR code
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-
-    // QR code generator
-    implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
     // Crash report sender
     implementation 'ch.acra:acra:4.11', {
@@ -93,8 +95,9 @@ dependencies {
     }
 
     // JSON serialization & deserialization
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     }

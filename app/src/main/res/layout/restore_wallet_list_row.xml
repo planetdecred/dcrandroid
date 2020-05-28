@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:elevation="@dimen/shadow_spread"
+
+    android:paddingTop="@dimen/margin_padding_size_8"
+    android:paddingBottom="@dimen/margin_padding_size_8"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/input_background"
+        android:id="@id/list_layout"
+
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingTop="@dimen/margin_padding_size_12"
+        android:paddingEnd="@dimen/margin_padding_size_24"
+        android:paddingBottom="@dimen/margin_padding_size_12">
+
+    <TextView
+        android:id="@+id/seed_index"
+        android:layout_width="30dp"
+        android:layout_height="@dimen/seed_row_height"
+        android:textColor="@color/darkerBlueGrayTextColor"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/edit_text_size_16"
+        android:fontFamily="@font/source_sans_pro_regular"
+        android:background="@drawable/seed_index_bg"
+        tools:text="33" />
+
+    <AutoCompleteTextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/seed_et"
+        android:completionThreshold="2"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/text_cursor"
+        android:fontFamily="@font/source_sans_pro"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_16"
+        android:includeFontPadding="false"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:imeOptions="actionNext"
+        android:inputType="textVisiblePassword"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:nextFocusDown="@id/seed_et"
+        tools:text="tolerance" />
+
+        <ImageView
+            android:layout_width="@dimen/margin_padding_size_24"
+            android:layout_height="@dimen/margin_padding_size_24"
+            android:id="@+id/custom_input_clear"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:visibility="invisible"
+            android:src="@drawable/ic_close" />
+
+    </LinearLayout>
+
+</LinearLayout>

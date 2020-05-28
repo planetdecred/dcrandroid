@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        android:background="#f3f5f6"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:paddingStart="@dimen/margin_padding_size_24"
+            app:contentInsetStart="@dimen/margin_padding_size_24"
+            app:contentInsetLeft="@dimen/margin_padding_size_24"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            app:contentInsetEnd="@dimen/margin_padding_size_16"
+            app:contentInsetRight="@dimen/margin_padding_size_16" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/home_logo"
+                    app:srcCompat="@drawable/ic_decred_blue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Overview"
+                    android:id="@+id/toolbar_title"
+                    android:textSize="20sp"
+                    android:textColor="#091440"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro"
+                    android:layout_marginStart="16dp" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical"
+        android:background="#f3f5f6" >
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recycler_view_tabs"
+                />
+
+            <View
+                android:layout_width="@dimen/tab_indicator_width"
+                android:layout_height="2dp"
+                android:background="@drawable/tab_indicator"
+                android:layout_alignParentTop="true"
+                android:id="@+id/tab_indicator" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_padding_size_80"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="?actionBarSize">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_padding_size_48"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/send_receive_layout"
+            android:background="@drawable/send_receive_button_layout"
+            android:elevation="4dp" >
+
+            <LinearLayout
+                android:layout_width="@dimen/send_receive_btn_width"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="@dimen/margin_padding_size_16"
+                android:id="@+id/fab_send"
+                android:gravity="center"
+                android:background="@drawable/send_button_effect"
+                android:focusable="true"
+                android:clickable="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_send"
+                    android:drawablePadding="8dp"
+                    android:text="@string/send"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/source_sans_pro"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:background="#6b9dfc"
+                />
+
+            <LinearLayout
+                android:layout_width="@dimen/send_receive_btn_width"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="@dimen/margin_padding_size_16"
+                android:id="@+id/fab_receive"
+                android:gravity="center"
+                android:background="@drawable/receive_button_effect"
+                android:focusable="true"
+                android:clickable="true"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_receive"
+                    android:drawablePadding="8dp"
+                    android:text="@string/receive"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

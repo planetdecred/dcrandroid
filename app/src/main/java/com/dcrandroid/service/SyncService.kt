@@ -14,12 +14,9 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.R
-import com.dcrandroid.data.Constants
-import com.dcrandroid.util.PreferenceUtil
-import com.dcrandroid.util.Utils
+import com.dcrandroid.util.TimeUtils
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.*
-import java.lang.Exception
 
 const val NOTIFICATION_ID = 4
 const val TAG = "SyncService"
@@ -27,9 +24,8 @@ const val TAG = "SyncService"
 class SyncService : Service(), SyncProgressListener {
 
     private var notification: Notification? = null
-    private var wallet: LibWallet? = null
+    private var multiWallet: MultiWallet? = null
     private var walletData: WalletData? = null
-    private var preferenceUtil: PreferenceUtil? = null
 
     private var contentTitle: String? = null
     private var contentText: String? = null
@@ -43,15 +39,15 @@ class SyncService : Service(), SyncProgressListener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "Service is Started")
 
-        walletData = WalletData.getInstance()
-        wallet = walletData!!.wallet
+        walletData = WalletData.instance
+        multiWallet = walletData!!.multiWallet
 
-        if (wallet == null) {
-            Log.d(TAG, "Wallet is null")
+        if (multiWallet == null) {
+            Log.d(TAG, "MultiWallet is null, destroying service")
+            stopForeground(true)
+            stopSelf()
             return super.onStartCommand(intent, flags, startId)
         }
-
-        preferenceUtil = PreferenceUtil(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -69,18 +65,11 @@ class SyncService : Service(), SyncProgressListener {
 
         showNotification()
 
-        wallet!!.removeSyncProgressListener(TAG)
-        wallet!!.addSyncProgressListener(this, TAG)
+        multiWallet?.removeSyncProgressListener(TAG)
+        multiWallet?.addSyncProgressListener(this, TAG)
 
-        if (Integer.parseInt(preferenceUtil!!.get(Constants.NETWORK_MODES, "0")) == 0) {
-            val peerAddresses = preferenceUtil!!.get(Constants.PEER_IP)
-            Log.d(TAG, "Starting SPV Sync")
-            wallet!!.spvSync(peerAddresses)
-        } else {
-            val remoteNodeAddress = preferenceUtil!!.get(Constants.REMOTE_NODE_ADDRESS)
-            Log.d(TAG, "Starting RPC Sync")
-            wallet!!.rpcSync(remoteNodeAddress, "dcrwallet", "dcrwallet", Utils.getRemoteCertificate(this).toByteArray())
-        }
+        Log.d(TAG, "Starting SPV Sync")
+        multiWallet?.spvSync()
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -111,6 +100,7 @@ class SyncService : Service(), SyncProgressListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        multiWallet?.removeSyncProgressListener(TAG)
         Log.d(TAG, "Service Destroyed")
     }
 
@@ -119,10 +109,13 @@ class SyncService : Service(), SyncProgressListener {
         println("Task Removed")
     }
 
-    private fun publishProgress(remainingTime: Long, syncProgress: Int){
+    private fun publishProgress(remainingTime: Long, syncProgress: Int) {
         contentTitle = getString(R.string.synchronizing)
-        contentText = Utils.getSyncTimeRemaining(remainingTime, syncProgress, false, this)
+        contentText = TimeUtils.getSyncTimeRemaining(remainingTime, syncProgress, this)
         showNotification()
+    }
+
+    override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {
@@ -142,7 +135,7 @@ class SyncService : Service(), SyncProgressListener {
     }
 
     override fun onSyncCanceled(willRestart: Boolean) {
-        if(willRestart){
+        if (willRestart) {
             println("Sync Restarting")
             return
         }

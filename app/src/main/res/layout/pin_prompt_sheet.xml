@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/margin_padding_size_24"
+    android:paddingEnd="@dimen/margin_padding_size_24"
+    android:paddingStart="@dimen/margin_padding_size_24" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sheet_title"
+        android:text="@string/confirm_to_send"
+        android:layout_marginBottom="@dimen/margin_padding_size_24"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:includeFontPadding="false"
+        android:textColor="@color/darkBlueTextColor"
+        android:textSize="@dimen/edit_text_size_20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/margin_padding_size_32"
+        android:paddingStart="@dimen/margin_padding_size_40"
+        android:paddingEnd="0dp"
+        android:orientation="horizontal">
+
+        <com.dcrandroid.view.PinView
+            android:id="@+id/pin_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_padding_size_96"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/pin_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_padding_size_96"
+            android:layout_gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/source_sans_pro"
+            android:textSize="@dimen/edit_text_size_12"
+            android:textColor="@color/darkerBlueGrayTextColor"
+            android:text="0"
+            android:layout_marginStart="28dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:layout_marginTop="-64dp" >
+
+            <TextView
+                android:id="@+id/btn_cancel"
+                style="@style/textViewButton.Outline"
+                android:layout_width="83dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textSize="@dimen/edit_text_size_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btn_confirm"
+                style="@style/textViewButton"
+                android:layout_width="83dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:textStyle="bold"
+                android:enabled="false"
+                android:text="@string/confirm"
+                android:textSize="@dimen/edit_text_size_16" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="83dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:indeterminate="true"
+                android:theme="@style/CircularProgressBar"
+                android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

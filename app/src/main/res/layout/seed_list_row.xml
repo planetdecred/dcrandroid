@@ -8,23 +8,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/seed_index"
+        android:layout_width="30dp"
+        android:layout_height="@dimen/seed_row_height"
+        android:textColor="#3d5873"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/edit_text_size_16"
+        app:fontFamily="@font/source_sans_pro_regular"
+        android:background="@drawable/seed_index_bg"
+        tools:text="33" />
 
     <TextView
         android:id="@+id/seed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:gravity="start"
-        android:paddingLeft="5dp"
-        android:paddingTop="3dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="3dp"
-        android:textColor="@color/darkBlueTextColor"
-        android:textSize="14sp"
-        app:fontFamily="@font/source_sans_pro_regular"
-        tools:text="1. puppy" />
+        android:text="tonic"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        android:textColor="#3d5873"
+        app:fontFamily="@font/source_sans_pro_semibold"
+        android:includeFontPadding="false" />
 
 </LinearLayout>
