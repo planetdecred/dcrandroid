@@ -11,6 +11,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
@@ -88,7 +89,7 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
             return@InputHelper true
 
         }.apply {
-            hintTextView.setText(R.string.extended_public_key)
+            hintTextView.setText(R.string.extended_public_key2)
             hideQrScanner()
             editText.setRawInputType(InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
@@ -124,6 +125,14 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
                 }
             }
 
+        }
+
+        iv_info.setOnClickListener {
+            InfoDialog(context!!)
+                    .setDialogTitle(getString(R.string.extended_public_key2))
+                    .setMessage(HtmlCompat.fromHtml(getString(R.string.ext_pub_key_info), 0))
+                    .setPositiveButton(getString(R.string.got_it), null)
+                    .show()
         }
     }
 
