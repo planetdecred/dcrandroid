@@ -76,6 +76,7 @@
     <string name="confirm_to_remove">Confirm to remove</string>
     <string name="remove_wallet">Remove wallet from device</string>
     <string name="remove_wallet_prompt">Remove wallet from device?</string>
+    <string name="remove_watch_wallet_prompt"> Remove watch-only wallet from device?</string>
     <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
     <string name="error_copied">Error copied</string>
 
