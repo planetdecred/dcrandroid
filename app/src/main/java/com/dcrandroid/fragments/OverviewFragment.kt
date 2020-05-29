@@ -44,6 +44,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     companion object {
         private var closedBackupWarning = false
         const val FRAGMENT_POSITION = 0
+
+        // Tx hash received during this session is saved here.
+        // Not all new tx hashes will be present here,
+        // only the ones that came in while Overview page is visible.
+        private val newTxHashes = ArrayList<String>()
     }
 
     private val transactions: ArrayList<Transaction> = ArrayList()
@@ -200,17 +205,20 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         loadBalance()
 
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
-        transaction.animate = true
+        if (newTxHashes.indexOf(transaction.hash) == -1) {
+            newTxHashes.add(transaction.hash)
+            transaction.animate = true
 
-        GlobalScope.launch(Dispatchers.Main) {
-            transactions.add(0, transaction)
+            GlobalScope.launch(Dispatchers.Main) {
+                transactions.add(0, transaction)
 
-            // remove last item if more than max
-            if (transactions.size > MAX_TRANSACTIONS) {
-                transactions.removeAt(transactions.size - 1)
+                // remove last item if more than max
+                if (transactions.size > MAX_TRANSACTIONS) {
+                    transactions.removeAt(transactions.size - 1)
+                }
+
+                adapter?.notifyDataSetChanged()
             }
-
-            adapter?.notifyDataSetChanged()
         }
     }
 

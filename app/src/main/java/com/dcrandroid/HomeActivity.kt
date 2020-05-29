@@ -348,7 +348,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
-                    transaction.timestampMillis.toInt(), transaction.walletID)
+                    transaction.amount.toInt() + transaction.inputs!!.size, transaction.walletID)
         }
     }
 
@@ -390,7 +390,7 @@ private fun HomeActivity.setupLogoAnim() {
     }
 
     val handler = Handler()
-    home_logo.setOnTouchListener { v, event ->
+    toolbar_title.setOnTouchListener { _, event ->
         when (event.action) {
             MotionEvent.ACTION_DOWN -> handler.postDelayed(runnable, 10000)
             MotionEvent.ACTION_UP -> handler.removeCallbacks(runnable)
