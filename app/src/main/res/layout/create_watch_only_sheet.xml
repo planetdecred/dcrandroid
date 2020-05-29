@@ -34,7 +34,7 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/margin_padding_size_8"
@@ -42,37 +42,24 @@
 
         <TextView
             android:id="@+id/btn_cancel"
-            android:layout_width="83dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:background="@drawable/outline_button_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/textViewButton.Outline"
             android:text="@string/cancel"
-            android:textColor="@color/blue"
-            android:textSize="@dimen/edit_text_size_16"
-            android:focusable="true"
-            android:clickable="true"
-            app:fontFamily="@font/source_sans_pro_semibold"
             android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
         <TextView
             android:id="@+id/btn_import"
-            android:layout_width="83dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:background="@drawable/default_app_button_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/textViewButton"
             android:enabled="false"
-            android:text="@string/_import"
-            android:textColor="@color/white"
-            android:textSize="@dimen/edit_text_size_16"
-            android:focusable="true"
-            android:clickable="true"
-            app:fontFamily="@font/source_sans_pro_semibold"
-            android:includeFontPadding="false"/>
+            android:text="@string/_import" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
-            android:layout_width="83dp"
-            android:layout_height="35dp"
+            android:layout_width="82dp"
+            android:layout_height="40dp"
             android:indeterminate="true"
             android:theme="@style/CircularProgressBar"
             android:visibility="gone" />

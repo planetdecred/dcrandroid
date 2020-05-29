@@ -170,11 +170,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/share_qr_code"
-            android:gravity="center_horizontal"
             android:padding="@dimen/margin_padding_size_16"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/default_app_button_bg">
+            style="@style/textViewButton">
 
             <ImageView
                 android:layout_width="24dp"

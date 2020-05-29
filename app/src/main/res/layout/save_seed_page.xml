@@ -179,20 +179,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/step_2"
             android:enabled="false"
-            android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/seed_phase_2_briefing"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:paddingTop="@dimen/margin_padding_size_16"
             android:paddingBottom="@dimen/margin_padding_size_16"
-            android:background="@drawable/default_app_button_bg"
+            style="@style/textViewButton"
             android:text="@string/i_have_wrote_down_all_33_words"
-            android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_18"
-            android:focusable="true"
-            android:clickable="true"
-            android:includeFontPadding="false"
-            app:fontFamily="@font/source_sans_pro"
             android:visibility="visible" />
 
     </RelativeLayout>

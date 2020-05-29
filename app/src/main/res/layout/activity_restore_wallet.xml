@@ -121,7 +121,6 @@
                     android:enabled="false"
                     android:paddingTop="@dimen/margin_padding_size_16"
                     android:paddingBottom="@dimen/margin_padding_size_16"
-                    android:gravity="center"
                     style="@style/textViewButton"
                     android:text="@string/restore"
                     android:textSize="@dimen/edit_text_size_18" />

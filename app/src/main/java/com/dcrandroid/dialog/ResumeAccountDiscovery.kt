@@ -17,6 +17,7 @@ import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.dcrandroid.view.PinViewUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -163,6 +164,12 @@ class ResumeAccountDiscovery : BottomSheetDialogFragment() {
                     }
                 }
 
+            } else {
+                withContext(Dispatchers.Main) {
+                    val op = this@ResumeAccountDiscovery.javaClass.name + ": unlockWallet"
+                    Utils.showErrorDialog(context!!, op + ": " + e.message)
+                    Dcrlibwallet.logT(op, e.message)
+                }
             }
 
             withContext(Dispatchers.Main) {

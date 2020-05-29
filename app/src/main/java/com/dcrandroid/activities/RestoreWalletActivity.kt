@@ -10,7 +10,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import com.dcrandroid.R
 import com.dcrandroid.adapter.SuggestionsTextAdapter
@@ -20,11 +19,9 @@ import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
-import com.dcrandroid.util.WalletData
 import com.dcrandroid.view.SeedEditTextLayout
 import com.dcrandroid.view.util.SeedEditTextHelper
 import dcrlibwallet.Dcrlibwallet
-import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,10 +30,7 @@ import kotlinx.coroutines.withContext
 
 const val SEED_COUNT = 33
 
-class RestoreWalletActivity : AppCompatActivity() {
-
-    private val multiWallet: MultiWallet?
-        get() = WalletData.multiWallet
+class RestoreWalletActivity : BaseActivity() {
 
     var allSeedWords = ArrayList<String>()
     val seedInputHelperList = ArrayList<SeedEditTextHelper>()
