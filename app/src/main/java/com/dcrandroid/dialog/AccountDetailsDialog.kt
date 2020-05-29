@@ -60,6 +60,8 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
             iv_rename_account.hide()
             account_number_row.hide()
             hd_path_row.hide()
+
+            account_details_icon.setImageResource(R.drawable.ic_watch_only_wallet)
         } else {
             account_details_path.text = account.hdPath
         }

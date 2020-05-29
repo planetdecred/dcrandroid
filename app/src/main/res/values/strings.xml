@@ -470,7 +470,7 @@
     <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
     <string name="keep_in_mind">Keep in mind</string>
     <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
-    <string name="create_watch_only_wallet">Create watch only wallet</string>
+    <string name="create_watch_only_wallet">Create watch-only wallet</string>
     <string name="extended_public_key">Extended Public Key</string>
     <string name="extended_public_key2">Extended public key</string>
     <string name="ext_pub_key_info"><![CDATA[In <b>Decrediton</b>, under the <b>Accounts</b> section, expand the account you want to watch, and tap on <b>Reveal Pubkey</b>.]]></string>
