@@ -34,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import kotlin.math.floor
 
 
@@ -187,9 +186,7 @@ class WalletsFragment : BaseFragment() {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet.createNewWallet(walletName, spendingKey, type)
-            if (Locale.getDefault().language != Locale.ENGLISH.language) {
-                wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, getString(R.string._default))
-            }
+            Utils.renameDefaultAccountToLocalLanguage(context!!, wallet)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
                 adapter.addWallet(wallet.id)

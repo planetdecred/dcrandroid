@@ -24,6 +24,7 @@ public class Constants {
             RESULT = "result",
             AMOUNT = "amount",
             SEED = "seed",
+            DEFAULT = "default",
             ANDROID_KEY_STORE = "AndroidKeyStore",
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",

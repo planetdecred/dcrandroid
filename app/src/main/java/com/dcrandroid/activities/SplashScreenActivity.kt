@@ -35,7 +35,6 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.coroutines.*
-import java.util.*
 import kotlin.system.exitProcess
 
 const val RESTORE_WALLET_REQUEST_CODE = 1
@@ -96,9 +95,7 @@ class SplashScreenActivity : BaseActivity() {
         val op = this@SplashScreenActivity.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet!!.createNewWallet(getString(R.string.mywallet), spendingKey, type)
-            if (Locale.getDefault().language != Locale.ENGLISH.language) {
-                wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, getString(R.string._default))
-            }
+            Utils.renameDefaultAccountToLocalLanguage(this@SplashScreenActivity, wallet)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
             }
