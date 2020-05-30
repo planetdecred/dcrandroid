@@ -99,27 +99,33 @@ class WalletSettings : BaseActivity() {
             }
 
             val dialog = InfoDialog(this)
-                    .setDialogTitle(getString(R.string.remove_wallet_prompt))
-                    .setMessage(getString(R.string.remove_wallet_message))
-                    .setNegativeButton(getString(R.string.cancel), null)
-                    .setPositiveButton(getString(R.string.remove), DialogInterface.OnClickListener { _, _ ->
 
-                        if (wallet.isWatchingOnlyWallet) {
-                            DeleteWatchOnlyWallet(wallet) {
-                                postDeleteFinishActivity()
-                            }.show(this)
-                        } else {
-                            val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
+            if (wallet.isWatchingOnlyWallet) {
+                dialog.setMessage(getString(R.string.remove_watch_wallet_prompt))
+            } else {
+                dialog.setDialogTitle(getString(R.string.remove_wallet_prompt))
+                        .setMessage(getString(R.string.remove_wallet_message))
+            }
 
-                            PassPromptUtil(this, walletID, title, false) { dialog, pass ->
-                                if (pass != null) {
-                                    deleteWallet(pass, dialog)
-                                }
+            dialog.setNegativeButton(getString(R.string.cancel), null)
+            dialog.setPositiveButton(getString(R.string.remove), DialogInterface.OnClickListener { _, _ ->
 
-                                false
-                            }.show()
+                if (wallet.isWatchingOnlyWallet) {
+                    DeleteWatchOnlyWallet(wallet) {
+                        postDeleteFinishActivity()
+                    }.show(this)
+                } else {
+                    val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
+
+                    PassPromptUtil(this, walletID, title, false) { dialog, pass ->
+                        if (pass != null) {
+                            deleteWallet(pass, dialog)
                         }
-                    })
+
+                        false
+                    }.show()
+                }
+            })
 
             dialog.btnPositiveColor = R.color.orangeTextColor
             dialog.show()

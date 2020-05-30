@@ -56,8 +56,6 @@
             android:paddingBottom="10dp"
             android:paddingStart="@dimen/margin_padding_size_12"
             android:paddingEnd="@dimen/margin_padding_size_12"
-            android:textSize="@dimen/edit_text_size_16"
-            android:fontFamily="@font/source_sans_pro_semibold"
             android:text="@string/cancel" />
 
         <TextView
@@ -69,9 +67,7 @@
             android:paddingBottom="10dp"
             android:paddingStart="@dimen/margin_padding_size_12"
             android:paddingEnd="@dimen/margin_padding_size_12"
-            android:textSize="@dimen/edit_text_size_16"
-            android:text="@string/ok"
-            android:fontFamily="@font/source_sans_pro_semibold" />
+            android:text="@string/ok" />
     </LinearLayout>
 
 </LinearLayout>

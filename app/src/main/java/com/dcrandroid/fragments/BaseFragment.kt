@@ -32,6 +32,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     override fun onStop() {
         super.onStop()
         multiWallet.removeSyncProgressListener(TAG)
+        multiWallet.removeTxAndBlockNotificationListener(TAG)
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {

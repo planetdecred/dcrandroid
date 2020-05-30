@@ -24,10 +24,20 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import java.io.*
 import java.util.*
 
 object Utils {
+
+    fun renameDefaultAccountToLocalLanguage(context: Context, wallet: Wallet) {
+        if (Locale.getDefault().language != Locale.ENGLISH.language) {
+            val defaultAccountName = context.resources.getString(R.string._default)
+            if (defaultAccountName != Constants.DEFAULT) {
+                wallet.renameAccount(Constants.DEF_ACCOUNT_NUMBER, defaultAccountName)
+            }
+        }
+    }
 
     fun getHash(hash: String): ByteArray? {
         val hashList = ArrayList<String>()

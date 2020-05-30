@@ -50,6 +50,13 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
     private var txTypeSortAdapter: ArrayAdapter<String>? = null
 
+    companion object {
+        // Tx hash received during this session is saved here.
+        // Not all new tx hashes will be present here,
+        // only the ones that came in while Transactions page is visible.
+        private val newTxHashes = ArrayList<String>()
+    }
+
     fun setWalletID(walletID: Long): TransactionsFragment {
         wallet = multiWallet.walletWithID(walletID)
         TAG = wallet!!.name
@@ -204,13 +211,16 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
     override fun onTransaction(transactionJson: String?) {
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
-        if (transaction.walletID == wallet!!.id) {
-            transaction.animate = true
+        if (newTxHashes.indexOf(transaction.hash) == -1) {
+            newTxHashes.add(transaction.hash)
 
-            GlobalScope.launch(Dispatchers.Main) {
-                transactions.add(0, transaction)
+            if (transaction.walletID == wallet!!.id) {
+                transaction.animate = true
 
-                adapter?.notifyDataSetChanged()
+                GlobalScope.launch(Dispatchers.Main) {
+                    transactions.add(0, transaction)
+                    adapter?.notifyDataSetChanged()
+                }
             }
         }
     }

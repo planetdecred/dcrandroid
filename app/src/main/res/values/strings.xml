@@ -76,6 +76,7 @@
     <string name="confirm_to_remove">Confirm to remove</string>
     <string name="remove_wallet">Remove wallet from device</string>
     <string name="remove_wallet_prompt">Remove wallet from device?</string>
+    <string name="remove_watch_wallet_prompt"> Remove watch-only wallet from device?</string>
     <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
     <string name="error_copied">Error copied</string>
 
@@ -470,8 +471,10 @@
     <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
     <string name="keep_in_mind">Keep in mind</string>
     <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
-    <string name="create_watch_only_wallet">Create watch only wallet</string>
+    <string name="create_watch_only_wallet">Create watch-only wallet</string>
     <string name="extended_public_key">Extended Public Key</string>
+    <string name="extended_public_key2">Extended public key</string>
+    <string name="ext_pub_key_info"><![CDATA[In <b>Decrediton</b>, under the <b>Accounts</b> section, expand the account you want to watch, and tap on <b>Reveal Pubkey</b>.]]></string>
     <string name="wallet_name_exists">Wallet name exists</string>
     <string name="reserved_wallet_name">\'wallet-\' is a reserved prefix</string>
     <string name="invalid_key">Key is invalid</string>
@@ -531,9 +534,11 @@
     <string name="month_day_format">MMMM dd</string>
     <string name="date_format">MMMM dd, yyyy</string>
     <string name="date_time_format">MMM dd, yyyy hh:mma</string>
-    <string name="watch_only_wallets">Watch-only Wallets</string>
+    <string name="watch_only_wallets">Watch-only wallets</string>
     <string name="wallets_limit_error">Limit of 1 wallet per 1 gig of ram on the device</string>
     <string name="disconnect_add_wallet">Disconnect/cancel sync before adding a wallet</string>
     <string name="disconnect_delete_wallet">Disconnect/cancel sync before deleting wallet</string>
+    <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
+    <string name="seed_backup_verified">Your seed phrase backup is verified</string>
 
 </resources>

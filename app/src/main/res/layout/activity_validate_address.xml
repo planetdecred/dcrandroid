@@ -107,13 +107,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_clear"
                 android:text="@string/clear"
-                android:textStyle="bold"
-                android:textSize="@dimen/edit_text_size_16"
-                android:layout_marginEnd="@dimen/margin_padding_size_8"
-                android:paddingTop="@dimen/margin_padding_size_12"
-                android:paddingBottom="@dimen/margin_padding_size_12"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16" />
+                android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
             <TextView
                 style="@style/textViewButton"
@@ -121,13 +115,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_validate"
                 android:enabled="false"
-                android:text="@string/validate"
-                android:textStyle="bold"
-                android:textSize="@dimen/edit_text_size_16"
-                android:paddingTop="@dimen/margin_padding_size_12"
-                android:paddingBottom="@dimen/margin_padding_size_12"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16" />
+                android:text="@string/validate" />
 
         </LinearLayout>
 

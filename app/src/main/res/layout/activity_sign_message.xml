@@ -134,13 +134,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_clear"
                 android:text="@string/clear_all"
-                android:textStyle="bold"
-                android:textSize="@dimen/edit_text_size_16"
-                android:layout_marginEnd="@dimen/margin_padding_size_8"
-                android:paddingTop="@dimen/margin_padding_size_12"
-                android:paddingBottom="@dimen/margin_padding_size_12"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16" />
+                android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
             <TextView
                 style="@style/textViewButton"
@@ -148,18 +142,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_sign"
                 android:enabled="false"
-                android:text="@string/sign"
-                android:textStyle="bold"
-                android:textSize="@dimen/edit_text_size_16"
-                android:paddingTop="@dimen/margin_padding_size_12"
-                android:paddingBottom="@dimen/margin_padding_size_12"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16" />
+                android:text="@string/sign" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:indeterminate="true"
                 android:theme="@style/CircularProgressBar"
@@ -195,13 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_copy"
-                android:text="@string/_copy"
-                android:textStyle="bold"
-                android:textSize="@dimen/edit_text_size_16"
-                android:paddingTop="@dimen/margin_padding_size_12"
-                android:paddingBottom="@dimen/margin_padding_size_12"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="@dimen/margin_padding_size_16" />
+                android:text="@string/_copy" />
 
         </LinearLayout>
 

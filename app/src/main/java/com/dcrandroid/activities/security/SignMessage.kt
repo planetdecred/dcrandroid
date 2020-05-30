@@ -63,7 +63,7 @@ class SignMessage : BaseActivity(), View.OnClickListener {
             hideQrScanner()
             textChanged = {}
 
-            editText.isEnabled = false
+            setEnabled(false)
         }
 
 
@@ -132,6 +132,8 @@ class SignMessage : BaseActivity(), View.OnClickListener {
         tv_sign.isEnabled = isEnable
         tv_clear.isEnabled = isEnable
         go_back.isEnabled = isEnable
+        addressInputHelper.setEnabled(isEnable)
+        messageInputHelper.setEnabled(isEnable)
 
         if (isEnable) {
             tv_sign.show()

@@ -259,7 +259,6 @@
                 android:id="@+id/send_btn"
                 tools:text="Send 3.14159265 DCR"
                 style="@style/textViewButton"
-                android:gravity="center"
                 android:textSize="@dimen/edit_text_size_18"
                 android:paddingTop="@dimen/margin_padding_size_16"
                 android:paddingBottom="@dimen/margin_padding_size_16"/>

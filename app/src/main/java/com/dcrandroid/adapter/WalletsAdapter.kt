@@ -121,6 +121,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
         val containerBackground: Int // this is a transparent ripple
         val viewBackground: Int
+        var walletIcon = R.drawable.ic_wallet
 
         if (expanded == position) { // this should never hit for watching only wallets
             val adapter = AccountsAdapter(context, wallet.id)
@@ -142,6 +143,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
             if (wallet.isWatchingOnlyWallet) {
 
+                walletIcon = R.drawable.ic_watch_only_wallet
                 layoutParams.topMargin = 0
 
                 holder.expand.hide()
@@ -164,6 +166,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
             }
         }
 
+        holder.walletIcon.setImageResource(walletIcon)
         holder.itemView.setBackgroundResource(viewBackground)
         holder.container.setBackgroundResource(containerBackground)
 
@@ -285,6 +288,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
     inner class WatchOnlyWalletHeader
 
     inner class WalletsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val walletIcon = itemView.wallet_icon
         val walletName = itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
         val backupNeeded = itemView.backup_needed

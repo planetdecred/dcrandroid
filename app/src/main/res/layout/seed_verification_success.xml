@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your seed phrase backup is verified"
+            android:text="@string/seed_backup_verified"
             android:textColor="@color/darkBlueTextColor"
             android:textSize="@dimen/edit_text_size_24"
             app:fontFamily="@font/source_sans_pro"
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Be sure to store your seed phrase backup in a secure location."
+            android:text="@string/seed_backup_success_msg"
             android:textColor="#3d5873"
             android:textSize="@dimen/edit_text_size_16"
             android:layout_marginTop="@dimen/margin_padding_size_16"

@@ -56,7 +56,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:gravity="end"
         android:orientation="horizontal"
         android:layout_marginTop="-64dp" >
@@ -64,29 +64,23 @@
             <TextView
                 android:id="@+id/btn_cancel"
                 style="@style/textViewButton.Outline"
-                android:layout_width="83dp"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:text="@string/cancel"
-                android:textSize="@dimen/edit_text_size_16"
-                android:textStyle="bold" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
 
             <TextView
                 android:id="@+id/btn_confirm"
                 style="@style/textViewButton"
-                android:layout_width="83dp"
-                android:layout_height="40dp"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
-                android:textStyle="bold"
                 android:enabled="false"
-                android:text="@string/confirm"
-                android:textSize="@dimen/edit_text_size_16" />
+                android:text="@string/confirm" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"
-                android:layout_width="83dp"
-                android:layout_height="35dp"
+                android:layout_width="82dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:indeterminate="true"
