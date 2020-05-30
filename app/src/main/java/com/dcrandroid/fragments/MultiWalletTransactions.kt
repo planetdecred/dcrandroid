@@ -28,7 +28,7 @@ class MultiWalletTransactions : BaseFragment() {
 
         setToolbarTitle(R.string.transactions, false)
 
-        val adapter = TransactionsTabsAdapter(activity!!.supportFragmentManager)
+        val adapter = TransactionsTabsAdapter(childFragmentManager)
         transactions_pager.adapter = adapter
         transactions_tab.setupWithViewPager(transactions_pager)
     }
