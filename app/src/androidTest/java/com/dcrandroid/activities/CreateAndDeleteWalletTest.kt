@@ -14,9 +14,9 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
-import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.dcrandroid.R
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
@@ -26,12 +26,12 @@ import org.junit.runner.RunWith
 // This tests creating and deleting of wallets
 // and should be run on a device without a wallet.
 @LargeTest
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class CreateAndDeleteWalletTest {
 
     @Rule
     @JvmField
-    var mActivityTestRule = ActivityTestRule(SplashScreenActivity::class.java)
+    var mActivityTestRule = ActivityScenarioRule(SplashScreenActivity::class.java)
 
     private val actionDelay = 1000L
     private val walletPassword = "espresso test"
