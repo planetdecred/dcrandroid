@@ -1,8 +1,6 @@
-# $ANDROID_HOME/tools/bin/sdkmanager 'system-images;android-28;google_apis;x86'
-$ANDROID_HOME/tools/bin/sdkmanager --licenses
+echo | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
-$ANDROID_HOME/tools/bin/avdmanager list
-
+$ANDROID_HOME/tools/bin/avdmanager list avd
 echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -n testemu -k 'system-images;android-28;google_apis;x86'
 $ANDROID_HOME/tools/bin/avdmanager list avd
 $ANDROID_HOME/tools/emulator -avd testemu -no-window -no-boot-anim -no-audio -verbose &
