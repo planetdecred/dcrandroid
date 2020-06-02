@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   testing:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - name: Clone Repo
         uses: actions/checkout@v1
@@ -19,8 +19,11 @@ jobs:
         with:
           go-version: 1.13
 
+      - name: Echo
+        run: echo Root ${ANDROID_SDK_ROOT}, Home  ${ANDROID_HOME}, Path  ${PATH}
+
       - name: Install NDK
-        run: echo "y" | sudo ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager --install 'ndk;20.0.5594570' --sdk_root=${ANDROID_SDK_ROOT}
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;20.0.5594570'
 
       - name: Build Dcrlibwallet
         run: ./dcrlibwallet-ci-build.sh
