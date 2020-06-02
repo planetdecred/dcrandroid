@@ -28,6 +28,12 @@ jobs:
       - name: Run Android Linter
         run: ./gradlew lintTstnetDebug
 
+      - name: Upload Lint Results
+        uses: actions/upload-artifact@v1
+        with:
+          name: Lint results
+          path: app/build/reports/lint-results-tstnetDebug.html
+
       - name: Assemble Debug APK
         run: ./gradlew assembleTstnetDebug
 
