@@ -1,4 +1,9 @@
-echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n testemu --abi default/386 --package 'system-images;android-28;google_apis;x86_64'
+# $ANDROID_HOME/tools/bin/sdkmanager 'system-images;android-28;google_apis;x86'
+$ANDROID_HOME/tools/bin/sdkmanager --licenses
+
+$ANDROID_HOME/tools/bin/avdmanager list
+
+echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -n testemu -k 'system-images;android-28;google_apis;x86'
 $ANDROID_HOME/tools/bin/avdmanager list avd
 $ANDROID_HOME/tools/emulator -avd testemu -no-window -no-boot-anim -no-audio -verbose &
 
