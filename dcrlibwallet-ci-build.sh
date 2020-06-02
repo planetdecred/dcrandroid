@@ -19,7 +19,6 @@ fi
 
 export GOPATH=$HOME/go
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-source ~/.profile
 
 if !(hash gomobile 2>/dev/null); then
     installGomobile
