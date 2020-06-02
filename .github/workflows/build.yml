@@ -37,6 +37,9 @@ jobs:
           name: Lint results
           path: app/build/reports/lint-results-tstnetDebug.html
 
+      - name: Run Espresso Tests
+        run: ./run-ui-tests.sh
+
       - name: Assemble Debug APK
         run: ./gradlew assembleTstnetDebug
 
@@ -45,9 +48,3 @@ jobs:
         with:
           name: Decred Wallet Testnet (debug apk)
           path: app/build/outputs/apk/tstnet/debug/app-tstnet-debug.apk
-
-      - name: Test APK on Android 29
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedTstnetDebugAndroidTest
