@@ -1,4 +1,5 @@
-echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses
+$ANDROID_HOME/tools/bin/sdkmanager --list
+echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses  || true
 
 sudo $ANDROID_HOME/tools/bin/avdmanager list avd
 echo no | sudo $ANDROID_HOME/tools/bin/avdmanager create avd -n testemu -k 'system-images;android-28;google_apis;x86'

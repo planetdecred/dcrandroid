@@ -45,6 +45,13 @@ jobs:
           name: Lint results
           path: app/build/reports/lint-results-tstnetDebug.html
 
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          script: ./gradlew connectedTstnetDebugAndroidTest
+          arch: x86
+
       - name: Run Espresso Tests
         run: ./run-ui-tests.sh
 
