@@ -19,19 +19,22 @@ jobs:
         with:
           go-version: 1.13
 
-      - name: List Home Files
-        run: ls -a ~/.gradle
-
       - name: Cache (Gradle)
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            gradle-${{ runner.os }}-
+            ${{ runner.os }}-gradle-
+
+      - name: List NDK
+        run: ls -a ${ANDROID_HOME}/ndk && ls -a ${ANDROID_HOME}/ndk-bundle
 
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;20.0.5594570' | grep -v = || true
+
+      - name: List NDK Again
+        run: ls -a ${ANDROID_HOME}/ndk && ls -a ${ANDROID_HOME}/ndk-bundle
 
       - name: Build Dcrlibwallet
         run: ./dcrlibwallet-ci-build.sh
@@ -45,15 +48,13 @@ jobs:
           name: Lint results
           path: app/build/reports/lint-results-tstnetDebug.html
 
-      - name: run tests
+      - name: Run Espresso Tests
         uses: reactivecircus/android-emulator-runner@v2
+        if: false
         with:
           api-level: 28
           script: ./gradlew connectedTstnetDebugAndroidTest
           arch: x86
-
-      - name: Run Espresso Tests
-        run: ./run-ui-tests.sh
 
       - name: Assemble Debug APK
         run: ./gradlew assembleTstnetDebug
