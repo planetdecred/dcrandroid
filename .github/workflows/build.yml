@@ -22,19 +22,21 @@ jobs:
       - name: Cache (Gradle)
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ${ANDROID_HOME}/ndk/20.0.5594570
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
       - name: List NDK
-        run: ls -a ${ANDROID_HOME}/ndk && ls -a ${ANDROID_HOME}/ndk-bundle
+        run: ls -a ${ANDROID_HOME}/ndk
 
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;20.0.5594570' | grep -v = || true
 
       - name: List NDK Again
-        run: ls -a ${ANDROID_HOME}/ndk && ls -a ${ANDROID_HOME}/ndk-bundle
+        run: ls -a ${ANDROID_HOME}/ndk
 
       - name: Build Dcrlibwallet
         run: ./dcrlibwallet-ci-build.sh
