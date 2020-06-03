@@ -19,27 +19,16 @@ jobs:
         with:
           go-version: 1.13
 
-      - name: Cache (Gradle)
+      - name: Cache (Gradle & Go Mod)
         uses: actions/cache@v2
         id: cache
         with:
           path: |
             ~/.gradle/caches
             ~/go/pkg/mod
-            ${ANDROID_HOME}/ndk/20.0.5594570
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: List NDK
-        run: ls -a ${ANDROID_HOME}/ndk
-
-      - name: Install NDK
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;20.0.5594570' | grep -v = || true
-
-      - name: List NDK Again
-        run: ls -a ${ANDROID_HOME}/ndk
 
       - name: Build Dcrlibwallet
         run: ./dcrlibwallet-ci-build.sh
