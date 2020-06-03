@@ -1,9 +1,9 @@
-echo | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses
+echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
-$ANDROID_HOME/tools/bin/avdmanager list avd
-echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -n testemu -k 'system-images;android-28;google_apis;x86'
-$ANDROID_HOME/tools/bin/avdmanager list avd
-$ANDROID_HOME/tools/emulator -avd testemu -no-window -no-boot-anim -no-audio -verbose &
+sudo $ANDROID_HOME/tools/bin/avdmanager list avd
+echo no | sudo $ANDROID_HOME/tools/bin/avdmanager create avd -n testemu -k 'system-images;android-28;google_apis;x86'
+sudo $ANDROID_HOME/tools/bin/avdmanager list avd
+sudo $ANDROID_HOME/tools/emulator -avd testemu -no-window -no-boot-anim -no-audio -verbose &
 
 $ANDROID_HOME/platform-tools/adb wait-for-device
 

@@ -20,16 +20,18 @@ jobs:
           go-version: 1.13
 
       - name: List Home Files
-        run: ls -a
+        run: ls -a ~/.gradle
 
       - name: Cache (Gradle)
         uses: actions/cache@v1
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Install NDK
-        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;20.0.5594570'
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;20.0.5594570' | grep -v = || true
 
       - name: Build Dcrlibwallet
         run: ./dcrlibwallet-ci-build.sh
