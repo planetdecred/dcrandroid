@@ -28,16 +28,40 @@ internal fun childAtPosition(parentMatcher: Matcher<View>, position: Int): Match
     }
 }
 
-internal fun childHasParent(parentId: Int): Matcher<View> {
+internal fun childHasParentId(parentId: Int): Matcher<View> {
 
     return object : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description) {
+            description.appendText("Has parent Id ")
         }
 
         public override fun matchesSafely(view: View): Boolean {
             var viewParent: View? = view.parent as View
             do {
                 if (viewParent!!.id == parentId) {
+                    return true
+                }
+
+                viewParent = viewParent.parent as? View // this casting will return null if it's not a View instance
+            } while (viewParent != null)
+
+            return false
+        }
+    }
+}
+
+internal fun childHasParentMatcher(parentMatcher: Matcher<View>): Matcher<View> {
+
+    return object : TypeSafeMatcher<View>() {
+        override fun describeTo(description: Description) {
+            description.appendText("Child has parent matcher")
+            parentMatcher.describeTo(description)
+        }
+
+        public override fun matchesSafely(view: View): Boolean {
+            var viewParent: View? = view.parent as View
+            do {
+                if (parentMatcher.matches(viewParent!!)) {
                     return true
                 }
 

@@ -17,28 +17,27 @@ import org.junit.Assert
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-object WaitForUIUpdate {
+val actionDelay = 1000L
 
-    fun waitForWithId(id: Int) {
+fun waitForWithId(id: Int) {
 
-        var element: ViewInteraction
-        do {
-            waitFor(500)
+    var element: ViewInteraction
+    do {
+        waitFor(500)
 
-            // simple example using withText Matcher.
-            element = Espresso.onView(allOf(ViewMatchers.withId(id), ViewMatchers.isDisplayed()))
-        } while (!MatcherExtension.exists(element))
+        // simple example using withText Matcher.
+        element = Espresso.onView(allOf(ViewMatchers.withId(id), ViewMatchers.isDisplayed()))
+    } while (!MatcherExtension.exists(element))
 
-    }
+}
 
-    fun waitFor(ms: Long) {
-        val signal = CountDownLatch(1)
+fun waitFor(ms: Long) {
+    val signal = CountDownLatch(1)
 
-        try {
-            signal.await(ms, TimeUnit.MILLISECONDS)
-        } catch (e: InterruptedException) {
-            Assert.fail(e.message)
-        }
+    try {
+        signal.await(ms, TimeUnit.MILLISECONDS)
+    } catch (e: InterruptedException) {
+        Assert.fail(e.message)
     }
 }
 
