@@ -89,7 +89,6 @@ class CreateAndDeleteWalletTest {
 
 
         // App will delete wallet and go back to splash screen
-        waitFor(actionDelay)
         waitForWithId(R.id.ll_create_wallet)
 
         onView(allOf(withId(R.id.ll_create_wallet), isDisplayed())).perform(click())

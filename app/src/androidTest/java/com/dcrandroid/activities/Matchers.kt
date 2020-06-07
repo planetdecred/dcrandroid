@@ -54,12 +54,12 @@ internal fun childHasParentMatcher(parentMatcher: Matcher<View>): Matcher<View> 
 
     return object : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description) {
-            description.appendText("Child has parent matcher")
+            description.appendText("Child has parent matcher ")
             parentMatcher.describeTo(description)
         }
 
         public override fun matchesSafely(view: View): Boolean {
-            var viewParent: View? = view.parent as View
+            var viewParent: View? = view.parent as? View
             do {
                 if (parentMatcher.matches(viewParent!!)) {
                     return true
