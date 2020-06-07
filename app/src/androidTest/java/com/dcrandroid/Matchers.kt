@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid
 
 import android.view.View
 import android.view.ViewGroup

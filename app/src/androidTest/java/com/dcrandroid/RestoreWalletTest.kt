@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid
 
 
 import androidx.test.espresso.Espresso.onView
@@ -15,6 +15,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.dcrandroid.R
+import com.dcrandroid.activities.SplashScreenActivity
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
