@@ -109,6 +109,16 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                     else -> toolbar_title.setText(R.string.transferred)
                 }
             }
+            else -> {
+                val title = when(transaction.type){
+                    Dcrlibwallet.TxTypeTicketPurchase -> R.string.ticket_purchase
+                    Dcrlibwallet.TxTypeVote -> R.string.vote
+                    Dcrlibwallet.TxTypeRevocation -> R.string.revoked
+                    else -> R.string.tx_sort_coinbase
+                }
+
+                toolbar_title.setText(title)
+            }
         }
 
         tv_toggle_details.setOnClickListener(this)

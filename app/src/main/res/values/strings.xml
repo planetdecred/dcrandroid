@@ -384,6 +384,7 @@
     <string name="tx_sort_transferred">Transferred (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
+    <string name="ticket_purchase">Ticket Purchase</string>
     <string name="immature">Immature</string>
     <string name="live">Live</string>
     <string name="receive_dcr">Receive DCR</string>

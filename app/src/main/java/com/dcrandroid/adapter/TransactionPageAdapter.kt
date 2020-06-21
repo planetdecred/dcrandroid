@@ -125,10 +125,9 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                 }
                 Dcrlibwallet.TxTypeVote -> {
                     title = R.string.vote
-                    holder.itemView.vote_reward.show()
-
-                    val reward = CoinFormat.formatDecred(104044861) // TODO:
-                    holder.itemView.vote_reward.text = CoinFormat.format("+$reward DCR", 0.715f)
+//                    holder.itemView.vote_reward.show()
+//                    val reward = CoinFormat.formatDecred(104044861) // TODO:
+//                    holder.itemView.vote_reward.text = CoinFormat.format("+$reward DCR", 0.715f)
                 }
                 Dcrlibwallet.TxTypeRevocation -> {
                     title = R.string.revoked
