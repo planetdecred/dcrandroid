@@ -42,9 +42,9 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         tx_details_icon.setImageResource(transaction.iconResource)
 
-        val txAmount = if(transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular){
+        val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
             -transaction.amount
-        }else{
+        } else {
             transaction.amount
         }
         tx_details_amount.text = CoinFormat.format(txAmount, 0.625f)
