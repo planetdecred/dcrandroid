@@ -129,20 +129,27 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
                     title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
                         R.string.immature
                     } else {
-                        R.string.live
+                        if(wallet.ticketHasVotedOrRevoked(transaction.hash)){
+                            R.string.purchased
+                        } else {
+                            R.string.live
+                        }
                     }
                 }
                 Dcrlibwallet.TxTypeVote -> {
                     title = R.string.vote
-                    holder.itemView.vote_reward.show()
-                    holder.itemView.vote_reward.text = CoinFormat.format(transaction.voteReward, 0.715f)
                 }
                 Dcrlibwallet.TxTypeRevocation -> {
                     title = R.string.revoked
                 }
             }
 
-            if (transaction.type == Dcrlibwallet.TxTypeVote) {
+            if (transaction.type == Dcrlibwallet.TxTypeVote || transaction.type == Dcrlibwallet.TxTypeRevocation) {
+                holder.itemView.vote_reward.apply {
+                    text = CoinFormat.format(transaction.voteReward, 0.715f)
+                    show()
+                }
+
                 holder.itemView.days_to_vote.apply {
                     val daysToVoteOrRevoke = transaction.daysToVoteOrRevoke
                     text = if (daysToVoteOrRevoke == 1) {

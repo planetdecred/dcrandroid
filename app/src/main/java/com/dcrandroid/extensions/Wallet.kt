@@ -14,11 +14,6 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 
 fun Wallet.walletAccounts(): ArrayList<Account> {
-
-    val requiredConfirmations = when {
-        WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
-        else -> Constants.REQUIRED_CONFIRMATIONS
-    }
     return parseAccounts(this.accounts).accounts
 }
 

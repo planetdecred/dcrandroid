@@ -387,6 +387,7 @@
     <string name="ticket_purchase">Ticket Purchase</string>
     <string name="immature">Immature</string>
     <string name="live">Live</string>
+    <string name="purchased">Purchased</string>
     <string name="receive_dcr">Receive DCR</string>
     <string name="selected_account_name">%1$s (%2$s)</string>
     <string name="decred_qr_address_prefix">decred:%1$s</string>
