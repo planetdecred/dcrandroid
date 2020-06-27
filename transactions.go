@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"sort"
 
+	"github.com/asdine/storm"
 	"github.com/decred/dcrd/chaincfg/chainhash"
 	"github.com/raedahgroup/dcrlibwallet/txhelper"
 	"github.com/raedahgroup/dcrlibwallet/txindex"
@@ -115,6 +116,18 @@ func (mw *MultiWallet) GetTransactions(offset, limit, txFilter int32, newestFirs
 
 func (wallet *Wallet) CountTransactions(txFilter int32) (int, error) {
 	return wallet.txDB.Count(txFilter, &Transaction{})
+}
+
+func (wallet *Wallet) TicketHasVotedOrRevoked(ticketHash string) (bool, error) {
+	err := wallet.txDB.FindOne("TicketSpentHash", ticketHash, &Transaction{})
+	if err != nil {
+		if err == storm.ErrNotFound {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
 }
 
 func TxMatchesFilter(txType string, txDirection, txFilter int32) bool {

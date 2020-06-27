@@ -59,3 +59,7 @@ func (db *DB) Count(txFilter int32, txObj interface{}) (int, error) {
 
 	return count, nil
 }
+
+func (db *DB) FindOne(fieldName string, value interface{}, txObj interface{}) error {
+	return db.txDB.One(fieldName, value, txObj)
+}

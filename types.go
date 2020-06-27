@@ -151,9 +151,12 @@ type Transaction struct {
 	Outputs   []*TxOutput `json:"outputs"`
 
 	// Vote Info
-	VoteVersion    int32  `json:"vote_version"`
-	LastBlockValid bool   `json:"last_block_valid"`
-	VoteBits       string `json:"vote_bits"`
+	VoteVersion        int32  `json:"vote_version"`
+	LastBlockValid     bool   `json:"last_block_valid"`
+	VoteBits           string `json:"vote_bits"`
+	VoteReward         int64  `json:"vote_reward"`
+	TicketSpentHash    string `storm:"unique" json:"ticket_spent_hash"`
+	DaysToVoteOrRevoke int32  `json:"days_to_vote_revoke"`
 }
 
 type TxInput struct {

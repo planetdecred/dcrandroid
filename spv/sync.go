@@ -297,7 +297,7 @@ func (s *Syncer) Run(ctx context.Context) error {
 	for id, w := range s.wallets {
 		tipHash, tipHeight := w.MainChainTip(ctx)
 		log.Infof("[%d] Headers synced through block %v height %d", id, &tipHash, tipHeight)
-		
+
 		rescanPoint, err := w.RescanPoint(ctx)
 		if err != nil {
 			return err

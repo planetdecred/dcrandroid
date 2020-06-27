@@ -37,8 +37,9 @@ require (
 	github.com/raedahgroup/dcrlibwallet/spv v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.3.0 // indirect
 	go.etcd.io/bbolt v1.3.3
-	golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586
+	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898 // indirect
 	google.golang.org/appengine v1.5.0 // indirect
 )
 
