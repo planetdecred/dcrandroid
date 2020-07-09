@@ -151,6 +151,10 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         }
     }
 
+    override fun onUpdateData() {
+        loadTransactions()
+    }
+
     private fun loadTransactions(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
 
         if (loading.get()) {
@@ -210,6 +214,11 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     }
 
     override fun onTransaction(transactionJson: String?) {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
+
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
         if (newTxHashes.indexOf(transaction.hash) == -1) {
             newTxHashes.add(transaction.hash)
@@ -227,6 +236,10 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
         if (walletID == wallet!!.id) {
+            if (!isForeground) {
+                requiresDataUpdate = true
+                return
+            }
             GlobalScope.launch(Dispatchers.Main) {
                 for (i in 0 until transactions.size) {
                     if (transactions[i].hash == hash) {
@@ -240,6 +253,10 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
         if (walletID == wallet!!.id) {
+            if (!isForeground) {
+                requiresDataUpdate = true
+                return
+            }
             GlobalScope.launch(Dispatchers.Main) {
                 val unconfirmedTransactions = transactions.filter { it.confirmations <= 2 }.count()
                 if (unconfirmedTransactions > 0) {
@@ -250,6 +267,10 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     }
 
     override fun onSyncCompleted() {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
         loadTransactions()
     }
 

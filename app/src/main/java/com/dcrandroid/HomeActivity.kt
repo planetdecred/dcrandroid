@@ -245,7 +245,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
                     MultiWalletTransactions()
                 } else {
                     val wallet = multiWallet!!.openedWalletsList()[0]
-                    TransactionsFragment().setWalletID(wallet.id)
+                    val fragment = TransactionsFragment().setWalletID(wallet.id)
+                    fragment.removeListenersOnStop = false
+                    fragment
                 }
             }
             2 -> WalletsFragment()

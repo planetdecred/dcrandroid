@@ -51,6 +51,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         private val newTxHashes = ArrayList<String>()
     }
 
+    override var removeListenersOnStop = false
+
     private val transactions: ArrayList<Transaction> = ArrayList()
     private var adapter: TransactionListAdapter? = null
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
@@ -182,6 +184,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         }
     }
 
+    override fun onUpdateData() {
+        loadBalance()
+        loadTransactions()
+    }
+
     private fun isOffline(): Boolean {
 
         val isWifiConnected = context?.let { NetworkUtil.isWifiConnected(it) }
@@ -202,6 +209,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onTransaction(transactionJson: String?) {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
         loadBalance()
 
         val transaction = gson.fromJson(transactionJson, Transaction::class.java)
@@ -223,6 +234,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
         loadBalance()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -237,6 +252,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
         loadBalance()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -248,6 +267,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onSyncCompleted() {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
         loadBalance()
         loadTransactions()
     }

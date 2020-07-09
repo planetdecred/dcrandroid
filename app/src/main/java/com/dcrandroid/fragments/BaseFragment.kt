@@ -15,6 +15,9 @@ import dcrlibwallet.*
 open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificationListener {
 
     var TAG = this.javaClass.name
+    var isForeground = false
+    var requiresDataUpdate = false
+    open var removeListenersOnStop = true
 
     private val walletData: WalletData = WalletData.instance
     internal val multiWallet: MultiWallet
@@ -29,10 +32,26 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         multiWallet.addTxAndBlockNotificationListener(this, TAG)
     }
 
+    override fun onResume() {
+        super.onResume()
+        isForeground = true
+        if (requiresDataUpdate) {
+            requiresDataUpdate = false
+            onUpdateData()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isForeground = false
+    }
+
     override fun onStop() {
         super.onStop()
-        multiWallet.removeSyncProgressListener(TAG)
-        multiWallet.removeTxAndBlockNotificationListener(TAG)
+        if (removeListenersOnStop) {
+            multiWallet.removeSyncProgressListener(TAG)
+            multiWallet.removeTxAndBlockNotificationListener(TAG)
+        }
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
@@ -68,6 +87,8 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
             homeActivity.switchFragment(position)
         }
     }
+
+    open fun onUpdateData() {}
 
     // -- Sync Progress Listener
 
