@@ -50,6 +50,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_back_to_wallet"
         style="@style/textViewButton.Outline"
         android:padding="15dp"
         android:gravity="center"
