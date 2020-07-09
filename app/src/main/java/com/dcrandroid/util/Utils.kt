@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
@@ -158,10 +159,10 @@ object Utils {
     }
 
     fun sendTransactionNotification(context: Context, manager: NotificationManager, amount: String,
-                                    nonce: Int, walletID: Long) {
+                                    transaction: Transaction) {
 
         val multiWallet = WalletData.multiWallet!!
-        val wallet = multiWallet.walletWithID(walletID)
+        val wallet = multiWallet.walletWithID(transaction.walletID)
 
         val title = if (multiWallet.openedWalletsCount() > 1) {
             context.getString(R.string.wallet_new_transaction, wallet.name)
@@ -169,7 +170,7 @@ object Utils {
             context.getString(R.string.new_transaction)
         }
 
-        val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
+        val incomingNotificationsKey = transaction.walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
         val incomingNotificationConfig = multiWallet.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION)
 
         val notificationSound = when (incomingNotificationConfig) {
@@ -186,6 +187,8 @@ object Utils {
 
         val launchIntent = Intent(context, HomeActivity::class.java)
         launchIntent.action = Constants.NEW_TRANSACTION_NOTIFICATION
+        launchIntent.putExtra(Constants.TRANSACTION, transaction)
+
         val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context, Constants.TRANSACTION_CHANNEL_ID)
                 .setContentTitle(title)
@@ -210,7 +213,7 @@ object Utils {
                 .build()
 
         val notification = notificationBuilder.build()
-        manager.notify(nonce, notification)
+        manager.notify(transaction.amount.toInt() + transaction.inputs!!.size, notification)
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary)
     }
 

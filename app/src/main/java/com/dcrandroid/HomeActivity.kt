@@ -30,6 +30,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.*
 import com.dcrandroid.dialog.send.SendDialog
+import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
@@ -350,8 +351,19 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
-                    transaction.amount.toInt() + transaction.inputs!!.size, transaction.walletID)
+                    transaction)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent == null) {
+            return
+        }
+        val tx = intent.getSerializableExtra(Constants.TRANSACTION) as Transaction
+        TransactionDetailsDialog(
+                Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hashBytes))
+        ).show(this)
     }
 
     // -- Sync Progress Listener

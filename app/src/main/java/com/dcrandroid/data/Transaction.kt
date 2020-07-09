@@ -10,6 +10,7 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import dcrlibwallet.Dcrlibwallet
 import java.io.Serializable
@@ -140,6 +141,12 @@ class Transaction : Serializable {
 
         @SerializedName("address")
         var address: String? = null
+    }
+
+    companion object {
+        fun from(txJson: String): Transaction {
+            return Gson().fromJson(txJson, Transaction::class.java)
+        }
     }
 }
 

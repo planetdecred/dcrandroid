@@ -29,6 +29,7 @@ public class Constants {
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
             ENCRYPTION_IV = "encryption_iv",
+            TRANSACTION = "tx_hash",
             TRANSACTION_CHANNEL_ID = "new_transaction",
             SELECTED_SOURCE_ACCOUNT = "selected_source_account_id",
             SELECTED_DESTINATION_ACCOUNT = "selected_dest_account_no",
