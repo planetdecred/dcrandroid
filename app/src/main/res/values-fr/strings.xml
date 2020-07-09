@@ -64,6 +64,7 @@
     <string name="always">Toujours</string>
     <string name="rename">Renommer</string>
     <string name="create">Créer</string>
+    <string name="_import">Importer</string>
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet_sheet_title">Renommer le porte-monnaie</string>
     <string name="wallet_name">Nom du porte-monnaie</string>
@@ -72,6 +73,7 @@
     <string name="confirm_to_remove">Confirmer la suppression</string>
     <string name="remove_wallet">Supprimer le porte-monnaie de cet appareil</string>
     <string name="remove_wallet_prompt">Supprimer le porte-monnaie de cet application ?</string>
+    <string name="remove_watch_wallet_prompt"> Supprimer le porte-monnaie en lecture seule de cet appareil?</string>
     <string name="remove_wallet_message">Assurez-vous d\'avoir une sauvegarde de votre phrase de récupération avant de supprimer le porte-monnaie.</string>
 
     <!--/General-->
@@ -208,10 +210,12 @@
     <string name="not_enough_funds">Fonds insuffisants.</string>
     <string name="empty_seed">Phrase de récupération vide</string>
     <string name="not_connected">Pas de connexion au réseau Decred</string>
+    <string name="watch_only_wallet_error">Le seul porte-monnaie est en lecture seule</string>
     <string name="passphrase_required">La phrase secrète est requise</string>
     <string name="wallet_not_loaded">Le porte-monnaie n\'est pas chargé</string>
     <string name="err_no_peers">Le réseau Decred est injoignable à cause d\'un manque de pairs.</string>
     <string name="not_enough_funds_synced">Pas assez de fonds (ou pas connecté).</string>
+    <string name="error_occurred">Une erreur s\'est produite</string>
     <!--/Error Messages-->
 
     <!--Security Fragment-->
@@ -386,6 +390,7 @@
     <string name="cancel_sync_create_wallet">Impossible de créer un porte-monnaie lorsque la synchronisation est en cours</string>
     <string name="cancel_sync_delete_wallet">Impossible de supprimer un porte-monnaie lorsque la synchronisation est en cours</string>
     <string name="wallet_created">Porte-monnaie créé</string>
+    <string name="watch_only_wallet_created">Porte-monnaie en lecture seule importé</string>
     <string name="amount">Montant</string>
     <string name="processing_time">Temps d\'exécution</string>
     <string name="fee_rate">Taux de frais</string>
@@ -403,6 +408,8 @@
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
     <string name="balance_after_send">Solde après envoi</string>
     <string name="confirm_to_send">Confirmer l\'envoi</string>
+    <string name="confirm_show_seed">"Confirmer pour afficher la phrase de récupération"</string>
+    <string name="confirm_verify_seed">"Confirmer pour vérifier la phrase de récupération"</string>
     <string name="send_from_account"><![CDATA[Envoi depuis <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
     <string name="send_invalid">Pas valide pour envoi</string>
     <string name="to_destination_address">Vers adresse de destination</string>
@@ -461,7 +468,9 @@
     <string name="keep_in_mind">Rappelez-vous</string>
     <string name="invalid_restore_seed">Échec de la restauration. Merci de vérifier tous les mots et réessayer.</string>
     <string name="create_watch_only_wallet">Créer un porte-monnaie en lecture seule</string>
-    <string name="extended_public_key">Clé publique étendue</string>
+    <string name="extended_public_key">Clé Publique Étendue</string>
+    <string name="extended_public_key2">Clé publique étendue</string>
+    <string name="ext_pub_key_info"><![CDATA[Dans <b>Decrediton</b>, sous la section <b>Accounts</b>, étendre le compte que vous voulez voir et choisir <b>Reveal Pubkey</b>.]]></string>
     <string name="wallet_name_exists">Le nom du porte-monnaie existe</string>
     <string name="reserved_wallet_name">\'wallet-\' est un préfixe réservé</string>
     <string name="invalid_key">La clé est invalide</string>
@@ -516,5 +525,16 @@
     <string name="first_run_notice">Votre phrase de récupération à 33 mots est votre porte-monnaie, convervez-la en sécurité. Sans elle vos fonds ne peuvent pas être récupérés si votre appareil devait être perdu ou détruit. La synchronisaion initiale du porte-monnaie sera plus longue que normalement.</string>
     <string name="welcome_screen_text">Bienvenue dans Decred Wallet, un porte-monnaie mobile sécurisé et open-source.</string>
     <string name="mywallet">mywallet</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="yesterday">Hier</string>
+    <string name="month_day_format">MMMM dd</string>
+    <string name="date_format">MMMM dd, yyyy</string>
+    <string name="date_time_format">MMM dd, yyyy hh:mma</string>
+    <string name="watch_only_wallets">Porte-monnaies en lecture seule</string>
+    <string name="wallets_limit_error">Limite de 1 porte-monnaie pour 1 giga de ram sur l\'appareil</string>
+    <string name="disconnect_add_wallet">Déconnecter/annuler la synchronisation avant d\'ajouter un porte-monnaie</string>
+    <string name="disconnect_delete_wallet">Déconnecter/annuler la synchronisation avant de supprimer un porte-monnaie</string>
+    <string name="seed_backup_success_msg">Soyez certain de conserver votre phrase de récupération dans un lieu sûr.</string>
+    <string name="seed_backup_verified">Votre phrase de récupération est vérifiée</string>
 
 </resources>
