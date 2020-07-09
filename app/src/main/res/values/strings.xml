@@ -49,7 +49,7 @@
     <string name="syncing">Syncing</string>
     <string name="syncing_ellipsis">Syncing…</string>
     <string name="connected_to_a_peer">Connected to a peer</string>
-    <string name="connected_to_n_peer">Connected to %1$d peer</string>
+    <string name="connected_to_n_peer">Connected to %1$d peers</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
     <string name="user_agent_dialog_title">Set up user agent</string>
