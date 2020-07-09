@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -47,6 +48,42 @@
                 android:textColor="@color/darkBlueTextColor"
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro" />
+
+            <LinearLayout
+                android:id="@+id/rebroadcast_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@drawable/reconnect_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/margin_padding_size_16"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:paddingStart="@dimen/margin_padding_size_4"
+                android:paddingTop="@dimen/margin_padding_size_4"
+                android:paddingEnd="9dp"
+                android:paddingBottom="@dimen/margin_padding_size_4">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:id="@+id/cancel_icon"
+                    app:srcCompat="@drawable/ic_rebroadcast" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_4"
+                    android:includeFontPadding="false"
+                    android:text="@string/rebroadcast"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:id="@+id/tv_reconnect"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="40dp"
