@@ -54,7 +54,8 @@ type activeSyncData struct {
 
 	rescanStartTime int64
 
-	totalInactiveSeconds int64
+	totalInactiveSeconds     int64
+	totalFetchedHeadersCount int32
 }
 
 const (
@@ -86,6 +87,7 @@ func (mw *MultiWallet) initActiveSyncData() {
 		headersFetchTimeSpent:     -1,
 		addressDiscoveryStartTime: -1,
 		totalDiscoveryTimeSpent:   -1,
+		totalFetchedHeadersCount:  0,
 	}
 	mw.syncData.mu.Unlock()
 }
