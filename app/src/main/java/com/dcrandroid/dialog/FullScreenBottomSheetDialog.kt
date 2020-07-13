@@ -17,12 +17,20 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
+import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.WalletData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
+import dcrlibwallet.*
 
-open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null) : BottomSheetDialogFragment() {
+open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null) : BottomSheetDialogFragment(),
+        SyncProgressListener, TxAndBlockNotificationListener {
+
+    var TAG = this.javaClass.name
+    var isForeground = false
+    var requiresDataUpdate = false
 
     protected val multiWallet = WalletData.multiWallet!!
 
@@ -90,5 +98,87 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
             super.show(supportFragmentManager, javaClass.name)
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        multiWallet.removeSyncProgressListener(TAG)
+        multiWallet.removeTxAndBlockNotificationListener(TAG)
+
+        multiWallet.addSyncProgressListener(this, TAG)
+        multiWallet.addTxAndBlockNotificationListener(this, TAG)
+
+        isForeground = true
+        if (requiresDataUpdate) {
+            requiresDataUpdate = false
+            onTxOrBalanceUpdateRequired(null)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isForeground = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        multiWallet.removeSyncProgressListener(TAG)
+        multiWallet.removeTxAndBlockNotificationListener(TAG)
+    }
+
+    open fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
+    }
+
+    override fun onHeadersRescanProgress(p0: HeadersRescanProgressReport?) {
+
+    }
+
+    override fun onAddressDiscoveryProgress(p0: AddressDiscoveryProgressReport?) {
+
+    }
+
+    override fun onSyncCanceled(p0: Boolean) {
+
+    }
+
+    override fun onPeerConnectedOrDisconnected(p0: Int) {
+
+    }
+
+    override fun onSyncCompleted() {
+        onTxOrBalanceUpdateRequired(null)
+    }
+
+    override fun onSyncStarted(p0: Boolean) {
+
+    }
+
+    override fun onHeadersFetchProgress(p0: HeadersFetchProgressReport?) {
+
+    }
+
+    override fun onSyncEndedWithError(p0: Exception?) {
+
+    }
+
+    override fun debug(p0: DebugInfo?) {
+
+    }
+
+    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        onTxOrBalanceUpdateRequired(walletID)
+    }
+
+    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+        onTxOrBalanceUpdateRequired(walletID)
+    }
+
+    override fun onTransaction(transactionJson: String?) {
+        val transaction = Gson().fromJson(transactionJson, Transaction::class.java)
+        onTxOrBalanceUpdateRequired(transaction.walletID)
     }
 }

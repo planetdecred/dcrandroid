@@ -129,6 +129,17 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         clearEstimates()
     }
 
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        super.onTxOrBalanceUpdateRequired(walletID)
+        GlobalScope.launch(Dispatchers.Main) {
+            sourceAccountSpinner.refreshBalance()
+
+            if (destinationAddressCard.isSendToAccount) {
+                destinationAddressCard.destinationAccountSpinner.refreshBalance()
+            }
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         savedInstanceState = Bundle()

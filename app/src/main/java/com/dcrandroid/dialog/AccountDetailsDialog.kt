@@ -20,6 +20,9 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_details.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val account: Account,
                            val renameAccount: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
@@ -34,24 +37,12 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val balance = account.balance
-
         tv_account_name.text = if (wallet.isWatchingOnlyWallet) {
             wallet.name
         } else account.accountName
 
-        account_details_total_balance.text = CoinFormat.format(account.totalBalance, 0.625f)
-        account_details_spendable.text = CoinFormat.format(balance.spendable)
 
-        val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
-        if (stakeSum > 0) {
-            account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
-            account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
-            account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
-            account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
-        } else {
-            staking_balance.hide()
-        }
+        populateBalances()
 
         // properties
         account_details_number.text = account.accountNumber.toString()
@@ -96,7 +87,6 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
             }.show(activity.supportFragmentManager, null)
         }
 
-
         account_details_sv.viewTreeObserver.addOnScrollChangedListener {
             top_bar.elevation = if (account_details_sv.scrollY == 0) {
                 0f
@@ -105,6 +95,36 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
             }
         }
 
+    }
+
+    private fun populateBalances() {
+        val balance = wallet.getAccountBalance(account.accountNumber)
+
+        // Total & spendable balance
+        account_details_total_balance.text = CoinFormat.format(balance.total, 0.625f)
+        account_details_spendable.text = CoinFormat.format(balance.spendable)
+
+        // Staking balances
+        val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
+        if (stakeSum > 0) {
+            account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
+            account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
+            account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
+            account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
+        } else {
+            staking_balance.hide()
+        }
+    }
+
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        super.onTxOrBalanceUpdateRequired(walletID)
+        if (walletID != null && walletID != account.walletID) {
+            return
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            populateBalances()
+        }
     }
 
 }

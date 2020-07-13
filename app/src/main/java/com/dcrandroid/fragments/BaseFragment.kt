@@ -9,7 +9,9 @@ package com.dcrandroid.fragments
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
+import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.WalletData
+import com.google.gson.Gson
 import dcrlibwallet.*
 
 open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificationListener {
@@ -17,7 +19,6 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     var TAG = this.javaClass.name
     var isForeground = false
     var requiresDataUpdate = false
-    open var removeListenersOnStop = true
 
     private val walletData: WalletData = WalletData.instance
     internal val multiWallet: MultiWallet
@@ -37,7 +38,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         isForeground = true
         if (requiresDataUpdate) {
             requiresDataUpdate = false
-            onUpdateData()
+            onTxOrBalanceUpdateRequired(null)
         }
     }
 
@@ -46,12 +47,10 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         isForeground = false
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (removeListenersOnStop) {
-            multiWallet.removeSyncProgressListener(TAG)
-            multiWallet.removeTxAndBlockNotificationListener(TAG)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        multiWallet.removeSyncProgressListener(TAG)
+        multiWallet.removeTxAndBlockNotificationListener(TAG)
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
@@ -88,7 +87,12 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         }
     }
 
-    open fun onUpdateData() {}
+    open fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        if (!isForeground) {
+            requiresDataUpdate = true
+            return
+        }
+    }
 
     // -- Sync Progress Listener
 
@@ -104,7 +108,9 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
 
     override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {}
 
-    override fun onSyncCompleted() {}
+    override fun onSyncCompleted() {
+        onTxOrBalanceUpdateRequired(null)
+    }
 
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {}
 
@@ -113,9 +119,16 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     override fun debug(debugInfo: DebugInfo?) {}
 
 
-    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {}
+    override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
+        onTxOrBalanceUpdateRequired(walletID)
+    }
 
-    override fun onBlockAttached(walletID: Long, blockHeight: Int) {}
+    override fun onBlockAttached(walletID: Long, blockHeight: Int) {
+        onTxOrBalanceUpdateRequired(walletID)
+    }
 
-    override fun onTransaction(transactionJson: String?) {}
+    override fun onTransaction(transactionJson: String?) {
+        val transaction = Gson().fromJson(transactionJson, Transaction::class.java)
+        onTxOrBalanceUpdateRequired(transaction.walletID)
+    }
 }

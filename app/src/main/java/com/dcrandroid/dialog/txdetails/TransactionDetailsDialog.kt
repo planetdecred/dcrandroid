@@ -26,6 +26,9 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_details.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,21 +54,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         val timestamp = sdf.format(transaction.timestampMillis)
         tx_timestamp.text = timestamp
 
-        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
-
-        status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
-
-        if (transaction.confirmations > 1 || spendUnconfirmedFunds) {
-            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_confirmations, transaction.confirmations), 0)
-
-            tx_block_row.show()
-            tx_block.text = transaction.height.toString()
-        } else {
-            tv_confirmations.apply {
-                setText(R.string.pending)
-                setTextColor(context.getColor(R.color.lightGrayTextColor))
-            }
-        }
+        setConfirmationStatus()
 
         view_dcrdata.setOnClickListener(this)
         iv_info.setOnClickListener(this)
@@ -114,6 +103,37 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         tv_toggle_details.setOnClickListener(this)
         tx_details_scroll.viewTreeObserver.addOnScrollChangedListener(this)
         populateInputOutput()
+    }
+
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        super.onTxOrBalanceUpdateRequired(walletID)
+        GlobalScope.launch(Dispatchers.Main) {
+            setConfirmationStatus()
+        }
+    }
+
+    private fun setConfirmationStatus() {
+        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+
+        status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
+        tv_confirmations.setTextColor(context!!.getColor(R.color.blueGraySecondTextColor))
+
+        if (transaction.confirmations >= Dcrlibwallet.DefaultRequiredConfirmations || spendUnconfirmedFunds) {
+            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_confirmations, transaction.confirmations), 0)
+
+            tx_block_row.show()
+            tx_block.text = transaction.height.toString()
+        } else if (transaction.confirmations == 1) {
+            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_pending_confirmation, transaction.confirmations), 0)
+
+            tx_block_row.show()
+            tx_block.text = transaction.height.toString()
+        } else {
+            tv_confirmations.apply {
+                setText(R.string.pending)
+                setTextColor(context.getColor(R.color.lightGrayTextColor))
+            }
+        }
     }
 
     // returns first external output address if any

@@ -151,7 +151,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         }
     }
 
-    override fun onUpdateData() {
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         loadTransactions()
     }
 

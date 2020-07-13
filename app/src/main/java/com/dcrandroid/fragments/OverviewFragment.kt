@@ -51,8 +51,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         private val newTxHashes = ArrayList<String>()
     }
 
-    override var removeListenersOnStop = false
-
     private val transactions: ArrayList<Transaction> = ArrayList()
     private var adapter: TransactionListAdapter? = null
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
@@ -143,21 +141,32 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         syncLayoutUtil = null
     }
 
-    override fun onScrollChanged() {
-        val scrollY = scrollView.scrollY
+    private fun mainBalanceIsVisible(): Boolean {
+        val scrollY = this.scrollView.scrollY
         val textSize = context?.resources?.getDimension(R.dimen.visible_balance_text_size)
 
         if (textSize != null) {
             if (scrollY > textSize / 2) {
-                setToolbarTitle(balanceTextView.text, true)
-            } else {
-                setToolbarTitle(R.string.overview, false)
+                return true
             }
+        }
+
+        return false
+    }
+
+    override fun onScrollChanged() {
+        if (mainBalanceIsVisible()) {
+            setToolbarTitle(balanceTextView.text, true)
+        } else {
+            setToolbarTitle(R.string.overview, false)
         }
     }
 
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
         balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
+        if (mainBalanceIsVisible()) {
+            setToolbarTitle(balanceTextView.text, true)
+        }
     }
 
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
@@ -184,7 +193,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         }
     }
 
-    override fun onUpdateData() {
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         loadBalance()
         loadTransactions()
     }
@@ -264,15 +273,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
-    }
-
-    override fun onSyncCompleted() {
-        if (!isForeground) {
-            requiresDataUpdate = true
-            return
-        }
-        loadBalance()
-        loadTransactions()
     }
 }
 
