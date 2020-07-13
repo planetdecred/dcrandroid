@@ -42,6 +42,19 @@ class Transaction : Serializable {
 
     @SerializedName("timestamp")
     var timestamp: Long = 0
+
+    @SerializedName("ticket_spent_hash")
+    var ticketSpentHash: String = ""
+
+    @SerializedName("days_to_vote_revoke")
+    var daysToVoteOrRevoke: Int = 0
+
+    @SerializedName("vote_reward")
+    var voteReward: Long = 0
+
+    val timestampMillis: Long
+        get() = timestamp * 1000
+
     val confirmations: Int
         get() {
             return if (height == Dcrlibwallet.BlockHeightInvalid) {
@@ -64,9 +77,6 @@ class Transaction : Serializable {
         get() {
             return WalletData.multiWallet!!.walletWithID(walletID)?.name
         }
-
-    val timestampMillis: Long
-        get() = timestamp * 1000
 
     val iconResource: Int
         get() {

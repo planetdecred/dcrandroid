@@ -41,7 +41,13 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         super.onActivityCreated(savedInstanceState)
 
         tx_details_icon.setImageResource(transaction.iconResource)
-        tx_details_amount.text = CoinFormat.format(transaction.amount, 0.625f)
+
+        val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
+            -transaction.amount
+        } else {
+            transaction.amount
+        }
+        tx_details_amount.text = CoinFormat.format(txAmount, 0.625f)
 
         val sdf = SimpleDateFormat(getString(R.string.date_time_format), Locale.getDefault())
 
@@ -108,6 +114,16 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                     }
                     else -> toolbar_title.setText(R.string.transferred)
                 }
+            }
+            else -> {
+                val title = when(transaction.type){
+                    Dcrlibwallet.TxTypeTicketPurchase -> R.string.ticket_purchase
+                    Dcrlibwallet.TxTypeVote -> R.string.vote
+                    Dcrlibwallet.TxTypeRevocation -> R.string.revoked
+                    else -> R.string.tx_sort_coinbase
+                }
+
+                toolbar_title.setText(title)
             }
         }
 

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
@@ -45,10 +46,26 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
         if (stakeSum > 0) {
-            account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
-            account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
-            account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
-            account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
+            if(balance.immatureReward > 0) {
+                account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
+                account_details_imm_rewards_row.show()
+            }
+
+            if(balance.lockedByTickets > 0){
+                account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
+                account_details_locked_by_tickets_row.show()
+            }
+
+            if(balance.votingAuthority > 0){
+                account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
+                account_details_voting_authority_row.show()
+            }
+
+            if(balance.immatureStakeGeneration > 0){
+                account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
+                account_details_imm_stake_gen_row.show()
+            }
+
         } else {
             staking_balance.hide()
         }
