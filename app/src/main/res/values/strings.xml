@@ -140,6 +140,7 @@
     <string name="new_transaction">New Transaction</string>
     <string name="wallet_new_transaction">[%1$s] New Transaction</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; %1$d Confirmations]]></string>
+    <string name="tx_details_pending_confirmation"><![CDATA[<font color="#8997A5">Pending</font> &centerdot; %1$d Confirmation]]></string>
 
     <string-array name="timestamp_sort">
         <item>Newest</item>

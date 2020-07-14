@@ -80,6 +80,11 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         return wallet.nextAddress(selectedAccount!!.accountNumber)
     }
 
+    fun refreshBalance() {
+        val account = wallet.getAccount(selectedAccount!!.accountNumber)
+        selectedAccount = Account.from(account)
+    }
+
     fun isVisible(): Boolean {
         return spinnerLayout.visibility == View.VISIBLE
     }

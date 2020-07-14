@@ -68,6 +68,13 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         }
     }
 
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        super.onTxOrBalanceUpdateRequired(walletID)
+        GlobalScope.launch(Dispatchers.Main) {
+            sourceAccountSpinner.refreshBalance()
+        }
+    }
+
     override fun showInfo() {
         InfoDialog(context!!)
                 .setDialogTitle(getString(R.string.receive_dcr))

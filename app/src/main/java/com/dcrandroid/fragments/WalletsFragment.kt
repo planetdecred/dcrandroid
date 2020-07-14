@@ -204,4 +204,15 @@ class WalletsFragment : BaseFragment() {
         }
     }
 
+    override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
+        super.onTxOrBalanceUpdateRequired(walletID)
+
+        GlobalScope.launch(Dispatchers.Main) {
+            if (walletID == null) {
+                adapter.reloadList()
+            } else {
+                adapter.updateWalletRow(walletID)
+            }
+        }
+    }
 }

@@ -275,7 +275,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
     }
 
-    fun walletBackupVerified(walletID: Long) {
+    fun updateWalletRow(walletID: Long) {
         items.forEachIndexed { index, wallet ->
             if (wallet is Wallet && wallet.id == walletID) {
                 items[index] = multiWallet.walletWithID(walletID)
@@ -284,6 +284,8 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
             }
         }
     }
+
+    fun walletBackupVerified(walletID: Long) = updateWalletRow(walletID)
 
     inner class WatchOnlyWalletHeader
 
