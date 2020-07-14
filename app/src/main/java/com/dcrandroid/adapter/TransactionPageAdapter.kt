@@ -22,16 +22,20 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.transaction_page_row.view.*
 
-class TransactionPageAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
+class TransactionPageAdapter(val context: Context, walletID: Long, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val requiredConfirmations: Int
+    private val wallet: Wallet
 
     init {
+        val multiWallet = WalletData.multiWallet!!
+        wallet = multiWallet.walletWithID(walletID)
         requiredConfirmations = when {
-            WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
+            multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
             else -> Constants.REQUIRED_CONFIRMATIONS
         }
     }
@@ -95,8 +99,13 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
             transaction.animate = false
         }
 
-        if (transaction.type == Dcrlibwallet.TxTypeRegular) run {
-            val strAmount = CoinFormat.formatDecred(transaction.amount)
+        if (transaction.type == Dcrlibwallet.TxTypeRegular) {
+            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+                -transaction.amount
+            } else {
+                transaction.amount
+            }
+            val strAmount = CoinFormat.formatDecred(txAmount)
 
             holder.amount.apply {
                 text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
@@ -120,23 +129,37 @@ class TransactionPageAdapter(val context: Context, val transactions: ArrayList<T
                     title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
                         R.string.immature
                     } else {
-                        R.string.live
+                        if(wallet.ticketHasVotedOrRevoked(transaction.hash)){
+                            R.string.purchased
+                        } else {
+                            R.string.live
+                        }
                     }
                 }
                 Dcrlibwallet.TxTypeVote -> {
                     title = R.string.vote
-                    holder.itemView.vote_reward.show()
-
-                    val reward = CoinFormat.formatDecred(104044861) // TODO:
-                    holder.itemView.vote_reward.text = CoinFormat.format("+$reward DCR", 0.715f)
                 }
                 Dcrlibwallet.TxTypeRevocation -> {
                     title = R.string.revoked
                 }
             }
 
-            if (transaction.type != Dcrlibwallet.TxTypeTicketPurchase) {
-                holder.itemView.days_to_vote.show()
+            if (transaction.type == Dcrlibwallet.TxTypeVote || transaction.type == Dcrlibwallet.TxTypeRevocation) {
+                holder.itemView.vote_reward.apply {
+                    text = CoinFormat.format(transaction.voteReward, 0.715f)
+                    show()
+                }
+
+                holder.itemView.days_to_vote.apply {
+                    val daysToVoteOrRevoke = transaction.daysToVoteOrRevoke
+                    text = if (daysToVoteOrRevoke == 1) {
+                        context.getString(R.string.one_day)
+                    } else {
+                        context.getString(R.string.x_days, daysToVoteOrRevoke)
+                    }
+
+                    show()
+                }
             }
 
             holder.amount.setText(title)

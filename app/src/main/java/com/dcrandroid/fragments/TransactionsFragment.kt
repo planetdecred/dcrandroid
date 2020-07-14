@@ -74,7 +74,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
             setToolbarTitle(R.string.transactions, false)
         }
 
-        adapter = TransactionPageAdapter(context!!, transactions)
+        adapter = TransactionPageAdapter(context!!, wallet!!.id, transactions)
 
         txTypeSortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
         txTypeSortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

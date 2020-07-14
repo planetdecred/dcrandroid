@@ -75,7 +75,12 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         }
 
         if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            val strAmount = CoinFormat.formatDecred(transaction.amount)
+            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+                -transaction.amount
+            } else {
+                transaction.amount
+            }
+            val strAmount = CoinFormat.formatDecred(txAmount)
 
             holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
 

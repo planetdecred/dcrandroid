@@ -152,6 +152,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:id="@+id/account_details_imm_rewards_row"
                             android:layout_marginTop="@dimen/margin_padding_size_16">
 
                             <TextView
@@ -181,6 +184,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:id="@+id/account_details_locked_by_tickets_row"
                             android:layout_marginTop="@dimen/margin_padding_size_16">
 
                             <TextView
@@ -210,6 +216,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:id="@+id/account_details_voting_authority_row"
                             android:layout_marginTop="@dimen/margin_padding_size_16">
 
                             <TextView
@@ -239,6 +248,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:id="@+id/account_details_imm_stake_gen_row"
                             android:layout_marginTop="@dimen/margin_padding_size_16">
 
                             <TextView
