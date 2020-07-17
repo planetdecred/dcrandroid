@@ -5,6 +5,12 @@ import (
 	"github.com/decred/dcrwallet/errors/v2"
 )
 
+const (
+	AccountMixerConfigSet     = "account_mixer_config_set"
+	AccountMixerMixedAccount  = "account_mixer_mixed_account"
+	AccountMixerChangeAccount = "account_mixer_change_account"
+)
+
 func (wallet *Wallet) SaveUserConfigValue(key string, value interface{}) {
 	if wallet.setUserConfigValue == nil {
 		log.Errorf("call wallet.prepare before setting wallet config values")

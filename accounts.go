@@ -7,6 +7,7 @@ import (
 
 	"github.com/decred/dcrd/chaincfg/v2"
 	"github.com/decred/dcrwallet/errors/v2"
+	"github.com/decred/dcrwallet/ticketbuyer/v4"
 )
 
 func (wallet *Wallet) GetAccounts() (string, error) {
@@ -175,6 +176,11 @@ func (wallet *Wallet) AccountNumber(accountName string) (uint32, error) {
 	return wallet.internal.AccountNumber(wallet.shutdownContext(), accountName)
 }
 
+func (wallet *Wallet) HasAccount(accountName string) bool {
+	_, err := wallet.internal.AccountNumber(wallet.shutdownContext(), accountName)
+	return err == nil
+}
+
 func (wallet *Wallet) HDPathForAccount(accountNumber int32) (string, error) {
 	cointype, err := wallet.internal.CoinType(wallet.shutdownContext())
 	if err != nil {
@@ -198,4 +204,80 @@ func (wallet *Wallet) HDPathForAccount(accountNumber int32) (string, error) {
 	}
 
 	return hdPath + strconv.Itoa(int(accountNumber)), nil
+}
+
+func (wallet *Wallet) SetAccountMixerConfig(mixedAccount, changeAccount int32) error {
+
+	accountMixerConfigSet := wallet.ReadBoolConfigValueForKey(AccountMixerConfigSet, false)
+	if accountMixerConfigSet {
+		return errors.New(ErrInvalid)
+	}
+
+	_, err := wallet.GetAccount(mixedAccount)
+	if err != nil {
+		return err
+	}
+
+	_, err = wallet.GetAccount(changeAccount)
+	if err != nil {
+		return err
+	}
+
+	wallet.SetInt32ConfigValueForKey(AccountMixerMixedAccount, mixedAccount)
+	wallet.SetInt32ConfigValueForKey(AccountMixerChangeAccount, changeAccount)
+	wallet.SetBoolConfigValueForKey(AccountMixerConfigSet, true)
+
+	return nil
+}
+
+// StartAccountMixer starts the automatic account mixer
+func (wallet *Wallet) StartAccountMixer(walletPassphrase string) error {
+	tb := ticketbuyer.New(wallet.internal)
+
+	mixedAccount := wallet.ReadInt32ConfigValueForKey(AccountMixerMixedAccount, -1)
+	changeAccount := wallet.ReadInt32ConfigValueForKey(AccountMixerChangeAccount, -1)
+
+	tb.AccessConfig(func(c *ticketbuyer.Config) {
+		c.MixedAccountBranch = 0
+		c.MixedAccount = uint32(mixedAccount)
+		c.ChangeAccount = uint32(changeAccount)
+		c.CSPPServer = "cspp.decred.org:15760"
+		c.BuyTickets = false
+		c.MixChange = true
+	})
+
+	err := wallet.UnlockWallet([]byte(walletPassphrase))
+	if err != nil {
+		return translateError(err)
+	}
+
+	go func() {
+		log.Info("Running account mixer")
+		ctx, cancel := wallet.shutdownContextWithCancel()
+		wallet.cancelAccountMixer = cancel
+		err = tb.Run(ctx, []byte(walletPassphrase))
+		if err != nil {
+			log.Errorf("AccountMixer instance errored: %v", err)
+		}
+
+		wallet.cancelAccountMixer = nil
+	}()
+
+	return nil
+}
+
+// IsAccountMixerActive returns true if account mixer is active
+func (wallet *Wallet) IsAccountMixerActive() bool {
+	return wallet.cancelAccountMixer != nil
+}
+
+// StopAccountMixer stops the active account mixer
+func (wallet *Wallet) StopAccountMixer() error {
+	if wallet.cancelAccountMixer == nil {
+		return errors.New(ErrInvalid)
+	}
+
+	wallet.cancelAccountMixer()
+	wallet.cancelAccountMixer = nil
+	return nil
 }
