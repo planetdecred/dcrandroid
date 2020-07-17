@@ -69,7 +69,6 @@
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet_sheet_title">Zmień nazwę portfela</string>
     <string name="wallet_name">Nazwa portfela</string>
-    <string name="view_property">Wyświetl właściwość</string>
     <string name="remove">Usuń</string>
     <string name="confirm_to_remove">Potwierdź, aby usunąć</string>
     <string name="remove_wallet">Usuń portfel z urządzenia</string>

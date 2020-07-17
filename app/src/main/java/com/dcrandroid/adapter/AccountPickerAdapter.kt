@@ -17,8 +17,15 @@ import com.dcrandroid.util.CoinFormat
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
+import java.util.*
 
-class AccountPickerAdapter(val items: Array<Any>, val context: Context, val currentAccount: Account,
+enum class DisabledAccounts(value: Int) {
+    MixerChangeAccount(0),
+    MixerMixedAccount(1),
+    WatchOnlyWalletAccount(2),
+}
+
+class AccountPickerAdapter(val context: Context, val items: Array<Any>, val currentAccount: Account, val disabledAccounts: EnumSet<DisabledAccounts>,
                            val accountSelected: (account: Account) -> Unit?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -76,6 +83,11 @@ class AccountPickerAdapter(val items: Array<Any>, val context: Context, val curr
             holder.itemView.setOnClickListener {
                 accountSelected(item)
             }
+
+            var disableAccount = false
+            disableAccount = item.isMixerMixedAccount && disabledAccounts.contains(DisabledAccounts.MixerMixedAccount)
+            disableAccount = disableAccount || (item.isMixerChangeAccount && disabledAccounts.contains(DisabledAccounts.MixerChangeAccount))
+            holder.itemView.isEnabled = !disableAccount
         }
     }
 

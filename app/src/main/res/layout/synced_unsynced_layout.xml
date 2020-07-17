@@ -26,7 +26,7 @@
         <ImageView
             android:id="@+id/sync_state_icon"
             android:layout_width="@dimen/margin_padding_size_24"
-            android:layout_height="@dimen/margin_padding_size_16"
+            android:layout_height="@dimen/margin_padding_size_24"
             app:srcCompat="@drawable/ic_checkmark" />
 
         <TextView

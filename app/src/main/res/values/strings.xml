@@ -71,7 +71,8 @@
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet_sheet_title">Rename wallet</string>
     <string name="wallet_name">Wallet Name</string>
-    <string name="view_property">View property</string>
+    <string name="account_mixer">Account mixer</string>
+    <string name="privacy">Privacy</string>
     <string name="remove">Remove</string>
     <string name="confirm_to_remove">Confirm to remove</string>
     <string name="remove_wallet">Remove wallet from device</string>
@@ -387,6 +388,7 @@
     <string name="create_account_warning">Accounts CANNOT be deleted once created.</string>
     <string name="create_new_account">Create new account</string>
     <string name="confirm_to_create_account">Confirm to create account</string>
+    <string name="confirm_to_create_accounts">Confirm to create accounts</string>
     <string name="not_backed_up">Not backed up</string>
     <string name="seed_phase_2_briefing">You will be asked to enter the seed phrase on the next screen.</string>
     <string name="verify">Verify</string>
@@ -563,5 +565,11 @@
     <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
+    <string name="create_needed_accounts">Create needed accounts</string>
+    <string name="create_mixer_account_summary">You will need to create two accounts for using the mixer. <b>This action cannot be undone</b>.</string>
+    <string name="account_exists">Account already exist.</string>
+    <string name="mixed_account">Mixed account</string>
+    <string name="change_account">Change account</string>
+    <string name="start_account_mixer">Start account mixer</string>
 
 </resources>

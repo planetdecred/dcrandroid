@@ -10,6 +10,8 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
+import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import java.io.Serializable
 
 class Accounts : Serializable {
@@ -30,6 +32,10 @@ fun parseAccounts(json: String): Accounts {
 }
 
 class Account : Serializable {
+
+    private val wallet: Wallet
+        get() = WalletData.multiWallet!!.walletWithID(walletID)
+
     @SerializedName("WalletID")
     var walletID: Long = 0
 
@@ -55,7 +61,13 @@ class Account : Serializable {
     var importedKeyCount: Int = 0
 
     val hdPath: String
-        get() = WalletData.multiWallet!!.walletWithID(walletID).hdPathForAccount(accountNumber)
+        get() = wallet.hdPathForAccount(accountNumber)
+
+    val isMixerChangeAccount: Boolean
+        get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerChangeAccount, -1)
+
+    val isMixerMixedAccount: Boolean
+        get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
 
     companion object {
         fun from(acc: dcrlibwallet.Account): Account {

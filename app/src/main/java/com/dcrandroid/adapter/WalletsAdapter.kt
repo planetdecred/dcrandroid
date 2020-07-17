@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.AccountMixerActivity
 import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
@@ -203,7 +204,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
                     PopupDivider(dividerWidth),
-                    PopupItem(R.string.view_property, R.color.colorDisabled, enabled = false),
+                    PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
                     PopupDivider(dividerWidth),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
@@ -214,6 +215,11 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                 when (index) {
                     0 -> {
                         val intent = Intent(context, SignMessage::class.java)
+                        intent.putExtra(Constants.WALLET_ID, wallet.id)
+                        context.startActivity(intent)
+                    }
+                    2 -> {
+                        val intent = Intent(context, AccountMixerActivity::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }

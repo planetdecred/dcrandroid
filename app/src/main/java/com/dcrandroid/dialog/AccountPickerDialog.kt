@@ -15,14 +15,17 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.AccountPickerAdapter
+import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.data.Account
 import com.dcrandroid.extensions.fullCoinWalletsList
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
+import java.util.*
+import kotlin.collections.ArrayList
 
-class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account, private val showWatchOnlyWallets: Boolean,
+class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account, private val disabledAccounts: EnumSet<DisabledAccounts>,
                           val accountSelected: (account: Account) -> Unit?) : FullScreenBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
@@ -38,7 +41,8 @@ class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account
         account_picker_title.setText(title)
 
         val multiWallet = WalletData.multiWallet!!
-        val wallets = if (showWatchOnlyWallets) multiWallet.openedWalletsList() else multiWallet.fullCoinWalletsList()
+        val wallets = if (!disabledAccounts.contains(DisabledAccounts.WatchOnlyWalletAccount)) multiWallet.openedWalletsList()
+        else multiWallet.fullCoinWalletsList()
 
         val items = ArrayList<Any>()
 
@@ -49,7 +53,7 @@ class AccountPickerDialog(@StringRes val title: Int, val currentAccount: Account
             items.addAll(accounts)
         }
 
-        val adapter = AccountPickerAdapter(items.toTypedArray(), context!!, currentAccount) {
+        val adapter = AccountPickerAdapter(context!!, items.toTypedArray(), currentAccount, disabledAccounts) {
             dismiss()
             accountSelected(it)
         }
