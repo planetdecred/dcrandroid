@@ -8,7 +8,7 @@ import (
 	"github.com/decred/dcrd/txscript/v2"
 	"github.com/decred/dcrd/wire"
 	"github.com/decred/dcrwallet/wallet/v3"
-	"github.com/raedahgroup/dcrlibwallet/txhelper"
+	"github.com/planetdecred/dcrlibwallet/txhelper"
 )
 
 const BlockValid = 1 << 0

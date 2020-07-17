@@ -3,7 +3,7 @@ package dcrlibwallet
 import (
 	"github.com/decred/dcrd/chaincfg/chainhash"
 	w "github.com/decred/dcrwallet/wallet/v3"
-	"github.com/raedahgroup/dcrlibwallet/txindex"
+	"github.com/planetdecred/dcrlibwallet/txindex"
 )
 
 func (wallet *Wallet) IndexTransactions() error {

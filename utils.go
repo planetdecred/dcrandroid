@@ -20,7 +20,7 @@ import (
 	"github.com/decred/dcrwallet/wallet/v3"
 	"github.com/decred/dcrwallet/wallet/v3/txrules"
 	"github.com/decred/dcrwallet/walletseed"
-	"github.com/raedahgroup/dcrlibwallet/internal/loader"
+	"github.com/planetdecred/dcrlibwallet/internal/loader"
 )
 
 const (

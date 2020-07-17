@@ -3,7 +3,7 @@ package txindex
 import (
 	"github.com/asdine/storm"
 	"github.com/asdine/storm/q"
-	"github.com/raedahgroup/dcrlibwallet/txhelper"
+	"github.com/planetdecred/dcrlibwallet/txhelper"
 )
 
 const (

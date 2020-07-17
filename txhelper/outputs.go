@@ -3,7 +3,7 @@ package txhelper
 import (
 	dcrutil "github.com/decred/dcrd/dcrutil/v2"
 	"github.com/decred/dcrd/wire"
-	"github.com/raedahgroup/dcrlibwallet/addresshelper"
+	"github.com/planetdecred/dcrlibwallet/addresshelper"
 )
 
 func MakeTxOutput(address string, amountInAtom int64, net dcrutil.AddressParams) (output *wire.TxOut, err error) {

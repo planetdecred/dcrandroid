@@ -1,4 +1,4 @@
-module github.com/raedahgroup/dcrlibwallet/spv
+module github.com/planetdecred/dcrlibwallet/spv
 
 go 1.12
 
