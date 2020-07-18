@@ -33,6 +33,16 @@ const (
 	TxTypeRevocation     = txhelper.TxTypeRevocation
 )
 
+func (wallet *Wallet) PublishUnminedTransactions() error {
+	n, err := wallet.internal.NetworkBackend()
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return wallet.internal.PublishUnminedTransactions(wallet.shutdownContext(), n)
+}
+
 func (wallet *Wallet) GetTransaction(txHash []byte) (string, error) {
 	transaction, err := wallet.GetTransactionRaw(txHash)
 	if err != nil {
