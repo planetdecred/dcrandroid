@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
-import com.dcrandroid.activities.PoliteiaDetailsActivity
+import com.dcrandroid.activities.ProposalDetailsActivity
 import kotlinx.android.synthetic.main.activity_politeia.*
 
 class PoliteiaActivity : BaseActivity() {
@@ -19,7 +19,7 @@ class PoliteiaActivity : BaseActivity() {
 
         proposalItem = findViewById(R.id.proposal_item)
         proposalItem.setOnClickListener{
-            startActivity(Intent(this@PoliteiaActivity, PoliteiaDetailsActivity::class.java))
+            startActivity(Intent(this@PoliteiaActivity, ProposalDetailsActivity::class.java))
             Toast.makeText(this, "proposal item clicked", Toast.LENGTH_SHORT).show()
         }
 

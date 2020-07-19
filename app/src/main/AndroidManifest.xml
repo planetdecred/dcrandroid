@@ -174,7 +174,7 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.PoliteiaDetailsActivity"
+            android:name=".activities.ProposalDetailsActivity"
             android:launchMode="singleTask" />
 
         <activity
