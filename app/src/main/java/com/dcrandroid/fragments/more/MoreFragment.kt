@@ -31,6 +31,7 @@ class MoreFragment : BaseFragment() {
         val items = arrayOf(
                 ListItem(R.string.settings, R.drawable.ic_settings, Intent(context, SettingsActivity::class.java)),
                 ListItem(R.string.security_tools, R.drawable.ic_security, Intent(context, SecurityTools::class.java)),
+                ListItem(R.string.politeia, R.drawable.ic_politeia, Intent(context, PoliteiaActivity::class.java)),
                 ListItem(R.string.help, R.drawable.ic_question_mark, Intent(context, HelpActivity::class.java)),
                 ListItem(R.string.about, R.drawable.ic_info1, Intent(context, AboutActivity::class.java)),
                 ListItem(R.string.debug, R.drawable.ic_debug, Intent(context, DebugActivity::class.java)))

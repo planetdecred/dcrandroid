@@ -520,5 +520,6 @@
     <string name="first_run_notice">Twoje składające się z 33 słów ziarno to Twój portfel — trzymaj je w bezpiecznym miejscu. Bez niego nie będzie można odzyskać Twoich środków, jeśli Twoje urządzenie ulegnie uszkodzeniu, lub zostanie zgubione.\n\nPoczątkowa synchronizacja portfela potrwa dłużej, niż zwykle.</string>
     <string name="welcome_screen_text">Witaj w portfelu Decred, bezpiecznym oraz mobilnym portfelu typu open-source.</string>
     <string name="mywallet">mójportfel</string>
+    <string name="politeia">Politeia</string>
 
 </resources>

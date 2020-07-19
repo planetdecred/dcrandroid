@@ -194,4 +194,5 @@
     <string name="always">Luôn luôn</string>
     <string name="wifi_sync_notice">Bạn có muốn đồng bộ hóa bằng mọi cách?</string>
     <string name="not_connected_to_wifi">Không kết nối với WiFi.</string>
+    <string name="politeia">Politeia</string>
 </resources>

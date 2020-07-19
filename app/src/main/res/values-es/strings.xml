@@ -215,6 +215,7 @@
     <string name="wifi_data_sync_title">Sincronizar cuando no esté conectado a una red Wi-Fi</string>
     <string name="wifi_sync_notice">¿Te gustaría sincronizar de todos modos?</string>
     <string name="not_connected_to_wifi">No conectado al Wi-Fi.</string>
+    <string name="politeia">Politeia</string>
     <!--/WIFI Sync-->
 
 </resources>
