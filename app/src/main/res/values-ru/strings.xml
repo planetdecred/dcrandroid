@@ -161,4 +161,5 @@
     <string name="view_report">Просмотреть отчёт</string>
     <string name="copy">Копировать</string>
     <string name="politeia">Politeia</string>
+    <string name="politeia_details">Politeia Details</string>
 </resources>

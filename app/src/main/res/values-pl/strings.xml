@@ -521,5 +521,6 @@
     <string name="welcome_screen_text">Witaj w portfelu Decred, bezpiecznym oraz mobilnym portfelu typu open-source.</string>
     <string name="mywallet">mójportfel</string>
     <string name="politeia">Politeia</string>
+    <string name="politeia_details">Politeia Details</string>
 
 </resources>

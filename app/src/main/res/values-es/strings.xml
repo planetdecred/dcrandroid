@@ -216,6 +216,7 @@
     <string name="wifi_sync_notice">¿Te gustaría sincronizar de todos modos?</string>
     <string name="not_connected_to_wifi">No conectado al Wi-Fi.</string>
     <string name="politeia">Politeia</string>
+    <string name="politeia_details">Politeia Details</string>
     <!--/WIFI Sync-->
 
 </resources>

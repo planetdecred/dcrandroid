@@ -207,5 +207,6 @@
     <string name="wifi_sync_notice">Deseja sincronizar de qualquer jeito?</string>
     <string name="not_connected_to_wifi">Sem conexão com a rede sem fio.</string>
     <string name="politeia">Politeia</string>
+    <string name="politeia_details">Politeia Details</string>
     <!--/WIFI Sync-->
 </resources>
