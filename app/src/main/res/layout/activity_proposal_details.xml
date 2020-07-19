@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/app_bar_title"
-                    android:text="@string/politeia_details"
+                    android:text="@string/proposal_details"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="@color/darkBlueTextColor"

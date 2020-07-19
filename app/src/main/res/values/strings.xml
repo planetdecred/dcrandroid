@@ -564,6 +564,6 @@
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
     <string name="politeia">Politeia</string>
-    <string name="politeia_details">Politeia Details</string>
+    <string name="proposal_details">Proposal Details</string>
 
 </resources>
