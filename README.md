@@ -1,6 +1,6 @@
 # dcrandroid - Decred Mobile Wallet
 
-[![Build Status](https://travis-ci.org/decred/dcrandroid.svg?branch=master)](https://travis-ci.org/decred/dcrandroid)
+[![Build and Test](https://github.com/planetdecred/dcrandroid/workflows/Build%20and%20Test/badge.svg)](https://github.com/planetdecred/dcrandroid/actions)
 
 A Decred Mobile Wallet for android that runs on top of [dcrwallet](https://github.com/decred/dcrwallet).
 
