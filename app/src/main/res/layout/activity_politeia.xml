@@ -68,15 +68,24 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recycler_view"
-        android:background="@drawable/card_bg"
-        android:elevation="@dimen/margin_padding_size_4"
-        android:layout_marginTop="@dimen/margin_padding_size_4"
-        android:layout_marginStart="@dimen/margin_padding_size_8"
-        android:layout_marginEnd="@dimen/margin_padding_size_8"
-        android:layout_marginBottom="@dimen/margin_padding_size_8" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycler_view"
+            android:background="@drawable/card_bg"
+            android:elevation="@dimen/margin_padding_size_4"
+            android:layout_marginTop="@dimen/margin_padding_size_4"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            android:layout_marginBottom="@dimen/margin_padding_size_8" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 </LinearLayout>

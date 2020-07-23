@@ -566,4 +566,7 @@
     <string name="politeia">Politeia</string>
     <string name="proposal_details">Proposal Details</string>
 
+    <string name="ago">ago</string>
+    <string name="now">now</string>
+
 </resources>

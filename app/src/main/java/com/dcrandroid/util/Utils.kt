@@ -265,4 +265,56 @@ object Utils {
         }
         file.delete()
     }
+
+    fun calculateTime(seconds: Long, context: Context): String? {
+
+        var seconds = seconds
+        if (seconds > 59) {
+
+            // convert to minutes
+            seconds /= 60
+            if (seconds > 59) {
+
+                // convert to hours
+                seconds /= 60
+                if (seconds > 23) {
+
+                    // convert to days
+                    seconds /= 24
+                    if (seconds > 6) {
+
+                        // convert to weeks
+                        seconds /= 7
+                        if (seconds > 3) {
+
+                            // convert to month
+                            seconds /= 4
+                            if (seconds > 11) {
+
+                                //Convert to
+                                seconds /= 12
+                                return seconds.toString() + "y " + context.getString(R.string.ago)
+                            }
+
+                            //months
+                            return seconds.toString() + "mo " + context.getString(R.string.ago)
+                        }
+                        //weeks
+                        return seconds.toString() + "w " + context.getString(R.string.ago)
+                    }
+                    //days
+                    return seconds.toString() + "d " + context.getString(R.string.ago)
+                }
+                //hour
+                return seconds.toString() + "h " + context.getString(R.string.ago)
+            }
+
+            //minutes
+            return seconds.toString() + "m " + context.getString(R.string.ago)
+        }
+        return if (seconds < 0) {
+            context.getString(R.string.now)
+        } else seconds.toString() + "s " + context.getString(R.string.ago)
+        //seconds
+    }
 }

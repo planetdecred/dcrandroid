@@ -44,6 +44,8 @@
             android:textStyle="bold"
             app:fontFamily="@font/source_sans_pro" />
 
+
+
         <TextView
             android:id="@+id/proposal_status"
             android:layout_width="wrap_content"
@@ -81,7 +83,7 @@
             android:textColor="@color/blue" />
 
         <TextView
-            android:id="@+id/proposal_publish_date"
+            android:id="@+id/proposal_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
@@ -128,49 +130,24 @@
             app:fontFamily="@font/source_sans_pro" />
 
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_weight="1"-->
-<!--        android:orientation="vertical"-->
-<!--        android:layout_gravity="center_vertical"-->
-<!--        android:layout_marginStart="@dimen/margin_padding_size_16">-->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleY="5" />
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/wallet_name"-->
-<!--            android:text="This a proposal Title"-->
-<!--            android:textSize="@dimen/edit_text_size_16"-->
-<!--            android:includeFontPadding="false"-->
-<!--            app:fontFamily="@font/source_sans_pro"-->
-<!--            android:textColor="@color/darkBlueTextColor" />-->
+        <TextView
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white" />
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/backup_needed"-->
-<!--            android:text="@string/not_backed_up"-->
-<!--            android:textSize="@dimen/edit_text_size_14"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:includeFontPadding="false"-->
-<!--            app:fontFamily="@font/source_sans_pro"-->
-<!--            android:textColor="@color/orangeTextColor" />-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/comments"-->
-<!--            android:text="5 comments"-->
-<!--            android:textSize="@dimen/edit_text_size_14"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:includeFontPadding="false"-->
-<!--            app:fontFamily="@font/source_sans_pro"-->
-<!--            android:textColor="@color/darkerBlueGrayTextColor" />-->
-
-<!--    </LinearLayout>-->
-
-
+    </RelativeLayout>
 
 </LinearLayout>

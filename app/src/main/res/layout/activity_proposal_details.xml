@@ -7,6 +7,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/colorBackground"
     android:layout_width="match_parent"
@@ -109,12 +110,12 @@
                 android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/proposal_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textStyle="bold"
-                    android:text="PR by Monde Public Relations - Phase Two"
+                    tools:text="PR by Monde Public Relations - Phase Two"
                     />
 
                 <TextView
@@ -152,12 +153,12 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/description"
+                    android:id="@+id/proposal_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:lineSpacingExtra="5dp"
-                    android:text="PR by Monde Public Relations - Phase Two PR by Monde Public Relations - Phase Two"
+                    tools:text="PR by Monde Public Relations - Phase Two PR by Monde Public Relations - Phase Two"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             </LinearLayout>
