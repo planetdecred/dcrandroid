@@ -44,8 +44,6 @@
             android:textStyle="bold"
             app:fontFamily="@font/source_sans_pro" />
 
-
-
         <TextView
             android:id="@+id/proposal_status"
             android:layout_width="wrap_content"

@@ -46,29 +46,7 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         val proposal = proposals[position]
         holder.title.text = proposal.name
         holder.author.text = proposal.username
-
-//        val sdf = SimpleDateFormat("dd/MM/yy hh:mm a")
-//        val netDate = Date(0)
-//        val date =sdf.format(netDate)
-
-
-//        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//        var dateStr = "2016-01-24T16:00:00.000Z"
-//        var date = inputFormat.parse(dateStr)
-//        var niceDateStr = DateUtils.getRelativeTimeSpanString(date.time, Calendar.getInstance().timeInMillis, DateUtils.MINUTE_IN_MILLIS)
-//        val stamp = Timestamp(System.currentTimeMillis())
-//        val date = Date(proposal.timestamp)
-//        println(date)
-
-        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        val date = java.util.Date(proposal.timestamp * 1000)
-        sdf.format(date)
-
-//        java.time.format.DateTimeFormatter.ISO_INSTANT
-//                .format(java.time.Instant.ofEpochSecond(proposal.timestamp))
-
         holder.timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, context)
-        Log.i("ProposalAdapter", "[][[][][][][][][][][][[] " + sdf.format(date))
         holder.comments.text = String.format(Locale.getDefault(), "%d Comments", proposal.getNumcomments())
         holder.version.text = String.format(Locale.getDefault(), "version %s", proposal.version)
         val meta = String.format(Locale.getDefault(), "updated %s \nby %s \nversion %s - %d Comments",
