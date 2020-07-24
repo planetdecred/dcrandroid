@@ -22,12 +22,17 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.util.NetworkTask.AsyncResponse
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.*
 import java.util.*
+
 
 object Utils {
 
@@ -317,4 +322,18 @@ object Utils {
         } else seconds.toString() + "s " + context.getString(R.string.ago)
         //seconds
     }
+
+    private fun registerProposalNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(Constants.PROPOSAL_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.importance = NotificationManager.IMPORTANCE_LOW
+
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 }

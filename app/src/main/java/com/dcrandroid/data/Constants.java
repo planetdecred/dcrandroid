@@ -34,7 +34,10 @@ public class Constants {
             SELECTED_SOURCE_ACCOUNT = "selected_source_account_id",
             SELECTED_DESTINATION_ACCOUNT = "selected_dest_account_no",
             SEND_TO_ACCOUNT = "send_to_account",
-            SEND_MAX = "send_max";
+            SEND_MAX = "send_max",
+            POLITEIA_NOTIFICATION_GROUP = "com.dcrandroid.NEW_POLITEIAS",
+            POLITEIA_NOTIFICATION = "new_politeia_notification",
+            PROPOSAL_CHANNEL_ID = "new_proposal";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             REQUIRED_CONFIRMATIONS = 2,
