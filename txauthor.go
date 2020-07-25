@@ -31,12 +31,19 @@ func (mw *MultiWallet) NewUnsignedTx(sourceWallet *Wallet, sourceAccountNumber i
 	}
 }
 
-func (tx *TxAuthor) AddSendDestination(address string, atomAmount int64, sendMax bool) {
+func (tx *TxAuthor) AddSendDestination(address string, atomAmount int64, sendMax bool) error {
+	_, err := dcrutil.DecodeAddress(address, tx.sourceWallet.chainParams)
+	if err != nil {
+		return translateError(err)
+	}
+
 	tx.destinations = append(tx.destinations, TransactionDestination{
 		Address:    address,
 		AtomAmount: atomAmount,
 		SendMax:    sendMax,
 	})
+
+	return nil
 }
 
 func (tx *TxAuthor) UpdateSendDestination(index int, address string, atomAmount int64, sendMax bool) {
