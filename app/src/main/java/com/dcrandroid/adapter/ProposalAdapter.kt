@@ -2,10 +2,7 @@ package com.dcrandroid.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.format.DateUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.activities.ProposalDetailsActivity
-import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.Utils
-import java.security.Timestamp
-import java.text.SimpleDateFormat
 import java.util.*
 
 

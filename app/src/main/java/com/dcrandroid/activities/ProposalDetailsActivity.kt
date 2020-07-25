@@ -1,24 +1,20 @@
 package com.dcrandroid.activities
 
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.dcrandroid.R
-//import com.dcrandroid.data.Constants.DEFAULT
-import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.NetworkTask
 import com.dcrandroid.util.NetworkTask.AsyncResponse
-import com.dcrandroid.util.Utils
-import android.util.Base64;
 import kotlinx.android.synthetic.main.activity_proposal_details.*
 import org.jetbrains.annotations.NotNull
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
-//import java.lang.Byte.decode
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap

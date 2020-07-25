@@ -22,14 +22,10 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
-import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.util.NetworkTask.AsyncResponse
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.*
 import java.util.*
 

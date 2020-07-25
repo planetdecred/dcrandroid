@@ -1,17 +1,13 @@
 package com.dcrandroid.activities.more
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
-import com.dcrandroid.activities.ProposalDetailsActivity
 import com.dcrandroid.adapter.ProposalAdapter
-import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.NetworkTask
 import kotlinx.android.synthetic.main.activity_politeia.*
 import org.json.JSONException
