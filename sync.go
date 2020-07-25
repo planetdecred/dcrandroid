@@ -24,7 +24,7 @@ type syncData struct {
 	syncing      bool
 	cancelSync   context.CancelFunc
 	cancelRescan context.CancelFunc
-	syncCanceled chan bool
+	syncCanceled chan struct{}
 
 	// Flag to notify syncCanceled callback if the sync was canceled so as to be restarted.
 	restartSyncRequested bool
@@ -231,6 +231,7 @@ func (mw *MultiWallet) SpvSync() error {
 	mw.syncData.restartSyncRequested = false
 	mw.syncData.syncing = true
 	mw.syncData.cancelSync = cancel
+	mw.syncData.syncCanceled = make(chan struct{})
 	mw.syncData.mu.Unlock()
 
 	for _, listener := range mw.syncProgressListeners() {
@@ -242,20 +243,20 @@ func (mw *MultiWallet) SpvSync() error {
 	// losing connection to all persistent peers.
 	go func() {
 		syncError := syncer.Run(ctx)
-
-		// sync has ended or errored, reset sync variables
-		mw.resetSyncData()
-
+		//sync has ended or errored
 		if syncError != nil {
 			if syncError == context.DeadlineExceeded {
 				mw.notifySyncError(errors.Errorf("SPV synchronization deadline exceeded: %v", syncError))
 			} else if syncError == context.Canceled {
-				mw.syncData.syncCanceled <- true
+				close(mw.syncData.syncCanceled)
 				mw.notifySyncCanceled()
 			} else {
 				mw.notifySyncError(syncError)
 			}
 		}
+
+		//reset sync variables
+		mw.resetSyncData()
 	}()
 	return nil
 }

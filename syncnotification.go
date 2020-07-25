@@ -519,6 +519,7 @@ func (mw *MultiWallet) resetSyncData() {
 	mw.syncData.syncing = false
 	mw.syncData.synced = false
 	mw.syncData.cancelSync = nil
+	mw.syncData.syncCanceled = nil
 	mw.syncData.activeSyncData = nil
 	mw.syncData.mu.Unlock()
 

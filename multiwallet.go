@@ -82,7 +82,6 @@ func NewMultiWallet(rootDir, dbDriver, netType string) (*MultiWallet, error) {
 		chainParams: chainParams,
 		wallets:     make(map[int]*Wallet),
 		syncData: &syncData{
-			syncCanceled:          make(chan bool),
 			syncProgressListeners: make(map[string]SyncProgressListener),
 		},
 		txAndBlockNotificationListeners: make(map[string]TxAndBlockNotificationListener),
