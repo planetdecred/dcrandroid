@@ -1,16 +1,13 @@
 #!/bin/bash
 
-# Usage: ./run_tests.sh [all | build | lint]
-
 set -e
 
-function build_and_test() {
-    go build
-    go test
-    go vet
-}
-
-function lint() {
+# run tests on all modules
+for i in $(find . -name go.mod -type f -print); do
+  module=$(dirname ${i})
+  echo "running tests and lint on ${module}"
+  (cd ${module} && \
+    go test && \
     golangci-lint run --deadline=10m \
       --disable-all \
       --enable govet \
@@ -21,17 +18,6 @@ function lint() {
       --enable structcheck \
       --enable goimports \
       --enable misspell \
-      --enable unparam
-}
-
-option=$1
-if [[ "$option" = "build" ]]; then
-    build_and_test
-elif [[ "$option" = "lint" ]]; then
-    lint
-elif [[ "$option" = "all" ]]; then
-    build_and_test
-    lint
-else
-    echo "Usage: ./run_tests.sh [all | build | lint]"
-fi
+      --enable unparam \
+  )
+done

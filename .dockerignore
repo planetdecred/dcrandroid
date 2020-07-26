@@ -1,5 +1,0 @@
-.github/
-.git
-.gitignore
-*.md
-run_docker.sh
