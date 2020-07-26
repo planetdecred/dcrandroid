@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+// TODO: A joint class is needed for transactions and overview pages to avoid redundancy.
 class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -75,14 +76,18 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         }
 
         if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                -transaction.amount
+            if (transaction.isMixed) {
+                holder.amount.text = context.getString(R.string.mix)
             } else {
-                transaction.amount
-            }
-            val strAmount = CoinFormat.formatDecred(txAmount)
+                val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+                    -transaction.amount
+                } else {
+                    transaction.amount
+                }
+                val strAmount = CoinFormat.formatDecred(txAmount)
 
-            holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
+                holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
+            }
 
             val iconRes = when (transaction.direction) {
                 0 -> R.drawable.ic_send

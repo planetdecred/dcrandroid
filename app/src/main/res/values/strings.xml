@@ -571,5 +571,6 @@
     <string name="mixed_account">Mixed account</string>
     <string name="change_account">Change account</string>
     <string name="start_account_mixer">Start account mixer</string>
+    <string name="mix">Mix</string>
 
 </resources>

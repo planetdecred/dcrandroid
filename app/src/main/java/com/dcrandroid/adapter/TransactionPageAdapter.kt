@@ -100,16 +100,20 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
         }
 
         if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                -transaction.amount
+            if (transaction.isMixed) {
+                holder.amount.text = context.getString(R.string.mix)
             } else {
-                transaction.amount
-            }
-            val strAmount = CoinFormat.formatDecred(txAmount)
+                val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+                    -transaction.amount
+                } else {
+                    transaction.amount
+                }
+                val strAmount = CoinFormat.formatDecred(txAmount)
 
-            holder.amount.apply {
-                text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
+                holder.amount.apply {
+                    text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
+                }
             }
 
             holder.itemView.ticket_price.hide()

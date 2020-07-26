@@ -7,7 +7,6 @@
 package com.dcrandroid.activities
 
 import android.os.Bundle
-import android.view.View
 import android.widget.CompoundButton
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
@@ -26,7 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
@@ -52,18 +50,18 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
         start_account_mixer_card.hide()
         create_accounts_card.show()
 
-        val mixedAccountInputHelper = InputHelper(this, mixed_account_name_input) {
+        val validateInput: (String) -> Boolean = {
             it.isNotBlank() && !wallet.hasAccount(it)
-        }.apply {
+        }
+
+        val mixedAccountInputHelper = InputHelper(this, mixed_account_name_input, validateInput).apply {
             validationMessage = R.string.account_exists
             hidePasteButton()
             hideQrScanner()
             setHint(R.string.mixed_account)
         }
 
-        val changeAccountInputHelper = InputHelper(this, change_account_name_input) {
-            it.isNotBlank() && !wallet.hasAccount(it)
-        }.apply {
+        val changeAccountInputHelper = InputHelper(this, change_account_name_input, validateInput).apply {
             validationMessage = R.string.account_exists
             hidePasteButton()
             hideQrScanner()
