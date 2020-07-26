@@ -18,6 +18,5 @@ for i in $(find . -name go.mod -type f -print); do
       --enable structcheck \
       --enable goimports \
       --enable misspell \
-      --enable unparam \
   )
 done
