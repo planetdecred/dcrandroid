@@ -138,6 +138,10 @@ type Transaction struct {
 	Timestamp   int64  `json:"timestamp"`
 	BlockHeight int32  `json:"block_height"`
 
+	IsMixed         bool  `json:"is_mixed"`
+	MixDenomination int64 `json:"mix_denom"`
+	MixCount        int32 `json:"mix_count"`
+
 	Version  int32 `json:"version"`
 	LockTime int32 `json:"lock_time"`
 	Expiry   int32 `json:"expiry"`

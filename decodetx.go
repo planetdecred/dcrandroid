@@ -7,6 +7,7 @@ import (
 	"github.com/decred/dcrd/chaincfg/v2"
 	"github.com/decred/dcrd/txscript/v2"
 	"github.com/decred/dcrd/wire"
+	"github.com/decred/dcrdata/txhelpers/v4"
 	"github.com/decred/dcrwallet/wallet/v3"
 	"github.com/planetdecred/dcrlibwallet/txhelper"
 )
@@ -41,6 +42,8 @@ func DecodeTransaction(walletTx *TxInfoFromWallet, netParams *chaincfg.Params) (
 		ticketSpentHash = msgTx.TxIn[0].PreviousOutPoint.Hash.String()
 	}
 
+	isMixedTx, mixDenom, mixCount := txhelpers.IsMixTx(msgTx)
+
 	return &Transaction{
 		WalletID:    walletTx.WalletID,
 		Hash:        msgTx.TxHash().String(),
@@ -48,6 +51,10 @@ func DecodeTransaction(walletTx *TxInfoFromWallet, netParams *chaincfg.Params) (
 		Hex:         walletTx.Hex,
 		Timestamp:   walletTx.Timestamp,
 		BlockHeight: walletTx.BlockHeight,
+
+		IsMixed:         isMixedTx,
+		MixDenomination: mixDenom,
+		MixCount:        int32(mixCount),
 
 		Version:  int32(msgTx.Version),
 		LockTime: int32(msgTx.LockTime),
