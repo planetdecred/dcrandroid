@@ -46,7 +46,7 @@
     <string name="syncing">Synchronisation</string>
     <string name="syncing_ellipsis">Synchronisation…</string>
     <string name="connected_to_a_peer">Connecté à un pair</string>
-    <string name="connected_to_n_peer">Connecté à %1$d pair</string>
+    <string name="connected_to_n_peer">Connecté à %1$d pairs</string>
     <string name="ok">OK</string>
     <string name="user_agent">User Agent</string>
     <string name="user_agent_dialog_title">Configurer user agent</string>
@@ -136,6 +136,7 @@
     <string name="new_transaction">Nouvelle Transaction</string>
     <string name="wallet_new_transaction">[%1$s] Nouvelle Transaction</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmée</font> &centerdot; %1$d Confirmations]]></string>
+    <string name="tx_details_pending_confirmation"><![CDATA[<font color="#8997A5">Attente</font> &centerdot; %1$d Confirmation]]></string>
 
     <string-array name="timestamp_sort">
         <item>Plus récent</item>
@@ -380,8 +381,10 @@
     <string name="tx_sort_transferred">Transféré (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
+    <string name="ticket_purchase">Achat de Ticket</string>
     <string name="immature">Immature</string>
     <string name="live">Live</string>
+    <string name="purchased">Acheté</string>
     <string name="receive_dcr">Recevoir DCR</string>
     <string name="selected_account_name">%1$s (%2$s)</string>
     <string name="decred_qr_address_prefix">decred:%1$s</string>
