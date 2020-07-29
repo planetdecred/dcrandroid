@@ -1,23 +1,38 @@
 package com.dcrandroid.activities.more
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.ProposalAdapter
-import com.dcrandroid.util.NetworkTask
+import com.dcrandroid.data.Proposal
+import com.dcrandroid.util.Deserializer
+import com.google.gson.GsonBuilder
+import dcrlibwallet.Politeia
 import kotlinx.android.synthetic.main.activity_politeia.*
-import org.json.JSONException
-import org.json.JSONObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
-    internal var proposals = ArrayList<Proposal>()
-    internal var recyclerView: RecyclerView? = null
-    internal var proposalAdapter: ProposalAdapter? = null
-    internal var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private var proposals = ArrayList<Proposal>()
+    private var recyclerView: RecyclerView? = null
+    private var proposalAdapter: ProposalAdapter? = null
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private var layoutManager: LinearLayoutManager? = null
+
+    private var politeia: Politeia? = Politeia()
+    private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer())
+            .create()
+
+    private var loading = true
+    private var pastVisibleItems: Int = 0
+    private var visibleItemCount: Int = 0
+    private var totalItemCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,76 +42,79 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
         swipeRefreshLayout!!.setOnRefreshListener(this)
 
-        recyclerView!!.layoutManager = LinearLayoutManager(this)
+        layoutManager = LinearLayoutManager(this)
+        recyclerView!!.layoutManager = layoutManager
         proposalAdapter = ProposalAdapter(proposals, this)
         recyclerView!!.adapter = proposalAdapter
 
-        swipeRefreshLayout!!.post { loadProposals() }
+        loadProposals()
+
+        recyclerView!!.addOnScrollListener(object:RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView:RecyclerView, dx:Int, dy:Int) {
+                if (dy > 0) { //check for scroll down
+                    visibleItemCount = layoutManager!!.childCount
+                    totalItemCount = layoutManager!!.itemCount
+                    pastVisibleItems = layoutManager!!.findFirstVisibleItemPosition()
+                    if (loading)
+                    {
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 5)
+                        {
+                            loading = false
+                            loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
+                        }
+                    }
+                }
+            }
+        })
 
         go_back.setOnClickListener {
             finish()
         }
     }
 
-    private fun loadProposals() {
+    fun loadMore(token: String?) = GlobalScope.launch(Dispatchers.Default) {
+        val jsonResult = politeia!!.getProposalsChunk(token)
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+
+        if (loading) {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        } else {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+
+                loading = true
+            }
+        }
+    }
+
+    private fun loadProposals() = GlobalScope.launch(Dispatchers.Default) {
         swipeRefreshLayout!!.isRefreshing = true
-        val config = HashMap<String, String>()
-        config["url"] = "https://proposals.decred.org/api/v1/proposals/vetted"
-        NetworkTask(config, object : NetworkTask.AsyncResponse {
-            override fun onResponse(response: String) {
-                swipeRefreshLayout!!.isRefreshing = false
-                try {
-                    proposals.clear()
-                    val jsonObject = JSONObject(response)
-                    val jsonArray = jsonObject.getJSONArray("proposals")
-                    for (i in 0 until jsonArray.length()) {
-                        val jsonObject1 = jsonArray.get(i) as JSONObject
-                        val proposal = Proposal()
-                        proposal.name = jsonObject1.getString("name")
-                        proposal.state = jsonObject1.getInt("state")
-                        proposal.status = jsonObject1.getInt("status")
-                        proposal.timestamp = jsonObject1.getLong("timestamp")
-                        proposal.userid = jsonObject1.getString("userid")
-                        proposal.username = jsonObject1.getString("username")
-                        proposal.publickey = jsonObject1.getString("publickey")
-                        proposal.signature = jsonObject1.getString("signature")
-                        proposal.version = jsonObject1.getString("version")
-                        proposal.setNumcomments(jsonObject1.getInt("numcomments"))
-                        val jsonArray1 = jsonObject1.getJSONArray("files")
-                        val files = ArrayList<Proposal.File>()
-                        for (j in 0 until jsonArray1.length()) {
-                            val jsonObject2 = jsonArray1.get(j) as JSONObject
-                            val file = proposal.File()
-                            file.name = jsonObject2.getString("name")
-                            file.mime = jsonObject2.getString("mime")
-                            file.digest = jsonObject2.getString("digest")
-                            file.payload = jsonObject2.getString("payload")
-                            files.add(file)
-                        }
-                        val record = proposal.CensorshipRecord()
-                        record.token = jsonObject1.getJSONObject("censorshiprecord").getString("token")
-                        record.merkle = jsonObject1.getJSONObject("censorshiprecord").getString("merkle")
-                        record.signature = jsonObject1.getJSONObject("censorshiprecord").getString("signature")
+        val jsonResult = politeia!!.getProposalsChunk("")
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
 
-                        proposal.files = files
-                        proposal.censorshipRecord = record
-                        proposals.add(proposal)
-
-                    }
-
-                        runOnUiThread { proposalAdapter!!.notifyDataSetChanged() }
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
+        if (tempProposalList == null) {
+            tempProposalList = arrayOf()
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
             }
-
-            override fun onFailure(t: Throwable) {
-                swipeRefreshLayout!!.isRefreshing = false
-                t.printStackTrace()
-                    runOnUiThread { Toast.makeText(application, t.message, Toast.LENGTH_SHORT).show() }
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
             }
-        }).execute()
+        }
+        swipeRefreshLayout!!.isRefreshing = false
     }
 
     override fun onRefresh() {

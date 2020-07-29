@@ -7,6 +7,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.dcrandroid.R
+import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.NetworkTask
 import com.dcrandroid.util.NetworkTask.AsyncResponse
 import kotlinx.android.synthetic.main.activity_proposal_details.*
