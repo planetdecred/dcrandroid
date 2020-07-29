@@ -173,3 +173,29 @@ class DecredAddressURI {
         }
     }
 }
+
+class PeerInfo {
+    @SerializedName("id")
+    var id: Int = 0
+
+    @SerializedName("addr")
+    lateinit var addr: String
+
+    @SerializedName("addr_local")
+    lateinit var addrLocal: String
+
+    @SerializedName("services")
+    lateinit var services: String
+
+    @SerializedName("version")
+    var version: Int = 0
+
+    @SerializedName("sub_ver")
+    lateinit var subVer: String
+
+    @SerializedName("starting_height")
+    var startingHeight: Long = 0
+
+    @SerializedName("ban_score")
+    var banScore: Int = 0
+}

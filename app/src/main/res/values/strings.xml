@@ -79,6 +79,19 @@
     <string name="remove_watch_wallet_prompt"> Remove watch-only wallet from device?</string>
     <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
     <string name="error_copied">Error copied</string>
+    <!--/General-->
+
+    <!--Peers-->
+    <string name="connected_peers_details">
+        ID: %1$d
+        \nAddr: %2$s
+        \nAddrLocal: %3$s
+        \nServices: %4$s
+        \nVersion: %5$d
+        \nSubVer: %6$s
+        \nStartingHeight: %7$d
+        \nBanScore: %8$d
+    </string>
     <string name="version">Version</string>
     <string name="build_date">Build date</string>
     <string name="net">Net</string>
@@ -173,7 +186,8 @@
     <!--Preference-->
     <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
     <string name="logging_level">Logging level</string>
-    <string name="view_wallets_log">View wallets Log</string>
+    <string name="view_wallets_log">View wallets log</string>
+    <string name="view_connected_peers">View connected peers</string>
     <string name="currency_conversion">Currency Conversion</string>
     <string name="user_agent_summary">For exchange rate fetching</string>
     <string name="change">Change</string>
@@ -348,8 +362,9 @@
 
     <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
     <string name="latest_block_time"><![CDATA[Synced to block <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> ago]]></string>
-    <string name="connected_peers"><![CDATA[Connected to <font color="#091440">%1$d</font> peers.]]></string>
+    <string name="connected_to_n_peers"><![CDATA[Connected to <font color="#091440">%1$d</font> peers.]]></string>
     <string name="no_connected_peers">No connected peers.</string>
+    <string name="connected_peers">Connected peers</string>
     <string name="peers_connected">Peers connected</string>
     <string name="_default">default</string>
     <string name="starting_up">Starting up</string>
