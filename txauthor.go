@@ -263,11 +263,19 @@ func (tx *TxAuthor) constructTransaction() (*txauthor.AuthoredTx, error) {
 // change source for receiving change from this tx back into the wallet.
 func (tx *TxAuthor) changeSource(ctx context.Context) (txauthor.ChangeSource, error) {
 	if tx.changeAddress == "" {
-		address, err := tx.sourceWallet.internal.NewChangeAddress(ctx, tx.sourceAccountNumber)
+		var changeAccount uint32
+
+		mixChange := tx.sourceWallet.ReadBoolConfigValueForKey(AccountMixerMixTxChange, false)
+		if mixChange {
+			changeAccount = uint32(tx.sourceWallet.ReadInt32ConfigValueForKey(AccountMixerChangeAccount, -1))
+		} else {
+			changeAccount = tx.sourceAccountNumber
+		}
+
+		address, err := tx.sourceWallet.internal.NewChangeAddress(ctx, changeAccount)
 		if err != nil {
 			return nil, fmt.Errorf("change address error: %v", err)
 		}
-
 		tx.changeAddress = address.String()
 	}
 
