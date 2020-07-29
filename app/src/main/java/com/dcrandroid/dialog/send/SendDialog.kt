@@ -28,6 +28,8 @@ import com.dcrandroid.data.DecredAddressURI
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
@@ -321,7 +323,21 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             send_next.isEnabled = validForSend
 
             tx_size.text = getString(R.string.x_bytes, authoredTxData!!.estSignedSize)
-            balance_after_send.text = authoredTxData!!.balanceAfter
+
+            val wallet = multiWallet.walletWithID(sourceAccountSpinner.selectedAccount!!.walletID)
+            val mixChange = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
+            if (mixChange) {
+                balance_after_layout.hide()
+
+                val changeAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerChangeAccount, -1)
+                val changeAccountName = wallet.accountName(changeAccountNumber)
+                change_to_unmixed_label.apply {
+                    text = HtmlCompat.fromHtml(getString(R.string.change_sent_to_unmixed, changeAccountName), 0)
+                    show()
+                }
+            } else {
+                balance_after_send.text = authoredTxData!!.balanceAfter
+            }
 
             tx_fee.text = authoredTxData!!.fee
             total_cost.text = authoredTxData!!.totalCost

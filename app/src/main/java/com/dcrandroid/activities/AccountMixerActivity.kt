@@ -14,6 +14,7 @@ import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.preference.SwitchPreference
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.Utils
@@ -148,6 +149,8 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
 
         mixed_account_label.text = wallet.accountName(mixedAccountNumber)
         change_account_label.text = wallet.accountName(changeAccountNumber)
+
+        SwitchPreference(this@AccountMixerActivity, Dcrlibwallet.walletUniqueConfigKey(wallet.id, Dcrlibwallet.AccountMixerMixTxChange), mix_tx_change)
 
         start_account_mixer.setOnClickListener {
             switch_start_account_mixer.isChecked = !switch_start_account_mixer.isChecked

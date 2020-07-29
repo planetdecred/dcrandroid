@@ -572,5 +572,7 @@
     <string name="change_account">Change account</string>
     <string name="start_account_mixer">Start account mixer</string>
     <string name="mix">Mix</string>
+    <string name="mix_tx_change">Mix transaction change</string>
+    <string name="change_sent_to_unmixed"><![CDATA[Change will be sent to <b>%1$s</b>.]]></string>
 
 </resources>

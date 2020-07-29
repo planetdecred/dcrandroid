@@ -230,6 +230,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/mix_tx_change"
+            android:layout_marginTop="@dimen/margin_padding_size_8"
+            android:padding="@dimen/margin_padding_size_16"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@drawable/ripple"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@id/pref_title"
+                android:layout_weight="1"
+                android:includeFontPadding="false"
+                android:text="@string/mix_tx_change"
+                android:textColor="@color/darkBlueTextColor"
+                android:fontFamily="@font/source_sans_pro"
+                android:textSize="@dimen/edit_text_size_16" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@id/pref_switch"
+                android:theme="@style/Switch" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_8"
             android:id="@+id/start_account_mixer"
             android:padding="@dimen/margin_padding_size_16"
