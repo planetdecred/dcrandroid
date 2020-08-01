@@ -245,26 +245,25 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="@dimen/margin_padding_size_14">
 
                     <ProgressBar
                         android:id="@+id/progressBar"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progressDrawable="@drawable/vote_progress_bar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scaleY="5"
-                        android:secondaryProgress="60"
-                        android:visibility="gone" />
+                        android:layout_height="16dp"
+                        android:secondaryProgress="100"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/vote_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        tools:text="PR by Monde Public Relations - Phase Two PR by Monde Public Relations - Phase Two"
-                        android:secondaryProgress="60"
+                        tools:textSize="@dimen/edit_text_size_12"
                         android:textColor="@color/white"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
                 </RelativeLayout>
 

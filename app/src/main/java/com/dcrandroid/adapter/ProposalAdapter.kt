@@ -34,6 +34,8 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         var version: TextView = view.findViewById(R.id.proposal_version)
         var progressBar: ProgressBar = view.findViewById(R.id.progressBar)
         var progress: TextView = view.findViewById(R.id.progress)
+        var yes: TextView = view.findViewById(R.id.yes_votes)
+        var no: TextView = view.findViewById(R.id.no_votes)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -80,6 +82,9 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         if (proposal.voteStatus != null && proposal.voteStatus!!.totalvotes != 0) {
             holder.progress.visibility = View.VISIBLE
             holder.progressBar.visibility = View.VISIBLE
+
+            holder.yes.text = "Yes: " + proposal.voteStatus!!.optionsResults!![1].votesreceived + " (" + (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100 + "%)"
+            holder.no.text = "No: " + proposal.voteStatus!!.optionsResults!![0].votesreceived + " (" + (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100 + "%)"
 
             val percentage = (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
             holder.progress.text = String.format(Locale.getDefault(), "%.2f%%", percentage)
