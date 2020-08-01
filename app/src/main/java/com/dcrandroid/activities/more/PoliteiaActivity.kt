@@ -1,7 +1,6 @@
 package com.dcrandroid.activities.more
 
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -26,8 +25,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
     private var layoutManager: LinearLayoutManager? = null
 
     private var politeia: Politeia? = Politeia()
-    private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer())
-            .create()
+    private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
 
     private var loading = true
     private var pastVisibleItems: Int = 0
@@ -49,16 +47,14 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         loadProposals()
 
-        recyclerView!!.addOnScrollListener(object:RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView:RecyclerView, dx:Int, dy:Int) {
-                if (dy > 0) { //check for scroll down
+        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
                     visibleItemCount = layoutManager!!.childCount
                     totalItemCount = layoutManager!!.itemCount
                     pastVisibleItems = layoutManager!!.findFirstVisibleItemPosition()
-                    if (loading)
-                    {
-                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 5)
-                        {
+                    if (loading) {
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 8) {
                             loading = false
                             loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
                         }
@@ -74,7 +70,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     fun loadMore(token: String?) = GlobalScope.launch(Dispatchers.Default) {
         val jsonResult = politeia!!.getProposalsChunk(token)
-        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+        val tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
 
         if (loading) {
             proposals.let {

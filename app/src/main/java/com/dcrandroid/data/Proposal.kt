@@ -9,7 +9,6 @@ package com.dcrandroid.data
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import java.util.*
 
 class Proposal : Serializable {
     @SerializedName("name")
@@ -43,7 +42,7 @@ class Proposal : Serializable {
     var timestamp: Long = 0
 
     @SerializedName("files")
-    var files: ArrayList<File>? = null
+    var files: Array<File>? = null
 
     @SerializedName("censorshiprecord")
     var censorshipRecord: CensorshipRecord? = null
@@ -94,11 +93,30 @@ class Proposal : Serializable {
         @SerializedName("totalvotes")
         var totalvotes: Int = 0
 
-        @SerializedName("yes")
-        var yes: Int = 0
+        @SerializedName("optionsresult")
+        var optionsResults: Array<OptionsResult>? = null
 
-        @SerializedName("no")
-        var no: Int = 0
+        @SerializedName("passpercentage")
+        var passpercentage: Int = 0
+    }
+
+    class OptionsResult : Serializable {
+        @SerializedName("option")
+        var voteOption: VoteOption? = null
+
+        @SerializedName("votesreceived")
+        var votesreceived: Int = 0
+    }
+
+    inner class VoteOption : Serializable {
+        @SerializedName("id")
+        var id: String? = null
+
+        @SerializedName("description")
+        var description: String? = null
+
+        @SerializedName("bits")
+        var bits: Int = 0
     }
 
     companion object {

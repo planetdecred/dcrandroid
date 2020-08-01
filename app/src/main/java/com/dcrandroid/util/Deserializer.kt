@@ -55,7 +55,6 @@ class Deserializer {
             if (jsonArray.size() <= 0) {
                 return ArrayList<Any>()
             }
-
             return null
         }
 

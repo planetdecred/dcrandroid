@@ -568,5 +568,13 @@
 
     <string name="ago">ago</string>
     <string name="now">now</string>
+    <string name="status_abandoned">Abandoned</string>
+    <string name="status_invalid">Invalid</string>
+    <string name="status_not_authorized">Not authorized by author</string>
+    <string name="status_authorized">Authorized by author</string>
+    <string name="status_vote_started">Vote started</string>
+    <string name="status_approved">Approved</string>
+    <string name="status_rejected">Rejected</string>
+    <string name="status_non_existent">Does not exist</string>
 
 </resources>

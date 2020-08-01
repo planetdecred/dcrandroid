@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.activities.ProposalDetailsActivity
@@ -45,35 +44,45 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         holder.comments.text = String.format(Locale.getDefault(), "%d Comments", proposal.getNumcomments())
         holder.version.text = String.format(Locale.getDefault(), "version %s", proposal.version)
 
-        if (proposal.status == 1) {
-            holder.status.text = "Not found"
-        }
-        else if (proposal.status == 2) {
-            holder.status.text = "Not Reviewed"
-        }
-        else if (proposal.status == 3) {
-            holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
-            holder.status.text = "Censored"
-        }
-        else if (proposal.status == 4) {
-            holder.status.background = getDrawable(context, R.drawable.bg_light_green_corners_4dp)
-            holder.status.text = "Published"
-        }
-        else if (proposal.status == 5) {
-            holder.status.background = getDrawable(context, R.drawable.bg_transparent_light_grey_corners_4dp)
-            holder.status.resources.getColor(R.color.blue)
-            holder.status.text = "edited by author"
-        }
-        else {
+        // Set proposal vote status
+        if (proposal.status == 6) {
             holder.status.background = getDrawable(context, R.drawable.bg_light_orange_corners_4dp)
-            holder.status.text = "Abandoned"
+            holder.status.text = context.getString(R.string.status_abandoned)
+        } else {
+            if (proposal.voteStatus!!.status == 0) {
+                holder.status.text = context.getString(R.string.status_invalid)
+            } else if (proposal.voteStatus!!.status == 1) {
+                holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
+                holder.status.text = context.getString(R.string.status_not_authorized)
+            } else if (proposal.voteStatus!!.status == 2) {
+                holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
+                holder.status.text = context.getString(R.string.status_authorized)
+            } else if (proposal.voteStatus!!.status == 3) {
+                holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
+                holder.status.text = context.getString(R.string.status_vote_started)
+            } else if (proposal.voteStatus!!.status == 4) {
+                val yesPercentage = (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
+                val passPercentage = proposal.voteStatus!!.passpercentage
+
+                if (yesPercentage >= passPercentage) {
+                    holder.status.background = getDrawable(context, R.drawable.bg_light_green_corners_4dp)
+                    holder.status.text = context.getString(R.string.status_approved)
+                } else {
+                    holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
+                    holder.status.text = context.getString(R.string.status_rejected)
+                }
+            } else if (proposal.voteStatus!!.status == 5) {
+                holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
+                holder.status.text = context.getString(R.string.status_non_existent)
+            }
         }
 
         if (proposal.voteStatus != null && proposal.voteStatus!!.totalvotes != 0) {
             holder.progress.visibility = View.VISIBLE
             holder.progressBar.visibility = View.VISIBLE
-            val percentage = (proposal.voteStatus!!.yes.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
-            holder.progress.text = "%.2f%%".format(percentage)
+
+            val percentage = (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
+            holder.progress.text = String.format(Locale.getDefault(), "%.2f%%", percentage)
             holder.progressBar.progress = percentage.toInt()
         } else {
             holder.progress.visibility = View.GONE

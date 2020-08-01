@@ -28,8 +28,7 @@
         android:layout_height="wrap_content"
         android:weightSum="1"
         android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/margin_padding_size_16">
+        android:layout_gravity="center_vertical">
 
         <TextView
             android:id="@+id/proposal_title"
@@ -66,8 +65,7 @@
         android:weightSum="1"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/margin_padding_size_6"
-        android:layout_marginStart="@dimen/margin_padding_size_16">
+        android:layout_marginTop="@dimen/margin_padding_size_6">
 
         <TextView
             android:layout_width="wrap_content"
@@ -100,9 +98,7 @@
         android:weightSum="1"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/margin_padding_size_6"
-
-        android:layout_marginStart="@dimen/margin_padding_size_16">
+        android:layout_marginTop="@dimen/margin_padding_size_6">
 
         <TextView
             android:layout_width="wrap_content"
@@ -130,13 +126,15 @@
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_6">
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:secondaryProgress="60"
             android:scaleY="5" />
 
         <TextView
