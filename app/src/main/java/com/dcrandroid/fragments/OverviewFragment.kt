@@ -8,12 +8,14 @@ package com.dcrandroid.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,24 +24,26 @@ import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Deserializer
-import com.dcrandroid.util.NetworkUtil
-import com.dcrandroid.util.SyncLayoutUtil
+import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
+import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
+import kotlinx.android.synthetic.main.activity_account_mixer.*
+import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.overview_backup_warning.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.StringBuilder
 
 const val MAX_TRANSACTIONS = 3
 
-class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
+class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener, AccountMixerNotificationListener {
 
     companion object {
         private var closedBackupWarning = false
@@ -122,6 +126,40 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                         .show()
             }
         }
+
+        setMixerStatus()
+        multiWallet?.setAccountMixerNotification(this)
+    }
+
+    private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
+
+        if (!isForeground) {
+            return@launch
+        }
+
+        var mixerRunning = false
+        val walletsMixing = ArrayList<String>()
+        for (wallet in multiWallet!!.openedWalletsList()) {
+            if (wallet.isAccountMixerActive) {
+                walletsMixing.add(wallet.name)
+                mixerRunning = true
+                break
+            }
+        }
+
+        if(mixerRunning){
+
+            if(walletsMixing.size == 1) {
+                tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status, walletsMixing.first()), 0)
+            }else{
+                val walletsExceptLast = walletsMixing.dropLast(1).joinToString(", ")
+
+                tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status_multi, walletsExceptLast, walletsMixing.last()), 0)
+            }
+            cspp_running_layout.show()
+        }else {
+            cspp_running_layout.hide()
+        }
     }
 
     override fun onResume() {
@@ -198,25 +236,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         loadTransactions()
     }
 
-    private fun isOffline(): Boolean {
-
-        val isWifiConnected = context?.let { NetworkUtil.isWifiConnected(it) }
-        val isDataConnected = context?.let { NetworkUtil.isMobileDataConnected(it) }
-        val syncAnyways = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, false)
-
-        // 1. If the user chooses not to sync(means the user syncs only on wifi and wifi is off or the user tapped NO on the dialog)
-        if (!isWifiConnected!! && !syncAnyways) {
-            return true
-        }
-
-        // 2. If the wifi is off, user chose sync anyways but mobile data isn’t activated, offline
-        if (!isWifiConnected && syncAnyways && !isDataConnected!!) {
-            return true
-        }
-
-        return false
-    }
-
     override fun onTransaction(transactionJson: String?) {
         if (!isForeground) {
             requiresDataUpdate = true
@@ -273,6 +292,15 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onAccountMixerEnded(walletID: Long) {
+        setMixerStatus()
+        SnackBar.showText(context!!, R.string.mixer_has_stopped_running)
+    }
+
+    override fun onAccountMixerStarted(walletID: Long) {
+        setMixerStatus()
     }
 }
 

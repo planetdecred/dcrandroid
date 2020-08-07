@@ -47,6 +47,43 @@
 
         <include layout="@layout/overview_backup_warning" />
 
+    <LinearLayout
+        android:id="@+id/cspp_running_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:layout_marginBottom="@dimen/margin_padding_size_8"
+        android:elevation="4dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/card_bg"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Mixer Status"
+            android:textColor="#3d5873"
+            android:textSize="14sp"
+            app:fontFamily="@font/source_sans_pro" />
+
+        <TextView
+            android:id="@+id/tv_mixer_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:textColor="#8997a5"
+            android:textSize="16sp"
+            android:text="@string/wallet_mixer_status"
+            app:fontFamily="@font/source_sans_pro" />
+
+    </LinearLayout>
+
         <include layout="@layout/transactions_overview_layout" />
 
         <LinearLayout

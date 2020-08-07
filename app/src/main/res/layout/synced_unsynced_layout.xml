@@ -82,7 +82,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_padding_size_56"
         android:layout_marginEnd="@dimen/margin_padding_size_16"
-        android:layout_marginTop="@dimen/edit_text_size_14"
+        android:layout_marginTop="@dimen/margin_padding_size_14"
         android:orientation="vertical">
 
         <TextView
@@ -100,7 +100,7 @@
             android:id="@+id/connected_peers"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/edit_text_size_14"
+            android:layout_marginTop="@dimen/margin_padding_size_14"
             android:layout_weight="1"
             android:includeFontPadding="false"
             android:text="@string/no_connected_peers"

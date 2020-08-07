@@ -55,30 +55,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/account_mixer"
+                    android:text="@string/privacy"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:textSize="@dimen/edit_text_size_20"
                     android:textColor="@color/darkBlueTextColor"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:id="@+id/iv_info"
-                        android:padding="@dimen/margin_padding_size_8"
-                        android:layout_marginEnd="@dimen/margin_padding_size_8"
-                        app:srcCompat="@drawable/ic_info"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:background="@drawable/circular_transparent_ripple" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -209,7 +191,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="@string/change_account"
+                android:text="@string/unmixed_account"
                 android:textColor="@color/darkBlueTextColor"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_16" />
@@ -239,16 +221,34 @@
             android:background="@drawable/ripple"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@id/pref_title"
                 android:layout_weight="1"
+                android:layout_marginEnd="@dimen/margin_padding_size_16"
+                android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@id/pref_title"
                 android:includeFontPadding="false"
                 android:text="@string/mix_tx_change"
                 android:textColor="@color/darkBlueTextColor"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_padding_size_4"
+                android:textColor="@color/blueGraySecondTextColor"
+                android:fontFamily="@font/source_sans_pro"
+                android:text="@string/mix_tx_change_summary"
+                android:textSize="@dimen/edit_text_size_14" />
+
+            </LinearLayout>
 
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
@@ -273,15 +273,15 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/currency_conversion"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="@string/start_account_mixer"
+                    android:text="@string/mixer"
                     android:textColor="@color/darkBlueTextColor"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
@@ -289,14 +289,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/mixer_not_running"
                     android:includeFontPadding="false"
                     android:layout_marginTop="@dimen/margin_padding_size_4"
-                    android:text="App must remain running for mixer to properly mix inputs."
                     android:textColor="@color/blueGraySecondTextColor"
                     android:fontFamily="@font/source_sans_pro"
+                    android:text="@string/not_running"
                     android:textSize="@dimen/edit_text_size_14" />
-
             </LinearLayout>
+
 
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"

@@ -203,14 +203,12 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
 
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-                    PopupDivider(dividerWidth),
                     PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-                    PopupDivider(dividerWidth),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
             )
 
-            PopupUtil.showPopup(it, items) { window, index ->
+            PopupUtil.showPopup(it, items as Array<Any>) { window, index ->
                 window.dismiss()
                 when (index) {
                     0 -> {
@@ -218,12 +216,12 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }
-                    2 -> {
+                    1 -> {
                         val intent = Intent(context, AccountMixerActivity::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         context.startActivity(intent)
                     }
-                    4 -> { // rename wallet
+                    2 -> { // rename wallet
                         val activity = context as AppCompatActivity
                         RequestNameDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
 
@@ -238,7 +236,7 @@ class WalletsAdapter(val context: Context, val launchIntent: (intent: Intent, re
                             return@RequestNameDialog null
                         }.show(activity.supportFragmentManager, null)
                     }
-                    5 -> {
+                    3 -> {
                         val intent = Intent(context, WalletSettings::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         launchIntent(intent, WALLET_SETTINGS_REQUEST_CODE)

@@ -6,10 +6,12 @@
 
 package com.dcrandroid.activities
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.CompoundButton
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
@@ -17,8 +19,10 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.preference.SwitchPreference
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.InputHelper
+import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_account_mixer.*
@@ -27,7 +31,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListener {
+class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListener, AccountMixerNotificationListener {
 
     lateinit var wallet: Wallet
 
@@ -66,7 +70,7 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
             validationMessage = R.string.account_exists
             hidePasteButton()
             hideQrScanner()
-            setHint(R.string.change_account)
+            setHint(R.string.unmixed_account)
         }
 
         val textChanged = {
@@ -76,7 +80,10 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
         mixedAccountInputHelper.textChanged = textChanged
         changeAccountInputHelper.textChanged = textChanged
 
-        val setEnabled: (Boolean) -> Unit = {enabled ->
+        mixedAccountInputHelper.editText.setText(R.string.mixed)
+        changeAccountInputHelper.editText.setText(R.string.unmixed)
+
+        val setEnabled: (Boolean) -> Unit = { enabled ->
             if (enabled) {
                 tv_create.show()
                 progress_bar.hide()
@@ -156,14 +163,25 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
             switch_start_account_mixer.isChecked = !switch_start_account_mixer.isChecked
         }
 
+        mixer_not_running.text = when {
+            wallet.isAccountMixerActive -> getString(R.string.running)
+            else -> getString(R.string.not_running)
+        }
         switch_start_account_mixer.isChecked = wallet.isAccountMixerActive
         switch_start_account_mixer.setOnCheckedChangeListener(this@AccountMixerActivity)
+
+        multiWallet?.setAccountMixerNotification(this@AccountMixerActivity)
     }
 
     private fun setChecked(checked: Boolean) = GlobalScope.launch(Dispatchers.Main){
         switch_start_account_mixer.setOnCheckedChangeListener(null)
         switch_start_account_mixer.isChecked = checked
         switch_start_account_mixer.setOnCheckedChangeListener(this@AccountMixerActivity)
+
+        mixer_not_running.text = when {
+            wallet.isAccountMixerActive -> getString(R.string.running)
+            else -> getString(R.string.not_running)
+        }
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
@@ -171,19 +189,43 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
 
         changeSwitchState(false)
             if(isChecked){
-                startAccountMixer()
-            }else{
+                showWarningBeforeStarting()
+            } else {
                 stopAccountMixer()
             }
     }
 
-    private fun changeSwitchState(enabled: Boolean) = GlobalScope.launch(Dispatchers.Main){
+    private fun changeSwitchState(enabled: Boolean) = GlobalScope.launch(Dispatchers.Main) {
         start_account_mixer.isEnabled = enabled
         switch_start_account_mixer.isEnabled = enabled
     }
 
-    private fun startAccountMixer()  {
-        val title = PassPromptTitle(R.string.confirm_to_create_accounts, R.string.confirm_to_create_accounts, R.string.confirm_to_create_accounts)
+    private fun showWarningBeforeStarting() {
+
+        if (multiWallet!!.isSyncing) {
+            changeSwitchState(true)
+            SnackBar.showError(this, R.string.wait_for_sync)
+            return
+        } else if (!multiWallet!!.isConnectedToDecredNetwork) {
+            changeSwitchState(true)
+            SnackBar.showError(this, R.string.not_connected)
+            return
+        }
+
+        InfoDialog(this)
+                .setMessage(getString(R.string.start_mixer_warning))
+                .setPositiveButton(getString(R.string._continue), DialogInterface.OnClickListener { _, _ ->
+                    startAccountMixer()
+                })
+                .setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { _, _ ->
+                    changeSwitchState(true)
+                })
+                .show()
+    }
+
+    private fun startAccountMixer() {
+
+        val title = PassPromptTitle(R.string.unlock_to_start_mixing, R.string.unlock_to_start_mixing, R.string.unlock_to_start_mixing)
         PassPromptUtil(this@AccountMixerActivity, wallet.id, title, allowFingerprint = true) { dialog, passphrase ->
 
             if (passphrase == null) {
@@ -191,13 +233,15 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
                 return@PassPromptUtil true
             }
 
-            try{
-                wallet.startAccountMixer(passphrase)
+            try {
+                multiWallet!!.startAccountMixer(wallet.id, passphrase)
                 setChecked(true)
                 changeSwitchState(true)
                 GlobalScope.launch(Dispatchers.Main) {
                     dialog?.dismiss()
                 }
+
+                SnackBar.showText(this, R.string.mixer_is_running)
 
             }catch (e: Exception){
                 if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
@@ -208,7 +252,13 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
                         dialog.setProcessing(false)
                         dialog.showError()
                     }
-                } else {
+                } else if(e.message == Dcrlibwallet.ErrNoMixableOutput){
+                    SnackBar.showError(this, R.string.no_mixable_output)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        dialog?.dismiss()
+                        changeSwitchState(true)
+                    }
+                } else{
                     GlobalScope.launch(Dispatchers.Main) {
                         changeSwitchState(true)
 
@@ -225,9 +275,20 @@ class AccountMixerActivity: BaseActivity(), CompoundButton.OnCheckedChangeListen
     }
 
     private fun stopAccountMixer() = GlobalScope.launch(Dispatchers.Default){
-        wallet.stopAccountMixer()
+        multiWallet?.stopAccountMixer(wallet.id)
         setChecked(false)
         changeSwitchState(true)
+    }
+
+    override fun onAccountMixerEnded(walletID: Long) {
+        if(walletID == wallet.id){
+            setChecked(false)
+            changeSwitchState(true)
+            SnackBar.showText(this, R.string.mixer_has_stopped_running)
+        }
+    }
+
+    override fun onAccountMixerStarted(walletID: Long) {
     }
 
 }
