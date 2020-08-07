@@ -34,7 +34,7 @@ type MultiWallet struct {
 	notificationListenersMu         sync.RWMutex
 	txAndBlockNotificationListeners map[string]TxAndBlockNotificationListener
 
-	blocksRescanProgressListener    BlocksRescanProgressListener
+	blocksRescanProgressListener     BlocksRescanProgressListener
 	accountMixerNotificationListener AccountMixerNotificationListener
 
 	shuttingDown chan bool
