@@ -68,10 +68,29 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/colorBackground"
+        android:paddingLeft="@dimen/margin_padding_size_24"
+        android:paddingRight="@dimen/margin_padding_size_24"
+        android:paddingBottom="@dimen/margin_padding_size_12"
+        android:id="@+id/transactions_page_header"
+        android:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_sort_spinner" />
+
+    </LinearLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -85,6 +104,16 @@
             android:layout_marginBottom="@dimen/margin_padding_size_8" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="@color/lightGrayTextColor"
+        app:fontFamily="@font/source_sans_pro"
+        android:text="@string/no_proposals"/>
 
 
 

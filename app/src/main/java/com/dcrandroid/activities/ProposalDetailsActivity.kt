@@ -107,7 +107,7 @@ class ProposalDetailsActivity : BaseActivity() {
                 votePercent.visibility = View.VISIBLE
                 voteProgress.visibility = View.VISIBLE
                 yes.text = "Yes: " + voteItem.optionsResults!![1].votesreceived + " (" + (voteItem.optionsResults!![1].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100 + "%)"
-                no.text = "No: " + voteItem.optionsResults!![0].votesreceived + " (" + (voteItem.optionsResults!![1].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100 + "%)"
+                no.text = "No: " + voteItem.optionsResults!![0].votesreceived + " (" + (voteItem.optionsResults!![0].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100 + "%)"
                 val percentage = (voteItem.optionsResults!![1].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100
                 votePercent.text = "%.2f%%".format(percentage)
                 voteProgress.progress = percentage.toInt()

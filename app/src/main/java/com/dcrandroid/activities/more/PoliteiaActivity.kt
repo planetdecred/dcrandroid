@@ -1,6 +1,12 @@
 package com.dcrandroid.activities.more
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -8,6 +14,8 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.ProposalAdapter
 import com.dcrandroid.data.Proposal
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Politeia
@@ -16,13 +24,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
 
-class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
+class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, OnItemSelectedListener {
     private var proposals = ArrayList<Proposal>()
     private var recyclerView: RecyclerView? = null
     private var proposalAdapter: ProposalAdapter? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var layoutManager: LinearLayoutManager? = null
+    private lateinit var emptList: TextView
 
     private var politeia: Politeia? = Politeia()
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
@@ -38,6 +49,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         recyclerView = findViewById(R.id.recycler_view)
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+        emptList = findViewById(R.id.empty_list)
         swipeRefreshLayout!!.setOnRefreshListener(this)
 
         layoutManager = LinearLayoutManager(this)
@@ -45,7 +57,38 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
         proposalAdapter = ProposalAdapter(proposals, this)
         recyclerView!!.adapter = proposalAdapter
 
-        loadProposals()
+
+        val categorySortItems = this.resources.getStringArray(R.array.proposal_status_sort)
+        val categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categorySortItems)
+        categorySortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        var selectionCurrent: Int = category_sort_spinner.selectedItemPosition
+        category_sort_spinner.adapter = categorySortAdapter
+        category_sort_spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+                selectionCurrent = position
+                when (position) {
+                    0 -> {
+                        loadInDiscussionProposals()
+                    }
+                    1 -> {
+                        loadActiveProposals()
+                    }
+                    2 -> {
+                        loadApprovedProposals()
+                    }
+                    3 -> {
+                        loadRejectedProposals()
+                    }
+                    4 -> {
+                        loadAbandonedProposals()
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        loadAllProposals()
 
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -54,9 +97,10 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
                     totalItemCount = layoutManager!!.itemCount
                     pastVisibleItems = layoutManager!!.findFirstVisibleItemPosition()
                     if (loading) {
+                        // Start loading new data on the 12th recycler item.
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 8) {
                             loading = false
-                            loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
+//                            loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
                         }
                     }
                 }
@@ -94,9 +138,12 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun loadProposals() = GlobalScope.launch(Dispatchers.Default) {
-        swipeRefreshLayout!!.isRefreshing = true
+    private fun loadAllProposals() = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            swipeRefreshLayout!!.isRefreshing = true
+        }
         val jsonResult = politeia!!.getProposalsChunk("")
+
         var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
 
         if (tempProposalList == null) {
@@ -106,6 +153,9 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
                 it.clear()
                 it.addAll(tempProposalList)
             }
+
+            checkEmptyProposalList("in discussion")
+
             withContext(Dispatchers.Main) {
                 proposalAdapter?.notifyDataSetChanged()
             }
@@ -113,8 +163,152 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
         swipeRefreshLayout!!.isRefreshing = false
     }
 
+    private fun loadInDiscussionProposals() = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            swipeRefreshLayout!!.isRefreshing = true
+        }
+        val jsonResult = politeia!!.getBatchPreProposals()
+
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+
+        if (tempProposalList == null) {
+            tempProposalList = arrayOf()
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+
+            checkEmptyProposalList("in discussion")
+
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        }
+        swipeRefreshLayout!!.isRefreshing = false
+    }
+
+    private fun loadActiveProposals() = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            swipeRefreshLayout!!.isRefreshing = true
+        }
+        val jsonResult = politeia!!.getBatchActiveProposals()
+
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+
+        if (tempProposalList == null) {
+            Toast.makeText(this@PoliteiaActivity, "Empty list", Toast.LENGTH_LONG).show()
+
+            tempProposalList = arrayOf()
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+
+            checkEmptyProposalList("active")
+
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        }
+        swipeRefreshLayout!!.isRefreshing = false
+    }
+
+    private fun loadApprovedProposals() = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            swipeRefreshLayout!!.isRefreshing = true
+        }
+        val jsonResult = politeia!!.getBatchApprovedProposals()
+
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+
+        if (tempProposalList == null) {
+            tempProposalList = arrayOf()
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+
+            checkEmptyProposalList("approved")
+
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        }
+        swipeRefreshLayout!!.isRefreshing = false
+    }
+
+    private fun loadRejectedProposals() = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            swipeRefreshLayout!!.isRefreshing = true
+        }
+        val jsonResult = politeia!!.getBatchRejectedProposals()
+
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+
+        if (tempProposalList == null) {
+            tempProposalList = arrayOf()
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+
+            checkEmptyProposalList("rejected")
+
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        }
+        swipeRefreshLayout!!.isRefreshing = false
+    }
+
+    private fun loadAbandonedProposals() = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            swipeRefreshLayout!!.isRefreshing = true
+        }
+        val jsonResult = politeia!!.getBatchAbandonedProposals()
+
+        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+
+        if (tempProposalList == null) {
+            tempProposalList = arrayOf()
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+
+            checkEmptyProposalList("abandoned")
+
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        }
+        swipeRefreshLayout!!.isRefreshing = false
+    }
+
+    private fun checkEmptyProposalList(status: String) {
+        runOnUiThread {
+            if (proposals.size > 0) {
+                swipe_refresh_layout?.show()
+            } else {
+                swipe_refresh_layout?.hide()
+                emptList.text = String.format(Locale.getDefault(), "No %s proposals", status)
+            }
+        }
+    }
+
     override fun onRefresh() {
-        loadProposals()
+        loadAllProposals()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
     }
 
 }
