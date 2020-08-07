@@ -33,6 +33,7 @@ const (
 	ErrAddressDiscoveryNotDone      = "address_discovery_not_done"
 	ErrChangingPassphrase           = "err_changing_passphrase"
 	ErrSavingWallet                 = "err_saving_wallet"
+	ErrNoMixableOutput              = "err_no_mixable_output"
 )
 
 // todo, should update this method to translate more error kinds.

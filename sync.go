@@ -278,6 +278,17 @@ func (mw *MultiWallet) CancelSync() {
 	if cancelSync != nil {
 		log.Info("Canceling sync. May take a while for sync to fully cancel.")
 
+		// Stop running cspp mixers
+		for _, wallet := range mw.wallets {
+			if wallet.IsAccountMixerActive() {
+				log.Infof("[%d] Stopping cspp mixer", wallet.ID)
+				err := mw.StopAccountMixer(wallet.ID)
+				if err != nil {
+					log.Errorf("[%d] Error stopping cspp mixer: %v", wallet.ID, err)
+				}
+			}
+		}
+
 		// Cancel the context used for syncer.Run in spvSync().
 		// This may not immediately cause the sync process to terminate,
 		// but when it eventually terminates, syncer.Run will return `err == context.Canceled`.

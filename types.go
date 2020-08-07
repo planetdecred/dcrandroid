@@ -63,6 +63,11 @@ type Accounts struct {
 	CurrentBlockHeight int32
 }
 
+type AccountMixerNotificationListener interface {
+	OnAccountMixerStarted(walletID int)
+	OnAccountMixerEnded(walletID int)
+}
+
 /** begin sync-related types */
 
 type SyncProgressListener interface {

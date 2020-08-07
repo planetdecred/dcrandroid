@@ -6,6 +6,8 @@ import (
 	"github.com/decred/dcrwallet/errors/v2"
 )
 
+const smalletSplitPoint = 000.00262144
+
 func (mw *MultiWallet) listenForTransactions(walletID int) {
 	go func() {
 
@@ -63,6 +65,10 @@ func (mw *MultiWallet) listenForTransactions(walletID int) {
 					mw.publishBlockAttached(wallet.ID, int32(block.Header.Height))
 				}
 
+				if len(v.AttachedBlocks) > 0 {
+					mw.checkWalletMixers()
+				}
+
 			case <-mw.syncData.syncCanceled:
 				n.Done()
 			}
@@ -89,6 +95,26 @@ func (mw *MultiWallet) RemoveTxAndBlockNotificationListener(uniqueIdentifier str
 	defer mw.notificationListenersMu.Unlock()
 
 	delete(mw.txAndBlockNotificationListeners, uniqueIdentifier)
+}
+
+func (mw *MultiWallet) checkWalletMixers() {
+	for _, wallet := range mw.wallets {
+		if wallet.IsAccountMixerActive() {
+			changeAccount := wallet.ReadInt32ConfigValueForKey(AccountMixerChangeAccount, -1)
+			hasMixableOutput, err := wallet.accountHasMixableOutput(changeAccount)
+			if err != nil {
+				log.Errorf("Error checking for mixable outputs: %v", err)
+			}
+
+			if !hasMixableOutput {
+				log.Infof("[%d] change account does not have a mixable output, stopping account mixer", wallet.ID)
+				err = mw.StopAccountMixer(wallet.ID)
+				if err != nil {
+					log.Errorf("Error stopping account mixer: %v", err)
+				}
+			}
+		}
+	}
 }
 
 func (mw *MultiWallet) mempoolTransactionNotification(transaction string) {
