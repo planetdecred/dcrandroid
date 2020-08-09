@@ -143,3 +143,43 @@ func (wallet *Wallet) accountHasMixableOutput(accountNumber int32) (bool, error)
 func (wallet *Wallet) IsAccountMixerActive() bool {
 	return wallet.cancelAccountMixer != nil
 }
+
+func (wallet *Wallet) FindCSPPAccounts() ([]int32, error) {
+	var mixedTransactions []Transaction
+	err := wallet.txDB.FindAll("IsMixed", true, &mixedTransactions)
+	if err != nil {
+		return nil, translateError(err)
+	}
+
+	var csppAccountNumbers []int32
+
+	addAcccountIfNotExist := func(accountNumber int32) {
+		found := false
+		for i := range csppAccountNumbers {
+			if csppAccountNumbers[i] == accountNumber {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			csppAccountNumbers = append(csppAccountNumbers, accountNumber)
+		}
+	}
+
+	for _, tx := range mixedTransactions {
+		for _, input := range tx.Inputs {
+			if input.AccountNumber >= 0 {
+				addAcccountIfNotExist(input.AccountNumber)
+			}
+		}
+
+		for _, output := range tx.Outputs {
+			if output.AccountNumber >= 0 {
+				addAcccountIfNotExist(output.AccountNumber)
+			}
+		}
+	}
+
+	return csppAccountNumbers, nil
+}
