@@ -123,7 +123,6 @@ func (wallet *Wallet) accountHasMixableOutput(accountNumber int32) (bool, error)
 
 	hasMixableOutput := false
 	for _, credit := range credits {
-		log.Info("Credit: ", credit.Amount)
 		if credit.Amount.ToCoin() > smalletSplitPoint {
 			hasMixableOutput = true
 			break
@@ -132,7 +131,6 @@ func (wallet *Wallet) accountHasMixableOutput(accountNumber int32) (bool, error)
 
 	if !hasMixableOutput {
 		lockedOutpoints := wallet.internal.LockedOutpoints()
-		log.Infof("Checking %d locked outpoints", len(lockedOutpoints))
 		hasMixableOutput = len(lockedOutpoints) > 0
 	}
 
@@ -144,9 +142,9 @@ func (wallet *Wallet) IsAccountMixerActive() bool {
 	return wallet.cancelAccountMixer != nil
 }
 
-func (wallet *Wallet) FindCSPPAccounts() ([]int32, error) {
-	var mixedTransactions []Transaction
-	err := wallet.txDB.FindAll("IsMixed", true, &mixedTransactions)
+func (wallet *Wallet) FindLastUsedCSPPAccounts() ([]int32, error) {
+	var mixedTransaction Transaction
+	err := wallet.txDB.FindLast("IsMixed", true, &mixedTransaction)
 	if err != nil {
 		return nil, translateError(err)
 	}
@@ -167,18 +165,18 @@ func (wallet *Wallet) FindCSPPAccounts() ([]int32, error) {
 		}
 	}
 
-	for _, tx := range mixedTransactions {
-		for _, input := range tx.Inputs {
-			if input.AccountNumber >= 0 {
-				addAcccountIfNotExist(input.AccountNumber)
-			}
+	for _, input := range mixedTransaction.Inputs {
+		if input.AccountNumber >= 0 {
+			addAcccountIfNotExist(input.AccountNumber)
 		}
 
-		for _, output := range tx.Outputs {
-			if output.AccountNumber >= 0 {
-				addAcccountIfNotExist(output.AccountNumber)
-			}
+	}
+
+	for _, output := range mixedTransaction.Outputs {
+		if output.AccountNumber >= 0 {
+			addAcccountIfNotExist(output.AccountNumber)
 		}
+
 	}
 
 	return csppAccountNumbers, nil
