@@ -134,6 +134,8 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/white"
                     android:textSize="18sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     app:fontFamily="@font/source_sans_pro"
                     />
 
@@ -166,6 +168,8 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/white"
                     android:textSize="18sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
