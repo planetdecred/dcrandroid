@@ -50,6 +50,9 @@ class Proposal : Serializable {
     @SerializedName("votestatus")
     var voteStatus: VoteStatus? = null
 
+    @SerializedName("votesummary")
+    var voteSummary: VoteSummary? = null
+
     fun getNumcomments(): Int? {
         return numcomments
     }
@@ -94,6 +97,20 @@ class Proposal : Serializable {
         var totalvotes: Int = 0
 
         @SerializedName("optionsresult")
+        var optionsResults: Array<OptionsResult>? = null
+
+        @SerializedName("passpercentage")
+        var passpercentage: Int = 0
+    }
+
+    inner class VoteSummary : Serializable {
+        @SerializedName("status")
+        var status: Int = 0
+
+        @SerializedName("approved")
+        var approved: Boolean = false
+
+        @SerializedName("results")
         var optionsResults: Array<OptionsResult>? = null
 
         @SerializedName("passpercentage")

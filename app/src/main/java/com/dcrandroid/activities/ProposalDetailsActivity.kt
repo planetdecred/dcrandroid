@@ -35,7 +35,7 @@ class ProposalDetailsActivity : BaseActivity() {
     private lateinit var no: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var voteProgress: ProgressBar
-    private var politeia: Politeia? = Politeia()
+//    private var politeia: Politeia? = Politeia("")
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
     private var proposal: Proposal? = null
 
@@ -66,8 +66,8 @@ class ProposalDetailsActivity : BaseActivity() {
     }
 
     private fun loadProposalDetails() = GlobalScope.launch(Dispatchers.Default) {
-        val proposalResult = politeia!!.getProposalDetails(proposal!!.censorshipRecord!!.token, "")
-        val voteStatusResult = politeia!!.getVoteStatus(proposal!!.censorshipRecord!!.token)
+        val proposalResult = multiWallet!!.politeia!!.getProposalDetails(proposal!!.censorshipRecord!!.token, "")
+        val voteStatusResult = multiWallet!!.politeia!!.getVoteStatus(proposal!!.censorshipRecord!!.token)
 
         runOnUiThread {
             val proposalItem = gson.fromJson(proposalResult, Proposal::class.java)

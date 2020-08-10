@@ -49,20 +49,21 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
             holder.status.background = getDrawable(context, R.drawable.bg_light_orange_corners_4dp)
             holder.status.text = context.getString(R.string.status_abandoned)
         } else {
-            if (proposal.voteStatus!!.status == 0) {
+            if (proposal.voteSummary!!.status == 0) {
                 holder.status.text = context.getString(R.string.status_invalid)
-            } else if (proposal.voteStatus!!.status == 1) {
+            } else if (proposal.voteSummary!!.status == 1) {
                 holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
                 holder.status.text = context.getString(R.string.status_not_authorized)
-            } else if (proposal.voteStatus!!.status == 2) {
+            } else if (proposal.voteSummary!!.status == 2) {
                 holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
                 holder.status.text = context.getString(R.string.status_authorized)
-            } else if (proposal.voteStatus!!.status == 3) {
+            } else if (proposal.voteSummary!!.status == 3) {
                 holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
                 holder.status.text = context.getString(R.string.status_vote_started)
-            } else if (proposal.voteStatus!!.status == 4) {
-                val yesPercentage = (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
-                val passPercentage = proposal.voteStatus!!.passpercentage
+            } else if (proposal.voteSummary!!.status == 4) {
+                var totalVotes: Int = proposal.voteSummary!!.optionsResults!![0].votesreceived + proposal.voteSummary!!.optionsResults!![1].votesreceived
+                val yesPercentage = (proposal.voteSummary!!.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100
+                val passPercentage = proposal.voteSummary!!.passpercentage
 
                 if (yesPercentage >= passPercentage) {
                     holder.status.background = getDrawable(context, R.drawable.bg_light_green_corners_4dp)
@@ -71,16 +72,17 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
                     holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
                     holder.status.text = context.getString(R.string.status_rejected)
                 }
-            } else if (proposal.voteStatus!!.status == 5) {
+            } else if (proposal.voteSummary!!.status == 5) {
                 holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
                 holder.status.text = context.getString(R.string.status_non_existent)
             }
         }
 
-        if (proposal.voteStatus != null && proposal.voteStatus!!.totalvotes != 0) {
+        if (proposal.voteSummary != null && proposal.voteSummary!!.status == 4) {
+            var totalVotes: Int = proposal.voteSummary!!.optionsResults!![0].votesreceived + proposal.voteSummary!!.optionsResults!![1].votesreceived
             holder.progress.visibility = View.VISIBLE
             holder.progressBar.visibility = View.VISIBLE
-            val percentage = (proposal.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal.voteStatus!!.totalvotes.toFloat()) * 100
+            val percentage = (proposal.voteSummary!!.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100
             holder.progress.text = String.format(Locale.getDefault(), "%.2f%%", percentage)
             holder.progressBar.progress = percentage.toInt()
         } else {
