@@ -13,6 +13,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 3
+        versionName "v1.5.0"
+        buildConfigField("String", "BuildDate", "\"${getDate()}\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -35,7 +37,6 @@ android {
     productFlavors {
         tstnet {
             dimension "nettype"
-            versionName "testnet ${getDate()}"
             applicationIdSuffix ".testnet"
             buildConfigField("boolean", "IS_TESTNET", "true")
             buildConfigField("int", "TicketMaturity", "16")
@@ -51,7 +52,6 @@ android {
 
         mainnet {
             dimension "nettype"
-            versionName "mainnet ${getDate()}"
             applicationIdSuffix ".mainnet"
             buildConfigField("boolean", "IS_TESTNET", "false")
             buildConfigField("int", "TicketMaturity", "256")

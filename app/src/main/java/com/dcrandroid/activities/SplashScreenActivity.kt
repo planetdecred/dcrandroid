@@ -55,6 +55,7 @@ class SplashScreenActivity : BaseActivity() {
         }
 
         setContentView(R.layout.activity_splash_screen)
+        app_version.text = BuildConfig.VERSION_NAME
 
         ll_create_wallet.setOnClickListener {
             PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
@@ -226,6 +227,7 @@ class SplashScreenActivity : BaseActivity() {
 
         delay(3000)
         loading_status.hide()
+        app_version.hide()
 
         symbolAnim = false
         symbolAnimation?.stop()
