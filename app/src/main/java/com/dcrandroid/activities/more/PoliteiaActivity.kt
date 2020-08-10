@@ -18,6 +18,7 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_politeia.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -41,6 +42,10 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
     private var visibleItemCount: Int = 0
     private var totalItemCount: Int = 0
 
+    private val availableProposalTypes = ArrayList<String>()
+
+    private var categorySortAdapter: ArrayAdapter<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_politeia)
@@ -55,11 +60,11 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
         proposalAdapter = ProposalAdapter(proposals, this)
         recyclerView!!.adapter = proposalAdapter
 
-        val categorySortItems = this.resources.getStringArray(R.array.proposal_status_sort)
-        val categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categorySortItems)
-        categorySortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
+        categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         var selectionCurrent: Int = category_sort_spinner.selectedItemPosition
         category_sort_spinner.adapter = categorySortAdapter
+
         category_sort_spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
                 selectionCurrent = position
@@ -84,6 +89,8 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        refreshAvailableProposalCategories()
 
 //        loadAllProposals()
 
@@ -296,6 +303,30 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 swipe_refresh_layout?.hide()
                 emptyList.text = String.format(Locale.getDefault(), "No %s proposals", status)
             }
+        }
+    }
+
+    private fun refreshAvailableProposalCategories() = GlobalScope.launch(Dispatchers.Default) {
+        availableProposalTypes.clear()
+
+        val preCount = multiWallet!!.politeia.countPre()
+        val activeCount = multiWallet!!.politeia.countActive()
+        val approvedCount = multiWallet!!.politeia.countApproved()
+        val rejectedCount = multiWallet!!.politeia.countRejected()
+        val abandonedCount = multiWallet!!.politeia.countAbandoned()
+
+        withContext(Dispatchers.Main) {
+            if (this@PoliteiaActivity == null) {
+                return@withContext
+            }
+
+            availableProposalTypes.add(getString(R.string.proposal_in_discussion, preCount))
+            availableProposalTypes.add(getString(R.string.proposal_active, activeCount))
+            availableProposalTypes.add(getString(R.string.proposal_approved, approvedCount))
+            availableProposalTypes.add(getString(R.string.proposal_rejected, rejectedCount))
+            availableProposalTypes.add(getString(R.string.proposal_abandoned, abandonedCount))
+
+            categorySortAdapter?.notifyDataSetChanged()
         }
     }
 
