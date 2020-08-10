@@ -235,11 +235,10 @@ func (b *Bucket) delete(key []byte) error {
 }
 
 func (b *Bucket) forEach(fn func(k, v []byte) error) error {
-	txn := b.dbTransaction.db.NewTransaction(false)
+	txn := b.txn
 	it := txn.NewIterator(badger.DefaultIteratorOptions)
 	defer func() {
 		it.Close()
-		txn.Discard()
 	}()
 	prefix := b.prefix
 	it.Rewind()
@@ -249,10 +248,12 @@ func (b *Bucket) forEach(fn func(k, v []byte) error) error {
 		if bytes.Equal(item.Key(), prefix) {
 			continue
 		}
+
 		v, err := item.Value()
 		if err != nil {
 			return convertErr(err)
 		}
+
 		prefixLength := int(v[0])
 		if bytes.Equal(item.Key()[:prefixLength], prefix) {
 			if item.UserMeta() == metaBucket {

@@ -42,7 +42,9 @@ type transaction struct {
 	badgerTx *badger.Txn
 	db       *db
 	buckets  []*Bucket
-	writable bool
+
+	writable    bool
+	isDiscarded bool
 }
 
 func (tx *transaction) ReadBucket(key []byte) walletdb.ReadBucket {
@@ -140,16 +142,12 @@ func (tx *transaction) Commit() error {
 //
 // This function is part of the walletdb.Tx interface implementation.
 func (tx *transaction) Rollback() error {
-	if tx.db.closed {
+	if tx.db.closed || tx.isDiscarded {
 		return errors.E(errors.Invalid)
 	}
 
-	writeable := tx.writable
 	tx.badgerTx.Discard()
-	tx.badgerTx = tx.db.NewTransaction(writeable)
-	for _, b := range tx.buckets {
-		b.setTx(tx.badgerTx)
-	}
+	tx.isDiscarded = true
 	return nil
 }
 
@@ -229,6 +227,10 @@ func (b *Bucket) CreateBucketIfNotExists(key []byte) (walletdb.ReadWriteBucket, 
 //
 //This function is part of the walletdb.Bucket interface implementation.
 func (b *Bucket) DeleteNestedBucket(key []byte) error {
+	if key == nil {
+		return errors.E(errors.Invalid)
+	}
+
 	if b.dbTransaction.db.closed {
 		return errors.E(errors.Invalid)
 	}
@@ -366,6 +368,7 @@ func (c *Cursor) First() (key, value []byte) {
 	}
 
 	item := c.iterator.Item()
+	c.ck = item.KeyCopy(nil)
 
 	val, err := item.ValueCopy(nil)
 	if err != nil {
@@ -373,18 +376,15 @@ func (c *Cursor) First() (key, value []byte) {
 	}
 
 	prefixLength := int(val[0])
-	if prefixLength == len(c.prefix) {
-		if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
-			c.ck = item.KeyCopy(nil)
-			if item.UserMeta() == metaBucket {
-				return c.ck[prefixLength:], nil
-			}
-			return c.ck[prefixLength:], val[1:]
+	if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
+		if item.UserMeta() == metaBucket {
+			return c.ck[prefixLength:], nil
 		}
+		return c.ck[prefixLength:], val[1:]
 	}
 
 	//No item found
-	return nil, nil
+	return c.Next()
 }
 
 // Last positions the cursor at the last key/value pair and returns the pair.
@@ -446,7 +446,9 @@ func (c *Cursor) Next() (key, value []byte) {
 	if !c.iterator.ValidForPrefix(c.prefix) {
 		return nil, nil
 	}
+
 	item := c.iterator.Item()
+	c.ck = item.KeyCopy(nil)
 
 	val, err := item.ValueCopy(nil)
 	if err != nil {
@@ -454,18 +456,15 @@ func (c *Cursor) Next() (key, value []byte) {
 	}
 
 	prefixLength := int(val[0])
-	if prefixLength == len(c.prefix) {
-		if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
-			c.ck = item.KeyCopy(nil)
-			if item.UserMeta() == metaBucket {
-				return c.ck[prefixLength:], nil
-			}
-
-			return c.ck[prefixLength:], val[1:]
+	if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
+		if item.UserMeta() == metaBucket {
+			return c.ck[prefixLength:], nil
 		}
+
+		return c.ck[prefixLength:], val[1:]
 	}
 
-	return nil, nil
+	return c.Next()
 }
 
 // Prev moves the cursor one key/value pair backward and returns the new pair.
@@ -503,14 +502,12 @@ func (c *Cursor) Prev() (key, value []byte) {
 	}
 
 	prefixLength := int(val[0])
-	if prefixLength == len(c.prefix) {
-		if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
-			c.ck = item.KeyCopy(nil)
-			if item.UserMeta() == metaBucket {
-				return c.ck[prefixLength:], nil
-			}
-			return c.ck[prefixLength:], val[1:]
+	if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
+		c.ck = item.KeyCopy(nil)
+		if item.UserMeta() == metaBucket {
+			return c.ck[prefixLength:], nil
 		}
+		return c.ck[prefixLength:], val[1:]
 	}
 
 	//Item Not valid.
@@ -526,6 +523,10 @@ func (c *Cursor) Seek(seek []byte) (key, value []byte) {
 		return nil, nil
 	}
 
+	if seek == nil {
+		return c.First()
+	}
+
 	seekKey, err := addPrefix(c.prefix, seek)
 	if err != nil {
 		return nil, nil
@@ -535,7 +536,9 @@ func (c *Cursor) Seek(seek []byte) (key, value []byte) {
 	if !c.iterator.ValidForPrefix(c.prefix) {
 		return nil, nil
 	}
+
 	item := c.iterator.Item()
+	c.ck = item.KeyCopy(nil)
 
 	val, err := item.ValueCopy(nil)
 	if err != nil {
@@ -543,17 +546,14 @@ func (c *Cursor) Seek(seek []byte) (key, value []byte) {
 	}
 
 	prefixLength := int(val[0])
-	if prefixLength == len(c.prefix) {
-		if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
-			c.ck = item.KeyCopy(nil)
-			if item.UserMeta() == metaBucket {
-				return c.ck[prefixLength:], nil
-			}
-			return c.ck[prefixLength:], val[1:]
+	if bytes.Equal(item.Key()[:prefixLength], c.prefix) {
+		if item.UserMeta() == metaBucket {
+			return c.ck[prefixLength:], nil
 		}
+		return c.ck[prefixLength:], val[1:]
 	}
 
-	return nil, nil
+	return c.Next()
 }
 
 // Close the cursor

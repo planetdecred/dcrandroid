@@ -141,6 +141,7 @@ func (mw *MultiWallet) Shutdown() {
 	if logRotator != nil {
 		log.Info("Shutting down log rotator")
 		logRotator.Close()
+		log.Info("Shutdown log rotator successfully")
 	}
 }
 
