@@ -320,6 +320,7 @@
     <string name="online">Online</string>
     <string name="no_transactions_yet">No transactions yet.</string>
     <string name="not_syncing">Not syncing</string>
+    <string name="rebroadcast">Rebroadcast</string>
     <string name="reconnect">Reconnect</string>
     <string name="disconnect">Disconnect</string>
     <string name="connect">Connect</string>
@@ -542,5 +543,6 @@
     <string name="disconnect_delete_wallet">Disconnect/cancel sync before deleting wallet</string>
     <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
+    <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
 
 </resources>

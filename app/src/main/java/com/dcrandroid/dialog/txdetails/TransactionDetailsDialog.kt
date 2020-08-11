@@ -20,9 +20,11 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_details.*
@@ -35,6 +37,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomSheetDialog(null), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
+
+    private val wallet = multiWallet.walletWithID(transaction.walletID)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.transaction_details, container, false)
@@ -62,6 +66,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         setConfirmationStatus()
 
+        rebroadcast_button.setOnClickListener(this)
         view_dcrdata.setOnClickListener(this)
         iv_info.setOnClickListener(this)
         tx_details_id.setOnClickListener(this)
@@ -76,7 +81,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                         tx_source_row.show()
                         tx_details_source.text = getSourceAccount()
 
-                        tx_source_wallet_badge.text = multiWallet.walletWithID(transaction.walletID).name
+                        tx_source_wallet_badge.text = wallet.name
                         tx_source_wallet_badge.show()
 
                         tx_dest_row.show()
@@ -96,7 +101,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                         tx_details_dest.text = getReceiveAccount()
                         tx_details_dest.setTextColor(resources.getColor(R.color.darkBlueTextColor))
 
-                        tx_dest_wallet_badge.text = multiWallet.walletWithID(transaction.walletID).name
+                        tx_dest_wallet_badge.text = wallet.name
                         tx_dest_wallet_badge.show()
 
                         toolbar_title.setText(R.string.received)
@@ -150,6 +155,12 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                 setTextColor(context.getColor(R.color.lightGrayTextColor))
             }
         }
+
+        if (transaction.height == -1) {
+            rebroadcast_button.show()
+        } else {
+            rebroadcast_button.hide()
+        }
     }
 
     // returns first external output address if any
@@ -188,7 +199,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), input.accountName)
             var inputBadge = ""
             if (input.accountNumber != null && input.accountNumber != -1) {
-                inputBadge = multiWallet.walletWithID(transaction.walletID).name
+                inputBadge = wallet.name
             }
             inputs.add(DropDownItem(amount, input.previousOutpoint!!, inputBadge))
         }
@@ -200,7 +211,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), output.accountName)
             var outputBadge = ""
             if (output.account != -1) {
-                outputBadge = multiWallet.walletWithID(transaction.walletID).name
+                outputBadge = wallet.name
             }
             outputs.add(DropDownItem(amount, output.address!!, outputBadge))
         }
@@ -251,6 +262,23 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(browserIntent)
+            }
+            R.id.rebroadcast_button -> {
+
+                if (!multiWallet.isConnectedToDecredNetwork) {
+                    SnackBar.showError(context!!, R.string.not_connected)
+                    return
+                }
+
+                try {
+                    wallet.publishUnminedTransactions()
+                    SnackBar.showText(context!!, R.string.rebroadcast_tx_success)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    val op = "rebroadcast tx"
+                    Utils.showErrorDialog(context!!, op + ": " + e.message)
+                    Dcrlibwallet.logT(op, e.message)
+                }
             }
         }
     }
