@@ -75,13 +75,13 @@
     <string name="remove_wallet_prompt">Supprimer le porte-monnaie de cet application ?</string>
     <string name="remove_watch_wallet_prompt"> Supprimer le porte-monnaie en lecture seule de cet appareil?</string>
     <string name="remove_wallet_message">Assurez-vous d\'avoir une sauvegarde de votre phrase de récupération avant de supprimer le porte-monnaie.</string>
+    <string name="error_copied">Erreur copiée</string>
+    <string name="version">Version</string>
+    <string name="build_date">Build date</string>
+    <string name="net">Net</string>
+    <string name="connecting_to_peers">Connexion aux pairs</string>
 
     <!--/General-->
-
-    <!--Peers-->
-    <string name="version">Version</string>
-    <string name="connecting_to_peers">Connexion aux pairs</string>
-    <!--/Peers-->
 
     <!--Account-->
     <string name="account_number">Numéro de compte</string>
