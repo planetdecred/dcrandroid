@@ -317,6 +317,7 @@
     <string name="online">Online</string>
     <string name="no_transactions_yet">Aucune transaction pour le moment.</string>
     <string name="not_syncing">Pas de synchronisation</string>
+    <string name="rebroadcast">Rebroadcast</string>
     <string name="reconnect">Reconnecter</string>
     <string name="disconnect">Déconnecter</string>
     <string name="connect">Connecter</string>
@@ -539,5 +540,6 @@
     <string name="disconnect_delete_wallet">Déconnecter/annuler la synchronisation avant de supprimer un porte-monnaie</string>
     <string name="seed_backup_success_msg">Soyez certain de conserver votre phrase de récupération dans un lieu sûr.</string>
     <string name="seed_backup_verified">Votre phrase de récupération est vérifiée</string>
+    <string name="rebroadcast_tx_success">Transactions non-minées republiées vers le réseau decred</string>
 
 </resources>
