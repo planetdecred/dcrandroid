@@ -11,6 +11,9 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class Proposal : Serializable {
+    @SerializedName("ID")
+    var id: Long = 0
+
     @SerializedName("name")
     var name: String? = ""
 

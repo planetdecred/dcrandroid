@@ -18,9 +18,11 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,7 +55,7 @@ import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener {
+class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, PoliteiaNotificationListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -130,8 +132,22 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             currentBottomSheet = sendPageSheet
         }
 
+        syncProposals()
+
         setupLogoAnim()
         Handler().postDelayed({ checkWifiSync() }, 1000)
+    }
+
+    private fun syncProposals() {
+        Thread(Runnable {
+            try {
+                multiWallet!!.politeia.sync(this@HomeActivity)
+                println("Logged IN Broadcast sent")
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                runOnUiThread { Toast.makeText(this@HomeActivity, "PoliteiaSyncError " + e.localizedMessage, Toast.LENGTH_SHORT).show() }
+            }
+        }).start()
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
@@ -394,6 +410,18 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun debug(debugInfo: DebugInfo?) {
+    }
+
+    override fun onNewProposal(proposalID: Long, token: String?) {
+        Log.i(TAG, "[][][][][] New Proposal $proposalID $token")
+    }
+
+    override fun onVoteStarted(proposalID: Long, token: String?) {
+        Log.i(TAG, "[][][][][] Vote Started $proposalID $token")
+    }
+
+    override fun onVoteFinished(proposalID: Long, token: String?) {
+        Log.i(TAG, "[][][][][] Vote Finished $proposalID $token")
     }
 }
 

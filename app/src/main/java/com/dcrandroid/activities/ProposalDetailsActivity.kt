@@ -11,11 +11,11 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.Deserializer
 import com.dcrandroid.util.Utils
 import com.google.gson.GsonBuilder
-import dcrlibwallet.Politeia
 import kotlinx.android.synthetic.main.activity_proposal_details.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.util.*
@@ -35,7 +35,6 @@ class ProposalDetailsActivity : BaseActivity() {
     private lateinit var no: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var voteProgress: ProgressBar
-//    private var politeia: Politeia? = Politeia("")
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
     private var proposal: Proposal? = null
 
@@ -66,12 +65,16 @@ class ProposalDetailsActivity : BaseActivity() {
     }
 
     private fun loadProposalDetails() = GlobalScope.launch(Dispatchers.Default) {
-        val proposalResult = multiWallet!!.politeia!!.getProposalDetails(proposal!!.censorshipRecord!!.token, "")
-        val voteStatusResult = multiWallet!!.politeia!!.getVoteStatus(proposal!!.censorshipRecord!!.token)
+        val proposalResult = multiWallet!!.politeia!!.getProposalByID(proposal!!.id)
+        val proposalObjectJson = JSONObject(proposalResult).getJSONObject("result")
+        val proposalResultString: String = proposalObjectJson.toString()
+
+        val voteObjectJson = proposalObjectJson.getJSONObject("votesummary")
+        val voteSummaryString: String = voteObjectJson.toString()
 
         runOnUiThread {
-            val proposalItem = gson.fromJson(proposalResult, Proposal::class.java)
-            val voteItem = gson.fromJson(voteStatusResult, Proposal.VoteStatus::class.java)
+            val proposalItem = gson.fromJson(proposalResultString, Proposal::class.java)
+            val voteSummaryItem = gson.fromJson(voteSummaryString, Proposal.VoteSummary::class.java)
 
             proposalTitle.text = proposalItem.name
             author.text = proposal!!.username
@@ -80,7 +83,7 @@ class ProposalDetailsActivity : BaseActivity() {
             version.text = String.format(Locale.getDefault(), "version %s", proposal!!.version)
 
             // Get and read file from array.
-            if (proposal!!.files != null && proposal!!.files!!.isEmpty()) {
+            if (proposal!!.files != null && proposal!!.files!!.isNotEmpty()) {
                 progressBar.visibility = View.VISIBLE
 
                 var payload: String?
@@ -103,12 +106,13 @@ class ProposalDetailsActivity : BaseActivity() {
             }
 
             // Get vote status.
-            if (voteItem != null && voteItem.totalvotes != 0) {
+            if ( voteSummaryItem.status == 4) {
+                val totalVotes = voteSummaryItem.optionsResults!![0].votesreceived + voteSummaryItem.optionsResults!![1].votesreceived
                 votePercent.visibility = View.VISIBLE
                 voteProgress.visibility = View.VISIBLE
-                yes.text = "Yes: " + voteItem.optionsResults!![1].votesreceived + " (" + (voteItem.optionsResults!![1].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100 + "%)"
-                no.text = "No: " + voteItem.optionsResults!![0].votesreceived + " (" + (voteItem.optionsResults!![0].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100 + "%)"
-                val percentage = (voteItem.optionsResults!![1].votesreceived.toFloat() / voteItem.totalvotes.toFloat()) * 100
+                yes.text = "Yes: " + voteSummaryItem.optionsResults!![1].votesreceived + " (" + (voteSummaryItem.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100 + "%)"
+                no.text = "No: " + voteSummaryItem.optionsResults!![0].votesreceived + " (" + (voteSummaryItem.optionsResults!![0].votesreceived.toFloat() / totalVotes.toFloat()) * 100 + "%)"
+                val percentage = (voteSummaryItem.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100
                 votePercent.text = "%.2f%%".format(percentage)
                 voteProgress.progress = percentage.toInt()
             } else {
@@ -123,20 +127,21 @@ class ProposalDetailsActivity : BaseActivity() {
                 status.text = getString(R.string.status_abandoned)
             } else {
                 status.visibility = View.VISIBLE
-                if (proposal!!.voteStatus!!.status == 0) {
+                if (proposal!!.voteSummary!!.status == 0) {
                     status.text = getString(R.string.status_invalid)
-                } else if (proposal!!.voteStatus!!.status == 1) {
+                } else if (proposal!!.voteSummary!!.status == 1) {
                     status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)
                     status.text = getString(R.string.status_not_authorized)
-                } else if (proposal!!.voteStatus!!.status == 2) {
+                } else if (proposal!!.voteSummary!!.status == 2) {
                     status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.default_app_button_bg)
                     status.text = getString(R.string.status_authorized)
-                } else if (proposal!!.voteStatus!!.status == 3) {
+                } else if (proposal!!.voteSummary!!.status == 3) {
                     status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.default_app_button_bg)
                     status.text = getString(R.string.status_vote_started)
-                } else if (proposal!!.voteStatus!!.status == 4) {
-                    val yesPercentage = (proposal!!.voteStatus!!.optionsResults!![1].votesreceived.toFloat() / proposal!!.voteStatus!!.totalvotes.toFloat()) * 100
-                    val passPercentage = proposal!!.voteStatus!!.passpercentage
+                } else if (proposal!!.voteSummary!!.status == 4) {
+                    val totalVotes: Int = proposal!!.voteSummary!!.optionsResults!![0].votesreceived + proposal!!.voteSummary!!.optionsResults!![1].votesreceived
+                    val yesPercentage = (proposal!!.voteSummary!!.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100
+                    val passPercentage = proposal!!.voteSummary!!.passpercentage
 
                     if (yesPercentage >= passPercentage) {
                         status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_light_green_corners_4dp)
@@ -145,7 +150,7 @@ class ProposalDetailsActivity : BaseActivity() {
                         status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)
                         status.text = getString(R.string.status_rejected)
                     }
-                } else if (proposal!!.voteStatus!!.status == 5) {
+                } else if (proposal!!.voteSummary!!.status == 5) {
                     status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)
                     status.text = getString(R.string.status_non_existent)
                 }

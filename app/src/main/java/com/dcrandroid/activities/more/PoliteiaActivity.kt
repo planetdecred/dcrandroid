@@ -1,33 +1,42 @@
 package com.dcrandroid.activities.more
 
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.ProposalAdapter
+import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_politeia.*
+import kotlinx.android.synthetic.main.activity_politeia.recycler_view
+import kotlinx.android.synthetic.main.activity_politeia.transactions_page_header
+import kotlinx.android.synthetic.main.single_wallet_transactions_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 
-class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, OnItemSelectedListener {
+
+class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener  {
     private var proposals = ArrayList<Proposal>()
     private var recyclerView: RecyclerView? = null
     private var proposalAdapter: ProposalAdapter? = null
@@ -37,7 +46,12 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
 
-    private var loading = true
+    private var loading1 = true
+    private var newestProposalsFirst = true
+    private var loadedAll = false
+    private val loading = AtomicBoolean(false)
+    private val initialLoadingDone = AtomicBoolean(false)
+
     private var pastVisibleItems: Int = 0
     private var visibleItemCount: Int = 0
     private var totalItemCount: Int = 0
@@ -45,6 +59,12 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
     private val availableProposalTypes = ArrayList<String>()
 
     private var categorySortAdapter: ArrayAdapter<String>? = null
+
+//    private val progressBar: ProgressBar
+    private var progressStatus = 0
+    private lateinit var textView: TextView
+    private var selectionCurrent: Int = 0
+    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,10 +79,35 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
         recyclerView!!.layoutManager = layoutManager
         proposalAdapter = ProposalAdapter(proposals, this)
         recyclerView!!.adapter = proposalAdapter
+        recyclerView!!.viewTreeObserver.addOnScrollChangedListener(this)
+
+
+//        progressBar = findViewById(R.id.progressBar)
+        textView = findViewById(R.id.textView)
+//        Thread(Runnable {
+//            while (progressStatus < 100) {
+//                loading_view.visibility = View.VISIBLE
+//                progressStatus += 10
+//                // Update the progress bar and display the
+//                //current value in the text view
+//                handler.post {
+//                    progressBar.progress = progressStatus
+//                    textView.text = ""+progressStatus + "/" + progressBar.max
+//                }
+//                try {
+//                    // Sleep for 200 milliseconds.
+//                    Thread.sleep(200)
+//                } catch (e:InterruptedException) {
+//                    e.printStackTrace()
+//                }
+//            }
+//        }).start()
+
+//        loadInDiscussionProposals()
 
         categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
         categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        var selectionCurrent: Int = category_sort_spinner.selectedItemPosition
+        selectionCurrent = category_sort_spinner.selectedItemPosition
         category_sort_spinner.adapter = categorySortAdapter
 
         category_sort_spinner.onItemSelectedListener = object : OnItemSelectedListener {
@@ -90,20 +135,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        refreshAvailableProposalCategories()
-
-//        loadAllProposals()
-
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
                     visibleItemCount = layoutManager!!.childCount
                     totalItemCount = layoutManager!!.itemCount
                     pastVisibleItems = layoutManager!!.findFirstVisibleItemPosition()
-                    if (loading) {
+                    if (loading1) {
                         // Start loading new data on the 12th recycler item.
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 8) {
-                            loading = false
+                            loading1 = false
 //                            loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
                         }
                     }
@@ -114,70 +155,167 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
         go_back.setOnClickListener {
             finish()
         }
+        refreshAvailableProposalCategories()
+
     }
 
-//    fun loadMore(token: String?) = GlobalScope.launch(Dispatchers.Default) {
-//        val jsonResult = politeia!!.getProposalsChunk(token)
-//        val tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
-//
-//        if (loading) {
-//            proposals.let {
-//                it.clear()
-//                it.addAll(tempProposalList)
-//            }
-//            withContext(Dispatchers.Main) {
-//                proposalAdapter?.notifyDataSetChanged()
-//            }
-//        } else {
-//            val positionStart = proposals.size
-//            proposals.addAll(tempProposalList)
-//            withContext(Dispatchers.Main) {
-//                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
-//
-//                // notify previous last item to remove bottom margin
-//                proposalAdapter?.notifyItemChanged(positionStart - 1)
-//
-//                loading = true
-//            }
-//        }
-//    }
+    override fun onScrollChanged() {
+        if (proposals.size < 5 || !initialLoadingDone.get()) return
 
-//    private fun loadAllProposals() = GlobalScope.launch(Dispatchers.Default) {
-//        runOnUiThread {
-//            swipeRefreshLayout!!.isRefreshing = true
-//        }
-//        val jsonResult = politeia!!.getProposalsChunk("")
-//
-//        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
-//
-//        if (tempProposalList == null) {
-//            tempProposalList = arrayOf()
-//        } else {
-//            proposals.let {
-//                it.clear()
-//                it.addAll(tempProposalList)
-//            }
-//
-//            checkEmptyProposalList("in discussion")
-//
-//            withContext(Dispatchers.Main) {
-//                proposalAdapter?.notifyDataSetChanged()
-//            }
-//        }
-//        swipeRefreshLayout!!.isRefreshing = false
-//    }
+        val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
+        transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+        else 0f
 
-    private fun loadInDiscussionProposals() = GlobalScope.launch(Dispatchers.Default) {
-        runOnUiThread {
-            swipeRefreshLayout!!.isRefreshing = true
+        val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
+        if (lastVisibleItem >= proposals.size) {
+            if (!loadedAll) {
+                recycler_view.stopScroll()
+                when (selectionCurrent) {
+                    0 -> {
+                        loadInDiscussionProposals(loadMore = true)
+                    }
+                    1 -> {
+                        loadActiveProposals(loadMore = true)
+                    }
+                    2 -> {
+                        loadApprovedProposals(loadMore = true)
+                    }
+                    3 -> {
+                        loadRejectedProposals(loadMore = true)
+                    }
+                    4 -> {
+                        loadAbandonedProposals(loadMore = true)
+                    }
+                }
+            }
         }
-        val jsonResult = multiWallet!!.politeia.batchPreProposals
+    }
 
+    private fun loadAllProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            showLoadingView()
+            swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
+        }
 
-        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+        if (loading.get()) {
+            return@launch
+        }
+
+        loading.set(true)
+        val limit = 10
+        val offset = when {
+            loadMore -> proposals.size
+            else -> 0
+        }
+
+        val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_ALL, offset, limit, newestProposalsFirst)
+
+        val resultObject = JSONObject(jsonResult).getJSONArray("result")
+        val resultString: String = resultObject.toString()
+
+        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+
+        initialLoadingDone.set(true)
 
         if (tempProposalList == null) {
-            tempProposalList = arrayOf()
+            loadedAll = true
+            loading.set(false)
+            hideLoadingView()
+
+            if (!loadMore) {
+                proposals.clear()
+            }
+            return@launch
+        }
+
+        if (tempProposalList.size < limit) {
+            loadedAll = true
+        }
+
+        if (loadMore) {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+            }
+
+        } else {
+            proposals.let {
+                it.clear()
+                it.addAll(tempProposalList)
+            }
+
+            checkEmptyProposalList("")
+
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyDataSetChanged()
+            }
+        }
+
+        loading.set(false)
+        hideLoadingView()
+
+        swipeRefreshLayout!!.isRefreshing = false
+    }
+
+    private fun loadInDiscussionProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
+        runOnUiThread {
+            showLoadingView()
+            swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
+        }
+
+        if (loading.get()) {
+            return@launch
+        }
+
+        loading.set(true)
+        val limit = 10
+        val offset = when {
+            loadMore -> proposals.size
+            else -> 0
+        }
+
+        val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_PRE, offset, limit, newestProposalsFirst)
+
+        val resultObject = JSONObject(jsonResult).getJSONArray("result")
+        val resultString: String = resultObject.toString()
+
+        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+
+        initialLoadingDone.set(true)
+
+        if (tempProposalList == null) {
+            loadedAll = true
+            loading.set(false)
+            hideLoadingView()
+
+            if (!loadMore) {
+                proposals.clear()
+            }
+            return@launch
+        }
+
+        if (tempProposalList.size < limit) {
+            loadedAll = true
+        }
+
+        if (loadMore) {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+            }
+
         } else {
             proposals.let {
                 it.clear()
@@ -190,21 +328,66 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 proposalAdapter?.notifyDataSetChanged()
             }
         }
+
+        loading.set(false)
+        hideLoadingView()
+
         swipeRefreshLayout!!.isRefreshing = false
     }
 
-    private fun loadActiveProposals() = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadActiveProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
         runOnUiThread {
+            showLoadingView()
             swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
         }
-        val jsonResult = multiWallet!!.politeia!!.batchActiveProposals
 
-        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+        if (loading.get()) {
+            return@launch
+        }
+
+        loading.set(true)
+        val limit = 10
+        val offset = when {
+            loadMore -> proposals.size
+            else -> 0
+        }
+
+        val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_ACTIVE, offset, limit, newestProposalsFirst)
+
+        val resultObject = JSONObject(jsonResult).getJSONArray("result")
+        val resultString: String = resultObject.toString()
+
+        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+
+        initialLoadingDone.set(true)
 
         if (tempProposalList == null) {
-            Toast.makeText(this@PoliteiaActivity, "Empty list", Toast.LENGTH_LONG).show()
+            loadedAll = true
+            loading.set(false)
+            hideLoadingView()
 
-            tempProposalList = arrayOf()
+            if (!loadMore) {
+                proposals.clear()
+            }
+            return@launch
+        }
+
+        if (tempProposalList.size < limit) {
+            loadedAll = true
+        }
+
+        if (loadMore) {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+            }
+
         } else {
             proposals.let {
                 it.clear()
@@ -217,19 +400,66 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 proposalAdapter?.notifyDataSetChanged()
             }
         }
+
+        loading.set(false)
+        hideLoadingView()
+
         swipeRefreshLayout!!.isRefreshing = false
     }
 
-    private fun loadApprovedProposals() = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadApprovedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
         runOnUiThread {
+            showLoadingView()
             swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
         }
-        val jsonResult = multiWallet!!.politeia!!.batchApprovedProposals
 
-        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+        if (loading.get()) {
+            return@launch
+        }
+
+        loading.set(true)
+        val limit = 10
+        val offset = when {
+            loadMore -> proposals.size
+            else -> 0
+        }
+
+        val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_APPROVED, offset, limit, newestProposalsFirst)
+
+        val resultObject = JSONObject(jsonResult).getJSONArray("result")
+        val resultString: String = resultObject.toString()
+
+        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+
+        initialLoadingDone.set(true)
 
         if (tempProposalList == null) {
-            tempProposalList = arrayOf()
+            loadedAll = true
+            loading.set(false)
+            hideLoadingView()
+
+            if (!loadMore) {
+                proposals.clear()
+            }
+            return@launch
+        }
+
+        if (tempProposalList.size < limit) {
+            loadedAll = true
+        }
+
+        if (loadMore) {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+            }
+
         } else {
             proposals.let {
                 it.clear()
@@ -242,19 +472,66 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 proposalAdapter?.notifyDataSetChanged()
             }
         }
+
+        loading.set(false)
+        hideLoadingView()
+
         swipeRefreshLayout!!.isRefreshing = false
     }
 
-    private fun loadRejectedProposals() = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadRejectedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
         runOnUiThread {
+            showLoadingView()
             swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
         }
-        val jsonResult = multiWallet!!.politeia!!.batchRejectedProposals
 
-        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+        if (loading.get()) {
+            return@launch
+        }
+
+        loading.set(true)
+        val limit = 10
+        val offset = when {
+            loadMore -> proposals.size
+            else -> 0
+        }
+
+        val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_REJECTED, offset, limit, newestProposalsFirst)
+
+        val resultObject = JSONObject(jsonResult).getJSONArray("result")
+        val resultString: String = resultObject.toString()
+
+        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+
+        initialLoadingDone.set(true)
 
         if (tempProposalList == null) {
-            tempProposalList = arrayOf()
+            loadedAll = true
+            loading.set(false)
+            hideLoadingView()
+
+            if (!loadMore) {
+                proposals.clear()
+            }
+            return@launch
+        }
+
+        if (tempProposalList.size < limit) {
+            loadedAll = true
+        }
+
+        if (loadMore) {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+            }
+
         } else {
             proposals.let {
                 it.clear()
@@ -267,19 +544,66 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 proposalAdapter?.notifyDataSetChanged()
             }
         }
+
+        loading.set(false)
+        hideLoadingView()
+
         swipeRefreshLayout!!.isRefreshing = false
     }
 
-    private fun loadAbandonedProposals() = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadAbandonedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
         runOnUiThread {
+            showLoadingView()
             swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
         }
-        val jsonResult = multiWallet!!.politeia!!.batchAbandonedProposals
 
-        var tempProposalList = gson.fromJson(jsonResult, Array<Proposal>::class.java)
+        if (loading.get()) {
+            return@launch
+        }
+
+        loading.set(true)
+        val limit = 10
+        val offset = when {
+            loadMore -> proposals.size
+            else -> 0
+        }
+
+        val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_ABANDONED, offset, limit, newestProposalsFirst)
+
+        val resultObject = JSONObject(jsonResult).getJSONArray("result")
+        val resultString: String = resultObject.toString()
+
+        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+
+        initialLoadingDone.set(true)
 
         if (tempProposalList == null) {
-            tempProposalList = arrayOf()
+            loadedAll = true
+            loading.set(false)
+            hideLoadingView()
+
+            if (!loadMore) {
+                proposals.clear()
+            }
+            return@launch
+        }
+
+        if (tempProposalList.size < limit) {
+            loadedAll = true
+        }
+
+        if (loadMore) {
+            val positionStart = proposals.size
+            proposals.addAll(tempProposalList)
+            withContext(Dispatchers.Main) {
+                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                // notify previous last item to remove bottom margin
+                proposalAdapter?.notifyItemChanged(positionStart - 1)
+            }
+
         } else {
             proposals.let {
                 it.clear()
@@ -292,6 +616,10 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 proposalAdapter?.notifyDataSetChanged()
             }
         }
+
+        loading.set(false)
+        hideLoadingView()
+
         swipeRefreshLayout!!.isRefreshing = false
     }
 
@@ -309,17 +637,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
     private fun refreshAvailableProposalCategories() = GlobalScope.launch(Dispatchers.Default) {
         availableProposalTypes.clear()
 
-        val preCount = multiWallet!!.politeia.countPre()
-        val activeCount = multiWallet!!.politeia.countActive()
-        val approvedCount = multiWallet!!.politeia.countApproved()
-        val rejectedCount = multiWallet!!.politeia.countRejected()
-        val abandonedCount = multiWallet!!.politeia.countAbandoned()
+        val preCount = multiWallet!!.politeia.count(Constants.PROPOSALS_PRE)
+        val activeCount = multiWallet!!.politeia.count(Constants.PROPOSALS_ACTIVE)
+        val approvedCount = multiWallet!!.politeia.count(Constants.PROPOSALS_APPROVED)
+        val rejectedCount = multiWallet!!.politeia.count(Constants.PROPOSALS_REJECTED)
+        val abandonedCount = multiWallet!!.politeia.count(Constants.PROPOSALS_ABANDONED)
 
         withContext(Dispatchers.Main) {
-            if (this@PoliteiaActivity == null) {
-                return@withContext
-            }
-
             availableProposalTypes.add(getString(R.string.proposal_in_discussion, preCount))
             availableProposalTypes.add(getString(R.string.proposal_active, activeCount))
             availableProposalTypes.add(getString(R.string.proposal_approved, approvedCount))
@@ -330,8 +654,59 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
         }
     }
 
+    private fun showLoadingView(){
+        Thread(Runnable {
+            progressStatus = 0
+
+            while (progressStatus < 100) {
+                runOnUiThread { loading_view.visibility = View.VISIBLE }
+
+                progressStatus += 10
+                // Update the progress bar and display the
+                //current value in the text view
+                handler.post {
+                    progressBar.progress = progressStatus
+                    textView.text = "Loading proposals"
+                }
+                try {
+                    // Sleep for 200 milliseconds.
+                    Thread.sleep(200)
+                } catch (e:InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+        }).start()
+    }
+
+    private fun hideLoadingView(){
+        runOnUiThread {
+            progressStatus = 100
+            progressBar.progress = progressStatus
+            textView.text = ""+progressStatus + "/" + progressBar.max
+            loading_view.visibility = View.GONE
+            emptyList.visibility = View.VISIBLE
+        }
+
+    }
+
     override fun onRefresh() {
-//        loadAllProposals()
+        when (selectionCurrent) {
+            0 -> {
+                loadInDiscussionProposals()
+            }
+            1 -> {
+                loadActiveProposals()
+            }
+            2 -> {
+                loadApprovedProposals()
+            }
+            3 -> {
+                loadRejectedProposals()
+            }
+            4 -> {
+                loadAbandonedProposals()
+            }
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -578,10 +578,10 @@
     <string name="status_non_existent">Does not exist</string>
     <string name="no_proposals">No %d proposals</string>
 
-    <string name="proposal_in_discussion">In Discussion (%1$s)</string>
-    <string name="proposal_active">Active (%1$s)</string>
-    <string name="proposal_approved">Approved (%1$s)</string>
-    <string name="proposal_rejected">Rejected (%1$s)</string>
-    <string name="proposal_abandoned">Abandoned (%1$s)</string>
+    <string name="proposal_in_discussion">In Discussion (%1$d)</string>
+    <string name="proposal_active">Active (%1$d)</string>
+    <string name="proposal_approved">Approved (%1$d)</string>
+    <string name="proposal_rejected">Rejected (%1$d)</string>
+    <string name="proposal_abandoned">Abandoned (%1$d)</string>
 
 </resources>
