@@ -21,13 +21,17 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
+import com.dcrandroid.activities.ProposalDetailsActivity
 import com.dcrandroid.activities.more.PoliteiaActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
+import com.dcrandroid.util.WalletData.Companion.multiWallet
+import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
+import org.json.JSONObject
 import java.io.*
 import java.util.*
 
@@ -236,6 +240,12 @@ object Utils {
     fun sendProposalNotification(context: Context, manager: NotificationManager, proposalID: Long, title: String,
                                             token: String) {
 
+        val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
+        val proposalResult = multiWallet!!.politeia!!.getProposalByID(proposalID)
+        val proposalObjectJson = JSONObject(proposalResult).getJSONObject("result")
+        val proposalResultString: String = proposalObjectJson.toString()
+        val proposal = gson.fromJson(proposalResultString, Proposal::class.java)
+
         val text = when (title) {
             "New Proposal" -> {
                 "New proposal $token"
@@ -253,8 +263,9 @@ object Utils {
 
         val vibration = arrayOf(0L, 100, 100, 100).toLongArray()
 
-        val launchIntent = Intent(context, PoliteiaActivity::class.java)
+        val launchIntent = Intent(context, ProposalDetailsActivity::class.java)
         launchIntent.action = Constants.NEW_POLITEIA_NOTIFICATION
+        launchIntent.putExtra(Constants.PROPOSAL, proposal)
 
         val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)

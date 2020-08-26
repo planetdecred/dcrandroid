@@ -563,9 +563,10 @@
     <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
+
+    <!--Politeia-->
     <string name="politeia">Politeia</string>
     <string name="proposal_details">Proposal Details</string>
-
     <string name="ago">ago</string>
     <string name="now">now</string>
     <string name="status_abandoned">Abandoned</string>
@@ -577,7 +578,6 @@
     <string name="status_rejected">Rejected</string>
     <string name="status_non_existent">Does not exist</string>
     <string name="no_proposals">No %d proposals</string>
-
     <string name="proposal_in_discussion">In Discussion (%1$d)</string>
     <string name="proposal_active">Active (%1$d)</string>
     <string name="proposal_approved">Approved (%1$d)</string>
@@ -587,5 +587,5 @@
     <string name="new_proposal">New Proposal</string>
     <string name="vote_started">Vote Started</string>
     <string name="vote_ended">Vote Ended</string>
-
+    <!--/Politeia-->
 </resources>
