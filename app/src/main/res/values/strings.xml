@@ -583,5 +583,9 @@
     <string name="proposal_approved">Approved (%1$d)</string>
     <string name="proposal_rejected">Rejected (%1$d)</string>
     <string name="proposal_abandoned">Abandoned (%1$d)</string>
+    <string name="new_politeia">New Politeia</string>
+    <string name="new_proposal">New Proposal</string>
+    <string name="vote_started">Vote Started</string>
+    <string name="vote_ended">Vote Ended</string>
 
 </resources>

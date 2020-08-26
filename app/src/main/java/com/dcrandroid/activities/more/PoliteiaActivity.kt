@@ -1,5 +1,7 @@
 package com.dcrandroid.activities.more
 
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -20,6 +22,7 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
+import com.dcrandroid.util.Utils
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_politeia.*
 import kotlinx.android.synthetic.main.activity_politeia.recycler_view
@@ -46,7 +49,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
 
-    private var loading1 = true
+//    private var loading1 = true
     private var newestProposalsFirst = true
     private var loadedAll = false
     private val loading = AtomicBoolean(false)
@@ -135,22 +138,22 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    visibleItemCount = layoutManager!!.childCount
-                    totalItemCount = layoutManager!!.itemCount
-                    pastVisibleItems = layoutManager!!.findFirstVisibleItemPosition()
-                    if (loading1) {
-                        // Start loading new data on the 12th recycler item.
-                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 8) {
-                            loading1 = false
-//                            loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
-                        }
-                    }
-                }
-            }
-        })
+//        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                if (dy > 0) {
+//                    visibleItemCount = layoutManager!!.childCount
+//                    totalItemCount = layoutManager!!.itemCount
+//                    pastVisibleItems = layoutManager!!.findFirstVisibleItemPosition()
+//                    if (loading1) {
+//                        // Start loading new data on the 12th recycler item.
+//                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 8) {
+//                            loading1 = false
+////                            loadMore(proposals[totalItemCount - 1].censorshipRecord!!.token)
+//                        }
+//                    }
+//                }
+//            }
+//        })
 
         go_back.setOnClickListener {
             finish()
@@ -160,35 +163,72 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     override fun onScrollChanged() {
-        if (proposals.size < 5 || !initialLoadingDone.get()) return
+        when (selectionCurrent) {
+            0 -> {
+                if (proposals.size < 5 || !initialLoadingDone.get()) return
 
-        val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-        transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-        else 0f
+                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
+                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                else 0f
 
-        val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-        if (lastVisibleItem >= proposals.size) {
-            if (!loadedAll) {
-                recycler_view.stopScroll()
-                when (selectionCurrent) {
-                    0 -> {
+                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
+                if (lastVisibleItem >= proposals.size) {
+                    if (!loadedAll) {
+                        recycler_view.stopScroll()
                         loadInDiscussionProposals(loadMore = true)
-                    }
-                    1 -> {
-                        loadActiveProposals(loadMore = true)
-                    }
-                    2 -> {
-                        loadApprovedProposals(loadMore = true)
-                    }
-                    3 -> {
-                        loadRejectedProposals(loadMore = true)
-                    }
-                    4 -> {
-                        loadAbandonedProposals(loadMore = true)
                     }
                 }
             }
+            1 -> {
+                if (proposals.size < 5 || !initialLoadingDone.get()) return
+
+                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
+                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                else 0f
+
+                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
+                if (lastVisibleItem >= proposals.size) {
+                    if (!loadedAll) {
+                        recycler_view.stopScroll()
+                        loadActiveProposals(loadMore = true)
+                    }
+                }
+            }
+            2 -> {
+                if (proposals.size < 5 || !initialLoadingDone.get()) return
+
+                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
+                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                else 0f
+
+                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
+                if (lastVisibleItem >= proposals.size) {
+                    if (!loadedAll) {
+                        recycler_view.stopScroll()
+                        loadApprovedProposals(loadMore = true)
+                    }
+                }
+            }
+            3 -> {
+                if (proposals.size < 5 || !initialLoadingDone.get()) return
+
+                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
+                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                else 0f
+
+                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
+                if (lastVisibleItem >= proposals.size) {
+                    if (!loadedAll) {
+                        recycler_view.stopScroll()
+                        loadRejectedProposals(loadMore = true)
+                    }
+                }
+            }
+            4 -> {
+                loadAbandonedProposals(loadMore = true)
+            }
         }
+
     }
 
     private fun loadAllProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {

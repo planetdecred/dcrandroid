@@ -23,6 +23,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -79,6 +80,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
 
         Utils.registerTransactionNotificationChannel(this)
+        Utils.registerProposalNotificationChannel(this)
 
         val builder = SoundPool.Builder().setMaxStreams(3)
         val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -414,14 +416,20 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     override fun onNewProposal(proposalID: Long, token: String?) {
         Log.i(TAG, "[][][][][] New Proposal $proposalID $token")
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
     }
 
     override fun onVoteStarted(proposalID: Long, token: String?) {
         Log.i(TAG, "[][][][][] Vote Started $proposalID $token")
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
     }
 
     override fun onVoteFinished(proposalID: Long, token: String?) {
         Log.i(TAG, "[][][][][] Vote Finished $proposalID $token")
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
     }
 }
 

@@ -21,7 +21,9 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
+import com.dcrandroid.activities.more.PoliteiaActivity
 import com.dcrandroid.data.Constants
+import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
@@ -218,6 +220,70 @@ object Utils {
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary)
     }
 
+    fun registerProposalNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(Constants.PROPOSAL_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.importance = NotificationManager.IMPORTANCE_LOW
+
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun sendProposalNotification(context: Context, manager: NotificationManager, proposalID: Long, title: String,
+                                            token: String) {
+
+        val text = when (title) {
+            "New Proposal" -> {
+                "New proposal $token"
+            }
+            "Vote Started" -> {
+                "Vote started for proposal $token"
+            }
+            else -> {
+                "Vote ended for proposal $token"
+            }
+        }
+
+        val notificationSound =
+            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val vibration = arrayOf(0L, 100, 100, 100).toLongArray()
+
+        val launchIntent = Intent(context, PoliteiaActivity::class.java)
+        launchIntent.action = Constants.NEW_POLITEIA_NOTIFICATION
+
+        val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setSound(notificationSound)
+                .setVibrate(vibration)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+
+        val groupSummary = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
+                .setContentTitle(context.getString(R.string.new_politeia))
+                .setContentText(context.getString(R.string.new_politeia))
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
+                .setGroupSummary(true)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
+
+        val notification = notificationBuilder.build()
+        manager.notify(proposalID.toInt(), notification)
+        manager.notify(Constants.PROPOSAL_SUMMARY_ID, groupSummary)
+    }
+
 
     @Throws(Exception::class)
     fun readFileToBytes(path: String): ByteArray {
@@ -318,18 +384,4 @@ object Utils {
         } else seconds.toString() + "s " + context.getString(R.string.ago)
         //seconds
     }
-
-    private fun registerProposalNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(Constants.PROPOSAL_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
-            channel.enableLights(true)
-            channel.enableVibration(true)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.importance = NotificationManager.IMPORTANCE_LOW
-
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
 }
