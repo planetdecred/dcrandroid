@@ -248,13 +248,13 @@ object Utils {
 
         val text = when (title) {
             "New Proposal" -> {
-                "New proposal $token"
+                "New proposal with token $token"
             }
             "Vote Started" -> {
-                "Vote started for proposal $token"
+                "Vote started for proposal with token $token"
             }
             else -> {
-                "Vote ended for proposal $token"
+                "Vote finished for proposal with token $token"
             }
         }
 
