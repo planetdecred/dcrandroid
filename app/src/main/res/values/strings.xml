@@ -521,6 +521,7 @@
     <string name="confirm_new_startup_password">Confirm new startup password</string>
     <string name="confirm_new_spending_password">Confirm new spending password</string>
     <string name="remove_startup_security">Remove startup security</string>
+    <string name="close_privacy_reminder">Close privacy setup reminder</string>
     <string name="close_backup_warning">Close backup warning</string>
     <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
     <string name="startup_pin_prompt_title">Unlock with startup PIN</string>
@@ -567,6 +568,7 @@
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
     <string name="create_needed_accounts">Create needed accounts</string>
+    <string name="setup_needed_accounts">Setup needed accounts</string>
     <string name="create_mixer_account_summary">You will need to create two accounts for using the mixer. <b>This action cannot be undone</b>.</string>
     <string name="account_exists">Account already exist.</string>
     <string name="mixed_account">Mixed account</string>
@@ -587,5 +589,12 @@
     <string name="running">Running.</string>
     <string name="wallet_mixer_status"><![CDATA[Running on <b>%1$s</b>.]]></string>
     <string name="wallet_mixer_status_multi"><![CDATA[Running on <b>%1$s</b> and <b>%2$s</b>.]]></string>
+    <string name="setup_mixing_accounts">Setup mixing accounts</string>
+    <string name="mixing_account_reminder_text">2 accounts were found with coinjoin outputs.</string>
+    <string name="mixer_status">Mixer Status</string>
+    <string name="same_mixing_accounts_error">Mixed and unmixed accounts cannot be the same</string>
+    <string name="new_accounts_mixed_unmixed">New accounts will be created for mixed and unmixed.</string>
+    <string name="new_account_mixed">New account will be created for mixed.</string>
+    <string name="new_account_umixed">New account will be created for unmixed</string>
 
 </resources>

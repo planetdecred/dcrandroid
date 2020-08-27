@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -47,42 +48,44 @@
 
         <include layout="@layout/overview_backup_warning" />
 
-    <LinearLayout
-        android:id="@+id/cspp_running_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_padding_size_4"
-        android:layout_marginEnd="@dimen/margin_padding_size_8"
-        android:layout_marginStart="@dimen/margin_padding_size_8"
-        android:layout_marginBottom="@dimen/margin_padding_size_8"
-        android:elevation="4dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:background="@drawable/card_bg"
-        android:orientation="vertical" >
+        <include layout="@layout/mixer_settings_reminder" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="Mixer Status"
-            android:textColor="#3d5873"
-            android:textSize="14sp"
-            app:fontFamily="@font/source_sans_pro" />
-
-        <TextView
-            android:id="@+id/tv_mixer_status"
+        <LinearLayout
+            android:id="@+id/cspp_running_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
-            android:textColor="#8997a5"
-            android:textSize="16sp"
-            android:text="@string/wallet_mixer_status"
-            app:fontFamily="@font/source_sans_pro" />
+            android:layout_marginTop="@dimen/margin_padding_size_4"
+            android:layout_marginEnd="@dimen/margin_padding_size_8"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:layout_marginBottom="@dimen/margin_padding_size_8"
+            android:elevation="4dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:background="@drawable/card_bg"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/mixer_status"
+                android:textColor="#3d5873"
+                android:textSize="14sp"
+                app:fontFamily="@font/source_sans_pro" />
+
+            <TextView
+                android:id="@+id/tv_mixer_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                android:textColor="#8997a5"
+                android:textSize="16sp"
+                android:text="@string/wallet_mixer_status"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
 
         <include layout="@layout/transactions_overview_layout" />
 

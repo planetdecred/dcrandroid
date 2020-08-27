@@ -8,7 +8,6 @@ package com.dcrandroid.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,23 +22,24 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.util.*
+import com.dcrandroid.extensions.*
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.Deserializer
+import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.SyncLayoutUtil
 import com.google.gson.GsonBuilder
 import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
-import kotlinx.android.synthetic.main.activity_account_mixer.*
 import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.android.synthetic.main.mixer_settings_reminder.*
+import kotlinx.android.synthetic.main.mixer_settings_reminder.view.*
 import kotlinx.android.synthetic.main.overview_backup_warning.*
+import kotlinx.android.synthetic.main.overview_backup_warning.view.go_to_wallets_btn
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.StringBuilder
 
 const val MAX_TRANSACTIONS = 3
 
@@ -47,6 +47,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     companion object {
         private var closedBackupWarning = false
+        private var closedPrivacyReminder = false
         const val FRAGMENT_POSITION = 0
 
         // Tx hash received during this session is saved here.
@@ -112,8 +113,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 else -> getString(R.string.n_wallets_need_backup, multiWallet!!.numWalletsNeedingSeedBackup())
             }
 
-            go_to_wallets_btn?.setOnClickListener {
-                switchFragment(2) // Wallets Fragment
+            backup_warning_layout.go_to_wallets_btn.setOnClickListener {
+                switchFragment(2) // Wallets fragment
             }
 
             iv_close_backup_warning?.setOnClickListener {
@@ -151,14 +152,27 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
             if(walletsMixing.size == 1) {
                 tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status, walletsMixing.first()), 0)
-            }else{
+            } else {
                 val walletsExceptLast = walletsMixing.dropLast(1).joinToString(", ")
 
                 tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status_multi, walletsExceptLast, walletsMixing.last()), 0)
             }
             cspp_running_layout.show()
-        }else {
+        } else {
             cspp_running_layout.hide()
+        }
+
+        if (multiWallet!!.hasWalletsRequiringPrivacySetup() && !closedPrivacyReminder) {
+            mixer_settings_reminder.show()
+
+            mixer_settings_reminder.go_to_wallets_btn.setOnClickListener {
+                switchFragment(2) // Wallets fragment
+            }
+
+            mixer_settings_reminder.iv_close_privacy_reminder.setOnClickListener {
+                closedPrivacyReminder = true
+                mixer_settings_reminder.hide()
+            }
         }
     }
 
@@ -292,6 +306,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onSyncCompleted() {
+        super.onSyncCompleted()
+        setMixerStatus()
     }
 
     override fun onAccountMixerEnded(walletID: Long) {

@@ -5,7 +5,7 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,6 +21,17 @@
         tools:text="Rename wallet"
         android:textSize="@dimen/edit_text_size_16"
         android:textColor="@color/darkBlueTextColor"
-        android:fontFamily="@font/source_sans_pro"/>
+        android:fontFamily="@font/source_sans_pro" />
 
-</LinearLayout>
+    <View
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="end"
+        android:id="@+id/notification_dot"
+        android:layout_toEndOf="@id/popup_text"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:background="@drawable/offline_dot" />
+
+</RelativeLayout>

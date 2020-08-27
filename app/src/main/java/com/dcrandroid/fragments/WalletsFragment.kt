@@ -39,6 +39,7 @@ import kotlin.math.floor
 
 const val VERIFY_SEED_REQUEST_CODE = 200
 const val WALLET_SETTINGS_REQUEST_CODE = 300
+const val PRIVACY_SETTINGS_REQUEST_CODE = 300
 
 class WalletsFragment : BaseFragment() {
 
@@ -63,7 +64,7 @@ class WalletsFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = WalletsAdapter(context!!) { intent, requestCode ->
+        adapter = WalletsAdapter(this) { intent, requestCode ->
             startActivityForResult(intent, requestCode)
         }
 
@@ -98,6 +99,9 @@ class WalletsFragment : BaseFragment() {
             val walletID = data?.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID!!)
             SnackBar.showText(context!!, R.string.wallet_created)
+        } else if (requestCode == PRIVACY_SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
+            adapter.reloadList()
+            refreshNavigationTabs()
         }
     }
 

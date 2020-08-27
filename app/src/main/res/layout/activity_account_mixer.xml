@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/source_sans_pro_semibold"
             android:textSize="@dimen/edit_text_size_18"
-            android:text="@string/create_needed_accounts"/>
+            android:text="@string/setup_needed_accounts" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -118,9 +118,9 @@
                 style="@style/textViewButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_create"
+                android:id="@+id/tv_continue"
                 android:enabled="false"
-                android:text="@string/create" />
+                android:text="@string/_continue" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"

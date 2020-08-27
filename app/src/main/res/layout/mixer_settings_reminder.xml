@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mixer_settings_reminder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/margin_padding_size_4"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:layout_marginTop="@dimen/margin_padding_size_8"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:layout_marginBottom="@dimen/margin_padding_size_4"
+    android:background="@drawable/backup_seed_bg_overview"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/margin_padding_size_8"
+        android:paddingBottom="@dimen/margin_padding_size_8"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_8"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/margin_padding_size_24"
+            android:layout_height="@dimen/margin_padding_size_24"
+            android:src="@drawable/ic_wallet_alert" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:layout_weight="1"
+            android:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/edit_text_size_18"
+            android:text="@string/setup_mixing_accounts" />
+
+        <ImageView
+            android:layout_width="@dimen/margin_padding_size_40"
+            android:layout_height="@dimen/margin_padding_size_40"
+            android:id="@+id/iv_close_privacy_reminder"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:background="@drawable/orange_ripple"
+            android:padding="@dimen/margin_padding_size_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/close_privacy_reminder"
+            android:src="@drawable/ic_close03" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_padding_size_56"
+        android:layout_marginEnd="@dimen/margin_padding_size_16"
+        android:textColor="@color/white"
+        android:textSize="@dimen/edit_text_size_16"
+        android:fontFamily="@font/source_sans_pro"
+        android:text="@string/mixing_account_reminder_text"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:background="#feb8a5" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_padding_size_48"
+        android:id="@+id/go_to_wallets_btn"
+        android:background="@drawable/curved_bottom_ripple_bg_orange"
+        android:includeFontPadding="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/go_to_wallets"
+        android:textSize="@dimen/edit_text_size_16"
+        android:textColor="@color/white"
+        android:fontFamily="@font/source_sans_pro"
+        android:gravity="center" />
+
+</LinearLayout>
