@@ -1,5 +1,8 @@
 package com.dcrandroid.activities
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
@@ -58,6 +61,22 @@ class ProposalDetailsActivity : BaseActivity() {
         proposal = intent.getSerializableExtra("proposal") as Proposal
 
         loadProposalDetails()
+
+        open_proposal.setOnClickListener {
+            val url = "http://proposals.decred.org/proposals/" + proposal!!.censorshipRecord!!.token
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(url)
+            startActivity(i)
+        }
+
+        share_proposal.setOnClickListener {
+            val share = Intent(Intent.ACTION_SEND)
+            share.type = "text/plain"
+            share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            share.putExtra(Intent.EXTRA_SUBJECT, proposal!!.name)
+            share.putExtra(Intent.EXTRA_TEXT, "http://proposals.decred.org/proposals/" + proposal!!.censorshipRecord!!.token)
+            startActivity(Intent.createChooser(share, "Share Proposal Link"))
+        }
 
         go_back.setOnClickListener {
             finish()

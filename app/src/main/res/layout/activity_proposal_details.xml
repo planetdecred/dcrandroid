@@ -65,7 +65,17 @@
                     app:fontFamily="@font/source_sans_pro" />
 
                 <ImageView
-                    android:id="@+id/share"
+                    android:id="@+id/open_proposal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/margin_padding_size_8"
+                    app:srcCompat="@drawable/ic_open_in_browser" />
+
+                <ImageView
+                    android:id="@+id/share_proposal"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/bg_primary_ripple"
