@@ -24,9 +24,11 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.dcrandroid.util.Utils
 import com.google.gson.GsonBuilder
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_politeia.*
 import kotlinx.android.synthetic.main.activity_politeia.recycler_view
-import kotlinx.android.synthetic.main.activity_politeia.transactions_page_header
+import kotlinx.android.synthetic.main.activity_politeia.proposals_page_header
+import kotlinx.android.synthetic.main.activity_politeia.timestamp_sort_spinner
 import kotlinx.android.synthetic.main.single_wallet_transactions_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -84,29 +86,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
         recyclerView!!.adapter = proposalAdapter
         recyclerView!!.viewTreeObserver.addOnScrollChangedListener(this)
 
-
-//        progressBar = findViewById(R.id.progressBar)
         textView = findViewById(R.id.textView)
-//        Thread(Runnable {
-//            while (progressStatus < 100) {
-//                loading_view.visibility = View.VISIBLE
-//                progressStatus += 10
-//                // Update the progress bar and display the
-//                //current value in the text view
-//                handler.post {
-//                    progressBar.progress = progressStatus
-//                    textView.text = ""+progressStatus + "/" + progressBar.max
-//                }
-//                try {
-//                    // Sleep for 200 milliseconds.
-//                    Thread.sleep(200)
-//                } catch (e:InterruptedException) {
-//                    e.printStackTrace()
-//                }
-//            }
-//        }).start()
 
-//        loadInDiscussionProposals()
+        val timestampSortItems = this.resources.getStringArray(R.array.timestamp_sort)
+        val timestampSortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timestampSortItems)
+        timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        timestamp_sort_spinner.onItemSelectedListener = this
+        timestamp_sort_spinner.adapter = timestampSortAdapter
 
         categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
         categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -168,7 +154,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
                 else 0f
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
@@ -183,7 +169,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
                 else 0f
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
@@ -198,7 +184,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
                 else 0f
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
@@ -213,7 +199,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
                 else 0f
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
@@ -789,6 +775,73 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (selectionCurrent) {
+            0 -> {
+                if (!initialLoadingDone.get()) {
+                    return
+                }
+
+                if (parent!!.id == R.id.timestamp_sort_spinner) {
+                    val newestFirst = position == 0 // "Newest" is the first item
+                    if (newestFirst != newestProposalsFirst) {
+                        newestProposalsFirst = newestFirst
+                        loadInDiscussionProposals()
+                    }
+                }
+            }
+            1 -> {
+                if (!initialLoadingDone.get()) {
+                    return
+                }
+
+                if (parent!!.id == R.id.timestamp_sort_spinner) {
+                    val newestFirst = position == 0 // "Newest" is the first item
+                    if (newestFirst != newestProposalsFirst) {
+                        newestProposalsFirst = newestFirst
+                        loadActiveProposals()
+                    }
+                }
+            }
+            2 -> {
+                if (!initialLoadingDone.get()) {
+                    return
+                }
+
+                if (parent!!.id == R.id.timestamp_sort_spinner) {
+                    val newestFirst = position == 0 // "Newest" is the first item
+                    if (newestFirst != newestProposalsFirst) {
+                        newestProposalsFirst = newestFirst
+                        loadApprovedProposals()
+                    }
+                }
+            }
+            3 -> {
+                if (!initialLoadingDone.get()) {
+                    return
+                }
+
+                if (parent!!.id == R.id.timestamp_sort_spinner) {
+                    val newestFirst = position == 0 // "Newest" is the first item
+                    if (newestFirst != newestProposalsFirst) {
+                        newestProposalsFirst = newestFirst
+                        loadRejectedProposals()
+                    }
+                }
+            }
+            4 -> {
+                if (!initialLoadingDone.get()) {
+                    return
+                }
+
+                if (parent!!.id == R.id.timestamp_sort_spinner) {
+                    val newestFirst = position == 0 // "Newest" is the first item
+                    if (newestFirst != newestProposalsFirst) {
+                        newestProposalsFirst = newestFirst
+                        loadAbandonedProposals()
+                    }
+                }
+            }
+        }
     }
 
 }
