@@ -163,7 +163,7 @@ class ProposalDetailsActivity : BaseActivity() {
                     val passPercentage = proposal!!.voteSummary!!.passpercentage
 
                     if (yesPercentage >= passPercentage) {
-                        status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_light_green_corners_4dp)
+                        status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_dark_green_corners_4dp)
                         status.text = getString(R.string.status_approved)
                     } else {
                         status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)

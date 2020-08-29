@@ -61,12 +61,12 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
                 holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
                 holder.status.text = context.getString(R.string.status_vote_started)
             } else if (proposal.voteSummary!!.status == 4) {
-                var totalVotes: Int = proposal.voteSummary!!.optionsResults!![0].votesreceived + proposal.voteSummary!!.optionsResults!![1].votesreceived
+                val totalVotes: Int = proposal.voteSummary!!.optionsResults!![0].votesreceived + proposal.voteSummary!!.optionsResults!![1].votesreceived
                 val yesPercentage = (proposal.voteSummary!!.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100
                 val passPercentage = proposal.voteSummary!!.passpercentage
 
                 if (yesPercentage >= passPercentage) {
-                    holder.status.background = getDrawable(context, R.drawable.bg_light_green_corners_4dp)
+                    holder.status.background = getDrawable(context, R.drawable.bg_dark_green_corners_4dp)
                     holder.status.text = context.getString(R.string.status_approved)
                 } else {
                     holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
@@ -79,7 +79,7 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         }
 
         if (proposal.voteSummary != null && proposal.voteSummary!!.status == 4) {
-            var totalVotes: Int = proposal.voteSummary!!.optionsResults!![0].votesreceived + proposal.voteSummary!!.optionsResults!![1].votesreceived
+            val totalVotes: Int = proposal.voteSummary!!.optionsResults!![0].votesreceived + proposal.voteSummary!!.optionsResults!![1].votesreceived
             holder.progress.visibility = View.VISIBLE
             holder.progressBar.visibility = View.VISIBLE
             val percentage = (proposal.voteSummary!!.optionsResults!![1].votesreceived.toFloat() / totalVotes.toFloat()) * 100

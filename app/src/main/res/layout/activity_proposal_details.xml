@@ -141,7 +141,7 @@
                         android:id="@+id/proposal_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_light_green_corners_4dp"
+                        android:background="@drawable/bg_dark_green_corners_4dp"
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
@@ -262,7 +262,7 @@
                         style="?android:attr/progressBarStyleHorizontal"
                         android:progressDrawable="@drawable/vote_progress_bar"
                         android:layout_width="match_parent"
-                        android:layout_height="16dp"
+                        android:layout_height="19dp"
                         android:secondaryProgress="100"
                         android:visibility="gone"/>
 

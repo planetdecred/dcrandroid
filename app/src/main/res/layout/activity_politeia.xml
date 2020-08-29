@@ -111,6 +111,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="@dimen/edit_text_size_16"
+        android:layout_marginBottom="@dimen/margin_padding_size_18"
         android:textColor="@color/lightGrayTextColor"
         app:fontFamily="@font/source_sans_pro"
         android:text="@string/no_proposals"/>
@@ -139,10 +140,10 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/margin_padding_size_32"
+            />
 
     </LinearLayout>
-
-
 
 </LinearLayout>
