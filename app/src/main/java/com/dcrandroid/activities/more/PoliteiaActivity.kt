@@ -252,10 +252,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
         val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_ALL, offset, limit, newestProposalsFirst)
 
-        val resultObject = JSONObject(jsonResult).getJSONArray("result")
-        val resultString: String = resultObject.toString()
-
-        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+        // Check if the result object from the json response is null
+        val resultObject = JSONObject(jsonResult).get("result")
+        val resultObjectString = resultObject.toString()
+        val tempProposalList = if (resultObjectString == "null") {
+            gson.fromJson("[]", Array<Proposal>::class.java)
+        } else {
+            val resultArray = JSONObject(jsonResult).getJSONArray("result")
+            val resultArrayString = resultArray.toString()
+            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
+        }
 
         initialLoadingDone.set(true)
 
@@ -324,10 +330,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
         val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_PRE, offset, limit, newestProposalsFirst)
 
-        val resultObject = JSONObject(jsonResult).getJSONArray("result")
-        val resultString: String = resultObject.toString()
-
-        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+        // Check if the result object from the json response is null
+        val resultObject = JSONObject(jsonResult).get("result")
+        val resultObjectString = resultObject.toString()
+        val tempProposalList = if (resultObjectString == "null") {
+            gson.fromJson("[]", Array<Proposal>::class.java)
+        } else {
+            val resultArray = JSONObject(jsonResult).getJSONArray("result")
+            val resultArrayString = resultArray.toString()
+            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
+        }
 
         initialLoadingDone.set(true)
 
@@ -396,10 +408,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
         val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_ACTIVE, offset, limit, newestProposalsFirst)
 
-        val resultObject = JSONObject(jsonResult).getJSONArray("result")
-        val resultString: String = resultObject.toString()
-
-        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+        // Check if the result object from the json response is null
+        val resultObject = JSONObject(jsonResult).get("result")
+        val resultObjectString = resultObject.toString()
+        val tempProposalList = if (resultObjectString == "null") {
+            gson.fromJson("[]", Array<Proposal>::class.java)
+        } else {
+            val resultArray = JSONObject(jsonResult).getJSONArray("result")
+            val resultArrayString = resultArray.toString()
+            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
+        }
 
         initialLoadingDone.set(true)
 
@@ -468,10 +486,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
         val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_APPROVED, offset, limit, newestProposalsFirst)
 
-        val resultObject = JSONObject(jsonResult).getJSONArray("result")
-        val resultString: String = resultObject.toString()
-
-        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+        // Check if the result object from the json response is null
+        val resultObject = JSONObject(jsonResult).get("result")
+        val resultObjectString = resultObject.toString()
+        val tempProposalList = if (resultObjectString == "null") {
+            gson.fromJson("[]", Array<Proposal>::class.java)
+        } else {
+            val resultArray = JSONObject(jsonResult).getJSONArray("result")
+            val resultArrayString = resultArray.toString()
+            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
+        }
 
         initialLoadingDone.set(true)
 
@@ -540,10 +564,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
         val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_REJECTED, offset, limit, newestProposalsFirst)
 
-        val resultObject = JSONObject(jsonResult).getJSONArray("result")
-        val resultString: String = resultObject.toString()
-
-        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+        // Check if the result object from the json response is null
+        val resultObject = JSONObject(jsonResult).get("result")
+        val resultObjectString = resultObject.toString()
+        val tempProposalList = if (resultObjectString == "null") {
+            gson.fromJson("[]", Array<Proposal>::class.java)
+        } else {
+            val resultArray = JSONObject(jsonResult).getJSONArray("result")
+            val resultArrayString = resultArray.toString()
+            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
+        }
 
         initialLoadingDone.set(true)
 
@@ -612,10 +642,16 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
         val jsonResult = multiWallet!!.politeia.getProposals(Constants.PROPOSALS_ABANDONED, offset, limit, newestProposalsFirst)
 
-        val resultObject = JSONObject(jsonResult).getJSONArray("result")
-        val resultString: String = resultObject.toString()
-
-        var tempProposalList = gson.fromJson(resultString, Array<Proposal>::class.java)
+        // Check if the result object from the json response is null
+        val resultObject = JSONObject(jsonResult).get("result")
+        val resultObjectString = resultObject.toString()
+        val tempProposalList = if (resultObjectString == "null") {
+            gson.fromJson("[]", Array<Proposal>::class.java)
+        } else {
+            val resultArray = JSONObject(jsonResult).getJSONArray("result")
+            val resultArrayString = resultArray.toString()
+            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
+        }
 
         initialLoadingDone.set(true)
 
