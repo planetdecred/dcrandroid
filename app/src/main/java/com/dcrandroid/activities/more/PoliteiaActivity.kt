@@ -137,8 +137,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-                else 0f
+                if (firstVisibleItem != 0) {
+                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    proposals_page_header.elevation = 0f
+                    app_bar.elevation = 0f
+                }
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
                 if (lastVisibleItem >= proposals.size - 1) {
@@ -152,8 +157,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-                else 0f
+                if (firstVisibleItem != 0) {
+                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    proposals_page_header.elevation = 0f
+                    app_bar.elevation = 0f
+                }
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
                 if (lastVisibleItem >= proposals.size - 1) {
@@ -167,8 +177,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-                else 0f
+                if (firstVisibleItem != 0) {
+                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    proposals_page_header.elevation = 0f
+                    app_bar.elevation = 0f
+                }
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
                 if (lastVisibleItem >= proposals.size - 1) {
@@ -182,8 +197,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-                else 0f
+                if (firstVisibleItem != 0) {
+                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    proposals_page_header.elevation = 0f
+                    app_bar.elevation = 0f
+                }
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
                 if (lastVisibleItem >= proposals.size - 1) {
@@ -197,8 +217,13 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
                 val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                proposals_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-                else 0f
+                if (firstVisibleItem != 0) {
+                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+                } else {
+                    proposals_page_header.elevation = 0f
+                    app_bar.elevation = 0f
+                }
 
                 val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
                 if (lastVisibleItem >= proposals.size - 1) {
