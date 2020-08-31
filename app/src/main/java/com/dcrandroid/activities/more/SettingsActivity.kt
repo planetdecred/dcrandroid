@@ -8,6 +8,7 @@ package com.dcrandroid.activities.more
 
 import android.os.Bundle
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
@@ -34,6 +35,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
     private lateinit var enableStartupSecurity: SwitchPreference
     private lateinit var useFingerprint: SwitchPreference
+    private lateinit var enablePoliteiaNotification: SwitchPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +45,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
         SwitchPreference(this, Dcrlibwallet.BeepNewBlocksConfigKey, beep_new_blocks)
         SwitchPreference(this, Dcrlibwallet.SyncOnCellularConfigKey, wifi_sync)
+        SwitchPreference(this, Dcrlibwallet.PoliteiaNotificationConfigKey, enable_politeia_notification)
 
         enableStartupSecurity = SwitchPreference(this, Dcrlibwallet.IsStartupSecuritySetConfigKey, startup_pin_password) { newValue ->
             if (newValue) {
@@ -64,6 +67,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
             return@SwitchPreference false
         }
+
         loadStartupSecurity()
         change_startup_security.setOnClickListener {
             ChangePassUtil(this, null).begin()

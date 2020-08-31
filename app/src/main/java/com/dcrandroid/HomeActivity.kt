@@ -416,20 +416,26 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     override fun onNewProposal(proposalID: Long, token: String?) {
         Log.i(TAG, "[][][][][] New Proposal $proposalID $token")
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
+        if (multiWallet!!.isPoliteiaNotificationEnabled) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
+        }
     }
 
     override fun onVoteStarted(proposalID: Long, token: String?) {
         Log.i(TAG, "[][][][][] Vote Started $proposalID $token")
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
+        if (multiWallet!!.isPoliteiaNotificationEnabled) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
+        }
     }
 
     override fun onVoteFinished(proposalID: Long, token: String?) {
         Log.i(TAG, "[][][][][] Vote Finished $proposalID $token")
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
+        if (multiWallet!!.isPoliteiaNotificationEnabled) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
+        }
     }
 }
 

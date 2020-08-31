@@ -321,7 +321,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/enable_politeia"
+                    android:id="@+id/enable_politeia_notification"
                     android:padding="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"
                     android:focusable="true"

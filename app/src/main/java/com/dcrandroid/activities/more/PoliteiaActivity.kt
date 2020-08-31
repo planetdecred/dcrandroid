@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -65,7 +66,6 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
 
     private var categorySortAdapter: ArrayAdapter<String>? = null
 
-//    private val progressBar: ProgressBar
     private var progressStatus = 0
     private lateinit var textView: TextView
     private var selectionCurrent: Int = 0
