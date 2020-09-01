@@ -22,7 +22,6 @@ import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.activities.ProposalDetailsActivity
-import com.dcrandroid.activities.more.PoliteiaActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
@@ -238,7 +237,7 @@ object Utils {
     }
 
     fun sendProposalNotification(context: Context, manager: NotificationManager, proposalID: Long, title: String,
-                                            token: String) {
+                                 token: String) {
 
         val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
         val proposalResult = multiWallet!!.politeia!!.getProposalByID(proposalID)
@@ -259,7 +258,7 @@ object Utils {
         }
 
         val notificationSound =
-            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         val vibration = arrayOf(0L, 100, 100, 100).toLongArray()
 

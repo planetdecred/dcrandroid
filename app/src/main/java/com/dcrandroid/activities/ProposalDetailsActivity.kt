@@ -2,7 +2,6 @@ package com.dcrandroid.activities
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
@@ -72,7 +71,7 @@ class ProposalDetailsActivity : BaseActivity() {
         share_proposal.setOnClickListener {
             val share = Intent(Intent.ACTION_SEND)
             share.type = "text/plain"
-            share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
             share.putExtra(Intent.EXTRA_SUBJECT, proposal!!.name)
             share.putExtra(Intent.EXTRA_TEXT, "http://proposals.decred.org/proposals/" + proposal!!.censorshipRecord!!.token)
             startActivity(Intent.createChooser(share, "Share Proposal Link"))
@@ -125,7 +124,7 @@ class ProposalDetailsActivity : BaseActivity() {
             }
 
             // Get vote status.
-            if ( voteSummaryItem.status == 4) {
+            if (voteSummaryItem.status == 4) {
                 val totalVotes = voteSummaryItem.optionsResults!![0].votesreceived + voteSummaryItem.optionsResults!![1].votesreceived
                 votePercent.visibility = View.VISIBLE
                 voteProgress.visibility = View.VISIBLE

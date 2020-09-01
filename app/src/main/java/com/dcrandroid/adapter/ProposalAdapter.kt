@@ -16,7 +16,6 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.util.Utils
 import java.util.*
 
-
 class ProposalAdapter(private val proposals: List<Proposal>, private val context: Context) : RecyclerView.Adapter<ProposalAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

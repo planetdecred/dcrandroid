@@ -8,7 +8,6 @@ package com.dcrandroid.activities.more
 
 import android.os.Bundle
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
@@ -35,7 +34,6 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
     private lateinit var enableStartupSecurity: SwitchPreference
     private lateinit var useFingerprint: SwitchPreference
-    private lateinit var enablePoliteiaNotification: SwitchPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

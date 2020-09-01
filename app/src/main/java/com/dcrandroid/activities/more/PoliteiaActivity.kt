@@ -1,17 +1,13 @@
 package com.dcrandroid.activities.more
 
-import android.app.NotificationManager
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,25 +19,18 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
-import com.dcrandroid.util.Utils
 import com.google.gson.GsonBuilder
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_politeia.*
-import kotlinx.android.synthetic.main.activity_politeia.recycler_view
-import kotlinx.android.synthetic.main.activity_politeia.proposals_page_header
-import kotlinx.android.synthetic.main.activity_politeia.timestamp_sort_spinner
-import kotlinx.android.synthetic.main.single_wallet_transactions_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 
-class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener  {
+class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
     private var proposals = ArrayList<Proposal>()
     private var recyclerView: RecyclerView? = null
     private var proposalAdapter: ProposalAdapter? = null
@@ -128,7 +117,6 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
             finish()
         }
         refreshAvailableProposalCategories()
-
     }
 
     override fun onScrollChanged() {
@@ -234,7 +222,6 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 }
             }
         }
-
     }
 
     private fun loadAllProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
@@ -472,12 +459,12 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     private fun loadApprovedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
-       runOnUiThread {
-           showLoadingView()
-           swipeRefreshLayout!!.isRefreshing = true
-           swipe_refresh_layout.visibility = View.GONE
-           emptyList.visibility = View.GONE
-       }
+        runOnUiThread {
+            showLoadingView()
+            swipeRefreshLayout!!.isRefreshing = true
+            swipe_refresh_layout.visibility = View.GONE
+            emptyList.visibility = View.GONE
+        }
 
         if (loading.get()) {
             return@launch
@@ -737,7 +724,7 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
         }
     }
 
-    private fun showLoadingView(){
+    private fun showLoadingView() {
         Thread(Runnable {
             progressStatus = 0
 
@@ -754,23 +741,22 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
                 try {
                     // Sleep for 200 milliseconds.
                     Thread.sleep(200)
-                } catch (e:InterruptedException) {
+                } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
             }
         }).start()
     }
 
-    private fun hideLoadingView(){
+    private fun hideLoadingView() {
         runOnUiThread {
             progressStatus = 100
             progressBar.progress = progressStatus
-            textView.text = ""+progressStatus + "/" + progressBar.max
+            textView.text = "" + progressStatus + "/" + progressBar.max
             loading_view.visibility = View.GONE
             swipe_refresh_layout.visibility = View.VISIBLE
             emptyList.visibility = View.VISIBLE
         }
-
     }
 
     override fun onRefresh() {
@@ -865,5 +851,4 @@ class PoliteiaActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener, O
             }
         }
     }
-
 }
