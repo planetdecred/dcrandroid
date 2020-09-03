@@ -6,10 +6,12 @@
 
 package com.dcrandroid.dialog.send
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
@@ -29,6 +31,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
+
 
 const val AmountRelativeSize = 0.625f
 val usdAmountFormat: DecimalFormat = DecimalFormat("0.0000")
@@ -88,6 +91,8 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             if (event.action == MotionEvent.ACTION_UP) {
                 // focus amount input on touch
                 layout.send_amount.requestFocus()
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(layout.send_amount, InputMethodManager.SHOW_IMPLICIT)
                 return@setOnTouchListener true
             }
             return@setOnTouchListener false
