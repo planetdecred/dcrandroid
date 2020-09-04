@@ -14,14 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.data.Account
-import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.AccountDetailsDialog
 import com.dcrandroid.dialog.AddAccountDialog
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_row.view.*
 
@@ -29,14 +27,8 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
 
     private val accounts: ArrayList<Account>
     private val wallet: Wallet
-    private val requiredConfirmations: Int
 
     init {
-        requiredConfirmations = when {
-            WalletData.multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
-            else -> Constants.REQUIRED_CONFIRMATIONS
-        }
-
         wallet = WalletData.multiWallet!!.walletWithID(walletID)
         accounts = wallet.walletAccounts()
     }
