@@ -107,7 +107,7 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
         // Staking balances
         val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
         if (stakeSum > 0) {
-            if(balance.immatureReward > 0) {
+            if (balance.immatureReward > 0) {
                 account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
                 account_details_imm_rewards_row.show()
             }
