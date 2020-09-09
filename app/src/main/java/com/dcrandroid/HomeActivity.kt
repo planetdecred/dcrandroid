@@ -53,7 +53,7 @@ import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, PoliteiaNotificationListener {
+class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, ProposalNotificationListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -418,11 +418,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
     }
 
-    override fun onVoteStarted(proposalID: Long, token: String?) {
+    override fun onProposalVoteStarted(proposalID: Long, token: String?) {
         Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
     }
 
-    override fun onVoteFinished(proposalID: Long, token: String?) {
+    override fun onProposalVoteFinished(proposalID: Long, token: String?) {
         Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
     }
 }
