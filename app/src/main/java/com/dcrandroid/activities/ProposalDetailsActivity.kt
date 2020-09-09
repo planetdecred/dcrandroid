@@ -78,33 +78,37 @@ class ProposalDetailsActivity : BaseActivity() {
         val proposalItem = gson.fromJson(proposalResultString, Proposal::class.java)
         val voteSummaryItem = gson.fromJson(voteSummaryString, Proposal.VoteSummary::class.java)
 
-        proposal_title.text = proposalItem.name
-        proposal_author.text = proposal!!.username
-        proposal_timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal!!.timestamp, this@ProposalDetailsActivity)
-        proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal!!.getNumcomments())
-        proposal_version.text = String.format(Locale.getDefault(), getString(R.string.version_number), proposal!!.version)
+        runOnUiThread {
+            proposal_title.text = proposalItem.name
+            proposal_author.text = proposal!!.username
+            proposal_timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal!!.timestamp, this@ProposalDetailsActivity)
+            proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal!!.getNumcomments())
+            proposal_version.text = String.format(Locale.getDefault(), getString(R.string.version_number), proposal!!.version)
 
-        // Get and read file from array.
-        if (proposal!!.files != null && proposal!!.files!!.isNotEmpty()) {
-            progressBar.visibility = View.VISIBLE
+            // Get and read file from array.
+            if (proposal!!.files != null && proposal!!.files!!.isNotEmpty()) {
+                progressBar.visibility = View.VISIBLE
 
-            var payload: String?
-            val description = StringBuilder()
-            var i = 0
-            while (proposalItem.files != null && i < proposalItem.files!!.size) {
-                if (proposalItem.files!![i].name == Constants.INDEX_MD) {
-                    payload = proposalItem.files!![i].payload
-                    val data: ByteArray = Base64.decode(payload, Base64.DEFAULT)
-                    try {
-                        description.append(String(data, Charset.forName(Constants.CHARSET_UTF_8)))
-                    } catch (e: UnsupportedEncodingException) {
-                        e.printStackTrace()
+                var payload: String?
+                val description = StringBuilder()
+                var i = 0
+                while (proposalItem.files != null && i < proposalItem.files!!.size) {
+                    if (proposalItem.files!![i].name == Constants.INDEX_MD) {
+                        payload = proposalItem.files!![i].payload
+                        val data: ByteArray = Base64.decode(payload, Base64.DEFAULT)
+                        try {
+                            description.append(String(data, Charset.forName(Constants.CHARSET_UTF_8)))
+                        } catch (e: UnsupportedEncodingException) {
+                            e.printStackTrace()
+                        }
                     }
+                    i++
                 }
-                i++
+
+                proposal_description.text = description.toString()
+
+                progress.visibility = View.GONE
             }
-            proposal_description.text = description.toString()
-            progress.visibility = View.GONE
         }
 
         // Get vote status.

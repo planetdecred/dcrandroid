@@ -71,8 +71,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:background="@color/colorBackground"
-        android:paddingLeft="@dimen/margin_padding_size_24"
-        android:paddingRight="@dimen/margin_padding_size_24"
+        android:paddingLeft="@dimen/margin_padding_size_8"
+        android:paddingRight="@dimen/margin_padding_size_8"
         android:paddingBottom="@dimen/margin_padding_size_12"
         android:id="@+id/proposals_page_header"
         android:elevation="0dp"
