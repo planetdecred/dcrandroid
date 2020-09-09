@@ -66,6 +66,13 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         }
     }
 
+    fun syncProposals() {
+        if (activity is HomeActivity) {
+            val homeActivity = activity as HomeActivity
+            homeActivity.syncProposals()
+        }
+    }
+
     fun refreshNavigationTabs() {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity

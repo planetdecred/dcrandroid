@@ -18,11 +18,9 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,6 +66,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
     private var sendPageSheet: FullScreenBottomSheetDialog? = null
 
+    private lateinit var notificationManager: NotificationManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
@@ -80,6 +80,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         Utils.registerTransactionNotificationChannel(this)
         Utils.registerProposalNotificationChannel(this)
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = SoundPool.Builder().setMaxStreams(3)
         val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -133,20 +134,21 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             currentBottomSheet = sendPageSheet
         }
 
-        syncProposals()
+        if (multiWallet!!.isConnectedToDecredNetwork) {
+            syncProposals()
+        }
 
         setupLogoAnim()
         Handler().postDelayed({ checkWifiSync() }, 1000)
     }
 
-    private fun syncProposals() {
+    fun syncProposals() {
         Thread(Runnable {
             try {
                 multiWallet!!.politeia.sync(this@HomeActivity)
-                println("Logged IN Broadcast sent")
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
-                runOnUiThread { Toast.makeText(this@HomeActivity, "PoliteiaSyncError " + e.localizedMessage, Toast.LENGTH_SHORT).show() }
+                SnackBar.showError(this, R.string.error_syncying_proposals)
             }
         }).start()
     }
@@ -362,7 +364,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             val dcrFormat = DecimalFormat("#.######## DCR")
 
             val amount = Dcrlibwallet.amountCoin(transaction.amount)
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
                     transaction)
@@ -414,24 +415,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onNewProposal(proposalID: Long, token: String?) {
-        if (multiWallet!!.isPoliteiaNotificationEnabled) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
-        }
+        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
     }
 
     override fun onVoteStarted(proposalID: Long, token: String?) {
-        if (multiWallet!!.isPoliteiaNotificationEnabled) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
-        }
+        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
     }
 
     override fun onVoteFinished(proposalID: Long, token: String?) {
-        if (multiWallet!!.isPoliteiaNotificationEnabled) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
-        }
+        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
     }
 }
 

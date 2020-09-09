@@ -38,7 +38,10 @@ public class Constants {
             POLITEIA_NOTIFICATION_GROUP = "com.dcrandroid.NEW_POLITEIAS",
             NEW_POLITEIA_NOTIFICATION = "new_politeia_notification",
             PROPOSAL_CHANNEL_ID = "new_proposal",
-            PROPOSAL = "proposal";
+            PROPOSAL = "proposal",
+            CHARSET_UTF_8 = "UTF-8",
+            INDEX_MD = "index.md",
+            VOTE_SUMMARY = "votesummary";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             PROPOSAL_SUMMARY_ID = 5552479,

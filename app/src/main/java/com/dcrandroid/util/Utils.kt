@@ -26,7 +26,6 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.util.WalletData.Companion.multiWallet
 import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
@@ -240,20 +239,20 @@ object Utils {
                                  token: String) {
 
         val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
-        val proposalResult = multiWallet!!.politeia!!.getProposalByID(proposalID)
+        val proposalResult = WalletData.multiWallet!!.politeia!!.getProposalByID(proposalID)
         val proposalObjectJson = JSONObject(proposalResult).getJSONObject("result")
         val proposalResultString: String = proposalObjectJson.toString()
         val proposal = gson.fromJson(proposalResultString, Proposal::class.java)
 
         val text = when (title) {
             "New Proposal" -> {
-                "New proposal with token $token"
+                "There is a new proposal"
             }
             "Vote Started" -> {
-                "Vote started for proposal with token $token"
+                "Vote for a proposal has started"
             }
             else -> {
-                "Vote finished for proposal with token $token"
+                "Vote for a proposal has ended"
             }
         }
 
