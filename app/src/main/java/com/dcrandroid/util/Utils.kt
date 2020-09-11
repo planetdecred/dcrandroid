@@ -79,7 +79,7 @@ object Utils {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             val clip = android.content.ClipData
                     .newPlainText(context.getString(R.string.your_address), text)
-            clipboard.primaryClip = clip
+            clipboard.setPrimaryClip(clip)
         }
     }
 
