@@ -7,11 +7,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.decred.dcrandroid"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 3
         versionName "v1.5.2"
         buildConfigField("String", "BuildDate", "\"${getDate()}\"")
