@@ -110,13 +110,13 @@ class WalletsFragment : BaseFragment() {
         when (item.itemId) {
             R.id.add_new_wallet -> {
 
-                if (multiWallet.openedWalletsCount() >= numOfAllowedWallets()) {
+                if (multiWallet!!.openedWalletsCount() >= numOfAllowedWallets()) {
                     InfoDialog(context!!)
                             .setMessage(getString(R.string.wallets_limit_error))
                             .setPositiveButton(getString(R.string.ok))
                             .show()
                     return false
-                } else if (multiWallet.isConnectedToDecredNetwork) {
+                } else if (multiWallet!!.isConnectedToDecredNetwork) {
                     SnackBar.showError(context!!, R.string.disconnect_add_wallet)
                     return false
                 }
@@ -141,7 +141,7 @@ class WalletsFragment : BaseFragment() {
 
                                 RequestNameDialog(R.string.wallet_name, "", true) { newName ->
                                     try {
-                                        if (multiWallet.walletNameExists(newName)) {
+                                        if (multiWallet!!.walletNameExists(newName)) {
                                             return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
                                         }
 
@@ -185,7 +185,7 @@ class WalletsFragment : BaseFragment() {
     private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
-            val wallet = multiWallet.createNewWallet(walletName, spendingKey, type)
+            val wallet = multiWallet!!.createNewWallet(walletName, spendingKey, type)
             Utils.renameDefaultAccountToLocalLanguage(context!!, wallet)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()

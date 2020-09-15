@@ -403,7 +403,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK) {
             val result = data!!.getStringExtra(Constants.RESULT)
 
-            val decredAddressUri = DecredAddressURI.from(result)
+            val decredAddressUri = DecredAddressURI.from(result!!)
             destinationAddressCard.addressInputHelper.editText.setText(decredAddressUri.address)
             if (decredAddressUri.amount != null) {
                 sendMax = false

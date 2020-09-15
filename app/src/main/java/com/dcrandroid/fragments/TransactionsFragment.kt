@@ -58,7 +58,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     }
 
     fun setWalletID(walletID: Long): TransactionsFragment {
-        wallet = multiWallet.walletWithID(walletID)
+        wallet = multiWallet!!.walletWithID(walletID)
         TAG = wallet!!.name
         return this
     }
@@ -70,7 +70,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (multiWallet.openedWalletsCount() == 1) {
+        if (multiWallet!!.openedWalletsCount() == 1) {
             setToolbarTitle(R.string.transactions, false)
         }
 

@@ -128,7 +128,7 @@ class VerifySeedActivity : BaseActivity() {
 
         val seed = intent.getStringExtra(Constants.SEED)
 
-        if (seed.isNotBlank()) {
+        if (seed!!.isNotBlank()) {
             seeds = seed!!.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             initSeedAdapter()
         }

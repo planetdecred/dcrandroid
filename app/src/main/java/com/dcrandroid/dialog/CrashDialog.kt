@@ -16,7 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.dcrandroid.R
 
-class CrashDialog(context: Context?) : Dialog(context), View.OnClickListener {
+class CrashDialog(context: Context) : Dialog(context), View.OnClickListener {
 
     private var btnPositiveClick: DialogInterface.OnClickListener? = null
     private var btnNegativeClick: DialogInterface.OnClickListener? = null
