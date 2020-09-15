@@ -34,12 +34,12 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
 
     lateinit var wallet: Wallet
 
-
     private val selectedAccount: Account
         get() = transactionData.sourceAccount
 
     lateinit var transactionData: TransactionData
     lateinit var authoredTxData: AuthoredTxData
+    private var publishedTx = false
 
     fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): ConfirmTransaction {
         this.transactionData = transactionData
@@ -107,6 +107,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                     val op = this@ConfirmTransaction.javaClass.name + ": " + this.javaClass.name + ": txAuthor.broadcast"
                     try {
                         authoredTxData.txAuthor.broadcast(pass.toByteArray())
+                        publishedTx = true
                         passDialog?.dismiss()
                         showSuccess()
                     } catch (e: Exception) {
@@ -134,6 +135,13 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                 return@PassPromptUtil false
             }.show()
         }
+
+        go_back.setOnClickListener {
+            dismiss()
+            if (publishedTx) {
+                sendSuccess(true)
+            }
+        }
     }
 
     private fun showSendButton() = GlobalScope.launch(Dispatchers.Main) {
@@ -148,15 +156,11 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         success_layout.show()
         send_btn.hide()
         processing_layout.hide()
-        go_back.isEnabled = false
+        go_back.isEnabled = true
         isCancelable = false
 
         sendSuccess(false) // clear estimates
         delay(5000)
-        withContext(Dispatchers.Main) {
-            dismissAllowingStateLoss()
-            sendSuccess(true)
-        }
     }
 
     private fun showProcessing() = GlobalScope.launch(Dispatchers.Main) {
