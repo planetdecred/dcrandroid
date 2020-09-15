@@ -100,12 +100,12 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             switchFragment(1) // Transactions Fragment
         }
 
-        if (multiWallet.numWalletsNeedingSeedBackup() > 0 && !closedBackupWarning) {
+        if (multiWallet!!.numWalletsNeedingSeedBackup() > 0 && !closedBackupWarning) {
             backup_warning_layout?.show()
 
-            backup_warning_title?.text = when (multiWallet.numWalletsNeedingSeedBackup()) {
+            backup_warning_title?.text = when (multiWallet!!.numWalletsNeedingSeedBackup()) {
                 1 -> getString(R.string.a_wallet_needs_backup)
-                else -> getString(R.string.n_wallets_need_backup, multiWallet.numWalletsNeedingSeedBackup())
+                else -> getString(R.string.n_wallets_need_backup, multiWallet!!.numWalletsNeedingSeedBackup())
             }
 
             go_to_wallets_btn?.setOnClickListener {
@@ -127,7 +127,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onResume() {
         super.onResume()
         syncLayoutUtil = SyncLayoutUtil(syncLayout, { restartSyncProcess() }, {
-            if (multiWallet.isSyncing) {
+            if (multiWallet!!.isSyncing) {
                 scrollView.postDelayed({
                     scrollView.smoothScrollTo(0, scrollView.bottom)
                 }, 200)
@@ -163,14 +163,14 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
-        balanceTextView.text = CoinFormat.format(multiWallet.totalWalletBalance())
+        balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance())
         if (mainBalanceIsVisible()) {
             setToolbarTitle(balanceTextView.text, true)
         }
     }
 
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
-        val jsonResult = multiWallet.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterRegular, true)
+        val jsonResult = multiWallet!!.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterRegular, true)
         var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (tempTxList == null) {
@@ -202,7 +202,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         val isWifiConnected = context?.let { NetworkUtil.isWifiConnected(it) }
         val isDataConnected = context?.let { NetworkUtil.isMobileDataConnected(it) }
-        val syncAnyways = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, false)
+        val syncAnyways = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, false)
 
         // 1. If the user chooses not to sync(means the user syncs only on wifi and wifi is off or the user tapped NO on the dialog)
         if (!isWifiConnected!! && !syncAnyways) {

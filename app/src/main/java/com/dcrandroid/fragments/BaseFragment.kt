@@ -21,16 +21,16 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     var requiresDataUpdate = false
 
     private val walletData: WalletData = WalletData.instance
-    internal val multiWallet: MultiWallet
-        get() = walletData.multiWallet!!
+    internal val multiWallet: MultiWallet?
+        get() = walletData.multiWallet
 
     override fun onStart() {
         super.onStart()
-        multiWallet.removeSyncProgressListener(TAG)
-        multiWallet.removeTxAndBlockNotificationListener(TAG)
+        multiWallet?.removeSyncProgressListener(TAG)
+        multiWallet?.removeTxAndBlockNotificationListener(TAG)
 
-        multiWallet.addSyncProgressListener(this, TAG)
-        multiWallet.addTxAndBlockNotificationListener(this, TAG)
+        multiWallet?.addSyncProgressListener(this, TAG)
+        multiWallet?.addTxAndBlockNotificationListener(this, TAG)
     }
 
     override fun onResume() {
@@ -49,8 +49,8 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
 
     override fun onDestroy() {
         super.onDestroy()
-        multiWallet.removeSyncProgressListener(TAG)
-        multiWallet.removeTxAndBlockNotificationListener(TAG)
+        multiWallet?.removeSyncProgressListener(TAG)
+        multiWallet?.removeTxAndBlockNotificationListener(TAG)
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {

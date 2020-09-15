@@ -36,7 +36,7 @@ class MultiWalletTransactions : BaseFragment() {
     inner class TransactionsTabsAdapter(supportFragmentManager: FragmentManager) : FragmentStatePagerAdapter(supportFragmentManager,
             BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-        private val wallets = multiWallet.openedWalletsList()
+        private val wallets = multiWallet!!.openedWalletsList()
         override fun getCount(): Int {
             return wallets.size
         }
