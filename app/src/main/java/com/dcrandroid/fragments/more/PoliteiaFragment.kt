@@ -758,8 +758,14 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             progressBar.progress = progressStatus
             textView.text = "" + progressStatus + "/" + progressBar.max
             loading_view.visibility = View.GONE
-            swipe_refresh_layout.visibility = View.VISIBLE
-            empty_list.visibility = View.VISIBLE
+//            swipe_refresh_layout.visibility = View.VISIBLE
+            if (proposals.size > 0) {
+                swipe_refresh_layout.visibility = View.VISIBLE
+                empty_list.visibility = View.GONE
+            } else {
+                swipe_refresh_layout.visibility = View.GONE
+                empty_list.visibility = View.VISIBLE
+            }
         }
     }
 
