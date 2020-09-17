@@ -106,7 +106,6 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:id="@+id/cancel_icon"
                 app:srcCompat="@drawable/ic_rescan" />
 
             <TextView

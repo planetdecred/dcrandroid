@@ -9,6 +9,7 @@ package com.dcrandroid.fragments
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
+import com.dcrandroid.activities.more.PoliteiaActivity
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
@@ -67,9 +68,9 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     }
 
     fun syncProposals() {
-        if (activity is HomeActivity) {
-            val homeActivity = activity as HomeActivity
-            homeActivity.syncProposals()
+        if (activity is PoliteiaActivity) {
+            val politeiaActivity = activity as PoliteiaActivity
+            politeiaActivity.syncProposals()
         }
     }
 

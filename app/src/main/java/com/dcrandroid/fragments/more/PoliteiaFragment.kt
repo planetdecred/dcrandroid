@@ -120,7 +120,6 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 return@setOnClickListener
             }
             syncProposals()
-            SnackBar.showText(context!!, R.string.syncing_proposals)
         }
     }
 

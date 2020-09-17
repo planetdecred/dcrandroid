@@ -18,9 +18,11 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -94,9 +96,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         try {
             multiWallet?.removeSyncProgressListener(TAG)
             multiWallet?.removeTxAndBlockNotificationListener(TAG)
+            multiWallet?.politeia!!.removeNotificationListener(TAG)
 
             multiWallet?.addSyncProgressListener(this, TAG)
             multiWallet?.addTxAndBlockNotificationListener(this, TAG)
+            multiWallet?.politeia!!.addNotificationListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -142,15 +146,16 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         Handler().postDelayed({ checkWifiSync() }, 1000)
     }
 
-    fun syncProposals() {
-        Thread(Runnable {
+    private fun syncProposals() {
+        Thread {
             try {
-                multiWallet!!.politeia.sync(this@HomeActivity)
+                runOnUiThread { SnackBar.showText(this, R.string.syncing_proposals) }
+                multiWallet!!.politeia.sync()
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
-                SnackBar.showError(this, R.string.error_syncying_proposals)
+                runOnUiThread { SnackBar.showError(this, R.string.error_syncying_proposals) }
             }
-        }).start()
+        }.start()
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
