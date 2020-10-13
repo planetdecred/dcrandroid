@@ -14,7 +14,7 @@
     <string name="help">帮助</string>
     <string name="about">关于</string>
     <string name="statistics">统计数据</string>
-    <string name="build">构建</string>
+    <string name="build">版本号</string>
     <string name="uptime">运行时间</string>
     <string name="network">网络类型</string>
     <string name="best_block">最新区块高度</string>
@@ -281,7 +281,7 @@
     <!--/Crash Report-->
 
     <!--WIFI Sync-->
-    <string name="wifi_data_sync_title">当未连接WiFi时同步</string>
+    <string name="wifi_data_sync_title">未连接WiFi时开启同步</string>
     <string name="wifi_sync_notice">你想要在所有网络环境下同步吗？</string>
     <string name="not_connected_to_wifi">不能连接到WIFI</string>
     <string name="sync">同步</string>
