@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_padding_size_4"
                 android:includeFontPadding="false"
-                android:text="Sync"
+                android:text="@string/sync"
                 android:textColor="@color/darkBlueTextColor"
                 android:textSize="@dimen/edit_text_size_14"
                 android:id="@+id/tv_reconnect"

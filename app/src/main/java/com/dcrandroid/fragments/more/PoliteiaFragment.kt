@@ -21,6 +21,7 @@ import com.dcrandroid.fragments.BaseFragment
 import com.dcrandroid.util.Deserializer
 import com.dcrandroid.util.SnackBar
 import com.google.gson.GsonBuilder
+import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.fragment_politeia.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -54,7 +55,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
     private var categorySortAdapter: ArrayAdapter<String>? = null
 
     private var progressStatus = 0
-    private var selectionCurrent: Int = 0
+    private var currentCategory: Int = 0
     private val handler = Handler()
 
 
@@ -72,7 +73,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
         recycler_view.adapter = proposalAdapter
         recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
 
-        val timestampSortItems = this.resources.getStringArray(R.array.timestamp_sort)
+        val timestampSortItems = resources.getStringArray(R.array.timestamp_sort)
         val timestampSortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, timestampSortItems)
         timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timestamp_sort_spinner.onItemSelectedListener = this
@@ -80,12 +81,12 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
 
         categorySortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableProposalTypes)
         categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        selectionCurrent = category_sort_spinner.selectedItemPosition
+        currentCategory = category_sort_spinner.selectedItemPosition
         category_sort_spinner.adapter = categorySortAdapter
 
         category_sort_spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-                selectionCurrent = position
+                currentCategory = position
                 when (position) {
                     0 -> {
                         loadInDiscussionProposals()
@@ -124,7 +125,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     override fun onScrollChanged() {
-        when (selectionCurrent) {
+        when (currentCategory) {
             0 -> {
                 if (proposals.size < 5 || !initialLoadingDone.get()) return
 
@@ -247,7 +248,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Constants.PROPOSALS_ALL, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryAll, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -325,7 +326,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Constants.PROPOSALS_PRE, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryPre, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -403,7 +404,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Constants.PROPOSALS_ACTIVE, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryActive, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -481,7 +482,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Constants.PROPOSALS_APPROVED, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryApproved, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -560,7 +561,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Constants.PROPOSALS_REJECTED, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryRejected, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -638,7 +639,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Constants.PROPOSALS_ABANDONED, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryAbandoned, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -711,11 +712,11 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
     private fun refreshAvailableProposalCategories() = GlobalScope.launch(Dispatchers.Default) {
         availableProposalTypes.clear()
 
-        val preCount = multiWallet.politeia.count(Constants.PROPOSALS_PRE)
-        val activeCount = multiWallet.politeia.count(Constants.PROPOSALS_ACTIVE)
-        val approvedCount = multiWallet.politeia.count(Constants.PROPOSALS_APPROVED)
-        val rejectedCount = multiWallet.politeia.count(Constants.PROPOSALS_REJECTED)
-        val abandonedCount = multiWallet.politeia.count(Constants.PROPOSALS_ABANDONED)
+        val preCount = multiWallet.politeia.count(Dcrlibwallet.ProposalCategoryPre)
+        val activeCount = multiWallet.politeia.count(Dcrlibwallet.ProposalCategoryActive)
+        val approvedCount = multiWallet.politeia.count(Dcrlibwallet.ProposalCategoryApproved)
+        val rejectedCount = multiWallet.politeia.count(Dcrlibwallet.ProposalCategoryRejected)
+        val abandonedCount = multiWallet.politeia.count(Dcrlibwallet.ProposalCategoryAbandoned)
 
         withContext(Dispatchers.Main) {
             availableProposalTypes.add(getString(R.string.proposal_in_discussion, preCount))
@@ -770,7 +771,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     override fun onRefresh() {
-        when (selectionCurrent) {
+        when (currentCategory) {
             0 -> {
                 loadInDiscussionProposals()
             }
@@ -793,7 +794,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        when (selectionCurrent) {
+        when (currentCategory) {
             0 -> {
                 if (!initialLoadingDone.get()) {
                     return

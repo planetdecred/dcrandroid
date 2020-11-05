@@ -54,13 +54,7 @@ public class Constants {
             TX_NOTIFICATION_SOUND_ONLY = 3,
             TX_NOTIFICATION_SOUND_VIBRATE = 4,
             DEF_TX_NOTIFICATION = TX_NOTIFICATION_VIBRATE_ONLY,
-            DEF_CURRENCY_CONVERSION = 0, // None
-            PROPOSALS_ALL = 1,
-            PROPOSALS_PRE = 2,
-            PROPOSALS_ACTIVE = 3,
-            PROPOSALS_APPROVED = 4,
-            PROPOSALS_REJECTED = 5,
-            PROPOSALS_ABANDONED = 6;
+            DEF_CURRENCY_CONVERSION = 0; // None
 
     public static final boolean DEF_SPEND_UNCONFIRMED = false,
             DEF_STARTUP_SECURITY_SET = false,
