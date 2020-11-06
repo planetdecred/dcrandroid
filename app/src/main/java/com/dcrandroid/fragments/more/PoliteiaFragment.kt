@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dcrandroid.R
 import com.dcrandroid.adapter.ProposalAdapter
-import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
@@ -89,19 +88,19 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 currentCategory = position
                 when (position) {
                     0 -> {
-                        loadInDiscussionProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
                     }
                     1 -> {
-                        loadActiveProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
                     }
                     2 -> {
-                        loadApprovedProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
                     }
                     3 -> {
-                        loadRejectedProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
                     }
                     4 -> {
-                        loadAbandonedProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
                     }
                 }
             }
@@ -142,7 +141,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 if (lastVisibleItem >= proposals.size - 1) {
                     if (!loadedAllInDiscussionProposals) {
                         recycler_view.stopScroll()
-                        loadInDiscussionProposals(loadMore = true)
+                        loadProposals(true, Dcrlibwallet.ProposalCategoryPre)
                     }
                 }
             }
@@ -162,7 +161,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 if (lastVisibleItem >= proposals.size - 1) {
                     if (!loadedAllActiveProposals) {
                         recycler_view.stopScroll()
-                        loadActiveProposals(loadMore = true)
+                        loadProposals(true, Dcrlibwallet.ProposalCategoryActive)
                     }
                 }
             }
@@ -182,7 +181,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 if (lastVisibleItem >= proposals.size - 1) {
                     if (!loadedAllApprovedProposals) {
                         recycler_view.stopScroll()
-                        loadApprovedProposals(loadMore = true)
+                        loadProposals(true, Dcrlibwallet.ProposalCategoryApproved)
                     }
                 }
             }
@@ -202,7 +201,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 if (lastVisibleItem >= proposals.size - 1) {
                     if (!loadedAllRejectedProposals) {
                         recycler_view.stopScroll()
-                        loadRejectedProposals(loadMore = true)
+                        loadProposals(true, Dcrlibwallet.ProposalCategoryRejected)
                     }
                 }
             }
@@ -222,14 +221,14 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                 if (lastVisibleItem >= proposals.size - 1) {
                     if (!loadedAllAbandonedProposals) {
                         recycler_view.stopScroll()
-                        loadAbandonedProposals(loadMore = true)
+                        loadProposals(true, Dcrlibwallet.ProposalCategoryAbandoned)
                     }
                 }
             }
         }
     }
 
-    private fun loadAllProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadProposals(loadMore: Boolean = false, proposalCategory: Int) = GlobalScope.launch(Dispatchers.Default) {
         activity!!.runOnUiThread {
             showLoadingView()
             swipe_refresh_layout.isRefreshing = true
@@ -248,7 +247,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             else -> 0
         }
 
-        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryAll, offset, limit, newestProposalsFirst)
+        val jsonResult = multiWallet.politeia.getProposals(proposalCategory, offset, limit, newestProposalsFirst)
 
         // Check if the result object from the json response is null
         val resultObject = JSONObject(jsonResult).get("result")
@@ -295,397 +294,6 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
             }
 
             checkEmptyProposalList("")
-
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        hideLoadingView()
-
-        swipe_refresh_layout.isRefreshing = false
-    }
-
-    private fun loadInDiscussionProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
-        activity!!.runOnUiThread {
-            showLoadingView()
-            swipe_refresh_layout.isRefreshing = true
-            swipe_refresh_layout.visibility = View.GONE
-            empty_list.visibility = View.GONE
-        }
-
-        if (loading.get()) {
-            return@launch
-        }
-
-        loading.set(true)
-        val limit = 10
-        val offset = when {
-            loadMore -> proposals.size
-            else -> 0
-        }
-
-        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryPre, offset, limit, newestProposalsFirst)
-
-        // Check if the result object from the json response is null
-        val resultObject = JSONObject(jsonResult).get("result")
-        val resultObjectString = resultObject.toString()
-        val inDiscussionProposalList = if (resultObjectString == "null") {
-            gson.fromJson("[]", Array<Proposal>::class.java)
-        } else {
-            val resultArray = JSONObject(jsonResult).getJSONArray("result")
-            val resultArrayString = resultArray.toString()
-            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
-        }
-
-        initialLoadingDone.set(true)
-
-        if (inDiscussionProposalList == null) {
-            loadedAll = true
-            loading.set(false)
-            hideLoadingView()
-
-            if (!loadMore) {
-                proposals.clear()
-            }
-            return@launch
-        }
-
-        if (inDiscussionProposalList.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = proposals.size
-            proposals.addAll(inDiscussionProposalList)
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyItemRangeInserted(positionStart, inDiscussionProposalList.size)
-
-                // notify previous last item to remove bottom margin
-                proposalAdapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            proposals.let {
-                it.clear()
-                it.addAll(inDiscussionProposalList)
-            }
-
-            checkEmptyProposalList("in discussion")
-
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        hideLoadingView()
-
-        swipe_refresh_layout.isRefreshing = false
-    }
-
-    private fun loadActiveProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
-        activity!!.runOnUiThread {
-            showLoadingView()
-            swipe_refresh_layout.isRefreshing = true
-            swipe_refresh_layout.visibility = View.GONE
-            empty_list.visibility = View.GONE
-        }
-
-        if (loading.get()) {
-            return@launch
-        }
-
-        loading.set(true)
-        val limit = 10
-        val offset = when {
-            loadMore -> proposals.size
-            else -> 0
-        }
-
-        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryActive, offset, limit, newestProposalsFirst)
-
-        // Check if the result object from the json response is null
-        val resultObject = JSONObject(jsonResult).get("result")
-        val resultObjectString = resultObject.toString()
-        val activeProposalList = if (resultObjectString == "null") {
-            gson.fromJson("[]", Array<Proposal>::class.java)
-        } else {
-            val resultArray = JSONObject(jsonResult).getJSONArray("result")
-            val resultArrayString = resultArray.toString()
-            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
-        }
-
-        initialLoadingDone.set(true)
-
-        if (activeProposalList == null) {
-            loadedAll = true
-            loading.set(false)
-            hideLoadingView()
-
-            if (!loadMore) {
-                proposals.clear()
-            }
-            return@launch
-        }
-
-        if (activeProposalList.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = proposals.size
-            proposals.addAll(activeProposalList)
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyItemRangeInserted(positionStart, activeProposalList.size)
-
-                // notify previous last item to remove bottom margin
-                proposalAdapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            proposals.let {
-                it.clear()
-                it.addAll(activeProposalList)
-            }
-
-            checkEmptyProposalList("active")
-
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        hideLoadingView()
-
-        swipe_refresh_layout.isRefreshing = false
-    }
-
-    private fun loadApprovedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
-        activity!!.runOnUiThread {
-            showLoadingView()
-            swipe_refresh_layout.isRefreshing = true
-            swipe_refresh_layout.visibility = View.GONE
-            empty_list.visibility = View.GONE
-        }
-
-        if (loading.get()) {
-            return@launch
-        }
-
-        loading.set(true)
-        val limit = 10
-        val offset = when {
-            loadMore -> proposals.size
-            else -> 0
-        }
-
-        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryApproved, offset, limit, newestProposalsFirst)
-
-        // Check if the result object from the json response is null
-        val resultObject = JSONObject(jsonResult).get("result")
-        val resultObjectString = resultObject.toString()
-        val approvedProposalList = if (resultObjectString == "null") {
-            gson.fromJson("[]", Array<Proposal>::class.java)
-        } else {
-            val resultArray = JSONObject(jsonResult).getJSONArray("result")
-            val resultArrayString = resultArray.toString()
-            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
-        }
-
-        initialLoadingDone.set(true)
-
-        if (approvedProposalList == null) {
-
-            loadedAllApprovedProposals = true
-            loading.set(false)
-            hideLoadingView()
-
-            if (!loadMore) {
-                proposals.clear()
-            }
-            return@launch
-        }
-
-        if (approvedProposalList.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = proposals.size
-            proposals.addAll(approvedProposalList)
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyItemRangeInserted(positionStart, approvedProposalList.size)
-
-                // notify previous last item to remove bottom margin
-                proposalAdapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            proposals.let {
-                it.clear()
-                it.addAll(approvedProposalList)
-            }
-
-            checkEmptyProposalList("approved")
-
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        hideLoadingView()
-
-        swipe_refresh_layout.isRefreshing = false
-    }
-
-    private fun loadRejectedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
-        activity!!.runOnUiThread {
-            showLoadingView()
-            swipe_refresh_layout.isRefreshing = true
-            swipe_refresh_layout.visibility = View.GONE
-            empty_list.visibility = View.GONE
-        }
-
-        if (loading.get()) {
-            return@launch
-        }
-
-        loading.set(true)
-        val limit = 10
-        val offset = when {
-            loadMore -> proposals.size
-            else -> 0
-        }
-
-        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryRejected, offset, limit, newestProposalsFirst)
-
-        // Check if the result object from the json response is null
-        val resultObject = JSONObject(jsonResult).get("result")
-        val resultObjectString = resultObject.toString()
-        val rejectedProposalList = if (resultObjectString == "null") {
-            gson.fromJson("[]", Array<Proposal>::class.java)
-        } else {
-            val resultArray = JSONObject(jsonResult).getJSONArray("result")
-            val resultArrayString = resultArray.toString()
-            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
-        }
-
-        initialLoadingDone.set(true)
-
-        if (rejectedProposalList == null) {
-            loadedAll = true
-            loading.set(false)
-            hideLoadingView()
-
-            if (!loadMore) {
-                proposals.clear()
-            }
-            return@launch
-        }
-
-        if (rejectedProposalList.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = proposals.size
-            proposals.addAll(rejectedProposalList)
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyItemRangeInserted(positionStart, rejectedProposalList.size)
-
-                // notify previous last item to remove bottom margin
-                proposalAdapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            proposals.let {
-                it.clear()
-                it.addAll(rejectedProposalList)
-            }
-
-            checkEmptyProposalList("rejected")
-
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        hideLoadingView()
-
-        swipe_refresh_layout.isRefreshing = false
-    }
-
-    private fun loadAbandonedProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
-        activity!!.runOnUiThread {
-            showLoadingView()
-            swipe_refresh_layout.isRefreshing = true
-            swipe_refresh_layout.visibility = View.GONE
-            empty_list.visibility = View.GONE
-        }
-
-        if (loading.get()) {
-            return@launch
-        }
-
-        loading.set(true)
-        val limit = 10
-        val offset = when {
-            loadMore -> proposals.size
-            else -> 0
-        }
-
-        val jsonResult = multiWallet.politeia.getProposals(Dcrlibwallet.ProposalCategoryAbandoned, offset, limit, newestProposalsFirst)
-
-        // Check if the result object from the json response is null
-        val resultObject = JSONObject(jsonResult).get("result")
-        val resultObjectString = resultObject.toString()
-        val abandonedProposalList = if (resultObjectString == "null") {
-            gson.fromJson("[]", Array<Proposal>::class.java)
-        } else {
-            val resultArray = JSONObject(jsonResult).getJSONArray("result")
-            val resultArrayString = resultArray.toString()
-            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
-        }
-
-        initialLoadingDone.set(true)
-
-        if (abandonedProposalList == null) {
-            loadedAll = true
-            loading.set(false)
-            hideLoadingView()
-
-            if (!loadMore) {
-                proposals.clear()
-            }
-            return@launch
-        }
-
-        if (abandonedProposalList.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = proposals.size
-            proposals.addAll(abandonedProposalList)
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyItemRangeInserted(positionStart, abandonedProposalList.size)
-
-                // notify previous last item to remove bottom margin
-                proposalAdapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            proposals.let {
-                it.clear()
-                it.addAll(abandonedProposalList)
-            }
-
-            checkEmptyProposalList("abandoned")
 
             withContext(Dispatchers.Main) {
                 proposalAdapter?.notifyDataSetChanged()
@@ -773,19 +381,24 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
     override fun onRefresh() {
         when (currentCategory) {
             0 -> {
-                loadInDiscussionProposals()
+                loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
+//                loadInDiscussionProposals()
             }
             1 -> {
-                loadActiveProposals()
+                loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
+//                loadActiveProposals()
             }
             2 -> {
-                loadApprovedProposals()
+                loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
+//                loadApprovedProposals()
             }
             3 -> {
-                loadRejectedProposals()
+                loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
+//                loadRejectedProposals()
             }
             4 -> {
-                loadAbandonedProposals()
+                loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
+//                loadAbandonedProposals()
             }
         }
     }
@@ -804,7 +417,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                     val newestFirst = position == 0 // "Newest" is the first item
                     if (newestFirst != newestProposalsFirst) {
                         newestProposalsFirst = newestFirst
-                        loadInDiscussionProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
                     }
                 }
             }
@@ -817,7 +430,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                     val newestFirst = position == 0 // "Newest" is the first item
                     if (newestFirst != newestProposalsFirst) {
                         newestProposalsFirst = newestFirst
-                        loadActiveProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
                     }
                 }
             }
@@ -830,7 +443,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                     val newestFirst = position == 0 // "Newest" is the first item
                     if (newestFirst != newestProposalsFirst) {
                         newestProposalsFirst = newestFirst
-                        loadApprovedProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
                     }
                 }
             }
@@ -843,7 +456,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                     val newestFirst = position == 0 // "Newest" is the first item
                     if (newestFirst != newestProposalsFirst) {
                         newestProposalsFirst = newestFirst
-                        loadRejectedProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
                     }
                 }
             }
@@ -856,7 +469,7 @@ class PoliteiaFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, O
                     val newestFirst = position == 0 // "Newest" is the first item
                     if (newestFirst != newestProposalsFirst) {
                         newestProposalsFirst = newestFirst
-                        loadAbandonedProposals()
+                        loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
                     }
                 }
             }
