@@ -192,7 +192,6 @@ class SplashScreenActivity : BaseActivity() {
             }
 
             multiWallet!!.openWallets(publicPass.toByteArray())
-
             proceedToHomeActivity()
 
         } catch (e: Exception) {

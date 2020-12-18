@@ -270,6 +270,30 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         displaySyncingLayout()
     }
 
+    override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport?) {
+        GlobalScope.launch(Dispatchers.Main) {
+            // stage title
+            val syncStageTitle = context.getString(R.string.fetching_cfilters, cfiltersFetchProgress?.cFiltersFetchProgress)
+            syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
+
+            syncLayout.tv_steps.text = context.getString(R.string.step_1_3)
+
+            showSyncVerboseExtras()
+
+            // block headers fetched
+            syncLayout.tv_block_header_fetched.setText(R.string.cfilters_fetched)
+            syncLayout.tv_fetch_discover_scan_count.text = context.getString(R.string.block_header_fetched_count,
+                    cfiltersFetchProgress!!.currentCFilterHeight, cfiltersFetchProgress.totalCFiltersToFetch)
+
+            // syncing progress
+            syncLayout.tv_progress.setText(R.string.syncing_progress)
+            syncLayout.tv_days.text = context.getString(R.string.cfilters_left, cfiltersFetchProgress.totalCFiltersToFetch - cfiltersFetchProgress.currentCFilterHeight)
+        }
+
+        publishSyncProgress(cfiltersFetchProgress!!.generalSyncProgress)
+        displaySyncingLayoutIfNotShowing()
+    }
+
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {
         GlobalScope.launch(Dispatchers.Main) {
 
