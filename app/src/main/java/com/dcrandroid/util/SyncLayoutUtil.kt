@@ -276,7 +276,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
             val syncStageTitle = context.getString(R.string.fetching_cfilters, cfiltersFetchProgress?.cFiltersFetchProgress)
             syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
 
-            syncLayout.tv_steps.text = context.getString(R.string.step_1_3)
+            syncLayout.tv_steps.text = context.getString(R.string.step_cfilters)
 
             showSyncVerboseExtras()
 
