@@ -55,7 +55,7 @@ class RestoreWalletActivity : BaseActivity() {
         }
 
     private val validateSeed: (seed: String) -> Boolean = {
-        allSeedWords.indexOf(it) > 0
+        allSeedWords.indexOf(it) >= 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
