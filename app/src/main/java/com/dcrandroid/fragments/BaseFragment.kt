@@ -99,10 +99,13 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
-    override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {
-    }
+    override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport?) {}
+
+    override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {}
 
     override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport?) {}
+
+    override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {}
 
     override fun onSyncCanceled(willRestart: Boolean) {}
 
@@ -111,8 +114,6 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
     override fun onSyncCompleted() {
         onTxOrBalanceUpdateRequired(null)
     }
-
-    override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {}
 
     override fun onSyncEndedWithError(err: Exception?) {}
 

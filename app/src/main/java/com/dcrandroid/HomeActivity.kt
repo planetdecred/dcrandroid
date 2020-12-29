@@ -184,7 +184,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         recycler_view_tabs.adapter = adapter
 
         switchFragment(0)
-
     }
 
     fun refreshNavigationTabs() {
@@ -369,10 +368,16 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
-    override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {
+    override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport?) {
+    }
+
+    override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {
     }
 
     override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport?) {
+    }
+
+    override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {
     }
 
     override fun onSyncCanceled(willRestart: Boolean) {
@@ -383,9 +388,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onSyncCompleted() {
-    }
-
-    override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {
     }
 
     override fun onSyncEndedWithError(err: java.lang.Exception?) {
