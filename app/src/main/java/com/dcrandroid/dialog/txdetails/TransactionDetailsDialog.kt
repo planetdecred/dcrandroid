@@ -176,7 +176,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     private fun getSourceAccount(): String? {
         for (input in transaction.inputs!!) {
             if (input.accountNumber != null && input.accountNumber != -1) {
-                return input.accountName
+                return wallet.accountName(input.accountNumber)
             }
         }
 
@@ -187,7 +187,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     private fun getReceiveAccount(): String? {
         for (output in transaction.outputs!!) {
             if (output.account != -1) {
-                return output.accountName
+                return wallet.accountName(output.account)
             }
         }
         return null
@@ -196,9 +196,12 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     private fun populateInputOutput() {
         val inputs = ArrayList<DropDownItem>()
         for (input in transaction.inputs!!) {
-            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), input.accountName)
+            val accountName = if (input.accountNumber >= 0) {
+                wallet.accountName(input.accountNumber)
+            } else getString(R.string.external).toLowerCase()
+            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), accountName)
             var inputBadge = ""
-            if (input.accountNumber != null && input.accountNumber != -1) {
+            if (input.accountNumber != -1) {
                 inputBadge = wallet.name
             }
             inputs.add(DropDownItem(amount, input.previousOutpoint!!, inputBadge))
@@ -208,7 +211,10 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         val outputs = ArrayList<DropDownItem>()
         for (output in transaction.outputs!!) {
-            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), output.accountName)
+            val accountName = if (output.account >= 0) {
+                wallet.accountName(output.account)
+            } else getString(R.string.external).toLowerCase()
+            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), accountName)
             var outputBadge = ""
             if (output.account != -1) {
                 outputBadge = wallet.name
