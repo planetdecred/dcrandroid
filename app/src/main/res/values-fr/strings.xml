@@ -324,10 +324,14 @@
     <string name="show_details">Montrer les détails</string>
     <string name="hide_details">Masquer les détails</string>
     <string name="block_header_fetched">Entête de bloc récupéré</string>
+    <string name="cfilters_fetched">CFilters récupérés</string>
+    <string name="cfilters_left"> %1$d CFilters restants</string>
+    <string name="step_cfilters">Récupération des cfilters pour mise à jour</string>
     <string name="step_1_3" tools:ignore="TypographyFractions">Étape 1/3</string>
     <string name="step_2_3">Étape 2/3</string>
     <string name="step_2_2">Étape 2/2</string>
     <string name="step_3_3">Étape 3/3</string>
+    <string name="fetching_cfilters"><![CDATA[Récupération des cfilters <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="fetching_block_headers"><![CDATA[Récupération des entêtes de blocs <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="scanning_block_headers"><![CDATA[Scan des entête de blocs <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="rescanning_blocks"><![CDATA[Rescan des blocs <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
