@@ -29,7 +29,15 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 
-class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
+// Corresponding to spinner item position
+const val ProposalCategoryPre = 0
+const val ProposalCategoryActive = 1
+const val ProposalCategoryApproved = 2
+const val ProposalCategoryRejected = 3
+const val ProposalCategoryAbandoned = 4
+
+class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
+        SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var notificationManager: NotificationManager
 
@@ -81,23 +89,14 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         category_sort_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
                 currentCategory = position
-                when (position) {
-                    0 -> {
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
-                    }
-                    1 -> {
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
-                    }
-                    2 -> {
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
-                    }
-                    3 -> {
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
-                    }
-                    4 -> {
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
-                    }
+                val proposalCategory = when (currentCategory) {
+                    ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+                    ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+                    ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+                    ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
+                    else -> Dcrlibwallet.ProposalCategoryAbandoned
                 }
+                loadProposals(true, proposalCategory)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -107,8 +106,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
             finish()
         }
 
-        refreshAvailableProposalCategories()
-
         sync_layout.setOnClickListener {
             if (!multiWallet!!.isConnectedToDecredNetwork) {
                 SnackBar.showError(this, R.string.not_connected)
@@ -116,6 +113,8 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
             }
             syncProposals()
         }
+
+        refreshAvailableProposalCategories()
     }
 
     private fun syncProposals() = GlobalScope.launch(Dispatchers.Default) {
@@ -143,11 +142,11 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
         if (lastVisibleItem >= proposals.size - 1) {
             recycler_view.stopScroll()
-            val proposalCategory = when(currentCategory){
-                0 -> Dcrlibwallet.ProposalCategoryPre
-                1 -> Dcrlibwallet.ProposalCategoryActive
-                2 -> Dcrlibwallet.ProposalCategoryApproved
-                3 -> Dcrlibwallet.ProposalCategoryRejected
+            val proposalCategory = when (currentCategory) {
+                ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+                ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+                ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+                ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
                 else -> Dcrlibwallet.ProposalCategoryAbandoned
             }
             loadProposals(true, proposalCategory)
@@ -300,94 +299,39 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
     }
 
     override fun onRefresh() {
-        when (currentCategory) {
-            0 -> {
-                loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
-            }
-            1 -> {
-                loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
-            }
-            2 -> {
-                loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
-            }
-            3 -> {
-                loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
-            }
-            4 -> {
-                loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
-            }
+        val proposalCategory = when (currentCategory) {
+            ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+            ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+            ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+            ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
+            else -> Dcrlibwallet.ProposalCategoryAbandoned
         }
+
+        loadProposals(false, proposalCategory)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        when (currentCategory) {
-            0 -> {
-                if (!initialLoadingDone.get()) {
-                    return
-                }
 
-                if (parent!!.id == R.id.timestamp_sort_spinner) {
-                    val newestFirst = position == 0 // "Newest" is the first item
-                    if (newestFirst != newestProposalsFirst) {
-                        newestProposalsFirst = newestFirst
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
-                    }
-                }
-            }
-            1 -> {
-                if (!initialLoadingDone.get()) {
-                    return
-                }
+        if (!initialLoadingDone.get()) {
+            return
+        }
 
-                if (parent!!.id == R.id.timestamp_sort_spinner) {
-                    val newestFirst = position == 0 // "Newest" is the first item
-                    if (newestFirst != newestProposalsFirst) {
-                        newestProposalsFirst = newestFirst
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
-                    }
-                }
-            }
-            2 -> {
-                if (!initialLoadingDone.get()) {
-                    return
-                }
+        if (parent!!.id == R.id.timestamp_sort_spinner) {
+            val newestFirst = position == 0 // "Newest" is the first item
+            if (newestFirst != newestProposalsFirst) {
+                newestProposalsFirst = newestFirst
 
-                if (parent!!.id == R.id.timestamp_sort_spinner) {
-                    val newestFirst = position == 0 // "Newest" is the first item
-                    if (newestFirst != newestProposalsFirst) {
-                        newestProposalsFirst = newestFirst
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
-                    }
+                val proposalCategory = when (currentCategory) {
+                    ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+                    ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+                    ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+                    ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
+                    else -> Dcrlibwallet.ProposalCategoryAbandoned
                 }
-            }
-            3 -> {
-                if (!initialLoadingDone.get()) {
-                    return
-                }
-
-                if (parent!!.id == R.id.timestamp_sort_spinner) {
-                    val newestFirst = position == 0 // "Newest" is the first item
-                    if (newestFirst != newestProposalsFirst) {
-                        newestProposalsFirst = newestFirst
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
-                    }
-                }
-            }
-            4 -> {
-                if (!initialLoadingDone.get()) {
-                    return
-                }
-
-                if (parent!!.id == R.id.timestamp_sort_spinner) {
-                    val newestFirst = position == 0 // "Newest" is the first item
-                    if (newestFirst != newestProposalsFirst) {
-                        newestProposalsFirst = newestFirst
-                        loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
-                    }
-                }
+                loadProposals(false, proposalCategory)
             }
         }
     }

@@ -52,7 +52,7 @@ class ProposalDetailsActivity : BaseActivity() {
             startActivity(Intent.createChooser(share, getString(R.string.share_proposal)))
         }
 
-        nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+        nested_scroll_view.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY > oldScrollY) {
                 app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
             }
