@@ -23,7 +23,6 @@ import java.nio.charset.Charset
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class ProposalDetailsActivity : BaseActivity() {
 
     private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
@@ -67,7 +66,7 @@ class ProposalDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun loadProposalDetails() = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadProposalDetails() = GlobalScope.launch(Dispatchers.Main) {
         val proposalResult = multiWallet!!.politeia!!.getProposalByID(proposal!!.id)
         val proposalObjectJson = JSONObject(proposalResult).getJSONObject(Constants.RESULT)
         val proposalResultString: String = proposalObjectJson.toString()
@@ -78,8 +77,7 @@ class ProposalDetailsActivity : BaseActivity() {
         val proposalItem = gson.fromJson(proposalResultString, Proposal::class.java)
         val voteSummaryItem = gson.fromJson(voteSummaryString, Proposal.VoteSummary::class.java)
 
-        runOnUiThread {
-            proposal_title.text = proposalItem.name
+        proposal_title.text = proposalItem.name
             proposal_author.text = proposal!!.username
             proposal_timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal!!.timestamp, this@ProposalDetailsActivity)
             proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal!!.getNumcomments())
@@ -109,7 +107,6 @@ class ProposalDetailsActivity : BaseActivity() {
 
                 progress.visibility = View.GONE
             }
-        }
 
         // Get vote status.
         if (voteSummaryItem.status == 4) {

@@ -23,10 +23,7 @@ import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.ProposalNotificationListener
 import kotlinx.android.synthetic.main.activity_politeia.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -67,9 +64,10 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         swipe_refresh_layout.setOnRefreshListener(this)
+
         layoutManager = LinearLayoutManager(this)
-        recycler_view.layoutManager = layoutManager
         proposalAdapter = ProposalAdapter(proposals, this)
+        recycler_view.layoutManager = layoutManager
         recycler_view.adapter = proposalAdapter
         recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
 
@@ -124,16 +122,14 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         }
     }
 
-    fun syncProposals() {
-        Thread {
-            try {
-                runOnUiThread { SnackBar.showText(this, R.string.syncing_proposals) }
-                multiWallet!!.politeia.sync()
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                runOnUiThread { SnackBar.showError(this, R.string.error_syncying_proposals) }
-            }
-        }.start()
+    private fun syncProposals() = GlobalScope.launch(Dispatchers.Default) {
+        try {
+            SnackBar.showText(this@PoliteiaActivity, R.string.syncing_proposals)
+            multiWallet!!.politeia.sync()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            SnackBar.showError(this@PoliteiaActivity, R.string.error_syncying_proposals)
+        }
     }
 
     override fun onScrollChanged() {
@@ -242,7 +238,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
     }
 
     private fun loadProposals(loadMore: Boolean = false, proposalCategory: Int) = GlobalScope.launch(Dispatchers.Default) {
-        runOnUiThread {
+        withContext(Dispatchers.Main) {
             showLoadingView()
             swipe_refresh_layout.isRefreshing = true
             swipe_refresh_layout.visibility = View.GONE
@@ -319,14 +315,12 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         swipe_refresh_layout.isRefreshing = false
     }
 
-    private fun checkEmptyProposalList(status: String) {
-        runOnUiThread {
-            if (proposals.size > 0) {
-                swipe_refresh_layout?.show()
-            } else {
-                swipe_refresh_layout?.hide()
-                empty_list.text = String.format(Locale.getDefault(), "No %s proposals", status)
-            }
+    private fun checkEmptyProposalList(status: String) = GlobalScope.launch(Dispatchers.Main) {
+        if (proposals.size > 0) {
+            swipe_refresh_layout?.show()
+        } else {
+            swipe_refresh_layout?.hide()
+            empty_list.text = String.format(Locale.getDefault(), "No %s proposals", status)
         }
     }
 
@@ -350,44 +344,41 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         }
     }
 
-    private fun showLoadingView() {
-        Thread(Runnable {
-            progressStatus = 0
+    private fun showLoadingView() = GlobalScope.launch(Dispatchers.Default) {
+        progressStatus = 0
 
-            while (progressStatus < 100) {
-                runOnUiThread { loading_view.visibility = View.VISIBLE }
+        while (progressStatus < 100) {
+            withContext(Dispatchers.Main) { loading_view.visibility = View.VISIBLE }
 
-                progressStatus += 10
-                // Update the progress bar and display the
-                //current value in the text view
-                handler.post {
-                    progressBar.progress = progressStatus
-                    textView.text = "Loading proposals"
-                }
-                try {
-                    // Sleep for 200 milliseconds.
-                    Thread.sleep(200)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
+            progressStatus += 10
+            // Update the progress bar and display the
+            //current value in the text view
+            handler.post {
+                progressBar.progress = progressStatus
+                textView.text = "Loading proposals"
             }
-        }).start()
+
+            try {
+                // Sleep for 200 milliseconds.
+                delay(200)
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun hideLoadingView() {
-        runOnUiThread {
-            progressStatus = 100
-            progressBar.progress = progressStatus
-            textView.text = "" + progressStatus + "/" + progressBar.max
-            loading_view.visibility = View.GONE
+    private fun hideLoadingView() = GlobalScope.launch(Dispatchers.Main) {
+        progressStatus = 100
+        progressBar.progress = progressStatus
+        textView.text = "" + progressStatus + "/" + progressBar.max
+        loading_view.visibility = View.GONE
 //            swipe_refresh_layout.visibility = View.VISIBLE
-            if (proposals.size > 0) {
-                swipe_refresh_layout.visibility = View.VISIBLE
-                empty_list.visibility = View.GONE
-            } else {
-                swipe_refresh_layout.visibility = View.GONE
-                empty_list.visibility = View.VISIBLE
-            }
+        if (proposals.size > 0) {
+            swipe_refresh_layout.visibility = View.VISIBLE
+            empty_list.visibility = View.GONE
+        } else {
+            swipe_refresh_layout.visibility = View.GONE
+            empty_list.visibility = View.VISIBLE
         }
     }
 
@@ -395,23 +386,18 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
         when (currentCategory) {
             0 -> {
                 loadProposals(false, Dcrlibwallet.ProposalCategoryPre)
-//                loadInDiscussionProposals()
             }
             1 -> {
                 loadProposals(false, Dcrlibwallet.ProposalCategoryActive)
-//                loadActiveProposals()
             }
             2 -> {
                 loadProposals(false, Dcrlibwallet.ProposalCategoryApproved)
-//                loadApprovedProposals()
             }
             3 -> {
                 loadProposals(false, Dcrlibwallet.ProposalCategoryRejected)
-//                loadRejectedProposals()
             }
             4 -> {
                 loadProposals(false, Dcrlibwallet.ProposalCategoryAbandoned)
-//                loadAbandonedProposals()
             }
         }
     }
