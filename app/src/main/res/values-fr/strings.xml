@@ -345,7 +345,7 @@
 
     <string name="synced_latest_block_time"><![CDATA[Dernier bloc <font color="#091440">%1$d</font> &centerdot; il y a <font color="#091440">%2$s</font>]]></string>
     <string name="latest_block_time"><![CDATA[Synchronisé au bloc <font color="#091440">%1$d</font> &centerdot; il y a <font color="#091440">%2$s</font>]]></string>
-    <string name="connected_peers"><![CDATA[Connecté à <font color="#091440">%1$d</font> pairs.]]></string>
+    <string name="connected_to_n_peers"><![CDATA[Connecté à <font color="#091440">%1$d</font> pairs.]]></string>
     <string name="no_connected_peers">Pas de pairs connectés.</string>
     <string name="peers_connected">Pairs connectés</string>
     <string name="_default">défaut</string>

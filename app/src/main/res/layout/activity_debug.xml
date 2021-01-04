@@ -103,9 +103,29 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@id/pref_title"
                     android:includeFontPadding="false"
                     android:text="@string/view_statistics"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:textSize="@dimen/edit_text_size_16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_connected_peers"
+                android:padding="@dimen/margin_padding_size_16"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="@drawable/ripple"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/view_connected_peers"
                     android:textColor="@color/darkBlueTextColor"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
@@ -125,7 +145,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@id/pref_title"
                     android:includeFontPadding="false"
                     android:text="@string/view_wallets_log"
                     android:textColor="@color/darkBlueTextColor"
