@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 
 class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
+
     private lateinit var notificationManager: NotificationManager
 
     private var proposals = ArrayList<Proposal>()
@@ -40,11 +41,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
 
     private var newestProposalsFirst = true
     private var loadedAll = false
-    private var loadedAllInDiscussionProposals = false
-    private var loadedAllActiveProposals = false
-    private var loadedAllApprovedProposals = false
-    private var loadedAllRejectedProposals = false
-    private var loadedAllAbandonedProposals = false
 
     private val loading = AtomicBoolean(false)
     private val initialLoadingDone = AtomicBoolean(false)
@@ -133,107 +129,28 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener, SwipeRefr
     }
 
     override fun onScrollChanged() {
-        when (currentCategory) {
-            0 -> {
-                if (proposals.size < 5 || !initialLoadingDone.get()) return
+        if (proposals.size < 5 || !initialLoadingDone.get()) return
 
-                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                if (firstVisibleItem != 0) {
-                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                } else {
-                    proposals_page_header.elevation = 0f
-                    app_bar.elevation = 0f
-                }
+        val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
+        if (firstVisibleItem != 0) {
+            proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+            app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
+        } else {
+            proposals_page_header.elevation = 0f
+            app_bar.elevation = 0f
+        }
 
-                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-                if (lastVisibleItem >= proposals.size - 1) {
-                    if (!loadedAllInDiscussionProposals) {
-                        recycler_view.stopScroll()
-                        loadProposals(true, Dcrlibwallet.ProposalCategoryPre)
-                    }
-                }
+        val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
+        if (lastVisibleItem >= proposals.size - 1) {
+            recycler_view.stopScroll()
+            val proposalCategory = when(currentCategory){
+                0 -> Dcrlibwallet.ProposalCategoryPre
+                1 -> Dcrlibwallet.ProposalCategoryActive
+                2 -> Dcrlibwallet.ProposalCategoryApproved
+                3 -> Dcrlibwallet.ProposalCategoryRejected
+                else -> Dcrlibwallet.ProposalCategoryAbandoned
             }
-            1 -> {
-                if (proposals.size < 5 || !initialLoadingDone.get()) return
-
-                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                if (firstVisibleItem != 0) {
-                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                } else {
-                    proposals_page_header.elevation = 0f
-                    app_bar.elevation = 0f
-                }
-
-                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-                if (lastVisibleItem >= proposals.size - 1) {
-                    if (!loadedAllActiveProposals) {
-                        recycler_view.stopScroll()
-                        loadProposals(true, Dcrlibwallet.ProposalCategoryActive)
-                    }
-                }
-            }
-            2 -> {
-                if (proposals.size < 5 || !initialLoadingDone.get()) return
-
-                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                if (firstVisibleItem != 0) {
-                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                } else {
-                    proposals_page_header.elevation = 0f
-                    app_bar.elevation = 0f
-                }
-
-                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-                if (lastVisibleItem >= proposals.size - 1) {
-                    if (!loadedAllApprovedProposals) {
-                        recycler_view.stopScroll()
-                        loadProposals(true, Dcrlibwallet.ProposalCategoryApproved)
-                    }
-                }
-            }
-            3 -> {
-                if (proposals.size < 5 || !initialLoadingDone.get()) return
-
-                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                if (firstVisibleItem != 0) {
-                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                } else {
-                    proposals_page_header.elevation = 0f
-                    app_bar.elevation = 0f
-                }
-
-                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-                if (lastVisibleItem >= proposals.size - 1) {
-                    if (!loadedAllRejectedProposals) {
-                        recycler_view.stopScroll()
-                        loadProposals(true, Dcrlibwallet.ProposalCategoryRejected)
-                    }
-                }
-            }
-            4 -> {
-                if (proposals.size < 5 || !initialLoadingDone.get()) return
-
-                val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-                if (firstVisibleItem != 0) {
-                    proposals_page_header.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                    app_bar.elevation = resources.getDimension(R.dimen.app_bar_elevation)
-                } else {
-                    proposals_page_header.elevation = 0f
-                    app_bar.elevation = 0f
-                }
-
-                val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
-                if (lastVisibleItem >= proposals.size - 1) {
-                    if (!loadedAllAbandonedProposals) {
-                        recycler_view.stopScroll()
-                        loadProposals(true, Dcrlibwallet.ProposalCategoryAbandoned)
-                    }
-                }
-            }
+            loadProposals(true, proposalCategory)
         }
     }
 
