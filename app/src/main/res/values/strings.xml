@@ -85,12 +85,12 @@
     <string name="connected_peers_details">
         ID: %1$d
         \nAddr: %2$s
-        \nAddrLocal: %3$s
+        \nAddr Local: %3$s
         \nServices: %4$s
         \nVersion: %5$d
         \nSubVer: %6$s
-        \nStartingHeight: %7$d
-        \nBanScore: %8$d
+        \nStarting height: %7$d
+        \nBan score: %8$d
     </string>
     <string name="version">Version</string>
     <string name="build_date">Build date</string>

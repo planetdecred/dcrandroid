@@ -74,6 +74,10 @@ class ConnectedPeers: BaseActivity(), SyncProgressListener {
 
     }
 
+    override fun onCFiltersFetchProgress(p0: CFiltersFetchProgressReport?) {
+
+    }
+
     override fun onSyncCanceled(p0: Boolean) {
 
     }
