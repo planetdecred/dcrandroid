@@ -127,7 +127,7 @@
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone" >
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -152,35 +152,5 @@
         android:textColor="@color/lightGrayTextColor"
         app:fontFamily="@font/source_sans_pro"
         android:text="@string/no_proposals"/>
-
-    <LinearLayout
-        android:id="@+id/loading_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="false"
-            android:max="100"
-            android:minWidth="200dp"
-            android:minHeight="50dp"
-            android:progress="1" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginBottom="@dimen/margin_padding_size_32"
-            />
-
-    </LinearLayout>
 
 </LinearLayout>
