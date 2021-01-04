@@ -12,6 +12,7 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.activities.LogViewer
 import com.dcrandroid.data.Constants
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.preference.ListPreference
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_debug.*
@@ -31,6 +32,14 @@ class DebugActivity : BaseActivity() {
 
         check_statistics.setOnClickListener {
             startActivity(Intent(this, StatisticsActivity::class.java))
+        }
+
+        if (multiWallet!!.isConnectedToDecredNetwork) {
+            view_connected_peers.setOnClickListener {
+                startActivity(Intent(this, ConnectedPeers::class.java))
+            }
+        } else {
+            view_connected_peers.hide()
         }
 
         check_wallet_log.setOnClickListener {

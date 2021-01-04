@@ -173,6 +173,10 @@
             android:name=".activities.more.StatisticsActivity"
             android:launchMode="singleTask" />
 
+        <activity
+            android:name=".activities.more.ConnectedPeers"
+            android:launchMode="singleTask" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

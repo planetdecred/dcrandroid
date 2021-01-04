@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connected_peers"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_connected_peers"
+        android:gravity="center"
+        android:id="@+id/no_peers_available" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_view"
+        android:background="@drawable/card_bg"
+        android:elevation="@dimen/margin_padding_size_4"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:layout_marginBottom="@dimen/margin_padding_size_8" />
+
+</LinearLayout>

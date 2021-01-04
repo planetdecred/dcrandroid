@@ -194,7 +194,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
                 syncLayout.tv_reconnect.setText(R.string.disconnect)
                 syncLayout.cancel_icon.hide()
 
-                connectedPeers = context.getString(R.string.connected_peers, multiWallet.connectedPeers())
+                connectedPeers = context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers())
 
             } else {
 
@@ -406,7 +406,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {
         GlobalScope.launch(Dispatchers.Main) {
             if (multiWallet.isSynced) {
-                syncLayout.connected_peers.text = HtmlCompat.fromHtml(context.getString(R.string.connected_peers, multiWallet.connectedPeers()), 0)
+                syncLayout.connected_peers.text = HtmlCompat.fromHtml(context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers()), 0)
             } else if (multiWallet.isSyncing) {
                 syncLayout.tv_syncing_layout_connected_peer.text = numberOfConnectedPeers.toString()
             } else if (multiWallet.isRescanning) {
