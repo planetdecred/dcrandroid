@@ -194,7 +194,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
                 syncLayout.tv_reconnect.setText(R.string.disconnect)
                 syncLayout.cancel_icon.hide()
 
-                connectedPeers = context.getString(R.string.connected_peers, multiWallet.connectedPeers())
+                connectedPeers = context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers())
 
             } else {
 
@@ -268,6 +268,30 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
     override fun onSyncStarted(wasRestarted: Boolean) {
         displaySyncingLayout()
+    }
+
+    override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport?) {
+        GlobalScope.launch(Dispatchers.Main) {
+            // stage title
+            val syncStageTitle = context.getString(R.string.fetching_cfilters, cfiltersFetchProgress?.cFiltersFetchProgress)
+            syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
+
+            syncLayout.tv_steps.text = context.getString(R.string.step_cfilters)
+
+            showSyncVerboseExtras()
+
+            // block headers fetched
+            syncLayout.tv_block_header_fetched.setText(R.string.cfilters_fetched)
+            syncLayout.tv_fetch_discover_scan_count.text = context.getString(R.string.block_header_fetched_count,
+                    cfiltersFetchProgress!!.currentCFilterHeight, cfiltersFetchProgress.totalCFiltersToFetch)
+
+            // syncing progress
+            syncLayout.tv_progress.setText(R.string.syncing_progress)
+            syncLayout.tv_days.text = context.getString(R.string.cfilters_left, cfiltersFetchProgress.totalCFiltersToFetch - cfiltersFetchProgress.currentCFilterHeight)
+        }
+
+        publishSyncProgress(cfiltersFetchProgress!!.generalSyncProgress)
+        displaySyncingLayoutIfNotShowing()
     }
 
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport?) {
@@ -382,7 +406,7 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {
         GlobalScope.launch(Dispatchers.Main) {
             if (multiWallet.isSynced) {
-                syncLayout.connected_peers.text = HtmlCompat.fromHtml(context.getString(R.string.connected_peers, multiWallet.connectedPeers()), 0)
+                syncLayout.connected_peers.text = HtmlCompat.fromHtml(context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers()), 0)
             } else if (multiWallet.isSyncing) {
                 syncLayout.tv_syncing_layout_connected_peer.text = numberOfConnectedPeers.toString()
             } else if (multiWallet.isRescanning) {

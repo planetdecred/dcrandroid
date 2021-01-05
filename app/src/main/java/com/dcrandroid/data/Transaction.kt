@@ -123,11 +123,8 @@ class Transaction : Serializable {
         @SerializedName("amount")
         var amount: Long = 0
 
-        @SerializedName("account_name")
-        var accountName: String? = null
-
         @SerializedName("account_number")
-        var accountNumber: Int? = null
+        var accountNumber: Int = -1
 
         @SerializedName("previous_outpoint")
         var previousOutpoint: String? = null
@@ -138,10 +135,7 @@ class Transaction : Serializable {
         var index: Int = 0
 
         @SerializedName("account_number")
-        var account: Int = 0
-
-        @SerializedName("account_name")
-        var accountName: String? = null
+        var account: Int = -1
 
         @SerializedName("amount")
         var amount: Long = 0

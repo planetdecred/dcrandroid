@@ -118,6 +118,10 @@ class SyncService : Service(), SyncProgressListener {
     override fun onSyncStarted(wasRestarted: Boolean) {
     }
 
+    override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport) {
+        publishProgress(cfiltersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds, cfiltersFetchProgress.generalSyncProgress.totalSyncProgress)
+    }
+
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {
         publishProgress(headersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds, headersFetchProgress.generalSyncProgress.totalSyncProgress)
     }
@@ -125,7 +129,7 @@ class SyncService : Service(), SyncProgressListener {
     override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport) {
         publishProgress(addressDiscoveryProgress.generalSyncProgress.totalTimeRemainingSeconds, addressDiscoveryProgress.generalSyncProgress.totalSyncProgress)
     }
-
+    
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport) {
         publishProgress(headersRescanProgress.generalSyncProgress.totalTimeRemainingSeconds, headersRescanProgress.generalSyncProgress.totalSyncProgress)
     }

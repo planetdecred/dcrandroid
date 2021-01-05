@@ -9,7 +9,7 @@
     <string name="wallet">钱包</string>
     <string name="crash_dialog_text">一项意外错误导致应用被强制终止，请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题，这将有助于我们防止错误的再次发生。</string>
     <string name="type">类别</string>
-    <string name="loading">加载中…</string>
+    <string name="loading">加载中</string>
     <string name="dcr" translatable="false">DCR</string>
     <string name="help">帮助</string>
     <string name="about">关于</string>

@@ -167,12 +167,17 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
             // Update UI based on previously selected send to account.
             val selectedSourceAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_SOURCE_ACCOUNT) as Account?
-            val selectedDestAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_DESTINATION_ACCOUNT) as Account
-            if (multiWallet.walletWithID(selectedSourceAccount!!.walletID) != null) {
-                sourceAccountSpinner.selectedAccount = selectedSourceAccount
+            val selectedDestAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_DESTINATION_ACCOUNT) as Account?
+
+            // To avoid using an account object with invalid data, the account will be fetched from
+            // the wallet instead of using the serialized object.
+            if (selectedSourceAccount != null) {
+                val wallet = multiWallet.walletWithID(selectedSourceAccount.walletID)
+                sourceAccountSpinner.selectedAccount = Account.from(wallet.getAccount(selectedSourceAccount.accountNumber))
             }
-            if (multiWallet.walletWithID(selectedDestAccount.walletID) != null) {
-                destinationAddressCard.destinationAccountSpinner.selectedAccount = selectedDestAccount
+            if (selectedDestAccount != null) {
+                val wallet = multiWallet.walletWithID(selectedDestAccount.walletID)
+                destinationAddressCard.destinationAccountSpinner.selectedAccount = Account.from(wallet.getAccount(selectedDestAccount.accountNumber))
             }
 
             // Show destination address input / spinner depending on which was previously selected.

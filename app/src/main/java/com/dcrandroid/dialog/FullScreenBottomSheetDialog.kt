@@ -133,6 +133,10 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
         }
     }
 
+    override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport?) {
+
+    }
+
     override fun onHeadersRescanProgress(p0: HeadersRescanProgressReport?) {
 
     }
