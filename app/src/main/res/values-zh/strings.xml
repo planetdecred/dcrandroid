@@ -14,7 +14,7 @@
     <string name="help">帮助</string>
     <string name="about">关于</string>
     <string name="statistics">统计数据</string>
-    <string name="build">构建</string>
+    <string name="build">版本号</string>
     <string name="uptime">运行时间</string>
     <string name="network">网络类型</string>
     <string name="best_block">最新区块高度</string>
@@ -46,7 +46,7 @@
     <string name="syncing">同步中</string>
     <string name="syncing_ellipsis">同步中…</string>
     <string name="connected_to_a_peer">连接到指定节点</string>
-    <string name="connected_to_n_peer">已连接到%1$d个节点</string>
+    <string name="connected_to_n_peer">已连接到%1$d 个节点</string>
     <string name="ok">OK</string>
     <string name="user_agent">用户代理</string>
     <string name="user_agent_dialog_title">设置你的用户代理</string>
@@ -94,7 +94,7 @@
     <!--Seed-->
     <string name="save_seed_instruction">请按照正确的顺序写下33个助记词。</string>
     <string name="backup_seed_phrase">备份助记词短语</string>
-    <string name="verify_seed_info">验证你的助记词短语以便在需要的时候能够恢复。</string>
+    <string name="verify_seed_info">验证你的助记词短语以便在需要的时候能够恢复钱包。</string>
 
     <!--/Seed-->
 
@@ -246,7 +246,7 @@
     <!--Security-->
     <string name="pin">PIN码</string>
     <string name="create_spending_pin">创建支付PIN码</string>
-    <string name="create_spending_pass">船舰支付密码</string>
+    <string name="create_spending_pass">创建支付密码</string>
     <string name="change_spending_pass">更改支付密码</string>
     <string name="change_spending_pin">更改支付PIN码</string>
     <string name="mismatch_passcode">PIN码不匹配</string>
@@ -281,7 +281,7 @@
     <!--/Crash Report-->
 
     <!--WIFI Sync-->
-    <string name="wifi_data_sync_title">当未连接WiFi时同步</string>
+    <string name="wifi_data_sync_title">未连接WiFi时开启同步</string>
     <string name="wifi_sync_notice">你想要在所有网络环境下同步吗？</string>
     <string name="not_connected_to_wifi">不能连接到WIFI</string>
     <string name="sync">同步</string>
@@ -341,7 +341,7 @@
 
     <string name="synced_latest_block_time"><![CDATA[最新区块 <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> 前]]></string>
     <string name="latest_block_time"><![CDATA[已同步到区块 <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> 前]]></string>
-    <string name="connected_peers"><![CDATA[已连接到 <font color="#091440">%1$d</font> peers.]]></string>
+    <string name="connected_peers"><![CDATA[已连接到 <font color="#091440">%1$d</font> 个节点]]></string>
     <string name="no_connected_peers">未连接到节点</string>
     <string name="peers_connected">节点已连接</string>
     <string name="_default">默认</string>
@@ -368,10 +368,10 @@
     <string name="not_backed_up">未备份</string>
     <string name="seed_phase_2_briefing">你将在下一步被要求输入助记词短语</string>
     <string name="verify">验证</string>
-    <string name="seed_instruction_1">这<b>33个助记词短语</b>是非常重要的。</string>
-    <string name="seed_instruction_2">助记词短语是<b>唯一的方式</b>能恢复你的钱包。</string>
+    <string name="seed_instruction_1">这<b>33个助记词短语</b>非常重要！</string>
+    <string name="seed_instruction_2">助记词短语是<b>唯一</b>能恢复你钱包的方式！</string>
     <string name="seed_instruction_3">强烈建议保存你的助记词短语在<b><font color="#71b054">物理媒介</font></b>上（例如：写在纸上）。</string>
-    <string name="seed_instruction_4">绝对不要保存你的助记词短语在任何<b><font color="#ed6d47">数字媒介</font></b>上（例如：截屏）。</string>
+    <string name="seed_instruction_4">绝对不要保存你的助记词短语在<b><font color="#ed6d47">数字媒介</font></b>上（例如：截屏）。</string>
     <string name="seed_instruction_5">任何人使用你的助记词短语<b><font color="#ed6d47">都能偷取你的资金</font></b>。 不要给任何人看。</string>
     <string name="view_seed_phrase">查看助记词短语</string>
     <string name="seed_verification_failed">验证失败，请检查每一个单词并重试。</string>
@@ -486,9 +486,9 @@
     <string name="get_started">开始</string>
     <string name="back">后退</string>
     <string name="use_fingerprint">使用指纹</string>
-    <string name="overview_backup_seed_instruction">强烈建议写下助记词备份每一个钱包以便你能在需要的时候恢复。</string>
+    <string name="overview_backup_seed_instruction">强烈建议备份每一个钱包的助记词以便日后恢复钱包。</string>
     <string name="go_to_wallets">进入钱包</string>
-    <string name="n_wallets_need_backup">%1$d 钱包需要备份</string>
+    <string name="n_wallets_need_backup">%1$d个钱包需要备份</string>
     <string name="a_wallet_needs_backup">1个钱包需要备份</string>
     <string name="startup_password">启动密码</string>
     <string name="new_startup_password">新的启动密码</string>
@@ -527,7 +527,7 @@
     <string name="wait_for_sync">等待同步完成</string>
     <string name="welcome_title">欢迎使用Decred钱包</string>
     <string name="first_run_notice">你的33个助记词短语是你的钱包，请保持它安全。在你的设备丢失或破坏的情况下没有它你的资金将不能恢复\n\n首次钱包同步将比平常耗费更多时间。</string>
-    <string name="welcome_screen_text">欢迎使用Decred钱包，一个安全 &amp; 开源的移动钱包</string>
+    <string name="welcome_screen_text">欢迎使用Decred钱包，一个安全\n一个安全开源的移动钱包</string>
     <string name="mywallet">我的钱包</string>
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
