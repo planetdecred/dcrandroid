@@ -13,12 +13,9 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.ProposalAdapter
 import com.dcrandroid.data.Proposal
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.show
-import com.dcrandroid.util.Deserializer
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.ProposalNotificationListener
 import kotlinx.android.synthetic.main.activity_politeia.*
@@ -26,10 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.ArrayList
 
 // Corresponding to spinner item position
 const val ProposalCategoryPre = 0
@@ -46,9 +40,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
     private var proposals = ArrayList<Proposal>()
     private var proposalAdapter: ProposalAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
-
-    private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
-
     private var newestProposalsFirst = true
     private var loadedAll = false
 
@@ -95,7 +86,8 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
                     ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
                     else -> Dcrlibwallet.ProposalCategoryAbandoned
                 }
-                loadProposals(true, proposalCategory)
+
+                loadProposals(false, proposalCategory)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -140,114 +132,89 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
         val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
         if (lastVisibleItem >= proposals.size - 1) {
-            recycler_view.stopScroll()
-            val proposalCategory = when (currentCategory) {
-                ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
-                ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
-                ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
-                ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
-                else -> Dcrlibwallet.ProposalCategoryAbandoned
+            if (!loadedAll) {
+                recycler_view.stopScroll()
+                val proposalCategory = when (currentCategory) {
+                    ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+                    ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+                    ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+                    ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
+                    else -> Dcrlibwallet.ProposalCategoryAbandoned
+                }
+                loadProposals(true, proposalCategory)
             }
-            loadProposals(true, proposalCategory)
         }
     }
 
+    private fun preLoadTasks() = GlobalScope.launch(Dispatchers.Main) {
+        loading.set(true)
+        swipe_refresh_layout.isRefreshing = true
+    }
+
     private fun loadProposals(loadMore: Boolean = false, proposalCategory: Int) = GlobalScope.launch(Dispatchers.Default) {
-        withContext(Dispatchers.Main) {
-            //show loading view
-            swipe_refresh_layout.isRefreshing = true
-        }
 
         if (loading.get()) {
             return@launch
         }
+        preLoadTasks()
 
-        loading.set(true)
         val limit = 10
         val offset = when {
             loadMore -> proposals.size
             else -> 0
         }
 
-        val jsonResult = multiWallet!!.politeia.getProposals(proposalCategory, offset, limit, newestProposalsFirst)
+        try {
+            val jsonResult = multiWallet!!.politeia.getProposals(proposalCategory, offset, limit, newestProposalsFirst)
+            val tempProposalList = Gson().fromJson(jsonResult, Array<Proposal>::class.java)
 
-        // Check if the result object from the json response is null
-        val resultObject = JSONObject(jsonResult).get("result")
-        val resultObjectString = resultObject.toString()
-        val tempProposalList = if (resultObjectString == "null") {
-            gson.fromJson("[]", Array<Proposal>::class.java)
-        } else {
-            val resultArray = JSONObject(jsonResult).getJSONArray("result")
-            val resultArrayString = resultArray.toString()
-            gson.fromJson(resultArrayString, Array<Proposal>::class.java)
-        }
+            initialLoadingDone.set(true)
+            if (tempProposalList.isEmpty()) {
+                loadedAll = true
+                postLoadTasks()
 
-        initialLoadingDone.set(true)
+                if (!loadMore) {
+                    proposals.clear()
+                }
+                return@launch
+            }
 
-        if (tempProposalList == null) {
-            loadedAll = true
-            loading.set(false)
-            // hide loading view
-            withContext(Dispatchers.Main) {
-                swipe_refresh_layout.isRefreshing = false
-                if (proposals.size > 0) {
-                    swipe_refresh_layout.visibility = View.VISIBLE
-                } else {
-                    swipe_refresh_layout.visibility = View.GONE
+            loadedAll = tempProposalList.size < limit
+
+            if (loadMore) {
+                val positionStart = proposals.size
+                proposals.addAll(tempProposalList)
+                withContext(Dispatchers.Main) {
+                    proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
+
+                    // notify previous last item to remove bottom margin
+                    proposalAdapter?.notifyItemChanged(positionStart - 1)
+                }
+
+            } else {
+                proposals.let {
+                    it.clear()
+                    it.addAll(tempProposalList)
+                }
+
+                withContext(Dispatchers.Main) {
+                    proposalAdapter?.notifyDataSetChanged()
                 }
             }
 
-            if (!loadMore) {
-                proposals.clear()
-            }
-            return@launch
+            postLoadTasks()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        if (tempProposalList.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = proposals.size
-            proposals.addAll(tempProposalList)
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyItemRangeInserted(positionStart, tempProposalList.size)
-
-                // notify previous last item to remove bottom margin
-                proposalAdapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            proposals.let {
-                it.clear()
-                it.addAll(tempProposalList)
-            }
-
-            checkEmptyProposalList("")
-
-            withContext(Dispatchers.Main) {
-                proposalAdapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        withContext(Dispatchers.Main) {
-            swipe_refresh_layout.isRefreshing = false
-            if (proposals.size > 0) {
-                swipe_refresh_layout.visibility = View.VISIBLE
-            } else {
-                swipe_refresh_layout.visibility = View.GONE
-            }
-        }
-
     }
 
-    private fun checkEmptyProposalList(status: String) = GlobalScope.launch(Dispatchers.Main) {
+    private fun postLoadTasks() = GlobalScope.launch(Dispatchers.Main) {
+        loading.set(false)
+        swipe_refresh_layout.isRefreshing = false
         if (proposals.size > 0) {
-            swipe_refresh_layout?.show()
+            swipe_refresh_layout.visibility = View.VISIBLE
         } else {
-            swipe_refresh_layout?.hide()
-            empty_list.text = String.format(Locale.getDefault(), "No %s proposals", status)
+            swipe_refresh_layout.visibility = View.GONE
         }
     }
 

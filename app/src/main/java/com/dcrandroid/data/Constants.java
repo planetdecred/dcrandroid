@@ -39,6 +39,7 @@ public class Constants {
             NEW_POLITEIA_NOTIFICATION = "new_politeia_notification",
             PROPOSAL_CHANNEL_ID = "new_proposal",
             PROPOSAL = "proposal",
+            PROPOSAL_ID = "proposal_id",
             CHARSET_UTF_8 = "UTF-8",
             INDEX_MD = "index.md",
             VOTE_SUMMARY = "votesummary";

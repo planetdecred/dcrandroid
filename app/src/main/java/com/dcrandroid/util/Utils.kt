@@ -23,16 +23,12 @@ import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.activities.ProposalDetailsActivity
 import com.dcrandroid.data.Constants
-import com.dcrandroid.data.Proposal
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
-import com.google.gson.GsonBuilder
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
-import org.json.JSONObject
 import java.io.*
 import java.util.*
-
 
 object Utils {
 
@@ -238,12 +234,6 @@ object Utils {
     fun sendProposalNotification(context: Context, manager: NotificationManager, proposalID: Long, title: String,
                                  token: String) {
 
-        val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.ProposalDeserializer()).create()
-        val proposalResult = WalletData.multiWallet!!.politeia!!.getProposalByID(proposalID)
-        val proposalObjectJson = JSONObject(proposalResult).getJSONObject("result")
-        val proposalResultString: String = proposalObjectJson.toString()
-        val proposal = gson.fromJson(proposalResultString, Proposal::class.java)
-
         val text = when (title) {
             "New Proposal" -> {
                 "There is a new proposal"
@@ -263,7 +253,7 @@ object Utils {
 
         val launchIntent = Intent(context, ProposalDetailsActivity::class.java)
         launchIntent.action = Constants.NEW_POLITEIA_NOTIFICATION
-        launchIntent.putExtra(Constants.PROPOSAL, proposal)
+        launchIntent.putExtra(Constants.PROPOSAL_ID, proposalID)
 
         val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)

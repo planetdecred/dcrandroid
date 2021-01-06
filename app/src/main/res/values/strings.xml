@@ -577,7 +577,7 @@
     <string name="status_approved">Approved</string>
     <string name="status_rejected">Rejected</string>
     <string name="status_non_existent">Does not exist</string>
-    <string name="no_proposals">No %d proposals</string>
+    <string name="no_proposals">No proposals for selected category.</string>
     <string name="proposal_in_discussion">In Discussion (%1$d)</string>
     <string name="proposal_active">Active (%1$d)</string>
     <string name="proposal_approved">Approved (%1$d)</string>

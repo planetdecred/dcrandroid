@@ -14,6 +14,9 @@ class Proposal : Serializable {
     @SerializedName("ID")
     var id: Long = 0
 
+    @SerializedName("token")
+    var token: String? = ""
+
     @SerializedName("name")
     var name: String? = ""
 
@@ -23,125 +26,59 @@ class Proposal : Serializable {
     @SerializedName("username")
     var username: String? = ""
 
-    @SerializedName("publickey")
-    var publickey: String? = ""
-
-    @SerializedName("signature")
-    var signature: String? = ""
-
     @SerializedName("version")
     var version: String? = ""
 
     @SerializedName("status")
     var status: Int = 0
 
-    @SerializedName("state")
-    var state: Int = 0
-
     @SerializedName("numcomments")
-    private var numcomments: Int = 0
+    var numcomments: Int = 0
 
     @SerializedName("timestamp")
     var timestamp: Long = 0
 
-    @SerializedName("files")
-    var files: Array<File>? = null
-
-    @SerializedName("censorshiprecord")
-    var censorshipRecord: CensorshipRecord? = null
+    @SerializedName("indexfile")
+    var indexFile: String? = ""
 
     @SerializedName("votestatus")
-    var voteStatus: VoteStatus? = null
+    var voteStatus: Int = 0
 
-    @SerializedName("votesummary")
-    var voteSummary: VoteSummary? = null
+    @SerializedName("voteapproved")
+    var voteApproved: Boolean = false
 
-    fun getNumcomments(): Int? {
-        return numcomments
-    }
+    @SerializedName("yesvotes")
+    var yesVotes: Int = 0
 
-    fun setNumcomments(numcomments: Int?) {
-        this.numcomments = numcomments!!
-    }
+    @SerializedName("novotes")
+    var noVotes: Int = 0
 
-    inner class File : Serializable {
-        @SerializedName("name")
-        var name: String? = null
-
-        @SerializedName("mime")
-        var mime: String? = null
-
-        @SerializedName("digest")
-        var digest: String? = null
-
-        @SerializedName("payload")
-        var payload: String? = null
-    }
-
-    inner class CensorshipRecord : Serializable {
-        @SerializedName("token")
-        var token: String? = null
-
-        @SerializedName("merkle")
-        var merkle: String? = null
-
-        @SerializedName("signature")
-        var signature: String? = null
-    }
-
-    inner class VoteStatus : Serializable {
-        @SerializedName("token")
-        var token: String? = null
-
-        @SerializedName("status")
-        var status: Int = 0
-
-        @SerializedName("totalvotes")
-        var totalvotes: Int = 0
-
-        @SerializedName("optionsresult")
-        var optionsResults: Array<OptionsResult>? = null
-
-        @SerializedName("passpercentage")
-        var passpercentage: Int = 0
-    }
-
-    inner class VoteSummary : Serializable {
-        @SerializedName("status")
-        var status: Int = 0
-
-        @SerializedName("approved")
-        var approved: Boolean = false
-
-        @SerializedName("results")
-        var optionsResults: Array<OptionsResult>? = null
-
-        @SerializedName("passpercentage")
-        var passpercentage: Int = 0
-    }
-
-    class OptionsResult : Serializable {
-        @SerializedName("option")
-        var voteOption: VoteOption? = null
-
-        @SerializedName("votesreceived")
-        var votesreceived: Int = 0
-    }
-
-    inner class VoteOption : Serializable {
-        @SerializedName("id")
-        var id: String? = null
-
-        @SerializedName("description")
-        var description: String? = null
-
-        @SerializedName("bits")
-        var bits: Int = 0
-    }
+    @SerializedName("passpercentage")
+    var passPercentage: Int = 0
 
     companion object {
         fun from(proposalJson: String): Proposal {
             return Gson().fromJson(proposalJson, Proposal::class.java)
+        }
+
+        fun from(proposal: dcrlibwallet.Proposal): Proposal {
+            return Proposal().apply {
+                id = proposal.id
+                token = proposal.token
+                name = proposal.name
+                userid = proposal.userID
+                username = proposal.username
+                version = proposal.version
+                status = proposal.status
+                numcomments = proposal.numComments
+                timestamp = proposal.timestamp
+                indexFile = proposal.indexFile
+                voteStatus = proposal.voteStatus
+                voteApproved = proposal.voteApproved
+                yesVotes = proposal.yesVotes
+                noVotes = proposal.noVotes
+                passPercentage = proposal.passPercentage
+            }
         }
     }
 }

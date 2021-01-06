@@ -133,7 +133,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/recycler_view"
-            android:background="@drawable/card_bg"
             android:elevation="@dimen/margin_padding_size_4"
             android:layout_marginTop="@dimen/margin_padding_size_4"
             android:layout_marginStart="@dimen/margin_padding_size_8"
@@ -143,7 +142,6 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
-        android:id="@+id/empty_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
