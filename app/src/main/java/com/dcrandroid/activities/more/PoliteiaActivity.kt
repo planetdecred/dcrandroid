@@ -276,15 +276,15 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         }
     }
 
-    override fun onNewProposal(proposalID: Long, token: String?) {
-        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.new_proposal), token!!)
+    override fun onNewProposal(proposal: dcrlibwallet.Proposal) {
+        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
     }
 
-    override fun onProposalVoteStarted(proposalID: Long, token: String?) {
-        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_started), token!!)
+    override fun onProposalVoteStarted(proposal: dcrlibwallet.Proposal) {
+        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
     }
 
-    override fun onProposalVoteFinished(proposalID: Long, token: String?) {
-        Utils.sendProposalNotification(this, notificationManager, proposalID, getString(R.string.vote_ended), token!!)
+    override fun onProposalVoteFinished(proposal: dcrlibwallet.Proposal) {
+        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
     }
 }

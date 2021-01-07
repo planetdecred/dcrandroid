@@ -26,6 +26,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Proposal
 import dcrlibwallet.Wallet
 import java.io.*
 import java.util.*
@@ -231,8 +232,7 @@ object Utils {
         }
     }
 
-    fun sendProposalNotification(context: Context, manager: NotificationManager, proposalID: Long, title: String,
-                                 token: String) {
+    fun sendProposalNotification(context: Context, manager: NotificationManager, proposal: Proposal, title: String) {
 
         val text = when (title) {
             "New Proposal" -> {
@@ -253,7 +253,7 @@ object Utils {
 
         val launchIntent = Intent(context, ProposalDetailsActivity::class.java)
         launchIntent.action = Constants.NEW_POLITEIA_NOTIFICATION
-        launchIntent.putExtra(Constants.PROPOSAL_ID, proposalID)
+        launchIntent.putExtra(Constants.PROPOSAL_ID, proposal.id)
 
         val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
@@ -279,7 +279,7 @@ object Utils {
                 .build()
 
         val notification = notificationBuilder.build()
-        manager.notify(proposalID.toInt(), notification)
+        manager.notify(proposal.id.toInt(), notification)
         manager.notify(Constants.PROPOSAL_SUMMARY_ID, groupSummary)
     }
 
