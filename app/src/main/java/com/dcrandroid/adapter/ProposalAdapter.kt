@@ -40,7 +40,7 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         val proposal = proposals[position]
         holder.title.text = proposal.name
         holder.author.text = proposal.username
-        holder.timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, context)
+        holder.timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.publishedAt, context)
         holder.comments.text = String.format(Locale.getDefault(), "%d Comments", proposal.numcomments)
         holder.version.text = String.format(Locale.getDefault(), "version %s", proposal.version)
 

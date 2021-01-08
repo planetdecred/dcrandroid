@@ -417,6 +417,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun debug(debugInfo: DebugInfo?) {
     }
 
+    override fun onProposalsSynced() {
+    }
+
     override fun onNewProposal(proposal: Proposal) {
         Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
     }
@@ -424,6 +427,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onProposalVoteStarted(proposal: Proposal) {
         Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
     }
+
+
 
     override fun onProposalVoteFinished(proposal: Proposal) {
         Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))

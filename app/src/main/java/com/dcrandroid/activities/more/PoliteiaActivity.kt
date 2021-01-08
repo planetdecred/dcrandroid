@@ -5,6 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,14 +51,30 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
     private val availableProposalTypes = ArrayList<String>()
 
     private var categorySortAdapter: ArrayAdapter<String>? = null
-    private var currentCategory: Int = 0
+    private val currentCategory: Int
+    get() {
+       return when (category_sort_spinner.selectedItemPosition) {
+            ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+            ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+            ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+            ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
+            else -> Dcrlibwallet.ProposalCategoryAbandoned
+        }
+    }
+
+    private lateinit var rotateAnim: Animation
+
+    override fun onResume() {
+        super.onResume()
+        multiWallet!!.politeia.addNotificationListener(this, this.javaClass.name)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_politeia)
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+        rotateAnim = AnimationUtils.loadAnimation(this@PoliteiaActivity, R.anim.rotate)
         swipe_refresh_layout.setOnRefreshListener(this)
 
         layoutManager = LinearLayoutManager(this)
@@ -73,27 +91,17 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
         categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
         categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        currentCategory = category_sort_spinner.selectedItemPosition
         category_sort_spinner.adapter = categorySortAdapter
-
         category_sort_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-                currentCategory = position
-                val proposalCategory = when (currentCategory) {
-                    ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
-                    ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
-                    ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
-                    ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
-                    else -> Dcrlibwallet.ProposalCategoryAbandoned
-                }
-
-                loadProposals(false, proposalCategory)
+                loadProposals(false)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         go_back.setOnClickListener {
+            multiWallet!!.politeia.clearSavedProposals()
             finish()
         }
 
@@ -102,19 +110,55 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
                 SnackBar.showError(this, R.string.not_connected)
                 return@setOnClickListener
             }
-            syncProposals()
+            if(multiWallet!!.politeia.isConnected){
+                multiWallet!!.politeia.stopSync()
+                setSyncButtonState()
+            }else{
+                syncProposals()
+            }
+
         }
 
         refreshAvailableProposalCategories()
+        setSyncButtonState()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        multiWallet!!.politeia.removeNotificationListener(this.javaClass.name)
     }
 
     private fun syncProposals() = GlobalScope.launch(Dispatchers.Default) {
         try {
+            withContext(Dispatchers.Main){
+                tv_sync_label.setText(R.string.stop_sync)
+                sync_icon.animation = rotateAnim
+            }
             SnackBar.showText(this@PoliteiaActivity, R.string.syncing_proposals)
             multiWallet!!.politeia.sync()
         } catch (e: Exception) {
             e.printStackTrace()
-            SnackBar.showError(this@PoliteiaActivity, R.string.error_syncying_proposals)
+            if (e.message == Dcrlibwallet.ErrContextCanceled) {
+                SnackBar.showError(this@PoliteiaActivity, R.string.politeia_sync_stopped)
+            }else{
+                SnackBar.showError(this@PoliteiaActivity, R.string.error_syncying_proposals)
+            }
+            setSyncButtonState()
+        }
+    }
+
+    private fun setSyncButtonState() = GlobalScope.launch(Dispatchers.Main){
+        if(multiWallet!!.politeia.isConnected){
+            tv_sync_label.setText(R.string.stop_sync)
+
+            if(multiWallet!!.politeia.synced()) {
+                sync_icon.animation = null
+            }else {
+                sync_icon.animation = rotateAnim
+            }
+        }else{
+            tv_sync_label.setText(R.string.sync)
+            sync_icon.animation = null
         }
     }
 
@@ -134,14 +178,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         if (lastVisibleItem >= proposals.size - 1) {
             if (!loadedAll) {
                 recycler_view.stopScroll()
-                val proposalCategory = when (currentCategory) {
-                    ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
-                    ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
-                    ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
-                    ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
-                    else -> Dcrlibwallet.ProposalCategoryAbandoned
-                }
-                loadProposals(true, proposalCategory)
+                loadProposals(true)
             }
         }
     }
@@ -151,7 +188,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         swipe_refresh_layout.isRefreshing = true
     }
 
-    private fun loadProposals(loadMore: Boolean = false, proposalCategory: Int) = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
 
         if (loading.get()) {
             return@launch
@@ -165,7 +202,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         }
 
         try {
-            val jsonResult = multiWallet!!.politeia.getProposals(proposalCategory, offset, limit, newestProposalsFirst)
+            val jsonResult = multiWallet!!.politeia.getProposals(currentCategory, offset, limit, newestProposalsFirst)
             val tempProposalList = Gson().fromJson(jsonResult, Array<Proposal>::class.java)
 
             initialLoadingDone.set(true)
@@ -239,15 +276,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
     }
 
     override fun onRefresh() {
-        val proposalCategory = when (currentCategory) {
-            ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
-            ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
-            ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
-            ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
-            else -> Dcrlibwallet.ProposalCategoryAbandoned
-        }
-
-        loadProposals(false, proposalCategory)
+        loadProposals(false)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -263,17 +292,15 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
             val newestFirst = position == 0 // "Newest" is the first item
             if (newestFirst != newestProposalsFirst) {
                 newestProposalsFirst = newestFirst
-
-                val proposalCategory = when (currentCategory) {
-                    ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
-                    ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
-                    ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
-                    ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
-                    else -> Dcrlibwallet.ProposalCategoryAbandoned
-                }
-                loadProposals(false, proposalCategory)
+                loadProposals(false)
             }
         }
+    }
+
+    override fun onProposalsSynced() {
+        refreshAvailableProposalCategories()
+        loadProposals()
+        setSyncButtonState()
     }
 
     override fun onNewProposal(proposal: dcrlibwallet.Proposal) {

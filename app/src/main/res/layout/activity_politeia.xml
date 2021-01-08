@@ -106,6 +106,7 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:id="@+id/sync_icon"
                 app:srcCompat="@drawable/ic_rescan" />
 
             <TextView
@@ -116,7 +117,7 @@
                 android:text="@string/sync"
                 android:textColor="@color/darkBlueTextColor"
                 android:textSize="@dimen/edit_text_size_14"
-                android:id="@+id/tv_reconnect"
+                android:id="@+id/tv_sync_label"
                 app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>

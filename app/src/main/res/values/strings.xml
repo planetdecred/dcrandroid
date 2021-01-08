@@ -32,6 +32,8 @@
     <string name="receive">Receive</string>
     <string name="send">Send</string>
     <string name="cancel">Cancel</string>
+    <string name="stop_sync">Stop sync</string>
+    <string name="politeia_sync_stopped">Politeia sync stopped</string>
     <string name="connection">Connection</string>
     <string name="testnet">testnet</string>
     <string name="general">General</string>

@@ -64,7 +64,7 @@ class ProposalDetailsActivity : BaseActivity() {
 
         proposal_title.text = proposal.name
         proposal_author.text = proposal.username
-        proposal_timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.timestamp, this@ProposalDetailsActivity)
+        proposal_timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.publishedAt, this@ProposalDetailsActivity)
         proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal.numcomments)
         proposal_version.text = String.format(Locale.getDefault(), getString(R.string.version_number), proposal.version)
 

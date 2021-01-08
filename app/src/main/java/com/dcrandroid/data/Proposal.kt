@@ -38,6 +38,9 @@ class Proposal : Serializable {
     @SerializedName("timestamp")
     var timestamp: Long = 0
 
+    @SerializedName("publishedat")
+    var publishedAt: Long = 0
+
     @SerializedName("indexfile")
     var indexFile: String? = ""
 
