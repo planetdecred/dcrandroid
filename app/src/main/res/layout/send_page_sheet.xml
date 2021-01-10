@@ -190,7 +190,13 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="6dp"
-        android:padding="@dimen/margin_padding_size_16">
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_padding_size_16"
+            android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -225,7 +231,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/balance_after_layout"
-            android:layout_below="@id/total_cost_layout"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:orientation="horizontal">
 
@@ -253,17 +258,31 @@
         </LinearLayout>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_16"
+            android:includeFontPadding="false"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/change_to_unmixed_label"
+            android:textSize="@dimen/edit_text_size_14"
+            android:text="@string/change_sent_to_unmixed"
+            android:textColor="@color/blueGraySecondTextColor"
+            app:fontFamily="@font/source_sans_pro_regular" />
+
+        <TextView
             style="@style/textViewButton"
             android:id="@+id/send_next"
             android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/balance_after_layout"
             android:text="@string/next"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:padding="@dimen/margin_padding_size_16"
             android:gravity="center"
             android:textSize="@dimen/edit_text_size_18" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -68,7 +68,6 @@
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet_sheet_title">Renommer le porte-monnaie</string>
     <string name="wallet_name">Nom du porte-monnaie</string>
-    <string name="view_property">Voir les propriétés</string>
     <string name="remove">Supprimer</string>
     <string name="confirm_to_remove">Confirmer la suppression</string>
     <string name="remove_wallet">Supprimer le porte-monnaie de cet appareil</string>

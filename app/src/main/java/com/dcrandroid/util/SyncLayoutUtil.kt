@@ -13,10 +13,7 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.MultiWalletSyncDetailsAdapter
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.isShowing
-import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.toggleVisibility
+import com.dcrandroid.extensions.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dcrlibwallet.*

@@ -15,8 +15,10 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.extensions.hasWalletsRequiringPrivacySetup
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.tab_row.view.*
 
 data class NavigationTab(@StringRes val title: Int, @DrawableRes val activeIcon: Int, @DrawableRes val inactiveIcon: Int)
@@ -53,7 +55,7 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
             holder.icon.setImageResource(tabs[position].inactiveIcon)
         }
 
-        if (position == 2 && backupsNeeded > 0) { // Wallets Page
+        if (position == 2 && (backupsNeeded > 0 || WalletData.multiWallet!!.hasWalletsRequiringPrivacySetup())) { // Wallets Page
             holder.backupIcon.show()
         } else {
             holder.backupIcon.hide()
