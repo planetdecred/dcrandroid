@@ -596,5 +596,11 @@
     <string name="new_accounts_mixed_unmixed">New accounts will be created for mixed and unmixed.</string>
     <string name="new_account_mixed">New account will be created for mixed.</string>
     <string name="new_account_umixed">New account will be created for unmixed</string>
+    <string name="new_caps">NEW</string>
+    <string name="privacy_is_here">Privacy is here</string>
+    <string name="privacy_intro_desc">You can now use CoinShuffle++ mixer to mix your DCRs, right in the app.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="setup_mixer">Set up mixer</string>
+    <string name="privacy_popup_message">Set up CoinShuffle++ mixer in Privacy</string>
 
 </resources>

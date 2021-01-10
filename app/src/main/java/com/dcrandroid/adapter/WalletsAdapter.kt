@@ -10,6 +10,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,13 +29,12 @@ import com.dcrandroid.fragments.PRIVACY_SETTINGS_REQUEST_CODE
 import com.dcrandroid.fragments.VERIFY_SEED_REQUEST_CODE
 import com.dcrandroid.fragments.WALLET_SETTINGS_REQUEST_CODE
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.PopupMessage
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 // Item Types
 const val ITEM_TYPE_WALLET = 0
@@ -201,8 +202,20 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
         } else {
             holder.notificationDot.hide()
         }
+        var popupMessage: Toast? = null
+        var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
+        globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+            popupMessage = PopupMessage.showText(holder.more, R.string.welcome_screen_text, Toast.LENGTH_LONG)
+//            popupMessage?.show()
+
+            holder.more.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+        }
+
+        holder.more.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
         // popup menu
         holder.more.setOnClickListener {
+
+            popupMessage?.cancel()
 
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),

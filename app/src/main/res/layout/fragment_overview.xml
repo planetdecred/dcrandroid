@@ -46,6 +46,8 @@
 
         </LinearLayout>
 
+        <include layout="@layout/overview_privacy_introduction" />
+
         <include layout="@layout/overview_backup_warning" />
 
         <include layout="@layout/mixer_settings_reminder" />

@@ -26,6 +26,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
+            android:src="@drawable/ic_overview"
             android:id="@+id/tab_icon" />
 
         <View
@@ -33,7 +34,6 @@
             android:layout_height="12dp"
             android:layout_gravity="end"
             android:id="@+id/backup_icon"
-            android:visibility="gone"
             android:background="@drawable/offline_dot" />
 
     </FrameLayout>
