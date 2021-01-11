@@ -47,15 +47,3 @@ fun MultiWallet.totalWalletBalance(): Long {
 
     return totalBalance
 }
-
-fun MultiWallet.hasWalletsRequiringPrivacySetup(): Boolean {
-    val wallets = openedWalletsList()
-
-    for (wallet in wallets) {
-        if (wallet.isRestored && wallet.requiresPrivacySetup()) {
-            return true
-        }
-    }
-
-    return false
-}

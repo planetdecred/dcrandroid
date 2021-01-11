@@ -7,7 +7,7 @@
 <!-- Shadow Layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/margin_padding_size_8"
@@ -138,5 +138,12 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/tx_list_divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/primaryRipple"
+        android:layout_marginStart="@dimen/margin_padding_size_48"/>
 
 </LinearLayout>

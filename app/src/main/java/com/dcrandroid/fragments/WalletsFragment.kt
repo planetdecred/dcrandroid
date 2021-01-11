@@ -82,6 +82,11 @@ class WalletsFragment : BaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        adapter.onPause()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

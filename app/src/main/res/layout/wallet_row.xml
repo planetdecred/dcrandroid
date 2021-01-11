@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/container"
-        android:background="@drawable/ripple_bg_white_corners_8dp"
+        android:background="@drawable/ripple_bg_white_bottom_corners_14dp"
         android:clickable="true"
         android:focusable="true"
         android:paddingTop="8dp"
@@ -86,32 +86,15 @@
             android:textSize="@dimen/edit_text_size_16"
             android:textColor="@color/blueGraySecondTextColor" />
 
-        <FrameLayout
-            android:layout_width="@dimen/margin_padding_size_40"
-            android:layout_height="@dimen/margin_padding_size_40">
-
-            <ImageView
-                android:id="@+id/iv_more"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@drawable/circular_transparent_ripple"
-                app:srcCompat="@drawable/ic_options" />
-
-            <View
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="3dp"
-                android:layout_gravity="end"
-                android:id="@+id/notification_dot"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                android:background="@drawable/offline_dot" />
-
-        </FrameLayout>
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/circular_transparent_ripple"
+            app:srcCompat="@drawable/ic_options" />
 
     </LinearLayout>
 

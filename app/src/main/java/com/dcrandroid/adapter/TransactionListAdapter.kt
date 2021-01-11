@@ -101,6 +101,12 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
             TransactionDetailsDialog(transaction).show(context)
         }
 
+        if (position == itemCount - 1) {
+            holder.divider.hide()
+        } else {
+            holder.divider.show()
+        }
+
     }
 }
 
@@ -110,6 +116,8 @@ class TransactionListViewHolder(val view: View) : RecyclerView.ViewHolder(view) 
     val status = view.status
     val statusImg = view.img_status
     val walletName = view.wallet_name
+
+    val divider = view.tx_list_divider
 }
 
 fun TextView.setPending() {

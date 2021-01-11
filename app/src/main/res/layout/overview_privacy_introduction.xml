@@ -6,8 +6,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/card_bg"
+    android:background="@drawable/card_bg_14"
+    android:id="@+id/privacy_intro_card"
+    android:visibility="gone"
+    tools:visibility="visible"
     android:layout_marginTop="@dimen/margin_padding_size_12"
     android:layout_marginStart="@dimen/margin_padding_size_8"
     android:layout_marginEnd="@dimen/margin_padding_size_8"
@@ -47,8 +51,7 @@
                 android:background="@color/blue"
                 android:paddingStart="@dimen/margin_padding_size_2"
                 android:paddingEnd="@dimen/margin_padding_size_2"
-                android:layout_gravity="center_horizontal"
-                />
+                android:layout_gravity="center_horizontal" />
         </FrameLayout>
 
         <LinearLayout
@@ -88,7 +91,7 @@
         android:gravity="end">
 
         <TextView
-            android:id="@+id/btn_negative"
+            android:id="@+id/btn_dismiss_privacy_intro"
             style="@style/textViewButton.Outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,7 +103,7 @@
             android:paddingEnd="@dimen/margin_padding_size_16" />
 
         <TextView
-            android:id="@+id/btn_positive"
+            android:id="@+id/btn_setup_mixer"
             style="@style/textViewButton.Outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

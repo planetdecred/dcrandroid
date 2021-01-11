@@ -53,9 +53,9 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
 
         // background ripple
         val backgroundResource: Int = when {
-            itemCount == 1 -> R.drawable.ripple_bg_white_corners_8dp // only item on the list
-            position == 0 -> R.drawable.transactions_row_top
-            position == (itemCount - 1) -> R.drawable.transactions_row_bottom_bg
+            itemCount == 1 -> R.drawable.ripple_bg_white_corners_14dp // only item on the list
+            position == 0 -> R.drawable.ripple_bg_white_top_corner_14dp
+            position == (itemCount - 1) -> R.drawable.curved_bottom_ripple_14dp
             else -> R.drawable.transactions_row_bg
         }
 
@@ -167,6 +167,12 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
             }
 
             holder.amount.setText(title)
+        }
+
+        if (position == itemCount - 1) {
+            holder.divider.hide()
+        } else {
+            holder.divider.show()
         }
 
         holder.itemView.setOnClickListener {

@@ -62,9 +62,9 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
             holder.itemView.isEnabled = item.enabled
 
             if (item.showNotificationDot) {
-                holder.itemView.notification_dot.show()
+                holder.itemView.new_badge.show()
             } else {
-                holder.itemView.notification_dot.hide()
+                holder.itemView.new_badge.hide()
             }
 
             holder.itemView.setOnClickListener {
@@ -72,7 +72,7 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
             }
         } else if (item is PopupDivider) {
             val layoutParams = holder.itemView.layoutParams
-            layoutParams.width = item.widthPixels
+//            layoutParams.width = item.widthPixels
             holder.itemView.layoutParams = layoutParams
         }
     }

@@ -7,7 +7,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/wallets_menu_width"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/margin_padding_size_8"
     android:paddingBottom="@dimen/margin_padding_size_8" >

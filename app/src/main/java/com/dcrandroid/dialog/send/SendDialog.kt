@@ -329,7 +329,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             if (mixChange) {
                 balance_after_layout.hide()
 
-                val changeAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerChangeAccount, -1)
+                val changeAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
                 val changeAccountName = wallet.accountName(changeAccountNumber)
                 change_to_unmixed_label.apply {
                     text = HtmlCompat.fromHtml(getString(R.string.change_sent_to_unmixed, changeAccountName), 0)
