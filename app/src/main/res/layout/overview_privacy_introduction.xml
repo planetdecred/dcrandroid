@@ -17,7 +17,7 @@
     android:layout_marginEnd="@dimen/margin_padding_size_8"
     android:layout_marginBottom="@dimen/margin_padding_size_4"
     android:clipToPadding="true"
-    android:elevation="@dimen/margin_padding_size_4"
+    android:elevation="1dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 

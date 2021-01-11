@@ -152,27 +152,23 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         }
 
         var mixerRunning = false
-        val walletsMixing = ArrayList<String>()
         for (wallet in multiWallet!!.openedWalletsList()) {
             if (wallet.isAccountMixerActive) {
-                walletsMixing.add(wallet.name)
                 mixerRunning = true
+                mixer_status_wallet_name.text = wallet.name
+                val unmixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
+                mixer_stauts_unmixed_balance.text = getString(R.string.x_dcr, CoinFormat.formatDecred(wallet.getAccountBalance(unmixedAccountNumber).total))
+                cspp_running_layout.show()
                 break
             }
         }
 
-        if(mixerRunning){
-
-            if(walletsMixing.size == 1) {
-                tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status, walletsMixing.first()), 0)
-            } else {
-                val walletsExceptLast = walletsMixing.dropLast(1).joinToString(", ")
-
-                tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status_multi, walletsExceptLast, walletsMixing.last()), 0)
-            }
-            cspp_running_layout.show()
-        } else {
+        if(!mixerRunning){
             cspp_running_layout.hide()
+        }
+
+        mixer_go_to_wallets.setOnClickListener {
+            switchFragment(2)
         }
     }
 
@@ -248,6 +244,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         loadBalance()
         loadTransactions()
+        setMixerStatus()
     }
 
     override fun onTransaction(transactionJson: String?) {
@@ -273,6 +270,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
+
+        setMixerStatus()
     }
 
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {

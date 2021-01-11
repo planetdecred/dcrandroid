@@ -15,6 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/container"
         android:orientation="horizontal"
         android:minHeight="56dp"
         android:clickable="true"

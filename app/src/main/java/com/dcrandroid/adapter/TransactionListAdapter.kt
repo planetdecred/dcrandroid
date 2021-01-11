@@ -97,7 +97,7 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
             holder.icon.setImageResource(iconRes)
         }
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.container.setOnClickListener {
             TransactionDetailsDialog(transaction).show(context)
         }
 

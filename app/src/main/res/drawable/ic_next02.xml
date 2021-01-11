@@ -1,0 +1,15 @@
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M16.5858,13.0001H4V11.0001H16.5858L11.2218,5.6361L12.636,4.2219L20.4142,12.0001L12.636,19.7783L11.2218,18.3641L16.5858,13.0001Z"
+      android:fillColor="#3D5873"/>
+</vector>
