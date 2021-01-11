@@ -619,5 +619,8 @@
     <string name="account_branch">Account branch</string>
     <string name="shuffle_port">Shuffle port</string>
     <string name="shuffle_server">Shuffle server</string>
+    <string name="keep_app_opened">Keep this app opened</string>
+    <string name="mixer_help_title">How to use the mixer?</string>
+    <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#091440">Important: keep this app opened while mixer is running.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
 
 </resources>

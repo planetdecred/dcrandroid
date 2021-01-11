@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="@dimen/margin_padding_size_8"
-                android:paddingEnd="0dp"
+                android:paddingEnd="@dimen/margin_padding_size_8"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
@@ -53,8 +53,9 @@
                     app:srcCompat="@drawable/ic_back" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:orientation="vertical">
 
@@ -77,6 +78,24 @@
                         android:textColor="@color/blueGraySecondTextColor"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:gravity="end">
+
+                    <ImageView
+                        android:layout_width="@dimen/margin_padding_size_40"
+                        android:layout_height="@dimen/margin_padding_size_40"
+                        android:id="@+id/iv_info"
+                        android:padding="@dimen/margin_padding_size_8"
+                        app:srcCompat="@drawable/ic_info"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/bg_primary_ripple" />
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -132,18 +151,35 @@
                             android:textColor="@color/darkBlueTextColor" />
 
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/ready_to_mix"
-                            android:includeFontPadding="false"
-                            android:fontFamily="@font/source_sans_pro"
-                            android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="@color/blueGraySecondTextColor" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="@dimen/margin_padding_size_16"
+                                android:layout_height="@dimen/margin_padding_size_16"
+                                android:layout_marginEnd="@dimen/margin_padding_size_4"
+                                android:id="@+id/iv_mixer_status"
+                                android:visibility="gone"
+                                android:src="@drawable/ic_alert"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_mixer_status"
+                                android:text="@string/ready_to_mix"
+                                android:includeFontPadding="false"
+                                android:fontFamily="@font/source_sans_pro"
+                                android:textSize="@dimen/edit_text_size_14"
+                                android:textColor="@color/blueGraySecondTextColor" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
                     <Switch
+                        android:id="@+id/mixer_toggle_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:theme="@style/Switch" />
