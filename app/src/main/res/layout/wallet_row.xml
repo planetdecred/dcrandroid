@@ -13,7 +13,7 @@
     android:layout_marginBottom="@dimen/margin_padding_size_4"
     android:layout_marginStart="@dimen/margin_padding_size_8"
     android:layout_marginEnd="@dimen/margin_padding_size_8"
-    android:background="@color/white"
+    android:background="@drawable/card_bg_14"
     android:elevation="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/container"
-        android:background="@drawable/ripple_bg_white_bottom_corners_14dp"
+        android:background="@drawable/ripple_bg_white_corners_14dp"
         android:clickable="true"
         android:focusable="true"
         android:paddingTop="8dp"
@@ -88,13 +88,13 @@
 
         <ImageView
             android:id="@+id/iv_more"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/margin_padding_size_40"
+            android:layout_height="@dimen/margin_padding_size_40"
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/circular_transparent_ripple"
-            app:srcCompat="@drawable/ic_options" />
+            android:src="@drawable/ic_more02" />
 
     </LinearLayout>
 
@@ -107,7 +107,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="#e6eaed"
             android:layout_marginStart="44dp"/>
 
@@ -115,6 +115,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/account_list_rv" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/go_to_mixer"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/margin_padding_size_8"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/margin_padding_size_8" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#E6EAED" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:layout_marginTop="@dimen/margin_padding_size_8"
+            android:layout_marginEnd="@dimen/margin_padding_size_8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/check_mixer_status"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/source_sans_pro"
+                android:textSize="@dimen/edit_text_size_14"
+                android:textColor="@color/blue" />
+
+            <ImageView
+                android:layout_width="@dimen/margin_padding_size_16"
+                android:layout_height="@dimen/margin_padding_size_16"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:src="@drawable/ic_goto"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

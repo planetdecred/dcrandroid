@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ListPopupWindow
 import android.widget.PopupWindow
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
@@ -71,9 +72,7 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
                 itemClicked(position)
             }
         } else if (item is PopupDivider) {
-            val layoutParams = holder.itemView.layoutParams
-//            layoutParams.width = item.widthPixels
-            holder.itemView.layoutParams = layoutParams
+            holder.itemView.visibility = View.GONE
         }
     }
 
@@ -86,7 +85,7 @@ class PopupUtil {
             val context = anchorView.context
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.popup_layout, null)
-            val window = PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
+            val window = PopupWindow(view, ListPopupWindow.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT, true)
 
             val recyclerView = view.popup_rv

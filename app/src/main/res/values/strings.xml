@@ -624,5 +624,6 @@
     <string name="mixer_is_running">Mixer is running...</string>
     <string name="keep_this_app_opened">Keep this app opened</string>
     <string name="mixer_status_info">Mixer will automatically stop when unmixed balance are fully mixed.</string>
+    <string name="check_mixer_status">Check mixer status</string>
 
 </resources>

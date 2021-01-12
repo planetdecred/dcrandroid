@@ -5,14 +5,18 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/wallets_menu_width"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_layout"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:background="@drawable/ripple"
     android:clickable="true"
     android:focusable="true"
-    android:padding="@dimen/margin_padding_size_16">
+    android:padding="@dimen/margin_padding_size_16"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +26,6 @@
         android:textSize="@dimen/edit_text_size_16"
         android:textColor="@color/darkBlueTextColor"
         android:fontFamily="@font/source_sans_pro" />
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,10 +37,9 @@
         android:textColor="@color/white"
         android:text="@string/new_caps"
         android:background="@color/blue"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
+        android:layout_marginStart="44dp"
         android:paddingStart="@dimen/margin_padding_size_2"
         android:paddingEnd="@dimen/margin_padding_size_2"
         />
 
-</RelativeLayout>
+</LinearLayout>

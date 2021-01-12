@@ -18,7 +18,6 @@ import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.activities.RESTORE_WALLET_REQUEST_CODE
 import com.dcrandroid.activities.RestoreWalletActivity
-import com.dcrandroid.adapter.PopupDivider
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.adapter.WalletsAdapter
@@ -106,7 +105,6 @@ class WalletsFragment : BaseFragment() {
             SnackBar.showText(context!!, R.string.wallet_created)
         } else if (requestCode == PRIVACY_SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
             adapter.reloadList()
-            refreshNavigationTabs()
         }
     }
 
@@ -134,12 +132,9 @@ class WalletsFragment : BaseFragment() {
                     val homeActivity = activity as HomeActivity
                     val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
 
-                    val dividerWidth = context!!.resources.getDimensionPixelSize(R.dimen.add_wallet_menu_width)
-
-                    val items = arrayOf(
+                    val items: Array<Any> = arrayOf(
                             PopupItem(R.string.create_a_new_wallet),
                             PopupItem(R.string.import_existing_wallet),
-                            PopupDivider(dividerWidth),
                             PopupItem(R.string.import_watching_only_wallet)
                     )
 
@@ -168,7 +163,7 @@ class WalletsFragment : BaseFragment() {
                                 val restoreIntent = Intent(context!!, RestoreWalletActivity::class.java)
                                 startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
                             }
-                            3 -> {
+                            2 -> {
                                 CreateWatchOnlyWallet {
                                     SnackBar.showText(context!!, R.string.watch_only_wallet_created)
                                     adapter.addWallet(it.id)

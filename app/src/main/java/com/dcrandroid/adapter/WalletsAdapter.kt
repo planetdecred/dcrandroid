@@ -127,6 +127,12 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
             }
         }
 
+        if (wallet.isAccountMixerActive) {
+            holder.goToMixer.show()
+        } else {
+            holder.goToMixer.hide()
+        }
+
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
         layoutParams.bottomMargin = fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
         layoutParams.topMargin = fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
@@ -147,7 +153,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
             holder.expand.show()
             holder.expand.setImageResource(R.drawable.ic_collapse02)
 
-            containerBackground = R.drawable.ripple_bg_white_corners_14dp
+            containerBackground = R.drawable.ripple_bg_white_top_corner_14dp
             viewBackground = R.drawable.card_bg_14
         } else {
             holder.accountsList.adapter = null
@@ -221,6 +227,13 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
             holder.more.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
         }
+
+        holder.goToMixer.setOnClickListener {
+            val intent = Intent(fragment.context!!, AccountMixerActivity::class.java)
+            intent.putExtra(Constants.WALLET_ID, wallet.id)
+            fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
+        }
+
         // popup menu
         holder.more.setOnClickListener {
 
@@ -231,9 +244,9 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-                    PopupDivider(dividerWidth),
+//                    PopupDivider(dividerWidth),
                     PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, !hasCheckedPrivacyPage),
-                    PopupDivider(dividerWidth),
+//                    PopupDivider(dividerWidth),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
             )
@@ -246,7 +259,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         fragment.context!!.startActivity(intent)
                     }
-                    2 -> {
+                    1 -> {
 
                         val mixerConfigIsSet = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)
 
@@ -258,7 +271,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
                     }
-                    4 -> { // rename wallet
+                    2 -> { // rename wallet
                         RequestNameDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
 
                             try {
@@ -272,7 +285,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                             return@RequestNameDialog null
                         }.show(fragment.activity!!.supportFragmentManager, null)
                     }
-                    5 -> {
+                    3 -> {
                         val intent = Intent(fragment.context!!, WalletSettings::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         launchIntent(intent, WALLET_SETTINGS_REQUEST_CODE)
@@ -339,6 +352,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
         val expand = itemView.expand_icon
         val backupWarning = itemView.backup_warning
 
+        val goToMixer = itemView.go_to_mixer
         val container = itemView.container
         val accountsLayout = itemView.accounts
 
