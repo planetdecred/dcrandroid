@@ -99,17 +99,21 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
 
             iv_mixer_status.setImageResource(R.drawable.ic_alert)
             iv_mixer_status.show()
+
+            mixing_arrow.show()
         }else {
 
-            if(multiWallet!!.readyToMix(wallet.id)){
+            if (multiWallet!!.readyToMix(wallet.id)) {
                 tv_mixer_status.setText(R.string.ready_to_mix)
                 tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
                 iv_mixer_status.hide()
-            }else {
+            } else {
                 tv_mixer_status.setText(R.string.no_mixable_output)
                 tv_mixer_status.setTextColor(resources.getColor(R.color.colorError))
                 iv_mixer_status.hide()
             }
+
+            mixing_arrow.hide()
         }
 
         unmixed_balance.text = getString(R.string.x_dcr, CoinFormat.formatDecred(wallet.getAccountBalance(unmixedAccountNumber).total))

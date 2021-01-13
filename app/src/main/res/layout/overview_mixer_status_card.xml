@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cspp_running_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:paddingStart="@dimen/margin_padding_size_16"
+    android:paddingEnd="@dimen/margin_padding_size_8"
+    android:paddingTop="@dimen/margin_padding_size_16"
+    android:paddingBottom="@dimen/margin_padding_size_16"
+    android:elevation="1dp"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:background="@drawable/card_bg_14"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/margin_padding_size_24"
+            android:layout_height="@dimen/margin_padding_size_24"
+            android:src="@drawable/ic_mixer" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/margin_padding_size_16"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2 mixers are running…"
+                android:id="@+id/tv_mixer_running"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/source_sans_pro"
+                android:textSize="@dimen/edit_text_size_18"
+                android:textColor="@color/darkBlueTextColor" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/margin_padding_size_16"
+                    android:layout_height="@dimen/margin_padding_size_16"
+                    android:layout_marginEnd="@dimen/margin_padding_size_4"
+                    android:src="@drawable/ic_alert" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/keep_this_app_opened"
+                    android:includeFontPadding="false"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:textColor="@color/blueGraySecondTextColor" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="@dimen/margin_padding_size_8"
+            android:background="@drawable/circular_transparent_ripple"
+            android:id="@+id/mixer_go_to_wallets"
+            android:focusable="true"
+            android:clickable="true"
+            android:src="@drawable/ic_next02" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_8"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:id="@+id/mixer_status_rv"
+        tools:listitem="@layout/mixer_status_row"
+        tools:itemCount="2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:fontFamily="@font/source_sans_pro"
+        android:textColor="@color/blueGraySecondTextColor"
+        android:textSize="@dimen/edit_text_size_14"
+        android:text="@string/mixer_status_info" />
+
+</LinearLayout>

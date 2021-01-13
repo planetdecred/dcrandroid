@@ -621,9 +621,14 @@
     <string name="keep_app_opened">Keep this app opened</string>
     <string name="mixer_help_title">How to use the mixer?</string>
     <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#091440">Important: keep this app opened while mixer is running.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
-    <string name="mixer_is_running">Mixer is running...</string>
+    <string name="mixer_is_running">Mixer is running…</string>
     <string name="keep_this_app_opened">Keep this app opened</string>
     <string name="mixer_status_info">Mixer will automatically stop when unmixed balance are fully mixed.</string>
     <string name="check_mixer_status">Check mixer status</string>
+    <string name="mixing_elp">Mixing…</string>
+    <plurals name="mixer_is_running">
+        <item quantity="one">1 mixer is running…</item>
+        <item quantity="other">%d mixers are running…</item>
+    </plurals>
 
 </resources>

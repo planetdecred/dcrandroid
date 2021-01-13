@@ -103,7 +103,7 @@ class WalletsFragment : BaseFragment() {
             val walletID = data?.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID!!)
             SnackBar.showText(context!!, R.string.wallet_created)
-        } else if (requestCode == PRIVACY_SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == PRIVACY_SETTINGS_REQUEST_CODE) {
             adapter.reloadList()
         }
     }

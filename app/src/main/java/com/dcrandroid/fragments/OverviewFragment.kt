@@ -14,11 +14,11 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.adapter.MixerStatusAdapter
 import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
@@ -31,9 +31,9 @@ import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
-import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.overview_backup_warning.*
 import kotlinx.android.synthetic.main.overview_backup_warning.view.*
+import kotlinx.android.synthetic.main.overview_mixer_status_card.*
 import kotlinx.android.synthetic.main.overview_privacy_introduction.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
 import kotlinx.coroutines.Dispatchers
@@ -141,6 +141,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             }
         }
 
+        mixer_status_rv.layoutManager = LinearLayoutManager(context)
+        mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
         multiWallet?.setAccountMixerNotification(this)
     }
@@ -151,19 +153,18 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             return@launch
         }
 
-        var mixerRunning = false
+        var activeMixers = 0
         for (wallet in multiWallet!!.openedWalletsList()) {
             if (wallet.isAccountMixerActive) {
-                mixerRunning = true
-                mixer_status_wallet_name.text = wallet.name
-                val unmixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
-                mixer_stauts_unmixed_balance.text = getString(R.string.x_dcr, CoinFormat.formatDecred(wallet.getAccountBalance(unmixedAccountNumber).total))
-                cspp_running_layout.show()
+                activeMixers++
                 break
             }
         }
 
-        if(!mixerRunning){
+        if (activeMixers > 0) {
+            tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
+            cspp_running_layout.show()
+        } else {
             cspp_running_layout.hide()
         }
 

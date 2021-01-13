@@ -114,10 +114,12 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                 CoinFormat.formatDecred(wallet.totalWalletBalance()))
 
         if (wallet.encryptedSeed == null) {
-            holder.backupNeeded.hide()
+            holder.walletStatus.hide()
             holder.backupWarning.hide()
         } else {
-            holder.backupNeeded.show()
+            holder.walletStatus.show()
+            holder.walletStatus.setText(R.string.not_backed_up)
+            holder.walletStatus.setTextColor(fragment.context!!.getColor(R.color.colorError))
             holder.backupWarning.show()
 
             holder.backupWarning.setOnClickListener {
@@ -128,6 +130,9 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
         }
 
         if (wallet.isAccountMixerActive) {
+            holder.walletStatus.show()
+            holder.walletStatus.setText(R.string.mixing_elp)
+            holder.walletStatus.setTextColor(fragment.context!!.getColor(R.color.blueGraySecondTextColor))
             holder.goToMixer.show()
         } else {
             holder.goToMixer.hide()
@@ -346,7 +351,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
         val walletIcon = itemView.wallet_icon
         val walletName = itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
-        val backupNeeded = itemView.backup_needed
+        val walletStatus = itemView.tv_wallet_status
 
         val more = itemView.iv_more
         val expand = itemView.expand_icon

@@ -66,7 +66,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/backup_needed"
+                android:id="@+id/tv_wallet_status"
                 android:text="@string/not_backed_up"
                 android:textSize="@dimen/edit_text_size_14"
                 android:layout_marginTop="4dp"
