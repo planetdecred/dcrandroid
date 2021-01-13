@@ -116,8 +116,8 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
             mixing_arrow.hide()
         }
 
-        unmixed_balance.text = getString(R.string.x_dcr, CoinFormat.formatDecred(wallet.getAccountBalance(unmixedAccountNumber).total))
-        mixed_balance.text = getString(R.string.x_dcr, CoinFormat.formatDecred(wallet.getAccountBalance(mixedAccountNumber).total))
+        unmixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).total)
+        mixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).total)
     }
 
     private fun showWarningAndStartMixer() {

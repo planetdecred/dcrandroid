@@ -67,7 +67,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
             getString(R.string.x_dcr, dcrAmount)
         }
         if (amountStr is Spannable) {
-            CoinFormat.formatSpannable(amountStr, AmountRelativeSize)
+            CoinFormat.formatRelative(amountStr, AmountRelativeSize)
             send_amount.text = amountStr
         } else {
             send_amount.text = CoinFormat.format(amountStr as String, AmountRelativeSize)

@@ -15,11 +15,17 @@ import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.mixer_status_row.view.*
 
 class MixerStatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val wallets = WalletData.multiWallet!!.openedWalletsList()
+    val multiWallet = WalletData.multiWallet!!
+    val wallets = multiWallet.openedWalletsList()
+    val mixingWallets: List<Wallet>
+        get() {
+            return wallets.filter { it.isAccountMixerActive }
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -27,15 +33,14 @@ class MixerStatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .inflate(R.layout.mixer_status_row, parent, false))
     }
 
-    override fun getItemCount() = wallets.size
+    override fun getItemCount() = mixingWallets.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        holder.itemView.mixer_status_wallet_name.text = wallets[position].name
+        holder.itemView.mixer_status_wallet_name.text = mixingWallets[position].name
 
-        val unmixedAccountNumber = wallets[position].readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
-        holder.itemView.mixer_status_unmixed_balance.text = holder.itemView.context.getString(R.string.x_dcr,
-                CoinFormat.formatDecred(wallets[position].getAccountBalance(unmixedAccountNumber).total))
+        val unmixedAccountNumber = mixingWallets[position].readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
+        holder.itemView.mixer_status_unmixed_balance.text = CoinFormat.formatAlpha(mixingWallets[position].getAccountBalance(unmixedAccountNumber).total)
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v)

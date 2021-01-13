@@ -157,13 +157,13 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         for (wallet in multiWallet!!.openedWalletsList()) {
             if (wallet.isAccountMixerActive) {
                 activeMixers++
-                break
             }
         }
 
         if (activeMixers > 0) {
             tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
             cspp_running_layout.show()
+            mixer_status_rv.adapter?.notifyDataSetChanged()
         } else {
             cspp_running_layout.hide()
         }
