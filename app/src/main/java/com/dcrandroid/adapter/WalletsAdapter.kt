@@ -249,9 +249,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-//                    PopupDivider(dividerWidth),
                     PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, !hasCheckedPrivacyPage),
-//                    PopupDivider(dividerWidth),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
             )

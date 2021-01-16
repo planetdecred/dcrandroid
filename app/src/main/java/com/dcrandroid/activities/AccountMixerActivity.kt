@@ -167,11 +167,9 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
                     SnackBar.showError(this, R.string.no_mixable_output)
                     GlobalScope.launch(Dispatchers.Main) {
                         dialog?.dismiss()
-                        // off switch
                     }
                 } else{
                     GlobalScope.launch(Dispatchers.Main) {
-                        // off switch
 
                         val op = this.javaClass.name + "startAccountMixer"
                         dialog?.dismiss()
