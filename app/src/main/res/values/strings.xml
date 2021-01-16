@@ -626,6 +626,9 @@
     <string name="mixer_status_info">Mixer will automatically stop when unmixed balance are fully mixed.</string>
     <string name="check_mixer_status">Check mixer status</string>
     <string name="mixing_elp">Mixing…</string>
+    <string name="account_name_taken">Account name is taken</string>
+    <string name="account_name_conflict_dialog_desc"><![CDATA[There are existing accounts named <b>mixed</b> or <b>unmixed</b>. Please change the name to something else for now. You can change them back after the setup.]]></string>
+    <string name="go_back_rename"><![CDATA[Go back & rename]]></string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>

@@ -62,7 +62,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
                 GlobalScope.launch(Dispatchers.IO) {
                     if (passphrase != null) {
                         try {
-                            val accountNumber = wallet.nextAccount(newName, passphrase.toByteArray())
+                            val accountNumber = wallet.createNewAccount(newName, passphrase.toByteArray())
 
                             withContext(Dispatchers.Main) {
                                 dialog?.dismiss()

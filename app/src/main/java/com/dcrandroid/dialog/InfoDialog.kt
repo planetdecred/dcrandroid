@@ -12,10 +12,14 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.view.Window
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.dcrandroid.R
 import com.dcrandroid.extensions.show
 
@@ -35,6 +39,9 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
     private var btnNegativeText: String? = null
     var btnNegativeColor: Int = R.color.blue
 
+    private var iconBackground = R.color.white
+    private var icon: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -46,6 +53,9 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
 
         val tvTitle = findViewById<TextView>(R.id.title)
         val tvMessage = findViewById<TextView>(R.id.message)
+
+        val llIconBackground = findViewById<LinearLayout>(R.id.icon_background)
+        val ivIcon = findViewById<ImageView>(R.id.iv_icon)
 
         if (dialogTitle != null) {
             tvTitle.show()
@@ -75,6 +85,16 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         if (btnNegativeText == null && btnPositiveText == null) {
             findViewById<LinearLayout>(R.id.btn_layout).visibility = View.GONE
         }
+
+        if (icon != null) {
+            llIconBackground.setBackgroundDrawable(context.getDrawable(iconBackground))
+            ivIcon.setImageResource(icon!!)
+            ivIcon.show()
+        }
+    }
+
+    fun setDialogTitle(@StringRes title: Int): InfoDialog {
+        return this.setDialogTitle(Html.fromHtml(context.getString(title)))
     }
 
     fun setDialogTitle(title: CharSequence?): InfoDialog {
@@ -82,9 +102,17 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         return this
     }
 
+    fun setMessage(@StringRes message: Int): InfoDialog {
+        return this.setMessage(Html.fromHtml(context.getString(message)))
+    }
+
     fun setMessage(message: CharSequence?): InfoDialog {
         this.message = message
         return this
+    }
+
+    fun setPositiveButton(text: Int, listener: DialogInterface.OnClickListener? = null): InfoDialog {
+        return this.setPositiveButton(context.getString(text), listener)
     }
 
     fun setPositiveButton(text: String, listener: DialogInterface.OnClickListener? = null): InfoDialog {
@@ -93,9 +121,24 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         return this
     }
 
+    fun setNegativeButton(text: Int, listener: DialogInterface.OnClickListener? = null): InfoDialog {
+        return this.setNegativeButton(context.getString(text), listener)
+    }
+
     fun setNegativeButton(text: String, listener: DialogInterface.OnClickListener? = null): InfoDialog {
         this.btnNegativeText = text
         this.btnNegativeClick = listener
+        return this
+    }
+
+    fun setIcon(@DrawableRes iconResource: Int, @DrawableRes iconBackground: Int = R.color.white): InfoDialog {
+        this.icon = iconResource
+        this.iconBackground = iconBackground
+        return this
+    }
+
+    fun cancelable(cancelable: Boolean): InfoDialog {
+        setCancelable(cancelable)
         return this
     }
 

@@ -44,7 +44,7 @@ class SetupPrivacy : BaseActivity() {
                     .setMessage(Html.fromHtml(getString(R.string.privacy_intro_dialog_desc)))
                     .setNegativeButton(getString(R.string.cancel))
                     .setPositiveButton(getString(R.string.begin_setup), DialogInterface.OnClickListener { _, _ ->
-                        beginSetup()
+                        checkAccountNameConflict()
                     })
                     .show()
         }
@@ -54,6 +54,24 @@ class SetupPrivacy : BaseActivity() {
         multiWallet!!.setBoolConfigValueForKey(Constants.CHECKED_PRIVACY_PAGE, true)
     }
 
+    private fun checkAccountNameConflict() {
+
+        if (wallet.hasAccount(Constants.MIXED) || wallet.hasAccount(Constants.UNMIXED)) {
+            InfoDialog(this)
+                    .setDialogTitle(R.string.account_name_taken)
+                    .setMessage(R.string.account_name_conflict_dialog_desc)
+                    .setIcon(R.drawable.ic_alert2, R.drawable.grey_dialog_bg)
+                    .cancelable(false)
+                    .setPositiveButton(R.string.go_back_rename, DialogInterface.OnClickListener { dialog, _ ->
+                        dialog.dismiss()
+                        finish()
+                    })
+                    .show()
+            return
+        }
+
+        beginSetup()
+    }
 
     private fun beginSetup() {
         val title = PassPromptTitle(R.string.confirm_create_needed_accounts, R.string.confirm_create_needed_accounts, R.string.confirm_create_needed_accounts)

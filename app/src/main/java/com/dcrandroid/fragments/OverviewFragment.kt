@@ -205,7 +205,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onScrollChanged() {
         if (mainBalanceIsVisible()) {
-            setToolbarTitle(balanceTextView.text, true)
+            setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
         } else {
             setToolbarTitle(R.string.overview, false)
         }

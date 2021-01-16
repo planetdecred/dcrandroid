@@ -37,6 +37,8 @@ public class Constants {
             SELECTED_SOURCE_ACCOUNT = "selected_source_account_id",
             SELECTED_DESTINATION_ACCOUNT = "selected_dest_account_no",
             SEND_TO_ACCOUNT = "send_to_account",
+            MIXED = "mixed",
+            UNMIXED = "unmixed",
             SEND_MAX = "send_max";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
