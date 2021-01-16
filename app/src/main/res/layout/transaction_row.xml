@@ -8,31 +8,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/container"
-        android:orientation="horizontal"
-        android:minHeight="56dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/ripple"
-        android:gravity="center_vertical"
-        android:paddingTop="@dimen/margin_padding_size_8"
-        android:paddingBottom="@dimen/margin_padding_size_8"
-        android:paddingLeft="@dimen/margin_padding_size_16"
-        android:paddingRight="@dimen/margin_padding_size_16">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="56dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/ripple"
+    android:gravity="center_vertical"
+    android:paddingTop="@dimen/margin_padding_size_8"
+    android:paddingBottom="@dimen/margin_padding_size_8"
+    android:paddingLeft="@dimen/margin_padding_size_16"
+    android:paddingRight="@dimen/margin_padding_size_16">
 
     <ImageView
         android:layout_width="@dimen/margin_padding_size_24"
         android:layout_height="@dimen/margin_padding_size_24"
         app:srcCompat="@drawable/ic_receive"
-        android:id="@+id/tx_icon"
-        />
+        android:id="@+id/tx_icon" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -85,14 +78,5 @@
         android:layout_marginStart="@dimen/margin_padding_size_8"
         tools:layout_marginLeft="@dimen/margin_padding_size_8"
         app:srcCompat="@drawable/ic_pending"/>
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/tx_list_divider"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/primaryRipple"
-        android:layout_marginStart="@dimen/margin_padding_size_56"/>
 
 </LinearLayout>

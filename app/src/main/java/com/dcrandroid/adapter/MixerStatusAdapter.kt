@@ -20,9 +20,9 @@ import kotlinx.android.synthetic.main.mixer_status_row.view.*
 
 class MixerStatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val multiWallet = WalletData.multiWallet!!
-    val wallets = multiWallet.openedWalletsList()
-    val mixingWallets: List<Wallet>
+    private val multiWallet = WalletData.multiWallet!!
+    private val wallets = multiWallet.openedWalletsList()
+    private val mixingWallets: List<Wallet>
         get() {
             return wallets.filter { it.isAccountMixerActive }
         }

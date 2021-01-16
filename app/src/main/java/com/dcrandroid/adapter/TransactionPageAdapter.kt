@@ -169,17 +169,10 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
             holder.amount.setText(title)
         }
 
-        if (position == itemCount - 1) {
-            holder.divider.hide()
-        } else {
-            holder.divider.show()
-        }
-
         holder.itemView.setOnClickListener {
             TransactionDetailsDialog(transaction).show(context)
         }
 
     }
-
 
 }

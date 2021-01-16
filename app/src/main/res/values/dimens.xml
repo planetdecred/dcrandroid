@@ -21,6 +21,7 @@
     <dimen name="pinview_vertical_spacing">16dp</dimen>
 
     <!--Padding and Margins -->
+    <dimen name="margin_padding_size_05">0.5dp</dimen>
     <dimen name="margin_padding_size_2">2dp</dimen>
     <dimen name="margin_padding_size_4">4dp</dimen>
     <dimen name="margin_padding_size_6">6dp</dimen>

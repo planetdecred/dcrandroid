@@ -23,10 +23,7 @@ import com.dcrandroid.adapter.TransactionListAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.openedWalletsList
-import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.totalWalletBalance
+import com.dcrandroid.extensions.*
 import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.AccountMixerNotificationListener
@@ -93,6 +90,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false
+        recyclerView.setDivider(R.drawable.recycler_view_divider_pad_56)
         recyclerView.adapter = adapter
 
         setToolbarTitle(R.string.overview, false)

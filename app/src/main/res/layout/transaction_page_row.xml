@@ -10,14 +10,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/margin_padding_size_8"
     android:layout_marginStart="@dimen/margin_padding_size_8"
-    android:layout_marginRight="@dimen/margin_padding_size_8"
     android:layout_marginEnd="@dimen/margin_padding_size_8"
     android:clickable="true"
     android:focusable="true"
     android:id="@+id/ripple_layout"
-    android:elevation="@dimen/margin_padding_size_4">
+    android:elevation="@dimen/margin_padding_size_2">
 
     <!-- Ripple Color -->
     <LinearLayout
@@ -138,12 +136,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/tx_list_divider"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/primaryRipple"
-        android:layout_marginStart="@dimen/margin_padding_size_48"/>
-
 </LinearLayout>
