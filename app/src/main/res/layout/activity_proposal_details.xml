@@ -53,7 +53,7 @@
                     app:srcCompat="@drawable/ic_back" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/app_bar_title"
                     android:text="@string/proposal_details"
@@ -89,14 +89,6 @@
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
@@ -177,7 +169,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
-                        android:gravity="right"
+                        android:gravity="end"
                         android:includeFontPadding="false"
                         tools:text="published 9 months ago"
                         android:textColor="@color/darkBlueTextColor"
@@ -210,7 +202,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
-                        android:gravity="right"
+                        android:gravity="end"
                         android:includeFontPadding="false"
                         tools:text="Version 2"
                         android:textColor="@color/darkerBlueGrayTextColor"
@@ -222,66 +214,75 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="1"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:id="@+id/vote_summary"
                     android:layout_marginTop="@dimen/margin_padding_size_6">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/yes_votes"
-                        android:layout_weight="0.7"
-                        tools:text="yes"
-                        android:textSize="@dimen/edit_text_size_16"
-                        android:includeFontPadding="false"
-                        app:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/turquoise" />
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/yes_no_votes_layout">
 
-                    <TextView
-                        android:id="@+id/no_votes"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/yes_votes"
+                            android:layout_weight="0.5"
+                            tools:text="yes"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:includeFontPadding="false"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:textColor="@color/turquoise" />
+
+                        <TextView
+                            android:id="@+id/no_votes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="end"
+                            android:includeFontPadding="false"
+                            tools:text="no"
+                            android:textColor="@color/orangeTextColor"
+                            android:textSize="@dimen/edit_text_size_16"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
-                        android:gravity="right"
-                        android:includeFontPadding="false"
-                        tools:text="no"
-                        android:textColor="@color/orangeTextColor"
-                        android:textSize="@dimen/edit_text_size_16"
-                        app:fontFamily="@font/source_sans_pro" />
+                        android:layout_marginTop="@dimen/margin_padding_size_12">
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:progressDrawable="@drawable/vote_progress_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="19dp"
+                            android:secondaryProgress="100" />
+
+                        <TextView
+                            android:id="@+id/vote_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="@dimen/edit_text_size_12"
+                            android:textColor="@color/white" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_padding_size_14">
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:progressDrawable="@drawable/vote_progress_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="19dp"
-                        android:secondaryProgress="100"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:id="@+id/vote_progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        tools:textSize="@dimen/edit_text_size_12"
-                        android:textColor="@color/white"
-                        android:visibility="gone"/>
-
-                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/proposal_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
                     android:lineSpacingExtra="5dp"
                     tools:text="PR by Monde Public Relations - Phase Two PR by Monde Public Relations - Phase Two"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />

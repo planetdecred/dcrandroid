@@ -56,6 +56,18 @@ class Proposal : Serializable {
     @SerializedName("novotes")
     var noVotes: Int = 0
 
+    val totalVotes: Int
+        get() = yesVotes + noVotes
+
+    val yesPercentage: Float
+        get() = (yesVotes / totalVotes.toFloat()) * 100
+
+    val noPercentage: Float
+        get() = (noVotes / totalVotes.toFloat()) * 100
+
+    @SerializedName("eligibletickets")
+    var eligibleTickets: Int = 0
+
     @SerializedName("passpercentage")
     var passPercentage: Int = 0
 
@@ -74,12 +86,14 @@ class Proposal : Serializable {
                 version = proposal.version
                 status = proposal.status
                 numcomments = proposal.numComments
+                publishedAt = proposal.publishedAt
                 timestamp = proposal.timestamp
                 indexFile = proposal.indexFile
                 voteStatus = proposal.voteStatus
                 voteApproved = proposal.voteApproved
                 yesVotes = proposal.yesVotes
                 noVotes = proposal.noVotes
+                eligibleTickets = proposal.eligibleTickets
                 passPercentage = proposal.passPercentage
             }
         }

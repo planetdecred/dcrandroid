@@ -6,15 +6,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.activities.ProposalDetailsActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
+import kotlinx.android.synthetic.main.proposal_list_row.view.*
 import java.util.*
 
 class ProposalAdapter(private val proposals: List<Proposal>, private val context: Context) : RecyclerView.Adapter<ProposalAdapter.MyViewHolder>() {
@@ -25,24 +26,27 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         return MyViewHolder(itemView)
     }
 
-    inner class MyViewHolder internal constructor(var view: View) : RecyclerView.ViewHolder(view) {
-        var title: TextView = view.findViewById(R.id.proposal_title)
-        var status: TextView = view.findViewById(R.id.proposal_status)
-        var author: TextView = view.findViewById(R.id.proposal_author)
-        var timestamp: TextView = view.findViewById(R.id.proposal_timestamp)
-        var comments: TextView = view.findViewById(R.id.proposal_comments)
-        var version: TextView = view.findViewById(R.id.proposal_version)
-        var progressBar: ProgressBar = view.findViewById(R.id.progressBar)
-        var progress: TextView = view.findViewById(R.id.progress)
+    inner class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+        var title = view.proposal_title
+        var status = view.proposal_status
+        var author = view.proposal_author
+        var timestamp = view.proposal_timestamp
+        var comments = view.proposal_comments
+        var version = view.proposal_version
+
+        var progrssBarContainer = view.progress_bar_container
+        var progressBar = view.progressBar
+        var progress = view.progress
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val proposal = proposals[position]
+
         holder.title.text = proposal.name
         holder.author.text = proposal.username
-        holder.timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.publishedAt, context)
-        holder.comments.text = String.format(Locale.getDefault(), "%d Comments", proposal.numcomments)
-        holder.version.text = String.format(Locale.getDefault(), "version %s", proposal.version)
+        holder.timestamp.text = Utils.calculateTime((System.currentTimeMillis() / 1000) - proposal.publishedAt, context)
+        holder.comments.text = String.format(Locale.getDefault(), context.getString(R.string.comments), proposal.numcomments)
+        holder.version.text = String.format(Locale.getDefault(), context.getString(R.string.version_number), proposal.version)
 
         // Set proposal vote status
         if (proposal.status == 6) {
@@ -61,10 +65,7 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
                 holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
                 holder.status.text = context.getString(R.string.status_vote_started)
             } else if (proposal.voteStatus == 4) {
-                val totalVotes = (proposal.yesVotes + proposal.noVotes).toFloat()
-                val yesPercentage = (proposal.yesVotes / totalVotes) * 100
-
-                if (yesPercentage >= proposal.passPercentage) {
+                if (proposal.voteApproved) {
                     holder.status.background = getDrawable(context, R.drawable.bg_dark_green_corners_4dp)
                     holder.status.text = context.getString(R.string.status_approved)
                 } else {
@@ -78,15 +79,21 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
         }
 
         if (proposal.voteStatus == 4) {
-            val totalVotes = (proposal.yesVotes + proposal.noVotes).toFloat()
-            holder.progress.visibility = View.VISIBLE
-            holder.progressBar.visibility = View.VISIBLE
-            val percentage = (proposal.yesVotes / totalVotes) * 100
-            holder.progress.text = String.format(Locale.getDefault(), "%.2f%%", percentage)
-            holder.progressBar.progress = percentage.toInt()
+
+            holder.progrssBarContainer.show()
+
+            val totalVotes = proposal.totalVotes.toFloat()
+            val yesPercentage = (proposal.yesVotes / totalVotes) * 100
+            val noPercentage = (proposal.noVotes / totalVotes) * 100
+
+            holder.progressBar.max = proposal.eligibleTickets
+            holder.progressBar.progress = proposal.yesVotes
+            holder.progressBar.secondaryProgress = proposal.totalVotes
+
+            holder.progress.text = context.getString(R.string.yes_no_votes_percent, proposal.yesVotes, yesPercentage,
+                    proposal.noVotes, noPercentage)
         } else {
-            holder.progress.visibility = View.GONE
-            holder.progressBar.visibility = View.GONE
+            holder.progrssBarContainer.hide()
         }
 
         holder.view.setOnClickListener {

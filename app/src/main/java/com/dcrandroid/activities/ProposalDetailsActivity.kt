@@ -9,6 +9,7 @@ import androidx.core.widget.NestedScrollView
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_proposal_details.*
@@ -77,21 +78,19 @@ class ProposalDetailsActivity : BaseActivity() {
             }
         }
 
-        progress.visibility = View.GONE
-
         // Get vote status.
         if (proposal.voteStatus == 4) {
-            val totalVotes = proposal.yesVotes + proposal.noVotes
-            vote_progress.visibility = View.VISIBLE
-            progressBar.visibility = View.VISIBLE
-            yes_votes.text = "Yes: " + proposal.yesVotes + " (" + (proposal.yesVotes.toFloat() / totalVotes.toFloat()) * 100 + "%)"
-            no_votes.text = "No: " + proposal.noVotes + " (" + (proposal.noVotes.toFloat() / totalVotes.toFloat()) * 100 + "%)"
-            val percentage = (proposal.yesVotes.toFloat() / totalVotes.toFloat()) * 100
-            vote_progress.text = getString(R.string.proposal_percentage).format(percentage)
-            progressBar.progress = percentage.toInt()
-        } else {
-            vote_progress.visibility = View.GONE
-            progressBar.visibility = View.GONE
+            vote_summary.show()
+
+            yes_votes.text = getString(R.string.yes_votes_percent, proposal.yesVotes, proposal.yesPercentage)
+            no_votes.text = getString(R.string.no_votes_percent, proposal.noVotes, proposal.noPercentage)
+
+            vote_progress.text = getString(R.string.yes_no_votes_percent, proposal.yesVotes, proposal.yesPercentage,
+                    proposal.noVotes, proposal.noPercentage)
+
+            progressBar.max = proposal.eligibleTickets
+            progressBar.progress = proposal.yesVotes
+            progressBar.secondaryProgress = proposal.totalVotes
         }
 
         // Set proposal status.
@@ -113,11 +112,7 @@ class ProposalDetailsActivity : BaseActivity() {
                 proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.default_app_button_bg)
                 proposal_status.text = getString(R.string.status_vote_started)
             } else if (proposal.voteStatus == 4) {
-                val totalVotes = (proposal.yesVotes + proposal.noVotes).toFloat()
-                val yesPercentage = (proposal.yesVotes.toFloat() / totalVotes) * 100
-                val passPercentage = proposal.passPercentage
-
-                if (yesPercentage >= passPercentage) {
+                if (proposal.voteApproved) {
                     proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_dark_green_corners_4dp)
                     proposal_status.text = getString(R.string.status_approved)
                 } else {

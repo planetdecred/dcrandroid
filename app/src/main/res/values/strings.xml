@@ -592,10 +592,12 @@
     <string name="politeia_server_url" translatable="false">http://proposals.decred.org/proposals/</string>
     <string name="share_proposal">Share Proposal Link</string>
     <string name="text_pain">text/plain</string>
-    <string name="comments">%d Comments</string>
+    <string name="comments">%d comments</string>
     <string name="version_number">version %s</string>
-    <string name="proposal_percentage">%.2f%%</string>
     <string name="syncing_proposals">Syncing Proposals</string>
     <string name="error_syncying_proposals">There was an error syncing proposals, visit the proposal page to try again</string>
+    <string name="yes_votes_percent">Yes: %1$d (%2$.2f%%)</string>
+    <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
+    <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <!--/Politeia-->
 </resources>
