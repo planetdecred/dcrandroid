@@ -106,10 +106,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         }
 
         sync_layout.setOnClickListener {
-            if (!multiWallet!!.isConnectedToDecredNetwork) {
-                SnackBar.showError(this, R.string.not_connected)
-                return@setOnClickListener
-            }
             if(multiWallet!!.politeia.isConnected){
                 multiWallet!!.politeia.stopSync()
                 setSyncButtonState()
@@ -304,14 +300,11 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
     }
 
     override fun onNewProposal(proposal: dcrlibwallet.Proposal) {
-        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
     }
 
     override fun onProposalVoteStarted(proposal: dcrlibwallet.Proposal) {
-        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
     }
 
     override fun onProposalVoteFinished(proposal: dcrlibwallet.Proposal) {
-        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
     }
 }

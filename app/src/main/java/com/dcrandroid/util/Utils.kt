@@ -149,11 +149,10 @@ object Utils {
 
     fun registerTransactionNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH)
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.importance = NotificationManager.IMPORTANCE_HIGH
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -225,7 +224,6 @@ object Utils {
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.importance = NotificationManager.IMPORTANCE_LOW
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -233,18 +231,6 @@ object Utils {
     }
 
     fun sendProposalNotification(context: Context, manager: NotificationManager, proposal: Proposal, title: String) {
-
-        val text = when (title) {
-            "New Proposal" -> {
-                "There is a new proposal"
-            }
-            "Vote Started" -> {
-                "Vote for a proposal has started"
-            }
-            else -> {
-                "Vote for a proposal has ended"
-            }
-        }
 
         val notificationSound =
                 RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -258,7 +244,7 @@ object Utils {
         val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
                 .setContentTitle(title)
-                .setContentText(text)
+                .setContentText(context.getString(R.string.proposal_name_author, proposal.name, proposal.username))
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setSound(notificationSound)
                 .setVibrate(vibration)
@@ -269,8 +255,7 @@ object Utils {
                 .setContentIntent(launchPendingIntent)
 
         val groupSummary = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.new_politeia))
-                .setContentText(context.getString(R.string.new_politeia))
+                .setContentTitle(context.getString(R.string.politeia_notifications))
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
@@ -282,7 +267,6 @@ object Utils {
         manager.notify(proposal.id.toInt(), notification)
         manager.notify(Constants.PROPOSAL_SUMMARY_ID, groupSummary)
     }
-
 
     @Throws(Exception::class)
     fun readFileToBytes(path: String): ByteArray {

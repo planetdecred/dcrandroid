@@ -8,6 +8,7 @@ package com.dcrandroid
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
@@ -181,6 +182,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         if (multiWallet == null || multiWallet?.openedWalletsCount() == 0) {
             return
         }
+        notificationManager.cancelAll()
 
         val syncIntent = Intent(this, SyncService::class.java)
         stopService(syncIntent)
@@ -428,13 +430,12 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
     }
 
-
-
     override fun onProposalVoteFinished(proposal: Proposal) {
         Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
     }
 }
 
+@SuppressLint("ClickableViewAccessibility")
 private fun HomeActivity.setupLogoAnim() {
     val runnable = Runnable {
         val anim = AnimationUtils.loadAnimation(this, R.anim.logo_anim)

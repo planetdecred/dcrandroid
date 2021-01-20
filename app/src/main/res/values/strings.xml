@@ -585,7 +585,7 @@
     <string name="proposal_approved">Approved (%1$d)</string>
     <string name="proposal_rejected">Rejected (%1$d)</string>
     <string name="proposal_abandoned">Abandoned (%1$d)</string>
-    <string name="new_politeia">New Politeia</string>
+    <string name="politeia_notifications">Politeia Notifications</string>
     <string name="new_proposal">New Proposal</string>
     <string name="vote_started">Vote Started</string>
     <string name="vote_ended">Vote Ended</string>
@@ -599,5 +599,6 @@
     <string name="yes_votes_percent">Yes: %1$d (%2$.2f%%)</string>
     <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
+    <string name="proposal_name_author">%1$s by %2$s</string>
     <!--/Politeia-->
 </resources>
