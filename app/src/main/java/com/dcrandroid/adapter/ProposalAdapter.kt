@@ -65,7 +65,7 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
                 holder.status.background = getDrawable(context, R.drawable.default_app_button_bg)
                 holder.status.text = context.getString(R.string.status_vote_started)
             } else if (proposal.voteStatus == 4) {
-                if (proposal.voteApproved) {
+                if (proposal.approved) {
                     holder.status.background = getDrawable(context, R.drawable.bg_dark_green_corners_4dp)
                     holder.status.text = context.getString(R.string.status_approved)
                 } else {
@@ -82,16 +82,12 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
 
             holder.progrssBarContainer.show()
 
-            val totalVotes = proposal.totalVotes.toFloat()
-            val yesPercentage = (proposal.yesVotes / totalVotes) * 100
-            val noPercentage = (proposal.noVotes / totalVotes) * 100
-
-            holder.progressBar.max = proposal.eligibleTickets
+            holder.progressBar.max = proposal.totalVotes
             holder.progressBar.progress = proposal.yesVotes
             holder.progressBar.secondaryProgress = proposal.totalVotes
 
-            holder.progress.text = context.getString(R.string.yes_no_votes_percent, proposal.yesVotes, yesPercentage,
-                    proposal.noVotes, noPercentage)
+            holder.progress.text = context.getString(R.string.yes_no_votes_percent, proposal.yesVotes, proposal.yesPercentage,
+                    proposal.noVotes, proposal.noPercentage)
         } else {
             holder.progrssBarContainer.hide()
         }

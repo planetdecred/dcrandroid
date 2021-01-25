@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="@dimen/edit_text_size_12"
-            android:textColor="@color/white" />
+            android:textColor="@color/darkBlueTextColor" />
 
     </RelativeLayout>
 

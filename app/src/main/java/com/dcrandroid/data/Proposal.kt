@@ -47,9 +47,6 @@ class Proposal : Serializable {
     @SerializedName("votestatus")
     var voteStatus: Int = 0
 
-    @SerializedName("voteapproved")
-    var voteApproved: Boolean = false
-
     @SerializedName("yesvotes")
     var yesVotes: Int = 0
 
@@ -60,16 +57,31 @@ class Proposal : Serializable {
         get() = yesVotes + noVotes
 
     val yesPercentage: Float
-        get() = (yesVotes / totalVotes.toFloat()) * 100
+        get() {
+            if (yesVotes == 0) return 0f
+            return (yesVotes / totalVotes.toFloat()) * 100
+        }
 
     val noPercentage: Float
-        get() = (noVotes / totalVotes.toFloat()) * 100
+        get() {
+            if (noVotes == 0) return 0f
+            return (noVotes / totalVotes.toFloat()) * 100
+        }
 
     @SerializedName("eligibletickets")
     var eligibleTickets: Int = 0
 
+    @SerializedName("quorumpercentage")
+    var quorumPercentage: Int = 0
+
     @SerializedName("passpercentage")
     var passPercentage: Int = 0
+
+    val quorum: Int
+        get() = (eligibleTickets * (quorumPercentage / 100F)).toInt()
+
+    val approved: Boolean
+        get() = yesVotes >= (quorum * (passPercentage / 100F)) && yesPercentage >= passPercentage
 
     companion object {
         fun from(proposalJson: String): Proposal {
@@ -90,10 +102,10 @@ class Proposal : Serializable {
                 timestamp = proposal.timestamp
                 indexFile = proposal.indexFile
                 voteStatus = proposal.voteStatus
-                voteApproved = proposal.voteApproved
                 yesVotes = proposal.yesVotes
                 noVotes = proposal.noVotes
                 eligibleTickets = proposal.eligibleTickets
+                quorumPercentage = proposal.quorumPercentage
                 passPercentage = proposal.passPercentage
             }
         }

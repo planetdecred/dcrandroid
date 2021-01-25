@@ -10,7 +10,7 @@
     android:toDegrees="360"
     android:pivotX="50%"
     android:pivotY="50%"
-    android:duration="200"
+    android:duration="350"
     android:interpolator="@android:anim/accelerate_interpolator"
     android:repeatMode="restart"
     android:repeatCount="infinite"

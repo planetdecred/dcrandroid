@@ -10,13 +10,12 @@ import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.ProposalAdapter
 import com.dcrandroid.data.Proposal
-import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.Utils
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.show
 import com.google.gson.Gson
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.ProposalNotificationListener
@@ -35,7 +34,7 @@ const val ProposalCategoryRejected = 3
 const val ProposalCategoryAbandoned = 4
 
 class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
-        SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
+        AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var notificationManager: NotificationManager
 
@@ -75,7 +74,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         rotateAnim = AnimationUtils.loadAnimation(this@PoliteiaActivity, R.anim.rotate)
-        swipe_refresh_layout.setOnRefreshListener(this)
 
         layoutManager = LinearLayoutManager(this)
         proposalAdapter = ProposalAdapter(proposals, this)
@@ -101,22 +99,11 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         }
 
         go_back.setOnClickListener {
-            multiWallet!!.politeia.clearSavedProposals()
             finish()
         }
 
-        sync_layout.setOnClickListener {
-            if(multiWallet!!.politeia.isConnected){
-                multiWallet!!.politeia.stopSync()
-                setSyncButtonState()
-            }else{
-                syncProposals()
-            }
-
-        }
-
         refreshAvailableProposalCategories()
-        setSyncButtonState()
+        setSyncingState()
     }
 
     override fun onStop() {
@@ -124,37 +111,13 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         multiWallet!!.politeia.removeNotificationListener(this.javaClass.name)
     }
 
-    private fun syncProposals() = GlobalScope.launch(Dispatchers.Default) {
-        try {
-            withContext(Dispatchers.Main){
-                tv_sync_label.setText(R.string.stop_sync)
-                sync_icon.animation = rotateAnim
-            }
-            SnackBar.showText(this@PoliteiaActivity, R.string.syncing_proposals)
-            multiWallet!!.politeia.sync()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (e.message == Dcrlibwallet.ErrContextCanceled) {
-                SnackBar.showError(this@PoliteiaActivity, R.string.politeia_sync_stopped)
-            }else{
-                SnackBar.showError(this@PoliteiaActivity, R.string.error_syncying_proposals)
-            }
-            setSyncButtonState()
-        }
-    }
-
-    private fun setSyncButtonState() = GlobalScope.launch(Dispatchers.Main){
-        if(multiWallet!!.politeia.isConnected){
-            tv_sync_label.setText(R.string.stop_sync)
-
-            if(multiWallet!!.politeia.synced()) {
-                sync_icon.animation = null
-            }else {
-                sync_icon.animation = rotateAnim
-            }
-        }else{
-            tv_sync_label.setText(R.string.sync)
+    private fun setSyncingState() = GlobalScope.launch(Dispatchers.Main) {
+        if (multiWallet!!.politeia.isSyncing) {
+            sync_icon.animation = rotateAnim
+            sync_icon.show()
+        } else {
             sync_icon.animation = null
+            sync_icon.hide()
         }
     }
 
@@ -181,7 +144,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
     private fun preLoadTasks() = GlobalScope.launch(Dispatchers.Main) {
         loading.set(true)
-        swipe_refresh_layout.isRefreshing = true
     }
 
     private fun loadProposals(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
@@ -243,11 +205,10 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
     private fun postLoadTasks() = GlobalScope.launch(Dispatchers.Main) {
         loading.set(false)
-        swipe_refresh_layout.isRefreshing = false
         if (proposals.size > 0) {
-            swipe_refresh_layout.visibility = View.VISIBLE
+            recycler_view_container.visibility = View.VISIBLE
         } else {
-            swipe_refresh_layout.visibility = View.GONE
+            recycler_view_container.visibility = View.GONE
         }
     }
 
@@ -271,10 +232,6 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         }
     }
 
-    override fun onRefresh() {
-        loadProposals(false)
-    }
-
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
@@ -296,7 +253,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
     override fun onProposalsSynced() {
         refreshAvailableProposalCategories()
         loadProposals()
-        setSyncButtonState()
+        setSyncingState()
     }
 
     override fun onNewProposal(proposal: dcrlibwallet.Proposal) {

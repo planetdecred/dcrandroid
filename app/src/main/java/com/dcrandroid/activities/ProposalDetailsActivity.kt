@@ -85,10 +85,7 @@ class ProposalDetailsActivity : BaseActivity() {
             yes_votes.text = getString(R.string.yes_votes_percent, proposal.yesVotes, proposal.yesPercentage)
             no_votes.text = getString(R.string.no_votes_percent, proposal.noVotes, proposal.noPercentage)
 
-            vote_progress.text = getString(R.string.yes_no_votes_percent, proposal.yesVotes, proposal.yesPercentage,
-                    proposal.noVotes, proposal.noPercentage)
-
-            progressBar.max = proposal.eligibleTickets
+            progressBar.max = proposal.totalVotes
             progressBar.progress = proposal.yesVotes
             progressBar.secondaryProgress = proposal.totalVotes
         }
@@ -112,7 +109,7 @@ class ProposalDetailsActivity : BaseActivity() {
                 proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.default_app_button_bg)
                 proposal_status.text = getString(R.string.status_vote_started)
             } else if (proposal.voteStatus == 4) {
-                if (proposal.voteApproved) {
+                if (proposal.approved) {
                     proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_dark_green_corners_4dp)
                     proposal_status.text = getString(R.string.status_approved)
                 } else {

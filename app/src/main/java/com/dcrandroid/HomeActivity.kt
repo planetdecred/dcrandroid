@@ -48,6 +48,8 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
@@ -137,24 +139,19 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             currentBottomSheet = sendPageSheet
         }
 
-        if (multiWallet!!.isConnectedToDecredNetwork) {
-            syncProposals()
-        }
-
         setupLogoAnim()
-        Handler().postDelayed({ checkWifiSync() }, 1000)
-    }
-
-    private fun syncProposals() {
-        Thread {
-            try {
-                runOnUiThread { SnackBar.showText(this, R.string.syncing_proposals) }
-                multiWallet!!.politeia.sync()
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                runOnUiThread { SnackBar.showError(this, R.string.error_syncying_proposals) }
+        GlobalScope.launch(Dispatchers.Default) {
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                checkWifiSync()
             }
-        }.start()
+            delay(6000)
+            try {
+                multiWallet!!.politeia.sync()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
@@ -423,15 +420,21 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onNewProposal(proposal: Proposal) {
-        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
+            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
+        }
     }
 
     override fun onProposalVoteStarted(proposal: Proposal) {
-        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
+            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
+        }
     }
 
     override fun onProposalVoteFinished(proposal: Proposal) {
-        Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
+            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
+        }
     }
 }
 

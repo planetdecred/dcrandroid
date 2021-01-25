@@ -266,14 +266,6 @@
                             android:layout_height="19dp"
                             android:secondaryProgress="100" />
 
-                        <TextView
-                            android:id="@+id/vote_progress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textSize="@dimen/edit_text_size_12"
-                            android:textColor="@color/white" />
-
                     </RelativeLayout>
 
                 </LinearLayout>
