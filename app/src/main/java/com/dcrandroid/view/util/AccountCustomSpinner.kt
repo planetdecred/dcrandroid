@@ -7,26 +7,28 @@
 package com.dcrandroid.view.util
 
 import android.view.View
-import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.data.Account
-import com.dcrandroid.data.Constants
+import com.dcrandroid.data.parseAccounts
 import com.dcrandroid.dialog.AccountPickerDialog
-import com.dcrandroid.extensions.*
+import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.openedWalletsList
+import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
-import java.util.*
 
 class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
-                           @StringRes val pickerTitle: Int, val disabledAccounts: EnumSet<DisabledAccounts>, var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null) : View.OnClickListener {
+                           var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null) : View.OnClickListener {
 
-    val context = spinnerLayout.context
+    private val context = spinnerLayout.context
+
+    var pickerTitle: Int? = null
+    private lateinit var filterAccount: (account: Account) -> Boolean
 
     private val multiWallet = WalletData.multiWallet
-    var wallet: Wallet
+    lateinit var wallet: Wallet
 
     var selectedAccount: Account? = null
         set(value) {
@@ -45,33 +47,29 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
             selectedAccountChanged?.let { it1 -> it1(this) }
         }
 
-    init {
+    // also init function
+    fun init(filterAccount: (account: Account) -> Boolean) {
+        this.filterAccount = filterAccount
+
         // Set default selected account as "default"
         // account from the first opened wallet
-        wallet = if (!disabledAccounts.contains(DisabledAccounts.WatchOnlyWalletAccount)) {
-            multiWallet!!.openedWalletsList()[0]
-        } else {
-            multiWallet!!.fullCoinWalletsList()[0]
-        }
+        wallet = multiWallet!!.openedWalletsList()[0]
 
+        val accounts = parseAccounts(wallet.accounts).accounts.filter { filterAccount(it) }
+        selectedAccount = accounts[0]
 
-        selectedAccount = Account.from(wallet.getAccount(Constants.DEF_ACCOUNT_NUMBER))
         spinnerLayout.setOnClickListener(this)
-
-        val visibleAccounts = wallet.walletAccounts()
-                .dropLastWhile { it.accountNumber == Int.MAX_VALUE }.size
-
-        if (multiWallet.openedWalletsCount() == 1 && visibleAccounts == 1) {
-            spinnerLayout.setOnClickListener(null)
-            spinnerLayout.spinner_dropdown.visibility = View.INVISIBLE
-        }
     }
 
     override fun onClick(v: View?) {
-        AccountPickerDialog(pickerTitle, selectedAccount!!, disabledAccounts) {
+        val accountPicker = AccountPickerDialog(pickerTitle!!, selectedAccount!!)
+        accountPicker.accountSelected = {
             selectedAccount = it
-            return@AccountPickerDialog Unit
-        }.show(fragmentManager, null)
+            Unit
+        }
+        accountPicker.filterAccount = filterAccount
+
+        accountPicker.show(fragmentManager, null)
     }
 
     fun getCurrentAddress(): String {

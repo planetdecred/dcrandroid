@@ -19,7 +19,6 @@ import android.view.ViewTreeObserver
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.data.Account
@@ -84,9 +83,13 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             amountChanged = this@SendDialog.amountChanged
         }
 
-        val disabledAccounts = EnumSet.of(DisabledAccounts.MixerChangeAccount, DisabledAccounts.WatchOnlyWalletAccount)
         sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager,
-                source_account_spinner, R.string.source_account_picker_title, disabledAccounts, sourceAccountChanged)
+                source_account_spinner, sourceAccountChanged)
+        sourceAccountSpinner.init {
+            // Disable unmixed account and watch only wallet
+            !it.isMixerUnMixedAccount && !multiWallet.walletWithID(it.walletID).isWatchingOnlyWallet
+        }
+        sourceAccountSpinner.pickerTitle = R.string.source_account_picker_title
 
         destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
             addressChanged = this@SendDialog.addressChanged

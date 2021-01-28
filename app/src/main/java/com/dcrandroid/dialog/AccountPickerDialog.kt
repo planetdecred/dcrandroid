@@ -15,20 +15,17 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.AccountPickerAdapter
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.data.Account
-import com.dcrandroid.extensions.fullCoinWalletsList
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
-import java.util.*
-import kotlin.collections.ArrayList
 
-class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account, private val disabledAccounts: EnumSet<DisabledAccounts>,
-                          val accountSelected: (account: Account) -> Unit?) : FullScreenBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account) : FullScreenBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
+    lateinit var filterAccount: (account: Account) -> Boolean
+    lateinit var accountSelected: (account: Account) -> Unit?
     private var layoutManager: LinearLayoutManager? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,8 +38,7 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
         account_picker_title.setText(title)
 
         val multiWallet = WalletData.multiWallet!!
-        val wallets = if (!disabledAccounts.contains(DisabledAccounts.WatchOnlyWalletAccount)) multiWallet.openedWalletsList()
-        else multiWallet.fullCoinWalletsList()
+        val wallets = multiWallet.openedWalletsList()
 
         val items = ArrayList<Any>()
 
@@ -53,10 +49,12 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
             items.addAll(accounts)
         }
 
-        val adapter = AccountPickerAdapter(context!!, items.toTypedArray(), currentAccount, disabledAccounts) {
+        val adapter = AccountPickerAdapter(context!!, items.toTypedArray(), currentAccount)
+        adapter.accountSelected = {
             dismiss()
             accountSelected(it)
         }
+        adapter.filterAccount = filterAccount
         layoutManager = LinearLayoutManager(context)
         account_picker_rv.layoutManager = layoutManager
         account_picker_rv.adapter = adapter

@@ -63,7 +63,7 @@ class Account : Serializable {
     val hdPath: String
         get() = wallet.hdPathForAccount(accountNumber)
 
-    val isMixerChangeAccount: Boolean
+    val isMixerUnMixedAccount: Boolean
         get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
 
     val isMixerMixedAccount: Boolean

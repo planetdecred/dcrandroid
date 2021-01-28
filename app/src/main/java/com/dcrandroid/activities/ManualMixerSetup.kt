@@ -8,14 +8,12 @@ package com.dcrandroid.activities
 
 import android.os.Bundle
 import com.dcrandroid.R
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.data.Constants
 import com.dcrandroid.view.util.AccountCustomSpinner
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_manual_mixer_setup.*
 import kotlinx.android.synthetic.main.activity_setup_mixer_accounts.go_back
 import kotlinx.android.synthetic.main.activity_setup_mixer_accounts.wallet_name
-import java.util.*
 
 class ManualMixerSetup : BaseActivity() {
 
@@ -26,12 +24,20 @@ class ManualMixerSetup : BaseActivity() {
 
         wallet = multiWallet!!.walletWithID(intent.extras!!.getLong(Constants.WALLET_ID))
         wallet_name.text = wallet.name
-        val disabledAccounts = EnumSet.of(DisabledAccounts.MixerMixedAccount)
-        val mixed = AccountCustomSpinner(supportFragmentManager,
-                mixed_account_spinner, R.string.dest_account_picker_title, disabledAccounts)
 
-        val unmixed = AccountCustomSpinner(supportFragmentManager,
-                unmixed_account_spinner, R.string.dest_account_picker_title, disabledAccounts)
+        val mixed = AccountCustomSpinner(supportFragmentManager, mixed_account_spinner)
+        mixed.pickerTitle = R.string.dest_account_picker_title
+
+        val unmixed = AccountCustomSpinner(supportFragmentManager, unmixed_account_spinner)
+        unmixed.pickerTitle = R.string.dest_account_picker_title
+
+        // disallow selecting same account
+        mixed.init {
+            true
+        }
+        unmixed.init {
+            true
+        }
 
         go_back.setOnClickListener { finish() }
     }
