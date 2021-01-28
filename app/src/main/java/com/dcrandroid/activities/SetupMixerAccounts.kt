@@ -6,6 +6,7 @@
 
 package com.dcrandroid.activities
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -46,7 +47,7 @@ class SetupMixerAccounts : BaseActivity() {
         btn_manual_setup.setOnClickListener {
             val intent = Intent(this, ManualMixerSetup::class.java)
             intent.putExtra(Constants.WALLET_ID, wallet.id)
-            startActivity(intent)
+            startActivityForResult(intent, MANUAL_MIXER_REQUEST_CODE)
         }
 
         go_back.setOnClickListener { finish() }
@@ -99,6 +100,13 @@ class SetupMixerAccounts : BaseActivity() {
             }
             false
         }.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == MANUAL_MIXER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            finish()
+        }
     }
 
 }

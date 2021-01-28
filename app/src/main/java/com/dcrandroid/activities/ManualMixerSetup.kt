@@ -6,6 +6,7 @@
 
 package com.dcrandroid.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+const val MANUAL_MIXER_REQUEST_CODE = 500
 class ManualMixerSetup : BaseActivity() {
 
     private lateinit var wallet: Wallet
@@ -33,10 +35,12 @@ class ManualMixerSetup : BaseActivity() {
         wallet_name.text = wallet.name
 
         val mixed = AccountCustomSpinner(supportFragmentManager, mixed_account_spinner)
-        mixed.pickerTitle = R.string.dest_account_picker_title
+        mixed.pickerTitle = R.string.mixed_account
+        mixed.singleWalletID = wallet.id
 
         val unmixed = AccountCustomSpinner(supportFragmentManager, unmixed_account_spinner)
-        unmixed.pickerTitle = R.string.dest_account_picker_title
+        unmixed.pickerTitle = R.string.unmixed_account
+        unmixed.singleWalletID = wallet.id
 
         mixed.init {
             true
@@ -66,6 +70,7 @@ class ManualMixerSetup : BaseActivity() {
                         val intent = Intent(this@ManualMixerSetup, AccountMixerActivity::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         dialog?.dismissAllowingStateLoss()
+                        setResult(Activity.RESULT_OK)
                         startActivity(intent)
                         finish()
                         SnackBar.showText(this@ManualMixerSetup, R.string.mixer_setup_completed)

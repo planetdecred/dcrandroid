@@ -38,7 +38,7 @@ import kotlin.math.floor
 
 const val VERIFY_SEED_REQUEST_CODE = 200
 const val WALLET_SETTINGS_REQUEST_CODE = 300
-const val PRIVACY_SETTINGS_REQUEST_CODE = 300
+const val PRIVACY_SETTINGS_REQUEST_CODE = 400
 
 class WalletsFragment : BaseFragment() {
 
@@ -96,7 +96,6 @@ class WalletsFragment : BaseFragment() {
             refreshNavigationTabs()
 
         } else if (requestCode == WALLET_SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
-
             adapter.reloadList()
             refreshNavigationTabs()
         } else if (requestCode == RESTORE_WALLET_REQUEST_CODE && resultCode == RESULT_OK) {

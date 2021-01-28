@@ -22,10 +22,11 @@ import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
                            var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null) : View.OnClickListener {
 
-    private val context = spinnerLayout.context
-
     var pickerTitle: Int? = null
     private lateinit var filterAccount: (account: Account) -> Boolean
+
+    // Set this value to make the picker use only this wallet
+    var singleWalletID: Long? = null
 
     private val multiWallet = WalletData.multiWallet
     lateinit var wallet: Wallet
@@ -52,11 +53,17 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         this.filterAccount = filterAccount
 
         // Set default selected account as "default"
-        // account from the first opened wallet
-        wallet = multiWallet!!.openedWalletsList()[0]
+        // account from the first opened wallet or `walletID`
+        wallet = if (singleWalletID != null) multiWallet!!.walletWithID(singleWalletID!!)
+        else multiWallet!!.openedWalletsList()[0]
 
         val accounts = parseAccounts(wallet.accounts).accounts.filter { filterAccount(it) }
         selectedAccount = accounts[0]
+
+        if (multiWallet.openedWalletsCount() == 0 || singleWalletID != null) {
+            // hide wallet name since we're dealing with a single wallet here
+            spinnerLayout.spinner_wallet_name.hide()
+        }
 
         spinnerLayout.setOnClickListener(this)
     }
@@ -68,6 +75,7 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
             Unit
         }
         accountPicker.filterAccount = filterAccount
+        accountPicker.singleWalletID = singleWalletID
 
         accountPicker.show(fragmentManager, null)
     }

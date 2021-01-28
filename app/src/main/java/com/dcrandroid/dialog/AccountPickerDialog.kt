@@ -28,6 +28,8 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
     lateinit var accountSelected: (account: Account) -> Unit?
     private var layoutManager: LinearLayoutManager? = null
 
+    var singleWalletID: Long? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.account_picker_sheet, container, false)
     }
@@ -38,12 +40,18 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
         account_picker_title.setText(title)
 
         val multiWallet = WalletData.multiWallet!!
+
         val wallets = multiWallet.openedWalletsList()
+                // What this basically does is remove all other wallet from the list if `singleWalletID` is set.
+                .filter { (singleWalletID != null && it.id == singleWalletID) || singleWalletID == null }
 
         val items = ArrayList<Any>()
 
         for (wallet in wallets) {
-            items.add(wallet)
+            if (wallets.size > 1) {
+                // Do not add wallet header if there's only one wallet displayed
+                items.add(wallet)
+            }
             val accounts = wallet.walletAccounts()
                     .dropLastWhile { it.accountNumber == Int.MAX_VALUE } // remove imported account
             items.addAll(accounts)
