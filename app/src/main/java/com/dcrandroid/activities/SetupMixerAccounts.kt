@@ -13,20 +13,14 @@ import android.text.Html
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
-import com.dcrandroid.extensions.hide
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.Utils
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_setup_mixer_accounts.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SetupMixerAccounts : BaseActivity() {
 
@@ -44,7 +38,7 @@ class SetupMixerAccounts : BaseActivity() {
                     .setMessage(Html.fromHtml(getString(R.string.privacy_intro_dialog_desc)))
                     .setNegativeButton(getString(R.string.cancel))
                     .setPositiveButton(getString(R.string.begin_setup), DialogInterface.OnClickListener { _, _ ->
-                        beginSetup()
+                        checkAccountNameConflict()
                     })
                     .show()
         }
@@ -57,17 +51,29 @@ class SetupMixerAccounts : BaseActivity() {
 
         go_back.setOnClickListener { finish() }
 
-        checkAccountNameConflict()
+
     }
 
     private fun checkAccountNameConflict() {
 
         if (wallet.hasAccount(Constants.MIXED) || wallet.hasAccount(Constants.UNMIXED)) {
-            btn_auto_setup.hide()
+            InfoDialog(this)
+                    .setDialogTitle(R.string.account_name_taken)
+                    .setMessage(R.string.account_name_conflict_dialog_desc)
+                    .setIcon(R.drawable.ic_alert2, R.drawable.grey_dialog_bg)
+                    .cancelable(false)
+                    .setPositiveButton(R.string.go_back_rename, DialogInterface.OnClickListener { dialog, _ ->
+                        dialog.dismiss()
+                        finish()
+                    })
+                    .show()
+            return
         }
+
+        beginAutoSetup()
     }
 
-    private fun beginSetup() {
+    private fun beginAutoSetup() {
         val title = PassPromptTitle(R.string.confirm_create_needed_accounts, R.string.confirm_create_needed_accounts, R.string.confirm_create_needed_accounts)
         PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { dialog, passphrase ->
 
@@ -88,22 +94,7 @@ class SetupMixerAccounts : BaseActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
 
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        if (dialog is PinPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        } else if (dialog is PasswordPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            val op = this.javaClass.name + "beginSetup"
-                            dialog?.dismiss()
-                            Utils.showErrorDialog(this@SetupMixerAccounts, op + ": " + e.message)
-                            Dcrlibwallet.logT(op, e.message)
-                        }
-                    }
+                    PassPromptUtil.handleError(this@SetupMixerAccounts, e, dialog!!)
                 }
             }
             false

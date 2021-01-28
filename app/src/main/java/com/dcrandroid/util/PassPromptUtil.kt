@@ -6,6 +6,7 @@
 
 package com.dcrandroid.util
 
+import android.app.Activity
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
@@ -14,6 +15,9 @@ import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import dcrlibwallet.Dcrlibwallet
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 data class PassPromptTitle(val passwordTitle: Int, val pinTitle: Int, val fingerprintTitle: Int = pinTitle)
 
@@ -21,6 +25,27 @@ class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletI
                      private val passEntered: (dialog: FullScreenBottomSheetDialog?, passphrase: String?) -> Boolean) {
 
     var passType: Int = Dcrlibwallet.PassphraseTypePass
+
+    companion object {
+        fun handleError(activity: Activity, e: Exception, dialog: FullScreenBottomSheetDialog) {
+            if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
+                if (dialog is PinPromptDialog) {
+                    dialog.setProcessing(false)
+                    dialog.showError()
+                } else if (dialog is PasswordPromptDialog) {
+                    dialog.setProcessing(false)
+                    dialog.showError()
+                }
+            } else {
+                GlobalScope.launch(Dispatchers.Main) {
+                    val op = activity.javaClass.name
+                    dialog.dismissAllowingStateLoss()
+                    Utils.showErrorDialog(activity, op + ": " + e.message)
+                    Dcrlibwallet.logT(op, e.message)
+                }
+            }
+        }
+    }
 
     fun show() {
         val multiWallet = WalletData.multiWallet!!

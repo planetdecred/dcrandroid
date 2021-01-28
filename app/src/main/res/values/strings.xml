@@ -569,6 +569,7 @@
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
     <string name="create_needed_accounts">Create needed accounts</string>
     <string name="confirm_create_needed_accounts">Confirm to create needed accounts</string>
+    <string name="confirm_setup_mixer">Confirm to set mixer accounts</string>
     <string name="setup_needed_accounts">Setup needed accounts</string>
     <string name="create_mixer_account_summary">You will need to create two accounts for using the mixer. <b>This action cannot be undone</b>.</string>
     <string name="account_exists">Account already exist.</string>
@@ -639,6 +640,7 @@
     <string name="manual_mixer_setup_help"><font color='#091440'><b>Make sure to select the corresponding accounts to the previous setup.</b></font> Failing to do so could damage wallet privacy.</string>
     <string name="set_up">Set up</string>
     <string name="manual_setup">Manual setup</string>
+    <string name="same_mixed_unmixed"><![CDATA[Cannot use same account for mixed & unmixed]]></string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>

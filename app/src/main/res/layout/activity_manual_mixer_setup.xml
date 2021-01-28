@@ -181,11 +181,11 @@
 
         <TextView
             android:id="@+id/btn_setup"
+            style="@style/textViewButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/margin_padding_size_16"
             android:paddingBottom="@dimen/margin_padding_size_16"
-            style="@style/textViewButton"
             android:text="@string/set_up"
             android:textSize="@dimen/edit_text_size_18" />
 
