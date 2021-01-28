@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/circular_transparent_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/manual_setup"
+                        android:textSize="@dimen/edit_text_size_20"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/wallet_name"
+                        tools:text="Wallet-0"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_bg_14"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:layout_marginBottom="@dimen/margin_padding_size_4"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_8"
+        android:paddingTop="@dimen/margin_padding_size_14"
+        android:elevation="1dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mixed_account"
+            android:textSize="@dimen/edit_text_size_14"
+            android:textColor="@color/blueGraySecondTextColor"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/source_sans_pro" />
+
+        <include
+            android:id="@+id/mixed_account_spinner"
+            layout="@layout/account_custom_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_bg_14"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_8"
+        android:paddingTop="@dimen/margin_padding_size_14"
+        android:elevation="1dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro"
+            android:includeFontPadding="false"
+            android:text="@string/unmixed_account"
+            android:textColor="@color/blueGraySecondTextColor"
+            android:textSize="@dimen/edit_text_size_14" />
+
+        <include
+            android:id="@+id/unmixed_account_spinner"
+            layout="@layout/account_custom_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
+        android:layout_marginEnd="@dimen/margin_padding_size_16"
+        android:layout_marginTop="@dimen/margin_padding_size_16"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/margin_padding_size_16"
+            android:layout_height="@dimen/margin_padding_size_16"
+            android:layout_marginTop="@dimen/margin_padding_size_4"
+            android:src="@drawable/ic_alert" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/source_sans_pro"
+            android:textSize="@dimen/edit_text_size_16"
+            android:text="@string/manual_mixer_setup_help" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/margin_padding_size_16"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/btn_setup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_padding_size_16"
+            android:paddingBottom="@dimen/margin_padding_size_16"
+            style="@style/textViewButton"
+            android:text="@string/set_up"
+            android:textSize="@dimen/edit_text_size_18" />
+
+    </RelativeLayout>
+
+</LinearLayout>

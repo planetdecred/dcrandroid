@@ -628,7 +628,17 @@
     <string name="mixing_elp">Mixing…</string>
     <string name="account_name_taken">Account name is taken</string>
     <string name="account_name_conflict_dialog_desc"><![CDATA[There are existing accounts named <b>mixed</b> or <b>unmixed</b>. Please change the name to something else for now. You can change them back after the setup.]]></string>
-    <string name="go_back_rename"><![CDATA[Go back & rename]]></string>
+    <string name="go_back_rename">Go back &amp; rename</string>
+    <string name="set_up_needed_accounts">Set up needed accounts</string>
+    <string name="setup_mixer_account_desc">Two dedicated accounts will be set up to use the mixer:</string>
+    <string name="setup_mixer_account_bullet_1"><font color='#091440'><b>Mixed</b></font> account will be the outbound spending account.</string>
+    <string name="setup_mixer_account_bullet_2"><font color='#091440'><b>Unmixed</b></font> account will be the change handling account.</string>
+    <string name="auto_setup">Auto setup</string>
+    <string name="auto_setup_desc">Create and set up the needed accounts for you.</string>
+    <string name="manual_setup_desc">For wallets that have enabled privacy before.</string>
+    <string name="manual_mixer_setup_help"><font color='#091440'><b>Make sure to select the corresponding accounts to the previous setup.</b></font> Failing to do so could damage wallet privacy.</string>
+    <string name="set_up">Set up</string>
+    <string name="manual_setup">Manual setup</string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>
