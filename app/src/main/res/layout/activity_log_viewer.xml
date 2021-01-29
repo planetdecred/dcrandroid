@@ -45,8 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -66,7 +65,7 @@
                     android:background="@drawable/bg_primary_ripple"
                     android:focusable="true"
                     android:clickable="true"
-                    android:src="@drawable/ic_copy"/>
+                    android:src="@drawable/ic_copy" />
 
             </LinearLayout>
 

@@ -11,7 +11,7 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/margin_padding_size_24"
     android:paddingEnd="@dimen/margin_padding_size_24"
-    android:paddingStart="@dimen/margin_padding_size_24" >
+    android:paddingStart="@dimen/margin_padding_size_24">
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,33 +59,33 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:orientation="horizontal"
-        android:layout_marginTop="-64dp" >
+        android:layout_marginTop="-64dp">
 
-            <TextView
-                android:id="@+id/btn_cancel"
-                style="@style/textViewButton.Outline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel" />
+        <TextView
+            android:id="@+id/btn_cancel"
+            style="@style/textViewButton.Outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
 
-            <TextView
-                android:id="@+id/btn_confirm"
-                style="@style/textViewButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_padding_size_8"
-                android:enabled="false"
-                android:text="@string/confirm" />
+        <TextView
+            android:id="@+id/btn_confirm"
+            style="@style/textViewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:enabled="false"
+            android:text="@string/confirm" />
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="82dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_padding_size_8"
-                android:indeterminate="true"
-                android:theme="@style/CircularProgressBar"
-                android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="82dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_padding_size_8"
+            android:indeterminate="true"
+            android:theme="@style/CircularProgressBar"
+            android:visibility="gone" />
 
     </LinearLayout>
 

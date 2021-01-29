@@ -31,7 +31,7 @@
         <FrameLayout
             android:layout_width="@dimen/margin_padding_size_40"
             android:layout_height="45dp"
-            android:layout_marginTop="11dp" >
+            android:layout_marginTop="11dp">
 
             <ImageView
                 android:layout_width="@dimen/margin_padding_size_40"
@@ -39,7 +39,7 @@
                 android:padding="@dimen/margin_padding_size_8"
                 android:background="@drawable/circle_bg_primary"
                 android:layout_gravity="bottom"
-                android:src="@drawable/ic_mixer"/>
+                android:src="@drawable/ic_mixer" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,8 +111,7 @@
             android:paddingBottom="@dimen/margin_padding_size_12"
             android:paddingStart="@dimen/margin_padding_size_16"
             android:paddingEnd="@dimen/margin_padding_size_16"
-            android:text="@string/setup_mixer"
-            />
+            android:text="@string/setup_mixer" />
     </LinearLayout>
 
 </LinearLayout>

@@ -102,7 +102,7 @@
         android:id="@+id/recycler_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -120,6 +120,6 @@
         android:layout_marginBottom="@dimen/margin_padding_size_18"
         android:textColor="@color/lightGrayTextColor"
         app:fontFamily="@font/source_sans_pro"
-        android:text="@string/no_proposals"/>
+        android:text="@string/no_proposals" />
 
 </LinearLayout>

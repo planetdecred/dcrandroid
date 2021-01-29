@@ -59,7 +59,7 @@
 
         <include
             android:id="@+id/extended_public_key"
-            layout="@layout/custom_input"/>
+            layout="@layout/custom_input" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"

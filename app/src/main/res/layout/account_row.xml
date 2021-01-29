@@ -100,7 +100,6 @@
         android:background="#e6eaed"
         android:layout_marginStart="@dimen/margin_padding_size_40"
         android:layout_marginEnd="0dp"
-        android:layout_marginTop="@dimen/margin_padding_size_16"
-        />
+        android:layout_marginTop="@dimen/margin_padding_size_16" />
 
 </LinearLayout>

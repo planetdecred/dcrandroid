@@ -7,7 +7,7 @@
 
 <!-- Spanish Translation tricubeart@gmail.com-->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--General-->
     <string name="wallet">Cartera</string>
     <string name="crash_dialog_text">Ocurrió un error inesperado forzando a detener la aplicación. Ayúdenos a arreglar esto enviándonos las especificaciones de tu dispositivo y el registro de la aplicación.
@@ -100,8 +100,6 @@
 
     <!--Block chain-->
     <!--/Block chain-->
-
-
 
 
     <!--Sync Messages-->

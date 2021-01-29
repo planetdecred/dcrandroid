@@ -58,6 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -107,7 +108,7 @@
             android:textSize="@dimen/edit_text_size_20"
             android:textColor="@color/darkBlueTextColor"
             android:fontFamily="@font/source_sans_pro_semibold"
-            android:gravity="center"/>
+            android:gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,7 +118,7 @@
             android:textColor="@color/darkBlueTextColor"
             android:fontFamily="@font/source_sans_pro"
             android:layout_marginTop="@dimen/margin_padding_size_16"
-            android:gravity="center"/>
+            android:gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -127,7 +128,7 @@
             android:textColor="@color/darkBlueTextColor"
             android:fontFamily="@font/source_sans_pro"
             android:layout_marginTop="@dimen/margin_padding_size_16"
-            android:gravity="center"/>
+            android:gravity="center" />
 
     </LinearLayout>
 
@@ -136,7 +137,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="@dimen/margin_padding_size_16"
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/btn_setup_mixer"

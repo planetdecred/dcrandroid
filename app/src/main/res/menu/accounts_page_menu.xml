@@ -11,5 +11,5 @@
         android:id="@+id/add_new_wallet"
         android:icon="@drawable/ic_add_new_wallet"
         android:title="@string/add_new_wallet"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

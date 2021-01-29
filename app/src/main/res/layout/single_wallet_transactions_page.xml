@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -33,8 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tx_type_spinner"
-            android:layout_marginStart="@dimen/margin_padding_size_16"
-            />
+            android:layout_marginStart="@dimen/margin_padding_size_16" />
 
     </LinearLayout>
 
@@ -51,7 +50,7 @@
         android:textSize="@dimen/edit_text_size_16"
         android:textColor="@color/lightGrayTextColor"
         android:fontFamily="@font/source_sans_pro"
-        android:text="@string/no_transactions_yet"/>
+        android:text="@string/no_transactions_yet" />
 
 
 </LinearLayout>

@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-    android:padding="@dimen/margin_padding_size_24" >
+    android:padding="@dimen/margin_padding_size_24">
 
     <TextView
         android:id="@+id/unlock_title"
@@ -58,7 +58,7 @@
             android:id="@+id/bottom_row"
             android:orientation="horizontal"
             android:layout_gravity="end"
-            android:gravity="center" >
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/btn_unlock"

@@ -14,8 +14,7 @@
     android:background="@drawable/bg_gray_corner_8dp"
     android:layout_marginTop="@dimen/margin_padding_size_16"
     android:padding="16dp"
-    android:id="@+id/sync_verbose"
-    >
+    android:id="@+id/sync_verbose">
 
     <LinearLayout
         android:layout_width="match_parent"

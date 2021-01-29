@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
@@ -15,6 +16,6 @@
         android:layout_height="match_parent"
         android:id="@+id/barcode_scanner"
         app:zxing_use_texture_view="false"
-        app:zxing_preview_scaling_strategy="centerCrop"/>
+        app:zxing_preview_scaling_strategy="centerCrop" />
 
 </RelativeLayout>
