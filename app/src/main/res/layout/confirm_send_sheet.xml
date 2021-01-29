@@ -77,15 +77,14 @@
                 android:textSize="32sp"
                 android:textColor="@color/darkBlueTextColor"
                 android:layout_marginTop="@dimen/margin_padding_size_4"
-                android:text="3.14159265 DCR"/>
+                android:text="3.14159265 DCR" />
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_down_arrow"
                 android:scaleType="center"
-                android:layout_marginTop="@dimen/margin_padding_size_16"
-                />
+                android:layout_marginTop="@dimen/margin_padding_size_16" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -261,7 +260,7 @@
                 style="@style/textViewButton"
                 android:textSize="@dimen/edit_text_size_18"
                 android:paddingTop="@dimen/margin_padding_size_16"
-                android:paddingBottom="@dimen/margin_padding_size_16"/>
+                android:paddingBottom="@dimen/margin_padding_size_16" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -270,8 +269,7 @@
                 android:gravity="center"
                 android:id="@+id/processing_layout"
                 android:padding="@dimen/margin_padding_size_12"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
@@ -288,7 +286,7 @@
                     android:textColor="@color/darkerBlueGrayTextColor"
                     app:fontFamily="@font/source_sans_pro"
                     android:includeFontPadding="false"
-                    android:layout_marginStart="@dimen/margin_padding_size_8"/>
+                    android:layout_marginStart="@dimen/margin_padding_size_8" />
 
             </LinearLayout>
 
@@ -313,8 +311,7 @@
                     android:textSize="@dimen/edit_text_size_18"
                     android:fontFamily="@font/source_sans_pro"
                     android:textColor="@color/greenTextColor"
-                    android:layout_marginStart="@dimen/margin_padding_size_8"
-                    />
+                    android:layout_marginStart="@dimen/margin_padding_size_8" />
 
             </LinearLayout>
 

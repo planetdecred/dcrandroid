@@ -180,7 +180,6 @@
         </LinearLayout>
 
 
-
     </LinearLayout>
 
     <TextView
@@ -192,6 +191,6 @@
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_16"
         android:id="@+id/app_version"
-        tools:text="1.5.0"/>
+        tools:text="1.5.0" />
 
 </RelativeLayout>

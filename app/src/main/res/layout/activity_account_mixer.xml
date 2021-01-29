@@ -163,7 +163,7 @@
                                 android:layout_marginEnd="@dimen/margin_padding_size_4"
                                 android:id="@+id/iv_mixer_status"
                                 android:visibility="gone"
-                                android:src="@drawable/ic_alert"/>
+                                android:src="@drawable/ic_alert" />
 
                             <TextView
                                 android:layout_width="wrap_content"

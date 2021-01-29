@@ -23,8 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        >
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/seed_index"
@@ -46,8 +45,7 @@
             android:layout_marginStart="@dimen/margin_padding_size_8"
             android:textColor="#8997a5"
             android:id="@+id/selected_seed"
-            tools:text="—"
-            />
+            tools:text="—" />
 
     </LinearLayout>
 
@@ -56,7 +54,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/margin_padding_size_16"
-        android:weightSum="90" >
+        android:weightSum="90">
 
         <TextView
             android:id="@+id/seed1"

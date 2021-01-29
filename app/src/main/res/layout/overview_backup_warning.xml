@@ -29,8 +29,7 @@
         android:paddingTop="@dimen/margin_padding_size_8"
         android:paddingBottom="@dimen/margin_padding_size_8"
         android:paddingStart="@dimen/margin_padding_size_16"
-        android:paddingEnd="@dimen/margin_padding_size_8"
-        >
+        android:paddingEnd="@dimen/margin_padding_size_8">
 
         <ImageView
             android:layout_width="@dimen/margin_padding_size_24"

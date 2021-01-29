@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#e6eaed"
-            android:layout_marginStart="44dp"/>
+            android:layout_marginStart="44dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -37,6 +37,5 @@
         android:toYScale="1.7"
         android:interpolator="@android:anim/accelerate_interpolator"
         android:repeatMode="reverse"
-        android:repeatCount="7"
-        />
+        android:repeatCount="7" />
 </set>

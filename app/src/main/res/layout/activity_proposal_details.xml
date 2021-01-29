@@ -117,8 +117,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textStyle="bold"
-                    tools:text="PR by Monde Public Relations - Phase Two"
-                    />
+                    tools:text="PR by Monde Public Relations - Phase Two" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -141,7 +140,7 @@
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
