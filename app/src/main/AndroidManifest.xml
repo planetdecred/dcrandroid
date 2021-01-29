@@ -57,7 +57,7 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.VerifySeedActivity"
+            android:name=".activities.verifyseed.VerifySeedActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -70,14 +70,14 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.SaveSeedActivity"
+            android:name=".activities.verifyseed.SaveSeedActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:noHistory="true" />
 
         <activity
-            android:name=".activities.VerifySeedInstruction"
+            android:name=".activities.verifyseed.VerifySeedInstruction"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:noHistory="true" />
@@ -113,7 +113,7 @@
             android:label="Wallet Syncer" />
 
         <activity
-            android:name=".activities.SeedBackupSuccess"
+            android:name=".activities.verifyseed.SeedBackupSuccess"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
 
@@ -186,19 +186,19 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.AccountMixerActivity"
+            android:name=".activities.privacy.AccountMixerActivity"
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.SetupPrivacy"
+            android:name=".activities.privacy.SetupPrivacy"
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.SetupMixerAccounts"
+            android:name=".activities.privacy.SetupMixerAccounts"
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activities.ManualMixerSetup"
+            android:name=".activities.privacy.ManualMixerSetup"
             android:launchMode="singleTask" />
 
         <provider

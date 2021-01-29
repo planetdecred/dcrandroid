@@ -4,13 +4,14 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.verifyseed
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
+import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.adapter.ShuffledSeeds
 import com.dcrandroid.adapter.VerifySeedAdapter
@@ -29,6 +30,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// Step 3 for seed backup, user taps seed to verify each index.
 class VerifySeedActivity : BaseActivity() {
 
     private lateinit var seeds: Array<String>
