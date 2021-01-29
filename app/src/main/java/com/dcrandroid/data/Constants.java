@@ -47,8 +47,7 @@ public class Constants {
             INDEX_MD = "index.md",
             VOTE_SUMMARY = "votesummary",
             MIXED = "mixed",
-            UNMIXED = "unmixed",
-            SEND_MAX = "send_max";
+            UNMIXED = "unmixed";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             PROPOSAL_SUMMARY_ID = 5552479,
