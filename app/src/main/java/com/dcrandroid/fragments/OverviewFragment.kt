@@ -216,7 +216,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
         balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.5f)
         if (mainBalanceIsVisible()) {
-            setToolbarTitle(balanceTextView.text, true)
+            setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
         }
     }
 

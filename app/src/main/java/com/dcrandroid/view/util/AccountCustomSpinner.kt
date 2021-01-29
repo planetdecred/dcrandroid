@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentManager
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.parseAccounts
 import com.dcrandroid.dialog.AccountPickerDialog
+import com.dcrandroid.extensions.firstWalletWithAValidAccount
 import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
@@ -53,19 +53,22 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         this.filterAccount = filterAccount
 
         // Set default selected account as "default"
-        // account from the first opened wallet or `walletID`
-        wallet = if (singleWalletID != null) multiWallet!!.walletWithID(singleWalletID!!)
-        else multiWallet!!.openedWalletsList()[0]
+        // account from the first wallet with a valid or `walletID`
+        val wal = if (singleWalletID != null) multiWallet!!.walletWithID(singleWalletID!!)
+        else multiWallet!!.firstWalletWithAValidAccount(filterAccount)
 
-        val accounts = parseAccounts(wallet.accounts).accounts.filter { filterAccount(it) }
-        selectedAccount = accounts[0]
+        if (wal != null) {
+            wallet = wal
+            val accounts = parseAccounts(wallet.accounts).accounts.filter { filterAccount(it) }
+            selectedAccount = accounts.first()
 
-        if (multiWallet.openedWalletsCount() == 0 || singleWalletID != null) {
-            // hide wallet name since we're dealing with a single wallet here
-            spinnerLayout.spinner_wallet_name.hide()
+            if (multiWallet.openedWalletsCount() == 0 || singleWalletID != null) {
+                // hide wallet name since we're dealing with a single wallet here
+                spinnerLayout.spinner_wallet_name.hide()
+            }
+
+            spinnerLayout.setOnClickListener(this)
         }
-
-        spinnerLayout.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
