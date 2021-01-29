@@ -51,15 +51,15 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
     private var categorySortAdapter: ArrayAdapter<String>? = null
     private val currentCategory: Int
-    get() {
-       return when (category_sort_spinner.selectedItemPosition) {
-            ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
-            ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
-            ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
-            ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
-            else -> Dcrlibwallet.ProposalCategoryAbandoned
+        get() {
+            return when (category_sort_spinner.selectedItemPosition) {
+                ProposalCategoryPre -> Dcrlibwallet.ProposalCategoryPre
+                ProposalCategoryActive -> Dcrlibwallet.ProposalCategoryActive
+                ProposalCategoryApproved -> Dcrlibwallet.ProposalCategoryApproved
+                ProposalCategoryRejected -> Dcrlibwallet.ProposalCategoryRejected
+                else -> Dcrlibwallet.ProposalCategoryAbandoned
+            }
         }
-    }
 
     private lateinit var rotateAnim: Animation
 

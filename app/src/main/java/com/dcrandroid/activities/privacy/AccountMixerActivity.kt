@@ -27,7 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, TxAndBlockNotificationListener {
+class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, TxAndBlockNotificationListener {
 
     private lateinit var wallet: Wallet
     private var mixedAccountNumber: Int = -1
@@ -57,20 +57,18 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
         mixed_account_label.text = wallet.accountName(mixedAccountNumber)
         unmixed_account_label.text = wallet.accountName(unmixedAccountNumber)
 
-//      SwitchPreference(this@AccountMixerActivity, Dcrlibwallet.walletUniqueConfigKey(wallet.id, Dcrlibwallet.AccountMixerMixTxChange), mix_tx_change)
-
         multiWallet?.setAccountMixerNotification(this@AccountMixerActivity)
 
-        if(wallet.isAccountMixerActive){
+        if (wallet.isAccountMixerActive) {
             mixer_toggle_switch.isChecked = true
         }
 
         mixer_toggle_switch.setOnClickListener {
             mixer_toggle_switch.isChecked = wallet.isAccountMixerActive
 
-            if(wallet.isAccountMixerActive){
+            if (wallet.isAccountMixerActive) {
                 stopAccountMixer()
-            }else{
+            } else {
                 showWarningAndStartMixer()
             }
         }
@@ -94,7 +92,7 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
     }
 
     private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
-        if(wallet.isAccountMixerActive){
+        if (wallet.isAccountMixerActive) {
             tv_mixer_status.setText(R.string.keep_app_opened)
             tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
 
@@ -102,7 +100,7 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
             iv_mixer_status.show()
 
             mixing_arrow.show()
-        }else {
+        } else {
 
             if (multiWallet!!.readyToMix(wallet.id)) {
                 tv_mixer_status.setText(R.string.ready_to_mix)
@@ -155,7 +153,7 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
                     dialog?.dismiss()
                 }
 
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
                     if (dialog is PinPromptDialog) {
                         dialog.setProcessing(false)
@@ -164,12 +162,12 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
                         dialog.setProcessing(false)
                         dialog.showError()
                     }
-                } else if(e.message == Dcrlibwallet.ErrNoMixableOutput){
+                } else if (e.message == Dcrlibwallet.ErrNoMixableOutput) {
                     SnackBar.showError(this, R.string.no_mixable_output)
                     GlobalScope.launch(Dispatchers.Main) {
                         dialog?.dismiss()
                     }
-                } else{
+                } else {
                     GlobalScope.launch(Dispatchers.Main) {
 
                         val op = this.javaClass.name + "startAccountMixer"
@@ -184,12 +182,12 @@ class AccountMixerActivity: BaseActivity(), AccountMixerNotificationListener, Tx
         }.show()
     }
 
-    private fun stopAccountMixer() = GlobalScope.launch(Dispatchers.Default){
+    private fun stopAccountMixer() = GlobalScope.launch(Dispatchers.Default) {
         multiWallet?.stopAccountMixer(wallet.id)
     }
 
     override fun onAccountMixerEnded(walletID: Long) {
-        if(walletID == wallet.id){
+        if (walletID == wallet.id) {
             SnackBar.showText(this, R.string.mixer_has_stopped_running)
             setMixerStatus()
             GlobalScope.launch(Dispatchers.Main) {

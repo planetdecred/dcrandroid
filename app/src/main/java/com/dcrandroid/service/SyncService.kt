@@ -129,7 +129,7 @@ class SyncService : Service(), SyncProgressListener {
     override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport) {
         publishProgress(addressDiscoveryProgress.generalSyncProgress.totalTimeRemainingSeconds, addressDiscoveryProgress.generalSyncProgress.totalSyncProgress)
     }
-    
+
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport) {
         publishProgress(headersRescanProgress.generalSyncProgress.totalTimeRemainingSeconds, headersRescanProgress.generalSyncProgress.totalSyncProgress)
     }

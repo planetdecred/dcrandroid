@@ -20,9 +20,8 @@ import kotlinx.android.synthetic.main.activity_connected_peers.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
-class ConnectedPeers: BaseActivity(), SyncProgressListener {
+class ConnectedPeers : BaseActivity(), SyncProgressListener {
 
     private val peersInfo = ArrayList<PeerInfo>()
 
@@ -51,7 +50,7 @@ class ConnectedPeers: BaseActivity(), SyncProgressListener {
         multiWallet?.removeSyncProgressListener(this.javaClass.name)
     }
 
-    private fun updateConnectedPeers() = GlobalScope.launch(Dispatchers.Main){
+    private fun updateConnectedPeers() = GlobalScope.launch(Dispatchers.Main) {
         val peersJson = multiWallet!!.peerInfo()
 
         peersInfo.clear()
@@ -59,9 +58,9 @@ class ConnectedPeers: BaseActivity(), SyncProgressListener {
 
         adapter.notifyDataSetChanged()
 
-        if(peersInfo.size == 0){
+        if (peersInfo.size == 0) {
             no_peers_available.show()
-        }else{
+        } else {
             no_peers_available.hide()
         }
     }

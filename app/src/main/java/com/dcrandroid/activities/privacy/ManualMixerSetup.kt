@@ -25,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 const val MANUAL_MIXER_REQUEST_CODE = 500
+
 class ManualMixerSetup : BaseActivity() {
 
     private lateinit var wallet: Wallet

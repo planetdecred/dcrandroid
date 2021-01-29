@@ -41,7 +41,7 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
             btn_create.isEnabled = !it.isNullOrBlank()
             true
         }.apply {
-            editText.setSingleLine(true)
+            editText.isSingleLine = true
             hidePasteButton()
             hideQrScanner()
             setHint(R.string.account_name)

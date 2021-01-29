@@ -6,7 +6,6 @@
 
 package com.dcrandroid.util
 
-import android.animation.ObjectAnimator
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +13,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.dcrandroid.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class PopupMessage {
     companion object {
-        public fun showText(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT): Toast {
+        fun showText(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT): Toast {
             val inflater = LayoutInflater.from(anchorView.context)
             val view = inflater.inflate(R.layout.popup_message, null)
 
