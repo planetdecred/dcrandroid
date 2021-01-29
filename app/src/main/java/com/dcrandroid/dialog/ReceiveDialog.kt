@@ -19,7 +19,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.util.SnackBar
@@ -63,10 +62,15 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         tv_address.setOnClickListener { copyAddress() }
         qr_image.setOnClickListener { copyAddress() }
 
-        val disabledAccounts = EnumSet.of(DisabledAccounts.MixerMixedAccount)
-        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner, R.string.dest_account_picker_title, disabledAccounts) {
+        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner) {
+
+            it.pickerTitle = R.string.dest_account_picker_title
             setAddress(it.getCurrentAddress())
             return@AccountCustomSpinner Unit
+        }
+        sourceAccountSpinner.init {
+            // disable mixed account
+            !it.isMixerMixedAccount
         }
     }
 

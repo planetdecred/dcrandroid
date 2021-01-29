@@ -181,6 +181,18 @@
             android:name=".activities.AccountMixerActivity"
             android:launchMode="singleTask" />
 
+        <activity
+            android:name=".activities.SetupPrivacy"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".activities.SetupMixerAccounts"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".activities.ManualMixerSetup"
+            android:launchMode="singleTask" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

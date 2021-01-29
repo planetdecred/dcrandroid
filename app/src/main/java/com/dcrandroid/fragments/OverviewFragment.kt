@@ -14,27 +14,24 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.adapter.MixerStatusAdapter
 import com.dcrandroid.adapter.TransactionListAdapter
+import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.*
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Deserializer
-import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.SyncLayoutUtil
+import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
-import kotlinx.android.synthetic.main.fragment_overview.*
-import kotlinx.android.synthetic.main.mixer_settings_reminder.*
-import kotlinx.android.synthetic.main.mixer_settings_reminder.view.*
 import kotlinx.android.synthetic.main.overview_backup_warning.*
-import kotlinx.android.synthetic.main.overview_backup_warning.view.go_to_wallets_btn
+import kotlinx.android.synthetic.main.overview_backup_warning.view.*
+import kotlinx.android.synthetic.main.overview_mixer_status_card.*
+import kotlinx.android.synthetic.main.overview_privacy_introduction.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -93,6 +90,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false
+        recyclerView.setDivider(R.drawable.recycler_view_divider_pad_56)
         recyclerView.adapter = adapter
 
         setToolbarTitle(R.string.overview, false)
@@ -128,6 +126,21 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             }
         }
 
+        if (!WalletData.multiWallet!!.readBoolConfigValueForKey(Constants.HAS_SETUP_PRIVACY, false) && !closedPrivacyReminder) {
+            privacy_intro_card.show()
+            btn_dismiss_privacy_intro.setOnClickListener {
+                closedPrivacyReminder = true
+                privacy_intro_card.hide()
+            }
+
+            btn_setup_mixer.setOnClickListener {
+                multiWallet!!.setBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
+                switchFragment(2)
+            }
+        }
+
+        mixer_status_rv.layoutManager = LinearLayoutManager(context)
+        mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
         multiWallet?.setAccountMixerNotification(this)
     }
@@ -138,41 +151,23 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             return@launch
         }
 
-        var mixerRunning = false
-        val walletsMixing = ArrayList<String>()
+        var activeMixers = 0
         for (wallet in multiWallet!!.openedWalletsList()) {
             if (wallet.isAccountMixerActive) {
-                walletsMixing.add(wallet.name)
-                mixerRunning = true
-                break
+                activeMixers++
             }
         }
 
-        if(mixerRunning){
-
-            if(walletsMixing.size == 1) {
-                tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status, walletsMixing.first()), 0)
-            } else {
-                val walletsExceptLast = walletsMixing.dropLast(1).joinToString(", ")
-
-                tv_mixer_status.text = HtmlCompat.fromHtml(getString(R.string.wallet_mixer_status_multi, walletsExceptLast, walletsMixing.last()), 0)
-            }
+        if (activeMixers > 0) {
+            tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
             cspp_running_layout.show()
+            mixer_status_rv.adapter?.notifyDataSetChanged()
         } else {
             cspp_running_layout.hide()
         }
 
-        if (multiWallet!!.hasWalletsRequiringPrivacySetup() && !closedPrivacyReminder) {
-            mixer_settings_reminder.show()
-
-            mixer_settings_reminder.go_to_wallets_btn.setOnClickListener {
-                switchFragment(2) // Wallets fragment
-            }
-
-            mixer_settings_reminder.iv_close_privacy_reminder.setOnClickListener {
-                closedPrivacyReminder = true
-                mixer_settings_reminder.hide()
-            }
+        mixer_go_to_wallets.setOnClickListener {
+            switchFragment(2)
         }
     }
 
@@ -208,14 +203,14 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onScrollChanged() {
         if (mainBalanceIsVisible()) {
-            setToolbarTitle(balanceTextView.text, true)
+            setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
         } else {
             setToolbarTitle(R.string.overview, false)
         }
     }
 
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
-        balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance())
+        balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.5f)
         if (mainBalanceIsVisible()) {
             setToolbarTitle(balanceTextView.text, true)
         }
@@ -248,6 +243,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         loadBalance()
         loadTransactions()
+        setMixerStatus()
     }
 
     override fun onTransaction(transactionJson: String?) {
@@ -273,6 +269,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
+
+        setMixerStatus()
     }
 
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {

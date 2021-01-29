@@ -112,12 +112,12 @@
                     app:fontFamily="@font/source_sans_pro" />
 
                 <include
+                    android:id="@+id/source_account_spinner"
                     layout="@layout/account_custom_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_padding_size_8"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:id="@+id/source_account_spinner" />
+                    android:layout_marginEnd="@dimen/margin_padding_size_8" />
 
             </LinearLayout>
 

@@ -11,12 +11,10 @@ import android.text.InputType
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.dcrandroid.R
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.data.Account
 import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.send_page_sheet.view.*
-import java.util.*
 
 class DestinationAddressCard(context: Context, val layout: LinearLayout, validateAddress: (String) -> Boolean) {
 
@@ -27,9 +25,13 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
     init {
         val activity = context as AppCompatActivity
 
-        val disabledAccounts = EnumSet.of(DisabledAccounts.MixerMixedAccount)
         destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager,
-                layout.destination_account_spinner, R.string.dest_account_picker_title, disabledAccounts)
+                layout.destination_account_spinner)
+        destinationAccountSpinner.init {
+            // disable mixed account
+            !it.isMixerMixedAccount
+        }
+        destinationAccountSpinner.pickerTitle = R.string.dest_account_picker_title
 
         addressInputHelper = InputHelper(context, layout.destination_address_container, validateAddress)
         addressInputHelper.editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS

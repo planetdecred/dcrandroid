@@ -15,21 +15,20 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.adapter.AccountPickerAdapter
-import com.dcrandroid.adapter.DisabledAccounts
 import com.dcrandroid.data.Account
-import com.dcrandroid.extensions.fullCoinWalletsList
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
-import java.util.*
-import kotlin.collections.ArrayList
 
-class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account, private val disabledAccounts: EnumSet<DisabledAccounts>,
-                          val accountSelected: (account: Account) -> Unit?) : FullScreenBottomSheetDialog(),
+class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account) : FullScreenBottomSheetDialog(),
         ViewTreeObserver.OnScrollChangedListener {
 
+    lateinit var filterAccount: (account: Account) -> Boolean
+    lateinit var accountSelected: (account: Account) -> Unit?
     private var layoutManager: LinearLayoutManager? = null
+
+    var singleWalletID: Long? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.account_picker_sheet, container, false)
@@ -41,22 +40,29 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
         account_picker_title.setText(title)
 
         val multiWallet = WalletData.multiWallet!!
-        val wallets = if (!disabledAccounts.contains(DisabledAccounts.WatchOnlyWalletAccount)) multiWallet.openedWalletsList()
-        else multiWallet.fullCoinWalletsList()
+
+        val wallets = multiWallet.openedWalletsList()
+                // What this basically does is remove all other wallet from the list if `singleWalletID` is set.
+                .filter { (singleWalletID != null && it.id == singleWalletID) || singleWalletID == null }
 
         val items = ArrayList<Any>()
 
         for (wallet in wallets) {
-            items.add(wallet)
+            if (wallets.size > 1) {
+                // Do not add wallet header if there's only one wallet displayed
+                items.add(wallet)
+            }
             val accounts = wallet.walletAccounts()
                     .dropLastWhile { it.accountNumber == Int.MAX_VALUE } // remove imported account
             items.addAll(accounts)
         }
 
-        val adapter = AccountPickerAdapter(context!!, items.toTypedArray(), currentAccount, disabledAccounts) {
+        val adapter = AccountPickerAdapter(context!!, items.toTypedArray(), currentAccount)
+        adapter.accountSelected = {
             dismiss()
             accountSelected(it)
         }
+        adapter.filterAccount = filterAccount
         layoutManager = LinearLayoutManager(context)
         account_picker_rv.layoutManager = layoutManager
         account_picker_rv.adapter = adapter

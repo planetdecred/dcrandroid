@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_padding_size_8"
+    android:paddingStart="@dimen/margin_padding_size_16"
+    android:paddingEnd="@dimen/margin_padding_size_16"
+    android:paddingTop="@dimen/margin_padding_size_12"
+    android:paddingBottom="@dimen/margin_padding_size_12"
+    android:background="@drawable/bg_gray_corner_8dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/edit_text_size_16"
+        android:fontFamily="@font/source_sans_pro"
+        android:textColor="@color/darkBlueTextColor"
+        android:id="@+id/mixer_status_wallet_name"
+        tools:text="Wallet-0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/unmixed_balance"
+            android:textColor="#596d81"
+            android:textSize="@dimen/edit_text_size_14"
+            android:fontFamily="@font/source_sans_pro" />
+
+        <TextView
+            android:id="@+id/mixer_status_unmixed_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/source_sans_pro"
+            android:textColor="@color/darkBlueTextColor"
+            android:textSize="16sp"
+            tools:text="107.74431858 DCR" />
+
+    </LinearLayout>
+
+</LinearLayout>

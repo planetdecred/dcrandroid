@@ -21,12 +21,14 @@
     <dimen name="pinview_vertical_spacing">16dp</dimen>
 
     <!--Padding and Margins -->
+    <dimen name="margin_padding_size_05">0.5dp</dimen>
     <dimen name="margin_padding_size_2">2dp</dimen>
     <dimen name="margin_padding_size_4">4dp</dimen>
     <dimen name="margin_padding_size_6">6dp</dimen>
     <dimen name="margin_padding_size_8">8dp</dimen>
     <dimen name="margin_padding_size_12">12dp</dimen>
     <dimen name="margin_padding_size_14">14dp</dimen>
+    <dimen name="margin_padding_size_15">15dp</dimen>
     <dimen name="margin_padding_size_16">16dp</dimen>
     <dimen name="margin_padding_size_18">18dp</dimen>
     <dimen name="margin_padding_size_20">20dp</dimen>

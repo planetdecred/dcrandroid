@@ -37,8 +37,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="@dimen/margin_padding_size_16"
-                android:paddingEnd="0dp"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="@dimen/margin_padding_size_8"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
@@ -52,15 +52,51 @@
                     android:id="@+id/go_back"
                     app:srcCompat="@drawable/ic_back" />
 
-                <TextView
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/privacy"
+                        android:textSize="@dimen/edit_text_size_20"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/wallet_name"
+                        tools:text="Wallet-0"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:textSize="@dimen/edit_text_size_14"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/privacy"
-                    android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
-                    android:includeFontPadding="false"
-                    app:fontFamily="@font/source_sans_pro" />
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:gravity="end">
+
+                    <ImageView
+                        android:layout_width="@dimen/margin_padding_size_40"
+                        android:layout_height="@dimen/margin_padding_size_40"
+                        android:id="@+id/iv_info"
+                        android:padding="@dimen/margin_padding_size_8"
+                        app:srcCompat="@drawable/ic_info"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/bg_primary_ripple" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -68,246 +104,402 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:id="@+id/create_accounts_card"
-        android:layout_margin="@dimen/margin_padding_size_8"
-        android:paddingTop="9dp"
-        android:paddingStart="@dimen/margin_padding_size_16"
-        android:paddingEnd="@dimen/margin_padding_size_16"
-        android:paddingBottom="@dimen/margin_padding_size_16"
-        android:background="@drawable/card_bg"
-        android:elevation="4dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/source_sans_pro_semibold"
-            android:textSize="@dimen/edit_text_size_18"
-            android:text="@string/setup_needed_accounts" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/source_sans_pro"
-            android:textSize="@dimen/edit_text_size_16"
-            android:layout_marginTop="@dimen/margin_padding_size_8"
-            android:layout_marginBottom="@dimen/edit_text_size_16"
-            android:text="@string/create_mixer_account_summary" />
-
-        <include
-            android:id="@+id/mixed_account_name_input"
-            layout="@layout/custom_input" />
-
-        <include
-            android:id="@+id/change_account_name_input"
-            layout="@layout/custom_input"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end">
-
-            <TextView
-                style="@style/textViewButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_continue"
-                android:enabled="false"
-                android:text="@string/_continue" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:indeterminate="true"
-                android:theme="@style/CircularProgressBar"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_account_mixer_card"
-        android:layout_margin="@dimen/margin_padding_size_8"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/margin_padding_size_8"
-        android:paddingBottom="@dimen/margin_padding_size_8"
-        android:background="@drawable/card_bg">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/margin_padding_size_16"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/ripple"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:text="@string/mixed_account"
-                android:textColor="@color/darkBlueTextColor"
-                android:fontFamily="@font/source_sans_pro"
-                android:textSize="@dimen/edit_text_size_16" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/mixed_account_label"
-                android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_padding_size_4"
-                tools:text="mixed"
-                android:textColor="@color/blueGraySecondTextColor"
-                android:fontFamily="@font/source_sans_pro"
-                android:textSize="@dimen/edit_text_size_14" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/margin_padding_size_16"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/ripple"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:text="@string/unmixed_account"
-                android:textColor="@color/darkBlueTextColor"
-                android:fontFamily="@font/source_sans_pro"
-                android:textSize="@dimen/edit_text_size_16" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/change_account_label"
-                android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_padding_size_4"
-                tools:text="unmixed"
-                android:textColor="@color/blueGraySecondTextColor"
-                android:fontFamily="@font/source_sans_pro"
-                android:textSize="@dimen/edit_text_size_14" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/mix_tx_change"
-            android:layout_marginTop="@dimen/margin_padding_size_8"
-            android:padding="@dimen/margin_padding_size_16"
-            android:gravity="center_vertical"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/ripple"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="@dimen/margin_padding_size_16"
+                android:background="@drawable/card_bg_14"
+                android:elevation="1dp"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:padding="@dimen/margin_padding_size_16"
                 android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@id/pref_title"
-                android:includeFontPadding="false"
-                android:text="@string/mix_tx_change"
-                android:textColor="@color/darkBlueTextColor"
-                android:fontFamily="@font/source_sans_pro"
-                android:textSize="@dimen/edit_text_size_16" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_padding_size_4"
-                android:textColor="@color/blueGraySecondTextColor"
-                android:fontFamily="@font/source_sans_pro"
-                android:text="@string/mix_tx_change_summary"
-                android:textSize="@dimen/edit_text_size_14" />
+                    <ImageView
+                        android:layout_width="@dimen/margin_padding_size_24"
+                        android:layout_height="@dimen/margin_padding_size_24"
+                        android:src="@drawable/ic_mixer" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/margin_padding_size_16"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mixer"
+                            android:includeFontPadding="false"
+                            android:fontFamily="@font/source_sans_pro"
+                            android:textSize="@dimen/edit_text_size_18"
+                            android:textColor="@color/darkBlueTextColor" />
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="@dimen/margin_padding_size_16"
+                                android:layout_height="@dimen/margin_padding_size_16"
+                                android:layout_marginEnd="@dimen/margin_padding_size_4"
+                                android:id="@+id/iv_mixer_status"
+                                android:visibility="gone"
+                                android:src="@drawable/ic_alert"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_mixer_status"
+                                android:text="@string/ready_to_mix"
+                                android:includeFontPadding="false"
+                                android:fontFamily="@font/source_sans_pro"
+                                android:textSize="@dimen/edit_text_size_14"
+                                android:textColor="@color/blueGraySecondTextColor" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Switch
+                        android:id="@+id/mixer_toggle_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/Switch" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_gray_corner_8dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:paddingTop="@dimen/margin_padding_size_12"
+                    android:paddingBottom="@dimen/margin_padding_size_12"
+                    android:paddingStart="@dimen/margin_padding_size_16"
+                    android:paddingEnd="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/unmixed_balance"
+                            android:textColor="#596d81"
+                            android:textSize="@dimen/edit_text_size_14"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <TextView
+                            android:id="@+id/unmixed_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/darkBlueTextColor"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/source_sans_pro"
+                            tools:text="107.74431858 DCR" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/margin_padding_size_24"
+                        android:layout_height="@dimen/margin_padding_size_24"
+                        android:src="@drawable/ic_down_arrow"
+                        android:id="@+id/mixing_arrow"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_padding_size_8"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_8"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/mixed_balance"
+                            android:textColor="#596d81"
+                            android:textSize="@dimen/edit_text_size_14"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                        <TextView
+                            android:id="@+id/mixed_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/darkBlueTextColor"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/source_sans_pro"
+                            tools:text="0 DCR" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@id/pref_switch"
-                android:theme="@style/Switch" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_padding_size_8"
-            android:id="@+id/start_account_mixer"
-            android:padding="@dimen/margin_padding_size_16"
-            android:gravity="center_vertical"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/ripple"
-            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_margin="@dimen/margin_padding_size_8"
+                android:elevation="1dp"
                 android:orientation="vertical"
-                >
+                android:paddingTop="@dimen/margin_padding_size_16"
+                android:paddingStart="@dimen/margin_padding_size_16"
+                android:paddingEnd="0dp"
+                android:paddingBottom="@dimen/margin_padding_size_24"
+                android:background="@drawable/card_bg_14">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="@string/mixer"
-                    android:textColor="@color/darkBlueTextColor"
                     android:fontFamily="@font/source_sans_pro"
-                    android:textSize="@dimen/edit_text_size_16" />
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:text="@string/mixer_settings"
+                    android:textColor="@color/darkerBlueGrayTextColor" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/mixer_not_running"
-                    android:includeFontPadding="false"
-                    android:layout_marginTop="@dimen/margin_padding_size_4"
-                    android:textColor="@color/blueGraySecondTextColor"
-                    android:fontFamily="@font/source_sans_pro"
-                    android:text="@string/not_running"
-                    android:textSize="@dimen/edit_text_size_14" />
+                    android:layout_marginTop="@dimen/margin_padding_size_24"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/mixed_account"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/mixed_account_label"
+                        android:includeFontPadding="false"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        tools:text="mixed"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_14"
+                    android:background="#e6eaed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/unmixed_account"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/unmixed_account_label"
+                        android:includeFontPadding="false"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        tools:text="unmixed"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_14"
+                    android:background="#e6eaed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/account_branch"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/mixed_account_branch"
+                        android:includeFontPadding="false"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        tools:text="0"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_14"
+                    android:background="#e6eaed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/shuffle_server"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:id="@+id/shuffle_server"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        tools:text="cspp.decred.org"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_14"
+                    android:background="#e6eaed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/shuffle_port"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:id="@+id/shuffle_port"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        tools:text="15760"
+                        android:textColor="@color/blueGraySecondTextColor"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mix_tx_change"
+                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:background="@drawable/ripple"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/margin_padding_size_16"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@id/pref_title"
+                            android:includeFontPadding="false"
+                            android:text="@string/mix_tx_change"
+                            android:textColor="@color/darkBlueTextColor"
+                            android:fontFamily="@font/source_sans_pro"
+                            android:textSize="@dimen/edit_text_size_16" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:layout_marginTop="@dimen/margin_padding_size_4"
+                            android:textColor="@color/blueGraySecondTextColor"
+                            android:fontFamily="@font/source_sans_pro"
+                            android:text="@string/mix_tx_change_summary"
+                            android:textSize="@dimen/edit_text_size_14" />
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_switch"
+                        android:theme="@style/Switch" />
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_padding_size_16"
-                android:id="@+id/switch_start_account_mixer"
-                android:theme="@style/Switch" />
-
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

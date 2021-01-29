@@ -10,11 +10,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import com.dcrandroid.activities.AccountMixerActivity
+import com.dcrandroid.activities.SetupPrivacy
 import com.dcrandroid.activities.VerifySeedInstruction
 import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
@@ -27,8 +30,10 @@ import com.dcrandroid.fragments.PRIVACY_SETTINGS_REQUEST_CODE
 import com.dcrandroid.fragments.VERIFY_SEED_REQUEST_CODE
 import com.dcrandroid.fragments.WALLET_SETTINGS_REQUEST_CODE
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.PopupMessage
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.wallet_row.view.*
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +51,8 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
     private val multiWallet = WalletData.multiWallet!!
     private var expanded = -1
 
+    private var popupMessage: Toast? = null
+
     init {
         reloadList()
     }
@@ -59,6 +66,10 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
             items.addAll(watchOnlyWallets)
         }
         notifyDataSetChanged()
+    }
+
+    fun onPause() {
+        popupMessage?.cancel()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsViewHolder {
@@ -103,10 +114,12 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                 CoinFormat.formatDecred(wallet.totalWalletBalance()))
 
         if (wallet.encryptedSeed == null) {
-            holder.backupNeeded.hide()
+            holder.walletStatus.hide()
             holder.backupWarning.hide()
         } else {
-            holder.backupNeeded.show()
+            holder.walletStatus.show()
+            holder.walletStatus.setText(R.string.not_backed_up)
+            holder.walletStatus.setTextColor(fragment.context!!.getColor(R.color.colorError))
             holder.backupWarning.show()
 
             holder.backupWarning.setOnClickListener {
@@ -114,6 +127,15 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                 intent.putExtra(Constants.WALLET_ID, wallet.id)
                 launchIntent(intent, VERIFY_SEED_REQUEST_CODE)
             }
+        }
+
+        if (wallet.isAccountMixerActive) {
+            holder.walletStatus.show()
+            holder.walletStatus.setText(R.string.mixing_elp)
+            holder.walletStatus.setTextColor(fragment.context!!.getColor(R.color.blueGraySecondTextColor))
+            holder.goToMixer.show()
+        } else {
+            holder.goToMixer.hide()
         }
 
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
@@ -136,8 +158,8 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
             holder.expand.show()
             holder.expand.setImageResource(R.drawable.ic_collapse02)
 
-            containerBackground = R.drawable.curved_top_ripple
-            viewBackground = R.drawable.card_bg
+            containerBackground = R.drawable.ripple_bg_white_top_corner_14dp
+            viewBackground = R.drawable.card_bg_14
         } else {
             holder.accountsList.adapter = null
             holder.accountsLayout.hide()
@@ -162,8 +184,8 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                 holder.expand.show()
                 holder.expand.setImageResource(R.drawable.ic_expand02)
 
-                viewBackground = R.drawable.card_bg
-                containerBackground = R.drawable.ripple_bg_white_corners_8dp
+                viewBackground = R.drawable.card_bg_14
+                containerBackground = R.drawable.ripple_bg_white_corners_14dp
             }
         }
 
@@ -196,17 +218,38 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
         }
 
-        if (wallet.requiresPrivacySetup()) {
-            holder.notificationDot.show()
-        } else {
-            holder.notificationDot.hide()
+        val shownPrivacyPopup = multiWallet.readBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
+        if (!shownPrivacyPopup) {
+            var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
+            globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+                popupMessage = PopupMessage.showText(holder.more, R.string.privacy_popup_message, Toast.LENGTH_SHORT)
+                popupMessage?.show()
+
+                holder.more.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+
+                multiWallet.setBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, true)
+            }
+
+            holder.more.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
         }
+
+        holder.goToMixer.setOnClickListener {
+            val intent = Intent(fragment.context!!, AccountMixerActivity::class.java)
+            intent.putExtra(Constants.WALLET_ID, wallet.id)
+            fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
+        }
+
         // popup menu
         holder.more.setOnClickListener {
 
+            popupMessage?.cancel()
+
+            val dividerWidth = fragment.context!!.resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
+            val hasCheckedPrivacyPage = multiWallet.readBoolConfigValueForKey(Constants.CHECKED_PRIVACY_PAGE, false)
+
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-                    PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, wallet.requiresPrivacySetup()),
+                    PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, !hasCheckedPrivacyPage),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
             )
@@ -220,7 +263,14 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                         fragment.context!!.startActivity(intent)
                     }
                     1 -> {
-                        val intent = Intent(fragment.context!!, AccountMixerActivity::class.java)
+
+                        val mixerConfigIsSet = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)
+
+                        val intent = if (mixerConfigIsSet) {
+                            Intent(fragment.context!!, AccountMixerActivity::class.java)
+                        } else {
+                            Intent(fragment.context!!, SetupPrivacy::class.java)
+                        }
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
                     }
@@ -299,13 +349,13 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
         val walletIcon = itemView.wallet_icon
         val walletName = itemView.wallet_name
         val totalBalance = itemView.wallet_total_balance
-        val backupNeeded = itemView.backup_needed
+        val walletStatus = itemView.tv_wallet_status
 
         val more = itemView.iv_more
-        val notificationDot = itemView.notification_dot
         val expand = itemView.expand_icon
         val backupWarning = itemView.backup_warning
 
+        val goToMixer = itemView.go_to_mixer
         val container = itemView.container
         val accountsLayout = itemView.accounts
 

@@ -100,7 +100,6 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         holder.itemView.setOnClickListener {
             TransactionDetailsDialog(transaction).show(context)
         }
-
     }
 }
 

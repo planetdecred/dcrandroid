@@ -6,8 +6,11 @@
 
 package com.dcrandroid.util
 
+import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.style.CharacterStyle
+import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import dcrlibwallet.Dcrlibwallet
 import java.text.DecimalFormat
@@ -23,22 +26,31 @@ object CoinFormat {
 
     fun format(str: String, relativeSize: Float = 0.7f): Spannable {
         val spannable = SpannableString(str)
-
-        return formatSpannable(spannable, relativeSize)
+        return formatRelative(spannable, relativeSize)
     }
 
-    fun formatSpannable(spannable: Spannable, relativeSize: Float = 0.7f): Spannable {
+    fun formatRelative(spannable: Spannable, relativeSize: Float = 0.7f): Spannable {
+        val span = RelativeSizeSpan(relativeSize)
+        return formatSpannable(spannable, span)
+    }
+
+    fun formatAlpha(dcr: Long): Spannable {
+        val str = formatDecred(Dcrlibwallet.amountCoin(dcr)) + " DCR"
+        val spannable = SpannableString(str)
+        val span = ForegroundColorSpan(Color.parseColor("#596D81"))
+        return formatSpannable(spannable, span)
+    }
+
+    private fun formatSpannable(spannable: Spannable, span: CharacterStyle): Spannable {
 
         val removeRelativeSpan = spannable.getSpans(0, spannable.length, RelativeSizeSpan::class.java)
-        for (span in removeRelativeSpan) {
-            spannable.removeSpan(span)
+        for (s in removeRelativeSpan) {
+            spannable.removeSpan(s)
         }
 
         val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)*\\.)\\d{2,}").matcher(spannable)
         val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)*\\.)\\d").matcher(spannable)
         val noDecimal = Pattern.compile("([0-9]{1,3},*)+").matcher(spannable)
-
-        val span = RelativeSizeSpan(relativeSize)
 
         var startIndex: Int = -1
 

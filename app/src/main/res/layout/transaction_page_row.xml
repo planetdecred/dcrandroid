@@ -7,17 +7,15 @@
 <!-- Shadow Layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/margin_padding_size_8"
     android:layout_marginStart="@dimen/margin_padding_size_8"
-    android:layout_marginRight="@dimen/margin_padding_size_8"
     android:layout_marginEnd="@dimen/margin_padding_size_8"
     android:clickable="true"
     android:focusable="true"
     android:id="@+id/ripple_layout"
-    android:elevation="@dimen/margin_padding_size_4">
+    android:elevation="@dimen/margin_padding_size_2">
 
     <!-- Ripple Color -->
     <LinearLayout
@@ -138,5 +136,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
 </LinearLayout>

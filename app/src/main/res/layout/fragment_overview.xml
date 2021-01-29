@@ -46,62 +46,33 @@
 
         </LinearLayout>
 
-        <include layout="@layout/overview_backup_warning" />
-
-        <include layout="@layout/mixer_settings_reminder" />
-
         <LinearLayout
-            android:id="@+id/cspp_running_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_padding_size_4"
-            android:layout_marginEnd="@dimen/margin_padding_size_8"
-            android:layout_marginStart="@dimen/margin_padding_size_8"
-            android:layout_marginBottom="@dimen/margin_padding_size_8"
-            android:elevation="4dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:background="@drawable/card_bg"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/mixer_status"
-                android:textColor="#3d5873"
-                android:textSize="14sp"
-                app:fontFamily="@font/source_sans_pro" />
+            <include layout="@layout/overview_privacy_introduction" />
 
-            <TextView
-                android:id="@+id/tv_mixer_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp"
-                android:textColor="#8997a5"
-                android:textSize="16sp"
-                android:text="@string/wallet_mixer_status"
-                app:fontFamily="@font/source_sans_pro" />
+            <include layout="@layout/overview_backup_warning" />
+
+            <include layout="@layout/overview_mixer_status_card" />
+
+            <include layout="@layout/transactions_overview_layout" />
 
         </LinearLayout>
-
-        <include layout="@layout/transactions_overview_layout" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="80dp"
-            android:background="@drawable/card_bg"
-            android:elevation="4dp"
+            android:background="@drawable/card_bg_14"
             android:orientation="vertical"
             android:id="@+id/sync_layout"
-            app:elevation="4dp">
+            android:elevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,6 +111,13 @@
                     app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/primaryRipple"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:layout_marginStart="@dimen/margin_padding_size_16"/>
 
             <include layout="@layout/synced_unsynced_layout" />
 

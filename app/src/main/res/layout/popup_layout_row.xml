@@ -5,33 +5,41 @@
   ~ license that can be found in the LICENSE file.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:background="@drawable/ripple"
     android:clickable="true"
     android:focusable="true"
-    android:padding="@dimen/margin_padding_size_16">
+    android:padding="@dimen/margin_padding_size_16"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/popup_text"
-        tools:text="Rename wallet"
+        tools:text="Rename"
         android:textSize="@dimen/edit_text_size_16"
         android:textColor="@color/darkBlueTextColor"
         android:fontFamily="@font/source_sans_pro" />
 
-    <View
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="10dp"
-        android:layout_gravity="end"
-        android:id="@+id/notification_dot"
-        android:layout_toEndOf="@id/popup_text"
-        android:visibility="invisible"
-        tools:visibility="visible"
-        android:background="@drawable/offline_dot" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_badge"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:textSize="10sp"
+        android:visibility="visible"
+        android:textColor="@color/white"
+        android:text="@string/new_caps"
+        android:background="@color/blue"
+        android:layout_marginStart="44dp"
+        android:paddingStart="@dimen/margin_padding_size_2"
+        android:paddingEnd="@dimen/margin_padding_size_2"
+        />
 
-</RelativeLayout>
+</LinearLayout>
