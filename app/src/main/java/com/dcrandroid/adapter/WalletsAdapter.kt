@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.privacy.AccountMixerActivity
 import com.dcrandroid.activities.privacy.SetupPrivacy
-import com.dcrandroid.activities.verifyseed.VerifySeedInstruction
-import com.dcrandroid.activities.WalletSettings
 import com.dcrandroid.activities.security.SignMessage
+import com.dcrandroid.activities.verifyseed.VerifySeedInstruction
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.AccountDetailsDialog

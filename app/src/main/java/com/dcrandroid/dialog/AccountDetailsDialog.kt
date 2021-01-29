@@ -112,17 +112,17 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
                 account_details_imm_rewards_row.show()
             }
 
-            if(balance.lockedByTickets > 0){
+            if (balance.lockedByTickets > 0) {
                 account_details_locked_by_tickets.text = CoinFormat.format(balance.lockedByTickets)
                 account_details_locked_by_tickets_row.show()
             }
 
-            if(balance.votingAuthority > 0){
+            if (balance.votingAuthority > 0) {
                 account_details_voting_authority.text = CoinFormat.format(balance.votingAuthority)
                 account_details_voting_authority_row.show()
             }
 
-            if(balance.immatureStakeGeneration > 0){
+            if (balance.immatureStakeGeneration > 0) {
                 account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
                 account_details_imm_stake_gen_row.show()
             }

@@ -114,7 +114,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                 }
             }
             else -> {
-                val title = when(transaction.type){
+                val title = when (transaction.type) {
                     Dcrlibwallet.TxTypeTicketPurchase -> R.string.ticket_purchase
                     Dcrlibwallet.TxTypeVote -> R.string.vote
                     Dcrlibwallet.TxTypeRevocation -> R.string.revoked

@@ -45,7 +45,7 @@ class RequestNameDialog(private val dialogTitle: Int, private val currentName: S
             val filterArray = Array(1) { LengthFilter(MAX_NAME_LENGTH) }
             editText.filters = filterArray
 
-            editText.setSingleLine(true)
+            editText.isSingleLine = true
             editText.setText(currentName)
             editText.requestFocus()
             editText.setSelection(0, currentName.length)

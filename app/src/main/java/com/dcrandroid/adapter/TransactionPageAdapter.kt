@@ -133,7 +133,7 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
                     title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
                         R.string.immature
                     } else {
-                        if(wallet.ticketHasVotedOrRevoked(transaction.hash)){
+                        if (wallet.ticketHasVotedOrRevoked(transaction.hash)) {
                             R.string.purchased
                         } else {
                             R.string.live
