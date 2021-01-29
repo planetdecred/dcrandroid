@@ -6,6 +6,8 @@
 
 package com.dcrandroid.extensions
 
+import com.dcrandroid.data.Account
+import com.dcrandroid.data.parseAccounts
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dcrlibwallet.MultiWallet
@@ -27,6 +29,19 @@ fun MultiWallet.openedWalletsList(): ArrayList<Wallet> {
     wallets.sortBy { it.id }
 
     return wallets
+}
+
+fun MultiWallet.firstWalletWithAValidAccount(filterAccount: (account: Account) -> Boolean): Wallet? {
+    val wallets = this.openedWalletsList()
+
+    for (wallet in wallets) {
+        val accounts = parseAccounts(wallet.accounts).accounts.filter { filterAccount(it) }
+        if (accounts.size > 0) {
+            return wallet
+        }
+    }
+
+    return null
 }
 
 fun MultiWallet.fullCoinWalletsList(): ArrayList<Wallet> {
