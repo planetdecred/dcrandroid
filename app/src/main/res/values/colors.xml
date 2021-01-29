@@ -30,7 +30,6 @@
 
     <!--Text-->
     <color name="blackFirstTextColor">#212121</color>
-    <color name="grayTextColor">#727272</color>
     <color name="blueGraySecondTextColor">#596D81</color>
     <color name="blueGrayFirstTextColor">#617386</color>
     <color name="lightGrayTextColor">#8997A5</color>
@@ -42,7 +41,6 @@
     <!--/Text-->
 
     <!--Background-->
-    <color name="lightGreyBackgroundColor">#D6D8D8</color>
     <color name="send_receive_button_background_color">#2970ff</color>
     <!--/Background-->
 

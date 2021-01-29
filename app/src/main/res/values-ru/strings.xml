@@ -23,7 +23,6 @@
     <string name="testnet">testnet</string>
     <string name="general">Основные</string>
     <string name="view_on_dcrdata">просмотреть на dcrdata</string>
-    <string name="default_account">Аккаунт по умолчанию</string>
     <string name="exit_cap">ВЫХОД</string>
     <string name="delete">Удалить</string>
     <string name="no">Нет</string>
@@ -134,7 +133,6 @@
     <!--/Send Fragment-->
 
     <!--Confirm Transaction Dialog-->
-    <string name="toConfirmEnterYourPassword">Чтобы подтвердить, введите ваш пароль:</string>
     <string name="to">в:</string>
     <!--/Confirm Transaction Dialog-->
 
@@ -159,5 +157,4 @@
     <string name="crash_report_copied">Отчёт о сбое был скопирован.</string>
     <string name="hide_report">Скрыть отчёт</string>
     <string name="view_report">Просмотреть отчёт</string>
-    <string name="copy">Копировать</string>
 </resources>
