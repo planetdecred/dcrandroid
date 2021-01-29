@@ -156,9 +156,11 @@
     <string name="wallet_new_transaction">[%1$s] New Transaction</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; %1$d Confirmations]]></string>
     <string name="tx_details_pending_confirmation"><![CDATA[<font color="#8997A5">Pending</font> &centerdot; %1$d Confirmation]]></string>
+    <string name="wallet_ticket_voted">[%1$s] A ticket just voted</string>
     <string name="ticket_voted">A ticket just voted</string>
+    <string name="wallet_ticket_revoked">[%1$s] A ticket was revoked</string>
     <string name="ticket_revoked">A ticket was revoked</string>
-    <string name="vote_reward">Vote Reward: %1$d DCR</string>
+    <string name="vote_reward">Vote Reward: %1$s DCR</string>
 
     <string-array name="timestamp_sort">
         <item>Newest</item>

@@ -166,8 +166,18 @@ object Utils {
         val wallet = multiWallet.walletWithID(transaction.walletID)
 
         val title = when (transaction.type) {
-            Dcrlibwallet.TxTypeVote -> context.getString(R.string.ticket_voted)
-            Dcrlibwallet.TxTypeRevocation -> context.getString(R.string.ticket_revoked)
+            Dcrlibwallet.TxTypeVote ->
+                if (multiWallet.openedWalletsCount() > 1) {
+                    context.getString(R.string.wallet_ticket_voted, wallet.name)
+                } else {
+                    context.getString(R.string.ticket_voted)
+                }
+            Dcrlibwallet.TxTypeRevocation ->
+                if (multiWallet.openedWalletsCount() > 1) {
+                    context.getString(R.string.wallet_ticket_revoked, wallet.name)
+                } else {
+                    context.getString(R.string.ticket_revoked)
+                }
             else ->
                 if (multiWallet.openedWalletsCount() > 1) {
                     context.getString(R.string.wallet_new_transaction, wallet.name)
@@ -177,7 +187,7 @@ object Utils {
         }
 
         val amount = when (transaction.type) {
-            Dcrlibwallet.TxTypeVote -> context.getString(R.string.vote_reward, transaction.voteReward)
+            Dcrlibwallet.TxTypeVote -> context.getString(R.string.vote_reward, CoinFormat.formatDecred(transaction.voteReward))
             Dcrlibwallet.TxTypeRevocation -> ""
             else ->
                 amount
