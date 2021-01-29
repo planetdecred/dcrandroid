@@ -44,6 +44,15 @@ class Transaction : Serializable {
     @SerializedName("timestamp")
     var timestamp: Long = 0
 
+    @SerializedName("is_mixed")
+    var isMixed: Boolean = false
+
+    @SerializedName("mix_denom")
+    var mixDenomination: Long = 0
+
+    @SerializedName("mix_count")
+    var mixCount: Int = 0
+
     @SerializedName("ticket_spent_hash")
     var ticketSpentHash: String = ""
 

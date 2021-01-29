@@ -7,9 +7,10 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:minHeight="56dp"
     android:clickable="true"
     android:focusable="true"
@@ -18,34 +19,30 @@
     android:paddingTop="@dimen/margin_padding_size_8"
     android:paddingBottom="@dimen/margin_padding_size_8"
     android:paddingLeft="@dimen/margin_padding_size_16"
-    android:paddingRight="@dimen/margin_padding_size_16"
-    >
+    android:paddingRight="@dimen/margin_padding_size_16">
 
     <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/margin_padding_size_24"
+        android:layout_height="@dimen/margin_padding_size_24"
         app:srcCompat="@drawable/ic_receive"
-        android:id="@+id/tx_icon"
-        />
+        android:id="@+id/tx_icon" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginLeft="14dp"
-        android:layout_marginStart="14dp">
+        android:layout_marginStart="@dimen/margin_padding_size_14">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/edit_text_size_20"
             android:textColor="@color/darkBlueTextColor"
-            android:text="8.61990311 DCR"
-            app:fontFamily="@font/source_sans_pro"
+            tools:text="8.61990311 DCR"
+            android:fontFamily="@font/source_sans_pro"
             android:id="@+id/amount"
-            android:includeFontPadding="false"
-            android:letterSpacing="0.05" />
+            android:includeFontPadding="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,7 +53,7 @@
             android:padding="@dimen/margin_padding_size_2"
             android:textSize="@dimen/edit_text_size_12"
             android:textColor="@color/lightGrayTextColor"
-            android:text="wallet-1"
+            tools:text="wallet-1"
             android:visibility="gone"
             app:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false" />
@@ -66,8 +63,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Pending"
+        android:textSize="@dimen/edit_text_size_16"
+        tools:text="Pending"
         android:textColor="#8997a5"
         app:fontFamily="@font/source_sans_pro"
         android:gravity="center_vertical"
@@ -75,11 +72,11 @@
         />
 
     <ImageView
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="@dimen/margin_padding_size_12"
+        android:layout_height="@dimen/margin_padding_size_12"
         android:id="@+id/img_status"
         android:layout_marginStart="@dimen/margin_padding_size_8"
-        android:layout_marginLeft="@dimen/margin_padding_size_8"
+        tools:layout_marginLeft="@dimen/margin_padding_size_8"
         app:srcCompat="@drawable/ic_pending"/>
 
 </LinearLayout>

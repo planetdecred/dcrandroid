@@ -18,6 +18,7 @@ import com.dcrandroid.R
 import com.dcrandroid.adapter.TransactionPageAdapter
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.extensions.hide
+import com.dcrandroid.extensions.setDivider
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Deserializer
 import com.google.gson.GsonBuilder
@@ -83,6 +84,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
         layoutManager = LinearLayoutManager(context)
         recycler_view.layoutManager = layoutManager
+        recycler_view.setDivider(R.drawable.recycler_view_divider_pad_56)
         recycler_view.adapter = adapter
         recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
 

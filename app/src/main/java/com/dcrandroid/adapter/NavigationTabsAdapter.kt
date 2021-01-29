@@ -53,7 +53,7 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
             holder.icon.setImageResource(tabs[position].inactiveIcon)
         }
 
-        if (position == 2 && backupsNeeded > 0) { // Wallets Page
+        if (position == 2 && (backupsNeeded > 0)) { // Wallets Page
             holder.backupIcon.show()
         } else {
             holder.backupIcon.hide()

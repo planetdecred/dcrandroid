@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -11,28 +12,37 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_padding_size_4"
     android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:layout_marginBottom="4dp"
     android:layout_marginStart="@dimen/margin_padding_size_8"
-    android:layout_marginBottom="@dimen/margin_padding_size_8"
-    android:elevation="4dp"
-    android:background="@drawable/card_bg"
+    android:elevation="1dp"
+    android:background="@drawable/card_bg_14"
     android:orientation="vertical" >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="@dimen/margin_padding_size_15"
+        android:layout_marginBottom="@dimen/margin_padding_size_15"
+        android:layout_marginStart="@dimen/margin_padding_size_16"
         android:text="@string/recent_transactions"
         android:textColor="#3d5873"
         android:textSize="14sp"
         app:fontFamily="@font/source_sans_pro" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/primaryRipple"
+        android:layout_marginStart="@dimen/margin_padding_size_16"/>
+
     <TextView
         android:id="@+id/tv_no_transactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="16dp"
+        android:padding="@dimen/margin_padding_size_20"
+        android:paddingBottom="@dimen/margin_padding_size_20"
+        android:paddingStart="@dimen/margin_padding_size_16"
+        android:paddingEnd="@dimen/margin_padding_size_16"
         android:textColor="#8997a5"
         android:textSize="16sp"
         android:text="@string/no_transactions_yet"
@@ -52,7 +62,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="#edeff1" />
 
         <LinearLayout
@@ -73,7 +83,7 @@
                 android:paddingBottom="14dp"
                 android:textColor="#2970ff"
                 android:textSize="@dimen/edit_text_size_16"
-                android:text="See all"
+                android:text="@string/see_all"
                 app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>

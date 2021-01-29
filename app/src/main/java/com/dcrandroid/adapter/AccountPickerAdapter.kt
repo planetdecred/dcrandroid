@@ -18,8 +18,10 @@ import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
 
-class AccountPickerAdapter(val items: Array<Any>, val context: Context, val currentAccount: Account,
-                           val accountSelected: (account: Account) -> Unit?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountPickerAdapter(val context: Context, val items: Array<Any>, val currentAccount: Account) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    lateinit var filterAccount: (account: Account) -> Boolean
+    lateinit var accountSelected: (account: Account) -> Unit? // must be set
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -76,6 +78,8 @@ class AccountPickerAdapter(val items: Array<Any>, val context: Context, val curr
             holder.itemView.setOnClickListener {
                 accountSelected(item)
             }
+
+            holder.itemView.isEnabled = filterAccount(item)
         }
     }
 

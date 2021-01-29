@@ -10,7 +10,7 @@
     <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/transparent"/>
-            <corners android:radius="4dp"/>
+            <corners android:radius="@dimen/margin_padding_size_8"/>
         </shape>
     </item>
 
@@ -20,14 +20,14 @@
                 <shape android:shape="rectangle">
                     <solid android:color="@android:color/white" />
                     <corners
-                        android:radius="4dp"/>
+                        android:radius="@dimen/margin_padding_size_8"/>
                 </shape>
             </item>
 
             <item>
                 <shape android:shape="rectangle">
                     <solid android:color="@android:color/transparent"/>
-                    <corners android:radius="4dp"/>
+                    <corners android:radius="@dimen/margin_padding_size_8"/>
                 </shape>
             </item>
 

@@ -7,10 +7,7 @@
 package com.dcrandroid.extensions
 
 import com.dcrandroid.data.Account
-import com.dcrandroid.data.Constants
 import com.dcrandroid.data.parseAccounts
-import com.dcrandroid.util.WalletData
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 
 fun Wallet.walletAccounts(): ArrayList<Account> {

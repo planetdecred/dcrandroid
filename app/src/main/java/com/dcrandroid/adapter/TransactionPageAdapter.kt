@@ -53,9 +53,9 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
 
         // background ripple
         val backgroundResource: Int = when {
-            itemCount == 1 -> R.drawable.ripple_bg_white_corners_8dp // only item on the list
-            position == 0 -> R.drawable.transactions_row_top
-            position == (itemCount - 1) -> R.drawable.transactions_row_bottom_bg
+            itemCount == 1 -> R.drawable.ripple_bg_white_corners_14dp // only item on the list
+            position == 0 -> R.drawable.ripple_bg_white_top_corner_14dp
+            position == (itemCount - 1) -> R.drawable.curved_bottom_ripple_14dp
             else -> R.drawable.transactions_row_bg
         }
 
@@ -100,16 +100,20 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
         }
 
         if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                -transaction.amount
+            if (transaction.isMixed) {
+                holder.amount.text = context.getString(R.string.mix)
             } else {
-                transaction.amount
-            }
-            val strAmount = CoinFormat.formatDecred(txAmount)
+                val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+                    -transaction.amount
+                } else {
+                    transaction.amount
+                }
+                val strAmount = CoinFormat.formatDecred(txAmount)
 
-            holder.amount.apply {
-                text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
+                holder.amount.apply {
+                    text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
+                }
             }
 
             holder.itemView.ticket_price.hide()
@@ -170,6 +174,5 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
         }
 
     }
-
 
 }

@@ -243,7 +243,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             layout.currency_label.setTextColor(context.resources.getColor(R.color.darkBlueTextColor))
             hideOrShowClearButton()
             if (currencyIsDCR) {
-                CoinFormat.formatSpannable(s, AmountRelativeSize)
+                CoinFormat.formatRelative(s, AmountRelativeSize)
             }
         }
 

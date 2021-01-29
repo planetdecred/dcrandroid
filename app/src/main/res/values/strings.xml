@@ -53,6 +53,7 @@
     <string name="connected_to_a_peer">Connected to a peer</string>
     <string name="connected_to_n_peer">Connected to %1$d peers</string>
     <string name="ok">OK</string>
+    <string name="_continue">Continue</string>
     <string name="user_agent">User Agent</string>
     <string name="user_agent_dialog_title">Set up user agent</string>
     <string name="peer_ip_dialog_title">Set up persistent peer</string>
@@ -73,7 +74,7 @@
     <string name="dcr_amount">%1$s DCR</string>
     <string name="rename_wallet_sheet_title">Rename wallet</string>
     <string name="wallet_name">Wallet Name</string>
-    <string name="view_property">View property</string>
+    <string name="privacy">Privacy</string>
     <string name="remove">Remove</string>
     <string name="confirm_to_remove">Confirm to remove</string>
     <string name="remove_wallet">Remove wallet from device</string>
@@ -389,6 +390,8 @@
     <string name="create_account_warning">Accounts CANNOT be deleted once created.</string>
     <string name="create_new_account">Create new account</string>
     <string name="confirm_to_create_account">Confirm to create account</string>
+    <string name="confirm_to_create_accounts">Confirm to create accounts</string>
+    <string name="unlock_to_start_mixing">Unlock your wallet to start mixing</string>
     <string name="not_backed_up">Not backed up</string>
     <string name="seed_phase_2_briefing">You will be asked to enter the seed phrase on the next screen.</string>
     <string name="verify">Verify</string>
@@ -520,6 +523,7 @@
     <string name="confirm_new_startup_password">Confirm new startup password</string>
     <string name="confirm_new_spending_password">Confirm new spending password</string>
     <string name="remove_startup_security">Remove startup security</string>
+    <string name="close_privacy_reminder">Close privacy setup reminder</string>
     <string name="close_backup_warning">Close backup warning</string>
     <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
     <string name="startup_pin_prompt_title">Unlock with startup PIN</string>
@@ -565,6 +569,84 @@
     <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
+    <string name="create_needed_accounts">Create needed accounts</string>
+    <string name="confirm_create_needed_accounts">Confirm to create needed accounts</string>
+    <string name="confirm_setup_mixer">Confirm to set mixer accounts</string>
+    <string name="setup_needed_accounts">Setup needed accounts</string>
+    <string name="create_mixer_account_summary">You will need to create two accounts for using the mixer. <b>This action cannot be undone</b>.</string>
+    <string name="account_exists">Account already exist.</string>
+    <string name="mixed_account">Mixed account</string>
+    <string name="mixed" translatable="false">Mixed</string>
+    <string name="unmixed_account">Unmixed account</string>
+    <string name="unmixed" translatable="false">Unmixed</string>
+    <string name="mixer">Mixer</string>
+    <string name="mix">Mix</string>
+    <string name="mix_tx_change">Mix transaction change</string>
+    <string name="mix_tx_change_summary">Change from transactions will be sent to unmixed account if enabled.</string>
+    <string name="change_sent_to_unmixed"><![CDATA[Change will be sent to <b>%1$s</b>.]]></string>
+    <string name="start_mixer_warning">Your wallet will be unlocked until mixing completes.</string>
+    <string name="mixer_has_stopped_running">cspp mixer has stopped running</string>
+    <string name="cspp_mixer_is_running">cspp mixer is running</string>
+    <string name="no_mixable_output">Unmixed account has no mixable output</string>
+    <string name="not_running">Not running.</string>
+    <string name="running">Running.</string>
+    <string name="wallet_mixer_status"><![CDATA[Running on <b>%1$s</b>.]]></string>
+    <string name="wallet_mixer_status_multi"><![CDATA[Running on <b>%1$s</b> and <b>%2$s</b>.]]></string>
+    <string name="setup_mixing_accounts">Setup mixing accounts</string>
+    <string name="mixing_account_reminder_text">2 accounts were found with coinjoin outputs.</string>
+    <string name="mixer_status">Mixer Status</string>
+    <string name="same_mixing_accounts_error">Mixed and unmixed accounts cannot be the same</string>
+    <string name="new_accounts_mixed_unmixed">New accounts will be created for mixed and unmixed.</string>
+    <string name="new_account_mixed">New account will be created for mixed.</string>
+    <string name="new_account_umixed">New account will be created for unmixed</string>
+    <string name="new_caps">NEW</string>
+    <string name="privacy_is_here">Privacy is here</string>
+    <string name="privacy_intro_desc">You can now use CoinShuffle++ mixer to mix your DCRs, right in the app.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="setup_mixer">Set up mixer</string>
+    <string name="privacy_popup_message">Set up CoinShuffle++ mixer in Privacy</string>
+    <string name="see_all">See all</string>
+    <string name="privacy_intro_title">How does CoinShuffle++ mixer enhance your privacy?</string>
+    <string name="privacy_intro_desc_1">CoinShuffle++ mixer can mix your DCRs through CoinJoin transactions.</string>
+    <string name="privacy_intro_desc_2">Using mixed DCRs protects you from exposing your financial activities to the public (e.g. how much you own, who pays you).</string>
+    <string name="setup_mixer_btn_title">Set up mixer for this wallet</string>
+    <string name="privacy_intro_dialog_title">Set up mixer by creating two needed accounts</string>
+    <string name="privacy_intro_dialog_desc"><![CDATA[Two dedicated accounts (“mixed” & “unmixed”) will be created in order to use the mixer.<br/><br/><b><font color="#091440">This action cannot be undone.</font></b>]]></string>
+    <string name="begin_setup">Begin setup</string>
+    <string name="mixer_setup_completed">Mixer setup completed</string>
+    <string name="ready_to_mix">Ready to mix</string>
+    <string name="unmixed_balance">Unmixed balance</string>
+    <string name="mixed_balance">Mixed balance</string>
+    <string name="mixer_settings">Mixer Settings</string>
+    <string name="account_branch">Account branch</string>
+    <string name="shuffle_port">Shuffle port</string>
+    <string name="shuffle_server">Shuffle server</string>
+    <string name="keep_app_opened">Keep this app opened</string>
+    <string name="mixer_help_title">How to use the mixer?</string>
+    <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#091440">Important: keep this app opened while mixer is running.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
+    <string name="mixer_is_running">Mixer is running…</string>
+    <string name="keep_this_app_opened">Keep this app opened</string>
+    <string name="mixer_status_info">Mixer will automatically stop when unmixed balance are fully mixed.</string>
+    <string name="check_mixer_status">Check mixer status</string>
+    <string name="mixing_elp">Mixing…</string>
+    <string name="account_name_taken">Account name is taken</string>
+    <string name="account_name_conflict_dialog_desc"><![CDATA[There are existing accounts named <b>mixed</b> or <b>unmixed</b>. Please change the name to something else for now. You can change them back after the setup.]]></string>
+    <string name="go_back_rename">Go back &amp; rename</string>
+    <string name="set_up_needed_accounts">Set up needed accounts</string>
+    <string name="setup_mixer_account_desc">Two dedicated accounts will be set up to use the mixer:</string>
+    <string name="setup_mixer_account_bullet_1"><font color='#091440'><b>Mixed</b></font> account will be the outbound spending account.</string>
+    <string name="setup_mixer_account_bullet_2"><font color='#091440'><b>Unmixed</b></font> account will be the change handling account.</string>
+    <string name="auto_setup">Auto setup</string>
+    <string name="auto_setup_desc">Create and set up the needed accounts for you.</string>
+    <string name="manual_setup_desc">For wallets that have enabled privacy before.</string>
+    <string name="manual_mixer_setup_help"><font color='#091440'><b>Make sure to select the corresponding accounts to the previous setup.</b></font> Failing to do so could damage wallet privacy.</string>
+    <string name="set_up">Set up</string>
+    <string name="manual_setup">Manual setup</string>
+    <string name="same_mixed_unmixed"><![CDATA[Cannot use same account for mixed & unmixed]]></string>
+    <plurals name="mixer_is_running">
+        <item quantity="one">1 mixer is running…</item>
+        <item quantity="other">%d mixers are running…</item>
+    </plurals>
 
     <!--Politeia-->
     <string name="politeia">Politeia</string>

@@ -24,7 +24,15 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
 
     init {
         val activity = context as AppCompatActivity
-        destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager, layout.destination_account_spinner, true, R.string.dest_account_picker_title)
+
+        destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager,
+                layout.destination_account_spinner)
+        destinationAccountSpinner.init {
+            // disable mixed account
+            !it.isMixerMixedAccount
+        }
+        destinationAccountSpinner.pickerTitle = R.string.dest_account_picker_title
+
         addressInputHelper = InputHelper(context, layout.destination_address_container, validateAddress)
         addressInputHelper.editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 

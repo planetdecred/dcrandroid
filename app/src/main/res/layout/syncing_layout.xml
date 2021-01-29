@@ -11,13 +11,13 @@
     android:id="@+id/syncing_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_padding_size_16"
     android:visibility="visible"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/edit_text_size_14"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="@dimen/margin_padding_size_16"

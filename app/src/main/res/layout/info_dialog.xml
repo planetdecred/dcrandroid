@@ -10,15 +10,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/card_bg"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/margin_padding_size_24">
+    android:background="@drawable/card_bg_14"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/margin_padding_size_8"
+        android:id="@+id/icon_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/margin_padding_size_48"
+                android:layout_height="@dimen/margin_padding_size_48"
+                android:id="@+id/iv_icon"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:src="@drawable/ic_alert2"
+                android:layout_marginTop="@dimen/margin_padding_size_16"
+                android:layout_marginBottom="@dimen/margin_padding_size_24" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_padding_size_24"
         android:layout_marginEnd="@dimen/margin_padding_size_24"
+        android:layout_marginTop="@dimen/margin_padding_size_12"
         android:orientation="vertical">
 
         <TextView
@@ -68,7 +93,7 @@
                 android:paddingBottom="10dp"
                 android:paddingStart="@dimen/margin_padding_size_12"
                 android:paddingEnd="@dimen/margin_padding_size_12"
-                android:visibility="invisible"
+                android:visibility="gone"
                 tools:text="Neutral"
                 tools:visibility="visible" />
 

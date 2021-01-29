@@ -62,9 +62,15 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         tv_address.setOnClickListener { copyAddress() }
         qr_image.setOnClickListener { copyAddress() }
 
-        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner, true, R.string.dest_account_picker_title) {
+        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner) {
+
+            it.pickerTitle = R.string.dest_account_picker_title
             setAddress(it.getCurrentAddress())
             return@AccountCustomSpinner Unit
+        }
+        sourceAccountSpinner.init {
+            // disable mixed account
+            !it.isMixerMixedAccount
         }
     }
 

@@ -25,6 +25,9 @@ public class Constants {
             AMOUNT = "amount",
             SEED = "seed",
             DEFAULT = "default",
+            CHECKED_PRIVACY_PAGE = "checked_privacy_page",
+            HAS_SETUP_PRIVACY = "has_setup_privacy",
+            SHOWN_PRIVACY_POPUP = "shown_privacy_popup",
             ANDROID_KEY_STORE = "AndroidKeyStore",
             TRANSFORMATION = "AES/GCM/NoPadding",
             ENCRYPTION_DATA = "encryption_data",
@@ -42,7 +45,10 @@ public class Constants {
             PROPOSAL_ID = "proposal_id",
             CHARSET_UTF_8 = "UTF-8",
             INDEX_MD = "index.md",
-            VOTE_SUMMARY = "votesummary";
+            VOTE_SUMMARY = "votesummary",
+            MIXED = "mixed",
+            UNMIXED = "unmixed",
+            SEND_MAX = "send_max";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             PROPOSAL_SUMMARY_ID = 5552479,

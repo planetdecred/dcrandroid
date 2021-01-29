@@ -18,19 +18,20 @@ import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.adapter.MixerStatusAdapter
 import com.dcrandroid.adapter.TransactionListAdapter
+import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.show
-import com.dcrandroid.extensions.totalWalletBalance
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Deserializer
-import com.dcrandroid.util.NetworkUtil
-import com.dcrandroid.util.SyncLayoutUtil
+import com.dcrandroid.extensions.*
+import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
+import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.overview_backup_warning.*
+import kotlinx.android.synthetic.main.overview_backup_warning.view.*
+import kotlinx.android.synthetic.main.overview_mixer_status_card.*
+import kotlinx.android.synthetic.main.overview_privacy_introduction.*
 import kotlinx.android.synthetic.main.transactions_overview_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,10 +40,11 @@ import kotlinx.coroutines.withContext
 
 const val MAX_TRANSACTIONS = 3
 
-class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener {
+class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener, AccountMixerNotificationListener {
 
     companion object {
         private var closedBackupWarning = false
+        private var closedPrivacyReminder = false
         const val FRAGMENT_POSITION = 0
 
         // Tx hash received during this session is saved here.
@@ -88,6 +90,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false
+        recyclerView.setDivider(R.drawable.recycler_view_divider_pad_56)
         recyclerView.adapter = adapter
 
         setToolbarTitle(R.string.overview, false)
@@ -108,8 +111,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 else -> getString(R.string.n_wallets_need_backup, multiWallet!!.numWalletsNeedingSeedBackup())
             }
 
-            go_to_wallets_btn?.setOnClickListener {
-                switchFragment(2) // Wallets Fragment
+            backup_warning_layout.go_to_wallets_btn.setOnClickListener {
+                switchFragment(2) // Wallets fragment
             }
 
             iv_close_backup_warning?.setOnClickListener {
@@ -121,6 +124,50 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                         })
                         .show()
             }
+        }
+
+        if (!WalletData.multiWallet!!.readBoolConfigValueForKey(Constants.HAS_SETUP_PRIVACY, false) && !closedPrivacyReminder) {
+            privacy_intro_card.show()
+            btn_dismiss_privacy_intro.setOnClickListener {
+                closedPrivacyReminder = true
+                privacy_intro_card.hide()
+            }
+
+            btn_setup_mixer.setOnClickListener {
+                multiWallet!!.setBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
+                switchFragment(2)
+            }
+        }
+
+        mixer_status_rv.layoutManager = LinearLayoutManager(context)
+        mixer_status_rv.adapter = MixerStatusAdapter()
+        setMixerStatus()
+        multiWallet?.setAccountMixerNotification(this)
+    }
+
+    private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
+
+        if (!isForeground) {
+            return@launch
+        }
+
+        var activeMixers = 0
+        for (wallet in multiWallet!!.openedWalletsList()) {
+            if (wallet.isAccountMixerActive) {
+                activeMixers++
+            }
+        }
+
+        if (activeMixers > 0) {
+            tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
+            cspp_running_layout.show()
+            mixer_status_rv.adapter?.notifyDataSetChanged()
+        } else {
+            cspp_running_layout.hide()
+        }
+
+        mixer_go_to_wallets.setOnClickListener {
+            switchFragment(2)
         }
     }
 
@@ -156,14 +203,14 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onScrollChanged() {
         if (mainBalanceIsVisible()) {
-            setToolbarTitle(balanceTextView.text, true)
+            setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
         } else {
             setToolbarTitle(R.string.overview, false)
         }
     }
 
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
-        balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance())
+        balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.5f)
         if (mainBalanceIsVisible()) {
             setToolbarTitle(balanceTextView.text, true)
         }
@@ -196,25 +243,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         loadBalance()
         loadTransactions()
-    }
-
-    private fun isOffline(): Boolean {
-
-        val isWifiConnected = context?.let { NetworkUtil.isWifiConnected(it) }
-        val isDataConnected = context?.let { NetworkUtil.isMobileDataConnected(it) }
-        val syncAnyways = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, false)
-
-        // 1. If the user chooses not to sync(means the user syncs only on wifi and wifi is off or the user tapped NO on the dialog)
-        if (!isWifiConnected!! && !syncAnyways) {
-            return true
-        }
-
-        // 2. If the wifi is off, user chose sync anyways but mobile data isn’t activated, offline
-        if (!isWifiConnected && syncAnyways && !isDataConnected!!) {
-            return true
-        }
-
-        return false
+        setMixerStatus()
     }
 
     override fun onTransaction(transactionJson: String?) {
@@ -240,6 +269,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
+
+        setMixerStatus()
     }
 
     override fun onTransactionConfirmed(walletID: Long, hash: String, blockHeight: Int) {
@@ -273,6 +304,20 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 adapter?.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onSyncCompleted() {
+        super.onSyncCompleted()
+        setMixerStatus()
+    }
+
+    override fun onAccountMixerEnded(walletID: Long) {
+        setMixerStatus()
+        SnackBar.showText(context!!, R.string.mixer_has_stopped_running)
+    }
+
+    override fun onAccountMixerStarted(walletID: Long) {
+        setMixerStatus()
     }
 }
 
