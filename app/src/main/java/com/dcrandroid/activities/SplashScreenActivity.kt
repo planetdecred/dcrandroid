@@ -25,6 +25,7 @@ import com.dcrandroid.BuildConfig
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
@@ -66,6 +67,13 @@ class SplashScreenActivity : BaseActivity() {
         ll_restore_wallet.setOnClickListener {
             val restoreIntent = Intent(this, RestoreWalletActivity::class.java)
             startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
+        }
+
+        ll_create_watch_only.setOnClickListener {
+            CreateWatchOnlyWallet {
+                SnackBar.showText(this, R.string.watch_only_wallet_created)
+                proceedToHomeActivity()
+            }.show(this)
         }
 
         if (BuildConfig.IS_TESTNET) {
