@@ -36,7 +36,6 @@
     <string name="general">Ogólne</string>
     <string name="view_on_dcrdata">zobacz w dcrdata</string>
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
-    <string name="default_account">Konto domyślne</string>
     <string name="exit_cap">WYJDŹ</string>
     <string name="delete">Skasuj</string>
     <string name="no">Nie</string>
@@ -239,8 +238,6 @@
     <!--Transaction Details View-->
     <!--/Transaction Details View-->
 
-    <string name="toConfirmEnterYourPassword">Aby potwierdzić, wprowadź hasło:</string>
-
     <!--Security-->
     <string name="pin">PIN</string>
     <string name="create_spending_pin">Utwórz PIN do wydawania środków</string>
@@ -289,7 +286,6 @@
     <string name="tx_details_account">%1$s DCR (%2$s)</string>
 
     <!--Landing page-->
-    <string name="welcome_android_title">Witaj w\nportfelu Decred na systemie Android</string>
     <!--Landing page-->
 
     <!--Time-->
@@ -327,7 +323,6 @@
     <string name="step_3_3">Krok 3/3</string>
     <string name="fetching_block_headers"><![CDATA[Pobieranie nagłówków bloków <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="scanning_block_headers"><![CDATA[Skanowanie nagłówków bloków <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
-    <string name="rescanning_blocks"><![CDATA[Ponowne skanowanie bloków <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="discovering_addresses"><![CDATA[Odkrywanie wykorzystanych adresów <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="syncing_progress">Postęp synchronizacji</string>
     <string name="percentage">%1$d%%</string>
@@ -355,7 +350,6 @@
     <string name="properties">Właściwości</string>
     <string name="show_properties">Wyświetl właściwości</string>
     <string name="hide_properties">Ukryj właściwości</string>
-    <string name="default_account_switch_desc">Domyślne dla wszystkich transakcji</string>
     <string name="wallet_renamed">Nazwa portfela została zmieniona</string>
     <string name="account_renamed">Nazwa konta została zmieniona</string>
     <string name="account_created">Konto zostało utworzone</string>
@@ -386,8 +380,6 @@
     <string name="decred_qr_address_prefix">decred:%1$s</string>
     <string name="got_it">Rozumiem</string>
     <string name="tap_to_copy">(kliknij, aby skopiować)</string>
-    <string name="cancel_sync_create_wallet">Rozłącz się przed stworzeniem portfela</string>
-    <string name="cancel_sync_delete_wallet">Rozłącz się przed usunięciem portfela</string>
     <string name="wallet_created">Portfel utworzony</string>
     <string name="amount">Kwota</string>
     <string name="processing_time">Czas przetwarzania</string>
@@ -413,7 +405,6 @@
     <string name="to_self">Do siebie</string>
     <string name="processing_ellipsis">Przetwarzanie…</string>
     <string name="success">Operacja udana</string>
-    <string name="send_fail_msg">Wysyłanie nie powiodło się. Spróbuj ponownie.</string>
     <string name="transaction_sent">Transakcja wysłana</string>
     <string name="from_account">Z konta</string>
     <string name="included_in_block">Zawarto w bloku</string>
@@ -464,7 +455,6 @@
     <string name="keep_in_mind">Miej na uwadze</string>
     <string name="invalid_restore_seed">Odzyskiwanie nie powiodło się. Sprawdź dokładnie każde wprowadzone słowo i spróbuj ponownie.</string>
     <string name="create_watch_only_wallet">Stwórz portfel tylko do obserwacji (watch-only)</string>
-    <string name="extended_public_key">Rozszerzony klucz publiczny</string>
     <string name="wallet_name_exists">Podana nazwa portfela już istnieje</string>
     <string name="reserved_wallet_name">\'portfel-\' jest przedrostkiem zarezerwowanym</string>
     <string name="invalid_key">Klucz jest niepoprawny</string>
@@ -515,8 +505,6 @@
     <string name="migrating_wallet">Migracja portfela</string>
     <string name="add_new_wallet">Dodaj nowy portfel</string>
     <string name="wait_for_sync">Poczekaj, aż skończy się synchronizacja</string>
-    <string name="welcome_title">Witaj w portfelu Decred.</string>
-    <string name="first_run_notice">Twoje składające się z 33 słów ziarno to Twój portfel — trzymaj je w bezpiecznym miejscu. Bez niego nie będzie można odzyskać Twoich środków, jeśli Twoje urządzenie ulegnie uszkodzeniu, lub zostanie zgubione.\n\nPoczątkowa synchronizacja portfela potrwa dłużej, niż zwykle.</string>
     <string name="welcome_screen_text">Witaj w portfelu Decred, bezpiecznym oraz mobilnym portfelu typu open-source.</string>
     <string name="mywallet">mójportfel</string>
 

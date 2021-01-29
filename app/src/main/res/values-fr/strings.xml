@@ -35,7 +35,6 @@
     <string name="testnet">testnet</string>
     <string name="general">Général</string>
     <string name="view_on_dcrdata">Voir sur dcrdata</string>
-    <string name="default_account">Compte par défaut</string>
     <string name="exit_cap">SORTIR</string>
     <string name="delete">Supprimer</string>
     <string name="no">Non</string>
@@ -242,8 +241,6 @@
     <!--Transaction Details View-->
     <!--/Transaction Details View-->
 
-    <string name="toConfirmEnterYourPassword">Pour confirmer, entrer votre mot de passe:</string>
-
     <!--Security-->
     <string name="pin">PIN</string>
     <string name="create_spending_pin">Créer un PIN de dépense</string>
@@ -292,7 +289,6 @@
     <string name="tx_details_account">%1$s DCR (%2$s)</string>
 
     <!--Landing page-->
-    <string name="welcome_android_title">Bienvenue dans\nle porte-monnaie Android Decred</string>
     <!--Landing page-->
 
     <!--Time-->
@@ -335,7 +331,6 @@
     <string name="fetching_cfilters"><![CDATA[Récupération des cfilters <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="fetching_block_headers"><![CDATA[Récupération des entêtes de blocs <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="scanning_block_headers"><![CDATA[Scan des entête de blocs <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
-    <string name="rescanning_blocks"><![CDATA[Rescan des blocs <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="discovering_addresses"><![CDATA[Découverte des adresses utilisées <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="syncing_progress">Synchronisation en cours</string>
     <string name="percentage">%1$d%%</string>
@@ -363,14 +358,12 @@
     <string name="properties">Propriétés</string>
     <string name="show_properties">Montrer les propriétés</string>
     <string name="hide_properties">Masquer les propriétés</string>
-    <string name="default_account_switch_desc">Défaut pour toutes les transactions</string>
     <string name="wallet_renamed">Porte-monnaie renommé</string>
     <string name="account_renamed">Compte renommé</string>
     <string name="account_created">Compte créé</string>
     <string name="create_account_warning">Les comptes NE PEUVENT PAS être supprimés une fois créés.</string>
     <string name="create_new_account">Créer un nouveau compte</string>
     <string name="confirm_to_create_account">Confirmer pour créer le compte</string>
-    <string name="confirm_to_create_accounts">Confirmer pour créer les comptes</string>
     <string name="unlock_to_start_mixing">Déverrouiller votre porte-monnaie pour débuter le mixage</string>
     <string name="not_backed_up">Non sauvegardé</string>
     <string name="seed_phase_2_briefing">Vous devrez entrer votre phrase de récupération dans le prochain éran.</string>
@@ -398,8 +391,6 @@
     <string name="decred_qr_address_prefix">decred:%1$s</string>
     <string name="got_it">Compris</string>
     <string name="tap_to_copy">(Sélectionner pour copier)</string>
-    <string name="cancel_sync_create_wallet">Impossible de créer un porte-monnaie lorsque la synchronisation est en cours</string>
-    <string name="cancel_sync_delete_wallet">Impossible de supprimer un porte-monnaie lorsque la synchronisation est en cours</string>
     <string name="wallet_created">Porte-monnaie créé</string>
     <string name="watch_only_wallet_created">Porte-monnaie en lecture seule importé</string>
     <string name="amount">Montant</string>
@@ -428,7 +419,6 @@
     <string name="to_self">Vers soi-même</string>
     <string name="processing_ellipsis">Exécution…</string>
     <string name="success">Succès</string>
-    <string name="send_fail_msg">Échec de l\'envoi. Merci de réessayer.</string>
     <string name="transaction_sent">Transaction envoyée</string>
     <string name="from_account">Depuis le compte</string>
     <string name="included_in_block">Inclus dans le bloc</string>
@@ -479,7 +469,6 @@
     <string name="keep_in_mind">Rappelez-vous</string>
     <string name="invalid_restore_seed">Échec de la restauration. Merci de vérifier tous les mots et réessayer.</string>
     <string name="create_watch_only_wallet">Créer un porte-monnaie en lecture seule</string>
-    <string name="extended_public_key">Clé Publique Étendue</string>
     <string name="extended_public_key2">Clé publique étendue</string>
     <string name="ext_pub_key_info"><![CDATA[Dans <b>Decrediton</b>, sous la section <b>Accounts</b>, étendre le compte que vous voulez voir et choisir <b>Reveal Pubkey</b>.]]></string>
     <string name="wallet_name_exists">Le nom du porte-monnaie existe</string>
@@ -503,7 +492,6 @@
     <string name="confirm_new_startup_password">Confirmer le nouveau mot de passe de démarrage</string>
     <string name="confirm_new_spending_password">Confirmer le nouveau mot de passe de dépense</string>
     <string name="remove_startup_security">Retirer la sécurité de démarrage</string>
-    <string name="close_privacy_reminder">Fermer le rappel de configuration de vie privée</string>
     <string name="close_backup_warning">Fermer l\'avertissement de sauvegarde</string>
     <string name="close_backup_warning_dialog_message">Rappelez-vous de sauvegarder vos porte-monnaies dès que possible.</string>
     <string name="startup_pin_prompt_title">Déverrouiller avec un PIN de démarrage</string>
@@ -533,8 +521,6 @@
     <string name="migrating_wallet">Migration du porte-monnaie</string>
     <string name="add_new_wallet">Ajouter un nouveau porte-monnaie</string>
     <string name="wait_for_sync">Attendre la fin de la synchronisation</string>
-    <string name="welcome_title">Bienvenue dans Decred Wall</string>
-    <string name="first_run_notice">Votre phrase de récupération à 33 mots est votre porte-monnaie, convervez-la en sécurité. Sans elle vos fonds ne peuvent pas être récupérés si votre appareil devait être perdu ou détruit. La synchronisaion initiale du porte-monnaie sera plus longue que normalement.</string>
     <string name="welcome_screen_text">Bienvenue dans Decred Wallet, un porte-monnaie mobile sécurisé et open-source.</string>
     <string name="mywallet">mywallet</string>
     <string name="today">Aujourd\'hui</string>
@@ -549,14 +535,8 @@
     <string name="seed_backup_success_msg">Soyez certain de conserver votre phrase de récupération dans un lieu sûr.</string>
     <string name="seed_backup_verified">Votre phrase de récupération est vérifiée</string>
     <string name="rebroadcast_tx_success">Transactions non-minées republiées vers le réseau decred</string>
-    <string name="create_needed_accounts">Créer les comptes nécessaires</string>
-    <string name="setup_needed_accounts">Configurer les comptes nécessaires</string>
-    <string name="create_mixer_account_summary">Vous devrez créer deux comptes pour utiliser le mixeur. <b>Cette action ne peut pas être annulée</b>.</string>
-    <string name="account_exists">Le compte existe déjà.</string>
     <string name="mixed_account">Compte mixé</string>
-    <string name="mixed">Mixé</string>
     <string name="unmixed_account">Compte non-mixé</string>
-    <string name="unmixed">Non-mixé</string>
     <string name="mixer">Mixeur</string>
     <string name="mix">Mixer</string>
     <string name="mix_tx_change">Mixer la monnaie de la transaction</string>
@@ -565,18 +545,6 @@
     <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé jusqu\'à la complétion du mixage.</string>
     <string name="mixer_is_running">le mixeur cspp fonctionne</string>
     <string name="mixer_has_stopped_running">le mixeur cspp a cessé de fonctionner</string>
-    <string name="cspp_mixer_is_running">le mixeur cspp fonctionne</string>
     <string name="no_mixable_output">Le compte non-mixé n\'a pas de sortie mixable</string>
-    <string name="not_running">Ne fonctionne pas.</string>
-    <string name="running">Fonctionne.</string>
-    <string name="wallet_mixer_status"><![CDATA[Fonctionne sur <b>%1$s</b>.]]></string>
-    <string name="wallet_mixer_status_multi"><![CDATA[Fonctionne sur <b>%1$s</b> et <b>%2$s</b>.]]></string>
-    <string name="setup_mixing_accounts">Configurer les comptes de mixage</string>
-    <string name="mixing_account_reminder_text">2 comptes ont étés trouvés avec des sorties coinjoin.</string>
-    <string name="mixer_status">Statut du Mixeur</string>
-    <string name="same_mixing_accounts_error">Les comptes mixé et non-mixé ne peuvent pas être le même</string>
-    <string name="new_accounts_mixed_unmixed">De nouveaux comptes seront créés pour mixé et non-mixé.</string>
-    <string name="new_account_mixed">Un nouveau compte sera créé pour mixé.</string>
-    <string name="new_account_umixed">Un nouveau compte sera créé pour non-mixé</string>
 
 </resources>

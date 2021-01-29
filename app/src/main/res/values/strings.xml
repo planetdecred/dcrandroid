@@ -32,14 +32,11 @@
     <string name="receive">Receive</string>
     <string name="send">Send</string>
     <string name="cancel">Cancel</string>
-    <string name="stop_sync">Stop sync</string>
-    <string name="politeia_sync_stopped">Politeia sync stopped</string>
     <string name="connection">Connection</string>
     <string name="testnet">testnet</string>
     <string name="general">General</string>
     <string name="view_on_dcrdata">View on dcrdata</string>
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
-    <string name="default_account">Default Account</string>
     <string name="exit_cap">EXIT</string>
     <string name="delete">Delete</string>
     <string name="no">No</string>
@@ -266,8 +263,6 @@
     <!--Transaction Details View-->
     <!--/Transaction Details View-->
 
-    <string name="toConfirmEnterYourPassword">To confirm, enter your password:</string>
-
     <!--Security-->
     <string name="pin">PIN</string>
     <string name="create_spending_pin">Create a spending PIN</string>
@@ -316,7 +311,6 @@
     <string name="tx_details_account">%1$s DCR (%2$s)</string>
 
     <!--Landing page-->
-    <string name="welcome_android_title">Welcome to\nDecred Android Wallet</string>
     <!--Landing page-->
 
     <!--Time-->
@@ -359,7 +353,6 @@
     <string name="fetching_cfilters"><![CDATA[Fetching cfilters <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
-    <string name="rescanning_blocks"><![CDATA[Rescanning blocks <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
     <string name="syncing_progress">Syncing progress</string>
     <string name="percentage">%1$d%%</string>
@@ -388,14 +381,12 @@
     <string name="properties">Properties</string>
     <string name="show_properties">Show properties</string>
     <string name="hide_properties">Hide properties</string>
-    <string name="default_account_switch_desc">Default for all transactions</string>
     <string name="wallet_renamed">Wallet renamed</string>
     <string name="account_renamed">Account renamed</string>
     <string name="account_created">Account created</string>
     <string name="create_account_warning">Accounts CANNOT be deleted once created.</string>
     <string name="create_new_account">Create new account</string>
     <string name="confirm_to_create_account">Confirm to create account</string>
-    <string name="confirm_to_create_accounts">Confirm to create accounts</string>
     <string name="unlock_to_start_mixing">Unlock your wallet to start mixing</string>
     <string name="not_backed_up">Not backed up</string>
     <string name="seed_phase_2_briefing">You will be asked to enter the seed phrase on the next screen.</string>
@@ -423,8 +414,6 @@
     <string name="decred_qr_address_prefix">decred:%1$s</string>
     <string name="got_it">Got It</string>
     <string name="tap_to_copy">(Tap to copy)</string>
-    <string name="cancel_sync_create_wallet">Disconnect before creating wallet</string>
-    <string name="cancel_sync_delete_wallet">Disconnect before deleting wallet</string>
     <string name="wallet_created">Wallet created</string>
     <string name="watch_only_wallet_created">Watch-only wallet imported</string>
     <string name="amount">Amount</string>
@@ -453,7 +442,6 @@
     <string name="to_self">To self</string>
     <string name="processing_ellipsis">Processing…</string>
     <string name="success">Success</string>
-    <string name="send_fail_msg">Failed to send. Please try again.</string>
     <string name="transaction_sent">Transaction sent</string>
     <string name="from_account">From account</string>
     <string name="included_in_block">Included in block</string>
@@ -504,7 +492,6 @@
     <string name="keep_in_mind">Keep in mind</string>
     <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
     <string name="create_watch_only_wallet">Create watch-only wallet</string>
-    <string name="extended_public_key">Extended Public Key</string>
     <string name="extended_public_key2">Extended public key</string>
     <string name="ext_pub_key_info"><![CDATA[In <b>Decrediton</b>, under the <b>Accounts</b> section, expand the account you want to watch, and tap on <b>Reveal Pubkey</b>.]]></string>
     <string name="wallet_name_exists">Wallet name exists</string>
@@ -528,7 +515,6 @@
     <string name="confirm_new_startup_password">Confirm new startup password</string>
     <string name="confirm_new_spending_password">Confirm new spending password</string>
     <string name="remove_startup_security">Remove startup security</string>
-    <string name="close_privacy_reminder">Close privacy setup reminder</string>
     <string name="close_backup_warning">Close backup warning</string>
     <string name="close_backup_warning_dialog_message">Remember to back up your wallets as soon as possible.</string>
     <string name="startup_pin_prompt_title">Unlock with startup PIN</string>
@@ -558,8 +544,6 @@
     <string name="migrating_wallet">Migrating wallet</string>
     <string name="add_new_wallet">Add new wallet</string>
     <string name="wait_for_sync">Wait for sync to complete</string>
-    <string name="welcome_title">Welcome to Decred Wallet.</string>
-    <string name="first_run_notice">Your 33 word seed is your wallet, keep it safe. Without it your funds cannot be recovered should your device be lost or destroyed.\n\nInitial wallet sync will take longer than usual.</string>
     <string name="welcome_screen_text">Welcome to Decred Wallet, a secure &amp; open-source mobile wallet.</string>
     <string name="mywallet">mywallet</string>
     <string name="today">Today</string>
@@ -574,16 +558,10 @@
     <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
     <string name="seed_backup_verified">Your seed phrase backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
-    <string name="create_needed_accounts">Create needed accounts</string>
     <string name="confirm_create_needed_accounts">Confirm to create needed accounts</string>
     <string name="confirm_setup_mixer">Confirm to set mixer accounts</string>
-    <string name="setup_needed_accounts">Setup needed accounts</string>
-    <string name="create_mixer_account_summary">You will need to create two accounts for using the mixer. <b>This action cannot be undone</b>.</string>
-    <string name="account_exists">Account already exist.</string>
     <string name="mixed_account">Mixed account</string>
-    <string name="mixed" translatable="false">Mixed</string>
     <string name="unmixed_account">Unmixed account</string>
-    <string name="unmixed" translatable="false">Unmixed</string>
     <string name="mixer">Mixer</string>
     <string name="mix">Mix</string>
     <string name="mix_tx_change">Mix transaction change</string>
@@ -591,19 +569,7 @@
     <string name="change_sent_to_unmixed"><![CDATA[Change will be sent to <b>%1$s</b>.]]></string>
     <string name="start_mixer_warning">Your wallet will be unlocked until mixing completes.</string>
     <string name="mixer_has_stopped_running">cspp mixer has stopped running</string>
-    <string name="cspp_mixer_is_running">cspp mixer is running</string>
     <string name="no_mixable_output">Unmixed account has no mixable output</string>
-    <string name="not_running">Not running.</string>
-    <string name="running">Running.</string>
-    <string name="wallet_mixer_status"><![CDATA[Running on <b>%1$s</b>.]]></string>
-    <string name="wallet_mixer_status_multi"><![CDATA[Running on <b>%1$s</b> and <b>%2$s</b>.]]></string>
-    <string name="setup_mixing_accounts">Setup mixing accounts</string>
-    <string name="mixing_account_reminder_text">2 accounts were found with coinjoin outputs.</string>
-    <string name="mixer_status">Mixer Status</string>
-    <string name="same_mixing_accounts_error">Mixed and unmixed accounts cannot be the same</string>
-    <string name="new_accounts_mixed_unmixed">New accounts will be created for mixed and unmixed.</string>
-    <string name="new_account_mixed">New account will be created for mixed.</string>
-    <string name="new_account_umixed">New account will be created for unmixed</string>
     <string name="new_caps">NEW</string>
     <string name="privacy_is_here">Privacy is here</string>
     <string name="privacy_intro_desc">You can now use CoinShuffle++ mixer to mix your DCRs, right in the app.</string>

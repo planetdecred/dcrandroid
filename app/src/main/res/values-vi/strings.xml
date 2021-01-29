@@ -21,7 +21,6 @@
     <string name="testnet">Mạng thử nghiệm (testnet)</string>
     <string name="general">Tổng hợp</string>
     <string name="view_on_dcrdata">Xem trên dcrdata</string>
-    <string name="default_account">Tài khoản mặc định</string>
     <string name="exit_cap">THOÁT</string>
     <string name="delete">Xoá</string>
     <string name="no">Không</string>
@@ -32,7 +31,6 @@
     <string name="log_file_not_found">Không tìm thấy tệp nhật ký</string>
     <string name="wallet_log_copied">Nhật ký ví được sao chép thành công</string>
     <string name="one_day">1 ngày</string>
-    <string name="copy">Sao chép</string>
     <string name="address_not_found">Địa chỉ không tìm thấy.</string>
     <string name="share">Chia sẻ</string>
     <string name="clear_fields">Xóa các dữ liệu</string>
@@ -163,7 +161,6 @@
     <!--/Transaction Details View-->
 
     <!--Confirm Transaction Dialog-->
-    <string name="toConfirmEnterYourPassword">Để xác nhận, nhập mật khẩu của bạn:</string>
     <string name="to">Tới</string>
     <!--/Confirm Transaction Dialog-->
 
