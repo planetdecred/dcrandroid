@@ -156,6 +156,9 @@
     <string name="wallet_new_transaction">[%1$s] New Transaction</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmed</font> &centerdot; %1$d Confirmations]]></string>
     <string name="tx_details_pending_confirmation"><![CDATA[<font color="#8997A5">Pending</font> &centerdot; %1$d Confirmation]]></string>
+    <string name="ticket_voted">A ticket just voted</string>
+    <string name="ticket_revoked">A ticket was revoked</string>
+    <string name="vote_reward">Vote Reward: %1$d DCR</string>
 
     <string-array name="timestamp_sort">
         <item>Newest</item>
@@ -681,4 +684,5 @@
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
     <!--/Politeia-->
+
 </resources>

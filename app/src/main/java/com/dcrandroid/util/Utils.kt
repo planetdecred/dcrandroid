@@ -165,10 +165,22 @@ object Utils {
         val multiWallet = WalletData.multiWallet!!
         val wallet = multiWallet.walletWithID(transaction.walletID)
 
-        val title = if (multiWallet.openedWalletsCount() > 1) {
-            context.getString(R.string.wallet_new_transaction, wallet.name)
-        } else {
-            context.getString(R.string.new_transaction)
+        val title = when (transaction.type) {
+            Dcrlibwallet.TxTypeVote -> context.getString(R.string.ticket_voted)
+            Dcrlibwallet.TxTypeRevocation -> context.getString(R.string.ticket_revoked)
+            else ->
+                if (multiWallet.openedWalletsCount() > 1) {
+                    context.getString(R.string.wallet_new_transaction, wallet.name)
+                } else {
+                    context.getString(R.string.new_transaction)
+                }
+        }
+
+        val amount = when (transaction.type) {
+            Dcrlibwallet.TxTypeVote -> context.getString(R.string.vote_reward, transaction.voteReward)
+            Dcrlibwallet.TxTypeRevocation -> ""
+            else ->
+                amount
         }
 
         val incomingNotificationsKey = transaction.walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
