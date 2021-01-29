@@ -21,10 +21,12 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.R
+import com.dcrandroid.activities.ProposalDetailsActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Proposal
 import dcrlibwallet.Wallet
 import java.io.*
 import java.util.*
@@ -147,11 +149,10 @@ object Utils {
 
     fun registerTransactionNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH)
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            channel.importance = NotificationManager.IMPORTANCE_HIGH
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -217,6 +218,55 @@ object Utils {
         manager.notify(Constants.TRANSACTION_SUMMARY_ID, groupSummary)
     }
 
+    fun registerProposalNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(Constants.PROPOSAL_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            channel.enableLights(true)
+            channel.enableVibration(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun sendProposalNotification(context: Context, manager: NotificationManager, proposal: Proposal, title: String) {
+
+        val notificationSound =
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val vibration = arrayOf(0L, 100, 100, 100).toLongArray()
+
+        val launchIntent = Intent(context, ProposalDetailsActivity::class.java)
+        launchIntent.action = Constants.NEW_POLITEIA_NOTIFICATION
+        launchIntent.putExtra(Constants.PROPOSAL_ID, proposal.id)
+
+        val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(context.getString(R.string.proposal_name_author, proposal.name, proposal.username))
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setSound(notificationSound)
+                .setVibrate(vibration)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(launchPendingIntent)
+
+        val groupSummary = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
+                .setContentTitle(context.getString(R.string.politeia_notifications))
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
+                .setGroupSummary(true)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
+
+        val notification = notificationBuilder.build()
+        manager.notify(proposal.id.toInt(), notification)
+        manager.notify(Constants.PROPOSAL_SUMMARY_ID, groupSummary)
+    }
 
     @Throws(Exception::class)
     fun readFileToBytes(path: String): ByteArray {
@@ -264,5 +314,57 @@ object Utils {
             }
         }
         file.delete()
+    }
+
+    fun calculateTime(seconds: Long, context: Context): String? {
+
+        var seconds = seconds
+        if (seconds > 59) {
+
+            // convert to minutes
+            seconds /= 60
+            if (seconds > 59) {
+
+                // convert to hours
+                seconds /= 60
+                if (seconds > 23) {
+
+                    // convert to days
+                    seconds /= 24
+                    if (seconds > 6) {
+
+                        // convert to weeks
+                        seconds /= 7
+                        if (seconds > 3) {
+
+                            // convert to month
+                            seconds /= 4
+                            if (seconds > 11) {
+
+                                //Convert to
+                                seconds /= 12
+                                return seconds.toString() + "y " + context.getString(R.string.ago)
+                            }
+
+                            //months
+                            return seconds.toString() + "mo " + context.getString(R.string.ago)
+                        }
+                        //weeks
+                        return seconds.toString() + "w " + context.getString(R.string.ago)
+                    }
+                    //days
+                    return seconds.toString() + "d " + context.getString(R.string.ago)
+                }
+                //hour
+                return seconds.toString() + "h " + context.getString(R.string.ago)
+            }
+
+            //minutes
+            return seconds.toString() + "m " + context.getString(R.string.ago)
+        }
+        return if (seconds < 0) {
+            context.getString(R.string.now)
+        } else seconds.toString() + "s " + context.getString(R.string.ago)
+        //seconds
     }
 }

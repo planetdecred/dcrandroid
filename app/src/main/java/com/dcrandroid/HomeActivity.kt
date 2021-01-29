@@ -8,6 +8,7 @@ package com.dcrandroid
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
@@ -47,13 +48,15 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener {
+class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, ProposalNotificationListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -66,6 +69,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
     private var sendPageSheet: FullScreenBottomSheetDialog? = null
 
+    private lateinit var notificationManager: NotificationManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
@@ -77,6 +82,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
 
         Utils.registerTransactionNotificationChannel(this)
+        Utils.registerProposalNotificationChannel(this)
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = SoundPool.Builder().setMaxStreams(3)
         val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -90,9 +97,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         try {
             multiWallet?.removeSyncProgressListener(TAG)
             multiWallet?.removeTxAndBlockNotificationListener(TAG)
+            multiWallet?.politeia!!.removeNotificationListener(TAG)
 
             multiWallet?.addSyncProgressListener(this, TAG)
             multiWallet?.addTxAndBlockNotificationListener(this, TAG)
+            multiWallet?.politeia!!.addNotificationListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -131,7 +140,18 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
 
         setupLogoAnim()
-        Handler().postDelayed({ checkWifiSync() }, 1000)
+        GlobalScope.launch(Dispatchers.Default) {
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                checkWifiSync()
+            }
+            delay(6000)
+            try {
+                multiWallet!!.politeia.sync()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
@@ -159,6 +179,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         if (multiWallet == null || multiWallet?.openedWalletsCount() == 0) {
             return
         }
+        notificationManager.cancelAll()
 
         val syncIntent = Intent(this, SyncService::class.java)
         stopService(syncIntent)
@@ -345,7 +366,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             val dcrFormat = DecimalFormat("#.######## DCR")
 
             val amount = Dcrlibwallet.amountCoin(transaction.amount)
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
                     transaction)
@@ -395,8 +415,30 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     override fun debug(debugInfo: DebugInfo?) {
     }
+
+    override fun onProposalsSynced() {
+    }
+
+    override fun onNewProposal(proposal: Proposal) {
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
+            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
+        }
+    }
+
+    override fun onProposalVoteStarted(proposal: Proposal) {
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
+            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
+        }
+    }
+
+    override fun onProposalVoteFinished(proposal: Proposal) {
+        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
+            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
+        }
+    }
 }
 
+@SuppressLint("ClickableViewAccessibility")
 private fun HomeActivity.setupLogoAnim() {
     val runnable = Runnable {
         val anim = AnimationUtils.loadAnimation(this, R.anim.logo_anim)

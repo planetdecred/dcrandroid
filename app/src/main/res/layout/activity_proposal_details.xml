@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2019 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="@dimen/margin_padding_size_8"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/app_bar_title"
+                    android:text="@string/proposal_details"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+                <ImageView
+                    android:id="@+id/open_proposal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/margin_padding_size_8"
+                    app:srcCompat="@drawable/ic_open_in_browser" />
+
+                <ImageView
+                    android:id="@+id/share_proposal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/margin_padding_size_8"
+                    app:srcCompat="@drawable/ic_share_dark" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:fitsSystemWindows="true"
+        android:scrollbars="none"
+        android:scrollingCache="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/proposal_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textStyle="bold"
+                    tools:text="PR by Monde Public Relations - Phase Two"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+
+                    android:layout_marginTop="@dimen/margin_padding_size_6">
+
+                    <TextView
+                        android:id="@+id/proposal_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_dark_green_corners_4dp"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        tools:text="Approved"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/edit_text_size_14"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/margin_padding_size_6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/proposal_author"
+                        android:layout_weight="0.7"
+                        tools:text="dreacot"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/blue" />
+
+                    <TextView
+                        android:id="@+id/proposal_timestamp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:gravity="end"
+                        android:includeFontPadding="false"
+                        tools:text="published 9 months ago"
+                        android:textColor="@color/darkBlueTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/margin_padding_size_6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/proposal_comments"
+                        android:layout_weight="0.7"
+                        tools:text="25 comments"
+                        android:textSize="@dimen/edit_text_size_16"
+                        android:includeFontPadding="false"
+                        app:fontFamily="@font/source_sans_pro"
+                        android:textColor="@color/darkerBlueGrayTextColor" />
+
+                    <TextView
+                        android:id="@+id/proposal_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:gravity="end"
+                        android:includeFontPadding="false"
+                        tools:text="Version 2"
+                        android:textColor="@color/darkerBlueGrayTextColor"
+                        android:textSize="@dimen/edit_text_size_14"
+                        app:fontFamily="@font/source_sans_pro" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:id="@+id/vote_summary"
+                    android:layout_marginTop="@dimen/margin_padding_size_6">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/yes_no_votes_layout">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/yes_votes"
+                            android:layout_weight="0.5"
+                            tools:text="yes"
+                            android:textSize="@dimen/edit_text_size_16"
+                            android:includeFontPadding="false"
+                            app:fontFamily="@font/source_sans_pro"
+                            android:textColor="@color/turquoise" />
+
+                        <TextView
+                            android:id="@+id/no_votes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="end"
+                            android:includeFontPadding="false"
+                            tools:text="no"
+                            android:textColor="@color/orangeTextColor"
+                            android:textSize="@dimen/edit_text_size_16"
+                            app:fontFamily="@font/source_sans_pro" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_padding_size_12">
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:progressDrawable="@drawable/vote_progress_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="19dp"
+                            android:secondaryProgress="100" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/proposal_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
+                    android:lineSpacingExtra="5dp"
+                    tools:text="PR by Monde Public Relations - Phase Two PR by Monde Public Relations - Phase Two"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="15dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

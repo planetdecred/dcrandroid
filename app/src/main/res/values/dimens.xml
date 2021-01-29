@@ -8,6 +8,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
 
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="edit_text_size_8">8sp</dimen>
     <dimen name="edit_text_size_12">12sp</dimen>
     <dimen name="edit_text_size_14">14sp</dimen>
     <dimen name="edit_text_size_16">16sp</dimen>

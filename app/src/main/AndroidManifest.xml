@@ -157,6 +157,10 @@
             android:launchMode="singleTask" />
 
         <activity
+            android:name=".activities.more.PoliteiaActivity"
+            android:launchMode="singleTask" />
+
+        <activity
             android:name=".activities.RestoreWalletActivity"
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask" />
@@ -167,6 +171,10 @@
 
         <activity
             android:name=".activities.WalletSettings"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".activities.ProposalDetailsActivity"
             android:launchMode="singleTask" />
 
         <activity
