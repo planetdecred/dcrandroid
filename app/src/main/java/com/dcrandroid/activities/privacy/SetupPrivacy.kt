@@ -4,11 +4,12 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.privacy
 
 import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
+import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.activity_setup_privacy.*

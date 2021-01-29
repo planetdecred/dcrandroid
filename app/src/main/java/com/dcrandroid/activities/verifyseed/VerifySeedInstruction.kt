@@ -4,15 +4,17 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.verifyseed
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.dcrandroid.R
+import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import kotlinx.android.synthetic.main.verify_seed_instruction.*
 
+// Step 1 for seed backup, user is shown instructions on how to save seed.
 class VerifySeedInstruction : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,12 +4,13 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.privacy
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.dcrandroid.R
+import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil

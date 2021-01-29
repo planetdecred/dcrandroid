@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-package com.dcrandroid.activities
+package com.dcrandroid.activities.verifyseed
 
 import android.content.Intent
 import android.graphics.Rect
@@ -14,6 +14,7 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.SaveSeedAdapter
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.PasswordPromptDialog
@@ -32,6 +33,7 @@ import kotlinx.coroutines.withContext
 
 const val SEEDS_PER_ROW = 17
 
+// Step 2 for seed backup, user is shown the wallet seed.
 class SaveSeedActivity : BaseActivity() {
 
     private lateinit var wallet: Wallet
