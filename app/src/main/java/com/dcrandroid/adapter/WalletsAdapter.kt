@@ -218,8 +218,9 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
         }
 
-        val shownPrivacyPopup = multiWallet.readBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
-        if (!shownPrivacyPopup) {
+        val showPrivacyPopup = !multiWallet.readBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
+                && !wallet.isWatchingOnlyWallet
+        if (showPrivacyPopup) {
             var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
             globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
                 popupMessage = PopupMessage.showText(holder.more, R.string.privacy_popup_message, Toast.LENGTH_SHORT)
@@ -249,7 +250,7 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
             val items = arrayOf(
                     PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-                    PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, !hasCheckedPrivacyPage),
+                    PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, !hasCheckedPrivacyPage && !wallet.isWatchingOnlyWallet),
                     PopupItem(R.string.rename),
                     PopupItem(R.string.settings)
             )

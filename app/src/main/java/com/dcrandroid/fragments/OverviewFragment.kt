@@ -24,7 +24,10 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.*
-import com.dcrandroid.util.*
+import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.Deserializer
+import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.SyncLayoutUtil
 import com.google.gson.GsonBuilder
 import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
@@ -126,7 +129,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             }
         }
 
-        if (!WalletData.multiWallet!!.readBoolConfigValueForKey(Constants.HAS_SETUP_PRIVACY, false) && !closedPrivacyReminder) {
+        if (!multiWallet!!.readBoolConfigValueForKey(Constants.HAS_SETUP_PRIVACY, false)
+                && multiWallet!!.fullCoinWalletsList().size > 0 && !closedPrivacyReminder) {
             privacy_intro_card.show()
             btn_dismiss_privacy_intro.setOnClickListener {
                 closedPrivacyReminder = true
