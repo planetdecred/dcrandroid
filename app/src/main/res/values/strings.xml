@@ -644,7 +644,7 @@
     <string name="vote_ended">Vote Ended</string>
     <string name="politeia_server_url" translatable="false">http://proposals.decred.org/proposals/</string>
     <string name="share_proposal">Share Proposal Link</string>
-    <string name="text_pain">text/plain</string>
+    <string name="text_pain" translatable="false">text/plain</string>
     <string name="comments">%d comments</string>
     <string name="version_number">version %s</string>
     <string name="yes_votes_percent">Yes: %1$d (%2$.2f%%)</string>

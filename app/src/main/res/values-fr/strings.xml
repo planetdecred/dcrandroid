@@ -16,6 +16,7 @@
     <string name="help">Aide</string>
     <string name="about">À propos</string>
     <string name="statistics">Statistiques</string>
+    <string name="statistics">Statistiques</string>
     <string name="build">Build</string>
     <string name="uptime">Durée de fonctionnement</string>
     <string name="network">Réseau</string>
@@ -137,6 +138,11 @@
     <string name="wallet_new_transaction">[%1$s] Nouvelle Transaction</string>
     <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">Confirmée</font> &centerdot; %1$d Confirmations]]></string>
     <string name="tx_details_pending_confirmation"><![CDATA[<font color="#8997A5">Attente</font> &centerdot; %1$d Confirmation]]></string>
+    <string name="wallet_ticket_voted">[%1$s] Un ticket vient de voter</string>
+    <string name="ticket_voted">Un ticket vient de voter</string>
+    <string name="wallet_ticket_revoked">[%1$s] Un ticket a été révoqué</string>
+    <string name="ticket_revoked">Un ticket a été révoqué</string>
+    <string name="vote_reward">Récompense du vote: %1$s DCR</string>
 
     <string-array name="timestamp_sort">
         <item>Plus récent</item>
@@ -174,6 +180,7 @@
     <string name="currency_conversion">Conversion de devise</string>
     <string name="user_agent_summary">Pour rafraîchir les taux de change</string>
     <string name="change">Changer</string>
+    <string name="change">Échanger</string>
 
     <string-array name="currency_conversion">
         <item>Aucun</item>
@@ -343,6 +350,7 @@
     <string name="latest_block_time"><![CDATA[Synchronisé au bloc <font color="#091440">%1$d</font> &centerdot; il y a <font color="#091440">%2$s</font>]]></string>
     <string name="connected_to_n_peers"><![CDATA[Connecté à <font color="#091440">%1$d</font> pairs.]]></string>
     <string name="no_connected_peers">Pas de pairs connectés.</string>
+    <string name="connected_peers">Pairs connectés</string>
     <string name="peers_connected">Pairs connectés</string>
     <string name="_default">défaut</string>
     <string name="starting_up">Démarrage</string>
@@ -401,7 +409,7 @@
     <string name="next">Suivant</string>
     <string name="send_dcr">Envoyer DCR</string>
     <string name="spendable_bal_format">Disponible: %1$s DCR</string>
-    <string name="send_x_dcr">Evnoyer %1$s DCR</string>
+    <string name="send_x_dcr">Envoyer %1$s DCR</string>
 
     <string name="x_dcr">%1$s DCR</string>
     <string name="x_usd">%1$s USD</string>
@@ -535,6 +543,8 @@
     <string name="seed_backup_success_msg">Soyez certain de conserver votre phrase de récupération dans un lieu sûr.</string>
     <string name="seed_backup_verified">Votre phrase de récupération est vérifiée</string>
     <string name="rebroadcast_tx_success">Transactions non-minées republiées vers le réseau decred</string>
+    <string name="confirm_create_needed_accounts">Confirmer pour créer les comptes nécessaires</string>
+    <string name="confirm_setup_mixer">Confirmer pour configurer les comptes de mixage</string>
     <string name="mixed_account">Compte mixé</string>
     <string name="unmixed_account">Compte non-mixé</string>
     <string name="mixer">Mixeur</string>
@@ -543,8 +553,87 @@
     <string name="mix_tx_change_summary">La monnaie des transactions sera envoyée vers le compte non-mixé si activé.</string>
     <string name="change_sent_to_unmixed"><![CDATA[La monnaie sera envoyée vers <b>%1$s</b>.]]></string>
     <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé jusqu\'à la complétion du mixage.</string>
-    <string name="mixer_is_running">le mixeur cspp fonctionne</string>
     <string name="mixer_has_stopped_running">le mixeur cspp a cessé de fonctionner</string>
     <string name="no_mixable_output">Le compte non-mixé n\'a pas de sortie mixable</string>
+    <string name="new_caps">NOUVEAU</string>
+    <string name="privacy_is_here">La vie privée est ici</string>
+    <string name="privacy_intro_desc">Vous pouvez désormais utiliser le mixeur CoinShuffle++ pour mixer vos DCR, directmement dans l\'application.</string>
+    <string name="dismiss">Ignorer</string>
+    <string name="setup_mixer">Configurer le mixeur</string>
+    <string name="privacy_popup_message">Configurer le mixeur CoinShuffle++ dans Vie privée</string>
+    <string name="see_all">Voir tout</string>
+    <string name="privacy_intro_title">Comment le mixeur CoinShuffle++ améliore votre vie privée ?</string>
+    <string name="privacy_intro_desc_1">Le mixeur CoinShuffle++ peut mixer vos DCR avec des transactions CoinJoin.</string>
+    <string name="privacy_intro_desc_2">Utiliser des DCR mixés vous protège d\'exposer vos activités financières au public (ex: combien vous avez, qui vous paie).</string>
+    <string name="setup_mixer_btn_title">Configurer le mixeur pour ce porte-monnaie</string>
+    <string name="privacy_intro_dialog_title">Configurer le mixeur en créant deux comptes nécessaires</string>
+    <string name="privacy_intro_dialog_desc"><![CDATA[Deux comptes dédiés (“mixé” & “non-mixé”) seront créés pour utiliser le mixeur.<br/><br/><b><font color="#091440">Cette action ne peut pas être annulée.</font></b>]]></string>
+    <string name="begin_setup">Démarrer la configuration</string>
+    <string name="mixer_setup_completed">La configuration du mixeur est terminée</string>
+    <string name="ready_to_mix">Prêt à mixer</string>
+    <string name="unmixed_balance">Solde non-mixé</string>
+    <string name="mixed_balance">Solde mixé</string>
+    <string name="mixer_settings">Paramètres du mixeur</string>
+    <string name="account_branch">Branche du compte</string>
+    <string name="shuffle_port">Port aléatoire</string>
+    <string name="shuffle_server">Serveur aléatoire</string>
+    <string name="keep_app_opened">Garder cette application ouverte</string>
+    <string name="mixer_help_title">Comment utiliser le mixeur ?</string>
+    <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>
+    <string name="mixer_is_running">le mixeur cspp fonctionne</string>
+    <string name="keep_this_app_opened">Garder cette application ouverte</string>
+    <string name="mixer_status_info">Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.</string>
+    <string name="check_mixer_status">Vérifier le statut du mixeur</string>
+    <string name="mixing_elp">Mixage...</string>
+    <string name="account_name_taken">Le nom du compte est déjà pris</string>
+    <string name="account_name_conflict_dialog_desc"><![CDATA[Il y a des comptes existants nommés <b>mixé</b> or <b>non-mixé</b>. Merci de changer le nom pour le moment. Vous pourrez les changer de nouveau après la configuration.]]></string>
+    <string name="go_back_rename">Revenir &amp; renommer</string>
+    <string name="set_up_needed_accounts">Configurer les comptes nécessaires</string>
+    <string name="setup_mixer_account_desc">Deux comptes dédiés seront configurés pour utiliser le mixeur:</string>
+    <string name="setup_mixer_account_bullet_1">Le compte <font color='#091440'><b>mixé</b></font> sera le compte pour les dépenses sortantes.</string>
+    <string name="setup_mixer_account_bullet_2">Le compte <font color='#091440'><b>non-mixé</b></font> sera le compte pour gérer la monnaie.</string>
+    <string name="auto_setup">Configuration auto</string>
+    <string name="auto_setup_desc">Créer et configurer les comptes nécessaires pour vous.</string>
+    <string name="manual_setup_desc">Pour les porte-monnaies qui ont préalablement activé la vie privée.</string>
+    <string name="manual_mixer_setup_help"><font color='#091440'><b>Assurez-vous de sélectionner les comptes correspondants à la configuration précédente.</b></font> En cas d\'erreur cela pourrait compromettre la vie privée du porte-monnaie.</string>
+    <string name="set_up">Configurer</string>
+    <string name="manual_setup">Configuration manuelle</string>
+    <string name="same_mixed_unmixed"><![CDATA[Impossible d\'utiliser le même compte pour mixé & non-mixé]]></string>
+    <plurals name="mixer_is_running">
+        <item quantity="one">1 mixeur fonctionne…</item>
+        <item quantity="other">%d mixeurs fonctionnent…</item>
+    </plurals>
+
+    <!--Politeia-->
+    <string name="politeia">Politeia</string>
+    <string name="proposal_details">Détails de la proposition</string>
+    <string name="ago">avant</string>
+    <string name="now">maintenant</string>
+    <string name="status_abandoned">Abandonné</string>
+    <string name="status_invalid">Invalide</string>
+    <string name="status_not_authorized">Non autorisé par l\'auteur</string>
+    <string name="status_authorized">Autorisé par l\'auteur</string>
+    <string name="status_vote_started">Vote démarré</string>
+    <string name="status_approved">Approuvé</string>
+    <string name="status_rejected">Rejeté</string>
+    <string name="status_non_existent">N\'existe pas</string>
+    <string name="no_proposals">Pas de propositions pour la catégorie sélectionnée.</string>
+    <string name="proposal_in_discussion">En Discussion (%1$d)</string>
+    <string name="proposal_active">Active (%1$d)</string>
+    <string name="proposal_approved">Approuvée (%1$d)</string>
+    <string name="proposal_rejected">Rejetée (%1$d)</string>
+    <string name="proposal_abandoned">Abandonnée (%1$d)</string>
+    <string name="politeia_notifications">Notifications Politeia</string>
+    <string name="new_proposal">Nouvelle Proposition</string>
+    <string name="vote_started">Vote Démarré</string>
+    <string name="vote_ended">Vote Terminé</string>
+    <string name="share_proposal">Partager le lien vers la proposition</string>
+    <string name="comments">%d commentaires</string>
+    <string name="version_number">version %s</string>
+    <string name="yes_votes_percent">Oui: %1$d (%2$.2f%%)</string>
+    <string name="no_votes_percent">Non: %1$d (%2$.2f%%)</string>
+    <string name="yes_no_votes_percent">Oui: %1$d (%2$.2f%%)  Non: %3$d (%4$.2f%%)</string>
+    <string name="proposal_name_author">%1$s par %2$s</string>
+    <!--/Politeia-->
 
 </resources>
