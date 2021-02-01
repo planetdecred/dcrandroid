@@ -16,7 +16,6 @@
     <string name="help">Aide</string>
     <string name="about">À propos</string>
     <string name="statistics">Statistiques</string>
-    <string name="statistics">Statistiques</string>
     <string name="build">Build</string>
     <string name="uptime">Durée de fonctionnement</string>
     <string name="network">Réseau</string>
@@ -179,7 +178,6 @@
     <string name="view_wallets_log">Voir les logs des porte-monnaies</string>
     <string name="currency_conversion">Conversion de devise</string>
     <string name="user_agent_summary">Pour rafraîchir les taux de change</string>
-    <string name="change">Changer</string>
     <string name="change">Échanger</string>
 
     <string-array name="currency_conversion">
