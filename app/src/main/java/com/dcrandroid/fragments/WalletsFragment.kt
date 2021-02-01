@@ -122,9 +122,6 @@ class WalletsFragment : BaseFragment() {
                             .setPositiveButton(getString(R.string.ok))
                             .show()
                     return false
-                } else if (multiWallet!!.isConnectedToDecredNetwork) {
-                    SnackBar.showError(context!!, R.string.disconnect_add_wallet)
-                    return false
                 }
 
                 if (activity is HomeActivity) {
