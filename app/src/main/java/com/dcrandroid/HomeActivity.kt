@@ -294,6 +294,20 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
     }
 
+    fun setToolbarSubTitle(title: CharSequence, showShadow: Boolean) {
+        if (title == "") {
+            toolbar_subtitle.visibility = View.GONE
+        } else {
+            toolbar_subtitle.visibility = View.VISIBLE
+            toolbar_subtitle.text = title
+            app_bar.elevation = if (showShadow) {
+                resources.getDimension(R.dimen.app_bar_elevation)
+            } else {
+                0f
+            }
+        }
+    }
+
     fun checkWifiSync() {
         if (!multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, Constants.DEF_SYNC_ON_CELLULAR)) {
             // Check if wifi is connected

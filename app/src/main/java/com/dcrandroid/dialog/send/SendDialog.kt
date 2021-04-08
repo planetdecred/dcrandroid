@@ -30,6 +30,7 @@ import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.CurrencyUtil
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.AccountCustomSpinner
@@ -405,8 +406,8 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             val feeCoin = Dcrlibwallet.amountCoin(feeAtom)
             val totalCostCoin = Dcrlibwallet.amountCoin(totalCostAtom)
 
-            val feeUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin)
-            val totalCostUSD = dcrToFormattedUSD(amountHelper.exchangeDecimal, totalCostCoin, 2)
+            val feeUSD = CurrencyUtil.dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin)
+            val totalCostUSD = CurrencyUtil.dcrToFormattedUSD(amountHelper.exchangeDecimal, totalCostCoin, 2)
 
             feeSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, feeString, feeUSD), 0)
             totalCostSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, totalCostString, totalCostUSD), 0)

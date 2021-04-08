@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -36,12 +35,18 @@
                 tools:text="315.08193725 DCR" />
 
             <TextView
+                android:id="@+id/tv_visible_usd_wallet_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="@string/current_total_balance"
-                android:textColor="#596d81"
-                android:textSize="14sp"
+                android:background="@drawable/light_grey_border_8dp"
+                android:textColor="#3D5873"
+                android:paddingTop="@dimen/margin_padding_size_4"
+                android:paddingBottom="@dimen/margin_padding_size_4"
+                android:paddingStart="@dimen/margin_padding_size_12"
+                android:paddingEnd="@dimen/margin_padding_size_12"
+                android:textSize="@dimen/edit_text_size_16"
+                android:visibility="gone"
                 app:fontFamily="@font/source_sans_pro" />
 
         </LinearLayout>

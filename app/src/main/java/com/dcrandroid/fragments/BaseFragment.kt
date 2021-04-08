@@ -66,6 +66,13 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         }
     }
 
+    fun setToolbarSubTitle(title: CharSequence, showShadow: Boolean) {
+        if (activity is HomeActivity) {
+            val homeActivity = activity as HomeActivity
+            homeActivity.setToolbarSubTitle(title, showShadow)
+        }
+    }
+
     fun refreshNavigationTabs() {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity
