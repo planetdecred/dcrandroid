@@ -282,6 +282,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         showOrHideFab(position)
 
+        // Hide title bar usd balance if not OverviewFragment
+        if (position > 0) {
+            toolbar_subtitle.visibility = View.GONE
+        }
+
         adapter.changeActiveTab(position)
     }
 
