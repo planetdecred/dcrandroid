@@ -68,7 +68,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     internal lateinit var noTransactionsTextView: TextView
     internal lateinit var transactionsLayout: LinearLayout
 
-    var exchangeEnabled = true
     var exchangeDecimal: BigDecimal? = null
 
     private lateinit var syncLayout: LinearLayout
@@ -92,8 +91,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        fetchExchangeRate()
 
         adapter = TransactionListAdapter(context!!, transactions)
 
@@ -153,6 +150,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
         multiWallet?.setAccountMixerNotification(this)
+
+        fetchExchangeRate()
     }
 
     private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
@@ -212,18 +211,18 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onScrollChanged() {
-        val totalCostAtom = multiWallet!!.totalWalletBalance()
-        val totalCostCoin = Dcrlibwallet.amountCoin(totalCostAtom)
+        val totalBalanceAtom = multiWallet!!.totalWalletBalance()
+        val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
 
         if (mainBalanceIsVisible()) {
             setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
             if (isExchangeEnabled()) {
-                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.dcr_usd, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalCostCoin, 2)), 0)
-                setToolbarSubTitle(formattedUSD, true)
+                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+                setToolbarSubTitle(formattedUSD)
             }
         } else {
             setToolbarTitle(R.string.overview, false)
-            setToolbarSubTitle("", false)
+            setToolbarSubTitle("")
         }
     }
 
@@ -234,9 +233,9 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         if (mainBalanceIsVisible()) {
             setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
-            if (isExchangeEnabled()) {
-                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.dcr_usd, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalCostCoin, 2)), 0)
-                setToolbarSubTitle(formattedUSD, true)
+            if (exchangeDecimal != null) {
+                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalCostCoin, 2)), 0)
+                setToolbarSubTitle(formattedUSD)
             }
         }
     }
@@ -346,12 +345,9 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun isExchangeEnabled(): Boolean {
-        val multiWallet = WalletData.multiWallet!!
-        val currencyConversion = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
+        val currencyConversion = multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
 
-        exchangeEnabled = currencyConversion > 0
-
-        return exchangeEnabled
+        return currencyConversion > 0
     }
 
     private fun fetchExchangeRate() {
@@ -369,7 +365,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         val totalCostAtom = multiWallet!!.totalWalletBalance()
         val totalCostCoin = Dcrlibwallet.amountCoin(totalCostAtom)
-        val formattedUSD = HtmlCompat.fromHtml(getString(R.string.dcr_usd, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalCostCoin, 2)), 0)
+        val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalCostCoin, 2)), 0)
         usdBalanceTextView.text = formattedUSD
 
         GlobalScope.launch(Dispatchers.Main) {

@@ -299,17 +299,12 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
     }
 
-    fun setToolbarSubTitle(title: CharSequence, showShadow: Boolean) {
-        if (title == "") {
+    fun setToolbarSubTitle(subtitle: CharSequence) {
+        if (subtitle == "") {
             toolbar_subtitle.visibility = View.GONE
         } else {
             toolbar_subtitle.visibility = View.VISIBLE
-            toolbar_subtitle.text = title
-            app_bar.elevation = if (showShadow) {
-                resources.getDimension(R.dimen.app_bar_elevation)
-            } else {
-                0f
-            }
+            toolbar_subtitle.text = subtitle
         }
     }
 

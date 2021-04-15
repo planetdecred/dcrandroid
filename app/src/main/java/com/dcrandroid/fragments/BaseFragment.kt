@@ -66,10 +66,10 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         }
     }
 
-    fun setToolbarSubTitle(title: CharSequence, showShadow: Boolean) {
+    fun setToolbarSubTitle(subtitle: CharSequence) {
         if (activity is HomeActivity) {
             val homeActivity = activity as HomeActivity
-            homeActivity.setToolbarSubTitle(title, showShadow)
+            homeActivity.setToolbarSubTitle(subtitle)
         }
     }
 
