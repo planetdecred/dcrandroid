@@ -366,9 +366,9 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         val totalBalanceAtom = multiWallet!!.totalWalletBalance()
         val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
         val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
-        usdBalanceTextView.text = formattedUSD
 
         GlobalScope.launch(Dispatchers.Main) {
+            usdBalanceTextView.text = formattedUSD
             usdBalanceTextView.show()
         }
     }
