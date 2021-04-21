@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,10 +25,7 @@ import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
 import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.*
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.Deserializer
-import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.SyncLayoutUtil
+import com.dcrandroid.util.*
 import com.google.gson.GsonBuilder
 import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.Dcrlibwallet
@@ -40,10 +38,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 const val MAX_TRANSACTIONS = 3
 
-class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener, AccountMixerNotificationListener {
+class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener, AccountMixerNotificationListener, GetExchangeRate.ExchangeRateCallback {
 
     companion object {
         private var closedBackupWarning = false
@@ -65,8 +64,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var balanceTextView: TextView
+    private lateinit var usdBalanceTextView: TextView
     internal lateinit var noTransactionsTextView: TextView
     internal lateinit var transactionsLayout: LinearLayout
+
+    var exchangeDecimal: BigDecimal? = null
 
     private lateinit var syncLayout: LinearLayout
     private var syncLayoutUtil: SyncLayoutUtil? = null
@@ -80,6 +82,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         recyclerView = view.findViewById(R.id.rv_transactions)
 
         balanceTextView = view.findViewById(R.id.tv_visible_wallet_balance)
+        usdBalanceTextView = view.findViewById(R.id.tv_visible_usd_wallet_balance)
         noTransactionsTextView = view.findViewById(R.id.tv_no_transactions)
         transactionsLayout = view.findViewById(R.id.transactions_view)
 
@@ -147,6 +150,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
         multiWallet?.setAccountMixerNotification(this)
+
+        fetchExchangeRate()
     }
 
     private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
@@ -206,17 +211,32 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     override fun onScrollChanged() {
+        val totalBalanceAtom = multiWallet!!.totalWalletBalance()
+        val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
+
         if (mainBalanceIsVisible()) {
             setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
+            if (exchangeDecimal != null) {
+                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+                setToolbarSubTitle(formattedUSD)
+            }
         } else {
             setToolbarTitle(R.string.overview, false)
+            setToolbarSubTitle("")
         }
     }
 
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
         balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.5f)
+        val totalBalanceAtom = multiWallet!!.totalWalletBalance()
+        val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
+
         if (mainBalanceIsVisible()) {
             setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
+            if (exchangeDecimal != null) {
+                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+                setToolbarSubTitle(formattedUSD)
+            }
         }
     }
 
@@ -322,6 +342,43 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onAccountMixerStarted(walletID: Long) {
         setMixerStatus()
+    }
+
+    private fun isExchangeEnabled(): Boolean {
+        val currencyConversion = multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
+
+        return currencyConversion > 0
+    }
+
+    private fun fetchExchangeRate() {
+        if (!isExchangeEnabled()) {
+            return
+        }
+
+        println("Getting exchange rate")
+        val userAgent = multiWallet!!.readStringConfigValueForKey(Dcrlibwallet.UserAgentConfigKey)
+        GetExchangeRate(userAgent, this).execute()
+    }
+
+    override fun onExchangeRateSuccess(rate: GetExchangeRate.BittrexRateParser) {
+        exchangeDecimal = rate.usdRate
+
+        val totalBalanceAtom = multiWallet!!.totalWalletBalance()
+        val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
+        val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+
+        GlobalScope.launch(Dispatchers.Main) {
+            usdBalanceTextView.text = formattedUSD
+            usdBalanceTextView.show()
+        }
+    }
+
+    override fun onExchangeRateError(e: Exception) {
+        e.printStackTrace()
+
+        GlobalScope.launch(Dispatchers.Main) {
+            usdBalanceTextView.hide()
+        }
     }
 }
 

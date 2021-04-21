@@ -21,10 +21,7 @@ import com.dcrandroid.dialog.PasswordPromptDialog
 import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
-import com.dcrandroid.util.CoinFormat
-import com.dcrandroid.util.PassPromptTitle
-import com.dcrandroid.util.PassPromptUtil
-import com.dcrandroid.util.Utils
+import com.dcrandroid.util.*
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
@@ -61,7 +58,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
 
         val dcrAmount = CoinFormat.formatDecred(Dcrlibwallet.amountAtom(transactionData.dcrAmount.toDouble()))
         val amountStr = if (transactionData.exchangeDecimal != null) {
-            val usdAmount = dcrToFormattedUSD(transactionData.exchangeDecimal, transactionData.dcrAmount.toDouble(), 2)
+            val usdAmount = CurrencyUtil.dcrToFormattedUSD(transactionData.exchangeDecimal, transactionData.dcrAmount.toDouble(), 2)
             HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, dcrAmount, usdAmount), 0)
         } else {
             getString(R.string.x_dcr, dcrAmount)
