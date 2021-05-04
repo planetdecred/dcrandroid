@@ -456,6 +456,7 @@
     <string name="to_address">To address</string>
     <string name="paste">Paste</string>
     <string name="qr_code_scan_hint">Place QR code in the frame</string>
+    <string name="source_account_changed">Source account changed</string>
     <string name="source_account_picker_title">Sending account</string>
     <string name="dest_account_picker_title">Receiving account</string>
     <string name="none">None</string>

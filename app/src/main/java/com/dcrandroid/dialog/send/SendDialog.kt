@@ -83,19 +83,26 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             amountChanged = this@SendDialog.amountChanged
         }
 
+        destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
+            addressChanged = destAddressChanged
+            addressInputHelper.textChanged = destAddressChanged
+            destinationAccountSpinner.selectedAccountChanged = destAccountChanged
+        }
+
         sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager,
                 source_account_spinner, sourceAccountChanged)
         sourceAccountSpinner.init {
-            // Disable unmixed account and watch only wallet
-            !it.isMixerUnMixedAccount && !multiWallet.walletWithID(it.walletID).isWatchingOnlyWallet
+            // If wallet has privacy enabled, enable only mixed account when sending to an address
+            // and enable all accounts when sending to an account
+            val wallet = multiWallet.walletWithID(it.walletID)
+            if (wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)
+                    && !destinationAddressCard.isSendToAccount) {
+                it.isMixerMixedAccount
+            } else {
+                true
+            }
         }
         sourceAccountSpinner.pickerTitle = R.string.source_account_picker_title
-
-        destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
-            addressChanged = this@SendDialog.addressChanged
-            addressInputHelper.textChanged = this@SendDialog.addressChanged
-            destinationAccountSpinner.selectedAccountChanged = destAccountChanged
-        }
 
         send_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
 
@@ -236,8 +243,9 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         constructTransaction()
     }
 
-    private val addressChanged: () -> Unit = {
+    private val destAddressChanged: () -> Unit = {
         constructTransaction()
+        sourceAccountSpinner.refreshSelectedAccount()
     }
 
     private val amountChanged: (Boolean) -> Unit = { byUser ->
