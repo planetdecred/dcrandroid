@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.activity_sign_message.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SignMessage : BaseActivity(), View.OnClickListener {
 
@@ -92,11 +91,20 @@ class SignMessage : BaseActivity(), View.OnClickListener {
         when (v!!.id) {
             R.id.tv_sign -> {
                 val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
-                PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { _, pass ->
+                PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { dialog, pass ->
                     if (pass != null) {
-                        beginSignMessage(pass)
+                        GlobalScope.launch(Dispatchers.Default) {
+                            try {
+                                beginSignMessage(pass)
+                                dialog?.dismiss()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                PassPromptUtil.handleError(this@SignMessage, e, dialog)
+                            }
+                        }
+
                     }
-                    true
+                    false
                 }.show()
             }
             R.id.tv_copy -> {
@@ -144,7 +152,7 @@ class SignMessage : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun beginSignMessage(passphrase: String) = GlobalScope.launch(Dispatchers.Default) {
+    private fun beginSignMessage(passphrase: String) {
         toggleViews(false)
 
         val address = addressInputHelper.validatedInput!!
@@ -154,26 +162,18 @@ class SignMessage : BaseActivity(), View.OnClickListener {
             val signature = wallet.signMessage(passphrase.toByteArray(), address, message)
             val signatureStr = Dcrlibwallet.encodeBase64(signature)
 
-            withContext(Dispatchers.Main) {
+            GlobalScope.launch(Dispatchers.Main) {
                 result_layout.show()
                 signatureHelper.editText.setText(signatureStr)
                 SnackBar.showText(this@SignMessage, R.string.message_signed)
             }
+            toggleViews(true)
         } catch (e: Exception) {
-            e.printStackTrace()
-            if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-
-                val err = if (wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePin) {
-                    R.string.invalid_pin
-                } else {
-                    R.string.invalid_password
-                }
-
-                SnackBar.showError(this@SignMessage, err)
-            }
+            toggleViews(true)
+            throw e
         }
 
-        toggleViews(true)
+
     }
 
 }

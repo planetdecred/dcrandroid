@@ -145,20 +145,22 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
                 return@PassPromptUtil true
             }
 
-            try {
-                multiWallet!!.startAccountMixer(wallet.id, passphrase)
-                GlobalScope.launch(Dispatchers.Main) {
-                    dialog?.dismiss()
-                }
-
-            } catch (e: Exception) {
-                if (e.message == Dcrlibwallet.ErrNoMixableOutput) {
-                    SnackBar.showError(this, R.string.no_mixable_output)
+            GlobalScope.launch(Dispatchers.Default) {
+                try {
+                    multiWallet!!.startAccountMixer(wallet.id, passphrase)
                     GlobalScope.launch(Dispatchers.Main) {
                         dialog?.dismiss()
                     }
-                } else {
-                    PassPromptUtil.handleError(this, e, dialog)
+
+                } catch (e: Exception) {
+                    if (e.message == Dcrlibwallet.ErrNoMixableOutput) {
+                        SnackBar.showError(this@AccountMixerActivity, R.string.no_mixable_output)
+                        GlobalScope.launch(Dispatchers.Main) {
+                            dialog?.dismiss()
+                        }
+                    } else {
+                        PassPromptUtil.handleError(this@AccountMixerActivity, e, dialog)
+                    }
                 }
             }
 
