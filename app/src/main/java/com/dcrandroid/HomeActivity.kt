@@ -282,6 +282,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         showOrHideFab(position)
 
+        // Hide title bar usd balance if not OverviewFragment
+        if (position > 0) {
+            toolbar_subtitle.visibility = View.GONE
+        }
+
         adapter.changeActiveTab(position)
     }
 
@@ -291,6 +296,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             resources.getDimension(R.dimen.app_bar_elevation)
         } else {
             0f
+        }
+    }
+
+    fun setToolbarSubTitle(subtitle: CharSequence) {
+        if (subtitle == "") {
+            toolbar_subtitle.visibility = View.GONE
+        } else {
+            toolbar_subtitle.visibility = View.VISIBLE
+            toolbar_subtitle.text = subtitle
         }
     }
 

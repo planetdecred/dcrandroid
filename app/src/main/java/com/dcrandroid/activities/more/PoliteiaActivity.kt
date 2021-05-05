@@ -65,6 +65,7 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
 
     override fun onResume() {
         super.onResume()
+        multiWallet!!.politeia.removeNotificationListener(this.javaClass.name)
         multiWallet!!.politeia.addNotificationListener(this, this.javaClass.name)
     }
 

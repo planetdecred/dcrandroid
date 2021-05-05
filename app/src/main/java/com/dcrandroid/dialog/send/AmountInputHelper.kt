@@ -20,6 +20,7 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.CurrencyUtil
 import com.dcrandroid.util.GetExchangeRate
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
@@ -29,12 +30,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
 const val AmountRelativeSize = 0.625f
-val usdAmountFormat: DecimalFormat = DecimalFormat("0.0000")
 val usdAmountFormat2: DecimalFormat = DecimalFormat("0.00")
 val dcrFormat = DecimalFormat("#.########")
 
@@ -194,7 +193,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             layout.send_amount.removeTextChangedListener(this)
 
             dcrAmount = BigDecimal(coin)
-            usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
+            usdAmount = CurrencyUtil.dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
 
             if (currencyIsDCR) {
                 val dcr = Dcrlibwallet.amountAtom(coin)
@@ -252,10 +251,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         if (enteredAmount != null) {
             if (currencyIsDCR) {
                 dcrAmount = enteredAmount!!
-                usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
+                usdAmount = CurrencyUtil.dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
             } else {
                 usdAmount = enteredAmount!!
-                dcrAmount = usdToDCR(exchangeDecimal, usdAmount!!.toDouble())
+                dcrAmount = CurrencyUtil.usdToDCR(exchangeDecimal, usdAmount!!.toDouble())
             }
         } else {
             dcrAmount = null
@@ -312,7 +311,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
         }
 
         if (dcrAmount != null) {
-            usdAmount = dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
+            usdAmount = CurrencyUtil.dcrToUSD(exchangeDecimal, dcrAmount!!.toDouble())
         }
 
         displayEquivalentValue()
@@ -329,29 +328,4 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             layout.exchange_layout.show()
         }
     }
-}
-
-fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String {
-    if (scale == 4) {
-        return usdAmountFormat.format(
-                dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
-    }
-
-    return usdAmountFormat2.format(
-            dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
-}
-
-fun dcrToUSD(exchangeDecimal: BigDecimal?, dcr: Double): BigDecimal? {
-    val dcrDecimal = BigDecimal(dcr)
-    return exchangeDecimal?.multiply(dcrDecimal)
-}
-
-fun usdToDCR(exchangeDecimal: BigDecimal?, usd: Double): BigDecimal? {
-    if (exchangeDecimal == null) {
-        return null
-    }
-
-    val usdDecimal = BigDecimal(usd)
-    // using 8 to be safe
-    return usdDecimal.divide(exchangeDecimal, 8, RoundingMode.HALF_EVEN)
 }

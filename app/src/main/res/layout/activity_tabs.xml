@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2018-2019 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
@@ -54,6 +53,22 @@
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="16dp" />
+
+                <TextView
+                    android:id="@+id/toolbar_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:background="@drawable/light_grey_border_8dp"
+                    android:textColor="#3D5873"
+                    android:paddingTop="@dimen/margin_padding_size_4"
+                    android:paddingBottom="@dimen/margin_padding_size_4"
+                    android:paddingStart="@dimen/margin_padding_size_6"
+                    android:paddingEnd="@dimen/margin_padding_size_6"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:textSize="@dimen/edit_text_size_14"
+                    android:visibility="gone"
+                    app:fontFamily="@font/source_sans_pro" />
 
             </LinearLayout>
 
