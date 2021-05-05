@@ -7,19 +7,12 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
-import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
-import com.dcrandroid.dialog.txdetails.TransactionDetailsDialog
-import com.dcrandroid.extensions.hide
-import com.dcrandroid.extensions.show
-import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
@@ -78,101 +71,8 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
 
 
         val transaction = transactions[position]
-
-        holder.icon.setImageResource(transaction.iconResource)
-
-        holder.itemView.ticket_price.hide()
-        holder.itemView.days_to_vote.hide()
-        holder.itemView.vote_reward.hide()
-
-        if (transaction.confirmations < requiredConfirmations) {
-            holder.status.setPending()
-            holder.statusImg.setImageResource(R.drawable.ic_pending)
-        } else {
-            holder.status.setConfirmed(transaction.timestamp)
-            holder.statusImg.setImageResource(R.drawable.ic_confirmed)
-        }
-
-        if (transaction.animate) {
-            val blinkAnim = AnimationUtils.loadAnimation(holder.view.context, R.anim.anim_blink)
-            holder.view.animation = blinkAnim
-            transaction.animate = false
-        }
-
-        if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            if (transaction.isMixed) {
-                holder.amount.text = context.getString(R.string.mix)
-            } else {
-                val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                    -transaction.amount
-                } else {
-                    transaction.amount
-                }
-                val strAmount = CoinFormat.formatDecred(txAmount)
-
-                holder.amount.apply {
-                    text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
-                }
-            }
-
-            holder.itemView.ticket_price.hide()
-
-        } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
-
-            holder.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
-
-            holder.itemView.ticket_price.apply {
-                show()
-                text = CoinFormat.format(transaction.amount, 0.715f)
-            }
-
-            var title = 0
-            when (transaction.type) {
-                Dcrlibwallet.TxTypeTicketPurchase -> {
-                    title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
-                        R.string.immature
-                    } else {
-                        if (wallet.ticketHasVotedOrRevoked(transaction.hash)) {
-                            R.string.purchased
-                        } else {
-                            R.string.live
-                        }
-                    }
-                }
-                Dcrlibwallet.TxTypeVote -> {
-                    title = R.string.vote
-                }
-                Dcrlibwallet.TxTypeRevocation -> {
-                    title = R.string.revoked
-                }
-            }
-
-            if (transaction.type == Dcrlibwallet.TxTypeVote || transaction.type == Dcrlibwallet.TxTypeRevocation) {
-                holder.itemView.vote_reward.apply {
-                    text = CoinFormat.format(transaction.voteReward, 0.715f)
-                    show()
-                }
-
-                holder.itemView.days_to_vote.apply {
-                    val daysToVoteOrRevoke = transaction.daysToVoteOrRevoke
-                    text = if (daysToVoteOrRevoke == 1) {
-                        context.getString(R.string.one_day)
-                    } else {
-                        context.getString(R.string.x_days, daysToVoteOrRevoke)
-                    }
-
-                    show()
-                }
-            }
-
-            holder.amount.setText(title)
-        }
-
-        holder.itemView.transaction_ripple_layout.setOnClickListener {
-            TransactionDetailsDialog(transaction).show(context)
-        }
-
+        populateTxRow(transaction, holder.itemView, layoutInflater)
     }
 
 }
+
