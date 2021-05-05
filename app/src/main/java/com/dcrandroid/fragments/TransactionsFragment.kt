@@ -89,7 +89,6 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
 
         initAdapter()
-
     }
 
     override fun onScrollChanged() {

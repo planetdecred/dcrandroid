@@ -11,6 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:id="@+id/transaction_ripple_layout"
     android:minHeight="56dp"
     android:clickable="true"
     android:focusable="true"
@@ -34,41 +35,105 @@
         android:orientation="vertical"
         android:layout_marginStart="@dimen/margin_padding_size_14">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/edit_text_size_20"
-            android:textColor="@color/darkBlueTextColor"
-            tools:text="8.61990311 DCR"
-            android:fontFamily="@font/source_sans_pro"
-            android:id="@+id/amount"
-            android:includeFontPadding="false" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/edit_text_size_20"
+                android:textColor="@color/darkBlueTextColor"
+                tools:text="8.61990311 DCR"
+                android:fontFamily="@font/source_sans_pro"
+                android:id="@+id/amount"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_padding_size_4"
+                android:layout_marginStart="@dimen/margin_padding_size_8"
+                android:textSize="@dimen/edit_text_size_14"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_light_green_corners_4dp"
+                android:text="8.61990311 DCR"
+                app:fontFamily="@font/source_sans_pro"
+                android:id="@+id/vote_reward"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:includeFontPadding="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_4"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wallet_name"
+                android:layout_marginEnd="@dimen/margin_padding_size_8"
+                android:background="@color/colorBackground"
+                android:padding="@dimen/margin_padding_size_2"
+                android:textSize="@dimen/edit_text_size_12"
+                android:textColor="@color/lightGrayTextColor"
+                tools:text="wallet-1"
+                tools:visibility="visible"
+                android:visibility="gone"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ticket_price"
+                android:textSize="@dimen/edit_text_size_14"
+                android:textColor="@color/lightGrayTextColor"
+                android:text="116.51637184 DCR"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|end"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/wallet_name"
-            android:background="@color/colorBackground"
+            android:textSize="@dimen/edit_text_size_16"
+            tools:text="Pending"
+            android:textColor="#8997a5"
+            app:fontFamily="@font/source_sans_pro"
+            android:gravity="center_vertical"
+            android:id="@+id/status" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/days_to_vote"
             android:layout_marginTop="@dimen/margin_padding_size_4"
-            android:padding="@dimen/margin_padding_size_2"
-            android:textSize="@dimen/edit_text_size_12"
-            android:textColor="@color/lightGrayTextColor"
-            tools:text="wallet-1"
+            android:textSize="@dimen/edit_text_size_14"
+            android:textColor="@color/lightGray"
+            android:text="14 days"
             android:visibility="gone"
+            tools:visibility="visible"
             app:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false" />
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/edit_text_size_16"
-        tools:text="Pending"
-        android:textColor="#8997a5"
-        app:fontFamily="@font/source_sans_pro"
-        android:gravity="center_vertical"
-        android:id="@+id/status" />
 
     <ImageView
         android:layout_width="@dimen/margin_padding_size_12"

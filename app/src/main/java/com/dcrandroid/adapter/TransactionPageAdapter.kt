@@ -23,7 +23,7 @@ import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
-import kotlinx.android.synthetic.main.transaction_page_row.view.*
+import kotlinx.android.synthetic.main.transaction_row.view.*
 
 class TransactionPageAdapter(val context: Context, walletID: Long, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
@@ -59,7 +59,7 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
             else -> R.drawable.transactions_row_bg
         }
 
-        holder.itemView.ripple_layout.setBackgroundResource(backgroundResource)
+        holder.itemView.transaction_ripple_layout.setBackgroundResource(backgroundResource)
 
         // setting top & bottom margin for top and bottom rows.
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
@@ -169,7 +169,7 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
             holder.amount.setText(title)
         }
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.transaction_ripple_layout.setOnClickListener {
             TransactionDetailsDialog(transaction).show(context)
         }
 
