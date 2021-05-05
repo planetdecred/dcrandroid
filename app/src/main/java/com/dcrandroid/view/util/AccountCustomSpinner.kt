@@ -7,7 +7,9 @@
 package com.dcrandroid.view.util
 
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
+import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.parseAccounts
 import com.dcrandroid.dialog.AccountPickerDialog
@@ -15,6 +17,7 @@ import com.dcrandroid.extensions.firstWalletWithAValidAccount
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.CoinFormat
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
@@ -52,6 +55,21 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
     fun init(filterAccount: (account: Account) -> Boolean) {
         this.filterAccount = filterAccount
 
+        refreshSelectedAccount()
+    }
+
+    fun refreshSelectedAccount() {
+
+        var previouslySelectedAccount: Account? = null
+        if (selectedAccount != null) {
+            // don't refresh if current selected account is valid
+            if (filterAccount(selectedAccount!!)) {
+                return
+            }
+
+            previouslySelectedAccount = selectedAccount
+        }
+
         // Set default selected account as "default"
         // account from the first wallet with a valid or `walletID`
         val wal = if (singleWalletID != null) multiWallet!!.walletWithID(singleWalletID!!)
@@ -68,6 +86,11 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
             }
 
             spinnerLayout.setOnClickListener(this)
+        }
+
+        if (selectedAccount != null && previouslySelectedAccount != null
+                && previouslySelectedAccount != selectedAccount) {
+            SnackBar.showText(spinnerLayout.context, R.string.source_account_changed, Toast.LENGTH_SHORT)
         }
     }
 

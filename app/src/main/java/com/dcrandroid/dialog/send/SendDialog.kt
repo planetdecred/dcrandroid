@@ -84,19 +84,35 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             amountChanged = this@SendDialog.amountChanged
         }
 
+        destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
+            addressChanged = destAddressChanged
+            addressInputHelper.textChanged = destAddressChanged
+            destinationAccountSpinner.selectedAccountChanged = destAccountChanged
+        }
+
         sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager,
                 source_account_spinner, sourceAccountChanged)
         sourceAccountSpinner.init {
-            // Disable unmixed account and watch only wallet
-            !it.isMixerUnMixedAccount && !multiWallet.walletWithID(it.walletID).isWatchingOnlyWallet
+            // If wallet has privacy enabled, enable only mixed account when sending to an address
+            // and enable all accounts when sending to an account
+            val wallet = multiWallet.walletWithID(it.walletID)
+            var accountIsEnabled = true // all accounts are enabled for non-privacy wallets
+            if (wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)) {
+                if (destinationAddressCard.isSendToAccount) {
+                    // unmixed accounts are not valid for sending if destination account is another wallet
+                    val destinationWalletID = destinationAddressCard.destinationAccount!!.walletID
+                    if (destinationWalletID != it.walletID) {
+                        accountIsEnabled = it.isMixerMixedAccount
+                    }
+                } else {
+                    // only mixed account can send to an address
+                    accountIsEnabled = it.isMixerMixedAccount
+                }
+            }
+
+            accountIsEnabled
         }
         sourceAccountSpinner.pickerTitle = R.string.source_account_picker_title
-
-        destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
-            addressChanged = this@SendDialog.addressChanged
-            addressInputHelper.textChanged = this@SendDialog.addressChanged
-            destinationAccountSpinner.selectedAccountChanged = destAccountChanged
-        }
 
         send_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
 
@@ -235,10 +251,12 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
     private val destAccountChanged: (AccountCustomSpinner) -> Unit = {
         constructTransaction()
+        sourceAccountSpinner.refreshSelectedAccount()
     }
 
-    private val addressChanged: () -> Unit = {
+    private val destAddressChanged: () -> Unit = {
         constructTransaction()
+        sourceAccountSpinner.refreshSelectedAccount()
     }
 
     private val amountChanged: (Boolean) -> Unit = { byUser ->
