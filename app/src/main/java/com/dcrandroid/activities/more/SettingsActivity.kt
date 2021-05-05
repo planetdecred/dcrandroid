@@ -11,8 +11,6 @@ import android.view.ViewTreeObserver
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.fragments.PasswordPinDialogFragment
@@ -148,20 +146,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                     }
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
-
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        if (dialog is PinPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        } else if (dialog is PasswordPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        }
-                    } else {
-                        dialog?.dismiss()
-                        Dcrlibwallet.logT(op, e.message)
-                        Utils.showErrorDialog(this@SettingsActivity, op + ": " + e.message)
-                    }
+                    PassPromptUtil.handleError(this@SettingsActivity, e, dialog)
 
                     return@launch
                 }
@@ -213,15 +198,7 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        if (dialog is PinPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        } else if (dialog is PasswordPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        }
-                    }
+                    PassPromptUtil.handleError(this@SettingsActivity, e, dialog)
                 }
 
             }

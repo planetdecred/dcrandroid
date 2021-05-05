@@ -56,19 +56,23 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
         }
     }
 
-    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main) {
-        btn_cancel.isEnabled = !processing
-        password_input.isEnabled = !processing
+    override fun setProcessing(processing: Boolean) {
+        GlobalScope.launch(Dispatchers.Main) {
+            btn_cancel.isEnabled = !processing
+            password_input.isEnabled = !processing
 
-        if (!processing) {
-            btn_confirm.isEnabled = password_input.textString.isNotBlank()
-        } else {
-            password_input.setError(null)
+            if (!processing) {
+                btn_confirm.isEnabled = password_input.textString.isNotBlank()
+            } else {
+                password_input.setError(null)
+            }
         }
     }
 
-    fun showError() = GlobalScope.launch(Dispatchers.Main) {
-        password_input.setError(getString(R.string.invalid_password))
+    override fun showError() {
+        GlobalScope.launch(Dispatchers.Main) {
+            password_input.setError(getString(R.string.invalid_password))
+        }
     }
 
     override fun onCancel(dialog: DialogInterface) {

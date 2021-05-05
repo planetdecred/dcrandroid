@@ -62,36 +62,40 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
         }
     }
 
-    fun showError() = GlobalScope.launch(Dispatchers.Main) {
-        pinViewUtil.pinView.rejectInput = true
-        pinViewUtil.showError(R.string.invalid_pin)
-        btn_cancel.isEnabled = false
-        btn_confirm.isEnabled = false
-        btn_confirm.show()
-        progress_bar.hide()
-
-        delay(2000)
-        withContext(Dispatchers.Main) {
-            pinViewUtil.reset()
-            pinViewUtil.showHint(hint)
-            pinViewUtil.pinView.rejectInput = false
-
-            btn_cancel.isEnabled = true
-        }
-    }
-
-    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main) {
-        pinViewUtil.pinView.rejectInput = processing
-        btn_cancel.isEnabled = !processing
-
-        if (processing) {
-            btn_confirm.hide()
-            progress_bar.show()
-        } else {
+    override fun showError() {
+        GlobalScope.launch(Dispatchers.Main) {
+            pinViewUtil.pinView.rejectInput = true
+            pinViewUtil.showError(R.string.invalid_pin)
+            btn_cancel.isEnabled = false
+            btn_confirm.isEnabled = false
             btn_confirm.show()
             progress_bar.hide()
 
-            btn_confirm.isEnabled = pinViewUtil.passCode.isNotEmpty()
+            delay(2000)
+            withContext(Dispatchers.Main) {
+                pinViewUtil.reset()
+                pinViewUtil.showHint(hint)
+                pinViewUtil.pinView.rejectInput = false
+
+                btn_cancel.isEnabled = true
+            }
+        }
+    }
+
+    override fun setProcessing(processing: Boolean) {
+        GlobalScope.launch(Dispatchers.Main) {
+            pinViewUtil.pinView.rejectInput = processing
+            btn_cancel.isEnabled = !processing
+
+            if (processing) {
+                btn_confirm.hide()
+                progress_bar.show()
+            } else {
+                btn_confirm.show()
+                progress_bar.hide()
+
+                btn_confirm.isEnabled = pinViewUtil.passCode.isNotEmpty()
+            }
         }
     }
 
