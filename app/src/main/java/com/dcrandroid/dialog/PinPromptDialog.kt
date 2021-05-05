@@ -24,6 +24,8 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
     var hint = R.string.enter_spending_pin
     private lateinit var pinViewUtil: PinViewUtil
 
+    private var pinTrials = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.pin_prompt_sheet, container, false)
     }
@@ -64,6 +66,11 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
 
     override fun showError() {
         GlobalScope.launch(Dispatchers.Main) {
+            pinTrials++
+            var delayTime = 2000L
+            if (pinTrials % 2 == 0) {
+                delayTime = 5000
+            }
             pinViewUtil.pinView.rejectInput = true
             pinViewUtil.showError(R.string.invalid_pin)
             btn_cancel.isEnabled = false
@@ -71,7 +78,7 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
             btn_confirm.show()
             progress_bar.hide()
 
-            delay(2000)
+            delay(delayTime)
             withContext(Dispatchers.Main) {
                 pinViewUtil.reset()
                 pinViewUtil.showHint(hint)
