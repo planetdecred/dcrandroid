@@ -16,16 +16,17 @@ import com.dcrandroid.R
 import kotlinx.android.synthetic.main.password_prompt_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Boolean,
                            val passEntered: (dialog: FullScreenBottomSheetDialog, passphrase: String?) -> Boolean) : FullScreenBottomSheetDialog() {
 
+    var confirmed = false
+    var passwordTrials = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.password_prompt_sheet, container, false)
     }
-
-    var confirmed = false
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -56,19 +57,36 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
         }
     }
 
-    fun setProcessing(processing: Boolean) = GlobalScope.launch(Dispatchers.Main) {
-        btn_cancel.isEnabled = !processing
-        password_input.isEnabled = !processing
+    override fun setProcessing(processing: Boolean) {
+        GlobalScope.launch(Dispatchers.Main) {
+            btn_cancel.isEnabled = !processing
+            password_input.isEnabled = !processing
 
-        if (!processing) {
-            btn_confirm.isEnabled = password_input.textString.isNotBlank()
-        } else {
-            password_input.setError(null)
+            if (!processing) {
+                btn_confirm.isEnabled = password_input.textString.isNotBlank()
+            } else {
+                password_input.setError(null)
+            }
         }
     }
 
-    fun showError() = GlobalScope.launch(Dispatchers.Main) {
-        password_input.setError(getString(R.string.invalid_password))
+    override fun showError() {
+        GlobalScope.launch(Dispatchers.Main) {
+            passwordTrials++
+            password_input.setError(getString(R.string.invalid_password))
+            password_input.isEnabled = false
+            btn_confirm.isEnabled = false
+
+            var delayTime = 2000L
+            if (passwordTrials % 2 == 0) {
+                delayTime = 5000L
+            }
+
+            delay(delayTime)
+
+            password_input?.isEnabled = true
+            btn_confirm?.isEnabled = true
+        }
     }
 
     override fun onCancel(dialog: DialogInterface) {

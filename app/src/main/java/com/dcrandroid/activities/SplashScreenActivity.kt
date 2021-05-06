@@ -11,7 +11,6 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -27,7 +26,6 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.fragments.PasswordPinDialogFragment
@@ -170,64 +168,43 @@ class SplashScreenActivity : BaseActivity() {
             }
 
         } else {
-            if (multiWallet!!.isStartupSecuritySet) {
-                requestStartupPass()
-            } else {
-                openWallet("")
-            }
-        }
-    }
-
-    private fun requestStartupPass() {
-        val title = PassPromptTitle(R.string.startup_password_prompt_title, R.string.startup_pin_prompt_title, R.string.startup_fingerprint_prompt_title)
-        PassPromptUtil(this, null, title, allowFingerprint = true) { _, pass ->
-            if (pass != null) {
-                openWallet(pass)
-            } else {
-                endProcess()
-            }
-
-            true
-        }.show()
-    }
-
-    private fun openWallet(publicPass: String) = GlobalScope.launch(Dispatchers.IO) {
-        try {
             if (multiWallet!!.loadedWalletsCount() > 1) {
                 setLoadingStatus(R.string.opening_wallets)
             } else {
                 setLoadingStatus(R.string.opening_wallet)
             }
 
-            multiWallet!!.openWallets(publicPass.toByteArray())
-            proceedToHomeActivity()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-
-            withContext(Dispatchers.Main) {
-                val infoDialog = InfoDialog(this@SplashScreenActivity)
-                        .setDialogTitle(getString(R.string.failed_to_open_wallet))
-                        .setMessage(Utils.translateError(this@SplashScreenActivity, e))
-                        .setPositiveButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
-
-                if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-
-                    if (multiWallet!!.startupSecurityType() == Dcrlibwallet.PassphraseTypePin) {
-                        infoDialog.setMessage(getString(R.string.invalid_pin))
-                    }
-
-                    infoDialog.setNegativeButton(getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ -> endProcess() })
-                            .setPositiveButton(getString(R.string.retry_caps), DialogInterface.OnClickListener { _, _ ->
-                                requestStartupPass()
-                            })
+            if (multiWallet!!.isStartupSecuritySet) {
+                requestStartupPass()
+            } else {
+                GlobalScope.launch(Dispatchers.IO) {
+                    multiWallet!!.openWallets(ByteArray(0))
+                    proceedToHomeActivity()
                 }
-
-                infoDialog.setCancelable(false)
-                infoDialog.setCanceledOnTouchOutside(false)
-                infoDialog.show()
             }
         }
+    }
+
+    private fun requestStartupPass() {
+        val title = PassPromptTitle(R.string.startup_password_prompt_title, R.string.startup_pin_prompt_title, R.string.startup_fingerprint_prompt_title)
+        PassPromptUtil(this, null, title, allowFingerprint = true) { dialog, pass ->
+            if (pass != null) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    try {
+                        multiWallet!!.openWallets(pass.toByteArray())
+                        dialog?.dismiss()
+                        proceedToHomeActivity()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        PassPromptUtil.handleError(this@SplashScreenActivity, e, dialog)
+                    }
+                }
+            } else {
+                endProcess()
+            }
+
+            false
+        }.show()
     }
 
     private fun showSetupWallet() = GlobalScope.launch(Dispatchers.Main) {

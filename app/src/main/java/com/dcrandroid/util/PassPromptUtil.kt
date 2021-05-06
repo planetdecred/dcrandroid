@@ -21,25 +21,21 @@ import kotlinx.coroutines.launch
 
 data class PassPromptTitle(val passwordTitle: Int, val pinTitle: Int, val fingerprintTitle: Int = pinTitle)
 
+// return false on passEntered to keep dialog visible after tapping confirm button.
 class PassPromptUtil(private val fragmentActivity: FragmentActivity, val walletID: Long?, val title: PassPromptTitle, private val allowFingerprint: Boolean,
                      private val passEntered: (dialog: FullScreenBottomSheetDialog?, passphrase: String?) -> Boolean) {
 
     var passType: Int = Dcrlibwallet.PassphraseTypePass
 
     companion object {
-        fun handleError(activity: Activity, e: Exception, dialog: FullScreenBottomSheetDialog) {
+        fun handleError(activity: Activity, e: Exception, dialog: FullScreenBottomSheetDialog?) {
             if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                if (dialog is PinPromptDialog) {
-                    dialog.setProcessing(false)
-                    dialog.showError()
-                } else if (dialog is PasswordPromptDialog) {
-                    dialog.setProcessing(false)
-                    dialog.showError()
-                }
+                dialog?.setProcessing(false)
+                dialog?.showError()
             } else {
                 GlobalScope.launch(Dispatchers.Main) {
                     val op = activity.javaClass.name
-                    dialog.dismissAllowingStateLoss()
+                    dialog?.dismissAllowingStateLoss()
                     Utils.showErrorDialog(activity, op + ": " + e.message)
                     Dcrlibwallet.logT(op, e.message)
                 }

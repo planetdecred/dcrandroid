@@ -160,21 +160,7 @@ class WalletSettings : BaseActivity() {
 
                 } catch (e: Exception) {
                     e.printStackTrace()
-
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        if (dialog is PinPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        } else if (dialog is PasswordPromptDialog) {
-                            dialog.setProcessing(false)
-                            dialog.showError()
-                        }
-                    } else {
-
-                        dialog?.dismiss()
-                        Dcrlibwallet.logT(op, e.message)
-                        Utils.showErrorDialog(this@WalletSettings, op + ": " + e.message)
-                    }
+                    PassPromptUtil.handleError(this@WalletSettings, e, dialog)
                 }
             }
             false
@@ -203,19 +189,7 @@ class WalletSettings : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
 
-            if (dialog is PinPromptDialog) {
-                dialog.setProcessing(false)
-            } else if (dialog is PasswordPromptDialog) {
-                dialog.setProcessing(false)
-            }
-
-            if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                val errMessage = when (wallet.privatePassphraseType) {
-                    Dcrlibwallet.PassphraseTypePin -> R.string.invalid_pin
-                    else -> R.string.invalid_password
-                }
-                SnackBar.showError(this@WalletSettings, errMessage)
-            }
+            PassPromptUtil.handleError(this@WalletSettings, e, dialog)
         }
     }
 

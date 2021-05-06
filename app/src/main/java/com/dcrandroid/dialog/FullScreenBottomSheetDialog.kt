@@ -87,6 +87,17 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
     open fun showInfo() {}
     open fun showOptionsMenu(v: View) {}
 
+    // For password and pin dialog
+    open fun setProcessing(processing: Boolean) {
+        throw IllegalAccessException()
+    }
+
+    // For password and pin dialog
+    open fun showError() {
+        throw IllegalAccessException()
+    }
+
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         dismissListener?.onDismiss(dialog)

@@ -17,19 +17,14 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.adapter.SaveSeedAdapter
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.save_seed_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 const val SEEDS_PER_ROW = 17
 
@@ -92,21 +87,7 @@ class SaveSeedActivity : BaseActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
 
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        if (passDialog is PinPromptDialog) {
-                            passDialog.setProcessing(false)
-                            passDialog.showError()
-                        } else if (passDialog is PasswordPromptDialog) {
-                            passDialog.setProcessing(false)
-                            passDialog.showError()
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            passDialog?.dismiss()
-                            Utils.showErrorDialog(this@SaveSeedActivity, op + ": " + e.message)
-                            Dcrlibwallet.logT(op, e.message)
-                        }
-                    }
+                    PassPromptUtil.handleError(this@SaveSeedActivity, e, passDialog)
                 }
             }
 
