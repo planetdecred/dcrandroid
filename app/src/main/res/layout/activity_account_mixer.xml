@@ -360,7 +360,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
-                        android:text="@string/account_branch"
+                        android:text="@string/mixed_account_branch"
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
@@ -394,7 +394,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
-                        android:text="@string/shuffle_server"
+                        android:text="@string/mix_server"
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
@@ -428,7 +428,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
-                        android:text="@string/shuffle_port"
+                        android:text="@string/server_port"
                         android:textColor="@color/darkBlueTextColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
