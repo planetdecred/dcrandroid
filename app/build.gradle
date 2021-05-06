@@ -89,9 +89,9 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     // Crash report sender
-    implementation 'ch.acra:acra:4.11', {
-        exclude group: 'com.android.support'
-    }
+    implementation 'ch.acra:acra-core:5.7.0'
+    implementation 'ch.acra:acra-dialog:5.7.0'
+    implementation 'ch.acra:acra-http:5.7.0'
 
     // JSON serialization & deserialization
     implementation 'com.google.code.gson:gson:2.8.5'
