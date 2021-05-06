@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 The Decred developers
+ * Copyright (c) 2018-2021 The Decred developers
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
@@ -7,9 +7,11 @@
 package com.dcrandroid.extensions
 
 import com.dcrandroid.data.Account
+import com.dcrandroid.data.Constants
 import com.dcrandroid.data.parseAccounts
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.MultiWallet
 import dcrlibwallet.Wallet
 
@@ -61,4 +63,9 @@ fun MultiWallet.totalWalletBalance(): Long {
     }
 
     return totalBalance
+}
+
+fun MultiWallet.requiredConfirmations(): Int {
+    return if (readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)) 0
+    else Constants.REQUIRED_CONFIRMATIONS
 }

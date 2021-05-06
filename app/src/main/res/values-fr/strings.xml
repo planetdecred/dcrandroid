@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2018-2020 The Decred developers
+  ~ Copyright (c) 2018-2021 The Decred developers
   ~ Use of this source code is governed by an ISC
   ~ license that can be found in the LICENSE file.
   -->
@@ -411,6 +411,7 @@
 
     <string name="x_dcr">%1$s DCR</string>
     <string name="x_usd">%1$s USD</string>
+    <string name="usd_symbol_format">$%1$s</string>
     <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
     <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
@@ -439,6 +440,7 @@
     <string name="to_address">Vers adresse</string>
     <string name="paste">Coller</string>
     <string name="qr_code_scan_hint">Placer le QR code dans le cadre</string>
+    <string name="source_account_changed">Le compte source a changé</string>
     <string name="source_account_picker_title">Envoi du compte</string>
     <string name="dest_account_picker_title">Compte de réception</string>
     <string name="none">Aucun</string>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 The Decred developers
+ * Copyright (c) 2018-2021 The Decred developers
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
@@ -241,7 +241,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
-        val jsonResult = multiWallet!!.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterRegular, true)
+        val jsonResult = multiWallet!!.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterAll, true)
         var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (tempTxList == null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 The Decred developers
+ * Copyright (c) 2018-2021 The Decred developers
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
@@ -9,12 +9,14 @@ package com.dcrandroid.adapter
 import android.content.Context
 import android.graphics.Color
 import android.text.format.DateUtils
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
@@ -53,63 +55,18 @@ class TransactionListAdapter(val context: Context, val transactions: ArrayList<T
         val transaction = transactions[position]
 
         if (multiWallet!!.openedWalletsCount() > 1) {
-            holder.walletName.apply {
+            holder.itemView.wallet_name.apply {
                 show()
                 text = transaction.walletName
             }
         } else {
-            holder.walletName.hide()
+            holder.itemView.wallet_name.hide()
         }
-
-        if (transaction.confirmations > 1 || spendUnconfirmedFunds) {
-            holder.status.setConfirmed(transaction.timestamp)
-            holder.statusImg.setImageResource(R.drawable.ic_confirmed)
-        } else {
-            holder.status.setPending()
-            holder.statusImg.setImageResource(R.drawable.ic_pending)
-        }
-
-        if (transaction.animate) {
-            val blinkAnim = AnimationUtils.loadAnimation(holder.view.context, R.anim.anim_blink)
-            holder.view.animation = blinkAnim
-            transaction.animate = false
-        }
-
-        if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            if (transaction.isMixed) {
-                holder.amount.text = context.getString(R.string.mix)
-            } else {
-                val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                    -transaction.amount
-                } else {
-                    transaction.amount
-                }
-                val strAmount = CoinFormat.formatDecred(txAmount)
-
-                holder.amount.text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
-            }
-
-            val iconRes = when (transaction.direction) {
-                0 -> R.drawable.ic_send
-                1 -> R.drawable.ic_receive
-                else -> R.drawable.ic_tx_transferred
-            }
-            holder.icon.setImageResource(iconRes)
-        }
-
-        holder.itemView.setOnClickListener {
-            TransactionDetailsDialog(transaction).show(context)
-        }
+        populateTxRow(transaction, holder.itemView, layoutInflater)
     }
 }
 
-class TransactionListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val icon = view.tx_icon
-    val amount = view.amount
-    val status = view.status
-    val statusImg = view.img_status
-    val walletName = view.wallet_name
-}
+class TransactionListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 fun TextView.setPending() {
     this.setText(R.string.pending)
@@ -139,5 +96,106 @@ fun getTimestamp(context: Context, timestamp: Long): String {
         week > difference -> SimpleDateFormat("EE", Locale.getDefault()).format(timestamp)
         today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat(context.getString(R.string.month_day_format), Locale.getDefault()).format(timestamp)
         else -> SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault()).format(timestamp)
+    }
+}
+
+fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: LayoutInflater) {
+
+    val context = layoutRow.context
+    val multiWallet = WalletData.multiWallet!!
+
+    layoutRow.tx_icon.setImageResource(transaction.iconResource)
+
+    layoutRow.ticket_price.hide()
+    layoutRow.days_to_vote.hide()
+    layoutRow.vote_reward.hide()
+
+    if (transaction.confirmations < multiWallet.requiredConfirmations()) {
+        layoutRow.status.setPending()
+        layoutRow.img_status.setImageResource(R.drawable.ic_pending)
+    } else {
+        layoutRow.status.setConfirmed(transaction.timestamp)
+        layoutRow.img_status.setImageResource(R.drawable.ic_confirmed)
+    }
+
+    if (transaction.animate) {
+        val blinkAnim = AnimationUtils.loadAnimation(context, R.anim.anim_blink)
+        layoutRow.animation = blinkAnim
+        transaction.animate = false
+    }
+
+    if (transaction.type == Dcrlibwallet.TxTypeRegular) {
+        if (transaction.isMixed) {
+            layoutRow.amount.text = context.getString(R.string.mix)
+        } else {
+            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+                -transaction.amount
+            } else {
+                transaction.amount
+            }
+            val strAmount = CoinFormat.formatDecred(txAmount)
+
+            layoutRow.amount.apply {
+                text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
+            }
+        }
+
+        layoutRow.ticket_price.hide()
+
+    } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
+
+        layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
+
+        layoutRow.ticket_price.apply {
+            show()
+            text = CoinFormat.format(transaction.amount, 0.715f)
+        }
+
+        var title = 0
+        when (transaction.type) {
+            Dcrlibwallet.TxTypeTicketPurchase -> {
+                title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
+                    R.string.immature
+                } else {
+                    if (multiWallet.walletWithID(transaction.walletID)
+                                    .ticketHasVotedOrRevoked(transaction.hash)) {
+                        R.string.purchased
+                    } else {
+                        R.string.live
+                    }
+                }
+            }
+            Dcrlibwallet.TxTypeVote -> {
+                title = R.string.vote
+            }
+            Dcrlibwallet.TxTypeRevocation -> {
+                title = R.string.revoked
+            }
+        }
+
+        if (transaction.type == Dcrlibwallet.TxTypeVote || transaction.type == Dcrlibwallet.TxTypeRevocation) {
+            layoutRow.vote_reward.apply {
+                text = CoinFormat.format(transaction.voteReward, 0.715f)
+                show()
+            }
+
+            layoutRow.days_to_vote.apply {
+                val daysToVoteOrRevoke = transaction.daysToVoteOrRevoke
+                text = if (daysToVoteOrRevoke == 1) {
+                    context.getString(R.string.one_day)
+                } else {
+                    context.getString(R.string.x_days, daysToVoteOrRevoke)
+                }
+
+                show()
+            }
+        }
+
+        layoutRow.amount.setText(title)
+    }
+
+    layoutRow.transaction_ripple_layout.setOnClickListener {
+        TransactionDetailsDialog(transaction).show(context)
     }
 }
