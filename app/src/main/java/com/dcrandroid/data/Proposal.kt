@@ -44,6 +44,9 @@ class Proposal : Serializable {
     @SerializedName("indexfile")
     var indexFile: String? = ""
 
+    @SerializedName("fileversion")
+    var indexFileVersion: String? = ""
+
     @SerializedName("votestatus")
     var voteStatus: Int = 0
 
@@ -101,6 +104,7 @@ class Proposal : Serializable {
                 publishedAt = proposal.publishedAt
                 timestamp = proposal.timestamp
                 indexFile = proposal.indexFile
+                indexFileVersion = proposal.indexFileVersion
                 voteStatus = proposal.voteStatus
                 yesVotes = proposal.yesVotes
                 noVotes = proposal.noVotes

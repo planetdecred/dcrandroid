@@ -9,19 +9,18 @@ import androidx.core.widget.NestedScrollView
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_proposal_details.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.nio.charset.Charset
+import kotlinx.android.synthetic.main.info_dialog.*
+import kotlinx.coroutines.*
 import java.util.*
 
 class ProposalDetailsActivity : BaseActivity() {
 
     private lateinit var proposal: Proposal
+    private var descriptionLoader: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +60,14 @@ class ProposalDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun loadProposalDetails() = GlobalScope.launch(Dispatchers.Main) {
+    override fun onDestroy() {
+        super.onDestroy()
+        if (descriptionLoader != null && descriptionLoader!!.isActive) {
+            descriptionLoader?.cancel()
+        }
+    }
+
+    private fun loadProposalDetails() {
 
         proposal_title.text = proposal.name
         proposal_author.text = proposal.username
@@ -69,12 +75,33 @@ class ProposalDetailsActivity : BaseActivity() {
         proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal.numcomments)
         proposal_version.text = String.format(Locale.getDefault(), getString(R.string.version_number), proposal.version)
 
-        if (proposal.indexFile!!.isNotEmpty()) {
-            val data = Dcrlibwallet.decodeBase64(proposal.indexFile!!)
-            try {
-                proposal_description.text = String(data, Charset.forName(Constants.CHARSET_UTF_8))
-            } catch (e: Exception) {
-                e.printStackTrace()
+        // load file from server if it is not yet loaded or outdated.
+        if (proposal.indexFile!!.isNotEmpty() && proposal.indexFileVersion == proposal.version) {
+            proposal_description.text = proposal.indexFile
+        } else {
+            description_progress.show()
+
+            descriptionLoader = GlobalScope.launch(Dispatchers.Default) {
+                // keep trying to load the description while displaying any errors from the screen
+                while (true) {
+                    try {
+                        val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
+                        withContext(Dispatchers.Main) {
+                            description_progress?.hide()
+                            proposal_description?.text = description
+                        }
+
+                        break
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        withContext(Dispatchers.Main) {
+                            proposal_description?.text = e.message
+                        }
+                    }
+
+                    delay(5000)
+
+                }
             }
         }
 
