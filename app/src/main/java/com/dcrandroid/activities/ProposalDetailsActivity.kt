@@ -9,19 +9,20 @@ import androidx.core.widget.NestedScrollView
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
+import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_proposal_details.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.info_dialog.*
+import kotlinx.coroutines.*
 import java.nio.charset.Charset
 import java.util.*
 
 class ProposalDetailsActivity : BaseActivity() {
 
     private lateinit var proposal: Proposal
+    private var descriptionLoader: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +62,14 @@ class ProposalDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun loadProposalDetails() = GlobalScope.launch(Dispatchers.Main) {
+    override fun onDestroy() {
+        super.onDestroy()
+        if (descriptionLoader != null && descriptionLoader!!.isActive) {
+            descriptionLoader?.cancel()
+        }
+    }
+
+    private fun loadProposalDetails() {
 
         proposal_title.text = proposal.name
         proposal_author.text = proposal.username
@@ -75,6 +83,31 @@ class ProposalDetailsActivity : BaseActivity() {
                 proposal_description.text = String(data, Charset.forName(Constants.CHARSET_UTF_8))
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        } else {
+            description_progress.show()
+
+            descriptionLoader = GlobalScope.launch(Dispatchers.Default) {
+                // keep trying to load the description while displaying any errors from the screen
+                while (true) {
+                    try {
+                        val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
+                        withContext(Dispatchers.Main) {
+                            description_progress?.hide()
+                            proposal_description?.text = description
+                        }
+
+                        break
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        withContext(Dispatchers.Main) {
+                            proposal_description?.text = e.message
+                        }
+                    }
+
+                    delay(5000)
+
+                }
             }
         }
 
