@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 The Decred developers
+ * Copyright (c) 2018-2021 The Decred developers
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
@@ -13,7 +13,7 @@ import com.dcrandroid.R
 class License : BaseActivity() {
     val license = "ISC License" +
             "\n\n" +
-            "Copyright (c) 2018-2020 The Decred developers" +
+            "Copyright (c) 2018-2021 The Decred developers" +
             "\n\n" +
             "Permission to use, copy, modify, and distribute this software for any" +
             " purpose with or without fee is hereby granted, provided that the above" +
