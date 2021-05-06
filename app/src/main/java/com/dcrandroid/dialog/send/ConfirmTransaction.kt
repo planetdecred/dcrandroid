@@ -17,8 +17,6 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Account
 import com.dcrandroid.data.TransactionData
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.*
@@ -111,21 +109,7 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                         e.printStackTrace()
                         showSendButton()
 
-                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                            if (passDialog is PinPromptDialog) {
-                                passDialog.setProcessing(false)
-                                passDialog.showError()
-                            } else if (passDialog is PasswordPromptDialog) {
-                                passDialog.setProcessing(false)
-                                passDialog.showError()
-                            }
-                        } else {
-                            withContext(Dispatchers.Main) {
-                                passDialog?.dismiss()
-                                Dcrlibwallet.logT(op, e.message)
-                                Utils.showErrorDialog(context!!, op + ": " + e.message)
-                            }
-                        }
+                        PassPromptUtil.handleError(fragmentActivity, e, passDialog)
                     }
                 }
 

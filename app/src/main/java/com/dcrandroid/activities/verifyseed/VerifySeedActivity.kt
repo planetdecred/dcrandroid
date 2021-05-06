@@ -16,19 +16,15 @@ import com.dcrandroid.adapter.InputSeed
 import com.dcrandroid.adapter.ShuffledSeeds
 import com.dcrandroid.adapter.VerifySeedAdapter
 import com.dcrandroid.data.Constants
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
 import com.dcrandroid.util.SnackBar
-import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.verify_seed_page.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 // Step 3 for seed backup, user taps seed to verify each index.
 class VerifySeedActivity : BaseActivity() {
@@ -95,26 +91,11 @@ class VerifySeedActivity : BaseActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
 
-                    if (passDialog is PinPromptDialog) {
-                        passDialog.setProcessing(false)
-                    } else if (passDialog is PasswordPromptDialog) {
-                        passDialog.setProcessing(false)
-                    }
-
-                    if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                        if (passDialog is PinPromptDialog) {
-                            passDialog.showError()
-                        } else if (passDialog is PasswordPromptDialog) {
-                            passDialog.showError()
-                        }
-                    } else if (e.message == Dcrlibwallet.ErrInvalid) {
+                    if (e.message == Dcrlibwallet.ErrInvalid) {
                         passDialog?.dismiss()
                         SnackBar.showError(this@VerifySeedActivity, R.string.seed_verification_failed)
                     } else {
-                        withContext(Dispatchers.Main) {
-                            Dcrlibwallet.logT(op, e.message)
-                            Utils.showErrorDialog(this@VerifySeedActivity, op + ": " + e.message)
-                        }
+                        PassPromptUtil.handleError(this@VerifySeedActivity, e, passDialog)
                     }
                 }
             }

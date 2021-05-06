@@ -13,8 +13,6 @@ import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.InfoDialog
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.*
@@ -147,33 +145,21 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
                 return@PassPromptUtil true
             }
 
-            try {
-                multiWallet!!.startAccountMixer(wallet.id, passphrase)
-                GlobalScope.launch(Dispatchers.Main) {
-                    dialog?.dismiss()
-                }
-
-            } catch (e: Exception) {
-                if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                    if (dialog is PinPromptDialog) {
-                        dialog.setProcessing(false)
-                        dialog.showError()
-                    } else if (dialog is PasswordPromptDialog) {
-                        dialog.setProcessing(false)
-                        dialog.showError()
-                    }
-                } else if (e.message == Dcrlibwallet.ErrNoMixableOutput) {
-                    SnackBar.showError(this, R.string.no_mixable_output)
+            GlobalScope.launch(Dispatchers.Default) {
+                try {
+                    multiWallet!!.startAccountMixer(wallet.id, passphrase)
                     GlobalScope.launch(Dispatchers.Main) {
                         dialog?.dismiss()
                     }
-                } else {
-                    GlobalScope.launch(Dispatchers.Main) {
 
-                        val op = this.javaClass.name + "startAccountMixer"
-                        dialog?.dismiss()
-                        Utils.showErrorDialog(this@AccountMixerActivity, op + ": " + e.message)
-                        Dcrlibwallet.logT(op, e.message)
+                } catch (e: Exception) {
+                    if (e.message == Dcrlibwallet.ErrNoMixableOutput) {
+                        SnackBar.showError(this@AccountMixerActivity, R.string.no_mixable_output)
+                        GlobalScope.launch(Dispatchers.Main) {
+                            dialog?.dismiss()
+                        }
+                    } else {
+                        PassPromptUtil.handleError(this@AccountMixerActivity, e, dialog)
                     }
                 }
             }

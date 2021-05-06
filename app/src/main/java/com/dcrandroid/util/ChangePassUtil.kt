@@ -10,8 +10,6 @@ import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
-import com.dcrandroid.dialog.PasswordPromptDialog
-import com.dcrandroid.dialog.PinPromptDialog
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.coroutines.Dispatchers
@@ -62,21 +60,7 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
                         passwordPinDialogFragment.show(fragmentActivity)
                     } catch (e: Exception) {
                         e.printStackTrace()
-
-                        if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                            if (dialog is PinPromptDialog) {
-                                dialog.setProcessing(false)
-                                dialog.showError()
-                            } else if (dialog is PasswordPromptDialog) {
-                                dialog.setProcessing(false)
-                                dialog.showError()
-                            }
-                        } else {
-
-                            dialog?.dismiss()
-                            Dcrlibwallet.logT(op, e.message)
-                            Utils.showErrorDialog(fragmentActivity, op + ": " + e.message)
-                        }
+                        PassPromptUtil.handleError(fragmentActivity, e, dialog)
                     }
                 }
 

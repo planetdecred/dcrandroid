@@ -14,10 +14,8 @@ import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
 import com.dcrandroid.util.PassPromptTitle
 import com.dcrandroid.util.PassPromptUtil
-import com.dcrandroid.util.Utils
 import com.dcrandroid.util.WalletData
 import com.dcrandroid.view.util.InputHelper
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.add_account_sheet.*
 import kotlinx.coroutines.Dispatchers
@@ -72,20 +70,8 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
                         } catch (e: Exception) {
                             e.printStackTrace()
 
+                            PassPromptUtil.handleError(fragmentActivity, e, dialog)
                             withContext(Dispatchers.Main) {
-                                dialog?.dismiss()
-
-                                if (e.message == Dcrlibwallet.ErrInvalidPassphrase) {
-                                    val err = if (wallet.privatePassphraseType == Dcrlibwallet.PassphraseTypePass) {
-                                        R.string.invalid_password
-                                    } else R.string.invalid_pin
-
-                                    accountNameInput.setError(getString(err))
-
-                                } else {
-                                    accountNameInput.setError(Utils.translateError(context!!, e))
-                                }
-
                                 setEnabled(true)
                             }
                         }
