@@ -574,9 +574,9 @@
     <string name="unmixed_balance">Solde non-mixé</string>
     <string name="mixed_balance">Solde mixé</string>
     <string name="mixer_settings">Paramètres du mixeur</string>
-    <string name="account_branch">Branche du compte</string>
-    <string name="shuffle_port">Port aléatoire</string>
-    <string name="shuffle_server">Serveur aléatoire</string>
+    <string name="mixed_account_branch">Branche du compte</string>
+    <string name="server_port">Port aléatoire</string>
+    <string name="mix_server">Serveur aléatoire</string>
     <string name="keep_app_opened">Garder cette application ouverte</string>
     <string name="mixer_help_title">Comment utiliser le mixeur ?</string>
     <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>

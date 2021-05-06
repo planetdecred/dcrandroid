@@ -9,11 +9,9 @@ package com.dcrandroid.util
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.fragment.app.FragmentActivity
-import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -106,12 +104,4 @@ object BiometricUtils {
     }
 
     fun getWalletAlias(walletID: Long) = walletID.toString() + Constants.SPENDING_PASSPHRASE
-
-    fun translateError(context: Context, errorCode: Int): String? {
-        return when (errorCode) {
-            BiometricConstants.ERROR_LOCKOUT -> context.getString(R.string.biometric_lockout_error)
-            BiometricConstants.ERROR_LOCKOUT_PERMANENT -> context.getString(R.string.biometric_permanent_lockout_error)
-            else -> null
-        }
-    }
 }

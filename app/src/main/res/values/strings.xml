@@ -574,13 +574,13 @@
     <string name="no_mixable_output">Unmixed account has no mixable output</string>
     <string name="new_caps">NEW</string>
     <string name="privacy_is_here">Privacy is here</string>
-    <string name="privacy_intro_desc">You can now use CoinShuffle++ mixer to mix your DCRs, right in the app.</string>
+    <string name="privacy_intro_desc">You can now use StakeShuffle mixer to mix your DCRs, right in the app.</string>
     <string name="dismiss">Dismiss</string>
     <string name="setup_mixer">Set up mixer</string>
-    <string name="privacy_popup_message">Set up CoinShuffle++ mixer in Privacy</string>
+    <string name="privacy_popup_message">Set up StakeShuffle mixer in Privacy</string>
     <string name="see_all">See all</string>
-    <string name="privacy_intro_title">How does CoinShuffle++ mixer enhance your privacy?</string>
-    <string name="privacy_intro_desc_1">CoinShuffle++ mixer can mix your DCRs through CoinJoin transactions.</string>
+    <string name="privacy_intro_title">How does StakeShuffle mixer enhance your privacy?</string>
+    <string name="privacy_intro_desc_1">StakeShuffle mixer can mix your DCRs through CoinJoin transactions.</string>
     <string name="privacy_intro_desc_2">Using mixed DCRs protects you from exposing your financial activities to the public (e.g. how much you own, who pays you).</string>
     <string name="setup_mixer_btn_title">Set up mixer for this wallet</string>
     <string name="privacy_intro_dialog_title">Set up mixer by creating two needed accounts</string>
@@ -591,9 +591,9 @@
     <string name="unmixed_balance">Unmixed balance</string>
     <string name="mixed_balance">Mixed balance</string>
     <string name="mixer_settings">Mixer Settings</string>
-    <string name="account_branch">Account branch</string>
-    <string name="shuffle_port">Shuffle port</string>
-    <string name="shuffle_server">Shuffle server</string>
+    <string name="mixed_account_branch">Mixed account branch</string>
+    <string name="server_port">Server port</string>
+    <string name="mix_server">Mix server</string>
     <string name="keep_app_opened">Keep this app opened</string>
     <string name="mixer_help_title">How to use the mixer?</string>
     <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#091440">Important: keep this app opened while mixer is running.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
