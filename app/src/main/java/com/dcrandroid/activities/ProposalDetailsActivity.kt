@@ -12,11 +12,9 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
-import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.activity_proposal_details.*
 import kotlinx.android.synthetic.main.info_dialog.*
 import kotlinx.coroutines.*
-import java.nio.charset.Charset
 import java.util.*
 
 class ProposalDetailsActivity : BaseActivity() {
@@ -77,13 +75,9 @@ class ProposalDetailsActivity : BaseActivity() {
         proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal.numcomments)
         proposal_version.text = String.format(Locale.getDefault(), getString(R.string.version_number), proposal.version)
 
-        if (proposal.indexFile!!.isNotEmpty()) {
-            val data = Dcrlibwallet.decodeBase64(proposal.indexFile!!)
-            try {
-                proposal_description.text = String(data, Charset.forName(Constants.CHARSET_UTF_8))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        // load file from server if it is not yet loaded or outdated.
+        if (proposal.indexFile!!.isNotEmpty() && proposal.indexFileVersion == proposal.version) {
+            proposal_description.text = proposal.indexFile
         } else {
             description_progress.show()
 
