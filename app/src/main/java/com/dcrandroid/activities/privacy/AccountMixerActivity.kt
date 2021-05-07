@@ -9,6 +9,7 @@ package com.dcrandroid.activities.privacy
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Html
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
@@ -47,7 +48,8 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         wallet_name.text = wallet.name
         mixed_account_branch.text = Dcrlibwallet.MixedAccountBranch.toString()
         shuffle_server.text = Dcrlibwallet.ShuffleServer
-        shuffle_port.text = Dcrlibwallet.ShufflePort
+        shuffle_port.text = if(BuildConfig.IS_TESTNET) Dcrlibwallet.TestnetShufflePort
+        else Dcrlibwallet.MainnetShufflePort
 
         mixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
         unmixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
