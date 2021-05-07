@@ -12,8 +12,8 @@ android {
         applicationId "com.decred.dcrandroid"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "v1.5.2"
+        versionCode 20
+        versionName "v1.6.0"
         buildConfigField("String", "BuildDate", "\"${getDate()}\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
