@@ -557,13 +557,13 @@
     <string name="no_mixable_output">Le compte non-mixé n\'a pas de sortie mixable</string>
     <string name="new_caps">NOUVEAU</string>
     <string name="privacy_is_here">La vie privée est ici</string>
-    <string name="privacy_intro_desc">Vous pouvez désormais utiliser le mixeur CoinShuffle++ pour mixer vos DCR, directmement dans l\'application.</string>
+    <string name="privacy_intro_desc">Vous pouvez désormais utiliser le mixeur StakeShuffle pour mixer vos DCR, directmement dans l\'application.</string>
     <string name="dismiss">Ignorer</string>
     <string name="setup_mixer">Configurer le mixeur</string>
-    <string name="privacy_popup_message">Configurer le mixeur CoinShuffle++ dans Vie privée</string>
+    <string name="privacy_popup_message">Configurer le mixeur StakeShuffle dans Vie privée</string>
     <string name="see_all">Voir tout</string>
-    <string name="privacy_intro_title">Comment le mixeur CoinShuffle++ améliore votre vie privée ?</string>
-    <string name="privacy_intro_desc_1">Le mixeur CoinShuffle++ peut mixer vos DCR avec des transactions CoinJoin.</string>
+    <string name="privacy_intro_title">Comment le mixeur StakeShuffle améliore votre vie privée ?</string>
+    <string name="privacy_intro_desc_1">Le mixeur StakeShuffle peut mixer vos DCR avec des transactions CoinJoin.</string>
     <string name="privacy_intro_desc_2">Utiliser des DCR mixés vous protège d\'exposer vos activités financières au public (ex: combien vous avez, qui vous paie).</string>
     <string name="setup_mixer_btn_title">Configurer le mixeur pour ce porte-monnaie</string>
     <string name="privacy_intro_dialog_title">Configurer le mixeur en créant deux comptes nécessaires</string>
@@ -574,9 +574,9 @@
     <string name="unmixed_balance">Solde non-mixé</string>
     <string name="mixed_balance">Solde mixé</string>
     <string name="mixer_settings">Paramètres du mixeur</string>
-    <string name="mixed_account_branch">Branche du compte</string>
-    <string name="server_port">Port aléatoire</string>
-    <string name="mix_server">Serveur aléatoire</string>
+    <string name="mixed_account_branch">Branche du compte mixé</string>
+    <string name="server_port">Port du serveur</string>
+    <string name="mix_server">Serveur de mixage</string>
     <string name="keep_app_opened">Garder cette application ouverte</string>
     <string name="mixer_help_title">Comment utiliser le mixeur ?</string>
     <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>
