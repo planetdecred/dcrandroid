@@ -21,6 +21,7 @@ import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +49,7 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
+import kotlinx.android.synthetic.main.overview_mixer_status_card.*
 import kotlinx.coroutines.*
 import java.lang.Runnable
 import java.text.DecimalFormat
@@ -56,7 +58,7 @@ import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, ProposalNotificationListener {
+class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, ProposalNotificationListener, AccountMixerNotificationListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -152,6 +154,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
                 e.printStackTrace()
             }
         }
+
+        checkMixerStatus()
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
@@ -171,6 +175,34 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         } else {
             switchFragment(OverviewFragment.FRAGMENT_POSITION)
         }
+    }
+
+    private fun checkMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
+        var activeMixers = 0
+        for (wallet in multiWallet!!.openedWalletsList()) {
+            if (wallet.isAccountMixerActive) {
+                activeMixers++
+            }
+        }
+
+        if (activeMixers > 0) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    override fun onAccountMixerEnded(walletID: Long) {
+        checkMixerStatus()
+    }
+
+    override fun onAccountMixerStarted(walletID: Long) {
+        checkMixerStatus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkMixerStatus()
     }
 
     override fun onDestroy() {

@@ -569,7 +569,7 @@
     <string name="mix_tx_change">Mix transaction change</string>
     <string name="mix_tx_change_summary">Change from transactions will be sent to unmixed account if enabled.</string>
     <string name="change_sent_to_unmixed"><![CDATA[Change will be sent to <b>%1$s</b>.]]></string>
-    <string name="start_mixer_warning">Your wallet will be unlocked until mixing completes.</string>
+    <string name="start_mixer_warning">Your wallet will be unlocked and your display would remain on until mixing completes.</string>
     <string name="mixer_has_stopped_running">cspp mixer has stopped running</string>
     <string name="no_mixable_output">Unmixed account has no mixable output</string>
     <string name="new_caps">NEW</string>
@@ -596,7 +596,7 @@
     <string name="mix_server">Mix server</string>
     <string name="keep_app_opened">Keep this app opened</string>
     <string name="mixer_help_title">How to use the mixer?</string>
-    <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#091440">Important: keep this app opened while mixer is running.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
+    <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#091440">Important: keep this app opened while mixer is running. Your display would not timeout until the mixer completes, this may impact your battery life.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
     <string name="mixer_is_running">Mixer is running…</string>
     <string name="keep_this_app_opened">Keep this app opened</string>
     <string name="mixer_status_info">Mixer will automatically stop when unmixed balance are fully mixed.</string>
