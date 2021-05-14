@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_account_mixer.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, TxAndBlockNotificationListener {
 
@@ -174,7 +175,7 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
     private fun stopAccountMixer() = GlobalScope.launch(Dispatchers.Default) {
         multiWallet?.stopAccountMixer(wallet.id)
         // Allow display to timeout after mixer is stopped
-        GlobalScope.launch(Dispatchers.Main) {
+        withContext(Dispatchers.Main) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
