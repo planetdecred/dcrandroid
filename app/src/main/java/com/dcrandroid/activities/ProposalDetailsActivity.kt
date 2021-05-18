@@ -12,6 +12,7 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_proposal_details.*
 import kotlinx.android.synthetic.main.info_dialog.*
 import kotlinx.coroutines.*
@@ -77,7 +78,9 @@ class ProposalDetailsActivity : BaseActivity() {
 
         // load file from server if it is not yet loaded or outdated.
         if (proposal.indexFile!!.isNotEmpty() && proposal.indexFileVersion == proposal.version) {
-            proposal_description.text = proposal.indexFile
+            // set markdown
+            Markwon.create(this)
+                    .setMarkdown(proposal_description, proposal.indexFile!!)
         } else {
             description_progress.show()
 
@@ -88,7 +91,9 @@ class ProposalDetailsActivity : BaseActivity() {
                         val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
                         withContext(Dispatchers.Main) {
                             description_progress?.hide()
-                            proposal_description?.text = description
+                            // set markdown
+                            Markwon.create(applicationContext)
+                                    .setMarkdown(proposal_description, description)
                         }
 
                         break
