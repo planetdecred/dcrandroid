@@ -96,6 +96,11 @@ dependencies {
     // JSON serialization & deserialization
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // Rich Text Formatting (No WebView)
+    implementation "io.noties.markwon:core:4.6.2"
+    implementation "io.noties.markwon:ext-tables:4.6.2"
+    implementation "io.noties.markwon:linkify:4.6.2"
+
     androidTestImplementation 'androidx.test:rules:1.4.0-alpha06'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0-alpha06'

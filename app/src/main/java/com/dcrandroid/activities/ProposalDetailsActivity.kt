@@ -12,6 +12,11 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
+import io.noties.markwon.Markwon
+import io.noties.markwon.ext.tables.TableAwareMovementMethod
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.linkify.LinkifyPlugin
+import io.noties.markwon.movement.MovementMethodPlugin
 import kotlinx.android.synthetic.main.activity_proposal_details.*
 import kotlinx.android.synthetic.main.info_dialog.*
 import kotlinx.coroutines.*
@@ -21,10 +26,18 @@ class ProposalDetailsActivity : BaseActivity() {
 
     private lateinit var proposal: Proposal
     private var descriptionLoader: Job? = null
+    private lateinit var markwon: Markwon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_proposal_details)
+
+        markwon = Markwon.builder(applicationContext)
+                .usePlugin(LinkifyPlugin.create())
+                .usePlugin(TablePlugin.create(applicationContext))
+                // use TableAwareLinkMovementMethod to handle clicks inside tables
+                .usePlugin(MovementMethodPlugin.create(TableAwareMovementMethod.create()))
+                .build();
 
         val proposalId = intent.getSerializableExtra(Constants.PROPOSAL_ID) as Long
         proposal = Proposal.from(multiWallet!!.politeia.getProposalByIDRaw(proposalId))
@@ -77,7 +90,8 @@ class ProposalDetailsActivity : BaseActivity() {
 
         // load file from server if it is not yet loaded or outdated.
         if (proposal.indexFile!!.isNotEmpty() && proposal.indexFileVersion == proposal.version) {
-            proposal_description.text = proposal.indexFile
+            // set markdown
+            markwon.setMarkdown(proposal_description, proposal.indexFile!!)
         } else {
             description_progress.show()
 
@@ -88,7 +102,8 @@ class ProposalDetailsActivity : BaseActivity() {
                         val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
                         withContext(Dispatchers.Main) {
                             description_progress?.hide()
-                            proposal_description?.text = description
+                            // set markdown
+                            markwon.setMarkdown(proposal_description, description)
                         }
 
                         break
