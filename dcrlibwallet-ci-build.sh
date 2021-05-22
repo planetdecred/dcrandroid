@@ -30,6 +30,7 @@ export DcrandroidDir=$(pwd)
 mkdir -p $GOPATH/src/github.com/planetdecred
 git clone https://github.com/planetdecred/dcrlibwallet $GOPATH/src/github.com/planetdecred/dcrlibwallet
 cd $GOPATH/src/github.com/planetdecred/dcrlibwallet
+git checkout release-v1.5
 export GO111MODULE=on && go mod vendor && export GO111MODULE=off
 gomobile bind -target=android/386
 cp dcrlibwallet.aar $DcrandroidDir/app/libs/dcrlibwallet.aar && cd $DcrandroidDir
