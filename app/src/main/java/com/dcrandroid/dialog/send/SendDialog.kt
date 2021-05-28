@@ -96,7 +96,8 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             // If wallet has privacy enabled, enable only mixed account when sending to an address
             // and enable all accounts when sending to an account
             val wallet = multiWallet.walletWithID(it.walletID)
-            var accountIsEnabled = true // all accounts are enabled for non-privacy wallets
+            var accountIsEnabled = !wallet.isWatchingOnlyWallet // all accounts are enabled for non-privacy wallets
+
             if (wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)) {
                 if (destinationAddressCard.isSendToAccount) {
                     // unmixed accounts are not valid for sending if destination account is another wallet
