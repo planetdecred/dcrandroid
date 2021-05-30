@@ -94,7 +94,11 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                             tx_details_dest.setOnClickListener(this@TransactionDetailsDialog)
                         }
 
-                        toolbar_title.setText(R.string.sent)
+                        if (transaction.isMixed) {
+                            toolbar_title.setText(R.string.mix)
+                        } else {
+                            toolbar_title.setText(R.string.sent)
+                        }
                     }
                     Dcrlibwallet.TxDirectionReceived -> {
                         tx_source_row.show()

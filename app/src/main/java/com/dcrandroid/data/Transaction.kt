@@ -93,7 +93,7 @@ class Transaction : Serializable {
             var res = when (direction) {
                 Dcrlibwallet.TxDirectionSent -> R.drawable.ic_send
                 Dcrlibwallet.TxDirectionReceived -> R.drawable.ic_receive
-                else -> R.drawable.ic_wallet
+                else -> R.drawable.ic_transferred
             }
 
             // replace icon for staking tx types
