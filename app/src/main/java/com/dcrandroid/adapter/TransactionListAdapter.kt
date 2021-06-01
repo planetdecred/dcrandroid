@@ -8,7 +8,11 @@ package com.dcrandroid.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
+import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -125,9 +129,6 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
     }
 
     if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-        if (transaction.isMixed) {
-            layoutRow.amount.text = context.getString(R.string.mix)
-        } else {
             val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
                 -transaction.amount
             } else {
@@ -139,10 +140,14 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
                 text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
             }
-        }
 
         layoutRow.ticket_price.hide()
 
+    } else if (transaction.type == Dcrlibwallet.TxTypeMixed) {
+        val amountDcrFormat = CoinFormat.formatDecred(transaction.mixDenomination)
+
+        layoutRow.amount.text = CoinFormat.format(context.getString(R.string.mixed_dcr_amount, amountDcrFormat, transaction.mixCount))
+        layoutRow.ticket_price.hide()
     } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
 
         layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))

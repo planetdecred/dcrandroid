@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.NestedScrollView
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
+import dcrlibwallet.Dcrlibwallet
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.tables.TableAwareMovementMethod
 import io.noties.markwon.ext.tables.TablePlugin
@@ -99,7 +101,7 @@ class ProposalDetailsActivity : BaseActivity() {
                 // keep trying to load the description while displaying any errors from the screen
                 while (true) {
                     try {
-                        val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
+                        val description = multiWallet!!.politeia.fetchProposalDescription(BuildConfig.PoliteiaHost, proposal.token)
                         withContext(Dispatchers.Main) {
                             description_progress?.hide()
                             // set markdown

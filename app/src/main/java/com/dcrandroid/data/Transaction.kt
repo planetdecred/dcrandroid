@@ -44,9 +44,6 @@ class Transaction : Serializable {
     @SerializedName("timestamp")
     var timestamp: Long = 0
 
-    @SerializedName("is_mixed")
-    var isMixed: Boolean = false
-
     @SerializedName("mix_denom")
     var mixDenomination: Long = 0
 
@@ -111,6 +108,8 @@ class Transaction : Serializable {
                     else -> R.drawable.ic_ticket_revoked
                 }
 
+            }else if (type == Dcrlibwallet.TxTypeMixed){
+                res = R.drawable.ic_mixed
             }
 
             return res

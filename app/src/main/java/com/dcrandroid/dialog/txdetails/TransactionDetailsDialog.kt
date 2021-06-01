@@ -9,6 +9,8 @@ package com.dcrandroid.dialog.txdetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +30,7 @@ import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_details.*
+import kotlinx.android.synthetic.main.transaction_row.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -49,8 +52,9 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         tx_details_icon.setImageResource(transaction.iconResource)
 
-        if (transaction.isMixed) {
-            tx_details_amount.text = CoinFormat.format(transaction.mixDenomination, 0.625f)
+        if (transaction.type == Dcrlibwallet.TxTypeMixed) {
+            val amountDcrFormat = CoinFormat.formatDecred(transaction.mixDenomination)
+            tx_details_amount.text = CoinFormat.format(getString(R.string.mixed_dcr_amount, amountDcrFormat, transaction.mixCount))
         } else {
             val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
                 -transaction.amount
@@ -94,11 +98,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                             tx_details_dest.setOnClickListener(this@TransactionDetailsDialog)
                         }
 
-                        if (transaction.isMixed) {
-                            toolbar_title.setText(R.string.mix)
-                        } else {
-                            toolbar_title.setText(R.string.sent)
-                        }
+                        toolbar_title.setText(R.string.sent)
                     }
                     Dcrlibwallet.TxDirectionReceived -> {
                         tx_source_row.show()
@@ -122,6 +122,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                     Dcrlibwallet.TxTypeTicketPurchase -> R.string.ticket_purchase
                     Dcrlibwallet.TxTypeVote -> R.string.vote
                     Dcrlibwallet.TxTypeRevocation -> R.string.revoked
+                    Dcrlibwallet.TxTypeMixed -> R.string.mixed
                     else -> R.string.tx_sort_coinbase
                 }
 

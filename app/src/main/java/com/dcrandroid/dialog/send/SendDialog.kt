@@ -390,7 +390,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         val feeAndSize: TxFeeAndSize
 
         try {
-            txAuthor = multiWallet.newUnsignedTx(sourceAccountSpinner.wallet, selectedAccount.accountNumber)
+            txAuthor = multiWallet.newUnsignedTx(sourceAccountSpinner.wallet.id, selectedAccount.accountNumber)
             txAuthor.addSendDestination(destinationAddressCard.estimationAddress, amountAtom, sendMax)
             feeAndSize = txAuthor.estimateFeeAndSize()
         } catch (e: Exception) {

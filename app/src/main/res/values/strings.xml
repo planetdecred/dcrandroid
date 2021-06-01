@@ -69,6 +69,7 @@
     <string name="create">Create</string>
     <string name="_import">Import</string>
     <string name="dcr_amount">%1$s DCR</string>
+    <string name="mixed_dcr_amount">%1$s DCR\t x%2$d</string>
     <string name="rename_wallet_sheet_title">Rename wallet</string>
     <string name="wallet_name">Wallet Name</string>
     <string name="privacy">Privacy</string>
@@ -566,6 +567,7 @@
     <string name="unmixed_account">Unmixed account</string>
     <string name="mixer">Mixer</string>
     <string name="mix">Mix</string>
+    <string name="mixed">Mixed</string>
     <string name="mix_tx_change">Mix transaction change</string>
     <string name="mix_tx_change_summary">Change from transactions will be sent to unmixed account if enabled.</string>
     <string name="change_sent_to_unmixed"><![CDATA[Change will be sent to <b>%1$s</b>.]]></string>
