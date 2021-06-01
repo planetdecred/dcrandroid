@@ -108,17 +108,19 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
                 tv_mixer_status.setText(R.string.ready_to_mix)
                 tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
                 iv_mixer_status.hide()
+                mixer_toggle_switch.isEnabled = true
             } else {
                 tv_mixer_status.setText(R.string.no_mixable_output)
                 tv_mixer_status.setTextColor(resources.getColor(R.color.colorError))
                 iv_mixer_status.hide()
+                mixer_toggle_switch.isEnabled = false
             }
 
             mixing_arrow.hide()
         }
 
-        unmixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).total)
-        mixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).total)
+        unmixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).spendable)
+        mixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).spendable)
     }
 
     private fun showWarningAndStartMixer() {
