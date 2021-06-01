@@ -54,7 +54,8 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         if (transaction.type == Dcrlibwallet.TxTypeMixed) {
             val amountDcrFormat = CoinFormat.formatDecred(transaction.mixDenomination)
-            tx_details_amount.text = CoinFormat.format(getString(R.string.mixed_dcr_amount, amountDcrFormat, transaction.mixCount))
+
+            tx_details_amount.text = CoinFormat.format(resources.getQuantityString(R.plurals.mixed_dcr_amount, transaction.mixCount, amountDcrFormat, transaction.mixCount))
         } else {
             val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
                 -transaction.amount

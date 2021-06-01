@@ -69,7 +69,6 @@
     <string name="create">Create</string>
     <string name="_import">Import</string>
     <string name="dcr_amount">%1$s DCR</string>
-    <string name="mixed_dcr_amount">%1$s DCR\t x%2$d</string>
     <string name="rename_wallet_sheet_title">Rename wallet</string>
     <string name="wallet_name">Wallet Name</string>
     <string name="privacy">Privacy</string>
@@ -80,6 +79,11 @@
     <string name="remove_watch_wallet_prompt"> Remove watch-only wallet from device?</string>
     <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
     <string name="error_copied">Error copied</string>
+
+    <plurals name="mixed_dcr_amount">
+        <item quantity="one">%1$s DCR</item>
+        <item quantity="other">%1$s DCR\t x%2$d</item>
+    </plurals>
     <!--/General-->
 
     <!--Peers-->

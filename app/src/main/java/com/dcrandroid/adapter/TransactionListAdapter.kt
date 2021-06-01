@@ -146,7 +146,7 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
     } else if (transaction.type == Dcrlibwallet.TxTypeMixed) {
         val amountDcrFormat = CoinFormat.formatDecred(transaction.mixDenomination)
 
-        layoutRow.amount.text = CoinFormat.format(context.getString(R.string.mixed_dcr_amount, amountDcrFormat, transaction.mixCount))
+        layoutRow.amount.text = CoinFormat.format(context.resources.getQuantityString(R.plurals.mixed_dcr_amount, transaction.mixCount, amountDcrFormat, transaction.mixCount))
         layoutRow.ticket_price.hide()
     } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
 
