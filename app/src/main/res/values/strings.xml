@@ -650,7 +650,6 @@
     <string name="new_proposal">New Proposal</string>
     <string name="vote_started">Vote Started</string>
     <string name="vote_ended">Vote Ended</string>
-    <string name="politeia_server_url" translatable="false">http://proposals.decred.org/proposals/</string>
     <string name="share_proposal">Share Proposal Link</string>
     <string name="text_pain" translatable="false">text/plain</string>
     <string name="comments">%d comments</string>

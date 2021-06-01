@@ -644,7 +644,6 @@
     <string name="new_proposal">新的提案</string>
     <string name="vote_started">投票已开始</string>
     <string name="vote_ended">投票已结束</string>
-    <string name="politeia_server_url" translatable="false">http://proposals.decred.org/proposals/</string>
     <string name="share_proposal">分享提案链接</string>
     <string name="text_pain" translatable="false">text/plain</string>
     <string name="comments">%d 评论</string>

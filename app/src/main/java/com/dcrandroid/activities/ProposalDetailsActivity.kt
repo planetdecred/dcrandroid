@@ -46,7 +46,7 @@ class ProposalDetailsActivity : BaseActivity() {
         loadProposalDetails()
 
         open_proposal.setOnClickListener {
-            val url = getString(R.string.politeia_server_url) + proposal.token
+            val url = BuildConfig.PoliteiaHost + "/record/" + proposal.token
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
             startActivity(i)
@@ -57,7 +57,7 @@ class ProposalDetailsActivity : BaseActivity() {
             share.type = getString(R.string.text_pain)
             share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
             share.putExtra(Intent.EXTRA_SUBJECT, proposal.name)
-            share.putExtra(Intent.EXTRA_TEXT, getString(R.string.politeia_server_url) + proposal.token)
+            share.putExtra(Intent.EXTRA_TEXT, BuildConfig.PoliteiaHost + "/record/" + proposal.token)
             startActivity(Intent.createChooser(share, getString(R.string.share_proposal)))
         }
 
