@@ -9,7 +9,6 @@ package com.dcrandroid.dialog.txdetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
@@ -53,9 +52,14 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         tx_details_icon.setImageResource(transaction.iconResource)
 
         if (transaction.type == Dcrlibwallet.TxTypeMixed) {
-            val amountDcrFormat = CoinFormat.formatDecred(transaction.mixDenomination)
+            val amountDcrFormat = CoinFormat.format(transaction.mixDenomination)
 
-            tx_details_amount.text = CoinFormat.format(resources.getQuantityString(R.plurals.mixed_dcr_amount, transaction.mixCount, amountDcrFormat, transaction.mixCount))
+            val amountBuilder = SpannableStringBuilder(amountDcrFormat)
+            if (transaction.mixCount > 1) {
+                amountBuilder.append("\t x${transaction.mixCount}")
+            }
+
+            tx_details_amount.text = amountBuilder
         } else {
             val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
                 -transaction.amount

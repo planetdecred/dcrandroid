@@ -8,11 +8,8 @@ package com.dcrandroid.adapter
 
 import android.content.Context
 import android.graphics.Color
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
-import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +31,6 @@ import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-// TODO: A joint class is needed for transactions and overview pages to avoid redundancy.
 class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -144,10 +140,23 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
         layoutRow.ticket_price.hide()
 
     } else if (transaction.type == Dcrlibwallet.TxTypeMixed) {
-        val amountDcrFormat = CoinFormat.formatDecred(transaction.mixDenomination)
 
-        layoutRow.amount.text = CoinFormat.format(context.resources.getQuantityString(R.plurals.mixed_dcr_amount, transaction.mixCount, amountDcrFormat, transaction.mixCount))
-        layoutRow.ticket_price.hide()
+        var mixedAmount = CoinFormat.format(transaction.mixDenomination)
+        mixedAmount = CoinFormat.applyColor(mixedAmount, context.resources.getColor(R.color.darkBlueTextColor))
+
+        val amountBuilder = SpannableStringBuilder(mixedAmount)
+        if (transaction.mixCount > 1) {
+            amountBuilder.append("\t x${transaction.mixCount}")
+        }
+        layoutRow.ticket_price.apply {
+            show()
+            text = amountBuilder
+        }
+
+        layoutRow.amount.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
+            setText(R.string.mixed)
+        }
     } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
 
         layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
