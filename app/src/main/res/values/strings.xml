@@ -408,6 +408,7 @@
     <string name="tx_sort_sent">Sent (%1$d)</string>
     <string name="tx_sort_received">Received (%1$d)</string>
     <string name="tx_sort_transferred">Transferred (%1$d)</string>
+    <string name="tx_sort_mixed">Mixed (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">Ticket Purchase</string>

@@ -9,6 +9,8 @@ package com.dcrandroid.dialog.txdetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +58,9 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
             val amountBuilder = SpannableStringBuilder(amountDcrFormat)
             if (transaction.mixCount > 1) {
-                amountBuilder.append("\t x${transaction.mixCount}")
+                var mixCount = SpannableString("\t x${transaction.mixCount}") as Spannable
+                mixCount = CoinFormat.applyColor(mixCount, context!!.resources.getColor(R.color.lightGrayTextColor))
+                amountBuilder.append(mixCount)
             }
 
             tx_details_amount.text = amountBuilder
