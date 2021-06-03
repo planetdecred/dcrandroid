@@ -6,20 +6,15 @@
 
 package com.dcrandroid.fragments
 
-import android.view.WindowManager
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.data.Transaction
-import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import dcrlibwallet.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificationListener, AccountMixerNotificationListener {
+open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificationListener {
 
     var TAG = this.javaClass.name
     var isForeground = false
@@ -36,8 +31,6 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
 
         multiWallet?.addSyncProgressListener(this, TAG)
         multiWallet?.addTxAndBlockNotificationListener(this, TAG)
-
-        checkMixerStatus()
     }
 
     override fun onResume() {
@@ -47,7 +40,6 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
             requiresDataUpdate = false
             onTxOrBalanceUpdateRequired(null)
         }
-        checkMixerStatus()
     }
 
     override fun onPause() {
@@ -59,29 +51,6 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         super.onDestroy()
         multiWallet?.removeSyncProgressListener(TAG)
         multiWallet?.removeTxAndBlockNotificationListener(TAG)
-    }
-
-    private fun checkMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
-        var activeMixers = 0
-        for (wallet in multiWallet!!.openedWalletsList()) {
-            if (wallet.isAccountMixerActive) {
-                activeMixers++
-            }
-        }
-
-        if (activeMixers > 0) {
-            requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        } else {
-            requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
-
-    override fun onAccountMixerEnded(walletID: Long) {
-        checkMixerStatus()
-    }
-
-    override fun onAccountMixerStarted(walletID: Long) {
-        checkMixerStatus()
     }
 
     fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
