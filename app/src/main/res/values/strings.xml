@@ -79,6 +79,11 @@
     <string name="remove_watch_wallet_prompt"> Remove watch-only wallet from device?</string>
     <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
     <string name="error_copied">Error copied</string>
+
+    <plurals name="mixed_dcr_amount">
+        <item quantity="one">%1$s DCR</item>
+        <item quantity="other">%1$s DCR\t x%2$d</item>
+    </plurals>
     <!--/General-->
 
     <!--Peers-->
@@ -403,6 +408,7 @@
     <string name="tx_sort_sent">Sent (%1$d)</string>
     <string name="tx_sort_received">Received (%1$d)</string>
     <string name="tx_sort_transferred">Transferred (%1$d)</string>
+    <string name="tx_sort_mixed">Mixed (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">Ticket Purchase</string>
@@ -566,6 +572,7 @@
     <string name="unmixed_account">Unmixed account</string>
     <string name="mixer">Mixer</string>
     <string name="mix">Mix</string>
+    <string name="mixed">Mixed</string>
     <string name="mix_tx_change">Mix transaction change</string>
     <string name="mix_tx_change_summary">Change from transactions will be sent to unmixed account if enabled.</string>
     <string name="change_sent_to_unmixed"><![CDATA[Change will be sent to <b>%1$s</b>.]]></string>
@@ -644,7 +651,6 @@
     <string name="new_proposal">New Proposal</string>
     <string name="vote_started">Vote Started</string>
     <string name="vote_ended">Vote Ended</string>
-    <string name="politeia_server_url" translatable="false">http://proposals.decred.org/proposals/</string>
     <string name="share_proposal">Share Proposal Link</string>
     <string name="text_pain" translatable="false">text/plain</string>
     <string name="comments">%d comments</string>

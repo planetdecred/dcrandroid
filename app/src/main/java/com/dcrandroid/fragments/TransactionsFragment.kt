@@ -123,10 +123,12 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     private fun refreshAvailableTxType() = GlobalScope.launch(Dispatchers.Default) {
         availableTxTypes.clear()
 
+        // TODO
         val txCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterAll)
         val sentTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterSent)
         val receivedTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterReceived)
         val transferredTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterTransferred)
+        val mixedTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterMixed)
         val stakingTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterStaking)
         val coinbaseTxCount = wallet!!.countTransactions(Dcrlibwallet.TxFilterCoinBase)
 
@@ -139,6 +141,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
             availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_transferred, transferredTxCount))
+            availableTxTypes.add(context!!.getString(R.string.tx_sort_mixed, mixedTxCount))
 
             if (stakingTxCount > 0) {
                 availableTxTypes.add(context!!.getString(R.string.tx_sort_staking, stakingTxCount))
@@ -300,6 +303,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
                 1 -> Dcrlibwallet.TxFilterSent
                 2 -> Dcrlibwallet.TxFilterReceived
                 3 -> Dcrlibwallet.TxFilterTransferred
+                4 -> Dcrlibwallet.TxFilterMixed
                 else -> Dcrlibwallet.TxFilterStaking
             }
 

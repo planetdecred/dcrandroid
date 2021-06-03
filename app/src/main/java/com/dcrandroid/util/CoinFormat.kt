@@ -12,6 +12,7 @@ import android.text.SpannableString
 import android.text.style.CharacterStyle
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import androidx.annotation.ColorInt
 import dcrlibwallet.Dcrlibwallet
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -32,6 +33,13 @@ object CoinFormat {
     fun formatRelative(spannable: Spannable, relativeSize: Float = 0.7f): Spannable {
         val span = RelativeSizeSpan(relativeSize)
         return formatSpannable(spannable, span)
+    }
+
+    fun applyColor(spannable: Spannable, @ColorInt color: Int): Spannable {
+        val span = ForegroundColorSpan(color)
+
+        spannable.setSpan(span, 0, spannable.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        return spannable
     }
 
     fun formatAlpha(dcr: Long): Spannable {
@@ -76,7 +84,7 @@ object CoinFormat {
             return spannable
         }
 
-        spannable.setSpan(span, startIndex, spannable.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        spannable.setSpan(span, startIndex, spannable.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 

@@ -8,6 +8,7 @@ package com.dcrandroid.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -30,7 +31,6 @@ import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-// TODO: A joint class is needed for transactions and overview pages to avoid redundancy.
 class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -125,9 +125,6 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
     }
 
     if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-        if (transaction.isMixed) {
-            layoutRow.amount.text = context.getString(R.string.mix)
-        } else {
             val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
                 -transaction.amount
             } else {
@@ -139,10 +136,27 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
                 text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
             }
-        }
 
         layoutRow.ticket_price.hide()
 
+    } else if (transaction.type == Dcrlibwallet.TxTypeMixed) {
+
+        var mixedAmount = CoinFormat.format(transaction.mixDenomination)
+        mixedAmount = CoinFormat.applyColor(mixedAmount, context.resources.getColor(R.color.darkBlueTextColor))
+
+        val amountBuilder = SpannableStringBuilder(mixedAmount)
+        if (transaction.mixCount > 1) {
+            amountBuilder.append("\t x${transaction.mixCount}")
+        }
+        layoutRow.ticket_price.apply {
+            show()
+            text = amountBuilder
+        }
+
+        layoutRow.amount.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
+            setText(R.string.mixed)
+        }
     } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
 
         layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
