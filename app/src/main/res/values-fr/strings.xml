@@ -81,6 +81,10 @@
     <string name="net">Net</string>
     <string name="connecting_to_peers">Connexion aux pairs</string>
 
+    <plurals name="mixed_dcr_amount">
+        <item quantity="one">%1$s DCR</item>
+        <item quantity="other">%1$s DCR\t x%2$d</item>
+    </plurals>
     <!--/General-->
 
     <!--Account-->
@@ -386,6 +390,7 @@
     <string name="tx_sort_sent">Envoyé (%1$d)</string>
     <string name="tx_sort_received">Reçu (%1$d)</string>
     <string name="tx_sort_transferred">Transféré (%1$d)</string>
+    <string name="tx_sort_mixed">Mixé (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">Achat de Ticket</string>
@@ -549,10 +554,11 @@
     <string name="unmixed_account">Compte non-mixé</string>
     <string name="mixer">Mixeur</string>
     <string name="mix">Mixer</string>
+    <string name="mixed">Mixé</string>
     <string name="mix_tx_change">Mixer la monnaie de la transaction</string>
     <string name="mix_tx_change_summary">La monnaie des transactions sera envoyée vers le compte non-mixé si activé.</string>
     <string name="change_sent_to_unmixed"><![CDATA[La monnaie sera envoyée vers <b>%1$s</b>.]]></string>
-    <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé jusqu\'à la complétion du mixage.</string>
+    <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé et votre écran restera actif jusqu\'à la complétion du mixage.</string>
     <string name="mixer_has_stopped_running">le mixeur cspp a cessé de fonctionner</string>
     <string name="no_mixable_output">Le compte non-mixé n\'a pas de sortie mixable</string>
     <string name="new_caps">NOUVEAU</string>
@@ -579,7 +585,7 @@
     <string name="mix_server">Serveur de mixage</string>
     <string name="keep_app_opened">Garder cette application ouverte</string>
     <string name="mixer_help_title">Comment utiliser le mixeur ?</string>
-    <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>
+    <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage. Votre écran ne passera pas en veille pendant le mixage, ce qui peut impacter votre durée de batterie.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>
     <string name="mixer_is_running">le mixeur cspp fonctionne</string>
     <string name="keep_this_app_opened">Garder cette application ouverte</string>
     <string name="mixer_status_info">Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.</string>
