@@ -81,6 +81,10 @@
     <string name="net">Net</string>
     <string name="connecting_to_peers">Connexion aux pairs</string>
 
+    <plurals name="mixed_dcr_amount">
+        <item quantity="one">%1$s DCR</item>
+        <item quantity="other">%1$s DCR\t x%2$d</item>
+    </plurals>
     <!--/General-->
 
     <!--Account-->
@@ -386,6 +390,7 @@
     <string name="tx_sort_sent">Envoyé (%1$d)</string>
     <string name="tx_sort_received">Reçu (%1$d)</string>
     <string name="tx_sort_transferred">Transféré (%1$d)</string>
+    <string name="tx_sort_mixed">Mixé (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">Achat de Ticket</string>
@@ -549,6 +554,7 @@
     <string name="unmixed_account">Compte non-mixé</string>
     <string name="mixer">Mixeur</string>
     <string name="mix">Mixer</string>
+    <string name="mixed">Mixé</string>
     <string name="mix_tx_change">Mixer la monnaie de la transaction</string>
     <string name="mix_tx_change_summary">La monnaie des transactions sera envoyée vers le compte non-mixé si activé.</string>
     <string name="change_sent_to_unmixed"><![CDATA[La monnaie sera envoyée vers <b>%1$s</b>.]]></string>
