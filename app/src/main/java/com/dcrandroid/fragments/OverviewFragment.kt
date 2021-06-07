@@ -8,10 +8,7 @@ package com.dcrandroid.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
@@ -171,8 +168,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
             cspp_running_layout.show()
             mixer_status_rv.adapter?.notifyDataSetChanged()
+            requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             cspp_running_layout.hide()
+            requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
         mixer_go_to_wallets.setOnClickListener {
