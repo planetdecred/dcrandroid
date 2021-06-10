@@ -146,7 +146,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         mixer_status_rv.layoutManager = LinearLayoutManager(context)
         mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
-        multiWallet?.setAccountMixerNotification(this)
 
         fetchExchangeRate()
     }
@@ -168,10 +167,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
             cspp_running_layout.show()
             mixer_status_rv.adapter?.notifyDataSetChanged()
-            requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             cspp_running_layout.hide()
-            requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
         mixer_go_to_wallets.setOnClickListener {
@@ -181,6 +178,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onResume() {
         super.onResume()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
+        multiWallet!!.addAccountMixerNotificationListener(this, this.javaClass.name)
         syncLayoutUtil = SyncLayoutUtil(syncLayout, { restartSyncProcess() }, {
             if (multiWallet!!.isSyncing) {
                 scrollView.postDelayed({
@@ -192,6 +191,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onPause() {
         super.onPause()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
         syncLayoutUtil?.destroy()
         syncLayoutUtil = null
     }

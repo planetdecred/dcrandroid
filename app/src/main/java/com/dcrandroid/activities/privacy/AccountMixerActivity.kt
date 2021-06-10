@@ -36,7 +36,10 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
     override fun onResume() {
         super.onResume()
+        multiWallet!!.removeTxAndBlockNotificationListener(this.javaClass.name)
         multiWallet!!.addTxAndBlockNotificationListener(this, this.javaClass.name)
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
+        multiWallet!!.addAccountMixerNotificationListener(this, this.javaClass.name)
         setMixerStatus()
     }
 
@@ -58,8 +61,6 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
         mixed_account_label.text = wallet.accountName(mixedAccountNumber)
         unmixed_account_label.text = wallet.accountName(unmixedAccountNumber)
-
-        multiWallet?.setAccountMixerNotification(this@AccountMixerActivity)
 
         if (wallet.isAccountMixerActive) {
             mixer_toggle_switch.isChecked = true
@@ -90,6 +91,7 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
     override fun onPause() {
         super.onPause()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
         multiWallet!!.removeTxAndBlockNotificationListener(this.javaClass.name)
     }
 
