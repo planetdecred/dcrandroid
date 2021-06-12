@@ -17,11 +17,16 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.util.WalletData
+import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.MultiWallet
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener {
 
     internal val walletData: WalletData = WalletData.instance
     internal val multiWallet: MultiWallet?
@@ -36,6 +41,8 @@ open class BaseActivity : AppCompatActivity() {
         } else {
             window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
         }
+
+        checkMixerStatus()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -50,5 +57,40 @@ open class BaseActivity : AppCompatActivity() {
                 (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(this.window.decorView.applicationWindowToken, 0)
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    private fun checkMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
+        var activeMixers = 0
+        for (wallet in multiWallet!!.openedWalletsList()) {
+            if (wallet.isAccountMixerActive) {
+                activeMixers++
+            }
+        }
+
+        if (activeMixers > 0) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
+        multiWallet!!.addAccountMixerNotificationListener(this, this.javaClass.name)
+        checkMixerStatus()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
+    }
+
+    override fun onAccountMixerEnded(walletID: Long) {
+        checkMixerStatus()
+    }
+
+    override fun onAccountMixerStarted(walletID: Long) {
+        checkMixerStatus()
     }
 }

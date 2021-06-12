@@ -8,10 +8,7 @@ package com.dcrandroid.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
@@ -149,7 +146,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         mixer_status_rv.layoutManager = LinearLayoutManager(context)
         mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
-        multiWallet?.setAccountMixerNotification(this)
 
         fetchExchangeRate()
     }
@@ -182,6 +178,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onResume() {
         super.onResume()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
+        multiWallet!!.addAccountMixerNotificationListener(this, this.javaClass.name)
         syncLayoutUtil = SyncLayoutUtil(syncLayout, { restartSyncProcess() }, {
             if (multiWallet!!.isSyncing) {
                 scrollView.postDelayed({
@@ -193,6 +191,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onPause() {
         super.onPause()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
         syncLayoutUtil?.destroy()
         syncLayoutUtil = null
     }
