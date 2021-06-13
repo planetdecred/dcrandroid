@@ -56,6 +56,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     private lateinit var amountHelper: AmountInputHelper
 
     private var sendMax = false
+        set(value) {
+            if (value) {
+                iv_send_max?.setImageResource(R.drawable.ic_send_max_enabled)
+            } else {
+                iv_send_max?.setImageResource(R.drawable.ic_send_max)
+            }
+
+            field = value
+        }
 
     var savedInstanceState: Bundle? = null
 
@@ -348,17 +357,18 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             tx_size.text = getString(R.string.x_bytes, authoredTxData!!.estSignedSize)
 
             val wallet = multiWallet.walletWithID(sourceAccountSpinner.selectedAccount!!.walletID)
-            val mixChange = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
-            if (mixChange) {
+            if (!sendMax && wallet.accountMixerConfigIsSet() &&
+                    wallet.mixedAccountNumber() == sourceAccountSpinner.selectedAccount!!.accountNumber) {
                 balance_after_layout.hide()
 
-                val changeAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
-                val changeAccountName = wallet.accountName(changeAccountNumber)
+                val changeAccountName = wallet.accountName(wallet.unmixedAccountNumber())
                 change_to_unmixed_label.apply {
                     text = HtmlCompat.fromHtml(getString(R.string.change_sent_to_unmixed, changeAccountName), 0)
                     show()
                 }
             } else {
+                change_to_unmixed_label.hide()
+                balance_after_layout.show()
                 balance_after_send.text = authoredTxData!!.balanceAfter
             }
 
