@@ -56,6 +56,8 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         shuffle_port.text = if(BuildConfig.IS_TESTNET) Dcrlibwallet.TestnetShufflePort
         else Dcrlibwallet.MainnetShufflePort
 
+        mix_tx_change_switch.isChecked = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
+
         mixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
         unmixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
 
@@ -85,6 +87,14 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         }
 
         go_back.setOnClickListener { finish() }
+
+        mix_tx_change.setOnClickListener {
+            mix_tx_change_switch.toggle()
+        }
+
+        mix_tx_change_switch.setOnCheckedChangeListener { _, isChecked ->
+            wallet.setBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, isChecked)
+        }
 
         setMixerStatus()
     }

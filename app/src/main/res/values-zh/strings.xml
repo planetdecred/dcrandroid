@@ -568,7 +568,6 @@
     <string name="mix">混合</string>
     <string name="mix_tx_change">混币交易找零</string>
     <string name="mix_tx_change_summary">如果启用，交易的找零将会发送到未混合的账户。</string>
-    <string name="change_sent_to_unmixed"><![CDATA[找零将会发送到<b>%1$s</b>。]]></string>
     <string name="start_mixer_warning">你的钱包在混币完成前将一直处于解锁状态</string>
     <string name="mixer_has_stopped_running">cspp混币器已停止运行</string>
     <string name="no_mixable_output">未混合的账户没有可混合的输出</string>

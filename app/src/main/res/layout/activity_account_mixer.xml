@@ -446,15 +446,20 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_14"
+                    android:background="#e6eaed" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/mix_tx_change"
-                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"
                     android:focusable="true"
                     android:clickable="true"
-                    android:visibility="gone"
                     android:background="@drawable/ripple"
                     android:orientation="horizontal">
 
@@ -490,7 +495,7 @@
                     <androidx.appcompat.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@id/pref_switch"
+                        android:id="@+id/mix_tx_change_switch"
                         android:theme="@style/Switch" />
 
                 </LinearLayout>

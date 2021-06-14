@@ -318,6 +318,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
         val zeroDcr = HtmlCompat.fromHtml(getString(R.string._dcr), 0)
         balance_after_send.text = zeroDcr
+        change_to_unmixed_label.hide()
 
         if (amountHelper.exchangeDecimal == null) {
             tx_fee.text = zeroDcr
@@ -357,21 +358,23 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             tx_size.text = getString(R.string.x_bytes, authoredTxData!!.estSignedSize)
 
             val wallet = multiWallet.walletWithID(sourceAccountSpinner.selectedAccount!!.walletID)
-            if (!sendMax && wallet.accountMixerConfigIsSet() &&
-                    wallet.mixedAccountNumber() == sourceAccountSpinner.selectedAccount!!.accountNumber) {
-                balance_after_layout.hide()
+            val sourceAccountNumber = sourceAccountSpinner.selectedAccount!!.accountNumber
+            if (!sendMax && (wallet.accountMixerMixChange() ||
+                    wallet.mixedAccountNumber() == sourceAccountNumber) &&
+                    wallet.unmixedAccountNumber() != sourceAccountNumber &&
+                    authoredTxData!!.change > 0) {
 
                 val changeAccountName = wallet.accountName(wallet.unmixedAccountNumber())
                 change_to_unmixed_label.apply {
-                    text = HtmlCompat.fromHtml(getString(R.string.change_sent_to_unmixed, changeAccountName), 0)
+                    text = HtmlCompat.fromHtml(getString(R.string.change_sent_to_unmixed,
+                            CoinFormat.formatDecred(authoredTxData!!.change), changeAccountName), 0)
                     show()
                 }
             } else {
                 change_to_unmixed_label.hide()
-                balance_after_layout.show()
-                balance_after_send.text = authoredTxData!!.balanceAfter
             }
 
+            balance_after_send.text = authoredTxData!!.balanceAfter
             tx_fee.text = authoredTxData!!.fee
             total_cost.text = authoredTxData!!.totalCost
 
@@ -415,7 +418,16 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }
 
         val totalCostAtom = amountAtom + feeAtom
-        val balance = selectedAccount.balance.spendable - totalCostAtom
+
+        val wallet = multiWallet.walletWithID(sourceAccountSpinner.selectedAccount!!.walletID)
+        val balance = if ((wallet.accountMixerMixChange() || selectedAccount.isMixerMixedAccount) &&
+                !selectedAccount.isMixerUnMixedAccount && feeAndSize.change != null) {
+            // Deduct change to get an accurate balance since the change will be sent to another account
+            selectedAccount.balance.spendable - (totalCostAtom + feeAndSize.change.atomValue)
+        }else{
+            selectedAccount.balance.spendable - totalCostAtom
+        }
+
         val balanceAfterSend = if (balance > 0) {
             getString(R.string.x_dcr, CoinFormat.formatDecred(balance))
         } else {
@@ -449,6 +461,9 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             balanceAfter = balanceAfterSend
 
             this.amountAtom = amountAtom
+            if(feeAndSize.change != null){
+                this.change = feeAndSize.change.atomValue
+            }
 
             this.txAuthor = txAuthor
         }
@@ -476,6 +491,7 @@ class AuthoredTxData {
     lateinit var balanceAfter: String
 
     var amountAtom: Long = 0
+    var change: Long = 0
 
     lateinit var txAuthor: TxAuthor
 }
