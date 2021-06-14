@@ -573,9 +573,10 @@
     <string name="mixer">Mixer</string>
     <string name="mix">Mix</string>
     <string name="mixed">Mixed</string>
-    <string name="mix_tx_change">Mix transaction change</string>
-    <string name="mix_tx_change_summary">Change from transactions will be sent to unmixed account if enabled.</string>
-    <string name="change_sent_to_unmixed"><![CDATA[Change of <b>%1$s DCR</b> will be sent to <b>%2$s</b>.]]></string>
+    <string name="mix_tx_change">Mix change</string>
+    <string name="mix_tx_change_summary_enabled">Change on transactions from all accounts will go to unmixed</string>
+    <string name="mix_tx_change_summary_disabled">Change on transactions from mixed will go to unmixed</string>
+    <string name="change_sent_to_unmixed"><![CDATA[Change of <b>%1$s DCR</b> will return to <b>%2$s</b>.]]></string>
     <string name="start_mixer_warning">Your wallet will be unlocked and your display would remain on until mixing completes.</string>
     <string name="mixer_has_stopped_running">cspp mixer has stopped running</string>
     <string name="no_mixable_output">Unmixed account has no mixable output</string>

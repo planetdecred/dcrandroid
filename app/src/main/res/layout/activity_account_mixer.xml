@@ -473,7 +473,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@id/pref_title"
                             android:includeFontPadding="false"
                             android:text="@string/mix_tx_change"
                             android:textColor="@color/darkBlueTextColor"
@@ -483,11 +482,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/mix_tx_change_summary"
                             android:includeFontPadding="false"
                             android:layout_marginTop="@dimen/margin_padding_size_4"
                             android:textColor="@color/blueGraySecondTextColor"
                             android:fontFamily="@font/source_sans_pro"
-                            android:text="@string/mix_tx_change_summary"
+                            android:text="@string/mix_tx_change_summary_disabled"
                             android:textSize="@dimen/edit_text_size_14" />
 
                     </LinearLayout>
