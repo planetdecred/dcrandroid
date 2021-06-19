@@ -64,10 +64,10 @@ class Account : Serializable {
         get() = wallet.hdPathForAccount(accountNumber)
 
     val isMixerUnMixedAccount: Boolean
-        get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
+        get() = accountNumber == wallet.unmixedAccountNumber()
 
     val isMixerMixedAccount: Boolean
-        get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
+        get() = accountNumber == wallet.mixedAccountNumber()
 
     companion object {
         fun from(acc: dcrlibwallet.Account): Account {
