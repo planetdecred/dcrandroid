@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2021 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/app_bar"
+        app:elevation="0dp"
+        android:background="@color/colorBackground"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_padding_size_8"
+                android:paddingEnd="0dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:background="@drawable/bg_primary_ripple"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:id="@+id/go_back"
+                    app:srcCompat="@drawable/ic_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/app_bar_title"
+                    android:text="Coin Control"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:textSize="@dimen/edit_text_size_20"
+                    android:textColor="@color/darkBlueTextColor"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/iv_info"
+                        android:padding="@dimen/margin_padding_size_8"
+                        android:layout_marginEnd="@dimen/margin_padding_size_8"
+                        app:srcCompat="@drawable/ic_info"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/bg_primary_ripple" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/iv_options"
+                        android:padding="@dimen/margin_padding_size_8"
+                        app:srcCompat="@drawable/ic_options"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="@drawable/bg_primary_ripple" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_bg"
+        android:orientation="vertical"
+        android:elevation="@dimen/margin_padding_size_4"
+        android:layout_marginStart="@dimen/margin_padding_size_8"
+        android:layout_marginEnd="@dimen/margin_padding_size_8"
+        android:layout_marginTop="@dimen/margin_padding_size_4"
+        android:layout_marginBottom="@dimen/margin_padding_size_4"
+        android:padding="@dimen/margin_padding_size_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/margin_padding_size_6">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/coin_control_quantity"
+                android:layout_weight="0.5"
+                android:text="Selected: 5"
+                android:textSize="@dimen/edit_text_size_16"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro" />
+
+            <TextView
+                android:id="@+id/coin_control_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:text="Amount: 118.19008368 DCR"
+                android:textSize="@dimen/edit_text_size_16"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/margin_padding_size_6">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/coin_control_fee"
+                android:layout_weight="0.5"
+                android:text="Fee: 0.0000881 DCR"
+                android:textSize="@dimen/edit_text_size_16"
+                android:includeFontPadding="false"
+                app:fontFamily="@font/source_sans_pro"/>
+
+            <TextView
+                android:id="@+id/coin_control_after_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:text="After Fee: 118.18999558 DCR"
+                android:textSize="@dimen/edit_text_size_16"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/margin_padding_size_6">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/recycler_view"-->
+<!--        android:background="@drawable/card_bg"-->
+<!--        android:elevation="@dimen/margin_padding_size_4"-->
+<!--        android:layout_marginTop="@dimen/margin_padding_size_4"-->
+<!--        android:layout_marginStart="@dimen/margin_padding_size_8"-->
+<!--        android:layout_marginEnd="@dimen/margin_padding_size_8"-->
+<!--        android:layout_marginBottom="@dimen/margin_padding_size_8" />-->
+
+    <LinearLayout
+        android:id="@+id/recycler_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <include
+            layout="@layout/coin_control_input_list_row"
+            android:visibility="visible"
+            android:id="@+id/destination_account_spinner" />
+
+        <include
+            layout="@layout/coin_control_input_list_row"
+            android:visibility="visible"
+            android:id="@+id/destination_account_spinner" />
+
+        <include
+            layout="@layout/coin_control_input_list_row"
+            android:visibility="visible"
+            android:id="@+id/destination_account_spinner" />
+
+        <include
+            layout="@layout/coin_control_input_list_row"
+            android:visibility="visible"
+            android:id="@+id/destination_account_spinner" />
+
+        <include
+            layout="@layout/coin_control_input_list_row"
+            android:visibility="visible"
+            android:id="@+id/destination_account_spinner" />
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/recycler_view"-->
+<!--            android:layout_marginTop="@dimen/margin_padding_size_4" />-->
+
+    </LinearLayout>
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:gravity="center"-->
+<!--        android:textSize="@dimen/edit_text_size_16"-->
+<!--        android:layout_marginBottom="@dimen/margin_padding_size_18"-->
+<!--        android:textColor="@color/lightGrayTextColor"-->
+<!--        app:fontFamily="@font/source_sans_pro"-->
+<!--        android:text="No inputs available" />-->
+
+</LinearLayout>

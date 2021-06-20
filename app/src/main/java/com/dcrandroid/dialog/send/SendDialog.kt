@@ -19,6 +19,7 @@ import android.view.ViewTreeObserver
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import com.dcrandroid.R
+import com.dcrandroid.activities.coincontrol.CoinControlActivity
 import com.dcrandroid.adapter.PopupItem
 import com.dcrandroid.adapter.PopupUtil
 import com.dcrandroid.data.Account
@@ -34,10 +35,12 @@ import com.dcrandroid.util.CurrencyUtil
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.AccountCustomSpinner
+import com.dcrandroid.view.util.InputHelper
 import com.dcrandroid.view.util.SCAN_QR_REQUEST_CODE
 import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.TxAuthor
 import dcrlibwallet.TxFeeAndSize
+import kotlinx.android.synthetic.main.coin_control_row.*
 import kotlinx.android.synthetic.main.fee_layout.*
 import kotlinx.android.synthetic.main.send_page_amount_card.*
 import kotlinx.android.synthetic.main.send_page_sheet.*
@@ -46,6 +49,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: DialogInterface.OnDismissListener) :
         FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
@@ -93,6 +97,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             amountChanged = this@SendDialog.amountChanged
         }
 
+        val customAddressChangeInput = InputHelper(requireContext(), custom_address_change_input) {
+            true
+        }.apply {
+            hideQrScanner()
+            setHint(R.string.custom_change_address)
+
+            editText.isSingleLine = true
+        }
+
         destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
             addressChanged = destAddressChanged
             addressInputHelper.textChanged = destAddressChanged
@@ -123,6 +136,19 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             accountIsEnabled
         }
         sourceAccountSpinner.pickerTitle = R.string.source_account_picker_title
+
+        coin_control_switch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                coin_control_enabled_section.show()
+            } else {
+                coin_control_enabled_section.hide()
+            }
+        }
+
+        coin_control_input_button.setOnClickListener {
+            val intent = Intent(context, CoinControlActivity::class.java)
+            startActivity(intent)
+        }
 
         send_scroll_view.viewTreeObserver.addOnScrollChangedListener(this)
 

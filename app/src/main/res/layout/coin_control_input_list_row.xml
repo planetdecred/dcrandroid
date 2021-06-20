@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018-2021 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/transaction_ripple_layout"
+    android:minHeight="56dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/card_bg"
+    android:gravity="center_vertical"
+    android:paddingTop="@dimen/margin_padding_size_8"
+    android:paddingBottom="@dimen/margin_padding_size_8"
+    android:paddingLeft="@dimen/margin_padding_size_16"
+    android:paddingRight="@dimen/margin_padding_size_16"
+    android:elevation="@dimen/margin_padding_size_4"
+    android:layout_marginStart="@dimen/margin_padding_size_8"
+    android:layout_marginEnd="@dimen/margin_padding_size_8"
+    android:layout_marginTop="@dimen/margin_padding_size_4"
+    android:layout_marginBottom="@dimen/margin_padding_size_4">
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/Switch"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/margin_padding_size_8"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/edit_text_size_20"
+                android:textColor="@color/darkBlueTextColor"
+                android:text="18.19008368 DCR"
+                android:gravity="start"
+                android:fontFamily="@font/source_sans_pro"
+                android:id="@+id/amount"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="547831 Confirmations"
+                android:textColor="#8997a5"
+                android:textSize="@dimen/edit_text_size_16"
+                app:fontFamily="@font/source_sans_pro" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ticket_price"
+                android:textSize="@dimen/edit_text_size_14"
+                android:textColor="@color/blue"
+                android:text="TskAgNND4hqUhztgcXutC4QemK44MYpAZxZ"
+                android:gravity="start"
+                android:visibility="visible"
+                tools:visibility="visible"
+                app:fontFamily="@font/source_sans_pro"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/days_to_vote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/margin_padding_size_4"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:text="May 24, 2021"
+                android:textColor="@color/darkerBlueGrayTextColor"
+                android:textSize="@dimen/edit_text_size_14"
+                android:visibility="visible"
+                app:fontFamily="@font/source_sans_pro"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>
