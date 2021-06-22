@@ -555,8 +555,10 @@
     <string name="mixer">Mixeur</string>
     <string name="mix">Mixer</string>
     <string name="mixed">Mixé</string>
-    <string name="mix_tx_change">Mixer la monnaie de la transaction</string>
-    <string name="mix_tx_change_summary_enabled">La monnaie des transactions sera envoyée vers le compte non-mixé si activé.</string>
+    <string name="mix_tx_change">Mixer la monnaie</string>
+    <string name="mix_tx_change_summary_enabled">La monnaie des transactions depuis tous les comptes sera envoyée vers non-mixé.</string>
+    <string name="mix_tx_change_summary_disabled">La monnaie des transactions depuis mixé sera envoyée vers non-mixé.</string>
+    <string name="change_sent_to_unmixed"><![CDATA[La monnaie de <b>%1$s DCR</b> retournera vers \'<b>%2$s</b>\'.]]></string>
     <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé et votre écran restera actif jusqu\'à la complétion du mixage.</string>
     <string name="mixer_has_stopped_running">le mixeur cspp a cessé de fonctionner</string>
     <string name="no_mixable_output">Le compte non-mixé n\'a pas de sortie mixable</string>
