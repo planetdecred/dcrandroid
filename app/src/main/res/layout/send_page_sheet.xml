@@ -123,6 +123,24 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_4"
+                android:elevation="4dp"
+                android:background="@drawable/card_bg"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/coin_control_view"
+                    layout="@layout/coin_control_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:layout_marginEnd= "@dimen/margin_padding_size_8" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:id="@+id/dest_address_card"

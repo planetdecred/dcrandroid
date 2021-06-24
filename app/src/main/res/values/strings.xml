@@ -11,6 +11,7 @@
     application to stop. Please help us fix this by sending us your device specification and app log,
     all you have to do is click OK. This will help us prevent the error from occurring again</string>
     <string name="send_dcr_info">Input or scan the destination wallet address and the amount in DCR to send funds.</string>
+    <string name="coin_control_info">Select the Inputs you want to use for your transaction </string>
     <string name="type">Type</string>
     <string name="loading">Loading</string>
     <string name="dcr" translatable="false">DCR</string>
@@ -660,6 +661,7 @@
     <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
+    <string name="custom_change_address">Custom Change Address</string>
     <!--/Politeia-->
 
 </resources>
