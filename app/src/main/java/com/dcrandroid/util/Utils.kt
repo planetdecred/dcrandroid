@@ -65,7 +65,8 @@ object Utils {
         val data = ByteArray(len / 2)
         var i = 0
         while (i < len) {
-            data[i / 2] = ((Character.digit(s[i], 16) shl 4) + Character.digit(s[i + 1], 16)).toByte()
+            data[i / 2] =
+                ((Character.digit(s[i], 16) shl 4) + Character.digit(s[i + 1], 16)).toByte()
             i += 2
         }
         return data
@@ -75,12 +76,14 @@ object Utils {
 
         val sdk = Build.VERSION.SDK_INT
         if (sdk < Build.VERSION_CODES.HONEYCOMB) {
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager
+            val clipboard =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager
             clipboard.text = text
         } else {
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clipboard =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             val clip = android.content.ClipData
-                    .newPlainText(context.getString(R.string.your_address), text)
+                .newPlainText(context.getString(R.string.your_address), text)
             clipboard.setPrimaryClip(clip)
         }
     }
@@ -98,10 +101,12 @@ object Utils {
     fun readFromClipboard(context: Context): String {
         val sdk = Build.VERSION.SDK_INT
         if (sdk < Build.VERSION_CODES.HONEYCOMB) {
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager
+            val clipboard =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as android.text.ClipboardManager
             return clipboard.text.toString()
         } else {
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clipboard =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             if (clipboard.hasPrimaryClip())
                 return clipboard.primaryClip!!.getItemAt(0).text.toString()
         }
@@ -127,13 +132,15 @@ object Utils {
 
     fun showErrorDialog(ctx: Context, err: String) {
         InfoDialog(ctx)
-                .setDialogTitle(ctx.getString(R.string.error_occurred))
-                .setMessage(err)
-                .setNegativeButton(ctx.getString(R.string._copy), DialogInterface.OnClickListener { _, _ ->
+            .setDialogTitle(ctx.getString(R.string.error_occurred))
+            .setMessage(err)
+            .setNegativeButton(
+                ctx.getString(R.string._copy),
+                DialogInterface.OnClickListener { _, _ ->
                     copyToClipboard(ctx, err, R.string.error_copied)
                 })
-                .setPositiveButton(ctx.getString(R.string.ok), null)
-                .show()
+            .setPositiveButton(ctx.getString(R.string.ok), null)
+            .show()
     }
 
     fun restartApp(context: Context) {
@@ -149,18 +156,25 @@ object Utils {
 
     fun registerTransactionNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(Constants.TRANSACTION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH)
+            val channel = NotificationChannel(
+                Constants.TRANSACTION_CHANNEL_ID,
+                context.getString(R.string.app_name),
+                NotificationManager.IMPORTANCE_HIGH
+            )
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
 
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
-    fun sendTransactionNotification(context: Context, manager: NotificationManager, amount: String,
-                                    transaction: Transaction) {
+    fun sendTransactionNotification(
+        context: Context, manager: NotificationManager, amount: String,
+        transaction: Transaction
+    ) {
 
         val multiWallet = WalletData.multiWallet!!
         val wallet = multiWallet.walletWithID(transaction.walletID)
@@ -187,14 +201,21 @@ object Utils {
         }
 
         val amount = when (transaction.type) {
-            Dcrlibwallet.TxTypeVote -> context.getString(R.string.vote_reward, CoinFormat.formatDecred(transaction.voteReward))
+            Dcrlibwallet.TxTypeVote -> context.getString(
+                R.string.vote_reward,
+                CoinFormat.formatDecred(transaction.voteReward)
+            )
             Dcrlibwallet.TxTypeRevocation -> ""
             else ->
                 amount
         }
 
-        val incomingNotificationsKey = transaction.walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
-        val incomingNotificationConfig = multiWallet.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION)
+        val incomingNotificationsKey =
+            transaction.walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
+        val incomingNotificationConfig = multiWallet.readInt32ConfigValueForKey(
+            incomingNotificationsKey,
+            Constants.DEF_TX_NOTIFICATION
+        )
 
         val notificationSound = when (incomingNotificationConfig) {
             Constants.TX_NOTIFICATION_SOUND_ONLY,
@@ -212,8 +233,10 @@ object Utils {
         launchIntent.action = Constants.NEW_TRANSACTION_NOTIFICATION
         launchIntent.putExtra(Constants.TRANSACTION, transaction)
 
-        val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val notificationBuilder = NotificationCompat.Builder(context, Constants.TRANSACTION_CHANNEL_ID)
+        val launchPendingIntent =
+            PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notificationBuilder =
+            NotificationCompat.Builder(context, Constants.TRANSACTION_CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(amount)
                 .setSmallIcon(R.drawable.ic_notification_icon)
@@ -226,14 +249,14 @@ object Utils {
                 .setContentIntent(launchPendingIntent)
 
         val groupSummary = NotificationCompat.Builder(context, Constants.TRANSACTION_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.new_transaction))
-                .setContentText(context.getString(R.string.new_transaction))
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
-                .setGroupSummary(true)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .build()
+            .setContentTitle(context.getString(R.string.new_transaction))
+            .setContentText(context.getString(R.string.new_transaction))
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setGroup(Constants.TRANSACTION_NOTIFICATION_GROUP)
+            .setGroupSummary(true)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
 
         val notification = notificationBuilder.build()
         manager.notify(transaction.amount.toInt() + transaction.inputs!!.size, notification)
@@ -242,20 +265,30 @@ object Utils {
 
     fun registerProposalNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(Constants.PROPOSAL_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                Constants.PROPOSAL_CHANNEL_ID,
+                context.getString(R.string.app_name),
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             channel.enableLights(true)
             channel.enableVibration(true)
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
 
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
-    fun sendProposalNotification(context: Context, manager: NotificationManager, proposal: Proposal, title: String) {
+    fun sendProposalNotification(
+        context: Context,
+        manager: NotificationManager,
+        proposal: Proposal,
+        title: String
+    ) {
 
         val notificationSound =
-                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         val vibration = arrayOf(0L, 100, 100, 100).toLongArray()
 
@@ -263,27 +296,34 @@ object Utils {
         launchIntent.action = Constants.NEW_POLITEIA_NOTIFICATION
         launchIntent.putExtra(Constants.PROPOSAL_ID, proposal.id)
 
-        val launchPendingIntent = PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val launchPendingIntent =
+            PendingIntent.getActivity(context, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(context.getString(R.string.proposal_name_author, proposal.name, proposal.username))
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setSound(notificationSound)
-                .setVibrate(vibration)
-                .setOngoing(false)
-                .setAutoCancel(true)
-                .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(launchPendingIntent)
+            .setContentTitle(title)
+            .setContentText(
+                context.getString(
+                    R.string.proposal_name_author,
+                    proposal.name,
+                    proposal.username
+                )
+            )
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setSound(notificationSound)
+            .setVibrate(vibration)
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(launchPendingIntent)
 
         val groupSummary = NotificationCompat.Builder(context, Constants.PROPOSAL_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.politeia_notifications))
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
-                .setGroupSummary(true)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .build()
+            .setContentTitle(context.getString(R.string.politeia_notifications))
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setGroup(Constants.POLITEIA_NOTIFICATION_GROUP)
+            .setGroupSummary(true)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
 
         val notification = notificationBuilder.build()
         manager.notify(proposal.id.toInt(), notification)

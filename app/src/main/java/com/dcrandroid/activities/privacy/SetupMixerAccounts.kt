@@ -36,13 +36,15 @@ class SetupMixerAccounts : BaseActivity() {
 
         btn_auto_setup.setOnClickListener {
             InfoDialog(this)
-                    .setDialogTitle(getString(R.string.privacy_intro_dialog_title))
-                    .setMessage(Html.fromHtml(getString(R.string.privacy_intro_dialog_desc)))
-                    .setNegativeButton(getString(R.string.cancel))
-                    .setPositiveButton(getString(R.string.begin_setup), DialogInterface.OnClickListener { _, _ ->
+                .setDialogTitle(getString(R.string.privacy_intro_dialog_title))
+                .setMessage(Html.fromHtml(getString(R.string.privacy_intro_dialog_desc)))
+                .setNegativeButton(getString(R.string.cancel))
+                .setPositiveButton(
+                    getString(R.string.begin_setup),
+                    DialogInterface.OnClickListener { _, _ ->
                         checkAccountNameConflict()
                     })
-                    .show()
+                .show()
         }
 
         btn_manual_setup.setOnClickListener {
@@ -60,15 +62,17 @@ class SetupMixerAccounts : BaseActivity() {
 
         if (wallet.hasAccount(Constants.MIXED) || wallet.hasAccount(Constants.UNMIXED)) {
             InfoDialog(this)
-                    .setDialogTitle(R.string.account_name_taken)
-                    .setMessage(R.string.account_name_conflict_dialog_desc)
-                    .setIcon(R.drawable.ic_alert2, R.drawable.grey_dialog_bg)
-                    .cancelable(false)
-                    .setPositiveButton(R.string.go_back_rename, DialogInterface.OnClickListener { dialog, _ ->
+                .setDialogTitle(R.string.account_name_taken)
+                .setMessage(R.string.account_name_conflict_dialog_desc)
+                .setIcon(R.drawable.ic_alert2, R.drawable.grey_dialog_bg)
+                .cancelable(false)
+                .setPositiveButton(
+                    R.string.go_back_rename,
+                    DialogInterface.OnClickListener { dialog, _ ->
                         dialog.dismiss()
                         finish()
                     })
-                    .show()
+                .show()
             return
         }
 
@@ -76,7 +80,11 @@ class SetupMixerAccounts : BaseActivity() {
     }
 
     private fun beginAutoSetup() {
-        val title = PassPromptTitle(R.string.confirm_create_needed_accounts, R.string.confirm_create_needed_accounts, R.string.confirm_create_needed_accounts)
+        val title = PassPromptTitle(
+            R.string.confirm_create_needed_accounts,
+            R.string.confirm_create_needed_accounts,
+            R.string.confirm_create_needed_accounts
+        )
         PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { dialog, passphrase ->
 
             if (passphrase == null) {

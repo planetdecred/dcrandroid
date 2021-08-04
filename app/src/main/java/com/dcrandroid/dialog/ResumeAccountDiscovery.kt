@@ -49,7 +49,11 @@ class ResumeAccountDiscovery : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.account_discovery_sheet, container, false)
     }
 
@@ -62,7 +66,8 @@ class ResumeAccountDiscovery : BottomSheetDialogFragment() {
             val bottomSheetDialog = dialog as BottomSheetDialog
             val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
-            bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            bottomSheetBehavior.setBottomSheetCallback(object :
+                BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 }
 
@@ -90,14 +95,16 @@ class ResumeAccountDiscovery : BottomSheetDialogFragment() {
 
             pinViewUtil.showHint(R.string.enter_spending_pin)
 
-            val bottomRowTopMargin = -resources.getDimensionPixelOffset(R.dimen.margin_padding_size_64)
+            val bottomRowTopMargin =
+                -resources.getDimensionPixelOffset(R.dimen.margin_padding_size_64)
             val bottomBarParams = bottom_row.layoutParams as LinearLayout.LayoutParams
             bottomBarParams.topMargin = bottomRowTopMargin
             bottom_row.layoutParams = bottomBarParams
         }
 
         if (WalletData.instance.multiWallet!!.openedWalletsCount() > 1) {
-            unlock_title.text = getString(R.string.multi_resume_account_discovery_title, wallet!!.name)
+            unlock_title.text =
+                getString(R.string.multi_resume_account_discovery_title, wallet!!.name)
         }
 
         pinViewUtil.pinChanged = {

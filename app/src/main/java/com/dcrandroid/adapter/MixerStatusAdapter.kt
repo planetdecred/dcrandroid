@@ -29,8 +29,9 @@ class MixerStatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.mixer_status_row, parent, false))
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.mixer_status_row, parent, false)
+        )
     }
 
     override fun getItemCount() = mixingWallets.size
@@ -39,8 +40,12 @@ class MixerStatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         holder.itemView.mixer_status_wallet_name.text = mixingWallets[position].name
 
-        val unmixedAccountNumber = mixingWallets[position].readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
-        holder.itemView.mixer_status_unmixed_balance.text = CoinFormat.formatAlpha(mixingWallets[position].getAccountBalance(unmixedAccountNumber).total)
+        val unmixedAccountNumber = mixingWallets[position].readInt32ConfigValueForKey(
+            Dcrlibwallet.AccountMixerUnmixedAccount,
+            -1
+        )
+        holder.itemView.mixer_status_unmixed_balance.text =
+            CoinFormat.formatAlpha(mixingWallets[position].getAccountBalance(unmixedAccountNumber).total)
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v)

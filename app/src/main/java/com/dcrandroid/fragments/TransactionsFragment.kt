@@ -31,7 +31,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
-class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
+class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
+    ViewTreeObserver.OnScrollChangedListener {
 
     private var loadedAll = false
     private val loading = AtomicBoolean(false)
@@ -42,8 +43,11 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     private var layoutManager: LinearLayoutManager? = null
     private val transactions: ArrayList<Transaction> = ArrayList()
     private var adapter: TransactionPageAdapter? = null
-    private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
-            .create()
+    private val gson = GsonBuilder().registerTypeHierarchyAdapter(
+        ArrayList::class.java,
+        Deserializer.TransactionDeserializer()
+    )
+        .create()
 
     private var newestTransactionsFirst = true
     private var txFilter = Dcrlibwallet.TxFilterAll
@@ -64,7 +68,11 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         return this
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.single_wallet_transactions_page, container, false)
     }
 
@@ -77,7 +85,8 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
         adapter = TransactionPageAdapter(context!!, wallet!!.id, transactions)
 
-        txTypeSortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
+        txTypeSortAdapter =
+            ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
         txTypeSortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         tx_type_spinner.adapter = txTypeSortAdapter
         tx_type_spinner.onItemSelectedListener = this
@@ -95,8 +104,9 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         if (context == null || transactions.size < 5 || !initialLoadingDone.get()) return
 
         val firstVisibleItem = layoutManager!!.findFirstCompletelyVisibleItemPosition()
-        transactions_page_header.elevation = if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
-        else 0f
+        transactions_page_header.elevation =
+            if (firstVisibleItem != 0) resources.getDimension(R.dimen.app_bar_elevation)
+            else 0f
 
         val lastVisibleItem = layoutManager!!.findLastCompletelyVisibleItemPosition()
         if (lastVisibleItem >= transactions.size - 5) {
@@ -110,7 +120,8 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
     private fun initAdapter() {
 
         val timestampSortItems = context!!.resources.getStringArray(R.array.timestamp_sort)
-        val timestampSortAdapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, timestampSortItems)
+        val timestampSortAdapter =
+            ArrayAdapter(context!!, android.R.layout.simple_spinner_item, timestampSortItems)
         timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timestamp_sort_spinner.onItemSelectedListener = this
         timestamp_sort_spinner.adapter = timestampSortAdapter
@@ -140,7 +151,12 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
             availableTxTypes.add(context!!.getString(R.string.tx_sort_all, txCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
             availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_transferred, transferredTxCount))
+            availableTxTypes.add(
+                context!!.getString(
+                    R.string.tx_sort_transferred,
+                    transferredTxCount
+                )
+            )
             availableTxTypes.add(context!!.getString(R.string.tx_sort_mixed, mixedTxCount))
 
             if (stakingTxCount > 0) {
@@ -148,7 +164,12 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
             }
 
             if (coinbaseTxCount > 0) {
-                availableTxTypes.add(context!!.getString(R.string.tx_sort_coinbase, coinbaseTxCount))
+                availableTxTypes.add(
+                    context!!.getString(
+                        R.string.tx_sort_coinbase,
+                        coinbaseTxCount
+                    )
+                )
             }
 
             txTypeSortAdapter?.notifyDataSetChanged()
@@ -159,63 +180,65 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         loadTransactions()
     }
 
-    private fun loadTransactions(loadMore: Boolean = false) = GlobalScope.launch(Dispatchers.Default) {
+    private fun loadTransactions(loadMore: Boolean = false) =
+        GlobalScope.launch(Dispatchers.Default) {
 
-        if (loading.get()) {
-            return@launch
-        }
+            if (loading.get()) {
+                return@launch
+            }
 
-        loading.set(true)
+            loading.set(true)
 
-        val limit = 40
-        val offset = when {
-            loadMore -> transactions.size
-            else -> 0
-        }
+            val limit = 40
+            val offset = when {
+                loadMore -> transactions.size
+                else -> 0
+            }
 
-        val jsonResult = wallet!!.getTransactions(offset, limit, txFilter, newestTransactionsFirst)
-        val tempTxs = gson.fromJson(jsonResult, Array<Transaction>::class.java)
+            val jsonResult =
+                wallet!!.getTransactions(offset, limit, txFilter, newestTransactionsFirst)
+            val tempTxs = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
-        initialLoadingDone.set(true)
+            initialLoadingDone.set(true)
 
-        if (tempTxs == null) {
-            loadedAll = true
+            if (tempTxs == null) {
+                loadedAll = true
+                loading.set(false)
+                showHideList()
+
+                if (!loadMore) {
+                    transactions.clear()
+                }
+                return@launch
+            }
+
+            if (tempTxs.size < limit) {
+                loadedAll = true
+            }
+
+            if (loadMore) {
+                val positionStart = transactions.size
+                transactions.addAll(tempTxs)
+                withContext(Dispatchers.Main) {
+                    adapter?.notifyItemRangeInserted(positionStart, tempTxs.size)
+
+                    // notify previous last item to remove bottom margin
+                    adapter?.notifyItemChanged(positionStart - 1)
+                }
+
+            } else {
+                transactions.let {
+                    it.clear()
+                    it.addAll(tempTxs)
+                }
+                withContext(Dispatchers.Main) {
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
             loading.set(false)
             showHideList()
-
-            if (!loadMore) {
-                transactions.clear()
-            }
-            return@launch
         }
-
-        if (tempTxs.size < limit) {
-            loadedAll = true
-        }
-
-        if (loadMore) {
-            val positionStart = transactions.size
-            transactions.addAll(tempTxs)
-            withContext(Dispatchers.Main) {
-                adapter?.notifyItemRangeInserted(positionStart, tempTxs.size)
-
-                // notify previous last item to remove bottom margin
-                adapter?.notifyItemChanged(positionStart - 1)
-            }
-
-        } else {
-            transactions.let {
-                it.clear()
-                it.addAll(tempTxs)
-            }
-            withContext(Dispatchers.Main) {
-                adapter?.notifyDataSetChanged()
-            }
-        }
-
-        loading.set(false)
-        showHideList()
-    }
 
     override fun onTransaction(transactionJson: String?) {
         if (!isForeground) {

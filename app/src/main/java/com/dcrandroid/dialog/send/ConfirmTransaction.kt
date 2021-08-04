@@ -25,7 +25,10 @@ import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.confirm_send_sheet.*
 import kotlinx.coroutines.*
 
-class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sendSuccess: (shouldExit: Boolean) -> Unit) : FullScreenBottomSheetDialog() {
+class ConfirmTransaction(
+    private val fragmentActivity: FragmentActivity,
+    val sendSuccess: (shouldExit: Boolean) -> Unit
+) : FullScreenBottomSheetDialog() {
 
     lateinit var wallet: Wallet
 
@@ -36,14 +39,21 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
     lateinit var authoredTxData: AuthoredTxData
     private var publishedTx = false
 
-    fun setTxData(transactionData: TransactionData, authoredTxData: AuthoredTxData): ConfirmTransaction {
+    fun setTxData(
+        transactionData: TransactionData,
+        authoredTxData: AuthoredTxData
+    ): ConfirmTransaction {
         this.transactionData = transactionData
         this.authoredTxData = authoredTxData
         this.wallet = multiWallet.walletWithID(transactionData.sourceAccount.walletID)
         return this
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.confirm_send_sheet, container, false)
     }
 
@@ -51,12 +61,21 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
         super.onActivityCreated(savedInstanceState)
 
         // set up layout
-        send_from_account_name.text = HtmlCompat.fromHtml(getString(R.string.send_from_account,
-                selectedAccount.accountName, wallet.name), 0)
+        send_from_account_name.text = HtmlCompat.fromHtml(
+            getString(
+                R.string.send_from_account,
+                selectedAccount.accountName, wallet.name
+            ), 0
+        )
 
-        val dcrAmount = CoinFormat.formatDecred(Dcrlibwallet.amountAtom(transactionData.dcrAmount.toDouble()))
+        val dcrAmount =
+            CoinFormat.formatDecred(Dcrlibwallet.amountAtom(transactionData.dcrAmount.toDouble()))
         val amountStr = if (transactionData.exchangeDecimal != null) {
-            val usdAmount = CurrencyUtil.dcrToFormattedUSD(transactionData.exchangeDecimal, transactionData.dcrAmount.toDouble(), 2)
+            val usdAmount = CurrencyUtil.dcrToFormattedUSD(
+                transactionData.exchangeDecimal,
+                transactionData.dcrAmount.toDouble(),
+                2
+            )
             HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, dcrAmount, usdAmount), 0)
         } else {
             getString(R.string.x_dcr, dcrAmount)
@@ -82,15 +101,28 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
 
             val destinationAccount = transactionData.destinationAccount!!
             val receivingWallet = multiWallet.walletWithID(destinationAccount.walletID)
-            address_account_name.text = HtmlCompat.fromHtml(getString(R.string.selected_account_name,
-                    destinationAccount.accountName, receivingWallet.name), 0)
+            address_account_name.text = HtmlCompat.fromHtml(
+                getString(
+                    R.string.selected_account_name,
+                    destinationAccount.accountName, receivingWallet.name
+                ), 0
+            )
         }
 
         send_btn.setOnClickListener {
             showProcessing()
 
-            val title = PassPromptTitle(R.string.confirm_to_send, R.string.confirm_to_send, R.string.confirm_to_send)
-            PassPromptUtil(this@ConfirmTransaction.fragmentActivity, wallet.id, title, allowFingerprint = true) { passDialog, pass ->
+            val title = PassPromptTitle(
+                R.string.confirm_to_send,
+                R.string.confirm_to_send,
+                R.string.confirm_to_send
+            )
+            PassPromptUtil(
+                this@ConfirmTransaction.fragmentActivity,
+                wallet.id,
+                title,
+                allowFingerprint = true
+            ) { passDialog, pass ->
                 if (pass == null) {
                     showSendButton()
                     return@PassPromptUtil true
@@ -99,7 +131,8 @@ class ConfirmTransaction(private val fragmentActivity: FragmentActivity, val sen
                 showProcessing()
 
                 GlobalScope.launch(Dispatchers.Default) {
-                    val op = this@ConfirmTransaction.javaClass.name + ": " + this.javaClass.name + ": txAuthor.broadcast"
+                    val op =
+                        this@ConfirmTransaction.javaClass.name + ": " + this.javaClass.name + ": txAuthor.broadcast"
                     try {
                         authoredTxData.txAuthor.broadcast(pass.toByteArray())
                         publishedTx = true

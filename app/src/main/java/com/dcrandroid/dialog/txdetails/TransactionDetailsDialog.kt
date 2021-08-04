@@ -40,11 +40,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomSheetDialog(null), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
+class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomSheetDialog(null),
+    View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
 
     private val wallet = multiWallet.walletWithID(transaction.walletID)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.transaction_details, container, false)
     }
 
@@ -59,17 +64,21 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             val amountBuilder = SpannableStringBuilder(amountDcrFormat)
             if (transaction.mixCount > 1) {
                 var mixCount = SpannableString("\t x${transaction.mixCount}") as Spannable
-                mixCount = CoinFormat.applyColor(mixCount, context!!.resources.getColor(R.color.lightGrayTextColor))
+                mixCount = CoinFormat.applyColor(
+                    mixCount,
+                    context!!.resources.getColor(R.color.lightGrayTextColor)
+                )
                 amountBuilder.append(mixCount)
             }
 
             tx_details_amount.text = amountBuilder
         } else {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
-                -transaction.amount
-            } else {
-                transaction.amount
-            }
+            val txAmount =
+                if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
+                    -transaction.amount
+                } else {
+                    transaction.amount
+                }
             tx_details_amount.text = CoinFormat.format(txAmount, 0.625f)
         }
 
@@ -152,18 +161,31 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     }
 
     private fun setConfirmationStatus() {
-        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(
+            Dcrlibwallet.SpendUnconfirmedConfigKey,
+            Constants.DEF_SPEND_UNCONFIRMED
+        )
 
         status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
         tv_confirmations.setTextColor(context!!.getColor(R.color.blueGraySecondTextColor))
 
         if (transaction.confirmations >= Dcrlibwallet.DefaultRequiredConfirmations || spendUnconfirmedFunds) {
-            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_confirmations, transaction.confirmations), 0)
+            tv_confirmations.text = HtmlCompat.fromHtml(
+                getString(
+                    R.string.tx_details_confirmations,
+                    transaction.confirmations
+                ), 0
+            )
 
             tx_block_row.show()
             tx_block.text = transaction.height.toString()
         } else if (transaction.confirmations == 1) {
-            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_pending_confirmation, transaction.confirmations), 0)
+            tv_confirmations.text = HtmlCompat.fromHtml(
+                getString(
+                    R.string.tx_details_pending_confirmation,
+                    transaction.confirmations
+                ), 0
+            )
 
             tx_block_row.show()
             tx_block.text = transaction.height.toString()
@@ -217,7 +239,11 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             val accountName = if (input.accountNumber >= 0) {
                 wallet.accountName(input.accountNumber)
             } else getString(R.string.external).toLowerCase()
-            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), accountName)
+            val amount = getString(
+                R.string.tx_details_account,
+                CoinFormat.formatDecred(input.amount),
+                accountName
+            )
             var inputBadge = ""
             if (input.accountNumber != -1) {
                 inputBadge = wallet.name
@@ -232,7 +258,11 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             val accountName = if (output.account >= 0) {
                 wallet.accountName(output.account)
             } else getString(R.string.external).toLowerCase()
-            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), accountName)
+            val amount = getString(
+                R.string.tx_details_account,
+                CoinFormat.formatDecred(output.amount),
+                accountName
+            )
             var outputBadge = ""
             if (output.account != -1) {
                 outputBadge = wallet.name
@@ -240,7 +270,12 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             outputs.add(DropDownItem(amount, output.address!!, outputBadge))
         }
 
-        InputOutputDropdown(output_dropdown_layout, outputs.toTypedArray(), isInput = false, toastAnchor = top_bar)
+        InputOutputDropdown(
+            output_dropdown_layout,
+            outputs.toTypedArray(),
+            isInput = false,
+            toastAnchor = top_bar
+        )
     }
 
     override fun onScrollChanged() {
@@ -267,15 +302,19 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                 Utils.copyToClipboard(top_bar, tx_details_id.text.toString(), R.string.tx_id_copied)
             }
             R.id.tx_details_dest -> {
-                Utils.copyToClipboard(top_bar, tx_details_dest.text.toString(), R.string.address_copy_text)
+                Utils.copyToClipboard(
+                    top_bar,
+                    tx_details_dest.text.toString(),
+                    R.string.address_copy_text
+                )
             }
             R.id.iv_info -> {
                 val content = HtmlCompat.fromHtml(getString(R.string.tx_details_copy_info), 0)
                 InfoDialog(context!!)
-                        .setDialogTitle(getString(R.string.how_to_copy))
-                        .setMessage(content)
-                        .setPositiveButton(getString(R.string.got_it), null)
-                        .show()
+                    .setDialogTitle(getString(R.string.how_to_copy))
+                    .setMessage(content)
+                    .setPositiveButton(getString(R.string.got_it), null)
+                    .show()
             }
             R.id.view_dcrdata -> {
                 val url = if (BuildConfig.IS_TESTNET) {

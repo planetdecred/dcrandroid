@@ -19,16 +19,39 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.tab_row.view.*
 
-data class NavigationTab(@StringRes val title: Int, @DrawableRes val activeIcon: Int, @DrawableRes val inactiveIcon: Int)
+data class NavigationTab(
+    @StringRes val title: Int,
+    @DrawableRes val activeIcon: Int,
+    @DrawableRes val inactiveIcon: Int
+)
 
-class NavigationTabsAdapter(val context: Context, var activeTab: Int, var deviceWidth: Int, var backupsNeeded: Int, var tabSelected: (position: Int) -> Unit) : RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
+class NavigationTabsAdapter(
+    val context: Context,
+    var activeTab: Int,
+    var deviceWidth: Int,
+    var backupsNeeded: Int,
+    var tabSelected: (position: Int) -> Unit
+) : RecyclerView.Adapter<NavigationTabsAdapter.NavigationTabViewHolder>() {
 
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val layoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private var tabs: ArrayList<NavigationTab> = ArrayList()
 
     init {
-        tabs.add(NavigationTab(R.string.overview, R.drawable.ic_overview, R.drawable.ic_overview_inactive))
-        tabs.add(NavigationTab(R.string.transactions, R.drawable.ic_transactions, R.drawable.ic_transactions_inactive))
+        tabs.add(
+            NavigationTab(
+                R.string.overview,
+                R.drawable.ic_overview,
+                R.drawable.ic_overview_inactive
+            )
+        )
+        tabs.add(
+            NavigationTab(
+                R.string.transactions,
+                R.drawable.ic_transactions,
+                R.drawable.ic_transactions_inactive
+            )
+        )
         tabs.add(NavigationTab(R.string.wallets, R.drawable.ic_wallet, R.drawable.ic_wallet02))
         tabs.add(NavigationTab(R.string.more, R.drawable.ic_menu, R.drawable.ic_menu_inactive))
     }
@@ -71,7 +94,8 @@ class NavigationTabsAdapter(val context: Context, var activeTab: Int, var device
             tabSelected(position)
         }
 
-        holder.itemView.layoutParams = ViewGroup.LayoutParams(deviceWidth / 4, ViewGroup.LayoutParams.MATCH_PARENT)
+        holder.itemView.layoutParams =
+            ViewGroup.LayoutParams(deviceWidth / 4, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
     fun changeActiveTab(position: Int) {

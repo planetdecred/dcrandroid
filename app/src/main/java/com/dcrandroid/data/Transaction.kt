@@ -120,7 +120,7 @@ class Transaction : Serializable {
                     else -> R.drawable.ic_ticket_revoked
                 }
 
-            }else if (type == Dcrlibwallet.TxTypeMixed){
+            } else if (type == Dcrlibwallet.TxTypeMixed) {
                 res = R.drawable.ic_mixed
             }
 

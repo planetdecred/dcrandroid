@@ -45,7 +45,10 @@ const val ITEM_TYPE_WALLET = 0
 const val ITEM_TYPE_WATCH_ONLY_WALLET_HEADER = 1
 const val ITEM_TYPE_WATCH_ONLY_WALLET = 2
 
-class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, requestCode: Int) -> Unit) : RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
+class WalletsAdapter(
+    val fragment: Fragment,
+    val launchIntent: (intent: Intent, requestCode: Int) -> Unit
+) : RecyclerView.Adapter<WalletsAdapter.WalletsViewHolder>() {
 
     private var items: ArrayList<Any> = ArrayList()
     private val multiWallet = WalletData.multiWallet!!
@@ -110,8 +113,10 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
     private fun setupWalletRow(wallet: Wallet, holder: WalletsViewHolder, position: Int) {
         holder.walletName.text = wallet.name
-        holder.totalBalance.text = fragment.context!!.getString(R.string.dcr_amount,
-                CoinFormat.formatDecred(wallet.totalWalletBalance()))
+        holder.totalBalance.text = fragment.context!!.getString(
+            R.string.dcr_amount,
+            CoinFormat.formatDecred(wallet.totalWalletBalance())
+        )
 
         if (wallet.encryptedSeed == null) {
             holder.walletStatus.hide()
@@ -139,8 +144,10 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
         }
 
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        layoutParams.bottomMargin = fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
-        layoutParams.topMargin = fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+        layoutParams.bottomMargin =
+            fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+        layoutParams.topMargin =
+            fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
 
         val containerBackground: Int // this is a transparent ripple
         val viewBackground: Int
@@ -218,12 +225,17 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
         }
 
-        val showPrivacyPopup = !multiWallet.readBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
-                && !wallet.isWatchingOnlyWallet
+        val showPrivacyPopup =
+            !multiWallet.readBoolConfigValueForKey(Constants.SHOWN_PRIVACY_POPUP, false)
+                    && !wallet.isWatchingOnlyWallet
         if (showPrivacyPopup) {
             var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
             globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
-                popupMessage = PopupMessage.showText(holder.more, R.string.privacy_popup_message, Toast.LENGTH_SHORT)
+                popupMessage = PopupMessage.showText(
+                    holder.more,
+                    R.string.privacy_popup_message,
+                    Toast.LENGTH_SHORT
+                )
                 popupMessage?.show()
 
                 holder.more.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
@@ -245,14 +257,25 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
 
             popupMessage?.cancel()
 
-            val dividerWidth = fragment.context!!.resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
-            val hasCheckedPrivacyPage = multiWallet.readBoolConfigValueForKey(Constants.CHECKED_PRIVACY_PAGE, false)
+            val dividerWidth =
+                fragment.context!!.resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
+            val hasCheckedPrivacyPage =
+                multiWallet.readBoolConfigValueForKey(Constants.CHECKED_PRIVACY_PAGE, false)
 
             val items = arrayOf(
-                    PopupItem(R.string.sign_message, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet),
-                    PopupItem(R.string.privacy, R.color.darkBlueTextColor, !wallet.isWatchingOnlyWallet, !hasCheckedPrivacyPage && !wallet.isWatchingOnlyWallet),
-                    PopupItem(R.string.rename),
-                    PopupItem(R.string.settings)
+                PopupItem(
+                    R.string.sign_message,
+                    R.color.darkBlueTextColor,
+                    !wallet.isWatchingOnlyWallet
+                ),
+                PopupItem(
+                    R.string.privacy,
+                    R.color.darkBlueTextColor,
+                    !wallet.isWatchingOnlyWallet,
+                    !hasCheckedPrivacyPage && !wallet.isWatchingOnlyWallet
+                ),
+                PopupItem(R.string.rename),
+                PopupItem(R.string.settings)
             )
 
             PopupUtil.showPopup(it, items as Array<Any>) { window, index ->
@@ -265,7 +288,10 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                     }
                     1 -> {
 
-                        val mixerConfigIsSet = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)
+                        val mixerConfigIsSet = wallet.readBoolConfigValueForKey(
+                            Dcrlibwallet.AccountMixerConfigSet,
+                            false
+                        )
 
                         val intent = if (mixerConfigIsSet) {
                             Intent(fragment.context!!, AccountMixerActivity::class.java)
@@ -276,7 +302,11 @@ class WalletsAdapter(val fragment: Fragment, val launchIntent: (intent: Intent, 
                         fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
                     }
                     2 -> { // rename wallet
-                        RequestNameDialog(R.string.rename_wallet_sheet_title, wallet.name, true) { newName ->
+                        RequestNameDialog(
+                            R.string.rename_wallet_sheet_title,
+                            wallet.name,
+                            true
+                        ) { newName ->
 
                             try {
                                 multiWallet.renameWallet(wallet.id, newName)

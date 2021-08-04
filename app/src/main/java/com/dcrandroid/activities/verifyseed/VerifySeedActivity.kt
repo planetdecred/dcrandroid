@@ -39,7 +39,10 @@ class VerifySeedActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
         setContentView(R.layout.verify_seed_page)
 
@@ -71,14 +74,19 @@ class VerifySeedActivity : BaseActivity() {
 
     private fun verifySeed() {
 
-        val title = PassPromptTitle(R.string.confirm_verify_seed, R.string.confirm_verify_seed, R.string.confirm_verify_seed)
+        val title = PassPromptTitle(
+            R.string.confirm_verify_seed,
+            R.string.confirm_verify_seed,
+            R.string.confirm_verify_seed
+        )
         PassPromptUtil(this, wallet!!.id, title, allowFingerprint = true) { passDialog, pass ->
             if (pass == null) {
                 return@PassPromptUtil true
             }
 
             GlobalScope.launch(Dispatchers.Default) {
-                val op = this@VerifySeedActivity.javaClass.name + ": " + this.javaClass.name + ": verifySeed"
+                val op =
+                    this@VerifySeedActivity.javaClass.name + ": " + this.javaClass.name + ": verifySeed"
                 try {
                     val seedMnemonic = verifySeedAdapter.enteredSeeds.joinToString(" ")
                     multiWallet!!.verifySeedForWallet(wallet!!.id, seedMnemonic, pass.toByteArray())
@@ -93,7 +101,10 @@ class VerifySeedActivity : BaseActivity() {
 
                     if (e.message == Dcrlibwallet.ErrInvalid) {
                         passDialog?.dismiss()
-                        SnackBar.showError(this@VerifySeedActivity, R.string.seed_verification_failed)
+                        SnackBar.showError(
+                            this@VerifySeedActivity,
+                            R.string.seed_verification_failed
+                        )
                     } else {
                         PassPromptUtil.handleError(this@VerifySeedActivity, e, passDialog)
                     }
@@ -112,7 +123,8 @@ class VerifySeedActivity : BaseActivity() {
         val seed = intent.getStringExtra(Constants.SEED)
 
         if (seed!!.isNotBlank()) {
-            seeds = seed.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            seeds =
+                seed.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             initSeedAdapter()
         }
     }
@@ -140,7 +152,8 @@ class VerifySeedActivity : BaseActivity() {
 
         val realInputSeed = InputSeed(realSeedIndex, allSeeds[realSeedIndex])
 
-        val arr = arrayListOf(firstInputSeed, secondInputSeed, realInputSeed).apply { shuffle() }.toTypedArray()
+        val arr = arrayListOf(firstInputSeed, secondInputSeed, realInputSeed).apply { shuffle() }
+            .toTypedArray()
         return ShuffledSeeds(arr)
     }
 

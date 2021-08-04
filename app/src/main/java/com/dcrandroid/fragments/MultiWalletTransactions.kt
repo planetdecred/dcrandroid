@@ -19,7 +19,11 @@ import kotlinx.android.synthetic.main.multi_wallet_transactions_page.*
 
 class MultiWalletTransactions : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.multi_wallet_transactions_page, container, false)
     }
 
@@ -33,8 +37,11 @@ class MultiWalletTransactions : BaseFragment() {
         transactions_tab.setupWithViewPager(transactions_pager)
     }
 
-    inner class TransactionsTabsAdapter(supportFragmentManager: FragmentManager) : FragmentStatePagerAdapter(supportFragmentManager,
-            BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    inner class TransactionsTabsAdapter(supportFragmentManager: FragmentManager) :
+        FragmentStatePagerAdapter(
+            supportFragmentManager,
+            BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+        ) {
 
         private val wallets = multiWallet!!.openedWalletsList()
         override fun getCount(): Int {
@@ -43,7 +50,7 @@ class MultiWalletTransactions : BaseFragment() {
 
         override fun getItem(position: Int): Fragment {
             return TransactionsFragment()
-                    .setWalletID(wallets[position].id)
+                .setWalletID(wallets[position].id)
         }
 
         override fun getPageTitle(position: Int): CharSequence? {

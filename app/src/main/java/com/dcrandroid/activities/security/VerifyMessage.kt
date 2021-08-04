@@ -37,12 +37,12 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         }
 
         messageInputHelper = InputHelper(this, message_container) { true }
-                .apply {
-                    hideQrScanner()
-                    setHint(R.string.message)
+            .apply {
+                hideQrScanner()
+                setHint(R.string.message)
 
-                    textChanged = this@VerifyMessage.textChanged
-                }
+                textChanged = this@VerifyMessage.textChanged
+            }
 
         signatureInputHelper = InputHelper(this, signature_container) {
             try {
@@ -95,10 +95,10 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
             val message = HtmlCompat.fromHtml(getString(R.string.verify_message_description), 0)
             InfoDialog(this)
-                    .setDialogTitle(getString(R.string.verify_message))
-                    .setMessage(message)
-                    .setPositiveButton(getString(R.string.got_it))
-                    .show()
+                .setDialogTitle(getString(R.string.verify_message))
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.got_it))
+                .show()
         }
 
         tv_clear.setOnClickListener {

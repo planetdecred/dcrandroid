@@ -51,12 +51,14 @@ object CoinFormat {
 
     private fun formatSpannable(spannable: Spannable, span: CharacterStyle): Spannable {
 
-        val removeRelativeSpan = spannable.getSpans(0, spannable.length, RelativeSizeSpan::class.java)
+        val removeRelativeSpan =
+            spannable.getSpans(0, spannable.length, RelativeSizeSpan::class.java)
         for (s in removeRelativeSpan) {
             spannable.removeSpan(s)
         }
 
-        val doubleOrMoreDecimalPlaces = Pattern.compile("(([0-9]{1,3},*)*\\.)\\d{2,}").matcher(spannable)
+        val doubleOrMoreDecimalPlaces =
+            Pattern.compile("(([0-9]{1,3},*)*\\.)\\d{2,}").matcher(spannable)
         val oneDecimalPlace = Pattern.compile("(([0-9]{1,3},*)*\\.)\\d").matcher(spannable)
         val noDecimal = Pattern.compile("([0-9]{1,3},*)+").matcher(spannable)
 
@@ -96,7 +98,8 @@ object CoinFormat {
         return format(formatDecred(amount) + suffix, relativeSize)
     }
 
-    fun formatDecred(dcr: Double, pattern: String = dcrWithCommasAndZeros) = formatDecred(Dcrlibwallet.amountAtom(dcr), pattern)
+    fun formatDecred(dcr: Double, pattern: String = dcrWithCommasAndZeros) =
+        formatDecred(Dcrlibwallet.amountAtom(dcr), pattern)
 
     fun formatDecred(dcr: Long, pattern: String = dcrWithCommasAndZeros): String {
         val convertedDcr = Dcrlibwallet.amountCoin(dcr)

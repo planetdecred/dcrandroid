@@ -13,7 +13,12 @@ import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.input_output_dropdown.view.*
 
-class InputOutputDropdown(private val layout: View, items: Array<DropDownItem>, toastAnchor: View, isInput: Boolean = true) : View.OnClickListener {
+class InputOutputDropdown(
+    private val layout: View,
+    items: Array<DropDownItem>,
+    toastAnchor: View,
+    isInput: Boolean = true
+) : View.OnClickListener {
 
     val context = layout.context
 

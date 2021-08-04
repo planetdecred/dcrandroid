@@ -20,15 +20,22 @@ import dcrlibwallet.HeadersFetchProgressReport
 import dcrlibwallet.MultiWallet
 import kotlinx.android.synthetic.main.multi_wallet_fetch_headers.view.*
 
-class MultiWalletSyncDetailsAdapter(private val context: Context, private var openedWallets: List<Long>) : RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
+class MultiWalletSyncDetailsAdapter(
+    private val context: Context,
+    private var openedWallets: List<Long>
+) : RecyclerView.Adapter<MultiWalletSyncDetailsAdapter.ViewHolder>() {
 
     private val multiWallet: MultiWallet = WalletData.multiWallet!!
 
     var fetchProgressReport: HeadersFetchProgressReport? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.multi_wallet_fetch_headers,
-                parent, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.multi_wallet_fetch_headers,
+                parent, false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -48,11 +55,14 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
 
             if (fetchProgressReport != null) {
                 // ## of ######
-                holder.fetchCount.text = context.getString(R.string.block_header_fetched_count,
-                        wallet.bestBlock, fetchProgressReport!!.totalHeadersToFetch)
+                holder.fetchCount.text = context.getString(
+                    R.string.block_header_fetched_count,
+                    wallet.bestBlock, fetchProgressReport!!.totalHeadersToFetch
+                )
 
                 // ## days behind
-                val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - wallet.bestBlockTimeStamp
+                val lastHeaderRelativeTime =
+                    (System.currentTimeMillis() / 1000) - wallet.bestBlockTimeStamp
                 holder.daysBehind.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
             }
 
@@ -64,11 +74,15 @@ class MultiWalletSyncDetailsAdapter(private val context: Context, private var op
 
             if (fetchProgressReport != null) {
                 // ## of ######
-                holder.fetchCount.text = context.getString(R.string.block_header_fetched_count,
-                        fetchProgressReport!!.currentHeaderHeight, fetchProgressReport!!.totalHeadersToFetch)
+                holder.fetchCount.text = context.getString(
+                    R.string.block_header_fetched_count,
+                    fetchProgressReport!!.currentHeaderHeight,
+                    fetchProgressReport!!.totalHeadersToFetch
+                )
 
                 // ## days behind
-                val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - fetchProgressReport!!.currentHeaderTimestamp
+                val lastHeaderRelativeTime =
+                    (System.currentTimeMillis() / 1000) - fetchProgressReport!!.currentHeaderTimestamp
                 holder.daysBehind.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
             }
         }

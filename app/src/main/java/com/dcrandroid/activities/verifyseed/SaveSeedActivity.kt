@@ -37,7 +37,10 @@ class SaveSeedActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
         setContentView(R.layout.save_seed_page)
 
         try {
@@ -71,7 +74,11 @@ class SaveSeedActivity : BaseActivity() {
 
     private fun promptWalletPassphrase() {
 
-        val title = PassPromptTitle(R.string.confirm_show_seed, R.string.confirm_show_seed, R.string.confirm_show_seed)
+        val title = PassPromptTitle(
+            R.string.confirm_show_seed,
+            R.string.confirm_show_seed,
+            R.string.confirm_show_seed
+        )
         PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { passDialog, pass ->
             if (pass == null) {
                 finish()
@@ -79,7 +86,8 @@ class SaveSeedActivity : BaseActivity() {
             }
 
             GlobalScope.launch(Dispatchers.Default) {
-                val op = this@SaveSeedActivity.javaClass.name + ": " + this.javaClass.name + ": promptWalletPassphrase."
+                val op =
+                    this@SaveSeedActivity.javaClass.name + ": " + this.javaClass.name + ": promptWalletPassphrase."
                 try {
                     seed = wallet.decryptSeed(pass.toByteArray())
                     populateList(seed!!)
@@ -97,12 +105,24 @@ class SaveSeedActivity : BaseActivity() {
 
     private fun populateList(seed: String) = GlobalScope.launch(Dispatchers.Main) {
 
-        val items = seed.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val items =
+            seed.split(Constants.NBSP.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val layoutManager = GridLayoutManager(applicationContext, SEEDS_PER_ROW, GridLayoutManager.HORIZONTAL, false)
+        val layoutManager = GridLayoutManager(
+            applicationContext,
+            SEEDS_PER_ROW,
+            GridLayoutManager.HORIZONTAL,
+            false
+        )
 
-        val verticalDivider = VerticalDividerItemDecoration(resources.getDimensionPixelSize(R.dimen.margin_padding_size_8), true)
-        val horizontalItemDecoration = VerticalDividerItemDecoration(resources.getDimensionPixelSize(R.dimen.seed_horizontal_margin), false)
+        val verticalDivider = VerticalDividerItemDecoration(
+            resources.getDimensionPixelSize(R.dimen.margin_padding_size_8),
+            true
+        )
+        val horizontalItemDecoration = VerticalDividerItemDecoration(
+            resources.getDimensionPixelSize(R.dimen.seed_horizontal_margin),
+            false
+        )
 
         recycler_view_seeds.isNestedScrollingEnabled = false
         recycler_view_seeds.layoutManager = layoutManager
@@ -113,10 +133,15 @@ class SaveSeedActivity : BaseActivity() {
         step_2.isEnabled = true
     }
 
-    inner class VerticalDividerItemDecoration(private val space: Int, private val verticalOrientation: Boolean) : RecyclerView.ItemDecoration() {
+    inner class VerticalDividerItemDecoration(
+        private val space: Int,
+        private val verticalOrientation: Boolean
+    ) : RecyclerView.ItemDecoration() {
 
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
-                                    state: RecyclerView.State) {
+        override fun getItemOffsets(
+            outRect: Rect, view: View, parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
             if (verticalOrientation) {
                 outRect.set(0, 0, 0, space)
             } else {

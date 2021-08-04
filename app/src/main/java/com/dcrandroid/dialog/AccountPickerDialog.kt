@@ -21,8 +21,9 @@ import com.dcrandroid.extensions.walletAccounts
 import com.dcrandroid.util.WalletData
 import kotlinx.android.synthetic.main.account_picker_sheet.*
 
-class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account) : FullScreenBottomSheetDialog(),
-        ViewTreeObserver.OnScrollChangedListener {
+class AccountPickerDialog(@StringRes val title: Int, private val currentAccount: Account) :
+    FullScreenBottomSheetDialog(),
+    ViewTreeObserver.OnScrollChangedListener {
 
     lateinit var filterAccount: (account: Account) -> Boolean
     lateinit var accountSelected: (account: Account) -> Unit?
@@ -30,7 +31,11 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
 
     var singleWalletID: Long? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.account_picker_sheet, container, false)
     }
 
@@ -42,8 +47,8 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
         val multiWallet = WalletData.multiWallet!!
 
         val wallets = multiWallet.openedWalletsList()
-                // What this basically does is remove all other wallet from the list if `singleWalletID` is set.
-                .filter { (singleWalletID != null && it.id == singleWalletID) || singleWalletID == null }
+            // What this basically does is remove all other wallet from the list if `singleWalletID` is set.
+            .filter { (singleWalletID != null && it.id == singleWalletID) || singleWalletID == null }
 
         val items = ArrayList<Any>()
 
@@ -53,7 +58,7 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
                 items.add(wallet)
             }
             val accounts = wallet.walletAccounts()
-                    .dropLastWhile { it.accountNumber == Int.MAX_VALUE } // remove imported account
+                .dropLastWhile { it.accountNumber == Int.MAX_VALUE } // remove imported account
             items.addAll(accounts)
         }
 

@@ -23,10 +23,10 @@ class AboutActivity : ListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         items = arrayOf(
-                ListItem(R.string.version, BuildConfig.VERSION_NAME),
-                ListItem(R.string.build_date, BuildConfig.BuildDate),
-                ListItem(R.string.net, BuildConfig.NetType),
-                ListItem(R.string.license)
+            ListItem(R.string.version, BuildConfig.VERSION_NAME),
+            ListItem(R.string.build_date, BuildConfig.BuildDate),
+            ListItem(R.string.net, BuildConfig.NetType),
+            ListItem(R.string.license)
         )
 
         super.onCreate(savedInstanceState)

@@ -15,7 +15,8 @@ import com.dcrandroid.R
 import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.more_list_row_2.view.*
 
-class ListAdapter(val context: Context, val items: Array<ListItem>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(val context: Context, val items: Array<ListItem>) :
+    RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     var itemTapped: ((position: Int) -> Unit?)? = null
 

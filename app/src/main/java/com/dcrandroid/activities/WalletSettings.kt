@@ -50,7 +50,11 @@ class WalletSettings : BaseActivity() {
                 ChangePassUtil(this, walletID).begin()
             }
 
-            useFingerprint = SwitchPreference(this, walletID.toString() + Dcrlibwallet.UseBiometricConfigKey, spendable_fingerprint) { newValue ->
+            useFingerprint = SwitchPreference(
+                this,
+                walletID.toString() + Dcrlibwallet.UseBiometricConfigKey,
+                spendable_fingerprint
+            ) { newValue ->
 
                 if (newValue) {
                     setupFingerprint()
@@ -63,10 +67,18 @@ class WalletSettings : BaseActivity() {
             loadFingerprintPreference()
         }
 
-        val incomingNotificationsKey = walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
-        setTxNotificationSummary(multiWallet!!.readInt32ConfigValueForKey(incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION))
-        ListPreference(this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
-                R.array.notification_options, incoming_transactions) {
+        val incomingNotificationsKey =
+            walletID.toString() + Dcrlibwallet.IncomingTxNotificationsConfigKey
+        setTxNotificationSummary(
+            multiWallet!!.readInt32ConfigValueForKey(
+                incomingNotificationsKey,
+                Constants.DEF_TX_NOTIFICATION
+            )
+        )
+        ListPreference(
+            this, incomingNotificationsKey, Constants.DEF_TX_NOTIFICATION,
+            R.array.notification_options, incoming_transactions
+        ) {
             setTxNotificationSummary(it)
         }
 
@@ -79,14 +91,16 @@ class WalletSettings : BaseActivity() {
                 SnackBar.showError(this, R.string.err_rescan_in_progress)
             } else {
                 InfoDialog(this)
-                        .setDialogTitle(getString(R.string.rescan_blockchain))
-                        .setMessage(getString(R.string.rescan_blockchain_warning))
-                        .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                    .setDialogTitle(getString(R.string.rescan_blockchain))
+                    .setMessage(getString(R.string.rescan_blockchain_warning))
+                    .setPositiveButton(
+                        getString(R.string.yes),
+                        DialogInterface.OnClickListener { _, _ ->
                             multiWallet!!.rescanBlocks(walletID)
                             SnackBar.showText(this, R.string.rescan_progress_notification)
                         })
-                        .setNegativeButton(getString(R.string.no))
-                        .show()
+                    .setNegativeButton(getString(R.string.no))
+                    .show()
             }
 
         }
@@ -99,28 +113,34 @@ class WalletSettings : BaseActivity() {
                 dialog.setMessage(getString(R.string.remove_watch_wallet_prompt))
             } else {
                 dialog.setDialogTitle(getString(R.string.remove_wallet_prompt))
-                        .setMessage(getString(R.string.remove_wallet_message))
+                    .setMessage(getString(R.string.remove_wallet_message))
             }
 
             dialog.setNegativeButton(getString(R.string.cancel), null)
-            dialog.setPositiveButton(getString(R.string.remove), DialogInterface.OnClickListener { _, _ ->
+            dialog.setPositiveButton(
+                getString(R.string.remove),
+                DialogInterface.OnClickListener { _, _ ->
 
-                if (wallet.isWatchingOnlyWallet) {
-                    DeleteWatchOnlyWallet(wallet) {
-                        postDeleteFinishActivity()
-                    }.show(this)
-                } else {
-                    val title = PassPromptTitle(R.string.confirm_to_remove, R.string.confirm_to_remove, R.string.confirm_to_remove)
+                    if (wallet.isWatchingOnlyWallet) {
+                        DeleteWatchOnlyWallet(wallet) {
+                            postDeleteFinishActivity()
+                        }.show(this)
+                    } else {
+                        val title = PassPromptTitle(
+                            R.string.confirm_to_remove,
+                            R.string.confirm_to_remove,
+                            R.string.confirm_to_remove
+                        )
 
-                    PassPromptUtil(this, walletID, title, false) { dialog, pass ->
-                        if (pass != null) {
-                            deleteWallet(pass, dialog)
-                        }
+                        PassPromptUtil(this, walletID, title, false) { dialog, pass ->
+                            if (pass != null) {
+                                deleteWallet(pass, dialog)
+                            }
 
-                        false
-                    }.show()
-                }
-            })
+                            false
+                        }.show()
+                    }
+                })
 
             dialog.btnPositiveColor = R.color.orangeTextColor
             dialog.show()
@@ -150,7 +170,11 @@ class WalletSettings : BaseActivity() {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     wallet.unlockWallet(pass.toByteArray())
-                    BiometricUtils.saveToKeystore(this@WalletSettings, pass, BiometricUtils.getWalletAlias(walletID))
+                    BiometricUtils.saveToKeystore(
+                        this@WalletSettings,
+                        pass,
+                        BiometricUtils.getWalletAlias(walletID)
+                    )
                     wallet.lockWallet()
 
                     withContext(Dispatchers.Main) {
@@ -168,7 +192,11 @@ class WalletSettings : BaseActivity() {
     }
 
     private fun clearSpendingPassFromKeystore() {
-        BiometricUtils.saveToKeystore(this@WalletSettings, "", BiometricUtils.getWalletAlias(walletID))
+        BiometricUtils.saveToKeystore(
+            this@WalletSettings,
+            "",
+            BiometricUtils.getWalletAlias(walletID)
+        )
     }
 
     private fun setTxNotificationSummary(index: Int) {
@@ -176,22 +204,23 @@ class WalletSettings : BaseActivity() {
         incoming_transactions.pref_subtitle.text = preferenceSummary
     }
 
-    private fun deleteWallet(pass: String, dialog: FullScreenBottomSheetDialog?) = GlobalScope.launch(Dispatchers.IO) {
-        try {
-            multiWallet!!.deleteWallet(walletID, pass.toByteArray())
-            clearSpendingPassFromKeystore()
+    private fun deleteWallet(pass: String, dialog: FullScreenBottomSheetDialog?) =
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                multiWallet!!.deleteWallet(walletID, pass.toByteArray())
+                clearSpendingPassFromKeystore()
 
-            withContext(Dispatchers.Main) {
-                dialog?.dismiss()
+                withContext(Dispatchers.Main) {
+                    dialog?.dismiss()
+                }
+
+                postDeleteFinishActivity()
+            } catch (e: Exception) {
+                e.printStackTrace()
+
+                PassPromptUtil.handleError(this@WalletSettings, e, dialog)
             }
-
-            postDeleteFinishActivity()
-        } catch (e: Exception) {
-            e.printStackTrace()
-
-            PassPromptUtil.handleError(this@WalletSettings, e, dialog)
         }
-    }
 
     private fun postDeleteFinishActivity() {
         if (multiWallet!!.openedWalletsCount() == 0) {

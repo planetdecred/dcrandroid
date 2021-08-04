@@ -17,10 +17,13 @@ object CurrencyUtil {
     fun dcrToFormattedUSD(exchangeDecimal: BigDecimal?, dcr: Double, scale: Int = 4): String {
         if (scale == 4) {
             return usdAmountFormat.format(
-                    dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
+                dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN)
+                    .toDouble()
+            )
         }
         return usdAmountFormat2.format(
-                dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble())
+            dcrToUSD(exchangeDecimal, dcr)!!.setScale(scale, BigDecimal.ROUND_HALF_EVEN).toDouble()
+        )
     }
 
     fun dcrToUSD(exchangeDecimal: BigDecimal?, dcr: Double): BigDecimal? {

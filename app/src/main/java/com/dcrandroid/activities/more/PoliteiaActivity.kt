@@ -34,7 +34,7 @@ const val ProposalCategoryRejected = 3
 const val ProposalCategoryAbandoned = 4
 
 class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
-        AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
+    AdapterView.OnItemSelectedListener, ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var notificationManager: NotificationManager
 
@@ -83,16 +83,23 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         recycler_view.viewTreeObserver.addOnScrollChangedListener(this)
 
         val timestampSortItems = resources.getStringArray(R.array.timestamp_sort)
-        val timestampSortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timestampSortItems)
+        val timestampSortAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, timestampSortItems)
         timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timestamp_sort_spinner.onItemSelectedListener = this
         timestamp_sort_spinner.adapter = timestampSortAdapter
 
-        categorySortAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
+        categorySortAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
         categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         category_sort_spinner.adapter = categorySortAdapter
         category_sort_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 loadProposals(false)
             }
 
@@ -161,7 +168,12 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         }
 
         try {
-            val jsonResult = multiWallet!!.politeia.getProposals(currentCategory, offset, limit, newestProposalsFirst)
+            val jsonResult = multiWallet!!.politeia.getProposals(
+                currentCategory,
+                offset,
+                limit,
+                newestProposalsFirst
+            )
             val tempProposalList = Gson().fromJson(jsonResult, Array<Proposal>::class.java)
 
             initialLoadingDone.set(true)

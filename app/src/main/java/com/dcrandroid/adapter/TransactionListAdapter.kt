@@ -31,15 +31,20 @@ import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
+class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) :
+    RecyclerView.Adapter<TransactionListViewHolder>() {
 
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val layoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val multiWallet = WalletData.multiWallet
 
     private val spendUnconfirmedFunds: Boolean
 
     init {
-        spendUnconfirmedFunds = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+        spendUnconfirmedFunds = multiWallet!!.readBoolConfigValueForKey(
+            Dcrlibwallet.SpendUnconfirmedConfigKey,
+            Constants.DEF_SPEND_UNCONFIRMED
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
@@ -94,8 +99,14 @@ fun getTimestamp(context: Context, timestamp: Long): String {
         DateUtils.isToday(timestamp) -> context.getString(R.string.today)
         yesterday > difference -> context.getString(R.string.yesterday)
         week > difference -> SimpleDateFormat("EE", Locale.getDefault()).format(timestamp)
-        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat(context.getString(R.string.month_day_format), Locale.getDefault()).format(timestamp)
-        else -> SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault()).format(timestamp)
+        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat(
+            context.getString(R.string.month_day_format),
+            Locale.getDefault()
+        ).format(timestamp)
+        else -> SimpleDateFormat(
+            context.getString(R.string.date_format),
+            Locale.getDefault()
+        ).format(timestamp)
     }
 }
 
@@ -126,24 +137,33 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
     }
 
     if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                -transaction.amount
-            } else {
-                transaction.amount
-            }
-            val strAmount = CoinFormat.formatDecred(txAmount)
+        val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+            -transaction.amount
+        } else {
+            transaction.amount
+        }
+        val strAmount = CoinFormat.formatDecred(txAmount)
 
-            layoutRow.amount.apply {
-                text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
-            }
+        layoutRow.amount.apply {
+            text = CoinFormat.format(
+                strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr),
+                0.7f
+            )
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                context.resources.getDimension(R.dimen.edit_text_size_20)
+            )
+        }
 
         layoutRow.ticket_price.hide()
 
     } else if (transaction.type == Dcrlibwallet.TxTypeMixed) {
 
         var mixedAmount = CoinFormat.format(transaction.mixDenomination)
-        mixedAmount = CoinFormat.applyColor(mixedAmount, context.resources.getColor(R.color.darkBlueTextColor))
+        mixedAmount = CoinFormat.applyColor(
+            mixedAmount,
+            context.resources.getColor(R.color.darkBlueTextColor)
+        )
 
         val amountBuilder = SpannableStringBuilder(mixedAmount)
         if (transaction.mixCount > 1) {
@@ -155,13 +175,19 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
         }
 
         layoutRow.amount.apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                context.resources.getDimension(R.dimen.edit_text_size_18)
+            )
             setText(R.string.mixed)
         }
 
     } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterStaking)) {
 
-        layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
+        layoutRow.amount.setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            context.resources.getDimension(R.dimen.edit_text_size_18)
+        )
 
         layoutRow.ticket_price.apply {
             show()

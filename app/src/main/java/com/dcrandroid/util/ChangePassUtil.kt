@@ -26,11 +26,19 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
 
     fun begin() {
         val op = this.javaClass.name + ".begin"
-        passwordPinDialogFragment = PasswordPinDialogFragment(R.string.change, walletID != null, true) { dialog, passphrase, passphraseType ->
+        passwordPinDialogFragment = PasswordPinDialogFragment(
+            R.string.change,
+            walletID != null,
+            true
+        ) { dialog, passphrase, passphraseType ->
             changePassphrase(dialog, passphrase, passphraseType)
         }
 
-        val title = PassPromptTitle(R.string.confirm_to_change, R.string.confirm_to_change, R.string.confirm_to_change)
+        val title = PassPromptTitle(
+            R.string.confirm_to_change,
+            R.string.confirm_to_change,
+            R.string.confirm_to_change
+        )
         var passPromptUtil: PassPromptUtil? = null
         passPromptUtil = PassPromptUtil(fragmentActivity, walletID, title, false) { dialog, pass ->
 
@@ -53,9 +61,10 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
 
                         oldPassphrase = pass
 
-                        passwordPinDialogFragment.tabIndex = if (passPromptUtil!!.passType == Dcrlibwallet.PassphraseTypePass) {
-                            0
-                        } else 1
+                        passwordPinDialogFragment.tabIndex =
+                            if (passPromptUtil!!.passType == Dcrlibwallet.PassphraseTypePass) {
+                                0
+                            } else 1
 
                         passwordPinDialogFragment.show(fragmentActivity)
                     } catch (e: Exception) {
@@ -72,14 +81,26 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
         passPromptUtil.show()
     }
 
-    private fun changePassphrase(dialog: FullScreenBottomSheetDialog, newPassphrase: String, passphraseType: Int) = GlobalScope.launch(Dispatchers.IO) {
+    private fun changePassphrase(
+        dialog: FullScreenBottomSheetDialog,
+        newPassphrase: String,
+        passphraseType: Int
+    ) = GlobalScope.launch(Dispatchers.IO) {
 
         if (walletID == null) {
             try {
-                multiWallet.changeStartupPassphrase(oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
+                multiWallet.changeStartupPassphrase(
+                    oldPassphrase.toByteArray(),
+                    newPassphrase.toByteArray(),
+                    passphraseType
+                )
 
                 // saving after a successful change to avoid saving a wrong oldPassphrase
-                BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, Constants.STARTUP_PASSPHRASE)
+                BiometricUtils.saveToKeystore(
+                    fragmentActivity,
+                    newPassphrase,
+                    Constants.STARTUP_PASSPHRASE
+                )
 
                 SnackBar.showText(fragmentActivity, R.string.startup_security_changed)
             } catch (e: Exception) {
@@ -92,9 +113,22 @@ class ChangePassUtil(private val fragmentActivity: FragmentActivity, val walletI
             }
         } else {
             try {
-                multiWallet.changePrivatePassphraseForWallet(walletID, oldPassphrase.toByteArray(), newPassphrase.toByteArray(), passphraseType)
-                if (multiWallet.readBoolConfigValueForKey(walletID.toString() + Dcrlibwallet.UseBiometricConfigKey, Constants.DEF_USE_FINGERPRINT)) {
-                    BiometricUtils.saveToKeystore(fragmentActivity, newPassphrase, BiometricUtils.getWalletAlias(walletID))
+                multiWallet.changePrivatePassphraseForWallet(
+                    walletID,
+                    oldPassphrase.toByteArray(),
+                    newPassphrase.toByteArray(),
+                    passphraseType
+                )
+                if (multiWallet.readBoolConfigValueForKey(
+                        walletID.toString() + Dcrlibwallet.UseBiometricConfigKey,
+                        Constants.DEF_USE_FINGERPRINT
+                    )
+                ) {
+                    BiometricUtils.saveToKeystore(
+                        fragmentActivity,
+                        newPassphrase,
+                        BiometricUtils.getWalletAlias(walletID)
+                    )
                 }
                 SnackBar.showText(fragmentActivity, R.string.spending_passphrase_changed)
             } catch (e: Exception) {

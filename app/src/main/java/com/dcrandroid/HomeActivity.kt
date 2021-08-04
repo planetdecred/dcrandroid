@@ -57,7 +57,8 @@ import kotlin.system.exitProcess
 
 const val TAG = "HomeActivity"
 
-class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener, ProposalNotificationListener {
+class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificationListener,
+    ProposalNotificationListener {
 
     private var deviceWidth: Int = 0
     private var blockNotificationSound: Int = 0
@@ -87,7 +88,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = SoundPool.Builder().setMaxStreams(3)
-        val attributes = AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+        val attributes =
+            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
                 .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION).build()
         builder.setAudioAttributes(attributes)
@@ -162,13 +164,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onBackPressed() {
         if (currentFragment is OverviewFragment) {
             InfoDialog(this)
-                    .setDialogTitle(getString(R.string.exit_app_prompt_title))
-                    .setMessage(getString(R.string.exit_app_prompt_message))
-                    .setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                .setDialogTitle(getString(R.string.exit_app_prompt_title))
+                .setMessage(getString(R.string.exit_app_prompt_message))
+                .setPositiveButton(
+                    getString(R.string.yes),
+                    DialogInterface.OnClickListener { _, _ ->
                         finish()
                     })
-                    .setNegativeButton(getString(R.string.no), null)
-                    .show()
+                .setNegativeButton(getString(R.string.no), null)
+                .show()
         } else {
             switchFragment(OverviewFragment.FRAGMENT_POSITION)
         }
@@ -198,13 +202,18 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay
-                .getMetrics(displayMetrics)
+            .getMetrics(displayMetrics)
         deviceWidth = displayMetrics.widthPixels
 
         val mLayoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_view_tabs.layoutManager = mLayoutManager
 
-        adapter = NavigationTabsAdapter(this, 0, deviceWidth, multiWallet!!.numWalletsNeedingSeedBackup()) { position ->
+        adapter = NavigationTabsAdapter(
+            this,
+            0,
+            deviceWidth,
+            multiWallet!!.numWalletsNeedingSeedBackup()
+        ) { position ->
             switchFragment(position)
         }
         recycler_view_tabs.adapter = adapter
@@ -236,9 +245,14 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         send_receive_layout.post {
             if (position < 2) { // show send and receive buttons for overview & transactions page
                 send_receive_layout.show()
-                ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, 0f).setDuration(350).start() // bring view down
+                ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, 0f).setDuration(350)
+                    .start() // bring view down
             } else {
-                val objectAnimator = ObjectAnimator.ofFloat(send_receive_layout, View.TRANSLATION_Y, send_receive_layout.height.toFloat())
+                val objectAnimator = ObjectAnimator.ofFloat(
+                    send_receive_layout,
+                    View.TRANSLATION_Y,
+                    send_receive_layout.height.toFloat()
+                )
 
                 objectAnimator.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(animation: Animator?) {
@@ -279,9 +293,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
 
         supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.frame, currentFragment)
-                .commit()
+            .beginTransaction()
+            .replace(R.id.frame, currentFragment)
+            .commit()
 
         setTabIndicator()
 
@@ -314,7 +328,11 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     fun checkWifiSync() {
-        if (!multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, Constants.DEF_SYNC_ON_CELLULAR)) {
+        if (!multiWallet!!.readBoolConfigValueForKey(
+                Dcrlibwallet.SyncOnCellularConfigKey,
+                Constants.DEF_SYNC_ON_CELLULAR
+            )
+        ) {
             // Check if wifi is connected
             val isWifiConnected = this.let { NetworkUtil.isWifiConnected(it) }
             if (!isWifiConnected) {
@@ -328,13 +346,16 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private fun showWifiNotice() {
         val wifiSyncDialog = WiFiSyncDialog(this)
-                .setPositiveButton(DialogInterface.OnClickListener { dialog, _ ->
-                    startSyncing()
+            .setPositiveButton(DialogInterface.OnClickListener { dialog, _ ->
+                startSyncing()
 
-                    val syncDialog = dialog as WiFiSyncDialog
-                    multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.SyncOnCellularConfigKey, syncDialog.checked)
+                val syncDialog = dialog as WiFiSyncDialog
+                multiWallet!!.setBoolConfigValueForKey(
+                    Dcrlibwallet.SyncOnCellularConfigKey,
+                    syncDialog.checked
+                )
 
-                })
+            })
 
         wifiSyncDialog.setOnCancelListener {
             sendBroadcast(Intent(Constants.SYNCED))
@@ -347,8 +368,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         for (w in multiWallet!!.openedWalletsList()) {
             if (!w.hasDiscoveredAccounts && w.isLocked) {
                 ResumeAccountDiscovery()
-                        .setWalletID(w.id)
-                        .show(supportFragmentManager, ResumeAccountDiscovery::javaClass.name)
+                    .setWalletID(w.id)
+                    .show(supportFragmentManager, ResumeAccountDiscovery::javaClass.name)
                 return
             }
         }
@@ -370,7 +391,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onBlockAttached(walletID: Long, blockHeight: Int) {
         if (lastBeepHeight == -1 || blockHeight > lastBeepHeight) {
             lastBeepHeight = blockHeight
-            val beepNewBlocks = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
+            val beepNewBlocks =
+                multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.BeepNewBlocksConfigKey, false)
             if (beepNewBlocks && !multiWallet!!.isSyncing) {
                 alertSound.play(blockNotificationSound, 1f, 1f, 1, 0, 1f)
             }
@@ -386,8 +408,10 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
             val amount = Dcrlibwallet.amountCoin(transaction.amount)
 
-            Utils.sendTransactionNotification(this, notificationManager, dcrFormat.format(amount),
-                    transaction)
+            Utils.sendTransactionNotification(
+                this, notificationManager, dcrFormat.format(amount),
+                transaction
+            )
         }
     }
 
@@ -398,7 +422,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
         val tx = intent.getSerializableExtra(Constants.TRANSACTION) as Transaction
         TransactionDetailsDialog(
-                Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hashBytes))
+            Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hashBytes))
         ).show(this)
     }
 
@@ -439,20 +463,47 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onNewProposal(proposal: Proposal) {
-        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
-            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.new_proposal))
+        if (multiWallet!!.readBoolConfigValueForKey(
+                Dcrlibwallet.PoliteiaNotificationConfigKey,
+                false
+            )
+        ) {
+            Utils.sendProposalNotification(
+                this,
+                notificationManager,
+                proposal,
+                getString(R.string.new_proposal)
+            )
         }
     }
 
     override fun onProposalVoteStarted(proposal: Proposal) {
-        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
-            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_started))
+        if (multiWallet!!.readBoolConfigValueForKey(
+                Dcrlibwallet.PoliteiaNotificationConfigKey,
+                false
+            )
+        ) {
+            Utils.sendProposalNotification(
+                this,
+                notificationManager,
+                proposal,
+                getString(R.string.vote_started)
+            )
         }
     }
 
     override fun onProposalVoteFinished(proposal: Proposal) {
-        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.PoliteiaNotificationConfigKey, false)) {
-            Utils.sendProposalNotification(this, notificationManager, proposal, getString(R.string.vote_ended))
+        if (multiWallet!!.readBoolConfigValueForKey(
+                Dcrlibwallet.PoliteiaNotificationConfigKey,
+                false
+            )
+        ) {
+            Utils.sendProposalNotification(
+                this,
+                notificationManager,
+                proposal,
+                getString(R.string.vote_ended)
+            )
         }
     }
 }

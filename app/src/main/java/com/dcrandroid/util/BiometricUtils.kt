@@ -46,13 +46,15 @@ object BiometricUtils {
     @Throws(Exception::class)
     fun saveToKeystore(context: Context, content: String, alias: String) {
         val keyGenerator = KeyGenerator
-                .getInstance(KeyProperties.KEY_ALGORITHM_AES, Constants.ANDROID_KEY_STORE)
+            .getInstance(KeyProperties.KEY_ALGORITHM_AES, Constants.ANDROID_KEY_STORE)
 
-        val keyGenParameterSpec = KeyGenParameterSpec.Builder(alias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .build()
+        val keyGenParameterSpec = KeyGenParameterSpec.Builder(
+            alias,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .build()
 
         keyGenerator.init(keyGenParameterSpec)
         val secretKey = keyGenerator.generateKey()
@@ -91,7 +93,11 @@ object BiometricUtils {
         return fingerprintManager.hasEnrolledFingerprints()
     }
 
-    fun displayBiometricPrompt(activity: FragmentActivity, promptInfo: BiometricPrompt.PromptInfo, callback: BiometricPrompt.AuthenticationCallback): Boolean {
+    fun displayBiometricPrompt(
+        activity: FragmentActivity,
+        promptInfo: BiometricPrompt.PromptInfo,
+        callback: BiometricPrompt.AuthenticationCallback
+    ): Boolean {
         if (isFingerprintEnrolled(activity)) {
             val executor = Executors.newSingleThreadExecutor()
             val biometricPrompt = BiometricPrompt(activity, executor, callback)

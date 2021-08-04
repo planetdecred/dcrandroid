@@ -18,9 +18,14 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.transaction_row.view.*
 
-class TransactionPageAdapter(val context: Context, walletID: Long, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
+class TransactionPageAdapter(
+    val context: Context,
+    walletID: Long,
+    val transactions: ArrayList<Transaction>
+) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val layoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val requiredConfirmations: Int
     private val wallet: Wallet
 
@@ -28,7 +33,10 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
         val multiWallet = WalletData.multiWallet!!
         wallet = multiWallet.walletWithID(walletID)
         requiredConfirmations = when {
-            multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
+            multiWallet.readBoolConfigValueForKey(
+                Dcrlibwallet.SpendUnconfirmedConfigKey,
+                Constants.DEF_SPEND_UNCONFIRMED
+            ) -> 0
             else -> Constants.REQUIRED_CONFIRMATIONS
         }
     }

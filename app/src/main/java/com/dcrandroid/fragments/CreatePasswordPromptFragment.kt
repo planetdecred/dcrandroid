@@ -18,10 +18,16 @@ import com.dcrandroid.R
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.create_password_sheet.*
 
-class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int, val createWallet: (passphrase: String?) -> Unit) : Fragment() {
+class CreatePasswordPromptFragment(
+    var isSpending: Boolean,
+    @StringRes var positiveButtonTitle: Int,
+    val createWallet: (passphrase: String?) -> Unit
+) : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.create_password_sheet, container, false)
     }
 
@@ -42,9 +48,11 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
 
             val progress = (Dcrlibwallet.shannonEntropy(it) / 4) * 100
             if (progress > 70) {
-                pass_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_strong)
+                pass_strength.progressDrawable =
+                    resources.getDrawable(R.drawable.password_strength_bar_strong)
             } else {
-                pass_strength.progressDrawable = resources.getDrawable(R.drawable.password_strength_bar_weak)
+                pass_strength.progressDrawable =
+                    resources.getDrawable(R.drawable.password_strength_bar_weak)
             }
 
             pass_strength.progress = progress.toInt()
@@ -80,7 +88,8 @@ class CreatePasswordPromptFragment(var isSpending: Boolean, @StringRes var posit
 
         override fun afterTextChanged(editable: Editable?) {
 
-            btn_create.isEnabled = ed_pass.textString.isNotBlank() && ed_pass.textString == ed_confirm_pass.textString
+            btn_create.isEnabled =
+                ed_pass.textString.isNotBlank() && ed_pass.textString == ed_confirm_pass.textString
 
             if (ed_confirm_pass.textString == "") {
                 ed_confirm_pass.setError(null)

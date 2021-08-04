@@ -18,8 +18,10 @@ import kotlinx.android.synthetic.main.verify_seed_list_row.view.*
 data class InputSeed(val number: Int, var phrase: String)
 data class ShuffledSeeds(val seeds: Array<InputSeed>, var selectedIndex: Int = -1)
 
-class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<ShuffledSeeds>,
-                        private val seedTapped: (seedIndex: Int) -> Unit) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
+class VerifySeedAdapter(
+    val context: Context, private val seeds: ArrayList<ShuffledSeeds>,
+    private val seedTapped: (seedIndex: Int) -> Unit
+) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
 
     val enteredSeeds = Array(SEED_COUNT) { "" }
     var allSeedsSelected = false
@@ -27,7 +29,13 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeedViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         if (viewType == 0) {
-            return SeedViewHolder(layoutInflater.inflate(R.layout.verify_seed_header, parent, false))
+            return SeedViewHolder(
+                layoutInflater.inflate(
+                    R.layout.verify_seed_header,
+                    parent,
+                    false
+                )
+            )
         }
         return SeedViewHolder(layoutInflater.inflate(R.layout.verify_seed_list_row, parent, false))
     }

@@ -39,7 +39,8 @@ import java.math.BigDecimal
 
 const val MAX_TRANSACTIONS = 3
 
-class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener, AccountMixerNotificationListener, GetExchangeRate.ExchangeRateCallback {
+class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListener,
+    AccountMixerNotificationListener, GetExchangeRate.ExchangeRateCallback {
 
     companion object {
         private var closedBackupWarning = false
@@ -54,8 +55,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     private val transactions: ArrayList<Transaction> = ArrayList()
     private var adapter: TransactionListAdapter? = null
-    private val gson = GsonBuilder().registerTypeHierarchyAdapter(ArrayList::class.java, Deserializer.TransactionDeserializer())
-            .create()
+    private val gson = GsonBuilder().registerTypeHierarchyAdapter(
+        ArrayList::class.java,
+        Deserializer.TransactionDeserializer()
+    )
+        .create()
 
     private lateinit var scrollView: NestedScrollView
     private lateinit var recyclerView: RecyclerView
@@ -70,7 +74,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     private lateinit var syncLayout: LinearLayout
     private var syncLayoutUtil: SyncLayoutUtil? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 
@@ -111,7 +119,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
             backup_warning_title?.text = when (multiWallet!!.numWalletsNeedingSeedBackup()) {
                 1 -> getString(R.string.a_wallet_needs_backup)
-                else -> getString(R.string.n_wallets_need_backup, multiWallet!!.numWalletsNeedingSeedBackup())
+                else -> getString(
+                    R.string.n_wallets_need_backup,
+                    multiWallet!!.numWalletsNeedingSeedBackup()
+                )
             }
 
             backup_warning_layout.go_to_wallets_btn.setOnClickListener {
@@ -120,17 +131,20 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
             iv_close_backup_warning?.setOnClickListener {
                 InfoDialog(context!!)
-                        .setMessage(getString(R.string.close_backup_warning_dialog_message))
-                        .setPositiveButton(getString(R.string.got_it), DialogInterface.OnClickListener { _, _ ->
+                    .setMessage(getString(R.string.close_backup_warning_dialog_message))
+                    .setPositiveButton(
+                        getString(R.string.got_it),
+                        DialogInterface.OnClickListener { _, _ ->
                             closedBackupWarning = true
                             backup_warning_layout?.hide()
                         })
-                        .show()
+                    .show()
             }
         }
 
         if (!multiWallet!!.readBoolConfigValueForKey(Constants.HAS_SETUP_PRIVACY, false)
-                && multiWallet!!.fullCoinWalletsList().size > 0 && !closedPrivacyReminder) {
+            && multiWallet!!.fullCoinWalletsList().size > 0 && !closedPrivacyReminder
+        ) {
             privacy_intro_card.show()
             btn_dismiss_privacy_intro.setOnClickListener {
                 closedPrivacyReminder = true
@@ -164,7 +178,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         }
 
         if (activeMixers > 0) {
-            tv_mixer_running.text = context!!.resources.getQuantityString(R.plurals.mixer_is_running, activeMixers, activeMixers)
+            tv_mixer_running.text = context!!.resources.getQuantityString(
+                R.plurals.mixer_is_running,
+                activeMixers,
+                activeMixers
+            )
             cspp_running_layout.show()
             mixer_status_rv.adapter?.notifyDataSetChanged()
         } else {
@@ -216,7 +234,12 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         if (mainBalanceIsVisible()) {
             setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
             if (exchangeDecimal != null) {
-                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+                val formattedUSD = HtmlCompat.fromHtml(
+                    getString(
+                        R.string.usd_symbol_format,
+                        CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
+                    ), 0
+                )
                 setToolbarSubTitle(formattedUSD)
             }
         } else {
@@ -233,14 +256,20 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         if (mainBalanceIsVisible()) {
             setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
             if (exchangeDecimal != null) {
-                val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+                val formattedUSD = HtmlCompat.fromHtml(
+                    getString(
+                        R.string.usd_symbol_format,
+                        CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
+                    ), 0
+                )
                 setToolbarSubTitle(formattedUSD)
             }
         }
     }
 
     private fun loadTransactions() = GlobalScope.launch(Dispatchers.Default) {
-        val jsonResult = multiWallet!!.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterAll, true)
+        val jsonResult =
+            multiWallet!!.getTransactions(0, MAX_TRANSACTIONS, Dcrlibwallet.TxFilterAll, true)
         var tempTxList = gson.fromJson(jsonResult, Array<Transaction>::class.java)
 
         if (tempTxList == null) {
@@ -344,7 +373,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun isExchangeEnabled(): Boolean {
-        val currencyConversion = multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
+        val currencyConversion = multiWallet!!.readInt32ConfigValueForKey(
+            Dcrlibwallet.CurrencyConversionConfigKey,
+            Constants.DEF_CURRENCY_CONVERSION
+        )
 
         return currencyConversion > 0
     }
@@ -365,7 +397,12 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         val totalBalanceAtom = multiWallet!!.totalWalletBalance()
         val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
         if (isAdded) {
-            val formattedUSD = HtmlCompat.fromHtml(getString(R.string.usd_symbol_format, CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)), 0)
+            val formattedUSD = HtmlCompat.fromHtml(
+                getString(
+                    R.string.usd_symbol_format,
+                    CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
+                ), 0
+            )
 
             GlobalScope.launch(Dispatchers.Main) {
                 usdBalanceTextView.text = formattedUSD

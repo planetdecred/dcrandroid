@@ -57,7 +57,11 @@ class SplashScreenActivity : BaseActivity() {
         app_version.text = BuildConfig.VERSION_NAME
 
         ll_create_wallet.setOnClickListener {
-            PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
+            PasswordPinDialogFragment(
+                R.string.create,
+                isSpending = true,
+                isChange = false
+            ) { dialog, passphrase, passphraseType ->
                 createWallet(dialog, passphrase, passphraseType)
             }.show(this)
         }
@@ -80,8 +84,10 @@ class SplashScreenActivity : BaseActivity() {
 
         splashscreen_dcr_symbol.post {
 
-            symbolAnimation = AnimatedVectorDrawableCompat.create(applicationContext, R.drawable.avd_anim)
-            symbolAnimation!!.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
+            symbolAnimation =
+                AnimatedVectorDrawableCompat.create(applicationContext, R.drawable.avd_anim)
+            symbolAnimation!!.registerAnimationCallback(object :
+                Animatable2Compat.AnimationCallback() {
                 override fun onAnimationEnd(drawable: Drawable?) {
                     super.onAnimationEnd(drawable)
                     splashscreen_dcr_symbol.postDelayed({
@@ -98,26 +104,28 @@ class SplashScreenActivity : BaseActivity() {
         startup()
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
-        val op = this@SplashScreenActivity.javaClass.name + ": createWallet"
-        try {
-            val wallet = multiWallet!!.createNewWallet(getString(R.string.mywallet), spendingKey, type)
-            Utils.renameDefaultAccountToLocalLanguage(this@SplashScreenActivity, wallet)
-            withContext(Dispatchers.Main) {
-                dialog.dismiss()
-            }
-            SnackBar.showText(this@SplashScreenActivity, R.string.wallet_created)
-            proceedToHomeActivity()
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun createWallet(dialog: FullScreenBottomSheetDialog, spendingKey: String, type: Int) =
+        GlobalScope.launch(Dispatchers.IO) {
+            val op = this@SplashScreenActivity.javaClass.name + ": createWallet"
+            try {
+                val wallet =
+                    multiWallet!!.createNewWallet(getString(R.string.mywallet), spendingKey, type)
+                Utils.renameDefaultAccountToLocalLanguage(this@SplashScreenActivity, wallet)
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                }
+                SnackBar.showText(this@SplashScreenActivity, R.string.wallet_created)
+                proceedToHomeActivity()
+            } catch (e: Exception) {
+                e.printStackTrace()
 
-            withContext(Dispatchers.Main) {
-                dialog.dismiss()
-                Utils.showErrorDialog(this@SplashScreenActivity, op + ": " + e.message)
-                Dcrlibwallet.logT(op, e.message)
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                    Utils.showErrorDialog(this@SplashScreenActivity, op + ": " + e.message)
+                    Dcrlibwallet.logT(op, e.message)
+                }
             }
         }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -143,11 +151,15 @@ class SplashScreenActivity : BaseActivity() {
         }
 
         val homeDir = "$filesDir/$walletsDirName"
-        walletData.multiWallet = MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType, BuildConfig.PoliteiaHost)
+        walletData.multiWallet =
+            MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType, BuildConfig.PoliteiaHost)
 
         // set log level
         val logLevels = resources.getStringArray(R.array.logging_levels)
-        val logLevel = multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.LogLevelConfigKey, Constants.DEF_LOG_LEVEL)
+        val logLevel = multiWallet!!.readInt32ConfigValueForKey(
+            Dcrlibwallet.LogLevelConfigKey,
+            Constants.DEF_LOG_LEVEL
+        )
         Dcrlibwallet.setLogLevels(logLevels[logLevel])
 
         if (multiWallet!!.loadedWalletsCount() == 0) {
@@ -186,7 +198,11 @@ class SplashScreenActivity : BaseActivity() {
     }
 
     private fun requestStartupPass() {
-        val title = PassPromptTitle(R.string.startup_password_prompt_title, R.string.startup_pin_prompt_title, R.string.startup_fingerprint_prompt_title)
+        val title = PassPromptTitle(
+            R.string.startup_password_prompt_title,
+            R.string.startup_pin_prompt_title,
+            R.string.startup_fingerprint_prompt_title
+        )
         PassPromptUtil(this, null, title, allowFingerprint = true) { dialog, pass ->
             if (pass != null) {
                 GlobalScope.launch(Dispatchers.IO) {
@@ -245,7 +261,7 @@ class SplashScreenActivity : BaseActivity() {
 
     private fun proceedToHomeActivity() {
         val i = Intent(this@SplashScreenActivity, HomeActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(i)
 
         // Finish all the activities before this

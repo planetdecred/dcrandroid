@@ -89,7 +89,11 @@ object TimeUtils {
 
             if (seconds > 60) {
                 val minutes = seconds / 60
-                return ctx.getString(R.string.remaining_minute_sync_eta, percentageCompleted, minutes)
+                return ctx.getString(
+                    R.string.remaining_minute_sync_eta,
+                    percentageCompleted,
+                    minutes
+                )
             }
 
             return ctx.getString(R.string.remaining_seconds_sync_eta, percentageCompleted, seconds)
