@@ -101,7 +101,7 @@ class ProposalDetailsActivity : BaseActivity() {
                 // keep trying to load the description while displaying any errors from the screen
                 while (true) {
                     try {
-                        val description = multiWallet!!.politeia.fetchProposalDescription(BuildConfig.PoliteiaHost, proposal.token)
+                        val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
                         withContext(Dispatchers.Main) {
                             description_progress?.hide()
                             // set markdown

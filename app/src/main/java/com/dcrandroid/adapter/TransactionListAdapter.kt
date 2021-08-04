@@ -103,6 +103,7 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
 
     val context = layoutRow.context
     val multiWallet = WalletData.multiWallet!!
+    val wallet = multiWallet.walletWithID(transaction.walletID)
 
     layoutRow.tx_icon.setImageResource(transaction.iconResource)
 
@@ -157,7 +158,8 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
             setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
             setText(R.string.mixed)
         }
-    } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
+
+    } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterStaking)) {
 
         layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
 
@@ -172,8 +174,7 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
                 title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
                     R.string.immature
                 } else {
-                    if (multiWallet.walletWithID(transaction.walletID)
-                                    .ticketHasVotedOrRevoked(transaction.hash)) {
+                    if (wallet!!.ticketHasVotedOrRevoked(transaction.hash)) {
                         R.string.purchased
                     } else {
                         R.string.live

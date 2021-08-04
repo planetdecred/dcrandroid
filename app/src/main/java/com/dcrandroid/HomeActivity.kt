@@ -148,7 +148,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             }
             delay(6000)
             try {
-                multiWallet!!.politeia.sync(BuildConfig.PoliteiaHost)
+                multiWallet!!.politeia.sync()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

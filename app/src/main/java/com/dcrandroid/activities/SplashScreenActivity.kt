@@ -143,7 +143,7 @@ class SplashScreenActivity : BaseActivity() {
         }
 
         val homeDir = "$filesDir/$walletsDirName"
-        walletData.multiWallet = MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType)
+        walletData.multiWallet = MultiWallet(homeDir, Constants.BADGER_DB, BuildConfig.NetType, BuildConfig.PoliteiaHost)
 
         // set log level
         val logLevels = resources.getStringArray(R.array.logging_levels)
