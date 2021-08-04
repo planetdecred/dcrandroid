@@ -18,7 +18,7 @@
         android:id="@+id/app_bar"
         app:elevation="0dp"
         android:background="@drawable/bg_rounded_corner_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/LightTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -54,7 +54,7 @@
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     tools:text="@string/dest_account_picker_title"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 

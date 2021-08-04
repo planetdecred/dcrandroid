@@ -9,7 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/app_bar"
-        app:cardBackgroundColor="@color/colorBackground"
+        app:cardBackgroundColor="@color/background"
         app:cardElevation="0dp">
 
         <LinearLayout
@@ -43,7 +43,7 @@
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:text="@string/send_dcr"
                 android:textSize="@dimen/edit_text_size_20"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -219,7 +219,7 @@
                     android:gravity="end"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_16"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:text="@string/_dcr"
                     tools:text="3.14161775 DCR" />
@@ -249,7 +249,7 @@
                     android:gravity="end"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_16"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:text="@string/_dcr"
                     app:fontFamily="@font/source_sans_pro_regular"
                     tools:text="7.51464806 DCR" />

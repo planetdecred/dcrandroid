@@ -32,7 +32,7 @@
         android:layout_marginEnd="@dimen/margin_padding_size_24"
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/textColor"
         tools:text="Simplified Payment Verification (SPV)" />
 
 </LinearLayout>

@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,8 +17,8 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:background="@color/background"
+        android:theme="@style/LightTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/debug"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="@string/view_statistics"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="@string/view_connected_peers"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="@string/view_wallets_log"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
@@ -169,7 +169,7 @@
                     android:id="@id/pref_title"
                     android:includeFontPadding="false"
                     android:text="@string/logging_level"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 

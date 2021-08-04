@@ -16,7 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:background="@color/background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:gravity="center_vertical"
                 android:text="Crash Report"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:textColor="@color/darkBlueTextColor" />
+                android:textColor="@color/textColor" />
         </LinearLayout>
     </LinearLayout>
 
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
-            android:textColor="@color/blueGrayFirstTextColor"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -105,7 +105,7 @@
         android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/background"
         android:weightSum="2">
 
         <TextView
@@ -116,7 +116,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:textAllCaps="true"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:textSize="14sp"
             android:visibility="invisible"
             app:fontFamily="@font/source_sans_pro_semibold"

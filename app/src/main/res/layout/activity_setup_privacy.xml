@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,8 +19,8 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:background="@color/background"
+        android:theme="@style/LightTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/privacy"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:text="@string/privacy_intro_title"
             android:textSize="@dimen/edit_text_size_20"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:fontFamily="@font/source_sans_pro_semibold"
             android:gravity="center" />
 
@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:text="@string/privacy_intro_desc_1"
             android:textSize="@dimen/edit_text_size_16"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:fontFamily="@font/source_sans_pro"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:gravity="center" />
@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:text="@string/privacy_intro_desc_2"
             android:textSize="@dimen/edit_text_size_16"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:fontFamily="@font/source_sans_pro"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             android:gravity="center" />

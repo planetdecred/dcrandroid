@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,8 +18,8 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:background="@color/background"
+        android:theme="@style/LightTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/privacy"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -148,7 +148,7 @@
                             android:includeFontPadding="false"
                             android:fontFamily="@font/source_sans_pro"
                             android:textSize="@dimen/edit_text_size_18"
-                            android:textColor="@color/darkBlueTextColor" />
+                            android:textColor="@color/textColor" />
 
 
                         <LinearLayout
@@ -215,7 +215,7 @@
                             android:id="@+id/unmixed_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             android:textSize="16sp"
                             app:fontFamily="@font/source_sans_pro"
                             tools:text="107.74431858 DCR" />
@@ -251,7 +251,7 @@
                             android:id="@+id/mixed_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             android:textSize="16sp"
                             app:fontFamily="@font/source_sans_pro"
                             tools:text="0 DCR" />
@@ -293,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mixed_account"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -327,7 +327,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/unmixed_account"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -361,7 +361,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mixed_account_branch"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -395,7 +395,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mix_server"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -429,7 +429,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/server_port"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -475,7 +475,7 @@
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
                             android:text="@string/mix_tx_change"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             android:fontFamily="@font/source_sans_pro"
                             android:textSize="@dimen/edit_text_size_16" />
 

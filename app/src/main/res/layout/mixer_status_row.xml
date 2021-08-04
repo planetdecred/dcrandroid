@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/edit_text_size_16"
         android:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/textColor"
         android:id="@+id/mixer_status_wallet_name"
         tools:text="Wallet-0" />
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:textSize="16sp"
             tools:text="107.74431858 DCR" />
 

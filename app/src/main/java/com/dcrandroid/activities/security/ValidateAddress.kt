@@ -77,7 +77,7 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
             for (wallet in wallets) {
                 if (wallet.haveAddress(address)) {
                     subtitleText = getString(R.string.internal_valid_address, wallet.name)
-                    tv_subtitle.setTextColor(getColor(R.color.greenLightTextColor))
+                    tv_subtitle.setTextColor(getColor(R.color.secondary))
                     break
                 } else {
                     subtitleText = getString(R.string.external_valid_address)

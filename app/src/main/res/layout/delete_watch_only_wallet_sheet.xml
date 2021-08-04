@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_padding_size_8"
         android:text="Enter wallet name"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/edit_text_size_20"
         app:fontFamily="@font/source_sans_pro_semibold" />
 

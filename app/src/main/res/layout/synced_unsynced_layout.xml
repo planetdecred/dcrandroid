@@ -38,7 +38,7 @@
             android:gravity="center_vertical"
             android:includeFontPadding="false"
             android:text="@string/synced"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:textSize="@dimen/edit_text_size_20"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -68,7 +68,7 @@
                 android:layout_marginStart="@dimen/margin_padding_size_4"
                 android:includeFontPadding="false"
                 android:text="@string/reconnect"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/edit_text_size_14"
                 android:id="@+id/tv_reconnect"
                 app:fontFamily="@font/source_sans_pro" />

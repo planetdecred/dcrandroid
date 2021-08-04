@@ -40,7 +40,7 @@
                 android:includeFontPadding="false"
                 android:textSize="@dimen/edit_text_size_16"
                 android:text="@string/_dcr"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 app:fontFamily="@font/source_sans_pro" />
 
             <ImageView

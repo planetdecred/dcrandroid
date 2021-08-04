@@ -11,7 +11,7 @@
 
     <shape>
         <size android:height="@dimen/margin_padding_size_05"/>
-        <solid android:color="@color/colorPrimary" />
+        <solid android:color="@color/background" />
     </shape>
 
 </inset>

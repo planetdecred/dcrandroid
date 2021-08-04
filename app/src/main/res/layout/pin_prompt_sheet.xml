@@ -21,7 +21,7 @@
         android:layout_marginBottom="@dimen/margin_padding_size_24"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:includeFontPadding="false"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/edit_text_size_20" />
 
     <LinearLayout

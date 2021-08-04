@@ -89,7 +89,7 @@
                             android:background="@color/white"
                             android:textSize="32sp"
                             android:textColorHint="@color/lightGrayTextColor"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             app:fontFamily="@font/source_sans_pro"
                             android:textCursorDrawable="@null"
                             android:inputType="numberDecimal"

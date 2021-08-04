@@ -49,7 +49,7 @@
                 android:includeFontPadding="false"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_18"
-                android:textColor="@color/darkBlueTextColor" />
+                android:textColor="@color/textColor" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

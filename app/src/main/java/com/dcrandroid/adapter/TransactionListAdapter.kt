@@ -162,7 +162,7 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
         var mixedAmount = CoinFormat.format(transaction.mixDenomination)
         mixedAmount = CoinFormat.applyColor(
             mixedAmount,
-            context.resources.getColor(R.color.darkBlueTextColor)
+            context.resources.getColor(R.color.textColor)
         )
 
         val amountBuilder = SpannableStringBuilder(mixedAmount)

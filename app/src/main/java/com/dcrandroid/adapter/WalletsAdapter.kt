@@ -265,12 +265,12 @@ class WalletsAdapter(
             val items = arrayOf(
                 PopupItem(
                     R.string.sign_message,
-                    R.color.darkBlueTextColor,
+                    R.color.textColor,
                     !wallet.isWatchingOnlyWallet
                 ),
                 PopupItem(
                     R.string.privacy,
-                    R.color.darkBlueTextColor,
+                    R.color.textColor,
                     !wallet.isWatchingOnlyWallet,
                     !hasCheckedPrivacyPage && !wallet.isWatchingOnlyWallet
                 ),

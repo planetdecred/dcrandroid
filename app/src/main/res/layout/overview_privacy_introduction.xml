@@ -37,7 +37,7 @@
                 android:layout_width="@dimen/margin_padding_size_40"
                 android:layout_height="@dimen/margin_padding_size_40"
                 android:padding="@dimen/margin_padding_size_8"
-                android:background="@drawable/circle_bg_primary"
+                android:background="@drawable/circle_bg"
                 android:layout_gravity="bottom"
                 android:src="@drawable/ic_mixer" />
 
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro_regular"
                 android:textSize="@dimen/edit_text_size_18"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:text="@string/privacy_is_here" />
 
             <TextView

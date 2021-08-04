@@ -10,39 +10,32 @@
     <!--Light theme-->
 
     <!--General-->
+    <color name="primary">#2970FF</color>
+    <color name="secondary">#2DD8A3</color>
+    <color name="textColor">#091440</color>
+    <color name="background">#F3F5F6</color>
     <color name="lightGray">#C4CBD2</color>
-    <color name="colorPrimary">#F3F5F6</color>
-    <color name="colorPrimaryDark">#838383</color>
     <color name="white">#ffffff</color>
+    <color name="dark_grey">#252525</color>
     <color name="blue">#2970FF</color>
-    <color name="primaryRipple">#E6EAED</color>
+    <color name="backgroundRipple">#E6EAED</color>
     <color name="whiteRipple">#EDEFF1</color>
     <color name="blueRipple">#1B41B3</color>
     <color name="orangeRipple">#D32F2F</color>
     <color name="turquoise">#2ED6A1</color>
     <color name="darkGreen">#3CC39A</color>
-    <color name="colorBackground">#F3F5F6</color>
     <color name="colorError">#ed6d47</color>
     <color name="colorDisabled">#c4cbd2</color>
     <color name="colorDivider">#edeff1</color>
-
     <!--/General-->
 
     <!--Text-->
-    <color name="blackFirstTextColor">#212121</color>
     <color name="blueGraySecondTextColor">#596D81</color>
-    <color name="blueGrayFirstTextColor">#617386</color>
     <color name="lightGrayTextColor">#8997A5</color>
     <color name="darkerBlueGrayTextColor">#3d5873</color>
-    <color name="darkBlueTextColor">#091440</color>
     <color name="orangeTextColor">#ED6D47</color>
     <color name="greenTextColor">#41be53</color>
-    <color name="greenLightTextColor">#2DD8A3</color>
     <!--/Text-->
-
-    <!--Background-->
-    <color name="send_receive_button_background_color">#2970ff</color>
-    <!--/Background-->
 
     <!--Drawable-->
     <color name="deepBlueDrawableColor">#0C1E3E</color>

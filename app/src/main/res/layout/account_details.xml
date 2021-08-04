@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_account_name"
                 android:layout_weight="1"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/edit_text_size_20"
                 tools:text="Default"
                 android:layout_gravity="center_vertical"
@@ -98,7 +98,7 @@
                         android:textSize="32sp"
                         app:fontFamily="@font/source_sans_pro"
                         android:includeFontPadding="false"
-                        android:textColor="@color/darkBlueTextColor" />
+                        android:textColor="@color/textColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -124,7 +124,7 @@
                             android:textSize="20sp"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false"
-                            android:textColor="@color/darkBlueTextColor" />
+                            android:textColor="@color/textColor" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/textColor" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -192,7 +192,7 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/textColor" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/textColor" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -254,7 +254,7 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/textColor" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -324,7 +324,7 @@
                             android:layout_marginStart="@dimen/margin_padding_size_16"
                             android:gravity="end"
                             android:id="@+id/account_details_number"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             android:textSize="@dimen/edit_text_size_16"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false" />
@@ -354,7 +354,7 @@
                             android:layout_marginStart="@dimen/margin_padding_size_16"
                             android:gravity="end"
                             android:id="@+id/account_details_path"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             android:textSize="@dimen/edit_text_size_16"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false" />
@@ -383,7 +383,7 @@
                             android:layout_marginStart="@dimen/margin_padding_size_16"
                             android:gravity="end"
                             android:id="@+id/account_details_keys"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             android:textSize="@dimen/edit_text_size_16"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false" />

@@ -45,7 +45,7 @@
                 android:id="@+id/toolbar_title"
                 android:text="@string/sent"
                 android:textSize="@dimen/edit_text_size_20"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -78,7 +78,7 @@
                     android:layout_marginStart="@dimen/margin_padding_size_4"
                     android:includeFontPadding="false"
                     android:text="@string/rebroadcast"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/textColor"
                     android:textSize="@dimen/edit_text_size_14"
                     android:id="@+id/tv_reconnect"
                     app:fontFamily="@font/source_sans_pro" />
@@ -139,7 +139,7 @@
                         android:textSize="32sp"
                         app:fontFamily="@font/source_sans_pro"
                         android:includeFontPadding="false"
-                        android:textColor="@color/darkBlueTextColor" />
+                        android:textColor="@color/textColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
                                 android:id="@+id/tx_source_wallet_badge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@color/colorBackground"
+                                android:background="@color/background"
                                 android:includeFontPadding="false"
                                 android:paddingTop="@dimen/margin_padding_size_2"
                                 android:paddingBottom="@dimen/margin_padding_size_2"
@@ -251,7 +251,7 @@
                                 android:gravity="end"
                                 tools:text="Default"
                                 android:textSize="@dimen/edit_text_size_18"
-                                android:textColor="@color/darkBlueTextColor"
+                                android:textColor="@color/textColor"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false" />
 
@@ -288,7 +288,7 @@
                                 android:id="@+id/tx_dest_wallet_badge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@color/colorBackground"
+                                android:background="@color/background"
                                 android:includeFontPadding="false"
                                 android:paddingTop="@dimen/margin_padding_size_2"
                                 android:paddingBottom="@dimen/margin_padding_size_2"
@@ -338,7 +338,7 @@
                             android:gravity="end"
                             tools:text="0.00071330 DCR"
                             android:textSize="@dimen/edit_text_size_16"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             app:fontFamily="@font/source_sans_pro"
                             android:layout_marginStart="@dimen/margin_padding_size_56" />
 
@@ -368,7 +368,7 @@
                             android:gravity="end"
                             tools:text="328115"
                             android:textSize="@dimen/edit_text_size_16"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             app:fontFamily="@font/source_sans_pro"
                             android:layout_marginStart="@dimen/margin_padding_size_56" />
 
@@ -395,7 +395,7 @@
                             android:id="@+id/tx_details_type"
                             tools:text="Regular"
                             android:textSize="@dimen/edit_text_size_16"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/textColor"
                             app:fontFamily="@font/source_sans_pro"
                             android:layout_marginStart="@dimen/margin_padding_size_56" />
 
@@ -475,7 +475,7 @@
                         android:text="@string/view_on_dcrdata"
                         android:textSize="@dimen/edit_text_size_16"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/textColor"
                         android:includeFontPadding="false"
                         android:layout_weight="1" />
 

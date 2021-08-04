@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/margin_padding_size_8"
             android:text="@string/confirm_to_send"
             android:textSize="@dimen/edit_text_size_20"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/textColor"
             android:includeFontPadding="false"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -75,7 +75,7 @@
                 android:id="@+id/send_amount"
                 app:fontFamily="@font/source_sans_pro"
                 android:textSize="32sp"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:layout_marginTop="@dimen/margin_padding_size_4"
                 android:text="3.14159265 DCR" />
 
@@ -103,7 +103,7 @@
                 app:fontFamily="@font/source_sans_pro"
                 android:id="@+id/address_account_name"
                 android:layout_marginTop="6dp"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/edit_text_size_16" />
 
         </LinearLayout>
@@ -136,7 +136,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:id="@+id/tx_fee"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro"
@@ -172,7 +172,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:id="@+id/total_cost"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro"
@@ -200,7 +200,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:id="@+id/balance_after_send"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro"
@@ -240,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/send_dcr_warning"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/textColor"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 app:fontFamily="@font/source_sans_pro" />
 
