@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:letterSpacing="0.05"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/visible_balance_text_size"
                 app:fontFamily="@font/source_sans_pro"
                 tools:text="315.08193725 DCR" />
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/wallet_status"
-                    android:textColor="#3d5873"
+                    android:textColor="@color/text2"
                     android:textSize="14sp"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_padding_size_4"
                     android:text="@string/online"
-                    android:textColor="#091440"
+                    android:textColor="@color/text1"
                     android:textSize="@dimen/edit_text_size_12"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -120,7 +120,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/backgroundRipple"
+                android:background="@color/colorDivider"
                 android:layout_marginTop="@dimen/margin_padding_size_16"
                 android:layout_marginStart="@dimen/margin_padding_size_16" />
 

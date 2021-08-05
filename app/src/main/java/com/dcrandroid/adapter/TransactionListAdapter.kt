@@ -7,7 +7,6 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
 import android.util.TypedValue
@@ -75,12 +74,12 @@ class TransactionListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 fun TextView.setPending() {
     this.setText(R.string.pending)
-    this.setTextColor(Color.parseColor("#8997a5"))
+    this.setTextColor(context.getColor(R.color.text3))
 }
 
 fun TextView.setConfirmed(timestamp: Long) {
     this.text = getTimestamp(this.context, timestamp * 1000) // convert seconds to milliseconds
-    this.setTextColor(Color.parseColor("#596d81"))
+    this.setTextColor(context.getColor(R.color.text4))
 }
 
 fun getTimestamp(context: Context, timestamp: Long): String {
@@ -162,7 +161,7 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
         var mixedAmount = CoinFormat.format(transaction.mixDenomination)
         mixedAmount = CoinFormat.applyColor(
             mixedAmount,
-            context.resources.getColor(R.color.textColor)
+            context.resources.getColor(R.color.text1)
         )
 
         val amountBuilder = SpannableStringBuilder(mixedAmount)

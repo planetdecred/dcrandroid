@@ -40,7 +40,7 @@
                 android:includeFontPadding="false"
                 android:textSize="@dimen/edit_text_size_16"
                 android:text="@string/_dcr"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 app:fontFamily="@font/source_sans_pro" />
 
             <ImageView
@@ -62,7 +62,7 @@
         android:id="@+id/fee_verbose"
         android:visibility="gone"
         tools:visibility="visible"
-        android:background="@drawable/bg_gray_corner_8dp"
+        android:background="@drawable/bg_corner_8dp"
         android:layout_marginTop="@dimen/margin_padding_size_16"
         android:padding="@dimen/margin_padding_size_16">
 

@@ -32,7 +32,7 @@
             android:id="@+id/spinner_account_name"
             tools:text="@string/_default"
             android:textSize="@dimen/edit_text_size_18"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             app:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false" />
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinner_total_balance"
             android:textSize="@dimen/edit_text_size_20"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             app:fontFamily="@font/source_sans_pro"
             tools:text="7.51464806 DCR" />
 

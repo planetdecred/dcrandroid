@@ -12,8 +12,18 @@
     <!--General-->
     <color name="primary">#2970FF</color>
     <color name="secondary">#2DD8A3</color>
-    <color name="textColor">#091440</color>
+    <color name="text">#ffffff</color>
+    <color name="text1">#091440</color>
+    <color name="text2">#3d5873</color>
+    <color name="text3">#8997a5</color>
+    <color name="text4">#596D81</color>
+    <color name="text5">#c4cbd2</color>
+    <color name="text6">#41be53</color>
     <color name="background">#F3F5F6</color>
+    <color name="surface">#ffffff</color>
+    <color name="surfaceRipple">#E6EAED</color>
+    <color name="colorDivider">#E6EAED</color>
+    <color name="border">#c4cbd2</color>
     <color name="lightGray">#C4CBD2</color>
     <color name="white">#ffffff</color>
     <color name="dark_grey">#252525</color>
@@ -26,7 +36,6 @@
     <color name="darkGreen">#3CC39A</color>
     <color name="colorError">#ed6d47</color>
     <color name="colorDisabled">#c4cbd2</color>
-    <color name="colorDivider">#edeff1</color>
     <!--/General-->
 
     <!--Text-->
@@ -34,7 +43,6 @@
     <color name="lightGrayTextColor">#8997A5</color>
     <color name="darkerBlueGrayTextColor">#3d5873</color>
     <color name="orangeTextColor">#ED6D47</color>
-    <color name="greenTextColor">#41be53</color>
     <!--/Text-->
 
     <!--Drawable-->

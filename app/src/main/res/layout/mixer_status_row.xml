@@ -13,7 +13,7 @@
     android:paddingEnd="@dimen/margin_padding_size_16"
     android:paddingTop="@dimen/margin_padding_size_12"
     android:paddingBottom="@dimen/margin_padding_size_12"
-    android:background="@drawable/bg_gray_corner_8dp"
+    android:background="@drawable/bg_corner_8dp"
     android:orientation="vertical">
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/edit_text_size_16"
         android:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/textColor"
+        android:textColor="@color/text1"
         android:id="@+id/mixer_status_wallet_name"
         tools:text="Wallet-0" />
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/unmixed_balance"
-            android:textColor="#596d81"
+            android:textColor="@color/text4"
             android:textSize="@dimen/edit_text_size_14"
             android:fontFamily="@font/source_sans_pro" />
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             android:textSize="16sp"
             tools:text="107.74431858 DCR" />
 

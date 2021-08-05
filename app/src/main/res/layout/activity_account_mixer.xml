@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/privacy"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -148,7 +148,7 @@
                             android:includeFontPadding="false"
                             android:fontFamily="@font/source_sans_pro"
                             android:textSize="@dimen/edit_text_size_18"
-                            android:textColor="@color/textColor" />
+                            android:textColor="@color/text1" />
 
 
                         <LinearLayout
@@ -189,7 +189,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_gray_corner_8dp"
+                    android:background="@drawable/bg_corner_8dp"
                     android:layout_marginTop="@dimen/margin_padding_size_16"
                     android:paddingTop="@dimen/margin_padding_size_12"
                     android:paddingBottom="@dimen/margin_padding_size_12"
@@ -215,7 +215,7 @@
                             android:id="@+id/unmixed_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/textColor"
+                            android:textColor="@color/text1"
                             android:textSize="16sp"
                             app:fontFamily="@font/source_sans_pro"
                             tools:text="107.74431858 DCR" />
@@ -251,7 +251,7 @@
                             android:id="@+id/mixed_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/textColor"
+                            android:textColor="@color/text1"
                             android:textSize="16sp"
                             app:fontFamily="@font/source_sans_pro"
                             tools:text="0 DCR" />
@@ -293,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mixed_account"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -327,7 +327,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/unmixed_account"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -361,7 +361,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mixed_account_branch"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -395,7 +395,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mix_server"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -429,7 +429,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/server_port"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -475,7 +475,7 @@
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
                             android:text="@string/mix_tx_change"
-                            android:textColor="@color/textColor"
+                            android:textColor="@color/text1"
                             android:fontFamily="@font/source_sans_pro"
                             android:textSize="@dimen/edit_text_size_16" />
 

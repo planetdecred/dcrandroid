@@ -22,7 +22,7 @@
         android:id="@+id/popup_text"
         tools:text="Rename"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="@color/textColor"
+        android:textColor="@color/text1"
         android:fontFamily="@font/source_sans_pro" />
 
     <TextView

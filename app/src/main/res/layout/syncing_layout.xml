@@ -38,7 +38,7 @@
             android:gravity="center_vertical"
             android:includeFontPadding="false"
             android:text="@string/syncing_state"
-            android:textColor="#091440"
+            android:textColor="@color/text1"
             android:textSize="20sp"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -62,7 +62,7 @@
                 android:layout_marginStart="@dimen/margin_padding_size_4"
                 android:includeFontPadding="false"
                 android:text="@string/cancel"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_14"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:includeFontPadding="false"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -109,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -121,7 +121,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_padding_size_16"
-        android:background="#edeff1" />
+        android:background="@color/colorDivider" />
 
     <LinearLayout
         android:id="@+id/sync_details"
@@ -148,7 +148,7 @@
                     android:layout_weight="1"
                     android:includeFontPadding="false"
                     android:text="@string/step_1_3"
-                    android:textColor="#596d81"
+                    android:textColor="@color/text4"
                     android:textSize="@dimen/edit_text_size_14"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -157,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:textSize="@dimen/edit_text_size_16"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -176,7 +176,7 @@
                     android:layout_weight="1"
                     android:includeFontPadding="false"
                     android:text="@string/connected_peers_count"
-                    android:textColor="#596d81"
+                    android:textColor="@color/text4"
                     android:textSize="@dimen/edit_text_size_14"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -185,7 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:textSize="@dimen/edit_text_size_16"
                     app:fontFamily="@font/source_sans_pro"
                     tools:text="16" />
@@ -206,7 +206,7 @@
                     android:layout_weight="1"
                     android:includeFontPadding="false"
                     android:text="@string/wallet"
-                    android:textColor="#596d81"
+                    android:textColor="@color/text4"
                     android:textSize="@dimen/edit_text_size_14"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -215,7 +215,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:textColor="#091440"
+                    android:textColor="@color/text1"
                     android:textSize="@dimen/edit_text_size_16"
                     app:fontFamily="@font/source_sans_pro"
                     tools:text="wallet-1" />
@@ -231,7 +231,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#edeff1" />
+            android:background="@color/colorDivider" />
 
     </LinearLayout>
 
@@ -247,7 +247,7 @@
         android:paddingTop="@dimen/edit_text_size_14"
         android:paddingBottom="@dimen/edit_text_size_14"
         android:text="@string/show_details"
-        android:textColor="#2970ff"
+        android:textColor="@color/primary"
         android:textSize="@dimen/edit_text_size_16"
         app:fontFamily="@font/source_sans_pro" />
 

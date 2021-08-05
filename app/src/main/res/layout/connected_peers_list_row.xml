@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_16"
                 tools:text="37" />
 

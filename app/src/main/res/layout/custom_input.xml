@@ -31,7 +31,7 @@
             android:breakStrategy="simple"
             android:background="@null"
             android:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             android:textCursorDrawable="@drawable/text_cursor"
             android:textSize="@dimen/edit_text_size_16" />
 

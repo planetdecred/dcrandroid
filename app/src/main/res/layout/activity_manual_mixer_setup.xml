@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/manual_setup"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 

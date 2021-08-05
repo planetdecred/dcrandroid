@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/set_up_needed_accounts"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -184,7 +184,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_18"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     android:text="@string/auto_setup" />
 
@@ -239,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_18"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     android:text="@string/manual_setup" />
 

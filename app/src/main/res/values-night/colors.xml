@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--General-->
+    <color name="primary">#57B6FF</color>
+    <color name="secondary">#80E3BD</color>
+    <color name="text">#000000</color>
+    <color name="text1">#DEFFFFFF</color>
+    <color name="text2">#DEFFFFFF</color>
+    <color name="text3">#61FFFFFF</color>
+    <color name="text4">#99FFFFFF</color>
+    <color name="text5">#61FFFFFF</color>
+    <color name="background">#121212</color>
+    <color name="surface">#252525</color>
+    <color name="surfaceRipple">#3D3D3D</color>
+    <color name="colorDivider">#3D3D3D</color>
+    <color name="border">#61FFFFFF</color>
+    <!--/General-->
+
+</resources>

@@ -217,7 +217,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             layout.send_amount.setSelection(layout.send_amount.text.length) //move cursor to end
 
             layout.send_amount.addTextChangedListener(this)
-            layout.currency_label.setTextColor(context.resources.getColor(R.color.textColor))
+            layout.currency_label.setTextColor(context.resources.getColor(R.color.text1))
         } else {
             layout.send_amount.text = null
         }
@@ -249,7 +249,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             layout.currency_label.setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
             hideOrShowClearButton()
         } else {
-            layout.currency_label.setTextColor(context.resources.getColor(R.color.textColor))
+            layout.currency_label.setTextColor(context.resources.getColor(R.color.text1))
             hideOrShowClearButton()
             if (currencyIsDCR) {
                 CoinFormat.formatRelative(s, AmountRelativeSize)

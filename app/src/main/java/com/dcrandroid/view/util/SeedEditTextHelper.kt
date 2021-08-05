@@ -77,7 +77,7 @@ class SeedEditTextHelper(
         var backgroundResource = R.drawable.input_background
         var indexBackground = R.drawable.seed_index_bg
         var indexTextColor = R.color.darkerBlueGrayTextColor
-        var editTextColor = R.color.textColor
+        var editTextColor = R.color.text1
 
         if (hasFocus) {
             backgroundResource = R.drawable.input_background_active

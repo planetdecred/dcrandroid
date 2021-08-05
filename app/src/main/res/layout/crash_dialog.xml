@@ -32,7 +32,7 @@
                 android:gravity="center_vertical"
                 android:text="Crash Report"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:textColor="@color/textColor" />
+                android:textColor="@color/text1" />
         </LinearLayout>
     </LinearLayout>
 
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             android:textSize="16sp"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -116,7 +116,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:textAllCaps="true"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             android:textSize="14sp"
             android:visibility="invisible"
             app:fontFamily="@font/source_sans_pro_semibold"

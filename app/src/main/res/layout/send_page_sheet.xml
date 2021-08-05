@@ -43,7 +43,7 @@
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:text="@string/send_dcr"
                 android:textSize="@dimen/edit_text_size_20"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -219,7 +219,7 @@
                     android:gravity="end"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_16"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     app:fontFamily="@font/source_sans_pro_regular"
                     android:text="@string/_dcr"
                     tools:text="3.14161775 DCR" />
@@ -249,7 +249,7 @@
                     android:gravity="end"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_16"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:text="@string/_dcr"
                     app:fontFamily="@font/source_sans_pro_regular"
                     tools:text="7.51464806 DCR" />

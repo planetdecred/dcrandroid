@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/keep_in_mind"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         app:fontFamily="@font/source_sans_pro" />
 
                 </LinearLayout>

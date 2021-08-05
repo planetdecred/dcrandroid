@@ -58,7 +58,7 @@
                     android:text="@string/verify_message"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -192,7 +192,7 @@
                             android:text="@string/valid_address"
                             android:textSize="@dimen/edit_text_size_16"
                             android:includeFontPadding="false"
-                            android:textColor="@color/greenTextColor"
+                            android:textColor="@color/text6"
                             android:fontFamily="@font/source_sans_pro" />
 
                     </LinearLayout>

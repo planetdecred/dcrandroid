@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/settings"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -112,7 +112,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/unconfirmed_funds"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -140,7 +140,7 @@
                         android:id="@id/pref_title"
                         android:includeFontPadding="false"
                         android:text="@string/currency_conversion"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -198,7 +198,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/startup_pin__password"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -229,7 +229,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/use_fingerprint"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -260,7 +260,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/change_startup_pin_password"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -306,7 +306,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/beep_for_new_blocks"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -336,7 +336,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="Enable politeia notifications"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -389,7 +389,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/wifi_data_sync_title"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -417,7 +417,7 @@
                         android:id="@id/pref_title"
                         android:includeFontPadding="false"
                         android:text="@string/connect_to_specific_peer"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -450,7 +450,7 @@
                         android:id="@id/pref_title"
                         android:includeFontPadding="false"
                         android:text="@string/user_agent"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 

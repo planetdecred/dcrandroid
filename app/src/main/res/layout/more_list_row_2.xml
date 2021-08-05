@@ -23,7 +23,7 @@
         tools:text="Version"
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="@color/textColor" />
+        android:textColor="@color/text1" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -38,7 +38,7 @@
             android:gravity="center_vertical"
             android:includeFontPadding="false"
             android:text="@string/synced"
-            android:textColor="@color/textColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_20"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -68,7 +68,7 @@
                 android:layout_marginStart="@dimen/margin_padding_size_4"
                 android:includeFontPadding="false"
                 android:text="@string/reconnect"
-                android:textColor="@color/textColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_14"
                 android:id="@+id/tv_reconnect"
                 app:fontFamily="@font/source_sans_pro" />
@@ -92,7 +92,7 @@
             android:layout_weight="1"
             android:includeFontPadding="false"
             tools:text="Latest block 320505．2 min ago"
-            android:textColor="#8997a5"
+            android:textColor="@color/text3"
             android:textSize="@dimen/edit_text_size_16"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -104,7 +104,7 @@
             android:layout_weight="1"
             android:includeFontPadding="false"
             android:text="@string/no_connected_peers"
-            android:textColor="#8997a5"
+            android:textColor="@color/text3"
             android:textSize="@dimen/edit_text_size_14"
             app:fontFamily="@font/source_sans_pro" />
 

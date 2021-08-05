@@ -42,10 +42,10 @@ object CoinFormat {
         return spannable
     }
 
-    fun formatAlpha(dcr: Long): Spannable {
+    fun formatAlpha(dcr: Long, @ColorInt color: Int): Spannable {
         val str = formatDecred(Dcrlibwallet.amountCoin(dcr)) + " DCR"
         val spannable = SpannableString(str)
-        val span = ForegroundColorSpan(Color.parseColor("#596D81"))
+        val span = ForegroundColorSpan(color)
         return formatSpannable(spannable, span)
     }
 

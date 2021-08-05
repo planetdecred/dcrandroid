@@ -45,7 +45,7 @@ class MixerStatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             -1
         )
         holder.itemView.mixer_status_unmixed_balance.text =
-            CoinFormat.formatAlpha(mixingWallets[position].getAccountBalance(unmixedAccountNumber).total)
+            CoinFormat.formatAlpha(mixingWallets[position].getAccountBalance(unmixedAccountNumber).total, holder.itemView.context.getColor(R.color.text4))
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v)

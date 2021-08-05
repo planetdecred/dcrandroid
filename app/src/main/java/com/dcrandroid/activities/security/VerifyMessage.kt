@@ -132,7 +132,7 @@ class VerifyMessage : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         val iconResource: Int
 
         if (valid) {
-            titleColor = R.color.greenTextColor
+            titleColor = R.color.text6
             titleText = R.string.valid_signature
             iconResource = R.drawable.ic_checkmark
 

@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/debug"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/textColor"
+                        android:textColor="@color/text1"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="@string/view_statistics"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="@string/view_connected_peers"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="@string/view_wallets_log"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
@@ -169,7 +169,7 @@
                     android:id="@id/pref_title"
                     android:includeFontPadding="false"
                     android:text="@string/logging_level"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/text1"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_16" />
 
