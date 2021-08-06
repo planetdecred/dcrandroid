@@ -36,7 +36,7 @@ class MainApplication : Application() {
 
                 builder.getPluginConfigurationBuilder(DialogConfigurationBuilder::class.java)
                     .setReportDialogClass(CustomCrashReport::class.java)
-                    .setResTheme(R.style.LightTheme)
+                    .setResTheme(R.style.AppTheme)
                     .setEnabled(true)
 
                 ACRA.init(this, builder.build())
