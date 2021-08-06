@@ -16,7 +16,8 @@ import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.connected_peers_list_row.view.*
 
-class PeerInfoAdapter(val peerInfos: ArrayList<PeerInfo>) : RecyclerView.Adapter<PeerInfoAdapter.ViewHolder>() {
+class PeerInfoAdapter(val peerInfos: ArrayList<PeerInfo>) :
+    RecyclerView.Adapter<PeerInfoAdapter.ViewHolder>() {
 
     private var expandedPosition = -1
 
@@ -34,8 +35,17 @@ class PeerInfoAdapter(val peerInfos: ArrayList<PeerInfo>) : RecyclerView.Adapter
         holder.itemView.tv_id.text = peerInfo.id.toString()
         holder.itemView.tv_addr.text = peerInfo.addr
 
-        holder.itemView.tv_peer_info.text = holder.itemView.context.getString(R.string.connected_peers_details, peerInfo.id,
-                peerInfo.addr, peerInfo.addrLocal, peerInfo.services, peerInfo.version, peerInfo.subVer, peerInfo.startingHeight, peerInfo.banScore)
+        holder.itemView.tv_peer_info.text = holder.itemView.context.getString(
+            R.string.connected_peers_details,
+            peerInfo.id,
+            peerInfo.addr,
+            peerInfo.addrLocal,
+            peerInfo.services,
+            peerInfo.version,
+            peerInfo.subVer,
+            peerInfo.startingHeight,
+            peerInfo.banScore
+        )
 
         if (expandedPosition == position) {
             holder.itemView.expand_row.setImageResource(R.drawable.ic_collapse)

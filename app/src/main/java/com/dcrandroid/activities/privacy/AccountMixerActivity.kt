@@ -28,7 +28,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, TxAndBlockNotificationListener {
+class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
+    TxAndBlockNotificationListener {
 
     private lateinit var wallet: Wallet
     private var mixedAccountNumber: Int = -1
@@ -53,14 +54,17 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         wallet_name.text = wallet.name
         mixed_account_branch.text = Dcrlibwallet.MixedAccountBranch.toString()
         shuffle_server.text = Dcrlibwallet.ShuffleServer
-        shuffle_port.text = if(BuildConfig.IS_TESTNET) Dcrlibwallet.TestnetShufflePort
+        shuffle_port.text = if (BuildConfig.IS_TESTNET) Dcrlibwallet.TestnetShufflePort
         else Dcrlibwallet.MainnetShufflePort
 
-        mix_tx_change_switch.isChecked = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
+        mix_tx_change_switch.isChecked =
+            wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
         setMixTxChangeSummary()
 
-        mixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
-        unmixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
+        mixedAccountNumber =
+            wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
+        unmixedAccountNumber =
+            wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
 
         mixed_account_label.text = wallet.accountName(mixedAccountNumber)
         unmixed_account_label.text = wallet.accountName(unmixedAccountNumber)
@@ -81,10 +85,10 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
         iv_info.setOnClickListener {
             InfoDialog(this)
-                    .setDialogTitle(getString(R.string.mixer_help_title))
-                    .setMessage(Html.fromHtml(getString(R.string.mixer_help_desc)))
-                    .setPositiveButton(getString(R.string.got_it), null)
-                    .show()
+                .setDialogTitle(getString(R.string.mixer_help_title))
+                .setMessage(Html.fromHtml(getString(R.string.mixer_help_desc)))
+                .setPositiveButton(getString(R.string.got_it), null)
+                .show()
         }
 
         go_back.setOnClickListener { finish() }
@@ -141,8 +145,10 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
             mixing_arrow.hide()
         }
 
-        unmixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).spendable)
-        mixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).spendable)
+        unmixed_balance.text =
+            CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).spendable)
+        mixed_balance.text =
+            CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).spendable)
     }
 
     private fun showWarningAndStartMixer() {
@@ -156,18 +162,29 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         }
 
         InfoDialog(this)
-                .setMessage(getString(R.string.start_mixer_warning))
-                .setPositiveButton(getString(R.string._continue), DialogInterface.OnClickListener { _, _ ->
+            .setMessage(getString(R.string.start_mixer_warning))
+            .setPositiveButton(
+                getString(R.string._continue),
+                DialogInterface.OnClickListener { _, _ ->
                     startAccountMixer()
                 })
-                .setNegativeButton(getString(R.string.cancel))
-                .show()
+            .setNegativeButton(getString(R.string.cancel))
+            .show()
     }
 
     private fun startAccountMixer() {
 
-        val title = PassPromptTitle(R.string.unlock_to_start_mixing, R.string.unlock_to_start_mixing, R.string.unlock_to_start_mixing)
-        PassPromptUtil(this@AccountMixerActivity, wallet.id, title, allowFingerprint = true) { dialog, passphrase ->
+        val title = PassPromptTitle(
+            R.string.unlock_to_start_mixing,
+            R.string.unlock_to_start_mixing,
+            R.string.unlock_to_start_mixing
+        )
+        PassPromptUtil(
+            this@AccountMixerActivity,
+            wallet.id,
+            title,
+            allowFingerprint = true
+        ) { dialog, passphrase ->
 
             if (passphrase == null) {
                 return@PassPromptUtil true

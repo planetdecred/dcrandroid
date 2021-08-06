@@ -50,7 +50,11 @@ class WalletsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_wallets, container, false)
     }
 
@@ -118,9 +122,9 @@ class WalletsFragment : BaseFragment() {
 
                 if (multiWallet!!.openedWalletsCount() >= numOfAllowedWallets()) {
                     InfoDialog(context!!)
-                            .setMessage(getString(R.string.wallets_limit_error))
-                            .setPositiveButton(getString(R.string.ok))
-                            .show()
+                        .setMessage(getString(R.string.wallets_limit_error))
+                        .setPositiveButton(getString(R.string.ok))
+                        .show()
                     return false
                 }
 
@@ -129,9 +133,9 @@ class WalletsFragment : BaseFragment() {
                     val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
 
                     val items: Array<Any> = arrayOf(
-                            PopupItem(R.string.create_a_new_wallet),
-                            PopupItem(R.string.import_existing_wallet),
-                            PopupItem(R.string.import_watching_only_wallet)
+                        PopupItem(R.string.create_a_new_wallet),
+                        PopupItem(R.string.import_existing_wallet),
+                        PopupItem(R.string.import_watching_only_wallet)
                     )
 
                     PopupUtil.showPopup(anchorView, items) { window, index ->
@@ -145,8 +149,17 @@ class WalletsFragment : BaseFragment() {
                                             return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
                                         }
 
-                                        PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
-                                            createWallet(dialog, newName, passphrase, passphraseType)
+                                        PasswordPinDialogFragment(
+                                            R.string.create,
+                                            isSpending = true,
+                                            isChange = false
+                                        ) { dialog, passphrase, passphraseType ->
+                                            createWallet(
+                                                dialog,
+                                                newName,
+                                                passphrase,
+                                                passphraseType
+                                            )
                                         }.show(context!!)
 
                                     } catch (e: Exception) {
@@ -156,7 +169,8 @@ class WalletsFragment : BaseFragment() {
                                 }.show(context!!)
                             }
                             1 -> {
-                                val restoreIntent = Intent(context!!, RestoreWalletActivity::class.java)
+                                val restoreIntent =
+                                    Intent(context!!, RestoreWalletActivity::class.java)
                                 startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
                             }
                             2 -> {
@@ -182,7 +196,12 @@ class WalletsFragment : BaseFragment() {
         return floor(memInfo.totalMem / 1e9).toInt()
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+    private fun createWallet(
+        dialog: FullScreenBottomSheetDialog,
+        walletName: String,
+        spendingKey: String,
+        type: Int
+    ) = GlobalScope.launch(Dispatchers.IO) {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet!!.createNewWallet(walletName, spendingKey, type)

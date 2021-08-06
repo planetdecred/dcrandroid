@@ -18,7 +18,11 @@ import com.dcrandroid.adapter.SuggestionsTextAdapter
 import com.dcrandroid.view.SeedEditTextLayout
 import kotlinx.android.synthetic.main.restore_wallet_list_row.view.*
 
-class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTextAdapter, private val itemPosition: Int) : View.OnFocusChangeListener, TextWatcher, AdapterView.OnItemClickListener {
+class SeedEditTextHelper(
+    val layout: SeedEditTextLayout,
+    adapter: SuggestionsTextAdapter,
+    private val itemPosition: Int
+) : View.OnFocusChangeListener, TextWatcher, AdapterView.OnItemClickListener {
 
     private val context = layout.context
 
@@ -36,7 +40,8 @@ class SeedEditTextHelper(val layout: SeedEditTextLayout, adapter: SuggestionsTex
 
         editText.apply {
             setDropDownBackgroundResource(android.R.color.transparent)
-            dropDownVerticalOffset = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_14)
+            dropDownVerticalOffset =
+                context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_14)
             dropDownWidth = ViewGroup.LayoutParams.MATCH_PARENT
         }
 

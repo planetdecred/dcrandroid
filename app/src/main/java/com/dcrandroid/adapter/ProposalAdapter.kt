@@ -18,11 +18,12 @@ import com.dcrandroid.util.Utils
 import kotlinx.android.synthetic.main.proposal_list_row.view.*
 import java.util.*
 
-class ProposalAdapter(private val proposals: List<Proposal>, private val context: Context) : RecyclerView.Adapter<ProposalAdapter.MyViewHolder>() {
+class ProposalAdapter(private val proposals: List<Proposal>, private val context: Context) :
+    RecyclerView.Adapter<ProposalAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.proposal_list_row, parent, false)
+            .inflate(R.layout.proposal_list_row, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -44,9 +45,18 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
 
         holder.title.text = proposal.name
         holder.author.text = proposal.username
-        holder.timestamp.text = Utils.calculateTime((System.currentTimeMillis() / 1000) - proposal.publishedAt, context)
-        holder.comments.text = String.format(Locale.getDefault(), context.getString(R.string.comments), proposal.numcomments)
-        holder.version.text = String.format(Locale.getDefault(), context.getString(R.string.version_number), proposal.version)
+        holder.timestamp.text =
+            Utils.calculateTime((System.currentTimeMillis() / 1000) - proposal.publishedAt, context)
+        holder.comments.text = String.format(
+            Locale.getDefault(),
+            context.getString(R.string.comments),
+            proposal.numcomments
+        )
+        holder.version.text = String.format(
+            Locale.getDefault(),
+            context.getString(R.string.version_number),
+            proposal.version
+        )
 
         // Set proposal vote status
         if (proposal.status == 6) {
@@ -66,10 +76,12 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
                 holder.status.text = context.getString(R.string.status_vote_started)
             } else if (proposal.voteStatus == 4) {
                 if (proposal.approved) {
-                    holder.status.background = getDrawable(context, R.drawable.bg_dark_green_corners_4dp)
+                    holder.status.background =
+                        getDrawable(context, R.drawable.bg_dark_green_corners_4dp)
                     holder.status.text = context.getString(R.string.status_approved)
                 } else {
-                    holder.status.background = getDrawable(context, R.drawable.orange_bg_corners_4dp)
+                    holder.status.background =
+                        getDrawable(context, R.drawable.orange_bg_corners_4dp)
                     holder.status.text = context.getString(R.string.status_rejected)
                 }
             } else if (proposal.voteStatus == 5) {
@@ -86,8 +98,10 @@ class ProposalAdapter(private val proposals: List<Proposal>, private val context
             holder.progressBar.progress = proposal.yesVotes
             holder.progressBar.secondaryProgress = proposal.totalVotes
 
-            holder.progress.text = context.getString(R.string.yes_no_votes_percent, proposal.yesVotes, proposal.yesPercentage,
-                    proposal.noVotes, proposal.noPercentage)
+            holder.progress.text = context.getString(
+                R.string.yes_no_votes_percent, proposal.yesVotes, proposal.yesPercentage,
+                proposal.noVotes, proposal.noPercentage
+            )
         } else {
             holder.progrssBarContainer.hide()
         }

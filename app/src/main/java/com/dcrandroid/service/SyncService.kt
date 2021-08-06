@@ -51,7 +51,11 @@ class SyncService : Service(), SyncProgressListener {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel("syncer", "Wallet Syncer", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                "syncer",
+                "Wallet Syncer",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             channel.enableLights(false)
             channel.setSound(null, null)
             channel.enableVibration(false)
@@ -76,7 +80,8 @@ class SyncService : Service(), SyncProgressListener {
 
     private fun showNotification() {
         val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
-        val launchPendingIntent = PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val launchPendingIntent =
+            PendingIntent.getActivity(this, 1, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val subText: String = when (peerCount) {
             0 -> getString(R.string.syncing)
@@ -85,16 +90,16 @@ class SyncService : Service(), SyncProgressListener {
         }
 
         notification = NotificationCompat.Builder(this, "syncer")
-                .setContentTitle(contentTitle)
-                .setSubText(subText)
-                .setContentText(contentText)
-                .setSmallIcon(R.drawable.decred_symbol_white)
-                .setOngoing(true)
-                .setAutoCancel(true)
-                .setSound(null)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(launchPendingIntent)
-                .build()
+            .setContentTitle(contentTitle)
+            .setSubText(subText)
+            .setContentText(contentText)
+            .setSmallIcon(R.drawable.decred_symbol_white)
+            .setOngoing(true)
+            .setAutoCancel(true)
+            .setSound(null)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(launchPendingIntent)
+            .build()
         startForeground(NOTIFICATION_ID, notification)
     }
 
@@ -119,19 +124,31 @@ class SyncService : Service(), SyncProgressListener {
     }
 
     override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport) {
-        publishProgress(cfiltersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds, cfiltersFetchProgress.generalSyncProgress.totalSyncProgress)
+        publishProgress(
+            cfiltersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds,
+            cfiltersFetchProgress.generalSyncProgress.totalSyncProgress
+        )
     }
 
     override fun onHeadersFetchProgress(headersFetchProgress: HeadersFetchProgressReport) {
-        publishProgress(headersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds, headersFetchProgress.generalSyncProgress.totalSyncProgress)
+        publishProgress(
+            headersFetchProgress.generalSyncProgress.totalTimeRemainingSeconds,
+            headersFetchProgress.generalSyncProgress.totalSyncProgress
+        )
     }
 
     override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport) {
-        publishProgress(addressDiscoveryProgress.generalSyncProgress.totalTimeRemainingSeconds, addressDiscoveryProgress.generalSyncProgress.totalSyncProgress)
+        publishProgress(
+            addressDiscoveryProgress.generalSyncProgress.totalTimeRemainingSeconds,
+            addressDiscoveryProgress.generalSyncProgress.totalSyncProgress
+        )
     }
 
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport) {
-        publishProgress(headersRescanProgress.generalSyncProgress.totalTimeRemainingSeconds, headersRescanProgress.generalSyncProgress.totalSyncProgress)
+        publishProgress(
+            headersRescanProgress.generalSyncProgress.totalTimeRemainingSeconds,
+            headersRescanProgress.generalSyncProgress.totalSyncProgress
+        )
     }
 
     override fun onSyncEndedWithError(err: Exception) {

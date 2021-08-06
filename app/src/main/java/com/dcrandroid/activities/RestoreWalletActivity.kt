@@ -63,10 +63,14 @@ class RestoreWalletActivity : BaseActivity() {
         setContentView(R.layout.activity_restore_wallet)
 
         loadSeedSuggestions()
-        val suggestionsAdapter = SuggestionsTextAdapter(this, R.layout.dropdown_item_1, allSeedWords)
+        val suggestionsAdapter =
+            SuggestionsTextAdapter(this, R.layout.dropdown_item_1, allSeedWords)
 
         for (i in 0 until SEED_COUNT) {
-            val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             val seedEditText = SeedEditTextLayout(this)
             seedEditText.layoutParams = layoutParams
 
@@ -139,15 +143,26 @@ class RestoreWalletActivity : BaseActivity() {
     }
 
     private fun requestWalletSpendingPass(walletName: String) {
-        PasswordPinDialogFragment(R.string.create, true, isChange = false) { dialog, passphrase, passphraseType ->
+        PasswordPinDialogFragment(
+            R.string.create,
+            true,
+            isChange = false
+        ) { dialog, passphrase, passphraseType ->
             createWallet(dialog, walletName, passphrase, passphraseType, enteredSeeds)
         }.show(this)
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, spendingPassType: Int, seed: String) = GlobalScope.launch(Dispatchers.IO) {
+    private fun createWallet(
+        dialog: FullScreenBottomSheetDialog,
+        walletName: String,
+        spendingKey: String,
+        spendingPassType: Int,
+        seed: String
+    ) = GlobalScope.launch(Dispatchers.IO) {
         val op = this@RestoreWalletActivity.javaClass.name + ".createWallet"
         try {
-            val wallet = multiWallet!!.restoreWallet(walletName, seed, spendingKey, spendingPassType)
+            val wallet =
+                multiWallet!!.restoreWallet(walletName, seed, spendingKey, spendingPassType)
             Utils.renameDefaultAccountToLocalLanguage(this@RestoreWalletActivity, wallet)
             wallet.unlockWallet(spendingKey.toByteArray())
 

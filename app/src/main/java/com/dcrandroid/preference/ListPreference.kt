@@ -23,8 +23,10 @@ import kotlinx.android.synthetic.main.activity_debug.view.*
 import kotlinx.android.synthetic.main.list_preference_dialog.*
 import kotlinx.android.synthetic.main.list_preference_row.view.*
 
-class ListPreference(val context: Context, val key: String, val defaultValue: Int,
-                     @ArrayRes val entries: Int, val view: View, val valueChanged: ((newValue: Int) -> Unit)? = null) : Preference(context, key, view), View.OnClickListener {
+class ListPreference(
+    val context: Context, val key: String, val defaultValue: Int,
+    @ArrayRes val entries: Int, val view: View, val valueChanged: ((newValue: Int) -> Unit)? = null
+) : Preference(context, key, view), View.OnClickListener {
 
     init {
         view.setOnClickListener(this)
@@ -60,7 +62,8 @@ class ListPreference(val context: Context, val key: String, val defaultValue: In
         }
     }
 
-    inner class ListPreferenceAdapter(private val context: Context) : RecyclerView.Adapter<ListPreferenceAdapter.ViewHolder>() {
+    inner class ListPreferenceAdapter(private val context: Context) :
+        RecyclerView.Adapter<ListPreferenceAdapter.ViewHolder>() {
 
         var selectedItem = 0
 

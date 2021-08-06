@@ -10,7 +10,11 @@ import android.content.Context
 import android.view.View
 import com.dcrandroid.util.WalletData
 
-open class Preference(private val context: Context, private val key: String, private val view: View) {
+open class Preference(
+    private val context: Context,
+    private val key: String,
+    private val view: View
+) {
 
     open val multiWallet = WalletData.multiWallet
 

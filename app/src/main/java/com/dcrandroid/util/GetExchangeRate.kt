@@ -18,8 +18,10 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
-class GetExchangeRate(private val userAgent: String,
-                      private val callback: ExchangeRateCallback) : AsyncTask<Void, String, String>() {
+class GetExchangeRate(
+    private val userAgent: String,
+    private val callback: ExchangeRateCallback
+) : AsyncTask<Void, String, String>() {
 
     val exchangeURL = "https://bittrex.com/api/v1.1/public/getticker?market=USDT-DCR"
 

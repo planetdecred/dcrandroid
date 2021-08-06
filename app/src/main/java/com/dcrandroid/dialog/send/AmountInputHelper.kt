@@ -37,7 +37,8 @@ const val AmountRelativeSize = 0.625f
 val usdAmountFormat2: DecimalFormat = DecimalFormat("0.00")
 val dcrFormat = DecimalFormat("#.########")
 
-class AmountInputHelper(private val layout: LinearLayout, private val scrollToBottom: () -> Unit) : TextWatcher, View.OnClickListener, GetExchangeRate.ExchangeRateCallback {
+class AmountInputHelper(private val layout: LinearLayout, private val scrollToBottom: () -> Unit) :
+    TextWatcher, View.OnClickListener, GetExchangeRate.ExchangeRateCallback {
 
     val context = layout.context
 
@@ -47,8 +48,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
     var selectedAccount: Account? = null
         set(value) {
-            layout.spendable_balance.text = context.getString(R.string.spendable_bal_format,
-                    CoinFormat.formatDecred(value!!.balance.spendable))
+            layout.spendable_balance.text = context.getString(
+                R.string.spendable_bal_format,
+                CoinFormat.formatDecred(value!!.balance.spendable)
+            )
             field = value
         }
 
@@ -90,7 +93,8 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
             if (event.action == MotionEvent.ACTION_UP) {
                 // focus amount input on touch
                 layout.send_amount.requestFocus()
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(layout.send_amount, InputMethodManager.SHOW_IMPLICIT)
                 return@setOnTouchListener true
             }
@@ -102,7 +106,10 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
 
     private fun fetchExchangeRate() {
         val multiWallet = WalletData.multiWallet!!
-        val currencyConversion = multiWallet.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION)
+        val currencyConversion = multiWallet.readInt32ConfigValueForKey(
+            Dcrlibwallet.CurrencyConversionConfigKey,
+            Constants.DEF_CURRENCY_CONVERSION
+        )
 
         exchangeEnabled = currencyConversion > 0
 
@@ -162,10 +169,13 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
                 layout.send_amount.removeTextChangedListener(this)
                 if (enteredAmount != null) {
                     if (currencyIsDCR) {
-                        val dcr = dcrFormat.format(dcrAmount!!.setScale(8, BigDecimal.ROUND_HALF_EVEN).toDouble())
+                        val dcr = dcrFormat.format(
+                            dcrAmount!!.setScale(8, BigDecimal.ROUND_HALF_EVEN).toDouble()
+                        )
                         layout.send_amount.setText(CoinFormat.format(dcr, AmountRelativeSize))
                     } else {
-                        val usd = usdAmount!!.setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString()
+                        val usd =
+                            usdAmount!!.setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString()
                         layout.send_amount.setText(usd)
                     }
 

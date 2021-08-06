@@ -11,8 +11,12 @@ import android.view.View
 import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.settings_activity.view.*
 
-class SwitchPreference(context: Context, val key: String, val view: View, val checkChange: ((checked: Boolean) -> Boolean)? = null)
-    : Preference(context, key, view), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+class SwitchPreference(
+    context: Context,
+    val key: String,
+    val view: View,
+    val checkChange: ((checked: Boolean) -> Boolean)? = null
+) : Preference(context, key, view), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     init {
         view.pref_switch.isChecked = multiWallet!!.readBoolConfigValueForKey(key, false)

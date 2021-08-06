@@ -16,23 +16,38 @@ import com.dcrandroid.dialog.FullScreenBottomSheetDialog
 import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.edit_text_preference_dialog.*
 
-class EditTextPreference(val context: Context, val key: String, val title: Int, val dialogHint: Int, var errorString: Int? = null,
-                         val view: View, val validateInput: ((String) -> Boolean) = { true },
-                         val valueChanged: ((newValue: String) -> Unit)? = null) : Preference(context, key, view), View.OnClickListener {
+class EditTextPreference(
+    val context: Context,
+    val key: String,
+    val title: Int,
+    val dialogHint: Int,
+    var errorString: Int? = null,
+    val view: View,
+    val validateInput: ((String) -> Boolean) = { true },
+    val valueChanged: ((newValue: String) -> Unit)? = null
+) : Preference(context, key, view), View.OnClickListener {
 
     init {
         view.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        EditTextDialog(title, dialogHint, key, errorString, validateInput, valueChanged).show(context)
+        EditTextDialog(title, dialogHint, key, errorString, validateInput, valueChanged).show(
+            context
+        )
     }
 }
 
-class EditTextDialog(val title: Int, val dialogHint: Int, val key: String, var errorString: Int? = null,
-                     val validateInput: (String) -> Boolean, val valueChanged: ((newValue: String) -> Unit)? = null) : FullScreenBottomSheetDialog() {
+class EditTextDialog(
+    val title: Int, val dialogHint: Int, val key: String, var errorString: Int? = null,
+    val validateInput: (String) -> Boolean, val valueChanged: ((newValue: String) -> Unit)? = null
+) : FullScreenBottomSheetDialog() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.edit_text_preference_dialog, container, false)
     }
 

@@ -40,14 +40,19 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullScreenBottomSheetDialog(dismissListener) {
+class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
+    FullScreenBottomSheetDialog(dismissListener) {
 
     private val qrHints = HashMap<EncodeHintType, Any>()
     private var generatedUri: Uri? = null
 
     private lateinit var sourceAccountSpinner: AccountCustomSpinner
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.receive_page_sheet, container, false)
     }
 
@@ -62,12 +67,13 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         tv_address.setOnClickListener { copyAddress() }
         qr_image.setOnClickListener { copyAddress() }
 
-        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner) {
+        sourceAccountSpinner =
+            AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner) {
 
-            it.pickerTitle = R.string.dest_account_picker_title
-            setAddress(it.getCurrentAddress())
-            return@AccountCustomSpinner Unit
-        }
+                it.pickerTitle = R.string.dest_account_picker_title
+                setAddress(it.getCurrentAddress())
+                return@AccountCustomSpinner Unit
+            }
         sourceAccountSpinner.init {
             // disable mixed account
             !it.isMixerMixedAccount
@@ -83,15 +89,15 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
 
     override fun showInfo() {
         InfoDialog(context!!)
-                .setDialogTitle(getString(R.string.receive_dcr))
-                .setMessage(getString(R.string.receive_fund_privacy_info))
-                .setPositiveButton(getString(R.string.got_it), null)
-                .show()
+            .setDialogTitle(getString(R.string.receive_dcr))
+            .setMessage(getString(R.string.receive_fund_privacy_info))
+            .setPositiveButton(getString(R.string.got_it), null)
+            .show()
     }
 
     override fun showOptionsMenu(v: View) {
         val items: Array<Any> = arrayOf(
-                PopupItem(R.string.generate_new_address)
+            PopupItem(R.string.generate_new_address)
         )
 
         PopupUtil.showPopup(v, items) { window, _ ->
@@ -133,7 +139,12 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
         val logo = getLogoBitmap()
         val canvas = Canvas(overlay)
         canvas.drawBitmap(qrBitmap, 0f, 0f, null)
-        canvas.drawBitmap(logo, ((qrBitmap.width - logo.width) / 2).toFloat(), ((qrBitmap.height - logo.height) / 2).toFloat(), null)
+        canvas.drawBitmap(
+            logo,
+            ((qrBitmap.width - logo.width) / 2).toFloat(),
+            ((qrBitmap.height - logo.height) / 2).toFloat(),
+            null
+        )
         return overlay
     }
 
@@ -142,8 +153,10 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
 
         // Generate QR Code
         val barcodeEncoder = BarcodeEncoder()
-        var generatedQR = barcodeEncoder.encodeBitmap(getString(R.string.decred_qr_address_prefix, address),
-                BarcodeFormat.QR_CODE, 1000, 1000, qrHints)
+        var generatedQR = barcodeEncoder.encodeBitmap(
+            getString(R.string.decred_qr_address_prefix, address),
+            BarcodeFormat.QR_CODE, 1000, 1000, qrHints
+        )
 
         generatedQR = overlayLogo(generatedQR)
 
@@ -155,12 +168,19 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
                 val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 val now = Date()
                 val fileName = formatter.format(now) + ".png"
-                val cachePath = File(activity!!.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "wallet_address: $fileName")
+                val cachePath = File(
+                    activity!!.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "wallet_address: $fileName"
+                )
                 val stream = FileOutputStream(cachePath)
                 generatedQR.compress(Bitmap.CompressFormat.PNG, 100, stream)
                 stream.flush()
                 stream.close()
-                generatedUri = FileProvider.getUriForFile(activity!!.applicationContext, BuildConfig.APPLICATION_ID + ".fileprovider", cachePath)
+                generatedUri = FileProvider.getUriForFile(
+                    activity!!.applicationContext,
+                    BuildConfig.APPLICATION_ID + ".fileprovider",
+                    cachePath
+                )
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
             } catch (e: IOException) {
@@ -184,7 +204,10 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) : FullSc
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            shareIntent.setDataAndType(generatedUri, context!!.contentResolver.getType(generatedUri!!))
+            shareIntent.setDataAndType(
+                generatedUri,
+                context!!.contentResolver.getType(generatedUri!!)
+            )
             shareIntent.putExtra(Intent.EXTRA_STREAM, generatedUri)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_address_via)))
         } else {

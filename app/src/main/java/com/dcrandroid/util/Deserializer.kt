@@ -16,7 +16,11 @@ import java.lang.reflect.Type
 
 class Deserializer {
     class TransactionDeserializer : JsonDeserializer<Any> {
-        override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Any? {
+        override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): Any? {
             val jsonArray = json!!.asJsonArray
             if (jsonArray.size() <= 0) {
                 return ArrayList<Any>()

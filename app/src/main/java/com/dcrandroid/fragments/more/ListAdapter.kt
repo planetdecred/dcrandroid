@@ -16,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.more_list_row.view.*
 
-class ListAdapter(val context: Context, val items: Array<ListItem>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(val context: Context, val items: Array<ListItem>) :
+    RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

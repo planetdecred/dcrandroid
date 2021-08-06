@@ -13,12 +13,18 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import dcrlibwallet.Dcrlibwallet
+import dcrlibwallet.Wallet
 import java.io.Serializable
 import java.math.BigDecimal
 
 class Transaction : Serializable {
     @SerializedName("walletID")
     var walletID: Long = 0
+
+    val wallet: Wallet?
+        get() {
+            return WalletData.multiWallet!!.walletWithID(walletID)
+        }
 
     @SerializedName("hash")
     var hash: String = ""
@@ -35,6 +41,9 @@ class Transaction : Serializable {
     @SerializedName("direction")
     var direction: Int = 0
 
+    @SerializedName("expiry")
+    var expiry: Int = 0
+
     @SerializedName("fee")
     var fee: Long = 0
 
@@ -49,6 +58,9 @@ class Transaction : Serializable {
 
     @SerializedName("mix_count")
     var mixCount: Int = 0
+
+    @SerializedName("ticket_spender")
+    var ticketSpender: String = ""
 
     @SerializedName("ticket_spent_hash")
     var ticketSpentHash: String = ""
@@ -67,7 +79,7 @@ class Transaction : Serializable {
             return if (height == Dcrlibwallet.BlockHeightInvalid) {
                 0
             } else {
-                (WalletData.multiWallet!!.bestBlock.height - height) + 1
+                (wallet!!.bestBlock - height) + 1
             }
         }
 
@@ -82,7 +94,7 @@ class Transaction : Serializable {
 
     val walletName: String?
         get() {
-            return WalletData.multiWallet!!.walletWithID(walletID)?.name
+            return wallet!!.name
         }
 
     val iconResource: Int
@@ -94,7 +106,7 @@ class Transaction : Serializable {
             }
 
             // replace icon for staking tx types
-            if (Dcrlibwallet.txMatchesFilter(type, direction, Dcrlibwallet.TxFilterStaking)) {
+            if (matchesFilter(Dcrlibwallet.TxFilterStaking)) {
 
                 res = when (type) {
                     Dcrlibwallet.TxTypeTicketPurchase -> {
@@ -108,7 +120,7 @@ class Transaction : Serializable {
                     else -> R.drawable.ic_ticket_revoked
                 }
 
-            }else if (type == Dcrlibwallet.TxTypeMixed){
+            } else if (type == Dcrlibwallet.TxTypeMixed) {
                 res = R.drawable.ic_mixed
             }
 
@@ -159,6 +171,10 @@ class Transaction : Serializable {
         fun from(txJson: String): Transaction {
             return Gson().fromJson(txJson, Transaction::class.java)
         }
+    }
+
+    fun matchesFilter(txFilter: Int): Boolean {
+        return wallet!!.txMatchesFilter2(direction, height, expiry, type, ticketSpender, txFilter)
     }
 }
 

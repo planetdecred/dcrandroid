@@ -23,7 +23,8 @@ import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_row.view.*
 
-class AccountsAdapter(private val context: Context, private val walletID: Long) : RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
+class AccountsAdapter(private val context: Context, private val walletID: Long) :
+    RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
 
     private val accounts: ArrayList<Account>
     private val wallet: Wallet
@@ -77,8 +78,10 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
             holder.accountName.text = account.accountName
             holder.accountName.isSelected = true
             holder.totalBalance.text = CoinFormat.format(account.totalBalance)
-            holder.spendableBalance.text = context.getString(R.string.dcr_amount,
-                    CoinFormat.formatDecred(account.balance.spendable))
+            holder.spendableBalance.text = context.getString(
+                R.string.dcr_amount,
+                CoinFormat.formatDecred(account.balance.spendable)
+            )
 
             holder.itemView.setOnClickListener {
                 AccountDetailsDialog(context, walletID, account) { newName ->
@@ -106,7 +109,8 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
                 AddAccountDialog(activity, walletID) { newAccountNumber ->
                     val account = wallet.getAccount(newAccountNumber)
 
-                    val index = accounts.size - 1 // there's always at least 2 accounts(default & imported)
+                    val index =
+                        accounts.size - 1 // there's always at least 2 accounts(default & imported)
                     accounts.add(index, Account.from(account)) // inserted before imported account
                     notifyItemInserted(index)
 

@@ -27,7 +27,11 @@ import kotlinx.android.synthetic.main.synced_unsynced_layout.view.*
 import kotlinx.android.synthetic.main.syncing_layout.view.*
 import kotlinx.coroutines.*
 
-class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: () -> Unit, scrollToBottom: () -> Unit) : SyncProgressListener, BlocksRescanProgressListener {
+class SyncLayoutUtil(
+    private val syncLayout: LinearLayout,
+    restartSyncProcess: () -> Unit,
+    scrollToBottom: () -> Unit
+) : SyncProgressListener, BlocksRescanProgressListener {
 
     private val context: Context
         get() = syncLayout.context
@@ -64,8 +68,9 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         syncLayout.show_details.setOnClickListener {
             syncLayout.sync_details.toggleVisibility()
 
-            syncLayout.show_details.text = if (syncLayout.sync_details.isShowing()) context.getString(R.string.hide_details)
-            else context.getString(R.string.show_details)
+            syncLayout.show_details.text =
+                if (syncLayout.sync_details.isShowing()) context.getString(R.string.hide_details)
+                else context.getString(R.string.show_details)
 
             scrollToBottom()
         }
@@ -164,13 +169,22 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         val blockInfo = multiWallet.bestBlock
         val currentTimeSeconds = System.currentTimeMillis() / 1000
         val lastBlockRelativeTime = currentTimeSeconds - blockInfo.timestamp
-        val formattedLastBlockTime = TimeUtils.calculateTime(lastBlockRelativeTime, syncLayout.context)
+        val formattedLastBlockTime =
+            TimeUtils.calculateTime(lastBlockRelativeTime, syncLayout.context)
 
         val latestBlock: String
         latestBlock = if (multiWallet.isSynced) {
-            context.getString(R.string.synced_latest_block_time, blockInfo.height, formattedLastBlockTime)
+            context.getString(
+                R.string.synced_latest_block_time,
+                blockInfo.height,
+                formattedLastBlockTime
+            )
         } else {
-            syncLayout.context.getString(R.string.latest_block_time, blockInfo.height, formattedLastBlockTime)
+            syncLayout.context.getString(
+                R.string.latest_block_time,
+                blockInfo.height,
+                formattedLastBlockTime
+            )
         }
 
         syncLayout.tv_latest_block.text = HtmlCompat.fromHtml(latestBlock, 0)
@@ -194,7 +208,8 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
                 syncLayout.tv_reconnect.setText(R.string.disconnect)
                 syncLayout.cancel_icon.hide()
 
-                connectedPeers = context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers())
+                connectedPeers =
+                    context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers())
 
             } else {
 
@@ -257,14 +272,18 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         syncLayout.multi_wallet_sync_verbose.show()
     }
 
-    private fun publishSyncProgress(syncProgress: GeneralSyncProgress) = GlobalScope.launch(Dispatchers.Main) {
-        syncLayout.pb_sync_progress.progress = syncProgress.totalSyncProgress
-        syncLayout.tv_percentage.text = context.getString(R.string.percentage, syncProgress.totalSyncProgress)
-        syncLayout.tv_time_left.text = TimeUtils.getSyncTimeRemaining(syncProgress.totalTimeRemainingSeconds, context)
+    private fun publishSyncProgress(syncProgress: GeneralSyncProgress) =
+        GlobalScope.launch(Dispatchers.Main) {
+            syncLayout.pb_sync_progress.progress = syncProgress.totalSyncProgress
+            syncLayout.tv_percentage.text =
+                context.getString(R.string.percentage, syncProgress.totalSyncProgress)
+            syncLayout.tv_time_left.text =
+                TimeUtils.getSyncTimeRemaining(syncProgress.totalTimeRemainingSeconds, context)
 
-        // connected peers count
-        syncLayout.tv_syncing_layout_connected_peer.text = multiWallet.connectedPeers().toString()
-    }
+            // connected peers count
+            syncLayout.tv_syncing_layout_connected_peer.text =
+                multiWallet.connectedPeers().toString()
+        }
 
     override fun onSyncStarted(wasRestarted: Boolean) {
         displaySyncingLayout()
@@ -273,7 +292,10 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     override fun onCFiltersFetchProgress(cfiltersFetchProgress: CFiltersFetchProgressReport?) {
         GlobalScope.launch(Dispatchers.Main) {
             // stage title
-            val syncStageTitle = context.getString(R.string.fetching_cfilters, cfiltersFetchProgress?.cFiltersFetchProgress)
+            val syncStageTitle = context.getString(
+                R.string.fetching_cfilters,
+                cfiltersFetchProgress?.cFiltersFetchProgress
+            )
             syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
 
             syncLayout.tv_steps.text = context.getString(R.string.step_cfilters)
@@ -282,12 +304,18 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
             // block headers fetched
             syncLayout.tv_block_header_fetched.setText(R.string.cfilters_fetched)
-            syncLayout.tv_fetch_discover_scan_count.text = context.getString(R.string.block_header_fetched_count,
-                    cfiltersFetchProgress!!.currentCFilterHeight, cfiltersFetchProgress.totalCFiltersToFetch)
+            syncLayout.tv_fetch_discover_scan_count.text = context.getString(
+                R.string.block_header_fetched_count,
+                cfiltersFetchProgress!!.currentCFilterHeight,
+                cfiltersFetchProgress.totalCFiltersToFetch
+            )
 
             // syncing progress
             syncLayout.tv_progress.setText(R.string.syncing_progress)
-            syncLayout.tv_days.text = context.getString(R.string.cfilters_left, cfiltersFetchProgress.totalCFiltersToFetch - cfiltersFetchProgress.currentCFilterHeight)
+            syncLayout.tv_days.text = context.getString(
+                R.string.cfilters_left,
+                cfiltersFetchProgress.totalCFiltersToFetch - cfiltersFetchProgress.currentCFilterHeight
+            )
         }
 
         publishSyncProgress(cfiltersFetchProgress!!.generalSyncProgress)
@@ -298,7 +326,10 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
         GlobalScope.launch(Dispatchers.Main) {
 
             // stage title
-            val syncStageTitle = context.getString(R.string.fetching_block_headers, headersFetchProgress?.headersFetchProgress)
+            val syncStageTitle = context.getString(
+                R.string.fetching_block_headers,
+                headersFetchProgress?.headersFetchProgress
+            )
             syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
 
             syncLayout.tv_steps.text = context.getString(R.string.step_1_3)
@@ -309,12 +340,16 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
                 // block headers fetched
                 syncLayout.tv_block_header_fetched.setText(R.string.block_header_fetched)
-                syncLayout.tv_fetch_discover_scan_count.text = context.getString(R.string.block_header_fetched_count,
-                        headersFetchProgress!!.currentHeaderHeight, headersFetchProgress.totalHeadersToFetch)
+                syncLayout.tv_fetch_discover_scan_count.text = context.getString(
+                    R.string.block_header_fetched_count,
+                    headersFetchProgress!!.currentHeaderHeight,
+                    headersFetchProgress.totalHeadersToFetch
+                )
 
                 // syncing progress
                 syncLayout.tv_progress.setText(R.string.syncing_progress)
-                val lastHeaderRelativeTime = (System.currentTimeMillis() / 1000) - headersFetchProgress.currentHeaderTimestamp
+                val lastHeaderRelativeTime =
+                    (System.currentTimeMillis() / 1000) - headersFetchProgress.currentHeaderTimestamp
                 syncLayout.tv_days.text = TimeUtils.getDaysBehind(lastHeaderRelativeTime, context)
 
             } else {
@@ -332,7 +367,10 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     override fun onAddressDiscoveryProgress(addressDiscoveryProgress: AddressDiscoveryProgressReport?) {
         GlobalScope.launch(Dispatchers.Main) {
             // stage title
-            val syncStageTitle = context.getString(R.string.discovering_addresses, addressDiscoveryProgress?.addressDiscoveryProgress)
+            val syncStageTitle = context.getString(
+                R.string.discovering_addresses,
+                addressDiscoveryProgress?.addressDiscoveryProgress
+            )
             syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
 
             syncLayout.tv_steps.text = context.getString(R.string.step_2_3)
@@ -356,7 +394,10 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     override fun onHeadersRescanProgress(headersRescanProgress: HeadersRescanProgressReport?) {
         GlobalScope.launch(Dispatchers.Main) {
             // stage title
-            val syncStageTitle = context.getString(R.string.scanning_block_headers, headersRescanProgress?.rescanProgress)
+            val syncStageTitle = context.getString(
+                R.string.scanning_block_headers,
+                headersRescanProgress?.rescanProgress
+            )
             syncLayout.tv_steps_title.text = HtmlCompat.fromHtml(syncStageTitle, 0)
 
             syncLayout.tv_steps.text = context.getString(R.string.step_3_3)
@@ -365,12 +406,15 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
             // blocks scanned
             syncLayout.tv_block_header_fetched.setText(R.string.scanned_blocks)
-            syncLayout.tv_fetch_discover_scan_count.text = headersRescanProgress!!.currentRescanHeight.toString()
+            syncLayout.tv_fetch_discover_scan_count.text =
+                headersRescanProgress!!.currentRescanHeight.toString()
 
             // scan progress
             syncLayout.tv_progress.setText(R.string.syncing_progress)
-            syncLayout.tv_days.text = context.getString(R.string.blocks_left,
-                    headersRescanProgress.totalHeadersToScan - headersRescanProgress.currentRescanHeight)
+            syncLayout.tv_days.text = context.getString(
+                R.string.blocks_left,
+                headersRescanProgress.totalHeadersToScan - headersRescanProgress.currentRescanHeight
+            )
 
             if (multiWallet.openedWalletsCount() > 1) {
                 syncLayout.syncing_layout_wallet_name.show()
@@ -406,7 +450,12 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
     override fun onPeerConnectedOrDisconnected(numberOfConnectedPeers: Int) {
         GlobalScope.launch(Dispatchers.Main) {
             if (multiWallet.isSynced) {
-                syncLayout.connected_peers.text = HtmlCompat.fromHtml(context.getString(R.string.connected_to_n_peers, multiWallet.connectedPeers()), 0)
+                syncLayout.connected_peers.text = HtmlCompat.fromHtml(
+                    context.getString(
+                        R.string.connected_to_n_peers,
+                        multiWallet.connectedPeers()
+                    ), 0
+                )
             } else if (multiWallet.isSyncing) {
                 syncLayout.tv_syncing_layout_connected_peer.text = numberOfConnectedPeers.toString()
             } else if (multiWallet.isRescanning) {
@@ -442,8 +491,10 @@ class SyncLayoutUtil(private val syncLayout: LinearLayout, restartSyncProcess: (
 
             // scan progress
             syncLayout.tv_progress.setText(R.string.syncing_progress)
-            syncLayout.tv_days.text = context.getString(R.string.blocks_left,
-                    report.totalHeadersToScan - report.currentRescanHeight)
+            syncLayout.tv_days.text = context.getString(
+                R.string.blocks_left,
+                report.totalHeadersToScan - report.currentRescanHeight
+            )
 
             if (multiWallet.openedWalletsCount() > 1) {
                 syncLayout.syncing_layout_wallet_name.show()

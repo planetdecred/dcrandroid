@@ -70,7 +70,11 @@ class PinView : View, View.OnClickListener {
         init(context, attrs, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context, attrs, defStyleAttr)
     }
 
@@ -92,17 +96,30 @@ class PinView : View, View.OnClickListener {
         isFocusableInTouchMode = true
         isFocusable = true
 
-        val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
+        val values =
+            context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
 
         try {
-            pinSize = values.getDimension(R.styleable.PinView_pin_size, resources.getDimension(R.dimen.pinview_pin_size))
+            pinSize = values.getDimension(
+                R.styleable.PinView_pin_size,
+                resources.getDimension(R.dimen.pinview_pin_size)
+            )
 
-            dotColor = values.getColor(R.styleable.PinView_active_color, resources.getColor(R.color.pinview_active_color))
+            dotColor = values.getColor(
+                R.styleable.PinView_active_color,
+                resources.getColor(R.color.pinview_active_color)
+            )
 
             autoSpace = values.getBoolean(R.styleable.PinView_auto_space, true)
 
-            horizontalSpacing = values.getDimension(R.styleable.PinView_horizontal_spacing, resources.getDimension(R.dimen.pinview_horizontal_spacing))
-            verticalSpacing = values.getDimension(R.styleable.PinView_vertical_spacing, resources.getDimension(R.dimen.pinview_vertical_spacing))
+            horizontalSpacing = values.getDimension(
+                R.styleable.PinView_horizontal_spacing,
+                resources.getDimension(R.dimen.pinview_horizontal_spacing)
+            )
+            verticalSpacing = values.getDimension(
+                R.styleable.PinView_vertical_spacing,
+                resources.getDimension(R.dimen.pinview_vertical_spacing)
+            )
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -186,7 +203,8 @@ class PinView : View, View.OnClickListener {
 
         var currentRowDotCount = min(maxDotsPerRow.toInt(), passCodeLength)
 
-        var startX = (usableWidth / 2) - ((dotWidthPlusPadding / 2) * currentRowDotCount) + horizontalSpacing
+        var startX =
+            (usableWidth / 2) - ((dotWidthPlusPadding / 2) * currentRowDotCount) + horizontalSpacing
         var startY = 0f
 
         val dotPaint = if (errorString != null) {
@@ -212,7 +230,8 @@ class PinView : View, View.OnClickListener {
                 val remainingDotCount = passCodeLength - i
                 currentRowDotCount = min(maxDotsPerRow.toInt(), remainingDotCount)
 
-                startX = (usableWidth / 2) - ((dotWidthPlusPadding / 2) * currentRowDotCount) + horizontalSpacing
+                startX =
+                    (usableWidth / 2) - ((dotWidthPlusPadding / 2) * currentRowDotCount) + horizontalSpacing
                 startY += dotHeightPlusPadding
                 currentRowDots = 0
 
@@ -232,7 +251,8 @@ class PinView : View, View.OnClickListener {
     var onEnter: (() -> Unit?)? = null
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if ((keyCode < KeyEvent.KEYCODE_0 || keyCode > KeyEvent.KEYCODE_9)
-                && keyCode != KeyEvent.KEYCODE_DEL && keyCode != KeyEvent.KEYCODE_ENTER) {
+            && keyCode != KeyEvent.KEYCODE_DEL && keyCode != KeyEvent.KEYCODE_ENTER
+        ) {
             return false
         } else if (rejectInput) {
             return false
@@ -274,7 +294,8 @@ class PinView : View, View.OnClickListener {
 
     private fun showKeyboard() {
         this.requestFocus()
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
 
@@ -325,7 +346,11 @@ class PinView : View, View.OnClickListener {
     }
 }
 
-class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength: ProgressBar? = null) {
+class PinViewUtil(
+    val pinView: PinView,
+    counterView: TextView?,
+    val pinStrength: ProgressBar? = null
+) {
 
     var passCode: String = ""
     private val context = pinView.context
@@ -349,9 +374,11 @@ class PinViewUtil(val pinView: PinView, counterView: TextView?, val pinStrength:
             if (pinStrength != null) {
                 val progress = (Dcrlibwallet.shannonEntropy(passCode) / 4) * 100
                 if (progress > 70) {
-                    pinStrength.progressDrawable = context.resources.getDrawable(R.drawable.password_strength_bar_strong)
+                    pinStrength.progressDrawable =
+                        context.resources.getDrawable(R.drawable.password_strength_bar_strong)
                 } else {
-                    pinStrength.progressDrawable = context.resources.getDrawable(R.drawable.password_strength_bar_weak)
+                    pinStrength.progressDrawable =
+                        context.resources.getDrawable(R.drawable.password_strength_bar_weak)
                 }
 
                 pinStrength.progress = progress.toInt()

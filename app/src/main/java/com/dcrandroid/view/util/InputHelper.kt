@@ -34,8 +34,10 @@ const val SCAN_QR_REQUEST_CODE = 100
     - hideQrScanner()
     - optionally hideErrorRow()
  */
-class InputHelper(private val context: Context, private val container: View,
-                  val validateInput: (String) -> Boolean) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
+class InputHelper(
+    private val context: Context, private val container: View,
+    val validateInput: (String) -> Boolean
+) : View.OnFocusChangeListener, View.OnClickListener, TextWatcher {
 
     var textChanged: () -> Unit = {}
     val validatedInput: String?
@@ -74,7 +76,8 @@ class InputHelper(private val context: Context, private val container: View,
         clearBtn.setOnClickListener(this)
 
         if (addressLayout.viewTreeObserver.isAlive) {
-            addressLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            addressLayout.viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     if (addressLayout.height > 0) {
                         addressLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -135,7 +138,8 @@ class InputHelper(private val context: Context, private val container: View,
             hintTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, animatedValue)
         }
 
-        val translationAnimator = ValueAnimator.ofFloat(hintTextView.translationY, translationYTarget)
+        val translationAnimator =
+            ValueAnimator.ofFloat(hintTextView.translationY, translationYTarget)
         translationAnimator.addUpdateListener {
             val animatedValue = (translationAnimator.animatedValue as Float)
             hintTextView.translationY = animatedValue

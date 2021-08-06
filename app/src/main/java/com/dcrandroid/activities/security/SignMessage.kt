@@ -90,7 +90,11 @@ class SignMessage : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.tv_sign -> {
-                val title = PassPromptTitle(R.string.confirm_to_sign, R.string.confirm_to_sign, R.string.confirm_to_sign)
+                val title = PassPromptTitle(
+                    R.string.confirm_to_sign,
+                    R.string.confirm_to_sign,
+                    R.string.confirm_to_sign
+                )
                 PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { dialog, pass ->
                     if (pass != null) {
                         GlobalScope.launch(Dispatchers.Default) {
@@ -108,14 +112,18 @@ class SignMessage : BaseActivity(), View.OnClickListener {
                 }.show()
             }
             R.id.tv_copy -> {
-                Utils.copyToClipboard(this, signatureHelper.editText.text.toString(), R.string.signature_copied)
+                Utils.copyToClipboard(
+                    this,
+                    signatureHelper.editText.text.toString(),
+                    R.string.signature_copied
+                )
             }
             R.id.iv_info -> {
                 InfoDialog(this)
-                        .setDialogTitle(getString(R.string.sign_message))
-                        .setMessage(getString(R.string.sign_message_description))
-                        .setPositiveButton(getString(R.string.got_it))
-                        .show()
+                    .setDialogTitle(getString(R.string.sign_message))
+                    .setMessage(getString(R.string.sign_message_description))
+                    .setPositiveButton(getString(R.string.got_it))
+                    .show()
             }
         }
     }

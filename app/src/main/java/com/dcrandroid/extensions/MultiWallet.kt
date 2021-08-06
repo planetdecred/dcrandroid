@@ -66,6 +66,10 @@ fun MultiWallet.totalWalletBalance(): Long {
 }
 
 fun MultiWallet.requiredConfirmations(): Int {
-    return if (readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)) 0
+    return if (readBoolConfigValueForKey(
+            Dcrlibwallet.SpendUnconfirmedConfigKey,
+            Constants.DEF_SPEND_UNCONFIRMED
+        )
+    ) 0
     else Constants.REQUIRED_CONFIRMATIONS
 }

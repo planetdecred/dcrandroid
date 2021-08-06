@@ -25,7 +25,7 @@ import android.view.inputmethod.BaseInputConnection
  *
  */
 class InputConnectionAccommodatingLatinIMETypeNullIssues(targetView: View?, fullEditor: Boolean) :
-        BaseInputConnection(targetView, fullEditor) {
+    BaseInputConnection(targetView, fullEditor) {
 
     // This holds the Editable text buffer that the LatinIME mistakenly *thinks*
     // that it is editing, even though the views that employ this class are
@@ -203,8 +203,10 @@ class InputConnectionAccommodatingLatinIMETypeNullIssues(targetView: View?, full
 
 class EditableAccommodatingLatinIMETypeNullIssues : SpannableStringBuilder("") {
 
-    override fun replace(spannableStringStart: Int, spannableStringEnd: Int,
-                         replacementSequence: CharSequence?, replacementStart: Int, replacementEnd: Int): SpannableStringBuilder {
+    override fun replace(
+        spannableStringStart: Int, spannableStringEnd: Int,
+        replacementSequence: CharSequence?, replacementStart: Int, replacementEnd: Int
+    ): SpannableStringBuilder {
         if (replacementEnd > replacementStart) {
             // In this case, there is something in the replacementSequence that the IME
             // is attempting to replace part of the editable with.
@@ -240,7 +242,9 @@ class EditableAccommodatingLatinIMETypeNullIssues : SpannableStringBuilder("") {
         // and we can be confident that there will be SOMETHING there.  This call to super.replace()
         // in that case will be a no-op, except
         // for the value it returns.
-        return super.replace(spannableStringStart, spannableStringEnd,
-                replacementSequence, replacementStart, replacementEnd)
+        return super.replace(
+            spannableStringStart, spannableStringEnd,
+            replacementSequence, replacementStart, replacementEnd
+        )
     }
 }
