@@ -87,7 +87,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
         txTypeSortAdapter =
             ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
-        txTypeSortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        txTypeSortAdapter!!.setDropDownViewResource(R.layout.spinner_dropdown_item)
         tx_type_spinner.adapter = txTypeSortAdapter
         tx_type_spinner.onItemSelectedListener = this
 
@@ -122,7 +122,7 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
         val timestampSortItems = context!!.resources.getStringArray(R.array.timestamp_sort)
         val timestampSortAdapter =
             ArrayAdapter(context!!, android.R.layout.simple_spinner_item, timestampSortItems)
-        timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        timestampSortAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         timestamp_sort_spinner.onItemSelectedListener = this
         timestamp_sort_spinner.adapter = timestampSortAdapter
 

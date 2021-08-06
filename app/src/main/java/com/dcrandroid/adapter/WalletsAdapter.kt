@@ -192,7 +192,7 @@ class WalletsAdapter(
                 holder.expand.setImageResource(R.drawable.ic_expand02)
 
                 viewBackground = R.drawable.card_bg_14
-                containerBackground = R.drawable.ripple_bg_white_corners_14dp
+                containerBackground = R.drawable.ripple_bg_surface_corners_14dp
             }
         }
 

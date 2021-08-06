@@ -31,7 +31,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="@dimen/margin_padding_size_8"
-                android:background="@drawable/circular_transparent_ripple"
+                android:background="@drawable/circular_surface_ripple"
                 android:focusable="true"
                 android:clickable="true"
                 android:id="@+id/go_back"
@@ -90,7 +90,7 @@
                 android:layout_height="40dp"
                 android:id="@+id/iv_info"
                 android:padding="@dimen/margin_padding_size_8"
-                android:background="@drawable/circular_transparent_ripple"
+                android:background="@drawable/circular_surface_ripple"
                 android:focusable="true"
                 android:clickable="true"
                 app:srcCompat="@drawable/ic_info" />
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tx_timestamp"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:layout_marginTop="@dimen/margin_padding_size_16"
                         app:fontFamily="@font/source_sans_pro"
                         android:includeFontPadding="false"
@@ -171,7 +171,7 @@
                             android:id="@+id/tv_confirmations"
                             android:text="@string/tx_details_confirmations"
                             app:fontFamily="@font/source_sans_pro"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             android:layout_marginStart="@dimen/margin_padding_size_4" />
 
@@ -192,7 +192,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grayBackgroundLightColor" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -217,7 +217,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/from_account"
                             android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             app:fontFamily="@font/source_sans_pro" />
 
                         <LinearLayout
@@ -238,9 +238,10 @@
                                 android:paddingLeft="@dimen/margin_padding_size_4"
                                 android:paddingRight="@dimen/margin_padding_size_4"
                                 android:layout_marginEnd="@dimen/margin_padding_size_4"
-                                android:textColor="@color/lightGrayTextColor"
+                                android:textColor="@color/text3"
                                 android:textSize="@dimen/edit_text_size_12"
                                 android:visibility="gone"
+                                tools:visibility="visible"
                                 app:fontFamily="@font/source_sans_pro_regular"
                                 tools:text="Wallet 2" />
 
@@ -274,7 +275,7 @@
                             android:id="@+id/tx_dest_label"
                             android:text="@string/to_address"
                             android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             app:fontFamily="@font/source_sans_pro" />
 
                         <LinearLayout
@@ -295,9 +296,10 @@
                                 android:paddingLeft="@dimen/margin_padding_size_4"
                                 android:paddingRight="@dimen/margin_padding_size_4"
                                 android:layout_marginEnd="@dimen/margin_padding_size_4"
-                                android:textColor="@color/lightGrayTextColor"
+                                android:textColor="@color/text3"
                                 android:textSize="@dimen/edit_text_size_12"
                                 android:visibility="gone"
+                                tools:visibility="visible"
                                 app:fontFamily="@font/source_sans_pro_regular"
                                 tools:text="Wallet 2" />
 
@@ -310,7 +312,7 @@
                                 tools:text="TsR3Hwq4AAmhFreyxazD8VB3nmBgp9j7LG5"
                                 android:ellipsize="middle"
                                 android:textSize="@dimen/edit_text_size_16"
-                                android:textColor="@color/blue"
+                                android:textColor="@color/primary"
                                 app:fontFamily="@font/source_sans_pro" />
 
                         </LinearLayout>
@@ -328,7 +330,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/fee"
                             android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             app:fontFamily="@font/source_sans_pro" />
 
                         <TextView
@@ -358,7 +360,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/included_in_block"
                             android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             app:fontFamily="@font/source_sans_pro" />
 
                         <TextView
@@ -385,7 +387,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/type"
                             android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             app:fontFamily="@font/source_sans_pro" />
 
                         <TextView
@@ -412,7 +414,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/transaction_id"
                             android:textSize="@dimen/edit_text_size_14"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             app:fontFamily="@font/source_sans_pro" />
 
                         <TextView
@@ -424,7 +426,8 @@
                             android:ellipsize="middle"
                             android:singleLine="true"
                             android:textSize="@dimen/edit_text_size_16"
-                            android:textColor="@color/blue"
+                            android:textColor="@color/primary"
+                            android:background="@drawable/surface_ripple"
                             app:fontFamily="@font/source_sans_pro"
                             android:layout_marginStart="@dimen/margin_padding_size_56" />
 
@@ -435,7 +438,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grayBackgroundLightColor" />
+                    android:background="@color/colorDivider" />
 
                 <include
                     layout="@layout/input_output_dropdown"
@@ -444,7 +447,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grayBackgroundLightColor" />
+                    android:background="@color/colorDivider" />
 
                 <include
                     layout="@layout/input_output_dropdown"
@@ -453,7 +456,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grayBackgroundLightColor" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -464,7 +467,7 @@
                     android:paddingBottom="@dimen/margin_padding_size_12"
                     android:paddingLeft="@dimen/margin_padding_size_16"
                     android:paddingRight="@dimen/margin_padding_size_16"
-                    android:background="@drawable/ripple"
+                    android:background="@drawable/surface_ripple"
                     android:focusable="true"
                     android:clickable="true"
                     android:gravity="center_vertical">
@@ -494,7 +497,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/grayBackgroundLightColor" />
+        android:background="@color/colorDivider" />
 
     <TextView
         android:layout_width="match_parent"
@@ -506,7 +509,7 @@
         android:textSize="@dimen/edit_text_size_16"
         android:paddingTop="@dimen/margin_padding_size_16"
         android:paddingBottom="@dimen/margin_padding_size_16"
-        android:textColor="@color/blue"
+        android:textColor="@color/primary"
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/curved_bottom_ripple" />

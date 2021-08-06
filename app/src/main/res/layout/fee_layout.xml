@@ -47,7 +47,7 @@
                 android:layout_width="24dp"
                 android:layout_height="@dimen/margin_padding_size_24"
                 android:id="@+id/iv_expand_fees"
-                android:background="@drawable/circular_transparent_ripple"
+                android:background="@drawable/circular_surface_ripple"
                 app:srcCompat="@drawable/ic_expand"
                 android:layout_marginStart="@dimen/margin_padding_size_4" />
 

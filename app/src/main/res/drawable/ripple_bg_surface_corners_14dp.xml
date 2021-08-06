@@ -12,8 +12,7 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/surface" />
             <corners
-                android:topRightRadius="@dimen/margin_padding_size_14"
-                android:topLeftRadius="@dimen/margin_padding_size_14"
+                android:radius="@dimen/margin_padding_size_14"
                 />
         </shape>
     </item>
@@ -21,9 +20,7 @@
     <item>
         <shape>
             <corners
-                android:topRightRadius="@dimen/margin_padding_size_14"
-                android:topLeftRadius="@dimen/margin_padding_size_14"
-                />
+                android:radius="@dimen/margin_padding_size_14" />
             <solid android:color="@color/surface"/>
         </shape>
     </item>

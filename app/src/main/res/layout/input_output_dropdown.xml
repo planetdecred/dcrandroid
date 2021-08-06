@@ -29,7 +29,7 @@
             tools:text="2 Inputs Consumed"
             android:textSize="@dimen/edit_text_size_14"
             android:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/blueGraySecondTextColor"
+            android:textColor="@color/text4"
             android:includeFontPadding="false"
             android:layout_weight="1" />
 
@@ -38,7 +38,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_expand"
             android:id="@+id/input_output_toggle_icon"
-            android:background="@drawable/circular_transparent_ripple" />
+            android:background="@drawable/circular_surface_ripple" />
 
     </LinearLayout>
 

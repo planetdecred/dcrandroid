@@ -56,7 +56,7 @@
                 android:padding="@dimen/margin_padding_size_4"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/white"
+                android:textColor="@color/text"
                 android:background="@drawable/bg_light_green_corners_4dp"
                 android:text="8.61990311 DCR"
                 app:fontFamily="@font/source_sans_pro"

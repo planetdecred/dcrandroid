@@ -15,6 +15,7 @@
     <color name="surfaceRipple">#3D3D3D</color>
     <color name="colorDivider">#3D3D3D</color>
     <color name="border">#61FFFFFF</color>
+    <color name="background2">@color/surface</color>
     <!--/General-->
 
 </resources>

@@ -215,7 +215,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
     private fun getSourceAccount(): String? {
         for (input in transaction.inputs!!) {
-            if (input.accountNumber != null && input.accountNumber != -1) {
+            if (input.accountNumber != -1) {
                 return wallet.accountName(input.accountNumber)
             }
         }

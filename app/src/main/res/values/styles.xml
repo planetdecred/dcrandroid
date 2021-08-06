@@ -28,7 +28,7 @@
 
     <!-- button style -->
 
-    <style name="textViewButton" parent="TextAppearance.AppCompat">
+    <style name="textViewButton" parent="TextAppearance.MaterialComponents.Body1">
 
         <item name="android:paddingStart">@dimen/margin_padding_size_16</item>
         <item name="android:paddingEnd">@dimen/margin_padding_size_16</item>

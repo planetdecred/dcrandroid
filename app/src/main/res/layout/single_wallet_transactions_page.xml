@@ -48,7 +48,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="@color/lightGrayTextColor"
+        android:textColor="@color/text3"
         android:fontFamily="@font/source_sans_pro"
         android:text="@string/no_transactions_yet" />
 
