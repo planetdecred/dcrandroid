@@ -107,9 +107,10 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
 
     fun show(context: Context) {
         val supportFragmentManager = (context as AppCompatActivity).supportFragmentManager
-        if (supportFragmentManager.findFragmentByTag(this::class.java.name) == null) {
-            super.show(supportFragmentManager, javaClass.name)
-        }
+        super.show(supportFragmentManager, javaClass.name)
+//        if (supportFragmentManager.findFragmentByTag(this::class.java.name) == null) {
+//            super.show(supportFragmentManager, javaClass.name)
+//        }
 
     }
 

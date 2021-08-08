@@ -422,7 +422,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
         val tx = intent.getSerializableExtra(Constants.TRANSACTION) as Transaction
         TransactionDetailsDialog(
-            Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hashBytes))
+            Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hash))
         ).show(this)
     }
 

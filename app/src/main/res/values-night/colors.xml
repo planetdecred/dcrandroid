@@ -11,11 +11,12 @@
     <color name="text4">#99FFFFFF</color>
     <color name="text5">#61FFFFFF</color>
     <color name="background">#121212</color>
+    <color name="background2">@color/surface</color>
     <color name="surface">#252525</color>
     <color name="surfaceRipple">#3D3D3D</color>
     <color name="colorDivider">#3D3D3D</color>
     <color name="border">#61FFFFFF</color>
-    <color name="background2">@color/surface</color>
+    <color name="blueProgressTint">#3357B6FF</color>
     <!--/General-->
 
 </resources>

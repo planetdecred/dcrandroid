@@ -196,14 +196,12 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
         var title = 0
         when (transaction.type) {
             Dcrlibwallet.TxTypeTicketPurchase -> {
-                title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
+                title = if (transaction.matchesFilter(Dcrlibwallet.TxFilterImmature)) {
                     R.string.immature
+                } else if(transaction.matchesFilter(Dcrlibwallet.TxFilterLive)){
+                    R.string.live
                 } else {
-                    if (wallet!!.ticketHasVotedOrRevoked(transaction.hash)) {
-                        R.string.purchased
-                    } else {
-                        R.string.live
-                    }
+                    R.string.purchased
                 }
             }
             Dcrlibwallet.TxTypeVote -> {
