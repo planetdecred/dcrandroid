@@ -49,7 +49,7 @@ class MultiWalletSyncDetailsAdapter(
 
         if (wallet.isWaiting) {
             holder.walletStatus.let {
-                it.setTextColor(context.resources.getColor(R.color.lightGray))
+                it.setTextColor(context.resources.getColor(R.color.text5))
                 it.setText(R.string.waiting_for_other_wallets)
             }
 
@@ -68,7 +68,7 @@ class MultiWalletSyncDetailsAdapter(
 
         } else {
             holder.walletStatus.let {
-                it.setTextColor(context.resources.getColor(R.color.greenTextColor))
+                it.setTextColor(context.resources.getColor(R.color.text6))
                 it.setText(R.string.syncing_ellipsis)
             }
 

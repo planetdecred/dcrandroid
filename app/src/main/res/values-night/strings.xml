@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#dedede">%1$d</font> &centerdot; <font color="#dedede">%2$s</font> ago]]></string>
+    <string name="latest_block_time"><![CDATA[Synced to block <font color="#dedede">%1$d</font> &centerdot; <font color="#dedede">%2$s</font> ago]]></string>
+    <string name="connected_to_n_peers"><![CDATA[Connected to <font color="#dedede">%1$d</font> peers.]]></string>
+</resources>

@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_padding_size_16"
-        android:background="@drawable/bg_gray_corner_8dp"
+        android:background="@drawable/bg_corner_8dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/_default"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:textSize="16sp"
                 android:id="@+id/wallet_name"
                 app:fontFamily="@font/source_sans_pro" />
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/wallet_syncing_status"
-                android:textColor="#c4cbd2"
+                android:textColor="@color/text5"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
                 tools:text="@string/waiting_for_other_wallets" />
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/block_header_fetched"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="14sp"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -65,7 +65,7 @@
                 android:id="@+id/tv_fetch_discover_scan_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
                 tools:text="6000 of 164864" />
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/syncing_progress"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="14sp"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/days_behind"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
                 tools:text="290 days behind" />

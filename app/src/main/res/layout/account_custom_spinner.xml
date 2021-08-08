@@ -32,7 +32,7 @@
             android:id="@+id/spinner_account_name"
             tools:text="@string/_default"
             android:textSize="@dimen/edit_text_size_18"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             app:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false" />
 
@@ -41,7 +41,7 @@
             android:id="@+id/spinner_wallet_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
+            android:background="@color/background"
             android:includeFontPadding="false"
             android:paddingTop="@dimen/margin_padding_size_2"
             android:paddingBottom="@dimen/margin_padding_size_2"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinner_total_balance"
             android:textSize="@dimen/edit_text_size_20"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             app:fontFamily="@font/source_sans_pro"
             tools:text="7.51464806 DCR" />
 

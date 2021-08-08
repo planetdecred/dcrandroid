@@ -50,7 +50,7 @@
             android:background="@null"
             android:textCursorDrawable="@drawable/text_cursor"
             android:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_16"
             android:includeFontPadding="false"
             android:layout_marginStart="@dimen/margin_padding_size_8"

@@ -37,7 +37,7 @@
                 android:layout_width="@dimen/margin_padding_size_40"
                 android:layout_height="@dimen/margin_padding_size_40"
                 android:padding="@dimen/margin_padding_size_8"
-                android:background="@drawable/circle_bg_primary"
+                android:background="@drawable/circle_bg"
                 android:layout_gravity="bottom"
                 android:src="@drawable/ic_mixer" />
 
@@ -48,7 +48,7 @@
                 android:textSize="10sp"
                 android:textColor="@color/white"
                 android:text="@string/new_caps"
-                android:background="@color/blue"
+                android:background="@color/primary"
                 android:paddingStart="@dimen/margin_padding_size_2"
                 android:paddingEnd="@dimen/margin_padding_size_2"
                 android:layout_gravity="center_horizontal" />
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro_regular"
                 android:textSize="@dimen/edit_text_size_18"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:text="@string/privacy_is_here" />
 
             <TextView
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/source_sans_pro_regular"
                 android:textSize="@dimen/edit_text_size_16"
-                android:textColor="@color/darkerBlueGrayTextColor"
+                android:textColor="@color/text2"
                 android:text="@string/privacy_intro_desc"
                 android:layout_marginTop="8dp" />
 

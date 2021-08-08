@@ -68,7 +68,7 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
 
         val addressIsValid = multiWallet!!.isAddressValid(address)
         if (addressIsValid) {
-            tv_title.setTextColor(getColor(R.color.greenTextColor))
+            tv_title.setTextColor(getColor(R.color.text6))
             tv_subtitle.show()
 
             icon = R.drawable.ic_checkmark
@@ -77,7 +77,7 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
             for (wallet in wallets) {
                 if (wallet.haveAddress(address)) {
                     subtitleText = getString(R.string.internal_valid_address, wallet.name)
-                    tv_subtitle.setTextColor(getColor(R.color.greenLightTextColor))
+                    tv_subtitle.setTextColor(getColor(R.color.secondary))
                     break
                 } else {
                     subtitleText = getString(R.string.external_valid_address)

@@ -125,7 +125,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                         tx_dest_row.show()
                         tx_dest_label.setText(R.string.to_account)
                         tx_details_dest.text = getReceiveAccount()
-                        tx_details_dest.setTextColor(resources.getColor(R.color.darkBlueTextColor))
+                        tx_details_dest.setTextColor(resources.getColor(R.color.text1))
 
                         tx_dest_wallet_badge.text = wallet.name
                         tx_dest_wallet_badge.show()

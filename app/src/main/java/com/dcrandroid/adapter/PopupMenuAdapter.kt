@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.popup_layout_row.view.*
 
 class PopupItem(
     @StringRes val title: Int,
-    @ColorRes val color: Int = R.color.darkBlueTextColor,
+    @ColorRes val color: Int = R.color.text1,
     val enabled: Boolean = true,
     val showNotificationDot: Boolean = false
 )

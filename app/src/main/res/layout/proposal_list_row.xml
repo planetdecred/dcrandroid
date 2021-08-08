@@ -37,7 +37,7 @@
             android:includeFontPadding="false"
             android:paddingRight="5dp"
             android:text="PR by Monde Public Relations - Phase Two"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_18"
             android:textStyle="bold"
             app:fontFamily="@font/source_sans_pro" />
@@ -52,7 +52,7 @@
 
             android:paddingRight="5dp"
             android:text="Approved"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/background"
             android:textSize="@dimen/edit_text_size_14"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -85,7 +85,7 @@
             android:gravity="right"
             android:includeFontPadding="false"
             android:text="published 9 months ago"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_14"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="@dimen/edit_text_size_12"
-            android:textColor="@color/darkBlueTextColor" />
+            android:textColor="@color/text1" />
 
     </RelativeLayout>
 

@@ -34,7 +34,7 @@
         android:largeHeap="true"
         android:roundIcon="${appIconRound}"
         android:supportsRtl="true"
-        android:theme="@style/LightTheme.NoActionBar"
+        android:theme="@style/AppTheme.NoActionBar"
         android:hardwareAccelerated="true"
         tools:ignore="GoogleAppIndexingWarning" >
 

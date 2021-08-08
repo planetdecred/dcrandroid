@@ -5,26 +5,25 @@
   -->
 
 <resources>
-    <!-- LightTheme -->
-    <style name="LightTheme" parent="Theme.MaterialComponents.Light">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/turquoise</item>
+    <!-- AppTheme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">#838383</item>
+        <item name="colorSecondary">@color/secondary</item>
         <item name="colorControlHighlight">@color/whiteRipple</item>
+        <item name="background">@color/background</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:textColor">@color/blackFirstTextColor</item>
+        <item name="android:textColor">@color/text1</item>
         <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
     </style>
 
-    <style name="LightTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
     <!--/LightTheme-->
 
     <!-- button style -->
@@ -38,7 +37,7 @@
 
         <item name="android:textSize">@dimen/edit_text_size_16</item>
         <item name="android:background">@drawable/default_app_button_bg</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/text</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:includeFontPadding">false</item>

@@ -9,12 +9,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:paddingLeft="@dimen/margin_padding_size_24"
         android:paddingRight="@dimen/margin_padding_size_24"
         android:paddingTop="@dimen/margin_padding_size_12"

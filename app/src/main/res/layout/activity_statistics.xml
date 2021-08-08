@@ -9,7 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +18,7 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -59,7 +59,7 @@
                     android:text="@string/statistics"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/build"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -129,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/peers_connected"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/uptime"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -185,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/network"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -213,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/best_block"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -241,7 +241,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/best_block_timestamp"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -269,7 +269,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/best_block_age"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -297,7 +297,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/wallet_data_directory"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -325,7 +325,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/wallet_data"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -353,7 +353,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/transactions"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 
@@ -381,7 +381,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/wallets"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false" />
 

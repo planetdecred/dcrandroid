@@ -54,7 +54,7 @@
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     tools:text="@string/dest_account_picker_title"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 

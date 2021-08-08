@@ -11,14 +11,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/manual_setup"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 

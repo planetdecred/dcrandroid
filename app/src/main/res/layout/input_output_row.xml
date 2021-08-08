@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/amount"
             tools:text="0.67320257 DCR (external)"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_16"
             android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro" />

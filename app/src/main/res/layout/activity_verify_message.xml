@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +18,7 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -58,7 +58,7 @@
                     android:text="@string/verify_message"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -192,7 +192,7 @@
                             android:text="@string/valid_address"
                             android:textSize="@dimen/edit_text_size_16"
                             android:includeFontPadding="false"
-                            android:textColor="@color/greenTextColor"
+                            android:textColor="@color/text6"
                             android:fontFamily="@font/source_sans_pro" />
 
                     </LinearLayout>

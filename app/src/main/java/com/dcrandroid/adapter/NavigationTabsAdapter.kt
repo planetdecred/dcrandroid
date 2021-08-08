@@ -7,7 +7,6 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,10 +68,10 @@ class NavigationTabsAdapter(
         holder.title.text = context.getString(tabs[position].title)
 
         if (activeTab == position) {
-            holder.title.setTextColor(Color.parseColor("#091440"))
+            holder.title.setTextColor(context.getColor(R.color.text1))
             holder.icon.setImageResource(tabs[position].activeIcon)
         } else {
-            holder.title.setTextColor(Color.parseColor("#596d81"))
+            holder.title.setTextColor(context.getColor(R.color.text2))
             holder.icon.setImageResource(tabs[position].inactiveIcon)
         }
 
