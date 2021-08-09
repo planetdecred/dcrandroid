@@ -24,7 +24,7 @@
                 android:topRightRadius="@dimen/margin_padding_size_14"
                 android:topLeftRadius="@dimen/margin_padding_size_14"
                 />
-            <solid android:color="@color/surface"/>
+            <solid android:color="@color/surface" />
         </shape>
     </item>
 </ripple>

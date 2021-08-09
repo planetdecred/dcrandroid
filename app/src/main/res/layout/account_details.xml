@@ -103,7 +103,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:layout_marginTop="4dp"
                         app:fontFamily="@font/source_sans_pro"
                         android:includeFontPadding="false"
@@ -129,7 +129,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:layout_marginTop="4dp"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false"
@@ -166,7 +166,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -197,7 +197,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -228,7 +228,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -259,7 +259,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -284,7 +284,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grayBackgroundLightColor" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -297,7 +297,7 @@
                         android:layout_height="wrap_content"
                         app:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/darkerBlueGrayTextColor"
+                        android:textColor="@color/text2"
                         android:text="@string/properties"
                         android:includeFontPadding="false" />
 
@@ -311,7 +311,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro"
                             android:text="@string/account_number"
@@ -341,7 +341,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro"
                             android:text="@string/hd_path"
@@ -370,7 +370,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro"
                             android:text="@string/keys"
@@ -405,7 +405,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grayBackgroundLightColor" />
+            android:background="@color/colorDivider" />
 
         <TextView
             android:layout_width="match_parent"
@@ -417,7 +417,7 @@
             android:textSize="@dimen/edit_text_size_16"
             android:paddingTop="@dimen/margin_padding_size_16"
             android:paddingBottom="@dimen/margin_padding_size_16"
-            android:textColor="@color/blue"
+            android:textColor="@color/primary"
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/curved_bottom_ripple" />

@@ -113,7 +113,7 @@ class WalletsAdapter(
 
     private fun setupWalletRow(wallet: Wallet, holder: WalletsViewHolder, position: Int) {
         holder.walletName.text = wallet.name
-        holder.totalBalance.text = fragment.context!!.getString(
+        holder.totalBalance.text = fragment.requireContext().getString(
             R.string.dcr_amount,
             CoinFormat.formatDecred(wallet.totalWalletBalance())
         )
@@ -124,7 +124,7 @@ class WalletsAdapter(
         } else {
             holder.walletStatus.show()
             holder.walletStatus.setText(R.string.not_backed_up)
-            holder.walletStatus.setTextColor(fragment.context!!.getColor(R.color.colorError))
+            holder.walletStatus.setTextColor(fragment.requireContext().getColor(R.color.colorError))
             holder.backupWarning.show()
 
             holder.backupWarning.setOnClickListener {
@@ -137,7 +137,7 @@ class WalletsAdapter(
         if (wallet.isAccountMixerActive) {
             holder.walletStatus.show()
             holder.walletStatus.setText(R.string.mixing_elp)
-            holder.walletStatus.setTextColor(fragment.context!!.getColor(R.color.blueGraySecondTextColor))
+            holder.walletStatus.setTextColor(fragment.requireContext().getColor(R.color.text4))
             holder.goToMixer.show()
         } else {
             holder.goToMixer.hide()
@@ -145,18 +145,18 @@ class WalletsAdapter(
 
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
         layoutParams.bottomMargin =
-            fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+            fragment.requireContext().resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
         layoutParams.topMargin =
-            fragment.context!!.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+            fragment.requireContext().resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
 
         val containerBackground: Int // this is a transparent ripple
         val viewBackground: Int
         var walletIcon = R.drawable.ic_wallet
 
         if (expanded == position) { // this should never hit for watching only wallets
-            val adapter = AccountsAdapter(fragment.context!!, wallet.id)
+            val adapter = AccountsAdapter(fragment.requireContext(), wallet.id)
 
-            holder.accountsList.layoutManager = LinearLayoutManager(fragment.context!!)
+            holder.accountsList.layoutManager = LinearLayoutManager(fragment.requireContext())
             holder.accountsList.isNestedScrollingEnabled = false
             holder.accountsList.adapter = adapter
 
@@ -165,7 +165,7 @@ class WalletsAdapter(
             holder.expand.show()
             holder.expand.setImageResource(R.drawable.ic_collapse02)
 
-            containerBackground = R.drawable.ripple_bg_white_top_corner_14dp
+            containerBackground = R.drawable.ripple_bg_surface_top_corner_14dp
             viewBackground = R.drawable.card_bg_14
         } else {
             holder.accountsList.adapter = null
@@ -185,7 +185,7 @@ class WalletsAdapter(
                     // ripple won't work, the background is not clickable. Just the white bg is needed
                     viewBackground = R.drawable.bg_white_ripple
 
-                    containerBackground = R.drawable.ripple
+                    containerBackground = R.drawable.surface_ripple
                 }
             } else {
                 holder.expand.show()
@@ -203,9 +203,9 @@ class WalletsAdapter(
         holder.container.setOnClickListener {
             if (wallet.isWatchingOnlyWallet) {
                 val account = Account.from(wallet.getAccount(0))
-                AccountDetailsDialog(fragment.context!!, wallet.id, account) {
+                AccountDetailsDialog(fragment.requireContext(), wallet.id, account) {
                     null
-                }.show(fragment.context!!)
+                }.show(fragment.requireContext())
             } else {
                 var currentlyExpanded: Int? = null
                 expanded = when (expanded) {
@@ -247,7 +247,7 @@ class WalletsAdapter(
         }
 
         holder.goToMixer.setOnClickListener {
-            val intent = Intent(fragment.context!!, AccountMixerActivity::class.java)
+            val intent = Intent(fragment.requireContext(), AccountMixerActivity::class.java)
             intent.putExtra(Constants.WALLET_ID, wallet.id)
             fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
         }
@@ -258,7 +258,7 @@ class WalletsAdapter(
             popupMessage?.cancel()
 
             val dividerWidth =
-                fragment.context!!.resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
+                fragment.requireContext().resources.getDimensionPixelSize(R.dimen.wallets_menu_width)
             val hasCheckedPrivacyPage =
                 multiWallet.readBoolConfigValueForKey(Constants.CHECKED_PRIVACY_PAGE, false)
 
@@ -282,9 +282,9 @@ class WalletsAdapter(
                 window.dismiss()
                 when (index) {
                     0 -> {
-                        val intent = Intent(fragment.context!!, SignMessage::class.java)
+                        val intent = Intent(fragment.requireContext(), SignMessage::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
-                        fragment.context!!.startActivity(intent)
+                        fragment.requireContext().startActivity(intent)
                     }
                     1 -> {
 
@@ -294,9 +294,9 @@ class WalletsAdapter(
                         )
 
                         val intent = if (mixerConfigIsSet) {
-                            Intent(fragment.context!!, AccountMixerActivity::class.java)
+                            Intent(fragment.requireContext(), AccountMixerActivity::class.java)
                         } else {
-                            Intent(fragment.context!!, SetupPrivacy::class.java)
+                            Intent(fragment.requireContext(), SetupPrivacy::class.java)
                         }
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         fragment.startActivityForResult(intent, PRIVACY_SETTINGS_REQUEST_CODE)
@@ -314,13 +314,13 @@ class WalletsAdapter(
                                 return@RequestNameDialog e
                             }
                             notifyItemChanged(position)
-                            SnackBar.showText(fragment.context!!, R.string.wallet_renamed)
+                            SnackBar.showText(fragment.requireContext(), R.string.wallet_renamed)
 
                             return@RequestNameDialog null
-                        }.show(fragment.activity!!.supportFragmentManager, null)
+                        }.show(fragment.requireActivity().supportFragmentManager, null)
                     }
                     3 -> {
-                        val intent = Intent(fragment.context!!, WalletSettings::class.java)
+                        val intent = Intent(fragment.requireContext(), WalletSettings::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)
                         launchIntent(intent, WALLET_SETTINGS_REQUEST_CODE)
                     }

@@ -98,9 +98,9 @@ class AccountsAdapter(private val context: Context, private val walletID: Long) 
             }
         } else {
 
-            val background = when {
-                wallet.encryptedSeed == null -> R.drawable.curved_bottom_ripple
-                else -> R.drawable.ripple
+            val background = when (wallet.encryptedSeed) {
+                null -> R.drawable.curved_bottom_ripple
+                else -> R.drawable.surface_ripple
             }
             holder.itemView.setBackgroundResource(background)
 

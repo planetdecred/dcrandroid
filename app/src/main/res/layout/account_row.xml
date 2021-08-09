@@ -9,7 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/ripple"
+    android:background="@drawable/surface_ripple"
     android:clickable="true"
     android:focusable="true"
     android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="5"
                 android:textSize="18sp"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:id="@+id/account_name" />
@@ -56,7 +56,7 @@
                 android:layout_marginTop="7dp"
                 android:text="@string/label_spendable"
                 android:textSize="14sp"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false" />
         </LinearLayout>
@@ -73,7 +73,7 @@
                 android:maxLines="1"
                 tools:text="0 DCR"
                 android:textSize="20sp"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:id="@+id/account_row_total_balance" />
@@ -86,7 +86,7 @@
                 android:layout_marginTop="7dp"
                 tools:text="0 DCR"
                 android:textSize="14sp"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 app:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
                 android:id="@+id/account_row_spendable_balance" />
@@ -97,7 +97,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#e6eaed"
+        android:background="@color/colorDivider"
         android:layout_marginStart="@dimen/margin_padding_size_40"
         android:layout_marginEnd="0dp"
         android:layout_marginTop="@dimen/margin_padding_size_16" />

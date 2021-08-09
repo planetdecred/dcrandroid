@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:text="@string/watch_only_wallets"
-        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textColor="@color/text2"
         android:textSize="@dimen/edit_text_size_14"
         android:fontFamily="@font/source_sans_pro_regular" />
 

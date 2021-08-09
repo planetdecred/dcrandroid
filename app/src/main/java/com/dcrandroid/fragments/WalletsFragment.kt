@@ -105,7 +105,7 @@ class WalletsFragment : BaseFragment() {
         } else if (requestCode == RESTORE_WALLET_REQUEST_CODE && resultCode == RESULT_OK) {
             val walletID = data?.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID!!)
-            SnackBar.showText(context!!, R.string.wallet_created)
+            SnackBar.showText(requireContext(), R.string.wallet_created)
         } else if (requestCode == PRIVACY_SETTINGS_REQUEST_CODE) {
             adapter.reloadList()
         }
@@ -121,7 +121,7 @@ class WalletsFragment : BaseFragment() {
             R.id.add_new_wallet -> {
 
                 if (multiWallet!!.openedWalletsCount() >= numOfAllowedWallets()) {
-                    InfoDialog(context!!)
+                    InfoDialog(requireContext())
                         .setMessage(getString(R.string.wallets_limit_error))
                         .setPositiveButton(getString(R.string.ok))
                         .show()
@@ -160,24 +160,24 @@ class WalletsFragment : BaseFragment() {
                                                 passphrase,
                                                 passphraseType
                                             )
-                                        }.show(context!!)
+                                        }.show(requireContext())
 
                                     } catch (e: Exception) {
                                         return@RequestNameDialog e
                                     }
                                     return@RequestNameDialog null
-                                }.show(context!!)
+                                }.show(requireContext())
                             }
                             1 -> {
                                 val restoreIntent =
-                                    Intent(context!!, RestoreWalletActivity::class.java)
+                                    Intent(requireContext(), RestoreWalletActivity::class.java)
                                 startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
                             }
                             2 -> {
                                 CreateWatchOnlyWallet {
-                                    SnackBar.showText(context!!, R.string.watch_only_wallet_created)
+                                    SnackBar.showText(requireContext(), R.string.watch_only_wallet_created)
                                     adapter.addWallet(it.id)
-                                }.show(context!!)
+                                }.show(requireContext())
                             }
                         }
                     }
@@ -189,7 +189,7 @@ class WalletsFragment : BaseFragment() {
     }
 
     private fun numOfAllowedWallets(): Int {
-        val actManager = context!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val actManager = requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val memInfo = ActivityManager.MemoryInfo()
         actManager.getMemoryInfo(memInfo)
 
@@ -205,19 +205,19 @@ class WalletsFragment : BaseFragment() {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet!!.createNewWallet(walletName, spendingKey, type)
-            Utils.renameDefaultAccountToLocalLanguage(context!!, wallet)
+            Utils.renameDefaultAccountToLocalLanguage(requireContext(), wallet)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
                 adapter.addWallet(wallet.id)
                 refreshNavigationTabs() // to add the orange backup needed indicator to the tab icon
-                SnackBar.showText(context!!, R.string.wallet_created)
+                SnackBar.showText(requireContext(), R.string.wallet_created)
             }
         } catch (e: Exception) {
             e.printStackTrace()
 
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
-                Utils.showErrorDialog(this@WalletsFragment.context!!, op + ": " + e.message)
+                Utils.showErrorDialog(requireContext(), op + ": " + e.message)
                 Dcrlibwallet.logT(op, e.message)
             }
         }
