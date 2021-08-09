@@ -10,7 +10,6 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import java.io.Serializable
 

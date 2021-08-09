@@ -669,6 +669,7 @@
     <string name="view_associated_ticket">View associated ticket</string>
     <string name="missed_expired">Missed/Expired</string>
     <string name="age">Age</string>
+    <string name="maturity">Maturity</string>
     <!--/Politeia-->
 
 </resources>

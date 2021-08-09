@@ -8,7 +8,6 @@ package com.dcrandroid.dialog.txdetails
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -69,7 +68,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                 var mixCount = SpannableString("\t x${transaction.mixCount}") as Spannable
                 mixCount = CoinFormat.applyColor(
                     mixCount,
-                    context!!.resources.getColor(R.color.lightGrayTextColor)
+                    requireContext().resources.getColor(R.color.text3)
                 )
                 amountBuilder.append(mixCount)
             }
@@ -151,109 +150,11 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             }
         }
 
-        if (transaction.matchesFilter(Dcrlibwallet.TxFilterStaking)){
-            if (transaction.type == Dcrlibwallet.TxTypeRevocation) {
-                view_ticket_spent_row.show()
-
-                if (transaction.confirmations <= BuildConfig.TicketMaturity){
-                    ticket_details.show()
-
-                    maturity_progress_row.show()
-
-                    maturity_progress_bar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar,null)
-                    maturity_progress_bar.max = BuildConfig.TicketMaturity
-                    maturity_progress_bar.progress = transaction.confirmations
-
-                    maturity_progress_prefix.text = String.format("%d%%", ((transaction.confirmations/ BuildConfig.TicketMaturity.toFloat()) * 100).toInt())
-
-                    val remainingMaturityTime = (BuildConfig.TicketMaturity - transaction.confirmations) * BuildConfig.TargetTimePerBlock
-                    maturity_progress_suffix.text = TimeUtils.calculateTime(remainingMaturityTime.toLong(), requireContext())
-                }
-            }else if (transaction.type == Dcrlibwallet.TxTypeVote) {
-                ticket_details.show()
-                view_ticket_spent_row.show()
-                vote_reward_row.show()
-                days_to_vote_row.show()
-
-                tv_days_to_vote.text = getString(R.string.x_days, transaction.daysToVoteOrRevoke)
-                tv_vote_reward.text = getString(R.string.x_dcr, CoinFormat.formatDecred(transaction.voteReward))
-
-                if (transaction.confirmations <= BuildConfig.TicketMaturity){
-                    maturity_progress_row.show()
-
-                    maturity_progress_bar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar2,null)
-                    maturity_progress_bar.max = BuildConfig.TicketMaturity
-                    maturity_progress_bar.progress = transaction.confirmations
-
-                    maturity_progress_prefix.text = String.format("%d%%", ((transaction.confirmations/ BuildConfig.TicketMaturity.toFloat()) * 100).toInt())
-
-                    val remainingMaturityTime = (BuildConfig.TicketMaturity - transaction.confirmations) * BuildConfig.TargetTimePerBlock
-                    maturity_progress_suffix.text = TimeUtils.calculateTime(remainingMaturityTime.toLong(), requireContext())
-                }
-            }else if (transaction.type == Dcrlibwallet.TxTypeTicketPurchase){
-                var ticketSpender: dcrlibwallet.Transaction? = null
-                if(wallet.ticketHasVotedOrRevoked(transaction.hash)){
-                    ticketSpender = wallet.ticketSpender(transaction.hash)
-                }
-
-                ticket_details.show()
-                status_row.show()
-
-                tv_status.text = if (ticketSpender != null) {
-                    if(ticketSpender.type == Dcrlibwallet.TxTypeVote){
-                        getString(R.string.voted)
-                    } else {
-                        getString(R.string.revoked)
-                    }
-                } else if(transaction.matchesFilter(Dcrlibwallet.TxFilterLive)){
-                    getString(R.string.live)
-                } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterImmature)){
-                    getString(R.string.immature)
-                } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterUnmined)){
-                    getString(R.string.unmined)
-                } else {
-                    getString(R.string.missed_expired)
-                }
-
-                if(ticketSpender != null && ticketSpender.type == Dcrlibwallet.TxTypeVote){
-                    vote_reward_row.show()
-                    days_to_vote_row.show()
-
-                    tv_days_to_vote.text = getString(R.string.x_days, ticketSpender.daysToVoteOrRevoke)
-                    tv_vote_reward.text = getString(R.string.x_dcr, CoinFormat.formatDecred(ticketSpender.voteReward))
-                }
-
-                if (transaction.confirmations <= BuildConfig.TicketMaturity){
-                    maturity_progress_row.show()
-
-                    maturity_progress_bar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.blue_progress_bar,null)
-                    maturity_progress_bar.max = BuildConfig.TicketMaturity
-                    maturity_progress_bar.progress = transaction.confirmations
-
-                    maturity_progress_prefix.text = String.format("%d%%", ((transaction.confirmations/ BuildConfig.TicketMaturity.toFloat()) * 100).toInt())
-
-                    val remainingMaturityTime = (BuildConfig.TicketMaturity - transaction.confirmations) * BuildConfig.TargetTimePerBlock
-                    maturity_progress_suffix.text = TimeUtils.calculateTime(remainingMaturityTime.toLong(), requireContext())
-
-                } else if(transaction.matchesFilter(Dcrlibwallet.TxFilterLive) && ticketSpender == null) {
-                    maturity_progress_row.show()
-
-                    maturity_progress_label.text = getString(R.string.age)
-
-                    maturity_progress_bar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.blue_progress_bar,null)
-                    val liveBlocks = transaction.confirmations - BuildConfig.TicketMaturity
-                    maturity_progress_bar.max = BuildConfig.TicketExpiry
-                    maturity_progress_bar.progress = liveBlocks
-
-                    maturity_progress_prefix.text = String.format("%.2f%%", ((liveBlocks/ BuildConfig.TicketExpiry.toFloat()) * 100))
-
-                    val remainingMaturityTime = (BuildConfig.TicketExpiry - liveBlocks) * BuildConfig.TargetTimePerBlock
-                    maturity_progress_suffix.text = TimeUtils.calculateTime(remainingMaturityTime.toLong(), requireContext())
-                }
-            }
+        if (transaction.matchesFilter(Dcrlibwallet.TxFilterStaking)) {
+            setupTicketDetails()
         }
 
-        view_ticket_spent.setOnClickListener{
+        view_ticket_spent.setOnClickListener {
             if (transaction.ticketSpentHash != "") {
                 val transaction = wallet.getTransaction(transaction.ticketSpentHash)
                 TransactionDetailsDialog(
@@ -270,7 +171,127 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         super.onTxOrBalanceUpdateRequired(walletID)
         GlobalScope.launch(Dispatchers.Main) {
+            setupTicketDetails()
             setConfirmationStatus()
+        }
+    }
+
+    private fun setupTicketDetails() {
+        var progressDrawable =
+            ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar, null)
+        var progressBarLabel = R.string.spendable_in
+        var progressBarMax = 0
+        var progressBarProgress = 0
+
+        var status: String? = null
+        var voteReward: String? = null
+        var daysToVote: String? = null
+
+        if (transaction.type == Dcrlibwallet.TxTypeRevocation) {
+            view_ticket_spent_row.show()
+
+            if (transaction.confirmations <= BuildConfig.TicketMaturity) {
+                ticket_details.show()
+
+                progressDrawable =
+                    ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar, null)
+                progressBarMax = BuildConfig.TicketMaturity
+                progressBarProgress = transaction.confirmations
+
+            }
+        } else if (transaction.type == Dcrlibwallet.TxTypeVote) {
+            ticket_details.show()
+            view_ticket_spent_row.show()
+
+            daysToVote = getString(R.string.x_days, transaction.daysToVoteOrRevoke)
+            voteReward = getString(R.string.x_dcr, CoinFormat.formatDecred(transaction.voteReward))
+
+            progressDrawable =
+                ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar2, null)
+            progressBarMax = BuildConfig.TicketMaturity
+            progressBarProgress = transaction.confirmations
+
+        } else if (transaction.type == Dcrlibwallet.TxTypeTicketPurchase) {
+            var ticketSpender: dcrlibwallet.Transaction? = null
+            if (wallet.ticketHasVotedOrRevoked(transaction.hash)) {
+                ticketSpender = wallet.ticketSpender(transaction.hash)
+            }
+
+            ticket_details.show()
+            status_row.show()
+
+            status = if (ticketSpender != null) {
+                if (ticketSpender.type == Dcrlibwallet.TxTypeVote) {
+                    getString(R.string.voted)
+                } else {
+                    getString(R.string.revoked)
+                }
+            } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterLive)) {
+                getString(R.string.live)
+            } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterImmature)) {
+                getString(R.string.immature)
+            } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterUnmined)) {
+                getString(R.string.unmined)
+            } else {
+                getString(R.string.missed_expired)
+            }
+
+            if (ticketSpender != null && ticketSpender.type == Dcrlibwallet.TxTypeVote) {
+                daysToVote = getString(R.string.x_days, ticketSpender.daysToVoteOrRevoke)
+                voteReward =
+                    getString(R.string.x_dcr, CoinFormat.formatDecred(ticketSpender.voteReward))
+            }
+
+            progressBarLabel = R.string.maturity
+            progressDrawable =
+                ResourcesCompat.getDrawable(resources, R.drawable.blue_progress_bar2, null)
+            progressBarMax = BuildConfig.TicketMaturity
+            progressBarProgress = transaction.confirmations
+
+            if (transaction.matchesFilter(Dcrlibwallet.TxFilterLive) && ticketSpender == null) {
+                progressBarLabel = R.string.age
+
+                progressDrawable =
+                    ResourcesCompat.getDrawable(resources, R.drawable.blue_progress_bar, null)
+                val liveBlocks = transaction.confirmations - BuildConfig.TicketMaturity
+                progressBarProgress = liveBlocks
+                progressBarMax = BuildConfig.TicketExpiry
+            }
+        }
+
+        if (status != null) {
+            status_row.show()
+            tv_status.text = status
+        }
+
+        if (daysToVote != null) {
+            days_to_vote_row.show()
+            tv_days_to_vote.text = daysToVote
+        }
+
+        if (voteReward != null) {
+            vote_reward_row.show()
+            tv_vote_reward.text = voteReward
+        }
+
+        if (progressBarProgress <= progressBarMax && progressBarMax != 0) {
+            maturity_progress_row.show()
+
+            maturity_progress_label.text = getString(progressBarLabel)
+
+            maturity_progress_bar.progressDrawable = progressDrawable
+            maturity_progress_bar.max = progressBarMax
+            maturity_progress_bar.progress = progressBarProgress
+
+            maturity_progress_prefix.text = String.format(
+                "%d%%",
+                ((progressBarProgress / progressBarMax.toFloat()) * 100).toInt()
+            )
+
+            val remainingTime =
+                (progressBarMax - progressBarProgress) * BuildConfig.TargetTimePerBlock
+            maturity_progress_suffix.text =
+                TimeUtils.calculateTime(remainingTime.toLong(), requireContext())
         }
     }
 
@@ -352,7 +373,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (input in transaction.inputs!!) {
             val accountName = if (input.accountNumber >= 0) {
                 wallet.accountName(input.accountNumber)
-            } else getString(R.string.external).toLowerCase()
+            } else getString(R.string.external).lowercase(Locale.getDefault())
             val amount = getString(
                 R.string.tx_details_account,
                 CoinFormat.formatDecred(input.amount),
@@ -371,7 +392,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (output in transaction.outputs!!) {
             val accountName = if (output.account >= 0) {
                 wallet.accountName(output.account)
-            } else getString(R.string.external).toLowerCase()
+            } else getString(R.string.external).lowercase(Locale.getDefault())
             val amount = getString(
                 R.string.tx_details_account,
                 CoinFormat.formatDecred(output.amount),

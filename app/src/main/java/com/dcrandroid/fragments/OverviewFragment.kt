@@ -6,7 +6,6 @@
 
 package com.dcrandroid.fragments
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout

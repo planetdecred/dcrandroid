@@ -13,7 +13,6 @@ import com.dcrandroid.data.Proposal
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.util.Utils
-import dcrlibwallet.Dcrlibwallet
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.tables.TableAwareMovementMethod
 import io.noties.markwon.ext.tables.TablePlugin
@@ -39,7 +38,7 @@ class ProposalDetailsActivity : BaseActivity() {
             .usePlugin(TablePlugin.create(applicationContext))
             // use TableAwareLinkMovementMethod to handle clicks inside tables
             .usePlugin(MovementMethodPlugin.create(TableAwareMovementMethod.create()))
-            .build();
+            .build()
 
         val proposalId = intent.getSerializableExtra(Constants.PROPOSAL_ID) as Long
         proposal = Proposal.from(multiWallet!!.politeia.getProposalByIDRaw(proposalId))

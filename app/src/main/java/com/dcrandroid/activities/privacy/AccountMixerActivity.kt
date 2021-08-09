@@ -146,9 +146,15 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
         }
 
         unmixed_balance.text =
-            CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).spendable, getColor(R.color.text4))
+            CoinFormat.formatAlpha(
+                wallet.getAccountBalance(unmixedAccountNumber).spendable,
+                getColor(R.color.text4)
+            )
         mixed_balance.text =
-            CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).spendable, getColor(R.color.text4))
+            CoinFormat.formatAlpha(
+                wallet.getAccountBalance(mixedAccountNumber).spendable,
+                getColor(R.color.text4)
+            )
     }
 
     private fun showWarningAndStartMixer() {
