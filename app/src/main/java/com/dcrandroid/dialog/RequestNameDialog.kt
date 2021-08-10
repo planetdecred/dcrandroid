@@ -36,7 +36,7 @@ class RequestNameDialog(
 
         sheet_title.setText(dialogTitle)
 
-        val accountNameInput = InputHelper(context!!, account_name_input) {
+        val accountNameInput = InputHelper(requireContext(), account_name_input) {
             btn_confirm.isEnabled = !it.isNullOrBlank() && it != currentName
             true
         }.apply {

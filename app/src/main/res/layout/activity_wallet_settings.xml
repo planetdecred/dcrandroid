@@ -61,7 +61,7 @@
                     android:id="@+id/tv_subtitle"
                     tools:text="@string/_default"
                     android:textSize="@dimen/edit_text_size_14"
-                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textColor="@color/text4"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -102,7 +102,7 @@
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:textColor="@color/darkerBlueGrayTextColor" />
+                    android:textColor="@color/text2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                     android:gravity="center_vertical"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/ripple"
+                    android:background="@drawable/surface_ripple"
                     android:orientation="horizontal">
 
                     <TextView
@@ -139,7 +139,7 @@
                     android:gravity="center_vertical"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/ripple"
+                    android:background="@drawable/surface_ripple"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -188,7 +188,7 @@
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:textColor="@color/darkerBlueGrayTextColor" />
+                    android:textColor="@color/text1" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -198,7 +198,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/ripple"
+                    android:background="@drawable/surface_ripple"
                     android:orientation="vertical">
 
                     <TextView
@@ -218,7 +218,7 @@
                         android:includeFontPadding="false"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:text="@string/none"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14" />
 
@@ -244,7 +244,7 @@
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:textColor="@color/darkerBlueGrayTextColor" />
+                    android:textColor="@color/text1" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -254,7 +254,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/ripple"
+                    android:background="@drawable/surface_ripple"
                     android:orientation="vertical">
 
                     <TextView
@@ -288,7 +288,7 @@
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/ripple"
+                    android:background="@drawable/surface_ripple"
                     android:orientation="vertical">
 
                     <TextView

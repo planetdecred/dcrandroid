@@ -74,7 +74,7 @@
                         tools:text="Wallet-0"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
                 </LinearLayout>
@@ -100,7 +100,7 @@
             android:text="@string/setup_mixer_account_desc"
             android:fontFamily="@font/source_sans_pro"
             android:textSize="@dimen/edit_text_size_16"
-            android:textColor="@color/darkerBlueGrayTextColor" />
+            android:textColor="@color/text2" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                 android:text="@string/setup_mixer_account_bullet_1"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_16"
-                android:textColor="@color/darkerBlueGrayTextColor" />
+                android:textColor="@color/text2" />
 
         </LinearLayout>
 
@@ -144,7 +144,7 @@
                 android:text="@string/setup_mixer_account_bullet_2"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_16"
-                android:textColor="@color/darkerBlueGrayTextColor" />
+                android:textColor="@color/text2" />
 
         </LinearLayout>
     </LinearLayout>
@@ -194,7 +194,7 @@
                     android:layout_marginTop="@dimen/margin_padding_size_4"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_14"
-                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textColor="@color/text4"
                     android:includeFontPadding="false"
                     android:text="@string/auto_setup_desc" />
 
@@ -249,7 +249,7 @@
                     android:layout_marginTop="@dimen/margin_padding_size_4"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_14"
-                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textColor="@color/text4"
                     android:includeFontPadding="false"
                     android:text="@string/manual_setup_desc" />
 

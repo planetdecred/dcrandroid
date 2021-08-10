@@ -135,7 +135,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:padding="@dimen/margin_padding_size_16"
         android:gravity="center_horizontal">
 

@@ -41,9 +41,9 @@
     <!--/General-->
 
     <!--Text-->
-    <color name="blueGraySecondTextColor">#596D81</color>
-    <color name="lightGrayTextColor">#8997A5</color>
-    <color name="darkerBlueGrayTextColor">#3d5873</color>
+    <color name="blueGraySecondTextColor">#596D81</color> <!-- text4 -->
+    <color name="lightGrayTextColor">#8997A5</color> <!-- text3 -->
+    <color name="darkerBlueGrayTextColor">#3d5873</color> <!-- text2 -->
     <color name="orangeTextColor">#ED6D47</color>
     <!--/Text-->
 
