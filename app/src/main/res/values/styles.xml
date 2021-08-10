@@ -10,10 +10,10 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">#838383</item>
         <item name="colorSecondary">@color/secondary</item>
-        <item name="colorControlHighlight">@color/whiteRipple</item>
+        <item name="colorControlHighlight">@color/surfaceRipple</item>
         <item name="background">@color/background</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:textColor">@color/text1</item>
         <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
     </style>
@@ -28,7 +28,7 @@
 
     <!-- button style -->
 
-    <style name="textViewButton" parent="TextAppearance.AppCompat">
+    <style name="textViewButton" parent="TextAppearance.MaterialComponents.Body1">
 
         <item name="android:paddingStart">@dimen/margin_padding_size_16</item>
         <item name="android:paddingEnd">@dimen/margin_padding_size_16</item>

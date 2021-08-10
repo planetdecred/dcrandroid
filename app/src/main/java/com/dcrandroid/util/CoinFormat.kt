@@ -6,7 +6,6 @@
 
 package com.dcrandroid.util
 
-import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.CharacterStyle

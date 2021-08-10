@@ -412,6 +412,8 @@
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">Ticket Purchase</string>
+    <string name="voted">Voted</string>
+    <string name="unmined">Unmined</string>
     <string name="immature">Immature</string>
     <string name="live">Live</string>
     <string name="purchased">Purchased</string>
@@ -660,6 +662,14 @@
     <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
+    <string name="status">Status</string>
+    <string name="reward">Reward</string>
+    <string name="days_to_vote">Days to vote</string>
+    <string name="spendable_in">Spendable in</string>
+    <string name="view_associated_ticket">View associated ticket</string>
+    <string name="missed_expired">Missed/Expired</string>
+    <string name="age">Age</string>
+    <string name="maturity">Maturity</string>
     <!--/Politeia-->
 
 </resources>

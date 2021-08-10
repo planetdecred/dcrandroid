@@ -6,7 +6,6 @@
 
 package com.dcrandroid.fragments
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -133,11 +132,11 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
                 InfoDialog(context!!)
                     .setMessage(getString(R.string.close_backup_warning_dialog_message))
                     .setPositiveButton(
-                        getString(R.string.got_it),
-                        DialogInterface.OnClickListener { _, _ ->
-                            closedBackupWarning = true
-                            backup_warning_layout?.hide()
-                        })
+                        getString(R.string.got_it)
+                    ) { _, _ ->
+                        closedBackupWarning = true
+                        backup_warning_layout?.hide()
+                    }
                     .show()
             }
         }

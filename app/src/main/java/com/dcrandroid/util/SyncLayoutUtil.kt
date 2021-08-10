@@ -172,8 +172,7 @@ class SyncLayoutUtil(
         val formattedLastBlockTime =
             TimeUtils.calculateTime(lastBlockRelativeTime, syncLayout.context)
 
-        val latestBlock: String
-        latestBlock = if (multiWallet.isSynced) {
+        val latestBlock = if (multiWallet.isSynced) {
             context.getString(
                 R.string.synced_latest_block_time,
                 blockInfo.height,

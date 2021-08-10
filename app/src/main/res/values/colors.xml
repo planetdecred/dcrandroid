@@ -20,10 +20,12 @@
     <color name="text5">#c4cbd2</color>
     <color name="text6">#41be53</color>
     <color name="background">#F3F5F6</color>
+    <color name="background2">#EDEFF1</color>
     <color name="surface">#ffffff</color>
     <color name="surfaceRipple">#E6EAED</color>
     <color name="colorDivider">#E6EAED</color>
     <color name="border">#c4cbd2</color>
+    <color name="blueProgressTint">#332970FF</color>
     <color name="lightGray">#C4CBD2</color>
     <color name="white">#ffffff</color>
     <color name="dark_grey">#252525</color>

@@ -118,7 +118,7 @@
                     android:id="@+id/iv_send_clear"
                     android:padding="@dimen/margin_padding_size_8"
                     android:layout_marginEnd="@dimen/margin_padding_size_8"
-                    android:background="@drawable/circular_transparent_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     app:srcCompat="@drawable/ic_close"
                     android:visibility="gone"
                     tools:visibility="visible" />
@@ -128,7 +128,7 @@
                     android:layout_height="40dp"
                     android:id="@+id/iv_send_max"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/circular_transparent_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     app:srcCompat="@drawable/ic_send_max" />
 
             </LinearLayout>

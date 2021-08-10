@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/container"
-        android:background="@drawable/ripple_bg_white_corners_14dp"
+        android:background="@drawable/ripple_bg_surface_corners_14dp"
         android:clickable="true"
         android:focusable="true"
         android:paddingTop="8dp"
@@ -93,7 +93,7 @@
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/circular_transparent_ripple"
+            android:background="@drawable/circular_surface_ripple"
             android:src="@drawable/ic_more02" />
 
     </LinearLayout>

@@ -40,6 +40,7 @@ android {
             applicationIdSuffix ".testnet"
             buildConfigField("boolean", "IS_TESTNET", "true")
             buildConfigField("int", "TicketMaturity", "16")
+            buildConfigField("int", "TicketExpiry", "6144")
             buildConfigField("int", "TargetTimePerBlock", "120")
             buildConfigField("String", "LogDir", "\"/wallets/testnet3/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"testnet3\"")
@@ -56,6 +57,7 @@ android {
             applicationIdSuffix ".mainnet"
             buildConfigField("boolean", "IS_TESTNET", "false")
             buildConfigField("int", "TicketMaturity", "256")
+            buildConfigField("int", "TicketExpiry", "40960")
             buildConfigField("int", "TargetTimePerBlock", "300")
             buildConfigField("String", "LogDir", "\"/wallets/mainnet/dcrlibwallet.log\"")
             buildConfigField("String", "NetType", "\"mainnet\"")
