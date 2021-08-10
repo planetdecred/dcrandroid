@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/container"
-        android:background="@drawable/ripple"
+        android:background="@drawable/surface_ripple"
         android:focusable="true"
         android:clickable="true"
         android:padding="@dimen/margin_padding_size_16"
@@ -51,7 +51,7 @@
                 android:layout_marginTop="@dimen/margin_padding_size_4"
                 android:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
-                android:textColor="@color/blueGraySecondTextColor"
+                android:textColor="@color/text4"
                 android:textSize="@dimen/edit_text_size_14"
                 tools:text="10.0.2.2:19108"
                 tools:visibility="visible" />
@@ -70,7 +70,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#e6eaed"
+            android:background="@color/colorDivider"
             android:layout_marginStart="44dp" />
 
         <LinearLayout
@@ -89,7 +89,7 @@
                 android:layout_marginTop="@dimen/margin_padding_size_4"
                 android:fontFamily="@font/source_sans_pro"
                 android:includeFontPadding="false"
-                android:textColor="@color/blueGraySecondTextColor"
+                android:textColor="@color/text4"
                 android:textSize="@dimen/edit_text_size_14"
                 tools:text="peer info"
                 tools:visibility="visible" />

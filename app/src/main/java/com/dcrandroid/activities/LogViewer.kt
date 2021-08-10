@@ -21,8 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
 
-const val MENU_ITEM = 1
-
 class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var updateJob: Job

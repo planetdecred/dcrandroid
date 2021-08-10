@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="22dp"
-        android:background="#edeff1" />
+        android:background="@color/colorDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_preference_rv"
@@ -38,7 +38,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#edeff1" />
+        android:background="@color/colorDivider" />
 
     <LinearLayout
         android:layout_width="match_parent"

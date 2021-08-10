@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/ripple"
+    android:background="@drawable/surface_ripple"
     android:paddingTop="@dimen/margin_padding_size_12"
     android:paddingBottom="@dimen/margin_padding_size_12"
     android:paddingStart="@dimen/margin_padding_size_24"
