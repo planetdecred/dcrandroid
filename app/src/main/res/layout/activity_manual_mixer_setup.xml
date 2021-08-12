@@ -74,7 +74,7 @@
                         tools:text="Wallet-0"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
                 </LinearLayout>
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:text="@string/mixed_account"
             android:textSize="@dimen/edit_text_size_14"
-            android:textColor="@color/blueGraySecondTextColor"
+            android:textColor="@color/text4"
             android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro" />
 
@@ -134,7 +134,7 @@
             android:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false"
             android:text="@string/unmixed_account"
-            android:textColor="@color/blueGraySecondTextColor"
+            android:textColor="@color/text4"
             android:textSize="@dimen/edit_text_size_14" />
 
         <include
@@ -174,7 +174,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:padding="@dimen/margin_padding_size_16"
         android:gravity="center_horizontal">
 

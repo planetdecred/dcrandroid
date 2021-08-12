@@ -84,7 +84,7 @@
             app:fontFamily="@font/source_sans_pro"
             tools:text="7.51464806 DCR"
             android:textSize="@dimen/edit_text_size_16"
-            android:textColor="@color/blueGraySecondTextColor" />
+            android:textColor="@color/text4" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -108,7 +108,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#e6eaed"
+            android:background="@color/colorDivider"
             android:layout_marginStart="44dp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -130,7 +130,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#E6EAED" />
+            android:background="@color/colorDivider" />
 
 
         <LinearLayout
@@ -147,7 +147,7 @@
                 android:includeFontPadding="false"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/blue" />
+                android:textColor="@color/primary" />
 
             <ImageView
                 android:layout_width="@dimen/margin_padding_size_16"

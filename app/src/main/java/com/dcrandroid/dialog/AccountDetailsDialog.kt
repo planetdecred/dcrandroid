@@ -32,7 +32,6 @@ class AccountDetailsDialog(
 
     private val wallet: Wallet = multiWallet.walletWithID(walletID)
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,7 +51,7 @@ class AccountDetailsDialog(
 
         // properties
         account_details_number.text = account.accountNumber.toString()
-        account_details_keys.text = context!!.getString(
+        account_details_keys.text = requireContext().getString(
             R.string.key_count,
             account.externalKeyCount,
             account.internalKeyCount,

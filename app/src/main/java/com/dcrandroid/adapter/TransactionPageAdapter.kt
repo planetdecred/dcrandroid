@@ -55,7 +55,7 @@ class TransactionPageAdapter(
         // background ripple
         val backgroundResource: Int = when {
             itemCount == 1 -> R.drawable.ripple_bg_surface_corners_14dp // only item on the list
-            position == 0 -> R.drawable.ripple_bg_white_top_corner_14dp
+            position == 0 -> R.drawable.ripple_bg_surface_top_corner_14dp
             position == (itemCount - 1) -> R.drawable.curved_bottom_ripple_14dp
             else -> R.drawable.transactions_row_bg
         }

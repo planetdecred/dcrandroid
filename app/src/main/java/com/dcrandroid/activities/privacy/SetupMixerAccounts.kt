@@ -7,7 +7,6 @@
 package com.dcrandroid.activities.privacy
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -40,10 +39,10 @@ class SetupMixerAccounts : BaseActivity() {
                 .setMessage(Html.fromHtml(getString(R.string.privacy_intro_dialog_desc)))
                 .setNegativeButton(getString(R.string.cancel))
                 .setPositiveButton(
-                    getString(R.string.begin_setup),
-                    DialogInterface.OnClickListener { _, _ ->
-                        checkAccountNameConflict()
-                    })
+                    getString(R.string.begin_setup)
+                ) { _, _ ->
+                    checkAccountNameConflict()
+                }
                 .show()
         }
 
@@ -67,11 +66,11 @@ class SetupMixerAccounts : BaseActivity() {
                 .setIcon(R.drawable.ic_alert2, R.drawable.grey_dialog_bg)
                 .cancelable(false)
                 .setPositiveButton(
-                    R.string.go_back_rename,
-                    DialogInterface.OnClickListener { dialog, _ ->
-                        dialog.dismiss()
-                        finish()
-                    })
+                    R.string.go_back_rename
+                ) { dialog, _ ->
+                    dialog.dismiss()
+                    finish()
+                }
                 .show()
             return
         }
