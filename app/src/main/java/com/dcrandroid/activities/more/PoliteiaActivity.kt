@@ -85,13 +85,13 @@ class PoliteiaActivity : BaseActivity(), ProposalNotificationListener,
         val timestampSortItems = resources.getStringArray(R.array.timestamp_sort)
         val timestampSortAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, timestampSortItems)
-        timestampSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        timestampSortAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         timestamp_sort_spinner.onItemSelectedListener = this
         timestamp_sort_spinner.adapter = timestampSortAdapter
 
         categorySortAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, availableProposalTypes)
-        categorySortAdapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categorySortAdapter!!.setDropDownViewResource(R.layout.spinner_dropdown_item)
         category_sort_spinner.adapter = categorySortAdapter
         category_sort_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(

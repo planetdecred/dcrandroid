@@ -46,7 +46,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:focusable="true"
                     android:clickable="true"
                     android:id="@+id/go_back"
@@ -68,7 +68,7 @@
                     android:id="@+id/open_proposal"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="@dimen/margin_padding_size_8"
@@ -78,7 +78,7 @@
                     android:id="@+id/share_proposal"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="@dimen/margin_padding_size_8"
@@ -125,7 +125,6 @@
                     android:weightSum="1"
                     android:orientation="horizontal"
                     android:layout_gravity="center_vertical"
-
                     android:layout_marginTop="@dimen/margin_padding_size_6">
 
                     <TextView
@@ -137,10 +136,12 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         tools:text="Approved"
-                        android:textColor="@color/background"
+                        android:textColor="@color/text"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
 
                 </LinearLayout>
 
@@ -161,7 +162,7 @@
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blue" />
+                        android:textColor="@color/primary" />
 
                     <TextView
                         android:id="@+id/proposal_timestamp"
@@ -194,7 +195,7 @@
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/darkerBlueGrayTextColor" />
+                        android:textColor="@color/text2" />
 
                     <TextView
                         android:id="@+id/proposal_version"
@@ -204,7 +205,7 @@
                         android:gravity="end"
                         android:includeFontPadding="false"
                         tools:text="Version 2"
-                        android:textColor="@color/darkerBlueGrayTextColor"
+                        android:textColor="@color/text2"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -279,7 +280,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_padding_size_16"
-                        android:indeterminateTint="@color/blue"
+                        android:indeterminateTint="@color/primary"
                         android:indeterminate="true"
                         android:layout_gravity="center"
                         android:indeterminateBehavior="cycle"
