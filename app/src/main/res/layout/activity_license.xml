@@ -47,7 +47,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:focusable="true"
                     android:clickable="true"
                     android:id="@+id/go_back"
@@ -77,7 +77,7 @@
         android:layout_marginTop="@dimen/margin_padding_size_8"
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_14"
-        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textColor="@color/text2"
         android:scrollbars="vertical"
         android:id="@+id/license_text" />
 

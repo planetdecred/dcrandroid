@@ -47,7 +47,7 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
             val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
 
-            val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val metrics = DisplayMetrics()
             wm.defaultDisplay.getMetrics(metrics)
 

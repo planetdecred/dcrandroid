@@ -56,7 +56,7 @@ class EditTextDialog(
 
         sheet_title.setText(title)
 
-        val inputHelper = InputHelper(context!!, et_preference, validateInput).apply {
+        val inputHelper = InputHelper(requireContext(), et_preference, validateInput).apply {
             if (errorString != null) {
                 validationMessage = errorString!!
             }

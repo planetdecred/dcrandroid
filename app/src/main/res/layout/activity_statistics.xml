@@ -82,7 +82,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ripple_bg_white_corners_8dp"
+                android:background="@drawable/ripple_bg_surface_corners_8dp"
                 android:layout_marginTop="@dimen/margin_padding_size_4"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 android:layout_marginEnd="@dimen/margin_padding_size_8"
@@ -112,7 +112,7 @@
                         tools:text="mainnet 2020-01-01"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -140,7 +140,7 @@
                         tools:text="8"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -168,7 +168,7 @@
                         tools:text="00:09:41"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -196,7 +196,7 @@
                         tools:text="mainnet"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -224,7 +224,7 @@
                         tools:text="231975"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -252,7 +252,7 @@
                         tools:text="2020-01-01 09:13:50 +0100"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -280,7 +280,7 @@
                         tools:text="3 min ago"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -308,7 +308,7 @@
                         tools:text="/data/user/0/com.decred.dcrandroid.mainnet/files/wallet/mainnet3/wallet.db"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -336,7 +336,7 @@
                         tools:text="150.77 Mb"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -364,7 +364,7 @@
                         tools:text="4"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 
@@ -392,7 +392,7 @@
                         tools:text="1"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:fontFamily="@font/source_sans_pro"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:textSize="@dimen/edit_text_size_14"
                         android:includeFontPadding="false" />
 

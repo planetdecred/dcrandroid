@@ -65,7 +65,7 @@ class MoreFragment : BaseFragment() {
             )
         )
 
-        val adapter = ListAdapter(context!!, items)
+        val adapter = ListAdapter(requireContext(), items)
         more_recycler_view.layoutManager = LinearLayoutManager(context)
         more_recycler_view.adapter = adapter
     }
