@@ -17,7 +17,7 @@
         android:id="@+id/seed_index"
         android:layout_width="30dp"
         android:layout_height="@dimen/seed_row_height"
-        android:textColor="#3d5873"
+        android:textColor="@color/text2"
         android:gravity="center"
         android:includeFontPadding="false"
         android:textSize="@dimen/edit_text_size_16"
@@ -33,7 +33,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:textSize="16sp"
-        android:textColor="#3d5873"
+        android:textColor="@color/text2"
         app:fontFamily="@font/source_sans_pro_semibold"
         android:includeFontPadding="false" />
 

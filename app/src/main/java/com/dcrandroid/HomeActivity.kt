@@ -342,7 +342,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private fun showWifiNotice() {
         val wifiSyncDialog = WiFiSyncDialog(this)
-            .setPositiveButton(DialogInterface.OnClickListener { dialog, _ ->
+            .setPositiveButton { dialog, _ ->
                 startSyncing()
 
                 val syncDialog = dialog as WiFiSyncDialog
@@ -351,7 +351,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
                     syncDialog.checked
                 )
 
-            })
+            }
 
         wifiSyncDialog.setOnCancelListener {
             sendBroadcast(Intent(Constants.SYNCED))

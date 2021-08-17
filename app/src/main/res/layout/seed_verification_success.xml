@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/seed_backup_success_msg"
-            android:textColor="#3d5873"
+            android:textColor="@color/text2"
             android:textSize="@dimen/edit_text_size_16"
             android:layout_marginTop="@dimen/margin_padding_size_16"
             app:fontFamily="@font/source_sans_pro"

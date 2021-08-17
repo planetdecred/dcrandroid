@@ -626,6 +626,15 @@
     <string name="set_up">Set up</string>
     <string name="manual_setup">Manual setup</string>
     <string name="same_mixed_unmixed"><![CDATA[Cannot use same account for mixed & unmixed]]></string>
+    <string name="status">Status</string>
+    <string name="reward">Reward</string>
+    <string name="days_to_vote">Days to vote</string>
+    <string name="spendable_in">Spendable in</string>
+    <string name="view_associated_ticket">View associated ticket</string>
+    <string name="missed_expired">Missed/Expired</string>
+    <string name="age">Age</string>
+    <string name="maturity">Maturity</string>
+    <string name="verify_seed_header_instruction">Select the correct words to verify.</string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>
@@ -662,14 +671,6 @@
     <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
-    <string name="status">Status</string>
-    <string name="reward">Reward</string>
-    <string name="days_to_vote">Days to vote</string>
-    <string name="spendable_in">Spendable in</string>
-    <string name="view_associated_ticket">View associated ticket</string>
-    <string name="missed_expired">Missed/Expired</string>
-    <string name="age">Age</string>
-    <string name="maturity">Maturity</string>
     <!--/Politeia-->
 
 </resources>

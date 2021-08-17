@@ -94,7 +94,7 @@
         android:layout_marginEnd="@dimen/margin_padding_size_24"
         android:includeFontPadding="false"
         android:text="@string/sign_message_instruction"
-        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textColor="@color/text2"
         android:textSize="@dimen/edit_text_size_16"
         android:fontFamily="@font/source_sans_pro" />
 

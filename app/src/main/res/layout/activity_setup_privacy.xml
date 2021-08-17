@@ -75,7 +75,7 @@
                         tools:text="Wallet-0"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
                 </LinearLayout>

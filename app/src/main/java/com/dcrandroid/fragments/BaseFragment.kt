@@ -62,7 +62,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
 
     fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean) {
         if (context != null) {
-            setToolbarTitle(context!!.getString(title), showShadow)
+            setToolbarTitle(requireContext().getString(title), showShadow)
         }
     }
 
