@@ -429,7 +429,6 @@
     <string name="x_dcr">%1$s DCR</string>
     <string name="x_usd">%1$s USD</string>
     <string name="usd_symbol_format">$%1$s</string>
-    <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
     <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
     <string name="balance_after_send">发送后的余额</string>

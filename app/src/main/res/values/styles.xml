@@ -53,7 +53,7 @@
     <!-- /button style -->
 
     <style name="CircularProgressBar" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">#3d5873</item>
+        <item name="colorAccent">@color/text2</item>
     </style>
 
     <!-- TabText Style -->

@@ -31,7 +31,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="@dimen/margin_padding_size_8"
-                android:background="@drawable/bg_primary_ripple"
+                android:background="@drawable/circular_surface_ripple"
                 android:focusable="true"
                 android:clickable="true"
                 android:id="@+id/go_back"
@@ -61,7 +61,7 @@
                     app:srcCompat="@drawable/ic_info"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/bg_primary_ripple" />
+                    android:background="@drawable/circular_surface_ripple" />
 
                 <ImageView
                     android:layout_width="40dp"
@@ -71,7 +71,7 @@
                     app:srcCompat="@drawable/ic_options"
                     android:focusable="true"
                     android:clickable="true"
-                    android:background="@drawable/bg_primary_ripple" />
+                    android:background="@drawable/circular_surface_ripple" />
 
             </LinearLayout>
 
@@ -107,7 +107,7 @@
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:includeFontPadding="false"
                     android:text="@string/from"
-                    android:textColor="@color/darkerBlueGrayTextColor"
+                    android:textColor="@color/text2"
                     android:textSize="@dimen/edit_text_size_14"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -146,7 +146,7 @@
                         android:layout_weight="1"
                         android:includeFontPadding="false"
                         android:text="@string/to"
-                        android:textColor="@color/darkerBlueGrayTextColor"
+                        android:textColor="@color/text2"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -156,7 +156,7 @@
                         android:id="@+id/send_dest_toggle"
                         android:gravity="end"
                         android:text="@string/send_to_account"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/primary"
                         android:textSize="@dimen/edit_text_size_14"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -188,7 +188,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:elevation="6dp">
 
         <LinearLayout
@@ -209,7 +209,7 @@
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_14"
                     android:text="@string/total_cost"
-                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textColor="@color/text4"
                     app:fontFamily="@font/source_sans_pro_regular" />
 
                 <TextView
@@ -239,7 +239,7 @@
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_14"
                     android:text="@string/balance_after_send"
-                    android:textColor="@color/blueGraySecondTextColor"
+                    android:textColor="@color/text4"
                     app:fontFamily="@font/source_sans_pro_regular" />
 
                 <TextView
@@ -266,7 +266,7 @@
                 android:id="@+id/change_to_unmixed_label"
                 android:textSize="@dimen/edit_text_size_14"
                 android:text="@string/change_sent_to_unmixed"
-                android:textColor="@color/blueGraySecondTextColor"
+                android:textColor="@color/text4"
                 app:fontFamily="@font/source_sans_pro_regular" />
 
             <TextView
