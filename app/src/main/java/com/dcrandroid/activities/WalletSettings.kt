@@ -118,29 +118,29 @@ class WalletSettings : BaseActivity() {
 
             dialog.setNegativeButton(getString(R.string.cancel), null)
             dialog.setPositiveButton(
-                getString(R.string.remove),
-                DialogInterface.OnClickListener { _, _ ->
+                getString(R.string.remove)
+            ) { _, _ ->
 
-                    if (wallet.isWatchingOnlyWallet) {
-                        DeleteWatchOnlyWallet(wallet) {
-                            postDeleteFinishActivity()
-                        }.show(this)
-                    } else {
-                        val title = PassPromptTitle(
-                            R.string.confirm_to_remove,
-                            R.string.confirm_to_remove,
-                            R.string.confirm_to_remove
-                        )
+                if (wallet.isWatchingOnlyWallet) {
+                    DeleteWatchOnlyWallet(wallet) {
+                        postDeleteFinishActivity()
+                    }.show(this)
+                } else {
+                    val title = PassPromptTitle(
+                        R.string.confirm_to_remove,
+                        R.string.confirm_to_remove,
+                        R.string.confirm_to_remove
+                    )
 
-                        PassPromptUtil(this, walletID, title, false) { dialog, pass ->
-                            if (pass != null) {
-                                deleteWallet(pass, dialog)
-                            }
+                    PassPromptUtil(this, walletID, title, false) { dialog, pass ->
+                        if (pass != null) {
+                            deleteWallet(pass, dialog)
+                        }
 
-                            false
-                        }.show()
-                    }
-                })
+                        false
+                    }.show()
+                }
+            }
 
             dialog.btnPositiveColor = R.color.orangeTextColor
             dialog.show()

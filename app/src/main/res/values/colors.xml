@@ -6,10 +6,6 @@
   -->
 
 <resources>
-
-    <!--Light theme-->
-
-    <!--General-->
     <color name="primary">#2970FF</color>
     <color name="secondary">#2DD8A3</color>
     <color name="text">#ffffff</color>
@@ -38,23 +34,6 @@
     <color name="darkGreen">#3CC39A</color>
     <color name="colorError">#ed6d47</color>
     <color name="colorDisabled">#c4cbd2</color>
-    <!--/General-->
-
-    <!--Text-->
-    <color name="blueGraySecondTextColor">#596D81</color> <!-- text4 -->
-    <color name="lightGrayTextColor">#8997A5</color> <!-- text3 -->
-    <color name="darkerBlueGrayTextColor">#3d5873</color> <!-- text2 -->
     <color name="orangeTextColor">#ED6D47</color>
-    <!--/Text-->
-
-    <!--Drawable-->
-    <color name="deepBlueDrawableColor">#0C1E3E</color>
-    <color name="grayBackgroundLightColor">#EDEFF1</color>
-    <!--/Drawable-->
-
-    <!--/Light theme-->
-
-
-    <!-- PinView -->
     <color name="pinview_active_color">#2DD8A3</color>
 </resources>

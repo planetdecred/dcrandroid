@@ -45,7 +45,10 @@ class PasswordPinDialogFragment(
 
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList =
-            listOf(requireContext().getString(R.string.password), requireContext().getString(R.string.pin))
+            listOf(
+                requireContext().getString(R.string.password),
+                requireContext().getString(R.string.pin)
+            )
         titleList = if (isSpending) {
             if (isChange) {
                 listOf(

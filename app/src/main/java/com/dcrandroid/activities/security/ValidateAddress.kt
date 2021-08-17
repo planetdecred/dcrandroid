@@ -81,7 +81,7 @@ class ValidateAddress : BaseActivity(), View.OnClickListener {
                     break
                 } else {
                     subtitleText = getString(R.string.external_valid_address)
-                    tv_subtitle.setTextColor(getColor(R.color.lightGrayTextColor))
+                    tv_subtitle.setTextColor(getColor(R.color.text3))
                 }
             }
         }
