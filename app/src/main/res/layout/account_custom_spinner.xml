@@ -36,7 +36,6 @@
             app:fontFamily="@font/source_sans_pro"
             android:includeFontPadding="false" />
 
-
         <TextView
             android:id="@+id/spinner_wallet_name"
             android:layout_width="wrap_content"
@@ -47,7 +46,7 @@
             android:paddingBottom="@dimen/margin_padding_size_2"
             android:paddingLeft="@dimen/margin_padding_size_4"
             android:paddingRight="@dimen/margin_padding_size_4"
-            android:textColor="@color/lightGrayTextColor"
+            android:textColor="@color/text3"
             android:textSize="@dimen/edit_text_size_12"
             app:fontFamily="@font/source_sans_pro"
             tools:text="Wallet 2" />

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/wallet_name"
-        android:textColor="#3d5873"
+        android:textColor="@color/text2"
         android:textSize="@dimen/edit_text_size_14"
         android:paddingTop="@dimen/margin_padding_size_16"
         android:paddingLeft="@dimen/margin_padding_size_16"

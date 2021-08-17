@@ -62,7 +62,7 @@ class AccountPickerDialog(@StringRes val title: Int, private val currentAccount:
             items.addAll(accounts)
         }
 
-        val adapter = AccountPickerAdapter(context!!, items.toTypedArray(), currentAccount)
+        val adapter = AccountPickerAdapter(requireContext(), items.toTypedArray(), currentAccount)
         adapter.accountSelected = {
             dismiss()
             accountSelected(it)

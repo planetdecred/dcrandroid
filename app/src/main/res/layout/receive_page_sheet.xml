@@ -26,7 +26,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="@dimen/margin_padding_size_8"
-            android:background="@drawable/bg_primary_ripple"
+            android:background="@drawable/circular_surface_ripple"
             android:focusable="true"
             android:clickable="true"
             android:id="@+id/go_back"
@@ -56,7 +56,7 @@
                 app:srcCompat="@drawable/ic_info"
                 android:focusable="true"
                 android:clickable="true"
-                android:background="@drawable/bg_primary_ripple" />
+                android:background="@drawable/circular_surface_ripple" />
 
             <ImageView
                 android:layout_width="40dp"
@@ -66,7 +66,7 @@
                 app:srcCompat="@drawable/ic_options"
                 android:focusable="true"
                 android:clickable="true"
-                android:background="@drawable/bg_primary_ripple" />
+                android:background="@drawable/circular_surface_ripple" />
 
         </LinearLayout>
 
@@ -94,7 +94,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#edeff1" />
+            android:background="@color/colorDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -142,7 +142,8 @@
                 app:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_16"
                 android:includeFontPadding="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/primary"
+                android:background="@drawable/surface_ripple"
                 tools:text="Dcur2mcGjmENx4DhNqDctW5wJCVyT3Qeqkx" />
 
             <TextView
@@ -152,7 +153,7 @@
                 app:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_16"
                 android:includeFontPadding="false"
-                android:textColor="#8997a5"
+                android:textColor="@color/text3"
                 android:text="@string/tap_to_copy" />
         </LinearLayout>
 
@@ -163,7 +164,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_padding_size_16"
         android:elevation="8dp"
-        android:background="@color/white"
+        android:background="@color/surface"
         android:layout_marginTop="@dimen/margin_padding_size_16">
 
         <LinearLayout
