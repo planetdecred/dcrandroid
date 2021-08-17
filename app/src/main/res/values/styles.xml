@@ -66,12 +66,12 @@
 
     <!-- TabLayout Style -->
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/surface</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabBackground">@drawable/unselected_tab_bottom_indicator</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/blue</item>
-        <item name="tabIndicatorColor">@color/blue</item>
+        <item name="tabSelectedTextColor">@color/primary</item>
+        <item name="tabIndicatorColor">@color/primary</item>
     </style>
 
     <!--/TabLayout Style -->

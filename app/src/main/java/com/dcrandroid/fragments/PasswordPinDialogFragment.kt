@@ -45,30 +45,30 @@ class PasswordPinDialogFragment(
 
         fragmentList = listOf(spendingCreatePasswordFragment, spendingCreatePinFragment)
         tabsTitleList =
-            listOf(context!!.getString(R.string.password), context!!.getString(R.string.pin))
+            listOf(requireContext().getString(R.string.password), requireContext().getString(R.string.pin))
         titleList = if (isSpending) {
             if (isChange) {
                 listOf(
-                    context!!.getString(R.string.change_spending_pass),
-                    context!!.getString(R.string.change_spending_pin)
+                    requireContext().getString(R.string.change_spending_pass),
+                    requireContext().getString(R.string.change_spending_pin)
                 )
             } else {
                 listOf(
-                    context!!.getString(R.string.create_spending_pass),
-                    context!!.getString(R.string.create_spending_pin)
+                    requireContext().getString(R.string.create_spending_pass),
+                    requireContext().getString(R.string.create_spending_pin)
                 )
             }
 
         } else {
             if (isChange) {
                 listOf(
-                    context!!.getString(R.string.change_startup_password),
-                    context!!.getString(R.string.change_startup_pin)
+                    requireContext().getString(R.string.change_startup_password),
+                    requireContext().getString(R.string.change_startup_pin)
                 )
             } else {
                 listOf(
-                    context!!.getString(R.string.create_startup_password),
-                    context!!.getString(R.string.create_startup_pin)
+                    requireContext().getString(R.string.create_startup_password),
+                    requireContext().getString(R.string.create_startup_pin)
                 )
             }
         }

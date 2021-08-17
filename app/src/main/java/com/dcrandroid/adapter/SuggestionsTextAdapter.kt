@@ -56,7 +56,7 @@ class SuggestionsTextAdapter(
         val backgroundResource = when (position) {
             0 -> R.drawable.curved_top_4dp_ripple
             count - 1 -> R.drawable.curved_bottom_4dp_ripple
-            else -> R.drawable.bg_white_ripple
+            else -> R.drawable.surface_bg_ripple
         }
 
         suggestionTextView.setBackgroundResource(backgroundResource)

@@ -9,10 +9,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:elevation="@dimen/shadow_spread"
-
     android:paddingTop="@dimen/margin_padding_size_8"
     android:paddingBottom="@dimen/margin_padding_size_8"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -23,7 +21,6 @@
         android:gravity="center_vertical"
         android:background="@drawable/input_background"
         android:id="@id/list_layout"
-
         android:paddingStart="@dimen/margin_padding_size_16"
         android:paddingTop="@dimen/margin_padding_size_12"
         android:paddingEnd="@dimen/margin_padding_size_24"
@@ -33,7 +30,7 @@
             android:id="@+id/seed_index"
             android:layout_width="30dp"
             android:layout_height="@dimen/seed_row_height"
-            android:textColor="@color/darkerBlueGrayTextColor"
+            android:textColor="@color/text2"
             android:gravity="center"
             android:includeFontPadding="false"
             android:textSize="@dimen/edit_text_size_16"
