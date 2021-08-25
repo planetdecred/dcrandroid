@@ -82,11 +82,17 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            style="@style/Spinner"
             android:id="@+id/timestamp_sort_spinner" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            style="@style/Spinner"
             android:id="@+id/category_sort_spinner" />
 
         <ImageView

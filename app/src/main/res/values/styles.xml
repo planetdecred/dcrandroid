@@ -102,4 +102,8 @@
         <item name="android:textSize">@dimen/edit_text_size_16</item>
     </style>
 
+    <style name="Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/bg_spinner_dropdown</item>
+    </style>
+
 </resources>
