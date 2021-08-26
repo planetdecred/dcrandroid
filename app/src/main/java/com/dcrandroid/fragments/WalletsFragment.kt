@@ -175,7 +175,10 @@ class WalletsFragment : BaseFragment() {
                             }
                             2 -> {
                                 CreateWatchOnlyWallet {
-                                    SnackBar.showText(requireContext(), R.string.watch_only_wallet_created)
+                                    SnackBar.showText(
+                                        requireContext(),
+                                        R.string.watch_only_wallet_created
+                                    )
                                     adapter.addWallet(it.id)
                                 }.show(requireContext())
                             }
@@ -189,7 +192,8 @@ class WalletsFragment : BaseFragment() {
     }
 
     private fun numOfAllowedWallets(): Int {
-        val actManager = requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val actManager =
+            requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val memInfo = ActivityManager.MemoryInfo()
         actManager.getMemoryInfo(memInfo)
 

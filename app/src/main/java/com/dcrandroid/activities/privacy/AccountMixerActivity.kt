@@ -6,7 +6,6 @@
 
 package com.dcrandroid.activities.privacy
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Html
 import android.view.WindowManager
@@ -122,7 +121,7 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
     private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
         if (wallet.isAccountMixerActive) {
             tv_mixer_status.setText(R.string.keep_app_opened)
-            tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
+            tv_mixer_status.setTextColor(resources.getColor(R.color.text4))
 
             iv_mixer_status.setImageResource(R.drawable.ic_alert)
             iv_mixer_status.show()
@@ -132,7 +131,7 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
 
             if (multiWallet!!.readyToMix(wallet.id)) {
                 tv_mixer_status.setText(R.string.ready_to_mix)
-                tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
+                tv_mixer_status.setTextColor(resources.getColor(R.color.text4))
                 iv_mixer_status.hide()
                 mixer_toggle_switch.isEnabled = true
             } else {
@@ -170,10 +169,10 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
         InfoDialog(this)
             .setMessage(getString(R.string.start_mixer_warning))
             .setPositiveButton(
-                getString(R.string._continue),
-                DialogInterface.OnClickListener { _, _ ->
-                    startAccountMixer()
-                })
+                getString(R.string._continue)
+            ) { _, _ ->
+                startAccountMixer()
+            }
             .setNegativeButton(getString(R.string.cancel))
             .show()
     }

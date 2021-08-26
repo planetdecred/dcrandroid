@@ -302,7 +302,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         )
 
         status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
-        tv_confirmations.setTextColor(requireContext().getColor(R.color.blueGraySecondTextColor))
+        tv_confirmations.setTextColor(requireContext().getColor(R.color.text4))
 
         if (transaction.confirmations >= Dcrlibwallet.DefaultRequiredConfirmations || spendUnconfirmedFunds) {
             tv_confirmations.text = HtmlCompat.fromHtml(
@@ -327,7 +327,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         } else {
             tv_confirmations.apply {
                 setText(R.string.pending)
-                setTextColor(context.getColor(R.color.lightGrayTextColor))
+                setTextColor(context.getColor(R.color.text3))
             }
         }
 

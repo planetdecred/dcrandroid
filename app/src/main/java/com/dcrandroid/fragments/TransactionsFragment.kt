@@ -83,10 +83,10 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
             setToolbarTitle(R.string.transactions, false)
         }
 
-        adapter = TransactionPageAdapter(context!!, wallet!!.id, transactions)
+        adapter = TransactionPageAdapter(requireContext(), wallet!!.id, transactions)
 
         txTypeSortAdapter =
-            ArrayAdapter(context!!, android.R.layout.simple_spinner_item, availableTxTypes)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, availableTxTypes)
         txTypeSortAdapter!!.setDropDownViewResource(R.layout.spinner_dropdown_item)
         tx_type_spinner.adapter = txTypeSortAdapter
         tx_type_spinner.onItemSelectedListener = this
@@ -119,9 +119,9 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
 
     private fun initAdapter() {
 
-        val timestampSortItems = context!!.resources.getStringArray(R.array.timestamp_sort)
+        val timestampSortItems = requireContext().resources.getStringArray(R.array.timestamp_sort)
         val timestampSortAdapter =
-            ArrayAdapter(context!!, android.R.layout.simple_spinner_item, timestampSortItems)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, timestampSortItems)
         timestampSortAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         timestamp_sort_spinner.onItemSelectedListener = this
         timestamp_sort_spinner.adapter = timestampSortAdapter
@@ -148,24 +148,24 @@ class TransactionsFragment : BaseFragment(), AdapterView.OnItemSelectedListener,
                 return@withContext
             }
 
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_all, txCount))
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_sent, sentTxCount))
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_received, receivedTxCount))
+            availableTxTypes.add(requireContext().getString(R.string.tx_sort_all, txCount))
+            availableTxTypes.add(requireContext().getString(R.string.tx_sort_sent, sentTxCount))
+            availableTxTypes.add(requireContext().getString(R.string.tx_sort_received, receivedTxCount))
             availableTxTypes.add(
-                context!!.getString(
+                requireContext().getString(
                     R.string.tx_sort_transferred,
                     transferredTxCount
                 )
             )
-            availableTxTypes.add(context!!.getString(R.string.tx_sort_mixed, mixedTxCount))
+            availableTxTypes.add(requireContext().getString(R.string.tx_sort_mixed, mixedTxCount))
 
             if (stakingTxCount > 0) {
-                availableTxTypes.add(context!!.getString(R.string.tx_sort_staking, stakingTxCount))
+                availableTxTypes.add(requireContext().getString(R.string.tx_sort_staking, stakingTxCount))
             }
 
             if (coinbaseTxCount > 0) {
                 availableTxTypes.add(
-                    context!!.getString(
+                    requireContext().getString(
                         R.string.tx_sort_coinbase,
                         coinbaseTxCount
                     )

@@ -68,7 +68,7 @@ class VerifySeedAdapter(
         for (i in 0..2) {
             holder.seedText[i].apply {
                 text = multiSeed.seeds[i].phrase
-                setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
+                setTextColor(context.resources.getColor(R.color.text3))
                 setBackgroundResource(R.drawable.verify_seed_normal)
 
                 setOnClickListener {
@@ -82,19 +82,19 @@ class VerifySeedAdapter(
 
         if (multiSeed.selectedIndex != -1) {
             holder.seedText[multiSeed.selectedIndex].apply {
-                setTextColor(context.resources.getColor(R.color.blue))
+                setTextColor(context.resources.getColor(R.color.primary))
                 setBackgroundResource(R.drawable.verify_seed_selected)
             }
 
             holder.itemView.selected_seed.apply {
                 text = multiSeed.seeds[multiSeed.selectedIndex].phrase
-                setTextColor(context.resources.getColor(R.color.darkerBlueGrayTextColor))
+                setTextColor(context.resources.getColor(R.color.text2))
             }
             holder.itemView.selected_seed.text = multiSeed.seeds[multiSeed.selectedIndex].phrase
         } else {
             holder.itemView.selected_seed.apply {
                 text = "—"
-                setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
+                setTextColor(context.resources.getColor(R.color.text3))
             }
         }
 

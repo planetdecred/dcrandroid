@@ -14,5 +14,5 @@
       android:strokeWidth="2"
       android:fillColor="#00000000"
       android:fillType="nonZero"
-      android:strokeColor="@color/blueGraySecondTextColor"/>
+      android:strokeColor="@color/text4"/>
 </vector>

@@ -6,6 +6,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -27,12 +28,18 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            style="@style/Spinner"
             android:id="@+id/timestamp_sort_spinner" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tx_type_spinner"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            style="@style/Spinner"
             android:layout_marginStart="@dimen/margin_padding_size_16" />
 
     </LinearLayout>

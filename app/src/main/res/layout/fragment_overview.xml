@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:background="@drawable/light_grey_border_8dp"
-                android:textColor="#3D5873"
+                android:textColor="@color/text2"
                 android:paddingTop="@dimen/margin_padding_size_4"
                 android:paddingBottom="@dimen/margin_padding_size_4"
                 android:paddingStart="@dimen/margin_padding_size_8"

@@ -102,7 +102,7 @@
                     android:layout_marginStart="@dimen/margin_padding_size_16"
                     android:includeFontPadding="false"
                     android:text="@string/create_a_new_wallet"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text"
                     android:textSize="@dimen/edit_text_size_16"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/restore_existing_wallet"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/primary"
                     android:textSize="@dimen/edit_text_size_18"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />

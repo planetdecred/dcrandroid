@@ -53,7 +53,7 @@
     <!-- /button style -->
 
     <style name="CircularProgressBar" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">#3d5873</item>
+        <item name="colorAccent">@color/text2</item>
     </style>
 
     <!-- TabText Style -->
@@ -66,12 +66,12 @@
 
     <!-- TabLayout Style -->
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/surface</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabBackground">@drawable/unselected_tab_bottom_indicator</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/blue</item>
-        <item name="tabIndicatorColor">@color/blue</item>
+        <item name="tabSelectedTextColor">@color/primary</item>
+        <item name="tabIndicatorColor">@color/primary</item>
     </style>
 
     <!--/TabLayout Style -->
@@ -100,6 +100,10 @@
     <style name="TransactionsTabText" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="fontFamily">@font/source_sans_pro</item>
         <item name="android:textSize">@dimen/edit_text_size_16</item>
+    </style>
+
+    <style name="Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/bg_spinner_dropdown</item>
     </style>
 
 </resources>

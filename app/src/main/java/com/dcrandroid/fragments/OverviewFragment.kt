@@ -96,7 +96,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = TransactionListAdapter(context!!, transactions)
+        adapter = TransactionListAdapter(requireContext(), transactions)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.isNestedScrollingEnabled = false
@@ -129,7 +129,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             }
 
             iv_close_backup_warning?.setOnClickListener {
-                InfoDialog(context!!)
+                InfoDialog(requireContext())
                     .setMessage(getString(R.string.close_backup_warning_dialog_message))
                     .setPositiveButton(
                         getString(R.string.got_it)
@@ -177,7 +177,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         }
 
         if (activeMixers > 0) {
-            tv_mixer_running.text = context!!.resources.getQuantityString(
+            tv_mixer_running.text = requireContext().resources.getQuantityString(
                 R.plurals.mixer_is_running,
                 activeMixers,
                 activeMixers
@@ -364,7 +364,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
     override fun onAccountMixerEnded(walletID: Long) {
         setMixerStatus()
-        SnackBar.showText(context!!, R.string.mixer_has_stopped_running)
+        SnackBar.showText(requireContext(), R.string.mixer_has_stopped_running)
     }
 
     override fun onAccountMixerStarted(walletID: Long) {

@@ -12,7 +12,7 @@
     android:viewportHeight="13">
     <path
         android:pathData="M3,9l1,0l0,1l3,0l0,1l-4,0l0,-1l-1,0l0,-4l1,0l0,-1l1,0l0,-1l-1,0l0,-1l-1,0l0,-1l2,0l0,1l1,0l0,1l1,0l0,1l1,0l0,1l-3,0l0,1l-1,0l0,2z"
-        android:fillColor="#2970ff" />
+        android:fillColor="@color/primary" />
     <path android:pathData="M11,3l0,4l-1,0l0,1l-1,0l0,1l1,0l0,1l1,0l0,1l-2,0l0,-1l-1,0l0,-1l-1,0l0,-1l-1,0l0,-1l3,0l0,-1l1,0l0,-2l-1,0l0,-1l-3,0l0,-1l4,0l0,1l1,0z">
         <aapt:attr name="android:fillColor">
             <gradient

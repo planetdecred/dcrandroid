@@ -75,7 +75,7 @@
         android:layout_marginStart="@dimen/margin_padding_size_24"
         android:includeFontPadding="false"
         android:text="@string/validate_address_instruction"
-        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textColor="@color/text2"
         android:textSize="@dimen/edit_text_size_16"
         android:fontFamily="@font/source_sans_pro" />
 
@@ -130,7 +130,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#e6eaed" />
+                android:background="@color/colorDivider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -168,7 +168,7 @@
                         android:id="@+id/tv_subtitle"
                         android:text="@string/external_valid_address"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/lightGrayTextColor"
+                        android:textColor="@color/text3"
                         android:includeFontPadding="false"
                         android:fontFamily="@font/source_sans_pro" />
 

@@ -101,14 +101,14 @@ class SendDialog(
         }
 
         destinationAddressCard =
-            DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
+            DestinationAddressCard(requireContext(), dest_address_card, validateAddress).apply {
                 addressChanged = destAddressChanged
                 addressInputHelper.textChanged = destAddressChanged
                 destinationAccountSpinner.selectedAccountChanged = destAccountChanged
             }
 
         sourceAccountSpinner = AccountCustomSpinner(
-            activity!!.supportFragmentManager,
+            requireActivity().supportFragmentManager,
             source_account_spinner, sourceAccountChanged
         )
         sourceAccountSpinner.init {
@@ -145,7 +145,7 @@ class SendDialog(
         send_next.setOnClickListener {
             if (!validForSend || authoredTxData == null) {
                 // should never encounter this
-                SnackBar.showText(context!!, R.string.send_invalid)
+                SnackBar.showText(requireContext(), R.string.send_invalid)
                 return@setOnClickListener
             }
 
@@ -168,7 +168,7 @@ class SendDialog(
 
             ConfirmTransaction(fragmentActivity, sendSuccess)
                 .setTxData(transactionData, authoredTxData!!)
-                .show(activity!!.supportFragmentManager, null)
+                .show(requireActivity().supportFragmentManager, null)
         }
 
         clearEstimates()
@@ -271,7 +271,7 @@ class SendDialog(
     }
 
     override fun showInfo() {
-        InfoDialog(context!!)
+        InfoDialog(requireContext())
             .setDialogTitle(getString(R.string.send_dcr))
             .setMessage(getString(R.string.send_dcr_info))
             .setPositiveButton(getString(R.string.got_it), null)
@@ -328,7 +328,7 @@ class SendDialog(
     private val sendSuccess: (shouldExit: Boolean) -> Unit = {
         GlobalScope.launch(Dispatchers.Main) {
             if (it) {
-                SnackBar.showText(context!!, R.string.transaction_sent)
+                SnackBar.showText(requireContext(), R.string.transaction_sent)
                 dismissAllowingStateLoss()
             } else {
                 clearFields()
@@ -414,7 +414,7 @@ class SendDialog(
         } catch (e: Exception) {
             e.printStackTrace()
 
-            amountHelper.setError(Utils.translateError(context!!, e))
+            amountHelper.setError(Utils.translateError(requireContext(), e))
             clearEstimates()
         }
     }

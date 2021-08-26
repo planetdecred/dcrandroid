@@ -136,7 +136,7 @@ class PinView : View, View.OnClickListener {
         hintPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         hintPaint.textSize = context.resources.getDimension(R.dimen.edit_text_size_16)
         hintPaint.textAlign = Paint.Align.CENTER
-        hintPaint.color = context.resources.getColor(R.color.lightGrayTextColor)
+        hintPaint.color = context.resources.getColor(R.color.text3)
         hintPaint.typeface = customTypeface
 
         errorCirclePaint = Paint(circlePaint)
@@ -319,7 +319,7 @@ class PinView : View, View.OnClickListener {
         if (error != null) {
             counterTextView?.setTextColor(context.getColor(R.color.colorError))
         } else {
-            counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
+            counterTextView?.setTextColor(context.getColor(R.color.text2))
         }
 
         this.errorString = error
@@ -334,7 +334,7 @@ class PinView : View, View.OnClickListener {
         lock.lock()
 
         errorString = null
-        counterTextView?.setTextColor(context.getColor(R.color.darkerBlueGrayTextColor))
+        counterTextView?.setTextColor(context.getColor(R.color.text2))
         counterTextView?.text = "0"
         passCodeLength = 0
         showHint = true

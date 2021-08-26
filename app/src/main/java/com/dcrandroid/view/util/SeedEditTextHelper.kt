@@ -76,13 +76,13 @@ class SeedEditTextHelper(
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
         var backgroundResource = R.drawable.input_background
         var indexBackground = R.drawable.seed_index_bg
-        var indexTextColor = R.color.darkerBlueGrayTextColor
+        var indexTextColor = R.color.text2
         var editTextColor = R.color.text1
 
         if (hasFocus) {
             backgroundResource = R.drawable.input_background_active
             indexBackground = R.drawable.seed_index_bg_active
-            indexTextColor = R.color.blue
+            indexTextColor = R.color.primary
         } else {
             val seed = editText.text.toString()
 

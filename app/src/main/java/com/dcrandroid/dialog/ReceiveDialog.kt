@@ -68,7 +68,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
         qr_image.setOnClickListener { copyAddress() }
 
         sourceAccountSpinner =
-            AccountCustomSpinner(activity!!.supportFragmentManager, source_account_spinner) {
+            AccountCustomSpinner(requireActivity().supportFragmentManager, source_account_spinner) {
 
                 it.pickerTitle = R.string.dest_account_picker_title
                 setAddress(it.getCurrentAddress())
@@ -88,7 +88,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
     }
 
     override fun showInfo() {
-        InfoDialog(context!!)
+        InfoDialog(requireContext())
             .setDialogTitle(getString(R.string.receive_dcr))
             .setMessage(getString(R.string.receive_fund_privacy_info))
             .setPositiveButton(getString(R.string.got_it), null)
@@ -112,7 +112,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
     }
 
     private fun getLogoBitmap(): Bitmap {
-        val logoDrawable = AppCompatResources.getDrawable(context!!, R.drawable.ic_qr_dcr)!!
+        val logoDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_qr_dcr)!!
         val sizePixels = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_80)
         val bitmap = Bitmap.createBitmap(sizePixels, sizePixels, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -122,13 +122,12 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
         val rectF = RectF(rect)
         val paint = Paint()
         paint.style = Paint.Style.FILL
-        paint.color = Color.WHITE
+        paint.color = resources.getColor(R.color.surface)
         paint.isAntiAlias = true
 
         val radius = resources.getDimension(R.dimen.margin_padding_size_4)
         canvas.drawRoundRect(rectF, radius, radius, paint)
         logoDrawable.draw(canvas)
-
 
         return bitmap
     }
@@ -169,7 +168,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
                 val now = Date()
                 val fileName = formatter.format(now) + ".png"
                 val cachePath = File(
-                    activity!!.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                     "wallet_address: $fileName"
                 )
                 val stream = FileOutputStream(cachePath)
@@ -177,7 +176,7 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
                 stream.flush()
                 stream.close()
                 generatedUri = FileProvider.getUriForFile(
-                    activity!!.applicationContext,
+                    requireContext(),
                     BuildConfig.APPLICATION_ID + ".fileprovider",
                     cachePath
                 )
@@ -206,12 +205,12 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             shareIntent.setDataAndType(
                 generatedUri,
-                context!!.contentResolver.getType(generatedUri!!)
+                requireContext().contentResolver.getType(generatedUri!!)
             )
             shareIntent.putExtra(Intent.EXTRA_STREAM, generatedUri)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_address_via)))
         } else {
-            SnackBar.showError(context!!, R.string.address_not_found)
+            SnackBar.showError(requireContext(), R.string.address_not_found)
         }
 
     }

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="_dcr"><![CDATA[<font color="#a7a7a7">—</font> DCR]]></string>
+    <string name="_dcr_usd"><![CDATA[<font color="#a7a7a7">—</font> DCR <font color="#787878">(— USD)</font>]]></string>
+    <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#787878">($%2$s USD)</font>]]></string>
+    <string name="send_from_account"><![CDATA[Sending from <font color="#dedede"><b>%1$s (%2$s)</b></font>]]></string>
+
+    <string name="fetching_cfilters"><![CDATA[Fetching cfilters <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+    <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+    <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+    <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+
     <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#dedede">%1$d</font> &centerdot; <font color="#dedede">%2$s</font> ago]]></string>
     <string name="latest_block_time"><![CDATA[Synced to block <font color="#dedede">%1$d</font> &centerdot; <font color="#dedede">%2$s</font> ago]]></string>
     <string name="connected_to_n_peers"><![CDATA[Connected to <font color="#dedede">%1$d</font> peers.]]></string>

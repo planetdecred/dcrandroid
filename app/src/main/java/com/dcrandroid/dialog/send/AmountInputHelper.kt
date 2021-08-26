@@ -246,7 +246,7 @@ class AmountInputHelper(private val layout: LinearLayout, private val scrollToBo
     var amountChanged: ((byUser: Boolean) -> Unit?)? = null
     override fun afterTextChanged(s: Editable?) {
         if (s.isNullOrEmpty()) {
-            layout.currency_label.setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
+            layout.currency_label.setTextColor(context.resources.getColor(R.color.text3))
             hideOrShowClearButton()
         } else {
             layout.currency_label.setTextColor(context.resources.getColor(R.color.text1))
