@@ -515,9 +515,9 @@
     <string name="get_started">Get started</string>
     <string name="back">Back</string>
     <string name="use_fingerprint">Use fingerprint</string>
-    <string name="overview_backup_seed_instruction">It is recommended to write down the seed phrase for each wallet as a backup so that you can recover your funds when needed.</string>
+    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Go to Wallets</string>
-    <string name="n_wallets_need_backup">%1$d wallets need backup</string>
+    <string name="wallets_need_backup">Would you like to backup your seed words now?</string>
     <string name="a_wallet_needs_backup">A wallet needs backup</string>
     <string name="startup_password">Startup Password</string>
     <string name="new_startup_password">New startup password</string>

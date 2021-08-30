@@ -496,9 +496,9 @@
     <string name="get_started">Débuter</string>
     <string name="back">Retour</string>
     <string name="use_fingerprint">Utiliser empreinte digitale</string>
-    <string name="overview_backup_seed_instruction">Il est recommandé d\'écrire la phrase de récupération de chaque porte-monnaie comme sauvegarde afin de pouvoir récupérer vos fonds si besoin.</string>
+    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Aller aux porte-monnaies</string>
-    <string name="n_wallets_need_backup">%1$d porte-monnaies requièrent une sauvegarde</string>
+    <string name="wallets_need_backup">Would you like to backup your seed words now?</string>
     <string name="a_wallet_needs_backup">Un porte-monnaie requiert une sauvegarde</string>
     <string name="startup_password">Mot de passe de démarrage</string>
     <string name="new_startup_password">Nouveau mot de passe de démarrage</string>

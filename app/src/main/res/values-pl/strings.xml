@@ -465,9 +465,9 @@
     <string name="get_started">Jak rozpocząć</string>
     <string name="back">Wróć</string>
     <string name="use_fingerprint">Użyj odcisku palca</string>
-    <string name="overview_backup_seed_instruction">Zaleca się zapisanie frazy bazowej dla każdego portfela w ramach wykonywania kopii zapasowej, aby w razie potrzeby można było odzyskać środki.</string>
+    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Idź do portfeli</string>
-    <string name="n_wallets_need_backup">%1$d portfeli potrzebuje utworzenia kopii zapasowej</string>
+    <string name="wallets_need_backup">Would you like to backup your seed words now?</string>
     <string name="a_wallet_needs_backup">Portfel potrzebuje utworzenia kopii zapasowej</string>
     <string name="startup_password">Hasło do uruchamiania</string>
     <string name="new_startup_password">Nowe hasło do uruchamiania</string>
