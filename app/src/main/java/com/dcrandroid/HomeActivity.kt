@@ -416,10 +416,12 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         if (intent == null) {
             return
         }
-        val tx = intent.getSerializableExtra(Constants.TRANSACTION) as Transaction
-        TransactionDetailsDialog(
-            Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hash))
-        ).show(this)
+        if (intent.hasExtra(Constants.TRANSACTION)) {
+            val tx = intent.getSerializableExtra(Constants.TRANSACTION) as Transaction
+            TransactionDetailsDialog(
+                Transaction.from(multiWallet!!.walletWithID(tx.walletID).getTransaction(tx.hash))
+            ).show(this)
+        }
     }
 
     // -- Sync Progress Listener
