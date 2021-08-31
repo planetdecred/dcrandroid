@@ -518,7 +518,6 @@
     <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Go to Wallets</string>
     <string name="wallets_need_backup">Would you like to backup your seed words now?</string>
-    <string name="a_wallet_needs_backup">A wallet needs backup</string>
     <string name="startup_password">Startup Password</string>
     <string name="new_startup_password">New startup password</string>
     <string name="new_spending_password">New spending password</string>
