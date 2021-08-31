@@ -46,6 +46,7 @@ public class Constants {
             CHARSET_UTF_8 = "UTF-8",
             INDEX_MD = "index.md",
             VOTE_SUMMARY = "votesummary",
+            COLOR_THEME = "color_theme",
             MIXED = "mixed",
             UNMIXED = "unmixed";
 
@@ -60,6 +61,7 @@ public class Constants {
             TX_NOTIFICATION_SOUND_ONLY = 3,
             TX_NOTIFICATION_SOUND_VIBRATE = 4,
             DEF_TX_NOTIFICATION = TX_NOTIFICATION_VIBRATE_ONLY,
+            DEF_COLOR_THEME = 0,
             DEF_CURRENCY_CONVERSION = 0; // None
 
     public static final boolean DEF_SPEND_UNCONFIRMED = false,

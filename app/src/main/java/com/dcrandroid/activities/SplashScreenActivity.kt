@@ -143,9 +143,9 @@ class SplashScreenActivity : BaseActivity() {
         try {
             if (multiWallet != null) {
                 multiWallet!!.shutdown()
-            }
 
-            walletData.multiWallet = null
+                walletData.multiWallet = null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
