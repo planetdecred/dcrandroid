@@ -506,7 +506,6 @@
     <string name="get_started">开始</string>
     <string name="back">上一步</string>
     <string name="use_fingerprint">使用指纹</string>
-    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">进入钱包</string>
     <string name="startup_password">启动密码</string>
     <string name="new_startup_password">新的启动密码</string>

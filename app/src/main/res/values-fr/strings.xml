@@ -496,7 +496,6 @@
     <string name="get_started">Débuter</string>
     <string name="back">Retour</string>
     <string name="use_fingerprint">Utiliser empreinte digitale</string>
-    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Aller aux porte-monnaies</string>
     <string name="startup_password">Mot de passe de démarrage</string>
     <string name="new_startup_password">Nouveau mot de passe de démarrage</string>

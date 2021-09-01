@@ -465,7 +465,6 @@
     <string name="get_started">Jak rozpocząć</string>
     <string name="back">Wróć</string>
     <string name="use_fingerprint">Użyj odcisku palca</string>
-    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Idź do portfeli</string>
     <string name="startup_password">Hasło do uruchamiania</string>
     <string name="new_startup_password">Nowe hasło do uruchamiania</string>
