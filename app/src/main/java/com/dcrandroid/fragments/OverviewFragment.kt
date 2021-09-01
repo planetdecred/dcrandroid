@@ -116,13 +116,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         if (multiWallet!!.numWalletsNeedingSeedBackup() > 0 && !closedBackupWarning) {
             backup_warning_layout?.show()
 
-            backup_warning_title?.text = when (multiWallet!!.numWalletsNeedingSeedBackup()) {
-                1 -> getString(R.string.a_wallet_needs_backup)
-                else -> getString(
-                    R.string.n_wallets_need_backup,
-                    multiWallet!!.numWalletsNeedingSeedBackup()
-                )
-            }
+            backup_warning_title?.text = getString(R.string.wallets_need_backup)
 
             backup_warning_layout.go_to_wallets_btn.setOnClickListener {
                 switchFragment(2) // Wallets fragment

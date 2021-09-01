@@ -506,10 +506,7 @@
     <string name="get_started">开始</string>
     <string name="back">上一步</string>
     <string name="use_fingerprint">使用指纹</string>
-    <string name="overview_backup_seed_instruction">强烈建议备份每一个钱包的助记词以便日后恢复钱包。</string>
     <string name="go_to_wallets">进入钱包</string>
-    <string name="n_wallets_need_backup">%1$d个钱包需要备份</string>
-    <string name="a_wallet_needs_backup">1个钱包需要备份</string>
     <string name="startup_password">启动密码</string>
     <string name="new_startup_password">新的启动密码</string>
     <string name="new_spending_password">新的支付密码</string>
