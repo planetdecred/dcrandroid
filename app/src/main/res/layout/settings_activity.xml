@@ -91,13 +91,46 @@
                     android:textSize="@dimen/edit_text_size_14"
                     android:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_16"
+                    android:layout_marginBottom="@dimen/margin_padding_size_8"
                     android:textColor="@color/text2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/color_theme"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="@drawable/surface_ripple"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_title"
+                        android:includeFontPadding="false"
+                        android:text="@string/color_theme"
+                        android:textColor="@color/text1"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/pref_subtitle"
+                        android:includeFontPadding="false"
+                        android:layout_marginTop="@dimen/margin_padding_size_4"
+                        android:text="Light"
+                        android:textColor="@color/text4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/spend_unconfirmed_funds"
-                    android:layout_marginTop="@dimen/margin_padding_size_8"
                     android:padding="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"
                     android:focusable="true"
