@@ -9,7 +9,8 @@ installGo(){
 
 installGomobile(){
     echo "Installing gomobile"
-    go install golang.org/x/mobile/cmd/gomobile@latest
+    export GO111MODULE=off
+    go get -u golang.org/x/mobile/cmd/gomobile
     gomobile init
 }
 
