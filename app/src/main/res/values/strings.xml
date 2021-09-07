@@ -51,7 +51,7 @@
     <string name="connected_to_n_peer">Connected to %1$d peers</string>
     <string name="ok">OK</string>
     <string name="_continue">Continue</string>
-    <string name="user_agent">User Agent</string>
+    <string name="user_agent">User agent</string>
     <string name="user_agent_dialog_title">Set up user agent</string>
     <string name="peer_ip_dialog_title">Set up persistent peer</string>
     <string name="peer_ip_pref_hint">IP Address</string>
@@ -194,19 +194,25 @@
     <!--/Address-->
 
     <!--Preference-->
-    <string name="unconfirmed_funds">Spend Unconfirmed Funds</string>
+    <string name="unconfirmed_funds">Spend unconfirmed funds</string>
     <string name="logging_level">Logging level</string>
     <string name="view_wallets_log">View wallets log</string>
     <string name="view_connected_peers">View connected peers</string>
-    <string name="currency_conversion">Currency Conversion</string>
+    <string name="currency_conversion">Currency conversion</string>
     <string name="user_agent_summary">For exchange rate fetching</string>
     <string name="change">Change</string>
+    <string name="color_theme">Color theme</string>
+
+    <string-array name="color_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Device default</item>
+    </string-array>
 
     <string-array name="currency_conversion">
         <item>None</item>
         <item>USD (bittrex)</item>
     </string-array>
-
 
     <string-array name="logging_levels" translatable="false">
         <item>Trace</item>

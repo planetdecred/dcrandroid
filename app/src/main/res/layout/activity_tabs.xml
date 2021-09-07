@@ -127,6 +127,8 @@
             android:gravity="center_vertical"
             android:id="@+id/send_receive_layout"
             android:background="@drawable/send_receive_button_layout"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:elevation="4dp">
 
             <LinearLayout
