@@ -44,7 +44,7 @@ class PasswordPromptDialog(
         }
 
         password_input.validateInput = {
-            btn_confirm.isEnabled = it.isNotBlank()
+            btn_confirm.isEnabled = true
             true
         }
 
