@@ -29,6 +29,7 @@ class ListPreference(
 ) : Preference(context, key, view), View.OnClickListener {
 
     init {
+        valueChanged?.invoke(multiWallet!!.readInt32ConfigValueForKey(key, defaultValue))
         view.setOnClickListener(this)
     }
 

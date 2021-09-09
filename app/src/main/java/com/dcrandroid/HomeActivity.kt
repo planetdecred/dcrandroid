@@ -22,7 +22,6 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.activities.BaseActivity
@@ -67,13 +66,17 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     private lateinit var adapter: NavigationTabsAdapter
 
-    private lateinit var currentFragment: Fragment
+    private var currentFragmentKey = "current_frag"
+    private var currentFragment: Int = 0
     private var currentBottomSheet: FullScreenBottomSheetDialog? = null
     private var sendPageSheet: FullScreenBottomSheetDialog? = null
 
     private lateinit var notificationManager: NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt(currentFragmentKey)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
         setSupportActionBar(toolbar)
@@ -143,18 +146,25 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
 
         setupLogoAnim()
-        GlobalScope.launch(Dispatchers.Default) {
-            delay(1000)
-            withContext(Dispatchers.Main) {
-                checkWifiSync()
-            }
-            delay(6000)
-            try {
-                multiWallet!!.politeia.sync()
-            } catch (e: Exception) {
-                e.printStackTrace()
+        if (savedInstanceState == null) {
+            GlobalScope.launch(Dispatchers.Default) {
+                delay(1000)
+                withContext(Dispatchers.Main) {
+                    checkWifiSync()
+                }
+                delay(6000)
+                try {
+                    multiWallet!!.politeia.sync()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(currentFragmentKey, currentFragment)
     }
 
     private val bottomSheetDismissed = DialogInterface.OnDismissListener {
@@ -162,15 +172,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onBackPressed() {
-        if (currentFragment is OverviewFragment) {
+        if (currentFragment == 0) {
             InfoDialog(this)
                 .setDialogTitle(getString(R.string.exit_app_prompt_title))
                 .setMessage(getString(R.string.exit_app_prompt_message))
                 .setPositiveButton(
-                    getString(R.string.yes),
-                    DialogInterface.OnClickListener { _, _ ->
-                        finish()
-                    })
+                    getString(R.string.yes)
+                ) { _, _ ->
+                    finish()
+                }
                 .setNegativeButton(getString(R.string.no), null)
                 .show()
         } else {
@@ -181,7 +191,9 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onDestroy() {
         super.onDestroy()
 
-        if (multiWallet == null || multiWallet?.openedWalletsCount() == 0) {
+        if (isChangingConfigurations ||
+            multiWallet == null || multiWallet?.openedWalletsCount() == 0
+        ) {
             return
         }
         notificationManager.cancelAll()
@@ -214,7 +226,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         }
         recycler_view_tabs.adapter = adapter
 
-        switchFragment(0)
+        switchFragment(currentFragment)
     }
 
     fun refreshNavigationTabs() {
@@ -274,7 +286,8 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
     fun switchFragment(position: Int) {
 
-        currentFragment = when (position) {
+        currentFragment = position
+        val fragment = when (position) {
             0 -> OverviewFragment()
             1 -> {
                 if (multiWallet!!.openedWalletsCount() > 1) {
@@ -290,7 +303,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.frame, currentFragment)
+            .replace(R.id.frame, fragment)
             .commit()
 
         setTabIndicator()

@@ -16,7 +16,9 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.openedWalletsList
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.AccountMixerNotificationListener
@@ -25,14 +27,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener {
+
+    var lastDayNightMode = 0
 
     internal val walletData: WalletData = WalletData.instance
     internal val multiWallet: MultiWallet?
         get() = walletData.multiWallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setColorTheme()
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -44,6 +50,40 @@ open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener 
         }
 
         checkMixerStatus()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        if (AppCompatDelegate.getDefaultNightMode() != lastDayNightMode) {
+            recreate()
+        }
+    }
+
+    fun setColorTheme() {
+        if (walletData.multiWallet != null) {
+            val colorTheme = multiWallet!!.readInt32ConfigValueForKey(
+                Constants.COLOR_THEME,
+                Constants.DEF_COLOR_THEME
+            )
+
+            lastDayNightMode = nightMode(colorTheme)
+            if (AppCompatDelegate.getDefaultNightMode() != lastDayNightMode) {
+                AppCompatDelegate.setDefaultNightMode(lastDayNightMode)
+                recreate()
+            }
+
+        } else {
+            lastDayNightMode = AppCompatDelegate.getDefaultNightMode()
+        }
+    }
+
+    fun nightMode(option: Int): Int {
+        return when (option) {
+            0 -> AppCompatDelegate.MODE_NIGHT_NO
+            1 -> AppCompatDelegate.MODE_NIGHT_YES
+            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {

@@ -86,12 +86,18 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             ChangePassUtil(this, null).begin()
         }
 
-        setCurrencyConversionSummary(
-            multiWallet!!.readInt32ConfigValueForKey(
-                Dcrlibwallet.CurrencyConversionConfigKey,
-                Constants.DEF_CURRENCY_CONVERSION
-            )
-        )
+        ListPreference(
+            this, Constants.COLOR_THEME, Constants.DEF_COLOR_THEME,
+            R.array.color_themes, color_theme
+        ) {
+            setColorThemeSummary(it)
+            var newMode = nightMode(it)
+
+            if (newMode != lastDayNightMode) {
+                setColorTheme()
+            }
+        }
+
         ListPreference(
             this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION,
             R.array.currency_conversion, currency_conversion
@@ -130,6 +136,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     private fun setCurrencyConversionSummary(index: Int) {
         val preferenceSummary = resources.getStringArray(R.array.currency_conversion)[index]
         currency_conversion.pref_subtitle.text = preferenceSummary
+    }
+
+    private fun setColorThemeSummary(index: Int) {
+        val preferenceSummary = resources.getStringArray(R.array.color_themes)[index]
+        color_theme.pref_subtitle.text = preferenceSummary
     }
 
     private fun setPeerIP(ip: String) {
