@@ -44,7 +44,7 @@ class PinPromptDialog(
         pinViewUtil = PinViewUtil(pin_view, pin_counter, null)
 
         pinViewUtil.pinChanged = {
-            btn_confirm.isEnabled = it.isNotEmpty()
+            btn_confirm.isEnabled = true
             Unit
         }
 
@@ -80,7 +80,7 @@ class PinPromptDialog(
             pinViewUtil.pinView.rejectInput = true
             pinViewUtil.showError(R.string.invalid_pin)
             btn_cancel.isEnabled = false
-            btn_confirm.isEnabled = false
+            btn_confirm.isEnabled = true
             btn_confirm.show()
             progress_bar.hide()
 
