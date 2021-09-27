@@ -8,6 +8,7 @@ package com.dcrandroid.activities
 
 import android.os.Bundle
 import android.view.ViewTreeObserver
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import com.dcrandroid.BuildConfig
@@ -65,6 +66,9 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
                 e.printStackTrace()
             }
         }
+
+        log_scroll_view.postDelayed( { log_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 1000)
+
     }
 
     override fun onDestroy() {
@@ -85,4 +89,10 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         }
     }
 
+    fun ScrollView.scrollToBottom() {
+        val lastChild = getChildAt(childCount - 1)
+        val bottom = lastChild.bottom + paddingBottom
+        val delta = bottom - (scrollY+ height)
+        smoothScrollBy(0, delta)
+    }
 }
