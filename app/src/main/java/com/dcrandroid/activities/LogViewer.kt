@@ -60,6 +60,7 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
                 while (line != null) {
                     addLine("\n" + line)
                     line = input.readLine()
+                    log_scroll_view.post { log_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
                 }
 
             } catch (e: Exception) {
