@@ -1,0 +1,681 @@
+<!--
+  ~ Copyright (c) 2018-2021 The Decred developers
+  ~ Use of this source code is governed by an ISC
+  ~ license that can be found in the LICENSE file.
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!--General-->
+    <string name="wallet">钱包</string>
+    <string name="crash_dialog_text">一个意外错误导致应用被强制终止，
+    请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题，
+    这将有助于我们防止错误的再次发生。</string>
+    <string name="send_dcr_info">输入或扫描目标钱包地址并输入要发送的DCR币的数量</string>
+    <string name="type">类别</string>
+    <string name="loading">加载中</string>
+    <string name="dcr" translatable="false">DCR</string>
+    <string name="help">帮助</string>
+    <string name="about">关于</string>
+    <string name="statistics">统计数据</string>
+    <string name="build">版本号</string>
+    <string name="uptime">运行时间</string>
+    <string name="network">网络类型</string>
+    <string name="best_block">最新区块高度</string>
+    <string name="best_block_timestamp">最新区块时间戳</string>
+    <string name="best_block_age">最新块龄</string>
+    <string name="wallet_data_directory">钱包数据目录</string>
+    <string name="wallet_data">钱包数据大小</string>
+    <string name="debug">调试</string>
+    <string name="overview">首页</string>
+    <string name="permission">权限</string>
+    <string name="denied_permission">你拒绝了授权！</string>
+    <string name="receive">接收</string>
+    <string name="send">发送</string>
+    <string name="cancel">取消</string>
+    <string name="connection">连接</string>
+    <string name="testnet">测试网</string>
+    <string name="general">通用</string>
+    <string name="view_on_dcrdata">在dcrdata查看</string>
+    <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
+    <string name="exit_cap">退出</string>
+    <string name="delete">删除</string>
+    <string name="no">否</string>
+    <string name="yes">是</string>
+    <string name="confirm">确认</string>
+    <string name="usd" translatable="false">USD</string>
+    <string name="settings">设置</string>
+    <string name="more">更多</string>
+    <string name="syncing">同步中</string>
+    <string name="syncing_ellipsis">同步中…</string>
+    <string name="connected_to_a_peer">连接到指定节点</string>
+    <string name="connected_to_n_peer">已连接到%1$d 个节点</string>
+    <string name="ok">确认</string>
+    <string name="_continue">继续</string>
+    <string name="user_agent">用户代理标识</string>
+    <string name="user_agent_dialog_title">代理标识</string>
+    <string name="peer_ip_dialog_title">设置永久节点</string>
+    <string name="peer_ip_pref_hint">IP地址</string>
+    <string name="log_file_not_found">未发现日志文件</string>
+    <string name="wallet_log_copied">钱包日志已复制</string>
+    <string name="_copy">复制</string>
+    <string name="address_not_found">未发现地址</string>
+    <string name="share">共享</string>
+    <string name="clear_fields">清除内容</string>
+    <string name="retry_caps">重试</string>
+    <string name="share_address_via">分享二维码到</string>
+    <string name="license">许可</string>
+    <string name="always">总是</string>
+    <string name="rename">重命名</string>
+    <string name="create">创建</string>
+    <string name="_import">导入</string>
+    <string name="dcr_amount">%1$s DCR</string>
+    <string name="rename_wallet_sheet_title">重命名钱包</string>
+    <string name="wallet_name">钱包名称</string>
+    <string name="privacy">隐私</string>
+    <string name="remove">移除</string>
+    <string name="confirm_to_remove">确认移除</string>
+    <string name="remove_wallet">从设备中移除钱包</string>
+    <string name="remove_wallet_prompt">从设备中移除钱包？</string>
+    <string name="remove_watch_wallet_prompt">从设备中移除观察钱包？</string>
+    <string name="remove_wallet_message">确保你在移除钱包前已备份了助记词</string>
+    <string name="error_copied">错误已复制</string>
+
+    <plurals name="mixed_dcr_amount">
+        <item quantity="one">%1$s DCR</item>
+        <item quantity="other">%1$s DCR\t x%2$d</item>
+    </plurals>
+    <!--/General-->
+
+    <!--Peers-->
+    <string name="connected_peers_details">
+        节点ID: %1$d
+        \n节点地址: %2$s
+        \n本地地址: %3$s
+        \n服务类型: %4$s
+        \n版本: %5$d
+        \n子版本: %6$s
+        \n起始高度: %7$d
+        \nBan评分: %8$d
+    </string>
+    <string name="version">版本</string>
+    <string name="build_date">编译时间</string>
+    <string name="net">网络类型</string>
+    <string name="connecting_to_peers">正在连接到节点</string>
+
+    <!--/General-->
+
+    <!--Account-->
+    <string name="account_number">账户编号</string>
+    <string name="account_name">账户名称</string>
+    <string name="hd_path">HD路径</string>
+    <string name="external">外部的</string>
+    <string name="rename_account">重命名账户</string>
+    <!--/Account-->
+
+    <!--Seed-->
+    <string name="save_seed_instruction">请按照正确的顺序写下33个助记词。</string>
+    <string name="backup_seed_phrase">备份助记词短语</string>
+    <string name="verify_seed_info">验证你的助记词短语以便在需要的时候能够恢复钱包。</string>
+
+    <!--/Seed-->
+
+    <!--Balance-->
+    <string name="label_spendable">可花费的</string>
+    <string name="immature_stake_generation">未成熟的份额</string>
+    <string name="label_immature_rewards">未成熟的奖励</string>
+    <string name="label_locked_by_tickets">被投票锁定</string>
+    <string name="label_voting_authority">投票权</string>
+    <string name="current_total_balance">当前总金额</string>
+    <string name="total_balance">总金额</string>
+    <!--/Balance-->
+
+    <!--Wallet-->
+    <string name="create_a_new_wallet">创建新钱包</string>
+    <string name="restore_existing_wallet">恢复已有钱包</string>
+    <string name="import_existing_wallet">导入已有钱包</string>
+    <string name="import_watching_only_wallet">导入观察钱包</string>
+    <string name="opening_wallet">正在打开钱包…</string>
+    <string name="opening_wallets">正在打开钱包…</string>
+    <string name="invalid_passphrase">密码输入不正确</string>
+    <string name="invalid_pin">PIN码输入不正确</string>
+    <string name="invalid_password">密码输入不正确</string>
+    <string name="failed_to_open_wallet">打开钱包失败</string>
+    <!--/Wallet-->
+
+    <!--Transaction-->
+    <string name="recent_transactions">最近的交易</string>
+    <string name="from">从</string>
+    <string name="to">到</string>
+    <string name="destination_address">目的地址</string>
+    <string name="transaction_fee">手续费</string>
+    <string name="Transaction_details">交易详情</string>
+    <string name="transactions">交易</string>
+    <string name="pending">等待中</string>
+    <string name="vote">已投票</string>
+    <string name="revoked">已撤销</string>
+    <string name="amount_invalid_decimal_places">金额超过%1$d位小数</string>
+    <string name="new_transaction">新的交易</string>
+    <string name="wallet_new_transaction">[%1$s]新的交易</string>
+    <string name="tx_details_confirmations"><![CDATA[<font color="#41be53">已确认</font> &centerdot; %1$d 确认数]]></string>
+    <string name="tx_details_pending_confirmation"><![CDATA[<font color="#8997A5">待处理</font> &centerdot; %1$d 确认数]]></string>
+    <string name="wallet_ticket_voted">[%1$s] 票已投出</string>
+    <string name="ticket_voted">一张票已被投出</string>
+    <string name="wallet_ticket_revoked">[%1$s] 票被撤销</string>
+    <string name="ticket_revoked">一张票已被撤销</string>
+    <string name="vote_reward">投票奖励：%1$s DCR</string>
+
+    <string-array name="timestamp_sort">
+        <item>最新的</item>
+        <item>最老的</item>
+    </string-array>
+    <!--/Transaction-->
+
+    <!--Block chain-->
+    <!--/Block chain-->
+
+    <!--Sync Messages-->
+    <string name="remaining_minute_sync_eta">已完成%1$d%%，还剩%2$d分钟。</string>
+    <string name="remaining_seconds_sync_eta">已完成%1$d%%，还剩%2$d秒钟。</string>
+    <string name="remaining_sync_eta_less_than_seconds">已完成%1$d%%, 还剩不到1秒钟。</string>
+    <string name="synchronizing">正在同步…</string>
+    <string name="scanned_blocks">已扫描完区块</string>
+    <!--/Sync Messages-->
+
+    <!--QR Code-->
+    <string name="camera_permission_scan">此应用需要相机权限去扫描二维码钱包地址，请在下个对话框允许操作。</string>
+    <!--/QR Code-->
+
+    <!--Address-->
+    <string name="address_copy_text">地址已复制</string>
+    <string name="your_address">你的地址</string>
+    <string name="generate_new_address">生成新地址</string>
+    <string name="receive_fund_privacy_info">每次请求收款都会创建一个新地址以保护你的隐私</string>
+    <string name="invalid_address">不正确的地址</string>
+    <!--/Address-->
+  
+    <!--Preference-->
+    <string name="unconfirmed_funds">花费未确认的金额</string>
+    <string name="logging_level">日志记录级别</string>
+    <string name="view_wallets_log">查看钱包日志</string>
+    <string name="view_connected_peers">查看已连接的节点</string>
+    <string name="currency_conversion">货币转换</string>
+    <string name="user_agent_summary">获取交易所汇率</string>
+    <string name="change">更改</string>
+    <string name="color_theme">主题颜色</string>
+
+    <string-array name="color_themes">
+        <item>浅色</item>
+        <item>深色</item>
+        <item>跟随系统</item>
+    </string-array>
+
+    <string-array name="currency_conversion">
+        <item>None</item>
+        <item>USD (bittrex)</item>
+    </string-array>
+
+    <string-array name="logging_levels" translatable="false">
+        <item>Trace</item>
+        <item>Debug</item>
+        <item>Info</item>
+        <item>Warn</item>
+        <item>Error</item>
+        <item>Critical</item>
+    </string-array>
+    
+    
+    <string-array name="notification_options">
+        <item>无</item>
+        <item>静音</item>
+        <item>仅振动</item>
+        <item>仅声音</item>
+        <item>声音和震动</item>
+    </string-array>
+
+    <!--/Preference-->
+
+    <!--History Fragment -->
+    <string name="transferred">已转入</string>
+    <string name="sent">已发送</string>
+    <string name="received">已接收</string>
+    <!--/History Fragment -->
+
+    <!--Error Messages-->
+    <string name="not_enough_funds">没有足够金额</string>
+    <string name="empty_seed">空助记词</string>
+    <string name="not_connected">不能连接到Decred网络</string>
+    <string name="watch_only_wallet_error">钱包只能查看</string>
+    <string name="passphrase_required">请提供隐私密码</string>
+    <string name="wallet_not_loaded">钱包未加载</string>
+    <string name="err_no_peers">Decred网络因缺少节点而无法连接</string>
+    <string name="not_enough_funds_synced">没有足够金额（或者未连接）</string>
+    <string name="error_occurred">发生错误</string>
+    <!--/Error Messages-->
+
+    <!--Security Fragment-->
+    <string name="sign_message">签署消息</string>
+    <string name="sign">签名</string>
+    <string name="message">消息</string>
+    <string name="signature">签名</string>
+    <string name="valid_signature">根据消息和地址验证这个签名正确。</string>
+    <string name="invalid_signature">根据消息和地址验证这个签名不正确。</string>
+    <string name="sign_message_description">使用地址签名一个消息，私钥能够帮助你证明你给对方的地址的所有权。</string>
+    <string name="verify_message_description"><![CDATA[在你或对方声称一个签名后， 你可以使用此框来验证消息的正确性。<br/><br/>一旦你输入了地址、这个消息和对应的签名，你会看到 <font color="#41be53">正确的</font> 如果这个签名和消息、地址相对应，否则显示<font color="#ed6d47">不正确</font>.]]></string>
+    <!--/Security Fragment-->
+
+    <!--Send Fragment-->
+    <string name="_0_bytes">0 bytes</string>
+    <string name="x_bytes">%1$d bytes</string>
+    <string name="fee">手续费</string>
+    <string name="send_to_account">发送到账户</string>
+    <string name="send_to_address">发送到地址</string>
+    <!--/Send Fragment-->
+
+    <!--Transaction Details View-->
+    <!--/Transaction Details View-->
+
+    <!--Security-->
+    <string name="pin">PIN码</string>
+    <string name="create_spending_pin">创建支付PIN码</string>
+    <string name="create_spending_pass">创建支付密码</string>
+    <string name="change_spending_pass">更改支付密码</string>
+    <string name="change_spending_pin">更改支付PIN码</string>
+    <string name="mismatch_passcode">PIN码不匹配</string>
+    <string name="mismatch_password">密码不匹配</string>
+    <string name="password">密码</string>
+    <string name="enter_spending_pin">输入支付PIN码</string>
+    <string name="enter_spending_pin_again">再次输入支付PIN码</string>
+    <string name="enter_startup_pin">输入启动PIN码</string>
+    <string name="enter_startup_password">输入启动密码</string>
+    <string name="enter_new_startup_pin">输入新的启动PIN码</string>
+    <string name="enter_new_startup_pin_again">再次输入新的启动PIN码</string>
+    <string name="create_startup_pin">创建PIN码</string>
+    <string name="create_startup_password">创建启动密码</string>
+    <string name="change_startup_password">更改启动密码</string>
+    <string name="change_startup_pin">更改启动PIN码</string>
+    <string name="change_spending_pin_password">更改支付PIN码/密码</string>
+    <string name="startup_pin_password">启动PIN码/密码</string>
+    <string name="startup_pin__password">启动PIN码/密码</string>
+    <string name="change_startup_pin_password">更改启动PIN码/密码</string>
+    <string name="spending_pin_password">支付PIN码/密码</string>
+    <string name="spending_password">支付密码</string>
+
+    <!--/Security-->
+
+    <!--Crash Report-->
+    <string name="dont_send">不要发送</string>
+    <string name="send_report">发送报告</string>
+    <string name="app_crashed">App已崩溃</string>
+    <string name="crash_report_copied">崩溃报告已复制</string>
+    <string name="hide_report">隐藏报告</string>
+    <string name="view_report">查看报告</string>
+    <!--/Crash Report-->
+
+    <!--WIFI Sync-->
+    <string name="wifi_data_sync_title">未连接WiFi时开启同步</string>
+    <string name="wifi_sync_notice">你想要在所有网络环境下同步吗？</string>
+    <string name="not_connected_to_wifi">不能连接到WiFi</string>
+    <string name="sync">同步</string>
+    <string name="not_now">现在不</string>
+    <!--/WIFI Sync-->
+
+    <string name="tx_details_account">%1$s DCR (%2$s)</string>
+
+    <!--Landing page-->
+    <!--Landing page-->
+
+    <!--Time-->
+    <string name="am">上午</string>
+    <string name="pm">下午</string>
+    <string name="time_left_minutes">剩余%1$d分钟</string>
+    <string name="time_left_seconds">剩余%1$d秒钟</string>
+    <string name="days_behind">%1$d天前</string>
+    <string name="one_day_behind">1天前</string>
+    <string name="x_days">%1$d天</string>
+    <string name="one_day">1天</string>
+    <string name="x_hours">%1$d小时</string>
+    <string name="one_hour">1小时</string>
+    <string name="x_minutes">%1$d分钟</string>
+    <string name="one_minute">1分钟</string>
+    <string name="x_seconds">%1$d秒钟</string>
+    <string name="one_second">1秒钟</string>
+    <!--/Time-->
+
+    <string name="connected_peers_count">已连接的节点数量</string>
+    <string name="wallet_status">钱包状态</string>
+    <string name="offline">离线</string>
+    <string name="online">在线</string>
+    <string name="no_transactions_yet">没有交易</string>
+    <string name="not_syncing">未同步</string>
+    <string name="rebroadcast">转发</string>
+    <string name="reconnect">重连</string>
+    <string name="disconnect">断开连接</string>
+    <string name="connect">连接</string>
+    <string name="show_details">查看详情</string>
+    <string name="hide_details">隐藏详情</string>
+    <string name="block_header_fetched">区块头已获取</string>
+    <string name="cfilters_fetched">过滤器已获取</string>
+    <string name="cfilters_left"> 剩余%1$d过滤器</string>
+    <string name="step_cfilters">重新为升级获取过滤器</string>
+    <string name="step_1_3" tools:ignore="TypographyFractions">步骤 1/3</string>
+    <string name="step_2_3">步骤 2/3</string>
+    <string name="step_2_2">步骤 2/2</string>
+    <string name="step_3_3">步骤 3/3</string>
+    <string name="fetching_cfilters"><![CDATA[正在获取过滤器 <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="fetching_block_headers"><![CDATA[正在获取区块头 <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="scanning_block_headers"><![CDATA[正在扫描区块头 <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="discovering_addresses"><![CDATA[正在检查已使用的地址 <font color="#8997a5">&centerdot;</font> %1$d%%]]></string>
+    <string name="syncing_progress">同步进度</string>
+    <string name="percentage">%1$d%%</string>
+    <string name="syncing_state">同步中…</string>
+    <string name="block_header_fetched_count">%1$d of %2$d</string>
+    <string name="blocks_left">剩余%1$d区块</string>
+    <string name="synced">已同步</string>
+
+    <string name="synced_latest_block_time"><![CDATA[最新区块 <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> 前]]></string>
+    <string name="latest_block_time"><![CDATA[已同步到区块 <font color="#091440">%1$d</font> &centerdot; <font color="#091440">%2$s</font> 前]]></string>
+    <string name="connected_to_n_peers"><![CDATA[已连接到 <font color="#091440">%1$d</font> 个节点]]></string>
+    <string name="no_connected_peers">未连接到节点</string>
+    <string name="connected_peers">已连接的节点</string>
+    <string name="peers_connected">节点已连接</string>
+    <string name="_default">默认</string>
+    <string name="starting_up">启动</string>
+    <string name="waiting_for_other_wallets">等待其他钱包</string>
+    <string name="resume_account_discovery_title">解锁以恢复</string>
+    <string name="multi_resume_account_discovery_title">解锁%1$s去恢复</string>
+    <string name="resume_account_discovery_desc">恢复发现钱包进度在上次同步中被打断。\n\n解锁钱包以恢复进度。</string>
+    <string name="unlock">解锁</string>
+    <string name="wallets">钱包</string>
+    <string name="add_new_account">添加新账户</string>
+    <string name="key_count">%1$d外部, %2$d内部, %3$d导入</string>
+    <string name="keys">密钥</string>
+    <string name="properties">属性</string>
+    <string name="show_properties">显示属性</string>
+    <string name="hide_properties">隐藏属性</string>
+    <string name="wallet_renamed">钱包已重命名</string>
+    <string name="account_renamed">账户已重命名</string>
+    <string name="account_created">账户已创建</string>
+    <string name="create_account_warning">账户一旦创建就不能删除</string>
+    <string name="create_new_account">创建新账户</string>
+    <string name="confirm_to_create_account">确认创建新账户</string>
+    <string name="unlock_to_start_mixing">解锁你的钱包开始混币</string>
+    <string name="not_backed_up">未备份</string>
+    <string name="seed_phase_2_briefing">你将在下一步被要求输入助记词短语</string>
+    <string name="verify">验证</string>
+    <string name="seed_instruction_1">这<b>33个助记词短语</b>非常重要！</string>
+    <string name="seed_instruction_2">助记词短语是<b>唯一</b>能恢复你钱包的方式！</string>
+    <string name="seed_instruction_3">强烈建议保存你的助记词短语在<b><font color="#71b054">物理媒介</font></b>上（例如：写在纸上）。</string>
+    <string name="seed_instruction_4">绝对不要保存你的助记词短语在<b><font color="#ed6d47">数字媒介</font></b>上（例如：截屏）。</string>
+    <string name="seed_instruction_5">任何人使用你的助记词短语<b><font color="#ed6d47">都能偷取你的资金</font></b>。 不要给任何人看。</string>
+    <string name="view_seed_phrase">查看助记词短语</string>
+    <string name="seed_verification_failed">验证失败，请检查每一个单词并重试。</string>
+    <string name="back_to_wallets">回到钱包</string>
+    <string name="tx_sort_all">所有 (%1$d)</string>
+    <string name="tx_sort_sent">已发送 (%1$d)</string>
+    <string name="tx_sort_received">已接收 (%1$d)</string>
+    <string name="tx_sort_transferred">已转入 (%1$d)</string>
+    <string name="tx_sort_mixed">已混合 (%1$d)</string>
+    <string name="tx_sort_staking">投票权益 (%1$d)</string>
+    <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
+    <string name="ticket_purchase">选票购买</string>
+    <string name="voted">已投票</string>
+    <string name="unmined">未确认</string>
+    <string name="immature">未成熟</string>
+    <string name="live">已成熟</string>
+    <string name="purchased">已购买</string>
+    <string name="receive_dcr">接收DCR</string>
+    <string name="selected_account_name">%1$s (%2$s)</string>
+    <string name="decred_qr_address_prefix">decred:%1$s</string>
+    <string name="got_it">了解</string>
+    <string name="tap_to_copy">(点击复制)</string>
+    <string name="wallet_created">钱包已创建</string>
+    <string name="watch_only_wallet_created">观察钱包已导入</string>
+    <string name="amount">金额</string>
+    <string name="processing_time">处理时间</string>
+    <string name="fee_rate">费率</string>
+    <string name="transaction_size">交易大小</string>
+    <string name="total_cost">总花费</string>
+    <string name="next">下一步</string>
+    <string name="send_dcr">发送 DCR</string>
+    <string name="spendable_bal_format">可花费的：%1$s DCR</string>
+    <string name="send_x_dcr">发送 %1$s DCR</string>
+
+    <string name="x_dcr">%1$s DCR</string>
+    <string name="x_usd">%1$s USD</string>
+    <string name="usd_symbol_format">$%1$s</string>
+    <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
+    <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
+    <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
+    <string name="balance_after_send">发送后的余额</string>
+    <string name="confirm_to_send">确认发送</string>
+    <string name="confirm_show_seed">"确认显示助记词"</string>
+    <string name="confirm_verify_seed">"确认验证助记词"</string>
+    <string name="send_from_account"><![CDATA[发送来自<font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
+    <string name="send_invalid">发送不正确</string>
+    <string name="to_destination_address">到目标地址</string>
+    <string name="send_dcr_warning">你的DCR将被发送并且不能撤销。</string>
+    <string name="to_self">发给自己</string>
+    <string name="processing_ellipsis">处理中…</string>
+    <string name="success">成功</string>
+    <string name="transaction_sent">交易已发送</string>
+    <string name="from_account">来自账户</string>
+    <string name="included_in_block">包含在区块</string>
+    <string name="transaction_id">交易ID</string>
+    <string name="tx_id_copied">交易ID已复制</string>
+    <string name="to_account">到账户</string>
+    <string name="how_to_copy">如何复制</string>
+    <string name="tx_details_copy_info"><![CDATA[点击<font color="#2970FF">蓝色文本</font>去复制条目。]]></string>
+    <string name="x_inputs_consumed">%1$d 输入消耗</string>
+    <string name="x_output_created">%1$d 输出创建</string>
+    <string name="previous_outpoint_copied">上一笔输出已复制</string>
+    <string name="to_address">到地址</string>
+    <string name="paste">粘贴</string>
+    <string name="qr_code_scan_hint">将二维码放入框中</string>
+    <string name="source_account_changed">来源账户已更改</string>
+    <string name="source_account_picker_title">发送账户</string>
+    <string name="dest_account_picker_title">接收账户</string>
+    <string name="none">None</string>
+    <string name="notifications">通知</string>
+    <string name="incoming_transactions">传入交易时</string>
+    <string name="beep_for_new_blocks">新区块提醒音</string>
+    <string name="connect_to_specific_peer">连接到指定节点</string>
+    <string name="validate_addresses">验证地址</string>
+    <string name="validate_address_instruction">输入要验证的地址：</string>
+    <string name="validate">验证</string>
+    <string name="clear">清除</string>
+    <string name="valid_address">正确的地址</string>
+    <string name="external_valid_address">不属于此钱包</string>
+    <string name="internal_valid_address">属于 %1$s</string>
+    <string name="address">地址</string>
+    <string name="sign_message_instruction">输入地址和消息去签名：</string>
+    <string name="signature_copied">签名已复制</string>
+    <string name="confirm_to_sign">确认签署</string>
+    <string name="confirm_to_change">确认更改</string>
+    <string name="sign_using_external_address_error">地址不属于此钱包</string>
+    <string name="verify_message_instruction">输入地址、签名和消息去验证：</string>
+    <string name="clear_all">清除所有</string>
+    <string name="verify_message">验证消息</string>
+    <string name="invalid_base64_string">不是BASE64字符串</string>
+    <string name="help_description">获取更多信息，请浏览Decred文档。</string>
+    <string name="see_documentations">查看文档</string>
+    <string name="exchange_rate_fetch_error">交易汇率未获取</string>
+    <string name="retry">重试</string>
+    <string name="message_signed">消息已签名</string>
+    <string name="restore_wallet_title">从助记词短语中恢复</string>
+    <string name="verify_seed_phrase">验证助记词短语</string>
+    <string name="restore">恢复</string>
+    <string name="restore_wallet_instruction">按照正确的顺序输入助记词短语</string>
+    <string name="keep_in_mind">注意</string>
+    <string name="invalid_restore_seed">恢复失败，请确认所有单词并重试</string>
+    <string name="create_watch_only_wallet">创建观察钱包</string>
+    <string name="extended_public_key2">扩展公钥</string>
+    <string name="ext_pub_key_info"><![CDATA[在<b>Decrediton</b>在<b>账户</b>部分，展开你看到的账户，并且点击<b>Reveal Pubkey</b>.]]></string>
+    <string name="wallet_name_exists">钱包名称已存在</string>
+    <string name="reserved_wallet_name">\'wallet-\' 是保留前缀</string>
+    <string name="invalid_key">密钥不正确</string>
+    <string name="unusable_key">密钥不可用</string>
+    <string name="biometric_lockout_error">太多尝试，请重试。</string>
+    <string name="biometric_permanent_lockout_error">生物识别已禁用，使用强身份验证解锁您的设备 (PIN码/图形锁/密码)</string>
+    <string name="invalid_peer_ip">输入正确的IP地址</string>
+    <string name="your_wallet_is_successfully_restored">你的钱包恢复成功</string>
+    <string name="get_started">开始</string>
+    <string name="back">上一步</string>
+    <string name="use_fingerprint">使用指纹</string>
+    <string name="overview_backup_seed_instruction">写下你的助记词短语以便于在需要的时候恢复你的资金。</string>
+    <string name="go_to_wallets">进入钱包</string>
+    <string name="wallets_need_backup">你想要现在备份你的助记词短语吗？</string>
+    <string name="startup_password">启动密码</string>
+    <string name="new_startup_password">新的启动密码</string>
+    <string name="new_spending_password">新的支付密码</string>
+    <string name="confirm_new_startup_password">确认启动密码</string>
+    <string name="confirm_new_spending_password">确认支付密码</string>
+    <string name="remove_startup_security">移除启动安全性</string>
+    <string name="close_backup_warning">关闭备份告警</string>
+    <string name="close_backup_warning_dialog_message">记得尽可能的备份你的钱包。</string>
+    <string name="startup_pin_prompt_title">使用启动PIN码解锁</string>
+    <string name="startup_password_prompt_title">使用启动密码解锁</string>
+    <string name="startup_fingerprint_prompt_title">使用指纹解锁</string>
+    <string name="use_password">使用密码</string>
+    <string name="use_pin">使用PIN码</string>
+    <string name="startup_security_changed">启动PIN码/密码已更改</string>
+    <string name="spending_passphrase_changed">支付PIN码/密码已更改</string>
+    <string name="wallets_log">钱包日志</string>
+    <string name="write_down_seed_phrase">写下助记词短语</string>
+    <string name="step_1_2" tools:ignore="TypographyFractions">步骤 1/2</string>
+    <string name="your_33_word_seed_phrase">你的33个单词助记词短语</string>
+    <string name="i_have_wrote_down_all_33_words">我已经写下33单词</string>
+    <string name="security_tools">安全工具</string>
+    <string name="security_tools_message">此处显示提高加密货币安全不同方面的各种工具。</string>
+    <string name="wallet_removed">钱包已移除</string>
+    <string name="rescanning_blocks_ellipsis">正在重新扫描区块…</string>
+    <string name="view_statistics">查看统计</string>
+    <string name="rescan_blockchain">重新扫描区块链</string>
+    <string name="rescan_progress_notification">在首页检查进度！</string>
+    <string name="rescan_blockchain_warning">你确定吗？这将花点时间</string>
+    <string name="err_sync_in_progress">当同步进行中不能开启扫描</string>
+    <string name="err_rescan_in_progress">当另一个扫描正在进行时不能开启扫描</string>
+    <string name="exit_app_prompt_title">退出钱包APP？</string>
+    <string name="exit_app_prompt_message">你确定要退出吗？</string>
+    <string name="migrating_wallet">迁移钱包</string>
+    <string name="add_new_wallet">添加新钱包</string>
+    <string name="wait_for_sync">等待同步完成</string>
+    <string name="welcome_screen_text">欢迎使用Decred钱包\n一个安全开源的移动钱包</string>
+    <string name="mywallet">我的钱包</string>
+    <string name="today">今天</string>
+    <string name="yesterday">昨天</string>
+    <string name="month_day_format">MMMM dd</string>
+    <string name="date_format">MMMM dd, yyyy</string>
+    <string name="date_time_format">MMM dd, yyyy hh:mma</string>
+    <string name="watch_only_wallets">观察钱包</string>
+    <string name="wallets_limit_error">限制每一个钱包使用1G RAM内存空间在此设备上</string>
+    <string name="disconnect_add_wallet">在添加钱包前请断开或取消同步</string>
+    <string name="disconnect_delete_wallet">在删除钱包前请断开或取消同步</string>
+    <string name="seed_backup_success_msg">确保保存你的助记词短语在安全的位置。</string>
+    <string name="seed_backup_verified">你的助记词短语是正确的</string>
+    <string name="rebroadcast_tx_success">将未完成的交易重新在Decred网络广播</string>
+    <string name="confirm_create_needed_accounts">确认创建所需的账户</string>
+    <string name="confirm_setup_mixer">确认设置混币账户</string>
+    <string name="mixed_account">已混合的账户</string>
+    <string name="unmixed_account">未混合的账户</string>
+    <string name="mixer">混币器</string>
+    <string name="mix">混合</string>
+    <string name="mixed">已混合</string>
+    <string name="mix_tx_change">混币交易找零</string>
+    <string name="mix_tx_change_summary_enabled">如果启用，所有交易的找零将会发送到未混合的账户。</string>
+    <string name="mix_tx_change_summary_disabled">如果禁用，来自已混合的交易的找零将会发送到未混合的账户。</string>
+    <string name="change_sent_to_unmixed"><![CDATA[<b>%1$s DCR</b>的找零金额将会返还到\'<b>%2$s</b>\'.]]></string>
+    <string name="start_mixer_warning">你的钱包在混币完成前将一直处于解锁状态</string>
+    <string name="mixer_has_stopped_running">cspp混币器已停止运行</string>
+    <string name="no_mixable_output">未混合的账户没有可混合的输出</string>
+    <string name="new_caps">新的</string>
+    <string name="privacy_is_here">隐私功能在这！</string>
+    <string name="privacy_intro_desc">你现在可以在App中使用StakeShuffle混币器去混合你的DCR硬币</string>
+    <string name="dismiss">取消</string>
+    <string name="setup_mixer">设置混币器</string>
+    <string name="privacy_popup_message">在隐私中设置StakeShuffle混币器</string>
+    <string name="see_all">查看所有</string>
+    <string name="privacy_intro_title">StakeShuffle混币器如何增强你的隐私？</string>
+    <string name="privacy_intro_desc_1">StakeShuffle混币器可以通过CoinJoin交易方式混合你的DCR。</string>
+    <string name="privacy_intro_desc_2">使用已混合的DCR可以保护你免受财产活动公开（例如：你有多少钱，谁向你打款）。</string>
+    <string name="setup_mixer_btn_title">为此钱包设置混币器</string>
+    <string name="privacy_intro_dialog_title">通过创建两个所需的帐户来设置混币器</string>
+    <string name="privacy_intro_dialog_desc"><![CDATA[使用混币器将会创建两个专用账户(“mixed” & “unmixed”)。<br/><br/><b><font color="#091440">此操作无法撤消！</font></b>]]></string>
+    <string name="begin_setup">开始设置</string>
+    <string name="mixer_setup_completed">混币器设置完成</string>
+    <string name="ready_to_mix">准备混合</string>
+    <string name="unmixed_balance">未混合的余额</string>
+    <string name="mixed_balance">已混合的余额</string>
+    <string name="mixer_settings">混币器设置</string>
+    <string name="mixed_account_branch">已混合的账户分支</string>
+    <string name="server_port">服务器端口</string>
+    <string name="mix_server">混币服务器</string>
+    <string name="keep_app_opened">保持App打开</string>
+    <string name="mixer_help_title">如何使用混币？</string>
+    <string name="mixer_help_desc"><![CDATA[当你打开混币器，这个钱包中未混合的DCR（未混合的余额）将被逐步地混合。<br/><br/><b><font color="#091440">重要：当混币器处于开启状态请保持App处于前台运行。</font></b><br/><br/>当未混合的余额被完全混合，混币器将会自动停止。]]></string>
+    <string name="mixer_is_running">混币器正在运行中……</string>
+    <string name="keep_this_app_opened">保持App处于开启状态</string>
+    <string name="mixer_status_info">混币器将会自动停止当未混合的余额被完全混合。</string>
+    <string name="check_mixer_status">检查混币器状态</string>
+    <string name="mixing_elp">混合中…</string>
+    <string name="account_name_taken">账户名已被使用</string>
+    <string name="account_name_conflict_dialog_desc"><![CDATA[已存在账户名为<b>mixed</b>或<b>unmixed</b>。请立刻改成其他名字，在安装结束之后你可以将它们更改回来。]]></string>
+    <string name="go_back_rename">后退&amp; 重命名</string>
+    <string name="set_up_needed_accounts">设置所需的账户</string>
+    <string name="setup_mixer_account_desc">使用混币器将会创建两个专用账户：</string>
+    <string name="setup_mixer_account_bullet_1"><font color='#091440'><b>Mixed</b></font>账户将是支付账户。</string>
+    <string name="setup_mixer_account_bullet_2"><font color='#091440'><b>Unmixed</b></font>账户将会是零钱处理账户。</string>
+    <string name="auto_setup">自动设置</string>
+    <string name="auto_setup_desc">为你创建并设置所需的账户。</string>
+    <string name="manual_setup_desc">钱包需要先开启隐私功能。</string>
+    <string name="manual_mixer_setup_help"><font color='#091440'><b>确保选择与之前设置对应的帐户，</b></font>否则可能会损坏钱包的隐私。</string>
+    <string name="set_up">设置</string>
+    <string name="manual_setup">手动设置</string>
+    <string name="same_mixed_unmixed"><![CDATA[不能使用相同的账户为mixed和unmixed账户]]></string>
+    <string name="status">状态</string>
+    <string name="reward">奖励</string>
+    <string name="days_to_vote">投票花费天数</string>
+    <string name="spendable_in">解锁进度</string>
+    <string name="view_associated_ticket">查看关联选票</string>
+    <string name="missed_expired">错过/过期</string>
+    <string name="age">持票时长</string>
+    <string name="maturity">到期</string>
+    <string name="verify_seed_header_instruction">选择正确的助记词去验证。</string>
+    <plurals name="mixer_is_running">
+        <item quantity="one">1个混币器正在运行…</item>
+        <item quantity="other">%d个混币器正在运行…</item>
+    </plurals>
+
+    <!--Politeia-->
+    <string name="politeia">Politeia提案平台</string>
+    <string name="proposal_details">提案详情</string>
+    <string name="ago">之前</string>
+    <string name="now">当前</string>
+    <string name="status_abandoned">已废弃</string>
+    <string name="status_invalid">不正确</string>
+    <string name="status_not_authorized">未经作者授权</string>
+    <string name="status_authorized">经过作者授权</string>
+    <string name="status_vote_started">已经开始投票</string>
+    <string name="status_approved">已批准</string>
+    <string name="status_rejected">已拒绝</string>
+    <string name="status_non_existent">不存在</string>
+    <string name="no_proposals">已选择的分类没有提案</string>
+    <string name="proposal_in_discussion">正在讨论中(%1$d)</string>
+    <string name="proposal_active">已激活(%1$d)</string>
+    <string name="proposal_approved">已批准(%1$d)</string>
+    <string name="proposal_rejected">已拒绝(%1$d)</string>
+    <string name="proposal_abandoned">已废弃(%1$d)</string>
+    <string name="politeia_notifications">Politeia通知</string>
+    <string name="new_proposal">新的提案</string>
+    <string name="vote_started">投票已开始</string>
+    <string name="vote_ended">投票已结束</string>
+    <string name="share_proposal">分享提案链接</string>
+    <string name="text_pain" translatable="false">text/plain</string>
+    <string name="comments">%d 评论</string>
+    <string name="version_number">版本：%s</string>
+    <string name="yes_votes_percent">批准：%1$d (%2$.2f%%)</string>
+    <string name="no_votes_percent">拒绝：%1$d (%2$.2f%%)</string>
+    <string name="yes_no_votes_percent">批准： %1$d (%2$.2f%%)  拒绝：%3$d (%4$.2f%%)</string>
+    <string name="proposal_name_author">%1$s by %2$s</string>
+    <!--/Politeia-->
+
+</resources>
