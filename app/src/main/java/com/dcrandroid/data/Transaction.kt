@@ -174,7 +174,7 @@ class Transaction : Serializable {
     }
 
     fun matchesFilter(txFilter: Int): Boolean {
-        return wallet!!.txMatchesFilter2(direction, height, expiry, type, ticketSpender, txFilter)
+        return wallet!!.txMatchesFilter2(direction, height, type, ticketSpender, txFilter)
     }
 }
 
