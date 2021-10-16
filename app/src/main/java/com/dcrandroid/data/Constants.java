@@ -48,7 +48,9 @@ public class Constants {
             VOTE_SUMMARY = "votesummary",
             COLOR_THEME = "color_theme",
             MIXED = "mixed",
-            UNMIXED = "unmixed";
+            UNMIXED = "unmixed",
+            SHOW_HIDE_BALANCE = "show_hide_balance",
+            HIDDEN_BALANCE_TEXT = "********DCR";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             PROPOSAL_SUMMARY_ID = 5552479,

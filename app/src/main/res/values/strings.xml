@@ -647,6 +647,8 @@
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>
     </plurals>
+    <string name="show_balance">Show Balance</string>
+    <string name="hide_balance">Hide Balance</string>
 
     <!--Politeia-->
     <string name="politeia">Politeia</string>

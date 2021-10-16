@@ -6,8 +6,10 @@
 
 package com.dcrandroid.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
@@ -67,11 +69,14 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     private lateinit var usdBalanceTextView: TextView
     internal lateinit var noTransactionsTextView: TextView
     internal lateinit var transactionsLayout: LinearLayout
+    private lateinit var ivConcealReveal: ImageView
 
     var exchangeDecimal: BigDecimal? = null
 
     private lateinit var syncLayout: LinearLayout
     private var syncLayoutUtil: SyncLayoutUtil? = null
+
+    private var isBalanceHidden = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,6 +94,7 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         usdBalanceTextView = view.findViewById(R.id.tv_visible_usd_wallet_balance)
         noTransactionsTextView = view.findViewById(R.id.tv_no_transactions)
         transactionsLayout = view.findViewById(R.id.transactions_view)
+        ivConcealReveal = view.findViewById(R.id.iv_conceal_reveal)
 
         syncLayout = view.findViewById(R.id.sync_layout)
     }
@@ -105,6 +111,8 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
 
         setToolbarTitle(R.string.overview, false)
         scrollView.viewTreeObserver.addOnScrollChangedListener(this)
+
+        isBalanceHidden = multiWallet!!.readBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, false)
 
         loadBalance()
         loadTransactions()
@@ -154,7 +162,21 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         mixer_status_rv.adapter = MixerStatusAdapter()
         setMixerStatus()
 
-        fetchExchangeRate()
+        ivConcealReveal.setOnClickListener {
+            if (isBalanceHidden) {
+                multiWallet!!.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, false)
+                isBalanceHidden = false
+                loadBalance()
+            } else {
+                multiWallet!!.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, true)
+                isBalanceHidden = true
+                loadBalance()
+            }
+        }
+
+        if (!isBalanceHidden) {
+            fetchExchangeRate()
+        }
     }
 
     private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
@@ -225,16 +247,21 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
 
         if (mainBalanceIsVisible()) {
-            setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
-            if (exchangeDecimal != null) {
-                val formattedUSD = HtmlCompat.fromHtml(
-                    getString(
-                        R.string.usd_symbol_format,
-                        CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
-                    ), 0
-                )
-                setToolbarSubTitle(formattedUSD)
+            if (isBalanceHidden) {
+                setToolbarTitle(Constants.HIDDEN_BALANCE_TEXT, true)
+            } else {
+                setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
+                if (exchangeDecimal != null) {
+                    val formattedUSD = HtmlCompat.fromHtml(
+                            getString(
+                                    R.string.usd_symbol_format,
+                                    CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
+                            ), 0
+                    )
+                    setToolbarSubTitle(formattedUSD)
+                }
             }
+
         } else {
             setToolbarTitle(R.string.overview, false)
             setToolbarSubTitle("")
@@ -242,20 +269,38 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun loadBalance() = GlobalScope.launch(Dispatchers.Main) {
-        balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.5f)
+        if (isBalanceHidden) {
+            usdBalanceTextView.hide()
+            balanceTextView.text = Constants.HIDDEN_BALANCE_TEXT
+            ivConcealReveal.setImageResource(R.drawable.ic_conceal)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ivConcealReveal.tooltipText = context?.getString(R.string.show_balance)
+            }
+        } else {
+            fetchExchangeRate()
+            balanceTextView.text = CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.5f)
+            ivConcealReveal.setImageResource(R.drawable.ic_reveal)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ivConcealReveal.tooltipText = context?.getString(R.string.hide_balance)
+            }
+        }
         val totalBalanceAtom = multiWallet!!.totalWalletBalance()
         val totalBalanceCoin = Dcrlibwallet.amountCoin(totalBalanceAtom)
 
         if (mainBalanceIsVisible()) {
-            setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
-            if (exchangeDecimal != null) {
-                val formattedUSD = HtmlCompat.fromHtml(
-                    getString(
-                        R.string.usd_symbol_format,
-                        CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
-                    ), 0
-                )
-                setToolbarSubTitle(formattedUSD)
+            if (isBalanceHidden) {
+                setToolbarTitle(Constants.HIDDEN_BALANCE_TEXT, true)
+            } else {
+                setToolbarTitle(CoinFormat.format(multiWallet!!.totalWalletBalance(), 0.7f), true)
+                if (exchangeDecimal != null) {
+                    val formattedUSD = HtmlCompat.fromHtml(
+                            getString(
+                                    R.string.usd_symbol_format,
+                                    CurrencyUtil.dcrToFormattedUSD(exchangeDecimal, totalBalanceCoin, 2)
+                            ), 0
+                    )
+                    setToolbarSubTitle(formattedUSD)
+                }
             }
         }
     }
@@ -398,8 +443,10 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
             )
 
             GlobalScope.launch(Dispatchers.Main) {
-                usdBalanceTextView.text = formattedUSD
-                usdBalanceTextView.show()
+                if (!isBalanceHidden) {
+                    usdBalanceTextView.text = formattedUSD
+                    usdBalanceTextView.show()
+                }
             }
         }
     }
