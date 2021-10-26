@@ -10,19 +10,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.dcrandroid.R
 import com.dcrandroid.extensions.openedWalletsList
 import kotlinx.android.synthetic.main.multi_wallet_transactions_page.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class MultiWalletTransactions : BaseFragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.multi_wallet_transactions_page, container, false)
     }
@@ -38,10 +40,10 @@ class MultiWalletTransactions : BaseFragment() {
     }
 
     inner class TransactionsTabsAdapter(supportFragmentManager: FragmentManager) :
-        FragmentStatePagerAdapter(
-            supportFragmentManager,
-            BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-        ) {
+            FragmentStatePagerAdapter(
+                    supportFragmentManager,
+                    BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+            ) {
 
         private val wallets = multiWallet!!.openedWalletsList()
         override fun getCount(): Int {
@@ -50,12 +52,36 @@ class MultiWalletTransactions : BaseFragment() {
 
         override fun getItem(position: Int): Fragment {
             return TransactionsFragment()
-                .setWalletID(wallets[position].id)
+                    .setWalletID(wallets[position].id)
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
             return wallets[position].name
         }
 
+    }
+
+    fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
+        toolbar_title.text = title
+        app_bar.elevation = if (showShadow) {
+            resources.getDimension(R.dimen.app_bar_elevation)
+        } else {
+            0f
+        }
+    }
+
+    fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean) {
+        if (context != null) {
+            setToolbarTitle(requireContext().getString(title), showShadow)
+        }
+    }
+
+    fun setToolbarSubTitle(subtitle: CharSequence) {
+        if (subtitle == "") {
+            toolbar_subtitle.visibility = View.GONE
+        } else {
+            toolbar_subtitle.visibility = View.VISIBLE
+            toolbar_subtitle.text = subtitle
+        }
     }
 }

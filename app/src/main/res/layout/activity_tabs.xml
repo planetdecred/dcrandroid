@@ -11,70 +11,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:id="@+id/app_bar"
-        android:background="@color/background"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="?actionBarSize"-->
+    <!--        android:id="@+id/app_bar"-->
+    <!--        android:background="@color/background"-->
+    <!--        android:theme="@style/AppTheme.AppBarOverlay">-->
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:clipChildren="false"
-            android:paddingStart="@dimen/margin_padding_size_24"
-            app:contentInsetStart="@dimen/margin_padding_size_24"
-            app:contentInsetLeft="@dimen/margin_padding_size_24"
-            android:paddingEnd="@dimen/margin_padding_size_16"
-            app:contentInsetEnd="@dimen/margin_padding_size_16"
-            app:contentInsetRight="@dimen/margin_padding_size_16">
+    <!--        <androidx.appcompat.widget.Toolbar-->
+    <!--            android:id="@+id/toolbar"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:clipToPadding="false"-->
+    <!--            android:clipChildren="false"-->
+    <!--            android:paddingStart="@dimen/margin_padding_size_24"-->
+    <!--            app:contentInsetStart="@dimen/margin_padding_size_24"-->
+    <!--            app:contentInsetLeft="@dimen/margin_padding_size_24">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:orientation="horizontal">-->
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:id="@+id/home_logo"
-                    app:srcCompat="@drawable/ic_home_logo" />
+    <!--                <LinearLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent"-->
+    <!--                    android:orientation="horizontal"-->
+    <!--                    android:layout_weight="0.1"-->
+    <!--                    android:gravity="center_vertical">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Overview"
-                    android:id="@+id/toolbar_title"
-                    android:textSize="20sp"
-                    android:textColor="@color/text1"
-                    android:includeFontPadding="false"
-                    app:fontFamily="@font/source_sans_pro"
-                    android:layout_marginStart="16dp" />
+    <!--                    <ImageView-->
+    <!--                        android:layout_width="24dp"-->
+    <!--                        android:layout_height="24dp"-->
+    <!--                        android:id="@+id/home_logo"-->
+    <!--                        app:srcCompat="@drawable/ic_home_logo" />-->
 
-                <TextView
-                    android:id="@+id/toolbar_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:background="@drawable/light_grey_border_8dp"
-                    android:textColor="@color/text2"
-                    android:paddingTop="@dimen/margin_padding_size_4"
-                    android:paddingBottom="@dimen/margin_padding_size_4"
-                    android:paddingStart="@dimen/margin_padding_size_6"
-                    android:paddingEnd="@dimen/margin_padding_size_6"
-                    android:layout_marginStart="@dimen/margin_padding_size_8"
-                    android:textSize="@dimen/edit_text_size_14"
-                    android:visibility="gone"
-                    app:fontFamily="@font/source_sans_pro" />
+    <!--                    <TextView-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        tools:text="Overview"-->
+    <!--                        android:id="@+id/toolbar_title"-->
+    <!--                        android:textSize="20sp"-->
+    <!--                        android:textColor="@color/text1"-->
+    <!--                        android:includeFontPadding="false"-->
+    <!--                        app:fontFamily="@font/source_sans_pro"-->
+    <!--                        android:layout_marginStart="16dp" />-->
 
-            </LinearLayout>
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/toolbar_subtitle"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:includeFontPadding="false"-->
+    <!--                        android:background="@drawable/light_grey_border_8dp"-->
+    <!--                        android:textColor="@color/text2"-->
+    <!--                        android:paddingTop="@dimen/margin_padding_size_4"-->
+    <!--                        android:paddingBottom="@dimen/margin_padding_size_4"-->
+    <!--                        android:paddingStart="@dimen/margin_padding_size_6"-->
+    <!--                        android:paddingEnd="@dimen/margin_padding_size_6"-->
+    <!--                        android:layout_marginStart="@dimen/margin_padding_size_8"-->
+    <!--                        android:textSize="@dimen/edit_text_size_14"-->
+    <!--                        android:visibility="gone"-->
+    <!--                        app:fontFamily="@font/source_sans_pro" />-->
 
-        </androidx.appcompat.widget.Toolbar>
+    <!--                </LinearLayout>-->
 
-    </com.google.android.material.appbar.AppBarLayout>
+    <!--                <LinearLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent"-->
+    <!--                    android:orientation="horizontal"-->
+    <!--                    android:layout_weight="0.9"-->
+    <!--                    android:gravity="center|end">-->
+
+    <!--                    <ImageView-->
+    <!--                        android:layout_width="24dp"-->
+    <!--                        android:layout_height="24dp"-->
+    <!--                        android:id="@+id/toolbar_right_icon"-->
+    <!--                        android:visibility="gone"-->
+    <!--                        app:srcCompat="@drawable/ic_conceal" />-->
+
+    <!--                </LinearLayout>-->
+
+    <!--            </LinearLayout>-->
+
+    <!--        </androidx.appcompat.widget.Toolbar>-->
+
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,8 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/recycler_view_tabs"
-                tools:listitem="@layout/tab_row"
-                />
+                tools:listitem="@layout/tab_row" />
 
             <View
                 android:layout_width="@dimen/tab_indicator_width"

@@ -6,12 +6,16 @@
 
 package com.dcrandroid.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
+import android.view.animation.AnimationUtils
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.HomeActivity
@@ -29,6 +33,7 @@ import com.dcrandroid.dialog.RequestNameDialog
 import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,9 +56,9 @@ class WalletsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_wallets, container, false)
     }
@@ -83,6 +88,8 @@ class WalletsFragment : BaseFragment() {
                 setToolbarTitle(R.string.wallets, true)
             }
         }
+
+        setupLogoAnim()
     }
 
     override fun onPause() {
@@ -122,9 +129,9 @@ class WalletsFragment : BaseFragment() {
 
                 if (multiWallet!!.openedWalletsCount() >= numOfAllowedWallets()) {
                     InfoDialog(requireContext())
-                        .setMessage(getString(R.string.wallets_limit_error))
-                        .setPositiveButton(getString(R.string.ok))
-                        .show()
+                            .setMessage(getString(R.string.wallets_limit_error))
+                            .setPositiveButton(getString(R.string.ok))
+                            .show()
                     return false
                 }
 
@@ -133,9 +140,9 @@ class WalletsFragment : BaseFragment() {
                     val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
 
                     val items: Array<Any> = arrayOf(
-                        PopupItem(R.string.create_a_new_wallet),
-                        PopupItem(R.string.import_existing_wallet),
-                        PopupItem(R.string.import_watching_only_wallet)
+                            PopupItem(R.string.create_a_new_wallet),
+                            PopupItem(R.string.import_existing_wallet),
+                            PopupItem(R.string.import_watching_only_wallet)
                     )
 
                     PopupUtil.showPopup(anchorView, items) { window, index ->
@@ -150,15 +157,15 @@ class WalletsFragment : BaseFragment() {
                                         }
 
                                         PasswordPinDialogFragment(
-                                            R.string.create,
-                                            isSpending = true,
-                                            isChange = false
+                                                R.string.create,
+                                                isSpending = true,
+                                                isChange = false
                                         ) { dialog, passphrase, passphraseType ->
                                             createWallet(
-                                                dialog,
-                                                newName,
-                                                passphrase,
-                                                passphraseType
+                                                    dialog,
+                                                    newName,
+                                                    passphrase,
+                                                    passphraseType
                                             )
                                         }.show(requireContext())
 
@@ -170,14 +177,14 @@ class WalletsFragment : BaseFragment() {
                             }
                             1 -> {
                                 val restoreIntent =
-                                    Intent(requireContext(), RestoreWalletActivity::class.java)
+                                        Intent(requireContext(), RestoreWalletActivity::class.java)
                                 startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
                             }
                             2 -> {
                                 CreateWatchOnlyWallet {
                                     SnackBar.showText(
-                                        requireContext(),
-                                        R.string.watch_only_wallet_created
+                                            requireContext(),
+                                            R.string.watch_only_wallet_created
                                     )
                                     adapter.addWallet(it.id)
                                 }.show(requireContext())
@@ -193,7 +200,7 @@ class WalletsFragment : BaseFragment() {
 
     private fun numOfAllowedWallets(): Int {
         val actManager =
-            requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+                requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val memInfo = ActivityManager.MemoryInfo()
         actManager.getMemoryInfo(memInfo)
 
@@ -201,10 +208,10 @@ class WalletsFragment : BaseFragment() {
     }
 
     private fun createWallet(
-        dialog: FullScreenBottomSheetDialog,
-        walletName: String,
-        spendingKey: String,
-        type: Int
+            dialog: FullScreenBottomSheetDialog,
+            walletName: String,
+            spendingKey: String,
+            type: Int
     ) = GlobalScope.launch(Dispatchers.IO) {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
@@ -236,6 +243,47 @@ class WalletsFragment : BaseFragment() {
             } else {
                 adapter.updateWalletRow(walletID)
             }
+        }
+    }
+
+    fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
+        toolbar_title.text = title
+        app_bar.elevation = if (showShadow) {
+            resources.getDimension(R.dimen.app_bar_elevation)
+        } else {
+            0f
+        }
+    }
+
+    fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean) {
+        if (context != null) {
+            setToolbarTitle(requireContext().getString(title), showShadow)
+        }
+    }
+
+    fun setToolbarSubTitle(subtitle: CharSequence) {
+        if (subtitle == "") {
+            toolbar_subtitle.visibility = View.GONE
+        } else {
+            toolbar_subtitle.visibility = View.VISIBLE
+            toolbar_subtitle.text = subtitle
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun WalletsFragment.setupLogoAnim() {
+        val runnable = Runnable {
+            val anim = AnimationUtils.loadAnimation(context, R.anim.logo_anim)
+            home_logo.startAnimation(anim)
+        }
+
+        val handler = Handler()
+        toolbar_title.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> handler.postDelayed(runnable, 10000)
+                MotionEvent.ACTION_UP -> handler.removeCallbacks(runnable)
+            }
+            true
         }
     }
 }

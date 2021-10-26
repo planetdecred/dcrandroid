@@ -6,7 +6,6 @@
 
 package com.dcrandroid.fragments
 
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.data.Transaction
@@ -51,26 +50,6 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         super.onDestroy()
         multiWallet?.removeSyncProgressListener(TAG)
         multiWallet?.removeTxAndBlockNotificationListener(TAG)
-    }
-
-    fun setToolbarTitle(title: CharSequence, showShadow: Boolean) {
-        if (activity is HomeActivity) {
-            val homeActivity = activity as HomeActivity
-            homeActivity.setToolbarTitle(title, showShadow)
-        }
-    }
-
-    fun setToolbarTitle(@StringRes title: Int, showShadow: Boolean) {
-        if (context != null) {
-            setToolbarTitle(requireContext().getString(title), showShadow)
-        }
-    }
-
-    fun setToolbarSubTitle(subtitle: CharSequence) {
-        if (activity is HomeActivity) {
-            val homeActivity = activity as HomeActivity
-            homeActivity.setToolbarSubTitle(subtitle)
-        }
     }
 
     fun refreshNavigationTabs() {
