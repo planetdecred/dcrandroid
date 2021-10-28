@@ -676,6 +676,7 @@
     <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
+    <string name="no_internet">No internet connection</string>
     <!--/Politeia-->
 
 </resources>
