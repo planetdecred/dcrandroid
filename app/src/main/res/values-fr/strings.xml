@@ -496,7 +496,9 @@
     <string name="get_started">Débuter</string>
     <string name="back">Retour</string>
     <string name="use_fingerprint">Utiliser empreinte digitale</string>
+    <string name="overview_backup_seed_instruction">Ecrivez votre phrase de récupération pour pouvoir récupérer vos fonds plus tard.</string>
     <string name="go_to_wallets">Aller aux porte-monnaies</string>
+    <string name="wallets_need_backup">Voulez-vous sauvegarder vos mots de récupération maintenant ?</string>
     <string name="startup_password">Mot de passe de démarrage</string>
     <string name="new_startup_password">Nouveau mot de passe de démarrage</string>
     <string name="new_spending_password">Nouveau mot de passe de dépense</string>
