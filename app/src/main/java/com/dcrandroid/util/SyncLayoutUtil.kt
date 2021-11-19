@@ -29,7 +29,7 @@ import kotlinx.coroutines.*
 
 class SyncLayoutUtil(
     private val syncLayout: LinearLayout,
-    restartSyncProcess: () -> Unit,
+    val restartSyncProcess: () -> Unit,
     scrollToBottom: () -> Unit
 ) : SyncProgressListener, BlocksRescanProgressListener {
 
@@ -97,8 +97,18 @@ class SyncLayoutUtil(
                     it.isEnabled = true
                 }
             } else {
-                restartSyncProcess()
+                checkNetworkAvailability()
             }
+        }
+    }
+    private fun checkNetworkAvailability() {
+        val isWifiConnected = this.let { NetworkUtil.isWifiConnected(context) }
+        val isMobileDataConnected = this.let { NetworkUtil.isMobileDataConnected(context) }
+        if (!isWifiConnected && !isMobileDataConnected) {
+            SnackBar.showError(context, R.string.no_internet)
+            return
+        } else {
+            restartSyncProcess()
         }
     }
 

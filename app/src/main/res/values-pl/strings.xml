@@ -72,7 +72,7 @@
     <string name="confirm_to_remove">Potwierdź, aby usunąć</string>
     <string name="remove_wallet">Usuń portfel z urządzenia</string>
     <string name="remove_wallet_prompt">Usunąć portfel z urządzenia?</string>
-    <string name="remove_wallet_message">Upewnij się, że posiadasz kopię zapasową frazy bazowej (seed phrase) zanim usuniesz portfel.</string>
+    <string name="remove_wallet_message">Upewnij się, że posiadasz kopię zapasową frazy bazowej (seed words) zanim usuniesz portfel.</string>
     <string name="error_copied">Błąd skopiowano</string>
 
     <!--/General-->
@@ -92,7 +92,7 @@
 
     <!--Seed-->
     <string name="save_seed_instruction">Zapisz wszystkie 33 słowa w podanej kolejności.</string>
-    <string name="backup_seed_phrase">Zrób kopię zapasową frazy bazowej (seed phrase)</string>
+    <string name="backup_seed_phrase">Zrób kopię zapasową frazy bazowej (seed words)</string>
     <string name="verify_seed_info">Sprawdź kopię zapasową swojej frazy bazowej, aby móc odzyskać środki w razie potrzeby.</string>
 
     <!--/Seed-->

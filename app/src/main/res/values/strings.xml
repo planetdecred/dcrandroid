@@ -77,7 +77,7 @@
     <string name="remove_wallet">Remove wallet from device</string>
     <string name="remove_wallet_prompt">Remove wallet from device?</string>
     <string name="remove_watch_wallet_prompt"> Remove watch-only wallet from device?</string>
-    <string name="remove_wallet_message">Make sure to have the seed phrase backed up before removing the wallet.</string>
+    <string name="remove_wallet_message">Make sure to have the seed words backed up before removing the wallet.</string>
     <string name="error_copied">Error copied</string>
 
     <plurals name="mixed_dcr_amount">
@@ -114,8 +114,8 @@
 
     <!--Seed-->
     <string name="save_seed_instruction">Write down all 33 words in the correct order.</string>
-    <string name="backup_seed_phrase">Back up seed phrase</string>
-    <string name="verify_seed_info">Verify your seed phrase backup so you can recover your funds when needed.</string>
+    <string name="backup_seed_phrase">Back up seed words</string>
+    <string name="verify_seed_info">Verify your seed words backup so you can recover your funds when needed.</string>
 
     <!--/Seed-->
 
@@ -400,14 +400,14 @@
     <string name="confirm_to_create_account">Confirm to create account</string>
     <string name="unlock_to_start_mixing">Unlock your wallet to start mixing</string>
     <string name="not_backed_up">Not backed up</string>
-    <string name="seed_phase_2_briefing">You will be asked to enter the seed phrase on the next screen.</string>
+    <string name="seed_phase_2_briefing">You will be asked to enter the seed words on the next screen.</string>
     <string name="verify">Verify</string>
-    <string name="seed_instruction_1">The <b>33-word seed phrase</b> is EXTREMELY IMPORTANT.</string>
-    <string name="seed_instruction_2">Seed phrase is <b>the only way</b> to restore your wallet.</string>
-    <string name="seed_instruction_3">It is recommended to store your seed phrase in a <b><font color="#71b054">physical format</font></b> (e.g. write down on a paper).</string>
-    <string name="seed_instruction_4">It is highly discouraged to store your seed phrase in any <b><font color="#ed6d47">digital format</font></b> (e.g. screenshot).</string>
-    <string name="seed_instruction_5">Anyone with your seed phrase <b><font color="#ed6d47">can steal your funds</font></b>. DO NOT show it to anyone.</string>
-    <string name="view_seed_phrase">View seed phrase</string>
+    <string name="seed_instruction_1">The <b>33-word seed words</b> is EXTREMELY IMPORTANT.</string>
+    <string name="seed_instruction_2">Seed words is <b>the only way</b> to restore your wallet.</string>
+    <string name="seed_instruction_3">It is recommended to store your seed words in a <b><font color="#71b054">physical format</font></b> (e.g. write down on a paper).</string>
+    <string name="seed_instruction_4">It is highly discouraged to store your seed words in any <b><font color="#ed6d47">digital format</font></b> (e.g. screenshot).</string>
+    <string name="seed_instruction_5">Anyone with your seed words <b><font color="#ed6d47">can steal your funds</font></b>. DO NOT show it to anyone.</string>
+    <string name="view_seed_phrase">View seed words</string>
     <string name="seed_verification_failed">Failed to verify. Please go through every word and try again.</string>
     <string name="back_to_wallets">Back to Wallets</string>
     <string name="tx_sort_all">All (%1$d)</string>
@@ -501,10 +501,10 @@
     <string name="exchange_rate_fetch_error">Exchange rate not fetched</string>
     <string name="retry">Retry</string>
     <string name="message_signed">Message signed</string>
-    <string name="restore_wallet_title">Restore from seed phrase</string>
-    <string name="verify_seed_phrase">Verify seed phrase</string>
+    <string name="restore_wallet_title">Restore from seed words</string>
+    <string name="verify_seed_phrase">Verify seed words</string>
     <string name="restore">Restore</string>
-    <string name="restore_wallet_instruction">Enter your seed phrase in the correct order.</string>
+    <string name="restore_wallet_instruction">Enter your seed words in the correct order.</string>
     <string name="keep_in_mind">Keep in mind</string>
     <string name="invalid_restore_seed">Failed to restore. Please verify all words and try again.</string>
     <string name="create_watch_only_wallet">Create watch-only wallet</string>
@@ -521,7 +521,7 @@
     <string name="get_started">Get started</string>
     <string name="back">Back</string>
     <string name="use_fingerprint">Use fingerprint</string>
-    <string name="overview_backup_seed_instruction">Write down your seed phrase so that you can recover your funds when needed.</string>
+    <string name="overview_backup_seed_instruction">Write down your seed words so that you can recover your funds when needed.</string>
     <string name="go_to_wallets">Go to Wallets</string>
     <string name="wallets_need_backup">Would you like to backup your seed words now?</string>
     <string name="startup_password">Startup Password</string>
@@ -540,9 +540,9 @@
     <string name="startup_security_changed">Startup PIN/password changed</string>
     <string name="spending_passphrase_changed">Spending PIN/password changed</string>
     <string name="wallets_log">Wallets log</string>
-    <string name="write_down_seed_phrase">Write down seed phrase</string>
+    <string name="write_down_seed_phrase">Write down seed words</string>
     <string name="step_1_2" tools:ignore="TypographyFractions">Step 1/2</string>
-    <string name="your_33_word_seed_phrase">Your 33-word seed phrase</string>
+    <string name="your_33_word_seed_phrase">Your 33-word seed words</string>
     <string name="i_have_wrote_down_all_33_words">I have written down all 33 words</string>
     <string name="security_tools">Security Tools</string>
     <string name="security_tools_message">Various tools that help in different aspects of crypto currency security will be located here.</string>
@@ -570,8 +570,8 @@
     <string name="wallets_limit_error">Limit of 1 wallet per 1 gig of ram on the device</string>
     <string name="disconnect_add_wallet">Disconnect/cancel sync before adding a wallet</string>
     <string name="disconnect_delete_wallet">Disconnect/cancel sync before deleting wallet</string>
-    <string name="seed_backup_success_msg">Be sure to store your seed phrase backup in a secure location.</string>
-    <string name="seed_backup_verified">Your seed phrase backup is verified</string>
+    <string name="seed_backup_success_msg">Be sure to store your seed words backup in a secure location.</string>
+    <string name="seed_backup_verified">Your seed words backup is verified</string>
     <string name="rebroadcast_tx_success">Republished unmined transactions to the decred network</string>
     <string name="confirm_create_needed_accounts">Confirm to create needed accounts</string>
     <string name="confirm_setup_mixer">Confirm to set mixer accounts</string>
@@ -676,6 +676,7 @@
     <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
+    <string name="no_internet">No internet connection</string>
     <!--/Politeia-->
 
 </resources>
