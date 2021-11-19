@@ -150,7 +150,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             GlobalScope.launch(Dispatchers.Default) {
                 delay(1000)
                 withContext(Dispatchers.Main) {
-                    checkWifiSync()
+                    checkNetworkAvailability()
                 }
                 delay(6000)
                 try {
@@ -333,6 +333,17 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
         } else {
             toolbar_subtitle.visibility = View.VISIBLE
             toolbar_subtitle.text = subtitle
+        }
+    }
+
+    private fun checkNetworkAvailability() {
+        val isWifiConnected = this.let { NetworkUtil.isWifiConnected(it) }
+        val isMobileDataConnected = this.let { NetworkUtil.isMobileDataConnected(it) }
+        if (!isWifiConnected && !isMobileDataConnected) {
+            SnackBar.showError(this, R.string.no_internet)
+            return
+        } else {
+            checkWifiSync()
         }
     }
 
