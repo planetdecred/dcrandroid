@@ -18,7 +18,11 @@ import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_picker_header.view.*
 import kotlinx.android.synthetic.main.account_picker_row.view.*
 
-class AccountPickerAdapter(val context: Context, val items: Array<Any>, val currentAccount: Account) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountPickerAdapter(
+    val context: Context,
+    val items: Array<Any>,
+    val currentAccount: Account
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit var filterAccount: (account: Account) -> Boolean
     lateinit var accountSelected: (account: Account) -> Unit? // must be set
@@ -72,8 +76,10 @@ class AccountPickerAdapter(val context: Context, val items: Array<Any>, val curr
 
             holder.itemView.account_row_total_balance.text = CoinFormat.format(item.balance.total)
 
-            holder.itemView.account_row_spendable_balance.text = context.getString(R.string.dcr_amount,
-                    CoinFormat.formatDecred(item.balance.spendable))
+            holder.itemView.account_row_spendable_balance.text = context.getString(
+                R.string.dcr_amount,
+                CoinFormat.formatDecred(item.balance.spendable)
+            )
 
             holder.itemView.setOnClickListener {
                 accountSelected(item)

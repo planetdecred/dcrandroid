@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.input_output_row.view.*
 
 data class DropDownItem(val amount: String, val address: String, val badge: String)
 
-class DropdownAdapter(private val items: Array<DropDownItem>) : RecyclerView.Adapter<DropdownAdapter.ViewHolder>() {
+class DropdownAdapter(private val items: Array<DropDownItem>) :
+    RecyclerView.Adapter<DropdownAdapter.ViewHolder>() {
 
     lateinit var addressTapped: (position: Int) -> Unit
 

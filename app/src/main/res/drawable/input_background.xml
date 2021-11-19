@@ -7,8 +7,8 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 
-    <solid android:color="@color/white"/>
-    <stroke android:color="#e6eaed" android:width="2dp"/>
+    <solid android:color="@color/surface"/>
+    <stroke android:color="@color/surfaceRipple" android:width="2dp"/>
     <corners android:radius="4dp"/>
 
 </shape>

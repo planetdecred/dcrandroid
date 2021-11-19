@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/not_connected_to_wifi"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/text1"
         android:textSize="@dimen/edit_text_size_20"
         app:fontFamily="@font/source_sans_pro_semibold" />
 
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_16"
         android:text="@string/wifi_sync_notice"
-        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textColor="@color/text2"
         android:textSize="@dimen/edit_text_size_16"
         app:fontFamily="@font/source_sans_pro" />
 

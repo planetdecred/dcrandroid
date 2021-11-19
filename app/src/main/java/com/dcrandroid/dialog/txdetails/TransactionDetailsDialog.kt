@@ -9,10 +9,14 @@ package com.dcrandroid.dialog.txdetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
@@ -25,9 +29,11 @@ import com.dcrandroid.extensions.show
 import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.util.CoinFormat
 import com.dcrandroid.util.SnackBar
+import com.dcrandroid.util.TimeUtils
 import com.dcrandroid.util.Utils
 import dcrlibwallet.Dcrlibwallet
 import kotlinx.android.synthetic.main.transaction_details.*
+import kotlinx.android.synthetic.main.transaction_row.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,11 +42,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomSheetDialog(null), View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
+class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomSheetDialog(null),
+    View.OnClickListener, ViewTreeObserver.OnScrollChangedListener {
 
     private val wallet = multiWallet.walletWithID(transaction.walletID)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.transaction_details, container, false)
     }
 
@@ -49,14 +60,27 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
         tx_details_icon.setImageResource(transaction.iconResource)
 
-        if (transaction.isMixed) {
-            tx_details_amount.text = CoinFormat.format(transaction.mixDenomination, 0.625f)
-        } else {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
-                -transaction.amount
-            } else {
-                transaction.amount
+        if (transaction.type == Dcrlibwallet.TxTypeMixed) {
+            val amountDcrFormat = CoinFormat.format(transaction.mixDenomination)
+
+            val amountBuilder = SpannableStringBuilder(amountDcrFormat)
+            if (transaction.mixCount > 1) {
+                var mixCount = SpannableString("\t x${transaction.mixCount}") as Spannable
+                mixCount = CoinFormat.applyColor(
+                    mixCount,
+                    requireContext().resources.getColor(R.color.text3)
+                )
+                amountBuilder.append(mixCount)
             }
+
+            tx_details_amount.text = amountBuilder
+        } else {
+            val txAmount =
+                if (transaction.direction == Dcrlibwallet.TxDirectionSent && transaction.type == Dcrlibwallet.TxTypeRegular) {
+                    -transaction.amount
+                } else {
+                    transaction.amount
+                }
             tx_details_amount.text = CoinFormat.format(txAmount, 0.625f)
         }
 
@@ -103,7 +127,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                         tx_dest_row.show()
                         tx_dest_label.setText(R.string.to_account)
                         tx_details_dest.text = getReceiveAccount()
-                        tx_details_dest.setTextColor(resources.getColor(R.color.darkBlueTextColor))
+                        tx_details_dest.setTextColor(resources.getColor(R.color.text1))
 
                         tx_dest_wallet_badge.text = wallet.name
                         tx_dest_wallet_badge.show()
@@ -118,10 +142,24 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                     Dcrlibwallet.TxTypeTicketPurchase -> R.string.ticket_purchase
                     Dcrlibwallet.TxTypeVote -> R.string.vote
                     Dcrlibwallet.TxTypeRevocation -> R.string.revoked
+                    Dcrlibwallet.TxTypeMixed -> R.string.mixed
                     else -> R.string.tx_sort_coinbase
                 }
 
                 toolbar_title.setText(title)
+            }
+        }
+
+        if (transaction.matchesFilter(Dcrlibwallet.TxFilterStaking)) {
+            setupTicketDetails()
+        }
+
+        view_ticket_spent.setOnClickListener {
+            if (transaction.ticketSpentHash != "") {
+                val transaction = wallet.getTransaction(transaction.ticketSpentHash)
+                TransactionDetailsDialog(
+                    Transaction.from(transaction)
+                ).show(requireContext())
             }
         }
 
@@ -133,30 +171,163 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
     override fun onTxOrBalanceUpdateRequired(walletID: Long?) {
         super.onTxOrBalanceUpdateRequired(walletID)
         GlobalScope.launch(Dispatchers.Main) {
+            setupTicketDetails()
             setConfirmationStatus()
         }
     }
 
+    private fun setupTicketDetails() {
+        var progressDrawable =
+            ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar, null)
+        var progressBarLabel = R.string.spendable_in
+        var progressBarMax = 0
+        var progressBarProgress = 0
+
+        var status: String? = null
+        var voteReward: String? = null
+        var daysToVote: String? = null
+
+        if (transaction.type == Dcrlibwallet.TxTypeRevocation) {
+            view_ticket_spent_row.show()
+
+            if (transaction.confirmations <= BuildConfig.TicketMaturity) {
+                ticket_details.show()
+
+                progressDrawable =
+                    ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar, null)
+                progressBarMax = BuildConfig.TicketMaturity
+                progressBarProgress = transaction.confirmations
+
+            }
+        } else if (transaction.type == Dcrlibwallet.TxTypeVote) {
+            ticket_details.show()
+            view_ticket_spent_row.show()
+
+            daysToVote = getString(R.string.x_days, transaction.daysToVoteOrRevoke)
+            voteReward = getString(R.string.x_dcr, CoinFormat.formatDecred(transaction.voteReward))
+
+            progressDrawable =
+                ResourcesCompat.getDrawable(resources, R.drawable.green_progress_bar2, null)
+            progressBarMax = BuildConfig.TicketMaturity
+            progressBarProgress = transaction.confirmations
+
+        } else if (transaction.type == Dcrlibwallet.TxTypeTicketPurchase) {
+            var ticketSpender: dcrlibwallet.Transaction? = null
+            if (wallet.ticketHasVotedOrRevoked(transaction.hash)) {
+                ticketSpender = wallet.ticketSpender(transaction.hash)
+            }
+
+            ticket_details.show()
+            status_row.show()
+
+            status = if (ticketSpender != null) {
+                if (ticketSpender.type == Dcrlibwallet.TxTypeVote) {
+                    getString(R.string.voted)
+                } else {
+                    getString(R.string.revoked)
+                }
+            } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterLive)) {
+                getString(R.string.live)
+            } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterImmature)) {
+                getString(R.string.immature)
+            } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterUnmined)) {
+                getString(R.string.unmined)
+            } else {
+                getString(R.string.missed_expired)
+            }
+
+            if (ticketSpender != null && ticketSpender.type == Dcrlibwallet.TxTypeVote) {
+                daysToVote = getString(R.string.x_days, ticketSpender.daysToVoteOrRevoke)
+                voteReward =
+                    getString(R.string.x_dcr, CoinFormat.formatDecred(ticketSpender.voteReward))
+            }
+
+            progressBarLabel = R.string.maturity
+            progressDrawable =
+                ResourcesCompat.getDrawable(resources, R.drawable.blue_progress_bar2, null)
+            progressBarMax = BuildConfig.TicketMaturity
+            progressBarProgress = transaction.confirmations
+
+            if (transaction.matchesFilter(Dcrlibwallet.TxFilterLive) && ticketSpender == null) {
+                progressBarLabel = R.string.age
+
+                progressDrawable =
+                    ResourcesCompat.getDrawable(resources, R.drawable.blue_progress_bar, null)
+                val liveBlocks = transaction.confirmations - BuildConfig.TicketMaturity
+                progressBarProgress = liveBlocks
+                progressBarMax = BuildConfig.TicketExpiry
+            }
+        }
+
+        if (status != null) {
+            status_row.show()
+            tv_status.text = status
+        }
+
+        if (daysToVote != null) {
+            days_to_vote_row.show()
+            tv_days_to_vote.text = daysToVote
+        }
+
+        if (voteReward != null) {
+            vote_reward_row.show()
+            tv_vote_reward.text = voteReward
+        }
+
+        if (progressBarProgress <= progressBarMax && progressBarMax != 0) {
+            maturity_progress_row.show()
+
+            maturity_progress_label.text = getString(progressBarLabel)
+
+            maturity_progress_bar.progressDrawable = progressDrawable
+            maturity_progress_bar.max = progressBarMax
+            maturity_progress_bar.progress = progressBarProgress
+
+            maturity_progress_prefix.text = String.format(
+                "%d%%",
+                ((progressBarProgress / progressBarMax.toFloat()) * 100).toInt()
+            )
+
+            val remainingTime =
+                (progressBarMax - progressBarProgress) * BuildConfig.TargetTimePerBlock
+            maturity_progress_suffix.text =
+                TimeUtils.calculateTime(remainingTime.toLong(), requireContext())
+        }
+    }
+
     private fun setConfirmationStatus() {
-        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+        val spendUnconfirmedFunds = multiWallet.readBoolConfigValueForKey(
+            Dcrlibwallet.SpendUnconfirmedConfigKey,
+            Constants.DEF_SPEND_UNCONFIRMED
+        )
 
         status_icon.setImageResource(transaction.getConfirmationIconRes(spendUnconfirmedFunds))
-        tv_confirmations.setTextColor(context!!.getColor(R.color.blueGraySecondTextColor))
+        tv_confirmations.setTextColor(requireContext().getColor(R.color.text4))
 
         if (transaction.confirmations >= Dcrlibwallet.DefaultRequiredConfirmations || spendUnconfirmedFunds) {
-            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_confirmations, transaction.confirmations), 0)
+            tv_confirmations.text = HtmlCompat.fromHtml(
+                getString(
+                    R.string.tx_details_confirmations,
+                    transaction.confirmations
+                ), 0
+            )
 
             tx_block_row.show()
             tx_block.text = transaction.height.toString()
         } else if (transaction.confirmations == 1) {
-            tv_confirmations.text = HtmlCompat.fromHtml(getString(R.string.tx_details_pending_confirmation, transaction.confirmations), 0)
+            tv_confirmations.text = HtmlCompat.fromHtml(
+                getString(
+                    R.string.tx_details_pending_confirmation,
+                    transaction.confirmations
+                ), 0
+            )
 
             tx_block_row.show()
             tx_block.text = transaction.height.toString()
         } else {
             tv_confirmations.apply {
                 setText(R.string.pending)
-                setTextColor(context.getColor(R.color.lightGrayTextColor))
+                setTextColor(context.getColor(R.color.text3))
             }
         }
 
@@ -179,7 +350,7 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
 
     private fun getSourceAccount(): String? {
         for (input in transaction.inputs!!) {
-            if (input.accountNumber != null && input.accountNumber != -1) {
+            if (input.accountNumber != -1) {
                 return wallet.accountName(input.accountNumber)
             }
         }
@@ -202,8 +373,12 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (input in transaction.inputs!!) {
             val accountName = if (input.accountNumber >= 0) {
                 wallet.accountName(input.accountNumber)
-            } else getString(R.string.external).toLowerCase()
-            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(input.amount), accountName)
+            } else getString(R.string.external).lowercase(Locale.getDefault())
+            val amount = getString(
+                R.string.tx_details_account,
+                CoinFormat.formatDecred(input.amount),
+                accountName
+            )
             var inputBadge = ""
             if (input.accountNumber != -1) {
                 inputBadge = wallet.name
@@ -217,8 +392,12 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
         for (output in transaction.outputs!!) {
             val accountName = if (output.account >= 0) {
                 wallet.accountName(output.account)
-            } else getString(R.string.external).toLowerCase()
-            val amount = getString(R.string.tx_details_account, CoinFormat.formatDecred(output.amount), accountName)
+            } else getString(R.string.external).lowercase(Locale.getDefault())
+            val amount = getString(
+                R.string.tx_details_account,
+                CoinFormat.formatDecred(output.amount),
+                accountName
+            )
             var outputBadge = ""
             if (output.account != -1) {
                 outputBadge = wallet.name
@@ -226,7 +405,12 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             outputs.add(DropDownItem(amount, output.address!!, outputBadge))
         }
 
-        InputOutputDropdown(output_dropdown_layout, outputs.toTypedArray(), isInput = false, toastAnchor = top_bar)
+        InputOutputDropdown(
+            output_dropdown_layout,
+            outputs.toTypedArray(),
+            isInput = false,
+            toastAnchor = top_bar
+        )
     }
 
     override fun onScrollChanged() {
@@ -253,15 +437,19 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
                 Utils.copyToClipboard(top_bar, tx_details_id.text.toString(), R.string.tx_id_copied)
             }
             R.id.tx_details_dest -> {
-                Utils.copyToClipboard(top_bar, tx_details_dest.text.toString(), R.string.address_copy_text)
+                Utils.copyToClipboard(
+                    top_bar,
+                    tx_details_dest.text.toString(),
+                    R.string.address_copy_text
+                )
             }
             R.id.iv_info -> {
                 val content = HtmlCompat.fromHtml(getString(R.string.tx_details_copy_info), 0)
-                InfoDialog(context!!)
-                        .setDialogTitle(getString(R.string.how_to_copy))
-                        .setMessage(content)
-                        .setPositiveButton(getString(R.string.got_it), null)
-                        .show()
+                InfoDialog(requireContext())
+                    .setDialogTitle(getString(R.string.how_to_copy))
+                    .setMessage(content)
+                    .setPositiveButton(getString(R.string.got_it), null)
+                    .show()
             }
             R.id.view_dcrdata -> {
                 val url = if (BuildConfig.IS_TESTNET) {
@@ -276,17 +464,17 @@ class TransactionDetailsDialog(val transaction: Transaction) : FullScreenBottomS
             R.id.rebroadcast_button -> {
 
                 if (!multiWallet.isConnectedToDecredNetwork) {
-                    SnackBar.showError(context!!, R.string.not_connected)
+                    SnackBar.showError(requireContext(), R.string.not_connected)
                     return
                 }
 
                 try {
                     wallet.publishUnminedTransactions()
-                    SnackBar.showText(context!!, R.string.rebroadcast_tx_success)
+                    SnackBar.showText(requireContext(), R.string.rebroadcast_tx_success)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     val op = "rebroadcast tx"
-                    Utils.showErrorDialog(context!!, op + ": " + e.message)
+                    Utils.showErrorDialog(requireContext(), op + ": " + e.message)
                     Dcrlibwallet.logT(op, e.message)
                 }
             }

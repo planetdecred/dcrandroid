@@ -22,7 +22,8 @@ class HelpActivity : BaseActivity() {
         go_back.setOnClickListener { finish() }
 
         see_docs.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.https_docs_decred_org)))
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.https_docs_decred_org)))
             startActivity(browserIntent)
         }
     }

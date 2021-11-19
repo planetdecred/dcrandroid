@@ -25,8 +25,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import dcrlibwallet.*
 
-open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null) : BottomSheetDialogFragment(),
-        SyncProgressListener, TxAndBlockNotificationListener {
+open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDismissListener? = null) :
+    BottomSheetDialogFragment(),
+    SyncProgressListener, TxAndBlockNotificationListener {
 
     var TAG = this.javaClass.name
     var isForeground = false
@@ -46,14 +47,15 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
             val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
 
-            val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val metrics = DisplayMetrics()
             wm.defaultDisplay.getMetrics(metrics)
 
             bottomSheetBehavior.peekHeight = metrics.heightPixels
 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            bottomSheetBehavior.addBottomSheetCallback(object :
+                BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 }
 
@@ -105,9 +107,10 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
 
     fun show(context: Context) {
         val supportFragmentManager = (context as AppCompatActivity).supportFragmentManager
-        if (supportFragmentManager.findFragmentByTag(this::class.java.name) == null) {
-            super.show(supportFragmentManager, javaClass.name)
-        }
+        super.show(supportFragmentManager, javaClass.name)
+//        if (supportFragmentManager.findFragmentByTag(this::class.java.name) == null) {
+//            super.show(supportFragmentManager, javaClass.name)
+//        }
 
     }
 

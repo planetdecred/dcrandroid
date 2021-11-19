@@ -18,8 +18,10 @@ import kotlinx.android.synthetic.main.verify_seed_list_row.view.*
 data class InputSeed(val number: Int, var phrase: String)
 data class ShuffledSeeds(val seeds: Array<InputSeed>, var selectedIndex: Int = -1)
 
-class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<ShuffledSeeds>,
-                        private val seedTapped: (seedIndex: Int) -> Unit) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
+class VerifySeedAdapter(
+    val context: Context, private val seeds: ArrayList<ShuffledSeeds>,
+    private val seedTapped: (seedIndex: Int) -> Unit
+) : RecyclerView.Adapter<VerifySeedAdapter.SeedViewHolder>() {
 
     val enteredSeeds = Array(SEED_COUNT) { "" }
     var allSeedsSelected = false
@@ -27,7 +29,13 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeedViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         if (viewType == 0) {
-            return SeedViewHolder(layoutInflater.inflate(R.layout.verify_seed_header, parent, false))
+            return SeedViewHolder(
+                layoutInflater.inflate(
+                    R.layout.verify_seed_header,
+                    parent,
+                    false
+                )
+            )
         }
         return SeedViewHolder(layoutInflater.inflate(R.layout.verify_seed_list_row, parent, false))
     }
@@ -60,7 +68,7 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
         for (i in 0..2) {
             holder.seedText[i].apply {
                 text = multiSeed.seeds[i].phrase
-                setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
+                setTextColor(context.resources.getColor(R.color.text3))
                 setBackgroundResource(R.drawable.verify_seed_normal)
 
                 setOnClickListener {
@@ -74,19 +82,19 @@ class VerifySeedAdapter(val context: Context, private val seeds: ArrayList<Shuff
 
         if (multiSeed.selectedIndex != -1) {
             holder.seedText[multiSeed.selectedIndex].apply {
-                setTextColor(context.resources.getColor(R.color.blue))
+                setTextColor(context.resources.getColor(R.color.primary))
                 setBackgroundResource(R.drawable.verify_seed_selected)
             }
 
             holder.itemView.selected_seed.apply {
                 text = multiSeed.seeds[multiSeed.selectedIndex].phrase
-                setTextColor(context.resources.getColor(R.color.darkerBlueGrayTextColor))
+                setTextColor(context.resources.getColor(R.color.text2))
             }
             holder.itemView.selected_seed.text = multiSeed.seeds[multiSeed.selectedIndex].phrase
         } else {
             holder.itemView.selected_seed.apply {
                 text = "—"
-                setTextColor(context.resources.getColor(R.color.lightGrayTextColor))
+                setTextColor(context.resources.getColor(R.color.text3))
             }
         }
 

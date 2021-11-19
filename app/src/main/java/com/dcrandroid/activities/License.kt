@@ -9,6 +9,7 @@ package com.dcrandroid.activities
 import android.os.Bundle
 import android.widget.TextView
 import com.dcrandroid.R
+import kotlinx.android.synthetic.main.activity_license.*
 
 class License : BaseActivity() {
     val license = "ISC License" +
@@ -32,5 +33,7 @@ class License : BaseActivity() {
 
         setContentView(R.layout.activity_license)
         findViewById<TextView>(R.id.license_text).text = license
+
+        go_back.setOnClickListener { finish() }
     }
 }

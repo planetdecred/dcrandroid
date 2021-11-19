@@ -22,8 +22,10 @@ import com.dcrandroid.util.WalletData
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.account_custom_spinner.view.*
 
-class AccountCustomSpinner(private val fragmentManager: FragmentManager, private val spinnerLayout: View,
-                           var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null) : View.OnClickListener {
+class AccountCustomSpinner(
+    private val fragmentManager: FragmentManager, private val spinnerLayout: View,
+    var selectedAccountChanged: ((AccountCustomSpinner) -> Unit?)? = null
+) : View.OnClickListener {
 
     var pickerTitle: Int? = null
     private lateinit var filterAccount: (account: Account) -> Boolean
@@ -89,8 +91,13 @@ class AccountCustomSpinner(private val fragmentManager: FragmentManager, private
         }
 
         if (selectedAccount != null && previouslySelectedAccount != null
-                && previouslySelectedAccount != selectedAccount) {
-            SnackBar.showText(spinnerLayout.context, R.string.source_account_changed, Toast.LENGTH_SHORT)
+            && previouslySelectedAccount != selectedAccount
+        ) {
+            SnackBar.showText(
+                spinnerLayout.context,
+                R.string.source_account_changed,
+                Toast.LENGTH_SHORT
+            )
         }
     }
 

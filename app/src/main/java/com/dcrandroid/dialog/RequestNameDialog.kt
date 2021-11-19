@@ -18,10 +18,16 @@ import kotlinx.android.synthetic.main.rename_account_sheet.*
 
 const val MAX_NAME_LENGTH = 32
 
-class RequestNameDialog(private val dialogTitle: Int, private val currentName: String,
-                        private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
+class RequestNameDialog(
+    private val dialogTitle: Int, private val currentName: String,
+    private val isWallet: Boolean = false, private val rename: (newName: String) -> Exception?
+) : FullScreenBottomSheetDialog() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.rename_account_sheet, container, false)
     }
 
@@ -30,7 +36,7 @@ class RequestNameDialog(private val dialogTitle: Int, private val currentName: S
 
         sheet_title.setText(dialogTitle)
 
-        val accountNameInput = InputHelper(context!!, account_name_input) {
+        val accountNameInput = InputHelper(requireContext(), account_name_input) {
             btn_confirm.isEnabled = !it.isNullOrBlank() && it != currentName
             true
         }.apply {

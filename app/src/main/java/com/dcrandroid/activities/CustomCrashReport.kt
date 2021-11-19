@@ -29,7 +29,8 @@ class CustomCrashReport : CrashReportDialog() {
         super.onCreate(savedInstanceState)
         try {
             helper = CrashReportDialogHelper(this, intent)
-            val dialogConfiguration = ConfigUtils.getPluginConfiguration(helper!!.config, DialogConfiguration::class.java)
+            val dialogConfiguration =
+                ConfigUtils.getPluginConfiguration(helper!!.config, DialogConfiguration::class.java)
             val themeResourceId = dialogConfiguration.resTheme()
             if (themeResourceId != ACRAConstants.DEFAULT_RES_VALUE) setTheme(themeResourceId)
             buildAndShowDialog(savedInstanceState)
@@ -43,17 +44,27 @@ class CustomCrashReport : CrashReportDialog() {
         crashDialog.setDialogTitle(getString(R.string.app_crashed))
         crashDialog.setMessage(getString(R.string.crash_dialog_text))
         crashDialog.setCanceledOnTouchOutside(false)
-        crashDialog.setPositiveButton(getString(R.string.send_report), DialogInterface.OnClickListener { dialog, _ ->
-            helper?.sendCrash("", "")
-            dialog.dismiss()
-            finish()
-        })
-        crashDialog.setNegativeButton(getString(R.string.dont_send), DialogInterface.OnClickListener { dialog, _ ->
-            helper?.cancelReports()
-            dialog.dismiss()
-            finish()
-        })
-        crashDialog.setCopyReportClickListener { Utils.copyToClipboard(this, loadReports(), R.string.crash_report_copied) } //TODO:
+        crashDialog.setPositiveButton(
+            getString(R.string.send_report),
+            DialogInterface.OnClickListener { dialog, _ ->
+                helper?.sendCrash("", "")
+                dialog.dismiss()
+                finish()
+            })
+        crashDialog.setNegativeButton(
+            getString(R.string.dont_send),
+            DialogInterface.OnClickListener { dialog, _ ->
+                helper?.cancelReports()
+                dialog.dismiss()
+                finish()
+            })
+        crashDialog.setCopyReportClickListener {
+            Utils.copyToClipboard(
+                this,
+                loadReports(),
+                R.string.crash_report_copied
+            )
+        } //TODO:
         crashDialog.setViewHideReportClickListener {
             if (crashDialog.isHidden()) {
                 crashDialog.showReport(loadReports())

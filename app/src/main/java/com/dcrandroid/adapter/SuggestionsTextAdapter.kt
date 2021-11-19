@@ -17,8 +17,12 @@ import android.widget.TextView
 import androidx.annotation.LayoutRes
 import com.dcrandroid.R
 
-class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val suggestions: List<String>) :
-        ArrayAdapter<String>(context, layoutResource, suggestions) {
+class SuggestionsTextAdapter(
+    context: Context,
+    @LayoutRes private val layoutResource: Int,
+    private val suggestions: List<String>
+) :
+    ArrayAdapter<String>(context, layoutResource, suggestions) {
 
     private val filteredArray = ArrayList<String>()
 
@@ -26,7 +30,11 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
         return createViewFromResource(position, convertView, parent)
     }
 
-    private fun createViewFromResource(position: Int, convertView: View?, parent: ViewGroup?): View {
+    private fun createViewFromResource(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
         var view = convertView
 
         if (view == null) {
@@ -38,7 +46,8 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
 
         val layoutParams = suggestionTextView.layoutParams as LinearLayout.LayoutParams
         if (position == count - 1) {
-            layoutParams.bottomMargin = context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
+            layoutParams.bottomMargin =
+                context.resources.getDimensionPixelOffset(R.dimen.margin_padding_size_4)
         } else {
             layoutParams.bottomMargin = 0
         }
@@ -47,7 +56,7 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
         val backgroundResource = when (position) {
             0 -> R.drawable.curved_top_4dp_ripple
             count - 1 -> R.drawable.curved_bottom_4dp_ripple
-            else -> R.drawable.bg_white_ripple
+            else -> R.drawable.surface_bg_ripple
         }
 
         suggestionTextView.setBackgroundResource(backgroundResource)
@@ -71,7 +80,10 @@ class SuggestionsTextAdapter(context: Context, @LayoutRes private val layoutReso
         return filteredArray[position]
     }
 
-    private inner class StringFilter(val textAdapter: SuggestionsTextAdapter, val suggestionList: List<String>) : Filter() {
+    private inner class StringFilter(
+        val textAdapter: SuggestionsTextAdapter,
+        val suggestionList: List<String>
+    ) : Filter() {
 
         var filteredList = ArrayList<String>()
 

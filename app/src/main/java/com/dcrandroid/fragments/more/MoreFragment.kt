@@ -19,7 +19,11 @@ import kotlinx.android.synthetic.main.fragment_more.*
 
 class MoreFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_more, container, false)
     }
 
@@ -29,14 +33,39 @@ class MoreFragment : BaseFragment() {
         setToolbarTitle(R.string.more, false)
 
         val items = arrayOf(
-                ListItem(R.string.settings, R.drawable.ic_settings, Intent(context, SettingsActivity::class.java)),
-                ListItem(R.string.security_tools, R.drawable.ic_security, Intent(context, SecurityTools::class.java)),
-                ListItem(R.string.politeia, R.drawable.ic_politeia, Intent(context, PoliteiaActivity::class.java)),
-                ListItem(R.string.help, R.drawable.ic_question_mark, Intent(context, HelpActivity::class.java)),
-                ListItem(R.string.about, R.drawable.ic_info1, Intent(context, AboutActivity::class.java)),
-                ListItem(R.string.debug, R.drawable.ic_debug, Intent(context, DebugActivity::class.java)))
+            ListItem(
+                R.string.settings,
+                R.drawable.ic_settings,
+                Intent(context, SettingsActivity::class.java)
+            ),
+            ListItem(
+                R.string.security_tools,
+                R.drawable.ic_security,
+                Intent(context, SecurityTools::class.java)
+            ),
+            ListItem(
+                R.string.politeia,
+                R.drawable.ic_politeia,
+                Intent(context, PoliteiaActivity::class.java)
+            ),
+            ListItem(
+                R.string.help,
+                R.drawable.ic_question_mark,
+                Intent(context, HelpActivity::class.java)
+            ),
+            ListItem(
+                R.string.about,
+                R.drawable.ic_info1,
+                Intent(context, AboutActivity::class.java)
+            ),
+            ListItem(
+                R.string.debug,
+                R.drawable.ic_debug,
+                Intent(context, DebugActivity::class.java)
+            )
+        )
 
-        val adapter = ListAdapter(context!!, items)
+        val adapter = ListAdapter(requireContext(), items)
         more_recycler_view.layoutManager = LinearLayoutManager(context)
         more_recycler_view.adapter = adapter
     }

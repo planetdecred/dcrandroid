@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
 import kotlinx.android.synthetic.main.seed_list_row.view.*
 
-class SaveSeedAdapter(private val items: Array<String>) : RecyclerView.Adapter<SaveSeedAdapter.MyViewHolder>() {
+class SaveSeedAdapter(private val items: Array<String>) :
+    RecyclerView.Adapter<SaveSeedAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
         return items.size
@@ -26,7 +27,7 @@ class SaveSeedAdapter(private val items: Array<String>) : RecyclerView.Adapter<S
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.seed_list_row, parent, false)
+            .inflate(R.layout.seed_list_row, parent, false)
 
         return MyViewHolder(itemView)
     }

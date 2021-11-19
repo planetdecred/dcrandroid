@@ -23,13 +23,23 @@ import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.popup_layout.view.*
 import kotlinx.android.synthetic.main.popup_layout_row.view.*
 
-class PopupItem(@StringRes val title: Int, @ColorRes val color: Int = R.color.darkBlueTextColor, val enabled: Boolean = true, val showNotificationDot: Boolean = false)
+class PopupItem(
+    @StringRes val title: Int,
+    @ColorRes val color: Int = R.color.text1,
+    val enabled: Boolean = true,
+    val showNotificationDot: Boolean = false
+)
+
 class PopupDivider(val widthPixels: Int)
 
 const val VIEW_TYPE_ROW = 0
 const val VIEW_TYPE_DIVIDER = 1
 
-class PopupMenuAdapter(private val context: Context, private val items: Array<Any>, private val itemClicked: (position: Int) -> Unit) : RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
+class PopupMenuAdapter(
+    private val context: Context,
+    private val items: Array<Any>,
+    private val itemClicked: (position: Int) -> Unit
+) : RecyclerView.Adapter<PopupMenuAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout = when (viewType) {
@@ -38,9 +48,10 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
         }
 
         return ViewHolder(
-                LayoutInflater
-                        .from(context)
-                        .inflate(layout, parent, false))
+            LayoutInflater
+                .from(context)
+                .inflate(layout, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -81,12 +92,18 @@ class PopupMenuAdapter(private val context: Context, private val items: Array<An
 
 class PopupUtil {
     companion object {
-        fun showPopup(anchorView: View, items: Array<Any>, itemClicked: (window: PopupWindow, position: Int) -> Unit) {
+        fun showPopup(
+            anchorView: View,
+            items: Array<Any>,
+            itemClicked: (window: PopupWindow, position: Int) -> Unit
+        ) {
             val context = anchorView.context
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.popup_layout, null)
-            val window = PopupWindow(view, ListPopupWindow.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, true)
+            val window = PopupWindow(
+                view, ListPopupWindow.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT, true
+            )
 
             val recyclerView = view.popup_rv
 

@@ -59,7 +59,11 @@ class ManualMixerSetup : BaseActivity() {
                 return@setOnClickListener
             }
 
-            val title = PassPromptTitle(R.string.confirm_setup_mixer, R.string.confirm_setup_mixer, R.string.confirm_setup_mixer)
+            val title = PassPromptTitle(
+                R.string.confirm_setup_mixer,
+                R.string.confirm_setup_mixer,
+                R.string.confirm_setup_mixer
+            )
             PassPromptUtil(this, wallet.id, title, allowFingerprint = true) { dialog, passphrase ->
                 if (passphrase == null) {
                     return@PassPromptUtil true
@@ -67,7 +71,11 @@ class ManualMixerSetup : BaseActivity() {
 
                 GlobalScope.launch(Dispatchers.Default) {
                     try {
-                        wallet.setAccountMixerConfig(mixed.selectedAccount!!.accountNumber, unmixed.selectedAccount!!.accountNumber, passphrase)
+                        wallet.setAccountMixerConfig(
+                            mixed.selectedAccount!!.accountNumber,
+                            unmixed.selectedAccount!!.accountNumber,
+                            passphrase
+                        )
                         multiWallet!!.setBoolConfigValueForKey(Constants.HAS_SETUP_PRIVACY, true)
                         val intent = Intent(this@ManualMixerSetup, AccountMixerActivity::class.java)
                         intent.putExtra(Constants.WALLET_ID, wallet.id)

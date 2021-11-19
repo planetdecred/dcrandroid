@@ -111,27 +111,42 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         return this
     }
 
-    fun setPositiveButton(text: Int, listener: DialogInterface.OnClickListener? = null): InfoDialog {
+    fun setPositiveButton(
+        text: Int,
+        listener: DialogInterface.OnClickListener? = null
+    ): InfoDialog {
         return this.setPositiveButton(context.getString(text), listener)
     }
 
-    fun setPositiveButton(text: String, listener: DialogInterface.OnClickListener? = null): InfoDialog {
+    fun setPositiveButton(
+        text: String,
+        listener: DialogInterface.OnClickListener? = null
+    ): InfoDialog {
         this.btnPositiveText = text
         this.btnPositiveClick = listener
         return this
     }
 
-    fun setNegativeButton(text: Int, listener: DialogInterface.OnClickListener? = null): InfoDialog {
+    fun setNegativeButton(
+        text: Int,
+        listener: DialogInterface.OnClickListener? = null
+    ): InfoDialog {
         return this.setNegativeButton(context.getString(text), listener)
     }
 
-    fun setNegativeButton(text: String, listener: DialogInterface.OnClickListener? = null): InfoDialog {
+    fun setNegativeButton(
+        text: String,
+        listener: DialogInterface.OnClickListener? = null
+    ): InfoDialog {
         this.btnNegativeText = text
         this.btnNegativeClick = listener
         return this
     }
 
-    fun setIcon(@DrawableRes iconResource: Int, @DrawableRes iconBackground: Int = R.color.white): InfoDialog {
+    fun setIcon(
+        @DrawableRes iconResource: Int,
+        @DrawableRes iconBackground: Int = R.color.white
+    ): InfoDialog {
         this.icon = iconResource
         this.iconBackground = iconBackground
         return this

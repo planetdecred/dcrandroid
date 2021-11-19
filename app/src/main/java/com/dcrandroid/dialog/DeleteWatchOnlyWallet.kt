@@ -23,11 +23,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DeleteWatchOnlyWallet(val wallet: Wallet, val walletDeleted: () -> Unit) : FullScreenBottomSheetDialog() {
+class DeleteWatchOnlyWallet(val wallet: Wallet, val walletDeleted: () -> Unit) :
+    FullScreenBottomSheetDialog() {
 
     private var walletNameInput: InputHelper? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.delete_watch_only_wallet_sheet, container, false)
     }
 
@@ -59,8 +64,12 @@ class DeleteWatchOnlyWallet(val wallet: Wallet, val walletDeleted: () -> Unit) :
                 } catch (e: Exception) {
                     toggleButtons(true)
                     withContext(Dispatchers.Main) {
-                        val op = this@DeleteWatchOnlyWallet.javaClass.name + ": createWatchOnlyWallet"
-                        Utils.showErrorDialog(this@DeleteWatchOnlyWallet.context!!, op + ": " + e.message)
+                        val op =
+                            this@DeleteWatchOnlyWallet.javaClass.name + ": createWatchOnlyWallet"
+                        Utils.showErrorDialog(
+                            this@DeleteWatchOnlyWallet.context!!,
+                            op + ": " + e.message
+                        )
                         Dcrlibwallet.logT(op, e.message)
                     }
                 }

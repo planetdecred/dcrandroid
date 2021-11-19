@@ -16,11 +16,11 @@
 
     <item android:state_enabled="true">
         <ripple
-            android:color="@color/whiteRipple">
+            android:color="@color/surfaceRipple">
 
             <item android:id="@android:id/mask">
                 <shape android:shape="rectangle">
-                    <solid android:color="@android:color/white" />
+                    <solid android:color="@color/surface" />
                 </shape>
             </item>
 

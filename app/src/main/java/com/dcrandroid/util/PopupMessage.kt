@@ -16,7 +16,11 @@ import com.dcrandroid.R
 
 class PopupMessage {
     companion object {
-        fun showText(anchorView: View, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT): Toast {
+        fun showText(
+            anchorView: View,
+            @StringRes text: Int,
+            length: Int = Toast.LENGTH_SHORT
+        ): Toast {
             val inflater = LayoutInflater.from(anchorView.context)
             val view = inflater.inflate(R.layout.popup_message, null)
 
@@ -26,7 +30,8 @@ class PopupMessage {
             val position = IntArray(2)
             anchorView.getLocationInWindow(position)
 
-            val topMargin = anchorView.context.resources.getDimensionPixelSize(R.dimen.margin_padding_size_12)
+            val topMargin =
+                anchorView.context.resources.getDimensionPixelSize(R.dimen.margin_padding_size_12)
 
             val t = Toast(anchorView.context)
             t.view = view

@@ -27,17 +27,17 @@ class MainApplication : Application() {
             try {
                 val builder = CoreConfigurationBuilder(this)
                 builder.setBuildConfigClass(BuildConfig::class.java)
-                        .setReportFormat(StringFormat.JSON)
+                    .setReportFormat(StringFormat.JSON)
 
                 builder.getPluginConfigurationBuilder(HttpSenderConfigurationBuilder::class.java)
-                        .setUri("https://decred-widget-crash.herokuapp.com/logs/Dcrandroid")
-                        .setHttpMethod(HttpSender.Method.POST)
-                        .setEnabled(true)
+                    .setUri("https://decred-widget-crash.herokuapp.com/logs/Dcrandroid")
+                    .setHttpMethod(HttpSender.Method.POST)
+                    .setEnabled(true)
 
                 builder.getPluginConfigurationBuilder(DialogConfigurationBuilder::class.java)
-                        .setReportDialogClass(CustomCrashReport::class.java)
-                        .setResTheme(R.style.LightTheme)
-                        .setEnabled(true)
+                    .setReportDialogClass(CustomCrashReport::class.java)
+                    .setResTheme(R.style.AppTheme)
+                    .setEnabled(true)
 
                 ACRA.init(this, builder.build())
             } catch (e: Exception) {

@@ -25,7 +25,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="@dimen/margin_padding_size_8"
-            android:background="@drawable/circular_transparent_ripple"
+            android:background="@drawable/circular_surface_ripple"
             android:focusable="true"
             android:clickable="true"
             android:id="@+id/go_back"
@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/margin_padding_size_8"
             android:text="@string/confirm_to_send"
             android:textSize="@dimen/edit_text_size_20"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:includeFontPadding="false"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -46,7 +46,7 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:background="#edeff1" />
+        android:background="@color/colorDivider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 android:id="@+id/send_from_account_name"
                 android:text="@string/send_from_account"
                 app:fontFamily="@font/source_sans_pro"
-                android:textColor="@color/darkerBlueGrayTextColor"
+                android:textColor="@color/text2"
                 android:textSize="@dimen/edit_text_size_14" />
 
             <TextView
@@ -75,7 +75,7 @@
                 android:id="@+id/send_amount"
                 app:fontFamily="@font/source_sans_pro"
                 android:textSize="32sp"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:layout_marginTop="@dimen/margin_padding_size_4"
                 android:text="3.14159265 DCR" />
 
@@ -94,7 +94,7 @@
                 android:id="@+id/confirm_dest_type"
                 android:layout_marginTop="@dimen/margin_padding_size_16"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/darkerBlueGrayTextColor" />
+                android:textColor="@color/text2" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                 app:fontFamily="@font/source_sans_pro"
                 android:id="@+id/address_account_name"
                 android:layout_marginTop="6dp"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_16" />
 
         </LinearLayout>
@@ -111,7 +111,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#e6eaed"
+            android:background="@color/colorDivider"
             android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginRight="@dimen/margin_padding_size_16"
             android:layout_marginTop="@dimen/margin_padding_size_24" />
@@ -129,14 +129,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/transaction_fee"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="@dimen/edit_text_size_14"
                 app:fontFamily="@font/source_sans_pro" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:id="@+id/tx_fee"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro"
@@ -147,7 +147,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#e6eaed"
+            android:background="@color/colorDivider"
             android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginRight="@dimen/margin_padding_size_16"
             android:layout_marginTop="@dimen/margin_padding_size_16" />
@@ -165,14 +165,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/total_cost"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="@dimen/edit_text_size_14"
                 app:fontFamily="@font/source_sans_pro" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:id="@+id/total_cost"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro"
@@ -193,14 +193,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/balance_after_send"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="@dimen/edit_text_size_14"
                 app:fontFamily="@font/source_sans_pro" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:id="@+id/balance_after_send"
                 android:textSize="@dimen/edit_text_size_16"
                 app:fontFamily="@font/source_sans_pro"
@@ -211,7 +211,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#e6eaed"
+            android:background="@color/colorDivider"
             android:layout_marginLeft="@dimen/margin_padding_size_16"
             android:layout_marginRight="@dimen/margin_padding_size_16"
             android:layout_marginTop="@dimen/margin_padding_size_16" />
@@ -240,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/send_dcr_warning"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:layout_marginStart="@dimen/margin_padding_size_8"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -283,7 +283,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/processing_ellipsis"
                     android:textSize="@dimen/edit_text_size_18"
-                    android:textColor="@color/darkerBlueGrayTextColor"
+                    android:textColor="@color/text2"
                     app:fontFamily="@font/source_sans_pro"
                     android:includeFontPadding="false"
                     android:layout_marginStart="@dimen/margin_padding_size_8" />
@@ -310,7 +310,7 @@
                     android:text="@string/success"
                     android:textSize="@dimen/edit_text_size_18"
                     android:fontFamily="@font/source_sans_pro"
-                    android:textColor="@color/greenTextColor"
+                    android:textColor="@color/text6"
                     android:layout_marginStart="@dimen/margin_padding_size_8" />
 
             </LinearLayout>

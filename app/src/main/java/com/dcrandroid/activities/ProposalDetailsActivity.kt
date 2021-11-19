@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.NestedScrollView
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Proposal
@@ -33,18 +34,18 @@ class ProposalDetailsActivity : BaseActivity() {
         setContentView(R.layout.activity_proposal_details)
 
         markwon = Markwon.builder(applicationContext)
-                .usePlugin(LinkifyPlugin.create())
-                .usePlugin(TablePlugin.create(applicationContext))
-                // use TableAwareLinkMovementMethod to handle clicks inside tables
-                .usePlugin(MovementMethodPlugin.create(TableAwareMovementMethod.create()))
-                .build();
+            .usePlugin(LinkifyPlugin.create())
+            .usePlugin(TablePlugin.create(applicationContext))
+            // use TableAwareLinkMovementMethod to handle clicks inside tables
+            .usePlugin(MovementMethodPlugin.create(TableAwareMovementMethod.create()))
+            .build()
 
         val proposalId = intent.getSerializableExtra(Constants.PROPOSAL_ID) as Long
         proposal = Proposal.from(multiWallet!!.politeia.getProposalByIDRaw(proposalId))
         loadProposalDetails()
 
         open_proposal.setOnClickListener {
-            val url = getString(R.string.politeia_server_url) + proposal.token
+            val url = BuildConfig.PoliteiaHost + "/record/" + proposal.token
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
             startActivity(i)
@@ -55,7 +56,10 @@ class ProposalDetailsActivity : BaseActivity() {
             share.type = getString(R.string.text_pain)
             share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
             share.putExtra(Intent.EXTRA_SUBJECT, proposal.name)
-            share.putExtra(Intent.EXTRA_TEXT, getString(R.string.politeia_server_url) + proposal.token)
+            share.putExtra(
+                Intent.EXTRA_TEXT,
+                BuildConfig.PoliteiaHost + "/record/" + proposal.token
+            )
             startActivity(Intent.createChooser(share, getString(R.string.share_proposal)))
         }
 
@@ -84,9 +88,14 @@ class ProposalDetailsActivity : BaseActivity() {
 
         proposal_title.text = proposal.name
         proposal_author.text = proposal.username
-        proposal_timestamp.text = Utils.calculateTime(System.currentTimeMillis() / 1000 - proposal.publishedAt, this@ProposalDetailsActivity)
-        proposal_comments.text = String.format(Locale.getDefault(), getString(R.string.comments), proposal.numcomments)
-        proposal_version.text = String.format(Locale.getDefault(), getString(R.string.version_number), proposal.version)
+        proposal_timestamp.text = Utils.calculateTime(
+            System.currentTimeMillis() / 1000 - proposal.publishedAt,
+            this@ProposalDetailsActivity
+        )
+        proposal_comments.text =
+            String.format(Locale.getDefault(), getString(R.string.comments), proposal.numcomments)
+        proposal_version.text =
+            String.format(Locale.getDefault(), getString(R.string.version_number), proposal.version)
 
         // load file from server if it is not yet loaded or outdated.
         if (proposal.indexFile!!.isNotEmpty() && proposal.indexFileVersion == proposal.version) {
@@ -99,7 +108,8 @@ class ProposalDetailsActivity : BaseActivity() {
                 // keep trying to load the description while displaying any errors from the screen
                 while (true) {
                     try {
-                        val description = multiWallet!!.politeia.fetchProposalDescription(proposal.token)
+                        val description =
+                            multiWallet!!.politeia.fetchProposalDescription(proposal.token)
                         withContext(Dispatchers.Main) {
                             description_progress?.hide()
                             // set markdown
@@ -124,8 +134,10 @@ class ProposalDetailsActivity : BaseActivity() {
         if (proposal.voteStatus == 4) {
             vote_summary.show()
 
-            yes_votes.text = getString(R.string.yes_votes_percent, proposal.yesVotes, proposal.yesPercentage)
-            no_votes.text = getString(R.string.no_votes_percent, proposal.noVotes, proposal.noPercentage)
+            yes_votes.text =
+                getString(R.string.yes_votes_percent, proposal.yesVotes, proposal.yesPercentage)
+            no_votes.text =
+                getString(R.string.no_votes_percent, proposal.noVotes, proposal.noPercentage)
 
             progressBar.max = proposal.totalVotes
             progressBar.progress = proposal.yesVotes
@@ -135,31 +147,52 @@ class ProposalDetailsActivity : BaseActivity() {
         // Set proposal status.
         if (proposal.status == 6) {
             proposal_status.visibility = View.VISIBLE
-            proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_light_orange_corners_4dp)
+            proposal_status.background = AppCompatResources.getDrawable(
+                this@ProposalDetailsActivity,
+                R.drawable.bg_light_orange_corners_4dp
+            )
             proposal_status.text = getString(R.string.status_abandoned)
         } else {
             proposal_status.visibility = View.VISIBLE
             if (proposal.voteStatus == 0) {
                 proposal_status.text = getString(R.string.status_invalid)
             } else if (proposal.voteStatus == 1) {
-                proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)
+                proposal_status.background = AppCompatResources.getDrawable(
+                    this@ProposalDetailsActivity,
+                    R.drawable.orange_bg_corners_4dp
+                )
                 proposal_status.text = getString(R.string.status_not_authorized)
             } else if (proposal.voteStatus == 2) {
-                proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.default_app_button_bg)
+                proposal_status.background = AppCompatResources.getDrawable(
+                    this@ProposalDetailsActivity,
+                    R.drawable.default_app_button_bg
+                )
                 proposal_status.text = getString(R.string.status_authorized)
             } else if (proposal.voteStatus == 3) {
-                proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.default_app_button_bg)
+                proposal_status.background = AppCompatResources.getDrawable(
+                    this@ProposalDetailsActivity,
+                    R.drawable.default_app_button_bg
+                )
                 proposal_status.text = getString(R.string.status_vote_started)
             } else if (proposal.voteStatus == 4) {
                 if (proposal.approved) {
-                    proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.bg_dark_green_corners_4dp)
+                    proposal_status.background = AppCompatResources.getDrawable(
+                        this@ProposalDetailsActivity,
+                        R.drawable.bg_dark_green_corners_4dp
+                    )
                     proposal_status.text = getString(R.string.status_approved)
                 } else {
-                    proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)
+                    proposal_status.background = AppCompatResources.getDrawable(
+                        this@ProposalDetailsActivity,
+                        R.drawable.orange_bg_corners_4dp
+                    )
                     proposal_status.text = getString(R.string.status_rejected)
                 }
             } else if (proposal.voteStatus == 5) {
-                proposal_status.background = AppCompatResources.getDrawable(this@ProposalDetailsActivity, R.drawable.orange_bg_corners_4dp)
+                proposal_status.background = AppCompatResources.getDrawable(
+                    this@ProposalDetailsActivity,
+                    R.drawable.orange_bg_corners_4dp
+                )
                 proposal_status.text = getString(R.string.status_non_existent)
             }
         }

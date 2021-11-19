@@ -37,7 +37,7 @@
             android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro"
             android:textSize="@dimen/edit_text_size_12"
-            android:textColor="@color/darkerBlueGrayTextColor"
+            android:textColor="@color/text2"
             android:text="0"
             android:layout_marginStart="28dp" />
 

@@ -50,7 +50,11 @@ class WalletsFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_wallets, container, false)
     }
 
@@ -101,7 +105,7 @@ class WalletsFragment : BaseFragment() {
         } else if (requestCode == RESTORE_WALLET_REQUEST_CODE && resultCode == RESULT_OK) {
             val walletID = data?.getLongExtra(Constants.WALLET_ID, -1)
             adapter.addWallet(walletID!!)
-            SnackBar.showText(context!!, R.string.wallet_created)
+            SnackBar.showText(requireContext(), R.string.wallet_created)
         } else if (requestCode == PRIVACY_SETTINGS_REQUEST_CODE) {
             adapter.reloadList()
         }
@@ -117,10 +121,10 @@ class WalletsFragment : BaseFragment() {
             R.id.add_new_wallet -> {
 
                 if (multiWallet!!.openedWalletsCount() >= numOfAllowedWallets()) {
-                    InfoDialog(context!!)
-                            .setMessage(getString(R.string.wallets_limit_error))
-                            .setPositiveButton(getString(R.string.ok))
-                            .show()
+                    InfoDialog(requireContext())
+                        .setMessage(getString(R.string.wallets_limit_error))
+                        .setPositiveButton(getString(R.string.ok))
+                        .show()
                     return false
                 }
 
@@ -129,9 +133,9 @@ class WalletsFragment : BaseFragment() {
                     val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
 
                     val items: Array<Any> = arrayOf(
-                            PopupItem(R.string.create_a_new_wallet),
-                            PopupItem(R.string.import_existing_wallet),
-                            PopupItem(R.string.import_watching_only_wallet)
+                        PopupItem(R.string.create_a_new_wallet),
+                        PopupItem(R.string.import_existing_wallet),
+                        PopupItem(R.string.import_watching_only_wallet)
                     )
 
                     PopupUtil.showPopup(anchorView, items) { window, index ->
@@ -145,25 +149,38 @@ class WalletsFragment : BaseFragment() {
                                             return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
                                         }
 
-                                        PasswordPinDialogFragment(R.string.create, isSpending = true, isChange = false) { dialog, passphrase, passphraseType ->
-                                            createWallet(dialog, newName, passphrase, passphraseType)
-                                        }.show(context!!)
+                                        PasswordPinDialogFragment(
+                                            R.string.create,
+                                            isSpending = true,
+                                            isChange = false
+                                        ) { dialog, passphrase, passphraseType ->
+                                            createWallet(
+                                                dialog,
+                                                newName,
+                                                passphrase,
+                                                passphraseType
+                                            )
+                                        }.show(requireContext())
 
                                     } catch (e: Exception) {
                                         return@RequestNameDialog e
                                     }
                                     return@RequestNameDialog null
-                                }.show(context!!)
+                                }.show(requireContext())
                             }
                             1 -> {
-                                val restoreIntent = Intent(context!!, RestoreWalletActivity::class.java)
+                                val restoreIntent =
+                                    Intent(requireContext(), RestoreWalletActivity::class.java)
                                 startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
                             }
                             2 -> {
                                 CreateWatchOnlyWallet {
-                                    SnackBar.showText(context!!, R.string.watch_only_wallet_created)
+                                    SnackBar.showText(
+                                        requireContext(),
+                                        R.string.watch_only_wallet_created
+                                    )
                                     adapter.addWallet(it.id)
-                                }.show(context!!)
+                                }.show(requireContext())
                             }
                         }
                     }
@@ -175,30 +192,36 @@ class WalletsFragment : BaseFragment() {
     }
 
     private fun numOfAllowedWallets(): Int {
-        val actManager = context!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val actManager =
+            requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val memInfo = ActivityManager.MemoryInfo()
         actManager.getMemoryInfo(memInfo)
 
         return floor(memInfo.totalMem / 1e9).toInt()
     }
 
-    private fun createWallet(dialog: FullScreenBottomSheetDialog, walletName: String, spendingKey: String, type: Int) = GlobalScope.launch(Dispatchers.IO) {
+    private fun createWallet(
+        dialog: FullScreenBottomSheetDialog,
+        walletName: String,
+        spendingKey: String,
+        type: Int
+    ) = GlobalScope.launch(Dispatchers.IO) {
         val op = this@WalletsFragment.javaClass.name + ": createWallet"
         try {
             val wallet = multiWallet!!.createNewWallet(walletName, spendingKey, type)
-            Utils.renameDefaultAccountToLocalLanguage(context!!, wallet)
+            Utils.renameDefaultAccountToLocalLanguage(requireContext(), wallet)
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
                 adapter.addWallet(wallet.id)
                 refreshNavigationTabs() // to add the orange backup needed indicator to the tab icon
-                SnackBar.showText(context!!, R.string.wallet_created)
+                SnackBar.showText(requireContext(), R.string.wallet_created)
             }
         } catch (e: Exception) {
             e.printStackTrace()
 
             withContext(Dispatchers.Main) {
                 dialog.dismiss()
-                Utils.showErrorDialog(this@WalletsFragment.context!!, op + ": " + e.message)
+                Utils.showErrorDialog(requireContext(), op + ": " + e.message)
                 Dcrlibwallet.logT(op, e.message)
             }
         }

@@ -25,13 +25,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val account: Account,
-                           val renameAccount: (newName: String) -> Exception?) : FullScreenBottomSheetDialog() {
+class AccountDetailsDialog(
+    private val ctx: Context, val walletID: Long, val account: Account,
+    val renameAccount: (newName: String) -> Exception?
+) : FullScreenBottomSheetDialog() {
 
     private val wallet: Wallet = multiWallet.walletWithID(walletID)
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.account_details, container, false)
     }
 
@@ -46,7 +51,12 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         // properties
         account_details_number.text = account.accountNumber.toString()
-        account_details_keys.text = context!!.getString(R.string.key_count, account.externalKeyCount, account.internalKeyCount, account.importedKeyCount)
+        account_details_keys.text = requireContext().getString(
+            R.string.key_count,
+            account.externalKeyCount,
+            account.internalKeyCount,
+            account.importedKeyCount
+        )
         if (wallet.isWatchingOnlyWallet) {
             iv_rename_account.hide()
             account_number_row.hide()
@@ -64,9 +74,10 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
 
         // click listeners
         tv_toggle_properties.setOnClickListener {
-            tv_toggle_properties.text = if (account_details_properties.toggleVisibility() == View.VISIBLE) {
-                context!!.getString(R.string.hide_properties)
-            } else context!!.getString(R.string.show_properties)
+            tv_toggle_properties.text =
+                if (account_details_properties.toggleVisibility() == View.VISIBLE) {
+                    context!!.getString(R.string.hide_properties)
+                } else context!!.getString(R.string.show_properties)
         }
 
         iv_close.setOnClickListener { dismiss() }
@@ -105,7 +116,8 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
         account_details_spendable.text = CoinFormat.format(balance.spendable)
 
         // Staking balances
-        val stakeSum = balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
+        val stakeSum =
+            balance.immatureReward + balance.lockedByTickets + balance.votingAuthority + balance.immatureStakeGeneration
         if (stakeSum > 0) {
             if (balance.immatureReward > 0) {
                 account_details_imm_rewards.text = CoinFormat.format(balance.immatureReward)
@@ -123,7 +135,8 @@ class AccountDetailsDialog(private val ctx: Context, val walletID: Long, val acc
             }
 
             if (balance.immatureStakeGeneration > 0) {
-                account_details_imm_stake_gen.text = CoinFormat.format(balance.immatureStakeGeneration)
+                account_details_imm_stake_gen.text =
+                    CoinFormat.format(balance.immatureStakeGeneration)
                 account_details_imm_stake_gen_row.show()
             }
 

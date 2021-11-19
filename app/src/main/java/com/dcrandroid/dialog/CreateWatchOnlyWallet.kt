@@ -25,12 +25,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullScreenBottomSheetDialog() {
+class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) :
+    FullScreenBottomSheetDialog() {
 
     private var walletNameInput: InputHelper? = null
     private var extendedPublicKeyInput: InputHelper? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.create_watch_only_sheet, container, false)
     }
 
@@ -91,8 +96,10 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
         }.apply {
             hintTextView.setText(R.string.extended_public_key2)
             hideQrScanner()
-            editText.setRawInputType(InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
+            editText.setRawInputType(
+                InputType.TYPE_CLASS_TEXT or
+                        InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            )
         }
 
         extendedPublicKeyInput?.textChanged = this@CreateWatchOnlyWallet.textChanged
@@ -118,8 +125,12 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
                     toggleUI(true)
 
                     withContext(Dispatchers.Main) {
-                        val op = this@CreateWatchOnlyWallet.javaClass.name + ": createWatchOnlyWallet"
-                        Utils.showErrorDialog(this@CreateWatchOnlyWallet.context!!, op + ": " + e.message)
+                        val op =
+                            this@CreateWatchOnlyWallet.javaClass.name + ": createWatchOnlyWallet"
+                        Utils.showErrorDialog(
+                            this@CreateWatchOnlyWallet.context!!,
+                            op + ": " + e.message
+                        )
                         Dcrlibwallet.logT(op, e.message)
                     }
                 }
@@ -129,10 +140,10 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
 
         iv_info.setOnClickListener {
             InfoDialog(context!!)
-                    .setDialogTitle(getString(R.string.extended_public_key2))
-                    .setMessage(HtmlCompat.fromHtml(getString(R.string.ext_pub_key_info), 0))
-                    .setPositiveButton(getString(R.string.got_it), null)
-                    .show()
+                .setDialogTitle(getString(R.string.extended_public_key2))
+                .setMessage(HtmlCompat.fromHtml(getString(R.string.ext_pub_key_info), 0))
+                .setPositiveButton(getString(R.string.got_it), null)
+                .show()
         }
     }
 
@@ -165,8 +176,9 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) : FullS
     }
 
     private val textChanged = {
-        btn_import.isEnabled = (!walletNameInput?.validatedInput.isNullOrBlank() || multiWallet.loadedWalletsCount() == 0)
-                && !extendedPublicKeyInput?.validatedInput.isNullOrBlank()
+        btn_import.isEnabled =
+            (!walletNameInput?.validatedInput.isNullOrBlank() || multiWallet.loadedWalletsCount() == 0)
+                    && !extendedPublicKeyInput?.validatedInput.isNullOrBlank()
     }
 
 }

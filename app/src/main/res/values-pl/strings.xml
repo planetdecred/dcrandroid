@@ -72,7 +72,7 @@
     <string name="confirm_to_remove">Potwierdź, aby usunąć</string>
     <string name="remove_wallet">Usuń portfel z urządzenia</string>
     <string name="remove_wallet_prompt">Usunąć portfel z urządzenia?</string>
-    <string name="remove_wallet_message">Upewnij się, że posiadasz kopię zapasową frazy bazowej (seed phrase) zanim usuniesz portfel.</string>
+    <string name="remove_wallet_message">Upewnij się, że posiadasz kopię zapasową frazy bazowej (seed words) zanim usuniesz portfel.</string>
     <string name="error_copied">Błąd skopiowano</string>
 
     <!--/General-->
@@ -92,7 +92,7 @@
 
     <!--Seed-->
     <string name="save_seed_instruction">Zapisz wszystkie 33 słowa w podanej kolejności.</string>
-    <string name="backup_seed_phrase">Zrób kopię zapasową frazy bazowej (seed phrase)</string>
+    <string name="backup_seed_phrase">Zrób kopię zapasową frazy bazowej (seed words)</string>
     <string name="verify_seed_info">Sprawdź kopię zapasową swojej frazy bazowej, aby móc odzyskać środki w razie potrzeby.</string>
 
     <!--/Seed-->
@@ -393,7 +393,6 @@
 
     <string name="x_dcr">%1$s DCR</string>
     <string name="x_usd">%1$s USD</string>
-    <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
     <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">(%2$s USD)</font>]]></string>
     <string name="balance_after_send">Saldo po transakcji</string>
@@ -466,10 +465,7 @@
     <string name="get_started">Jak rozpocząć</string>
     <string name="back">Wróć</string>
     <string name="use_fingerprint">Użyj odcisku palca</string>
-    <string name="overview_backup_seed_instruction">Zaleca się zapisanie frazy bazowej dla każdego portfela w ramach wykonywania kopii zapasowej, aby w razie potrzeby można było odzyskać środki.</string>
     <string name="go_to_wallets">Idź do portfeli</string>
-    <string name="n_wallets_need_backup">%1$d portfeli potrzebuje utworzenia kopii zapasowej</string>
-    <string name="a_wallet_needs_backup">Portfel potrzebuje utworzenia kopii zapasowej</string>
     <string name="startup_password">Hasło do uruchamiania</string>
     <string name="new_startup_password">Nowe hasło do uruchamiania</string>
     <string name="new_spending_password">Nowe hasło do wydawania środków</string>

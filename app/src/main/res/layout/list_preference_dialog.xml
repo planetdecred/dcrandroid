@@ -20,7 +20,7 @@
         android:layout_marginTop="22dp"
         android:includeFontPadding="false"
         android:text="@string/incoming_transactions"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/text1"
         android:textSize="@dimen/edit_text_size_20"
         android:fontFamily="@font/source_sans_pro_semibold" />
 
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="22dp"
-        android:background="#edeff1" />
+        android:background="@color/colorDivider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_preference_rv"
@@ -38,7 +38,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#edeff1" />
+        android:background="@color/colorDivider" />
 
     <LinearLayout
         android:layout_width="match_parent"

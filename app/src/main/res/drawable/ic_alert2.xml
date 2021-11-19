@@ -12,7 +12,7 @@
     <path
         android:pathData="M32.0337,3.5362C16.3243,3.5362 3.5893,16.2712 3.5893,31.9807C3.5893,47.6901 16.3243,60.4251 32.0337,60.4251C47.7431,60.4251 60.4781,47.6901 60.4781,31.9807C60.4781,16.2712 47.7431,3.5362 32.0337,3.5362Z"
         android:strokeWidth="1"
-        android:fillColor="@color/darkBlueTextColor"
+        android:fillColor="@color/text1"
         android:fillType="nonZero"
         android:strokeColor="#00000000"/>
     <path

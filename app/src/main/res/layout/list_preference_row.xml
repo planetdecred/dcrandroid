@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/ripple"
+    android:background="@drawable/surface_ripple"
     android:paddingTop="@dimen/margin_padding_size_12"
     android:paddingBottom="@dimen/margin_padding_size_12"
     android:paddingStart="@dimen/margin_padding_size_24"
@@ -32,7 +32,7 @@
         android:layout_marginEnd="@dimen/margin_padding_size_24"
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/text1"
         tools:text="Simplified Payment Verification (SPV)" />
 
 </LinearLayout>

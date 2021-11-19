@@ -26,10 +26,10 @@ class SecurityTools : BaseActivity() {
 
         iv_info.setOnClickListener {
             InfoDialog(this)
-                    .setDialogTitle(getString(R.string.security_tools))
-                    .setMessage(getString(R.string.security_tools_message))
-                    .setPositiveButton(getString(R.string.got_it), null)
-                    .show()
+                .setDialogTitle(getString(R.string.security_tools))
+                .setMessage(getString(R.string.security_tools_message))
+                .setPositiveButton(getString(R.string.got_it), null)
+                .show()
         }
 
         go_back.setOnClickListener {
@@ -37,8 +37,16 @@ class SecurityTools : BaseActivity() {
         }
 
         val items = arrayOf(
-                ListItem(R.string.verify_message, R.drawable.ic_verify_message, Intent(this, VerifyMessage::class.java)),
-                ListItem(R.string.validate_addresses, R.drawable.ic_location_pin, Intent(this, ValidateAddress::class.java))
+            ListItem(
+                R.string.verify_message,
+                R.drawable.ic_verify_message,
+                Intent(this, VerifyMessage::class.java)
+            ),
+            ListItem(
+                R.string.validate_addresses,
+                R.drawable.ic_location_pin,
+                Intent(this, ValidateAddress::class.java)
+            )
         )
 
         val adapter = ListAdapter(this, items)

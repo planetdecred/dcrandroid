@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
-        android:background="#f3f5f6"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -41,7 +41,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:id="@+id/home_logo"
-                    app:srcCompat="@drawable/ic_decred_blue" />
+                    app:srcCompat="@drawable/ic_home_logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                     tools:text="Overview"
                     android:id="@+id/toolbar_title"
                     android:textSize="20sp"
-                    android:textColor="#091440"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="16dp" />
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:background="@drawable/light_grey_border_8dp"
-                    android:textColor="#3D5873"
+                    android:textColor="@color/text2"
                     android:paddingTop="@dimen/margin_padding_size_4"
                     android:paddingBottom="@dimen/margin_padding_size_4"
                     android:paddingStart="@dimen/margin_padding_size_6"
@@ -81,7 +81,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
-        android:background="#f3f5f6">
+        android:background="@color/background">
 
         <FrameLayout
             android:id="@+id/frame"
@@ -92,13 +92,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@android:color/white"
+            android:background="@color/surface"
             android:elevation="4dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/recycler_view_tabs" />
+                android:id="@+id/recycler_view_tabs"
+                tools:listitem="@layout/tab_row"
+                />
 
             <View
                 android:layout_width="@dimen/tab_indicator_width"
@@ -125,6 +127,8 @@
             android:gravity="center_vertical"
             android:id="@+id/send_receive_layout"
             android:background="@drawable/send_receive_button_layout"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:elevation="4dp">
 
             <LinearLayout
@@ -145,7 +149,7 @@
                     android:drawablePadding="8dp"
                     android:text="@string/send"
                     android:gravity="center_vertical"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text"
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -176,7 +180,7 @@
                     android:drawablePadding="8dp"
                     android:text="@string/receive"
                     android:gravity="center_vertical"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text"
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:ellipsize="end"

@@ -20,8 +20,10 @@ import com.dcrandroid.view.PinViewUtil
 import kotlinx.android.synthetic.main.create_pin_sheet.*
 import kotlinx.coroutines.*
 
-class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveButtonTitle: Int,
-                              private val createWallet: (passphrase: String?) -> Unit?) : Fragment() {
+class CreatePinPromptFragment(
+    var isSpending: Boolean, @StringRes var positiveButtonTitle: Int,
+    private val createWallet: (passphrase: String?) -> Unit?
+) : Fragment() {
 
     private var currentPassCode: String? = null
     private lateinit var pinViewUtil: PinViewUtil
@@ -29,8 +31,10 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
     private var hint = R.string.enter_spending_pin
     private var confirmHint = R.string.enter_spending_pin_again
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.create_pin_sheet, container, false)
     }
 
@@ -138,8 +142,18 @@ class CreatePinPromptFragment(var isSpending: Boolean, @StringRes var positiveBu
         bottomBarParams.topMargin = bottomBarTopMargin
         bottom_bar.layoutParams = bottomBarParams
 
-        pin_view?.setPadding(pin_view.paddingLeft, pin_view.paddingTop, pin_view.paddingRight, pinBottomPadding)
-        pin_counter?.setPadding(pin_counter.paddingLeft, pin_counter.paddingTop, pin_counter.paddingRight, pinBottomPadding)
+        pin_view?.setPadding(
+            pin_view.paddingLeft,
+            pin_view.paddingTop,
+            pin_view.paddingRight,
+            pinBottomPadding
+        )
+        pin_counter?.setPadding(
+            pin_counter.paddingLeft,
+            pin_counter.paddingTop,
+            pin_counter.paddingRight,
+            pinBottomPadding
+        )
 
 
     }

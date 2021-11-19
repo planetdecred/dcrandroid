@@ -23,12 +23,20 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddAccountDialog(private val fragmentActivity: FragmentActivity, private val walletID: Long, private val accountCreated: (accountNumber: Int) -> Unit) : FullScreenBottomSheetDialog() {
+class AddAccountDialog(
+    private val fragmentActivity: FragmentActivity,
+    private val walletID: Long,
+    private val accountCreated: (accountNumber: Int) -> Unit
+) : FullScreenBottomSheetDialog() {
 
     private var wallet: Wallet = WalletData.multiWallet!!.walletWithID(walletID)
     private lateinit var accountNameInput: InputHelper
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.add_account_sheet, container, false)
     }
 
@@ -52,15 +60,25 @@ class AddAccountDialog(private val fragmentActivity: FragmentActivity, private v
         btn_create.setOnClickListener {
             setEnabled(false)
 
-            val title = PassPromptTitle(R.string.confirm_to_create_account, R.string.confirm_to_create_account, R.string.confirm_to_create_account)
-            PassPromptUtil(fragmentActivity, walletID, title, allowFingerprint = true) { dialog, passphrase ->
+            val title = PassPromptTitle(
+                R.string.confirm_to_create_account,
+                R.string.confirm_to_create_account,
+                R.string.confirm_to_create_account
+            )
+            PassPromptUtil(
+                fragmentActivity,
+                walletID,
+                title,
+                allowFingerprint = true
+            ) { dialog, passphrase ->
 
                 val newName = accountNameInput.validatedInput!!.trim()
 
                 GlobalScope.launch(Dispatchers.IO) {
                     if (passphrase != null) {
                         try {
-                            val accountNumber = wallet.createNewAccount(newName, passphrase.toByteArray())
+                            val accountNumber =
+                                wallet.createNewAccount(newName, passphrase.toByteArray())
 
                             withContext(Dispatchers.Main) {
                                 dialog?.dismiss()

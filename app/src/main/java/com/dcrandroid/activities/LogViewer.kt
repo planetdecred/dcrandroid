@@ -21,8 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
 
-const val MENU_ITEM = 1
-
 class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var updateJob: Job
@@ -46,7 +44,11 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
                 val logPath = filesDir.toString() + BuildConfig.LogDir
                 val file = File(logPath)
                 if (!file.exists()) {
-                    SnackBar.showError(this@LogViewer, R.string.log_file_not_found, Toast.LENGTH_LONG)
+                    SnackBar.showError(
+                        this@LogViewer,
+                        R.string.log_file_not_found,
+                        Toast.LENGTH_LONG
+                    )
                     return@launch
                 }
 

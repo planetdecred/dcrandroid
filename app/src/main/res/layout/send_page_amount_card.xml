@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/darkerBlueGrayTextColor"
+                android:textColor="@color/text2"
                 app:fontFamily="@font/source_sans_pro"
                 android:text="@string/amount" />
 
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/darkerBlueGrayTextColor"
+                android:textColor="@color/text2"
                 app:fontFamily="@font/source_sans_pro"
                 android:gravity="end"
                 android:id="@+id/spendable_balance"
@@ -86,10 +86,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/send_amount"
-                            android:background="@color/white"
+                            android:background="@color/surface"
                             android:textSize="32sp"
-                            android:textColorHint="@color/lightGrayTextColor"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColorHint="@color/text3"
+                            android:textColor="@color/text1"
                             app:fontFamily="@font/source_sans_pro"
                             android:textCursorDrawable="@null"
                             android:inputType="numberDecimal"
@@ -102,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/currency_label"
                             android:textSize="@dimen/edit_text_size_20"
-                            android:textColor="@color/lightGrayTextColor"
+                            android:textColor="@color/text3"
                             android:text="@string/dcr"
                             android:textAllCaps="true"
                             android:includeFontPadding="false"
@@ -118,7 +118,7 @@
                     android:id="@+id/iv_send_clear"
                     android:padding="@dimen/margin_padding_size_8"
                     android:layout_marginEnd="@dimen/margin_padding_size_8"
-                    android:background="@drawable/circular_transparent_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     app:srcCompat="@drawable/ic_close"
                     android:visibility="gone"
                     tools:visibility="visible" />
@@ -128,7 +128,7 @@
                     android:layout_height="40dp"
                     android:id="@+id/iv_send_max"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/circular_transparent_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     app:srcCompat="@drawable/ic_send_max" />
 
             </LinearLayout>
@@ -159,7 +159,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#e6eaed"
+                        android:background="@color/colorDivider"
                         android:layout_marginStart="@dimen/margin_padding_size_8" />
                 </LinearLayout>
 
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/send_equivalent_value"
                     android:textSize="@dimen/edit_text_size_16"
-                    android:textColor="#596d81"
+                    android:textColor="@color/text4"
                     app:fontFamily="@font/source_sans_pro"
                     android:includeFontPadding="false"
                     tools:text="90 USD" />
@@ -179,6 +179,7 @@
                     android:id="@+id/exchange_error_layout"
                     android:gravity="center_vertical"
                     android:visibility="gone"
+                    tools:visibility="visible"
                     android:orientation="horizontal">
 
                     <TextView
@@ -196,7 +197,7 @@
                         android:layout_height="24dp"
                         android:id="@+id/exchange_error_retry"
                         android:text="@string/retry"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/primary"
                         android:textSize="@dimen/edit_text_size_14"
                         android:fontFamily="@font/source_sans_pro"
                         android:background="@drawable/paste_bg"
@@ -231,7 +232,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/margin_padding_size_8"
-            android:background="#e6eaed" />
+            android:background="@color/colorDivider" />
 
         <include layout="@layout/fee_layout" />
 

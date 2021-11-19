@@ -42,11 +42,19 @@ class SnackBar {
             val position = IntArray(2)
             anchorView.getLocationOnScreen(position)
 
-            showText(position[1], anchorView.context, text, length, R.drawable.orange_bg_corners_4dp)
+            showText(
+                position[1],
+                anchorView.context,
+                text,
+                length,
+                R.drawable.orange_bg_corners_4dp
+            )
         }
 
-        private fun showText(x: Int = 0, context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT,
-                             @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp) = GlobalScope.launch(Dispatchers.Main) {
+        private fun showText(
+            x: Int = 0, context: Context, @StringRes text: Int, length: Int = Toast.LENGTH_SHORT,
+            @DrawableRes backgroundResource: Int = R.drawable.green_bg_corners_4dp
+        ) = GlobalScope.launch(Dispatchers.Main) {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(R.layout.snackbar, null)
             view.setBackgroundResource(backgroundResource)
@@ -55,7 +63,8 @@ class SnackBar {
             textView.setText(text)
 
             var statusBarHeight = 0
-            val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+            val resourceId =
+                context.resources.getIdentifier("status_bar_height", "dimen", "android")
             if (resourceId > 0) {
                 statusBarHeight = context.resources.getDimensionPixelSize(resourceId)
             }

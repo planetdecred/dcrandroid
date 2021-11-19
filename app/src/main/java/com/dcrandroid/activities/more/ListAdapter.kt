@@ -15,7 +15,8 @@ import com.dcrandroid.R
 import com.dcrandroid.extensions.show
 import kotlinx.android.synthetic.main.more_list_row_2.view.*
 
-class ListAdapter(val context: Context, val items: Array<ListItem>) : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(val context: Context, val items: Array<ListItem>) :
+    RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     var itemTapped: ((position: Int) -> Unit?)? = null
 
@@ -48,10 +49,10 @@ class ListAdapter(val context: Context, val items: Array<ListItem>) : RecyclerVi
         }
 
         val background = when {
-            itemCount == 1 -> R.drawable.ripple_bg_white_corners_8dp
+            itemCount == 1 -> R.drawable.ripple_bg_surface_corners_8dp
             position == 0 -> R.drawable.curved_top_ripple
             position == itemCount - 1 -> R.drawable.curved_bottom_ripple
-            else -> R.drawable.ripple
+            else -> R.drawable.surface_ripple
         }
 
         holder.itemView.setBackgroundResource(background)

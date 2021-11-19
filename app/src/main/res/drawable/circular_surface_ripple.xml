@@ -6,18 +6,17 @@
   -->
 
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/whiteRipple">
+    android:color="@color/surfaceRipple">
 
     <item android:id="@android:id/mask">
         <shape android:shape="oval">
-            <solid android:color="@android:color/white" />
+            <solid android:color="@color/surface" />
         </shape>
     </item>
 
     <item>
         <shape android:shape="oval">
-            <solid android:color="@android:color/transparent" />
+            <solid android:color="@android:color/transparent"/>
         </shape>
     </item>
-
 </ripple>

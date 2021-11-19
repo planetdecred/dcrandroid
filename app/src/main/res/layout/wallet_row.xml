@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/container"
-        android:background="@drawable/ripple_bg_white_corners_14dp"
+        android:background="@drawable/ripple_bg_surface_corners_14dp"
         android:clickable="true"
         android:focusable="true"
         android:paddingTop="8dp"
@@ -61,7 +61,7 @@
                 android:textSize="@dimen/edit_text_size_16"
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro"
-                android:textColor="@color/darkBlueTextColor" />
+                android:textColor="@color/text1" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
             app:fontFamily="@font/source_sans_pro"
             tools:text="7.51464806 DCR"
             android:textSize="@dimen/edit_text_size_16"
-            android:textColor="@color/blueGraySecondTextColor" />
+            android:textColor="@color/text4" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -93,7 +93,7 @@
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/circular_transparent_ripple"
+            android:background="@drawable/circular_surface_ripple"
             android:src="@drawable/ic_more02" />
 
     </LinearLayout>
@@ -108,7 +108,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#e6eaed"
+            android:background="@color/colorDivider"
             android:layout_marginStart="44dp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -130,7 +130,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#E6EAED" />
+            android:background="@color/colorDivider" />
 
 
         <LinearLayout
@@ -147,7 +147,7 @@
                 android:includeFontPadding="false"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_14"
-                android:textColor="@color/blue" />
+                android:textColor="@color/primary" />
 
             <ImageView
                 android:layout_width="@dimen/margin_padding_size_16"

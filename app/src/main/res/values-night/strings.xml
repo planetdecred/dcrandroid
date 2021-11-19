@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="_dcr"><![CDATA[<font color="#a7a7a7">—</font> DCR]]></string>
+    <string name="_dcr_usd"><![CDATA[<font color="#a7a7a7">—</font> DCR <font color="#787878">(— USD)</font>]]></string>
+    <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#787878">($%2$s USD)</font>]]></string>
+    <string name="send_from_account"><![CDATA[Sending from <font color="#dedede"><b>%1$s (%2$s)</b></font>]]></string>
+
+    <string name="fetching_cfilters"><![CDATA[Fetching cfilters <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+    <string name="fetching_block_headers"><![CDATA[Fetching block headers <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+    <string name="scanning_block_headers"><![CDATA[Scanning block headers <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+    <string name="discovering_addresses"><![CDATA[Discovering used addresses <font color="#787878">&centerdot;</font> %1$d%%]]></string>
+
+    <string name="synced_latest_block_time"><![CDATA[Latest block <font color="#dedede">%1$d</font> &centerdot; <font color="#dedede">%2$s</font> ago]]></string>
+    <string name="latest_block_time"><![CDATA[Synced to block <font color="#dedede">%1$d</font> &centerdot; <font color="#dedede">%2$s</font> ago]]></string>
+    <string name="connected_to_n_peers"><![CDATA[Connected to <font color="#dedede">%1$d</font> peers.]]></string>
+    <string name="tx_details_pending_confirmation"><![CDATA[<font color="#787878">Pending</font> &centerdot; %1$d Confirmation]]></string>
+    <string name="tx_details_copy_info"><![CDATA[Tap on <font color="#57B6FF">blue text</font> to copy the item.]]></string>
+    <string name="setup_mixer_account_bullet_1"><font color='#dedede'><b>Mixed</b></font> account will be the outbound spending account.</string>
+    <string name="setup_mixer_account_bullet_2"><font color='#dedede'><b>Unmixed</b></font> account will be the change handling account.</string>
+    <string name="manual_mixer_setup_help"><font color='#dedede'><b>Make sure to select the corresponding accounts to the previous setup.</b></font> Failing to do so could damage wallet privacy.</string>
+    <string name="mixer_help_desc"><![CDATA[When you turn on the mixer, your unmixed DCRs in this wallet (unmixed balance) will be gradually mixed.<br/><br/><b><font color="#dedede">Important: keep this app opened while mixer is running. Your display would not timeout until the mixer completes, this may impact your battery life.</font></b><br/><br/>Mixer will automatically stop when unmixed balance are fully mixed.]]></string>
+    <string name="privacy_intro_dialog_desc"><![CDATA[Two dedicated accounts (“mixed” & “unmixed”) will be created in order to use the mixer.<br/><br/><b><font color="#dedede">This action cannot be undone.</font></b>]]></string>
+</resources>

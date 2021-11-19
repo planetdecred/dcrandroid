@@ -54,7 +54,8 @@ class StatisticsActivity : BaseActivity() {
         stats_best_block_age.text = TimeUtils.calculateTime(lastBlockRelativeTime, this)
 
         stats_wallet_data_directory.text = "$filesDir/$walletsDirName"
-        stats_wallet_data.text = Formatter.formatFileSize(this, multiWallet!!.rootDirFileSizeInBytes())
+        stats_wallet_data.text =
+            Formatter.formatFileSize(this, multiWallet!!.rootDirFileSizeInBytes())
         stats_transaction_count.text = countAllWalletsTransactions().toString()
         stats_wallet_count.text = multiWallet!!.openedWalletsCount().toString()
     }
@@ -62,7 +63,7 @@ class StatisticsActivity : BaseActivity() {
     private fun countAllWalletsTransactions(): Long {
         var count = 0L
         multiWallet!!.openedWalletsList()
-                .forEach { count += it.countTransactions(Dcrlibwallet.TxFilterAll) }
+            .forEach { count += it.countTransactions(Dcrlibwallet.TxFilterAll) }
         return count
     }
 }

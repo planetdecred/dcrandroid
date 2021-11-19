@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/resume_account_discovery_title"
-        android:textColor="#091440"
+        android:textColor="@color/text1"
         android:textSize="20sp"
         android:textStyle="bold"
         app:fontFamily="@font/source_sans_pro" />
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/resume_account_discovery_desc"
-        android:textColor="#3d5873"
+        android:textColor="@color/text2"
         android:textSize="16sp"
         app:fontFamily="@font/source_sans_pro"
         android:layout_marginTop="@dimen/margin_padding_size_16" />

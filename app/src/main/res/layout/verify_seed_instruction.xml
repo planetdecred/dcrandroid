@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,7 +17,7 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -45,7 +45,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:focusable="true"
                     android:clickable="true"
                     android:id="@+id/go_back"
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/keep_in_mind"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         app:fontFamily="@font/source_sans_pro" />
 
                 </LinearLayout>
@@ -96,7 +96,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/seed_check_1"
                     android:onClick="verifyChecks"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:button="@drawable/checkbox"
                     android:gravity="center" />
 
@@ -106,7 +106,7 @@
                     android:text="@string/seed_instruction_1"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="#3d5873"
+                    android:textColor="@color/text2"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
@@ -124,7 +124,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/seed_check_2"
                     android:onClick="verifyChecks"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:button="@drawable/checkbox"
                     android:gravity="center" />
 
@@ -134,7 +134,7 @@
                     android:text="@string/seed_instruction_2"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="#3d5873"
+                    android:textColor="@color/text2"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
@@ -152,7 +152,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/seed_check_3"
                     android:onClick="verifyChecks"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:button="@drawable/checkbox"
                     android:gravity="center" />
 
@@ -162,7 +162,7 @@
                     android:text="@string/seed_instruction_3"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="#3d5873"
+                    android:textColor="@color/text2"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
@@ -180,7 +180,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/seed_check_4"
                     android:onClick="verifyChecks"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:button="@drawable/checkbox"
                     android:gravity="center" />
 
@@ -190,7 +190,7 @@
                     android:text="@string/seed_instruction_4"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="#3d5873"
+                    android:textColor="@color/text2"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
@@ -208,7 +208,7 @@
                     android:layout_height="32dp"
                     android:id="@+id/seed_check_5"
                     android:onClick="verifyChecks"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:button="@drawable/checkbox"
                     android:gravity="center" />
 
@@ -218,7 +218,7 @@
                     android:text="@string/seed_instruction_5"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="#3d5873"
+                    android:textColor="@color/text2"
                     app:fontFamily="@font/source_sans_pro"
                     android:layout_marginStart="@dimen/margin_padding_size_24" />
 
@@ -231,8 +231,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/margin_padding_size_4"
-        android:background="@color/white">
+        app:cardBackgroundColor="@color/surface"
+        app:cardElevation="@dimen/margin_padding_size_4">
 
         <LinearLayout
             android:layout_width="match_parent"

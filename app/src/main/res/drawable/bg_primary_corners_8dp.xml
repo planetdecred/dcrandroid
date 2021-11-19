@@ -11,5 +11,5 @@
     <corners
         android:radius="@dimen/bottom_sheet_corner_radius_8" />
 
-    <solid android:color="@color/colorBackground" />
+    <solid android:color="@color/background" />
 </shape>

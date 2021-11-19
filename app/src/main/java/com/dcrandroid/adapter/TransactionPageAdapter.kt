@@ -18,9 +18,14 @@ import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import kotlinx.android.synthetic.main.transaction_row.view.*
 
-class TransactionPageAdapter(val context: Context, walletID: Long, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
+class TransactionPageAdapter(
+    val context: Context,
+    walletID: Long,
+    val transactions: ArrayList<Transaction>
+) : RecyclerView.Adapter<TransactionListViewHolder>() {
 
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val layoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private val requiredConfirmations: Int
     private val wallet: Wallet
 
@@ -28,7 +33,10 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
         val multiWallet = WalletData.multiWallet!!
         wallet = multiWallet.walletWithID(walletID)
         requiredConfirmations = when {
-            multiWallet.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED) -> 0
+            multiWallet.readBoolConfigValueForKey(
+                Dcrlibwallet.SpendUnconfirmedConfigKey,
+                Constants.DEF_SPEND_UNCONFIRMED
+            ) -> 0
             else -> Constants.REQUIRED_CONFIRMATIONS
         }
     }
@@ -46,8 +54,8 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
 
         // background ripple
         val backgroundResource: Int = when {
-            itemCount == 1 -> R.drawable.ripple_bg_white_corners_14dp // only item on the list
-            position == 0 -> R.drawable.ripple_bg_white_top_corner_14dp
+            itemCount == 1 -> R.drawable.ripple_bg_surface_corners_14dp // only item on the list
+            position == 0 -> R.drawable.ripple_bg_surface_top_corner_14dp
             position == (itemCount - 1) -> R.drawable.curved_bottom_ripple_14dp
             else -> R.drawable.transactions_row_bg
         }
@@ -68,7 +76,6 @@ class TransactionPageAdapter(val context: Context, walletID: Long, val transacti
         }
 
         holder.itemView.layoutParams = layoutParams
-
 
         val transaction = transactions[position]
         populateTxRow(transaction, holder.itemView, layoutInflater)

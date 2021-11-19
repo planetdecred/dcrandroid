@@ -25,7 +25,7 @@
             android:includeFontPadding="false"
             android:text="@string/transaction_fee"
             android:textSize="@dimen/edit_text_size_14"
-            android:textColor="#596d81" />
+            android:textColor="@color/text4" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,14 +40,14 @@
                 android:includeFontPadding="false"
                 android:textSize="@dimen/edit_text_size_16"
                 android:text="@string/_dcr"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 app:fontFamily="@font/source_sans_pro" />
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="@dimen/margin_padding_size_24"
                 android:id="@+id/iv_expand_fees"
-                android:background="@drawable/circular_transparent_ripple"
+                android:background="@drawable/circular_surface_ripple"
                 app:srcCompat="@drawable/ic_expand"
                 android:layout_marginStart="@dimen/margin_padding_size_4" />
 
@@ -62,7 +62,7 @@
         android:id="@+id/fee_verbose"
         android:visibility="gone"
         tools:visibility="visible"
-        android:background="@drawable/bg_gray_corner_8dp"
+        android:background="@drawable/bg_corner_8dp"
         android:layout_marginTop="@dimen/margin_padding_size_16"
         android:padding="@dimen/margin_padding_size_16">
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/processing_time"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="14sp"
                 app:fontFamily="@font/source_sans_pro" />
 
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
                 android:text="≈ 10 mins (2 blocks)" />
@@ -108,14 +108,14 @@
                 android:layout_weight="1"
                 android:includeFontPadding="false"
                 android:text="@string/fee_rate"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="14sp"
                 app:fontFamily="@font/source_sans_pro" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:includeFontPadding="false"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/transaction_size"
-                android:textColor="#596d81"
+                android:textColor="@color/text4"
                 android:textSize="14sp"
                 android:includeFontPadding="false"
                 app:fontFamily="@font/source_sans_pro" />
@@ -145,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:textColor="#091440"
+                android:textColor="@color/text1"
                 android:textSize="16sp"
                 app:fontFamily="@font/source_sans_pro"
                 android:text="@string/_0_bytes" />

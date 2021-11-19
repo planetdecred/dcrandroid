@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,7 +17,7 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -45,7 +45,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/bg_primary_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:focusable="true"
                     android:clickable="true"
                     android:id="@+id/go_back"
@@ -58,7 +58,7 @@
                     android:text="@string/politeia"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -70,7 +70,7 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:paddingLeft="@dimen/margin_padding_size_8"
         android:paddingRight="@dimen/margin_padding_size_8"
         android:paddingBottom="@dimen/margin_padding_size_12"
@@ -82,11 +82,17 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            style="@style/Spinner"
             android:id="@+id/timestamp_sort_spinner" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/margin_padding_size_16"
+            style="@style/Spinner"
             android:id="@+id/category_sort_spinner" />
 
         <ImageView
@@ -118,7 +124,7 @@
         android:gravity="center"
         android:textSize="@dimen/edit_text_size_16"
         android:layout_marginBottom="@dimen/margin_padding_size_18"
-        android:textColor="@color/lightGrayTextColor"
+        android:textColor="@color/text3"
         app:fontFamily="@font/source_sans_pro"
         android:text="@string/no_proposals" />
 

@@ -5,31 +5,30 @@
   -->
 
 <resources>
-    <!-- LightTheme -->
-    <style name="LightTheme" parent="Theme.MaterialComponents.Light">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/turquoise</item>
-        <item name="colorControlHighlight">@color/whiteRipple</item>
+    <!-- AppTheme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">#838383</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorControlHighlight">@color/surfaceRipple</item>
+        <item name="background">@color/background</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:textColor">@color/blackFirstTextColor</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:textColor">@color/text1</item>
         <item name="textInputStyle">@style/Widget.Design.TextInputLayout</item>
     </style>
 
-    <style name="LightTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
     <!--/LightTheme-->
 
     <!-- button style -->
 
-    <style name="textViewButton" parent="TextAppearance.AppCompat">
+    <style name="textViewButton" parent="TextAppearance.MaterialComponents.Body1">
 
         <item name="android:paddingStart">@dimen/margin_padding_size_16</item>
         <item name="android:paddingEnd">@dimen/margin_padding_size_16</item>
@@ -38,7 +37,7 @@
 
         <item name="android:textSize">@dimen/edit_text_size_16</item>
         <item name="android:background">@drawable/default_app_button_bg</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/text</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:includeFontPadding">false</item>
@@ -54,7 +53,7 @@
     <!-- /button style -->
 
     <style name="CircularProgressBar" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">#3d5873</item>
+        <item name="colorAccent">@color/text2</item>
     </style>
 
     <!-- TabText Style -->
@@ -67,12 +66,12 @@
 
     <!-- TabLayout Style -->
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/surface</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabBackground">@drawable/unselected_tab_bottom_indicator</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/blue</item>
-        <item name="tabIndicatorColor">@color/blue</item>
+        <item name="tabSelectedTextColor">@color/primary</item>
+        <item name="tabIndicatorColor">@color/primary</item>
     </style>
 
     <!--/TabLayout Style -->
@@ -89,7 +88,7 @@
 
     <style name="Switch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->
-        <item name="colorControlActivated">@color/blue</item>
+        <item name="colorControlActivated">@color/primary</item>
 
         <!-- inactive thumb color -->
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
@@ -101,6 +100,10 @@
     <style name="TransactionsTabText" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="fontFamily">@font/source_sans_pro</item>
         <item name="android:textSize">@dimen/edit_text_size_16</item>
+    </style>
+
+    <style name="Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/bg_spinner_dropdown</item>
     </style>
 
 </resources>

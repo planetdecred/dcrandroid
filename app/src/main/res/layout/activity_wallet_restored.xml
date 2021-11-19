@@ -9,6 +9,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/surface"
     android:padding="@dimen/margin_padding_size_16">
 
     <LinearLayout
@@ -32,7 +33,7 @@
             android:gravity="center"
             android:fontFamily="@font/source_sans_pro"
             android:textSize="@dimen/edit_text_size_24"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:text="@string/your_wallet_is_successfully_restored" />
 
     </LinearLayout>

@@ -13,7 +13,8 @@ class NetworkUtil {
 
     companion object {
         fun isWifiConnected(context: Context): Boolean {
-            val connectionManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectionManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connectionManager.activeNetworkInfo
             if (networkInfo != null && networkInfo.isConnected) {
                 if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
@@ -24,7 +25,8 @@ class NetworkUtil {
         }
 
         fun isMobileDataConnected(context: Context): Boolean {
-            val connectionManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectionManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = connectionManager.activeNetworkInfo
             if (networkInfo != null && networkInfo.isConnected) {
                 if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {

@@ -9,7 +9,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,7 +18,7 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -58,7 +58,7 @@
                     android:text="@string/validate_addresses"
                     android:layout_marginStart="@dimen/margin_padding_size_8"
                     android:textSize="@dimen/edit_text_size_20"
-                    android:textColor="@color/darkBlueTextColor"
+                    android:textColor="@color/text1"
                     android:includeFontPadding="false"
                     app:fontFamily="@font/source_sans_pro" />
 
@@ -75,7 +75,7 @@
         android:layout_marginStart="@dimen/margin_padding_size_24"
         android:includeFontPadding="false"
         android:text="@string/validate_address_instruction"
-        android:textColor="@color/darkerBlueGrayTextColor"
+        android:textColor="@color/text2"
         android:textSize="@dimen/edit_text_size_16"
         android:fontFamily="@font/source_sans_pro" />
 
@@ -130,7 +130,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#e6eaed" />
+                android:background="@color/colorDivider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -159,7 +159,7 @@
                         android:text="@string/valid_address"
                         android:textSize="@dimen/edit_text_size_16"
                         android:includeFontPadding="false"
-                        android:textColor="@color/greenTextColor"
+                        android:textColor="@color/text6"
                         android:fontFamily="@font/source_sans_pro" />
 
                     <TextView
@@ -168,7 +168,7 @@
                         android:id="@+id/tv_subtitle"
                         android:text="@string/external_valid_address"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/lightGrayTextColor"
+                        android:textColor="@color/text3"
                         android:includeFontPadding="false"
                         android:fontFamily="@font/source_sans_pro" />
 

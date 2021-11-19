@@ -16,7 +16,11 @@ import com.dcrandroid.view.util.AccountCustomSpinner
 import com.dcrandroid.view.util.InputHelper
 import kotlinx.android.synthetic.main.send_page_sheet.view.*
 
-class DestinationAddressCard(context: Context, val layout: LinearLayout, validateAddress: (String) -> Boolean) {
+class DestinationAddressCard(
+    context: Context,
+    val layout: LinearLayout,
+    validateAddress: (String) -> Boolean
+) {
 
     lateinit var addressChanged: () -> Unit
     internal val destinationAccountSpinner: AccountCustomSpinner
@@ -25,15 +29,18 @@ class DestinationAddressCard(context: Context, val layout: LinearLayout, validat
     init {
         val activity = context as AppCompatActivity
 
-        destinationAccountSpinner = AccountCustomSpinner(activity.supportFragmentManager,
-                layout.destination_account_spinner)
+        destinationAccountSpinner = AccountCustomSpinner(
+            activity.supportFragmentManager,
+            layout.destination_account_spinner
+        )
         destinationAccountSpinner.init {
             // disable mixed account
             !it.isMixerMixedAccount
         }
         destinationAccountSpinner.pickerTitle = R.string.dest_account_picker_title
 
-        addressInputHelper = InputHelper(context, layout.destination_address_container, validateAddress)
+        addressInputHelper =
+            InputHelper(context, layout.destination_address_container, validateAddress)
         addressInputHelper.editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         layout.send_dest_toggle.setOnClickListener {

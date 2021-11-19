@@ -12,19 +12,19 @@
   <path
       android:pathData="M5.3333,5.3353l13.3294,0l0,13.3294l-13.3294,0z"
       android:strokeWidth="1"
-      android:fillColor="#C4CBD2"
+      android:fillColor="@color/text5"
       android:fillType="nonZero"
       android:strokeColor="#00000000"/>
   <path
       android:pathData="M12.3768,12.566l7.6229,-7.6229l0,3.0563l1.3333,0l0.0003,-5.3331l-0.0003,0l0,-0.0003l-5.3331,0.0003l0,1.3333l3.0575,0.0001l-7.6235,7.6235z"
       android:strokeWidth="1"
-      android:fillColor="#091440"
+      android:fillColor="@color/text1"
       android:fillType="nonZero"
       android:strokeColor="#00000000"/>
   <path
       android:pathData="M20,10.6663l0,9.3334l-16,0l0,-16.0001l9.3333,0l0,-1.3333l-10.6667,-0.0003l0,18.667l18.6667,0l0,-10.6667z"
       android:strokeWidth="1"
-      android:fillColor="#091440"
+      android:fillColor="@color/text1"
       android:fillType="nonZero"
       android:strokeColor="#00000000"/>
 </vector>

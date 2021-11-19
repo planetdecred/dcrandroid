@@ -81,6 +81,10 @@
     <string name="net">Net</string>
     <string name="connecting_to_peers">Connexion aux pairs</string>
 
+    <plurals name="mixed_dcr_amount">
+        <item quantity="one">%1$s DCR</item>
+        <item quantity="other">%1$s DCR\t x%2$d</item>
+    </plurals>
     <!--/General-->
 
     <!--Account-->
@@ -386,9 +390,12 @@
     <string name="tx_sort_sent">Envoyé (%1$d)</string>
     <string name="tx_sort_received">Reçu (%1$d)</string>
     <string name="tx_sort_transferred">Transféré (%1$d)</string>
+    <string name="tx_sort_mixed">Mixé (%1$d)</string>
     <string name="tx_sort_staking">Staking (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">Achat de Ticket</string>
+    <string name="voted">Voté</string>
+    <string name="unmined">Non miné</string>
     <string name="immature">Immature</string>
     <string name="live">Live</string>
     <string name="purchased">Acheté</string>
@@ -412,7 +419,6 @@
     <string name="x_dcr">%1$s DCR</string>
     <string name="x_usd">%1$s USD</string>
     <string name="usd_symbol_format">$%1$s</string>
-    <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
     <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
     <string name="balance_after_send">Solde après envoi</string>
@@ -490,10 +496,7 @@
     <string name="get_started">Débuter</string>
     <string name="back">Retour</string>
     <string name="use_fingerprint">Utiliser empreinte digitale</string>
-    <string name="overview_backup_seed_instruction">Il est recommandé d\'écrire la phrase de récupération de chaque porte-monnaie comme sauvegarde afin de pouvoir récupérer vos fonds si besoin.</string>
     <string name="go_to_wallets">Aller aux porte-monnaies</string>
-    <string name="n_wallets_need_backup">%1$d porte-monnaies requièrent une sauvegarde</string>
-    <string name="a_wallet_needs_backup">Un porte-monnaie requiert une sauvegarde</string>
     <string name="startup_password">Mot de passe de démarrage</string>
     <string name="new_startup_password">Nouveau mot de passe de démarrage</string>
     <string name="new_spending_password">Nouveau mot de passe de dépense</string>
@@ -549,10 +552,12 @@
     <string name="unmixed_account">Compte non-mixé</string>
     <string name="mixer">Mixeur</string>
     <string name="mix">Mixer</string>
-    <string name="mix_tx_change">Mixer la monnaie de la transaction</string>
-    <string name="mix_tx_change_summary">La monnaie des transactions sera envoyée vers le compte non-mixé si activé.</string>
-    <string name="change_sent_to_unmixed"><![CDATA[La monnaie sera envoyée vers <b>%1$s</b>.]]></string>
-    <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé jusqu\'à la complétion du mixage.</string>
+    <string name="mixed">Mixé</string>
+    <string name="mix_tx_change">Mixer la monnaie</string>
+    <string name="mix_tx_change_summary_enabled">La monnaie des transactions depuis tous les comptes sera envoyée vers non-mixé.</string>
+    <string name="mix_tx_change_summary_disabled">La monnaie des transactions depuis mixé sera envoyée vers non-mixé.</string>
+    <string name="change_sent_to_unmixed"><![CDATA[La monnaie de <b>%1$s DCR</b> retournera vers \'<b>%2$s</b>\'.]]></string>
+    <string name="start_mixer_warning">Votre porte-monnaie sera déverrouillé et votre écran restera actif jusqu\'à la complétion du mixage.</string>
     <string name="mixer_has_stopped_running">le mixeur cspp a cessé de fonctionner</string>
     <string name="no_mixable_output">Le compte non-mixé n\'a pas de sortie mixable</string>
     <string name="new_caps">NOUVEAU</string>
@@ -579,7 +584,7 @@
     <string name="mix_server">Serveur de mixage</string>
     <string name="keep_app_opened">Garder cette application ouverte</string>
     <string name="mixer_help_title">Comment utiliser le mixeur ?</string>
-    <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>
+    <string name="mixer_help_desc"><![CDATA[Quand vous activez le mixeur, vos DCR non-mixés dans ce porte-monnaie (solde non-mixé) seront graduellement mixés.<br/><br/><b><font color="#091440">Important: garder cette application ouverte durant le mixage. Votre écran ne passera pas en veille pendant le mixage, ce qui peut impacter votre durée de batterie.</font></b><br/><br/>Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.]]></string>
     <string name="mixer_is_running">le mixeur cspp fonctionne</string>
     <string name="keep_this_app_opened">Garder cette application ouverte</string>
     <string name="mixer_status_info">Le mixeur s\'arrêtera automatiquement quand le solde non-mixé est totalement mixé.</string>
@@ -634,6 +639,14 @@
     <string name="no_votes_percent">Non: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Oui: %1$d (%2$.2f%%)  Non: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s par %2$s</string>
+    <string name="status">Statut</string>
+    <string name="reward">Récompense</string>
+    <string name="days_to_vote">Jours pour voter</string>
+    <string name="spendable_in">Disponible dans</string>
+    <string name="view_associated_ticket">Voir le ticket associé</string>
+    <string name="missed_expired">Raté/Expiré</string>
+    <string name="age">Age</string>
+    <string name="maturity">Maturité</string>
     <!--/Politeia-->
 
 </resources>

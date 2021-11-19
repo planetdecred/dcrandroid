@@ -32,7 +32,7 @@
                 android:layout_height="40dp"
                 android:padding="@dimen/margin_padding_size_8"
                 app:srcCompat="@drawable/ic_close"
-                android:background="@drawable/circular_transparent_ripple"
+                android:background="@drawable/circular_surface_ripple"
                 android:id="@+id/iv_close" />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_account_name"
                 android:layout_weight="1"
-                android:textColor="@color/darkBlueTextColor"
+                android:textColor="@color/text1"
                 android:textSize="@dimen/edit_text_size_20"
                 tools:text="Default"
                 android:layout_gravity="center_vertical"
@@ -53,7 +53,7 @@
                 android:padding="@dimen/margin_padding_size_8"
                 app:srcCompat="@drawable/ic_edit"
                 android:id="@+id/iv_rename_account"
-                android:background="@drawable/circular_transparent_ripple" />
+                android:background="@drawable/circular_surface_ripple" />
 
         </LinearLayout>
 
@@ -98,12 +98,12 @@
                         android:textSize="32sp"
                         app:fontFamily="@font/source_sans_pro"
                         android:includeFontPadding="false"
-                        android:textColor="@color/darkBlueTextColor" />
+                        android:textColor="@color/text1" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:layout_marginTop="4dp"
                         app:fontFamily="@font/source_sans_pro"
                         android:includeFontPadding="false"
@@ -124,12 +124,12 @@
                             android:textSize="20sp"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false"
-                            android:textColor="@color/darkBlueTextColor" />
+                            android:textColor="@color/text1" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:layout_marginTop="4dp"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false"
@@ -161,12 +161,12 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/text1" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -192,12 +192,12 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/text1" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -223,12 +223,12 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/text1" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -254,12 +254,12 @@
                                 android:textSize="20sp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
-                                android:textColor="@color/darkBlueTextColor" />
+                                android:textColor="@color/text1" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/blueGraySecondTextColor"
+                                android:textColor="@color/text4"
                                 android:layout_marginTop="4dp"
                                 app:fontFamily="@font/source_sans_pro"
                                 android:includeFontPadding="false"
@@ -284,7 +284,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/grayBackgroundLightColor" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -297,7 +297,7 @@
                         android:layout_height="wrap_content"
                         app:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/darkerBlueGrayTextColor"
+                        android:textColor="@color/text2"
                         android:text="@string/properties"
                         android:includeFontPadding="false" />
 
@@ -311,7 +311,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro"
                             android:text="@string/account_number"
@@ -324,7 +324,7 @@
                             android:layout_marginStart="@dimen/margin_padding_size_16"
                             android:gravity="end"
                             android:id="@+id/account_details_number"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/text1"
                             android:textSize="@dimen/edit_text_size_16"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false" />
@@ -341,7 +341,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro"
                             android:text="@string/hd_path"
@@ -354,7 +354,7 @@
                             android:layout_marginStart="@dimen/margin_padding_size_16"
                             android:gravity="end"
                             android:id="@+id/account_details_path"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/text1"
                             android:textSize="@dimen/edit_text_size_16"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false" />
@@ -370,7 +370,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro"
                             android:text="@string/keys"
@@ -383,7 +383,7 @@
                             android:layout_marginStart="@dimen/margin_padding_size_16"
                             android:gravity="end"
                             android:id="@+id/account_details_keys"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/text1"
                             android:textSize="@dimen/edit_text_size_16"
                             app:fontFamily="@font/source_sans_pro"
                             android:includeFontPadding="false" />
@@ -405,7 +405,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grayBackgroundLightColor" />
+            android:background="@color/colorDivider" />
 
         <TextView
             android:layout_width="match_parent"
@@ -417,7 +417,7 @@
             android:textSize="@dimen/edit_text_size_16"
             android:paddingTop="@dimen/margin_padding_size_16"
             android:paddingBottom="@dimen/margin_padding_size_16"
-            android:textColor="@color/blue"
+            android:textColor="@color/primary"
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/curved_bottom_ripple" />

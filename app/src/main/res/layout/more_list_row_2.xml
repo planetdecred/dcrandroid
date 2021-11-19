@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple"
+    android:background="@drawable/surface_ripple"
     android:focusable="true"
     android:clickable="true"
     android:padding="@dimen/margin_padding_size_16">
@@ -23,7 +23,7 @@
         tools:text="Version"
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_16"
-        android:textColor="@color/darkBlueTextColor" />
+        android:textColor="@color/text1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,6 +36,6 @@
         tools:text="Pre-release"
         android:fontFamily="@font/source_sans_pro"
         android:textSize="@dimen/edit_text_size_14"
-        android:textColor="@color/blueGraySecondTextColor" />
+        android:textColor="@color/text4" />
 
 </LinearLayout>

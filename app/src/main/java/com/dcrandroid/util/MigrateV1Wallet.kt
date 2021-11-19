@@ -24,7 +24,11 @@ import java.io.File
 const val walletsDirName = "wallets"
 const val v1WalletDirName = "wallet"
 
-class MigrateV1Wallet(val activity: AppCompatActivity, val v1WalletPath: String, val migrationComplete: () -> Unit) {
+class MigrateV1Wallet(
+    val activity: AppCompatActivity,
+    val v1WalletPath: String,
+    val migrationComplete: () -> Unit
+) {
 
     private val multiWallet = WalletData.multiWallet
 
@@ -55,27 +59,38 @@ class MigrateV1Wallet(val activity: AppCompatActivity, val v1WalletPath: String,
         }
 
         if (publicPassType == KEY_PASSWORD) {
-            val passwordPromptDialog = PasswordPromptDialog(R.string.startup_password_prompt_title, false, passEntered)
+            val passwordPromptDialog =
+                PasswordPromptDialog(R.string.startup_password_prompt_title, false, passEntered)
             passwordPromptDialog.isCancelable = false
             passwordPromptDialog.show(activity)
         } else {
-            val pinPromptDialog = PinPromptDialog(R.string.startup_pin_prompt_title, false, passEntered)
+            val pinPromptDialog =
+                PinPromptDialog(R.string.startup_pin_prompt_title, false, passEntered)
             pinPromptDialog.isCancelable = false
             pinPromptDialog.show(activity)
         }
     }
 
     private fun completeV1WalletMigration(passphrase: String) = GlobalScope.launch(Dispatchers.IO) {
-        val privatePassphraseType = when (preferenceUtil.getString(KEY_SPENDING_PASSPHRASE_TYPE, KEY_PASSWORD)) {
-            KEY_PASSWORD -> Dcrlibwallet.PassphraseTypePass
-            else -> Dcrlibwallet.PassphraseTypePin
-        }
+        val privatePassphraseType =
+            when (preferenceUtil.getString(KEY_SPENDING_PASSPHRASE_TYPE, KEY_PASSWORD)) {
+                KEY_PASSWORD -> Dcrlibwallet.PassphraseTypePass
+                else -> Dcrlibwallet.PassphraseTypePin
+            }
 
         val peerIP = preferenceUtil.getString(KEY_PEER_IP, "")
 
         try {
-            multiWallet!!.linkExistingWallet(activity.getString(R.string.mywallet), v1WalletPath, passphrase, privatePassphraseType)
-            multiWallet.setStringConfigValueForKey(Dcrlibwallet.SpvPersistentPeerAddressesConfigKey, peerIP)
+            multiWallet!!.linkExistingWallet(
+                activity.getString(R.string.mywallet),
+                v1WalletPath,
+                passphrase,
+                privatePassphraseType
+            )
+            multiWallet.setStringConfigValueForKey(
+                Dcrlibwallet.SpvPersistentPeerAddressesConfigKey,
+                peerIP
+            )
 
             val transactionsFolder = File(activity.filesDir, BuildConfig.NetType)
             if (transactionsFolder.exists()) {
@@ -103,8 +118,10 @@ class MigrateV1Wallet(val activity: AppCompatActivity, val v1WalletPath: String,
             } else {
                 withContext(Dispatchers.Main) {
                     InfoDialog(activity)
-                            .setMessage(e.message)
-                            .setPositiveButton(activity.getString(R.string.exit_cap), DialogInterface.OnClickListener { _, _ ->
+                        .setMessage(e.message)
+                        .setPositiveButton(
+                            activity.getString(R.string.exit_cap),
+                            DialogInterface.OnClickListener { _, _ ->
                                 activity.finish()
                             }).show()
                 }

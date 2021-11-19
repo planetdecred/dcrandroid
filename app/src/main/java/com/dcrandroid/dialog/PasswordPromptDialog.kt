@@ -19,12 +19,18 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Boolean,
-                           val passEntered: (dialog: FullScreenBottomSheetDialog, passphrase: String?) -> Boolean) : FullScreenBottomSheetDialog() {
+class PasswordPromptDialog(
+    @StringRes val dialogTitle: Int, val isSpending: Boolean,
+    val passEntered: (dialog: FullScreenBottomSheetDialog, passphrase: String?) -> Boolean
+) : FullScreenBottomSheetDialog() {
 
     var confirmed = false
     var passwordTrials = 0
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.password_prompt_sheet, container, false)
     }
 
@@ -38,7 +44,7 @@ class PasswordPromptDialog(@StringRes val dialogTitle: Int, val isSpending: Bool
         }
 
         password_input.validateInput = {
-            btn_confirm.isEnabled = it.isNotBlank()
+            btn_confirm.isEnabled = true
             true
         }
 

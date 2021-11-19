@@ -25,14 +25,14 @@
         android:layout_marginBottom="@dimen/margin_padding_size_15"
         android:layout_marginStart="@dimen/margin_padding_size_16"
         android:text="@string/recent_transactions"
-        android:textColor="#3d5873"
+        android:textColor="@color/text2"
         android:textSize="14sp"
         app:fontFamily="@font/source_sans_pro" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/primaryRipple"
+        android:background="@color/colorDivider"
         android:layout_marginStart="@dimen/margin_padding_size_16" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:paddingBottom="@dimen/margin_padding_size_20"
         android:paddingStart="@dimen/margin_padding_size_16"
         android:paddingEnd="@dimen/margin_padding_size_16"
-        android:textColor="#8997a5"
+        android:textColor="@color/text3"
         android:textSize="16sp"
         android:text="@string/no_transactions_yet"
         app:fontFamily="@font/source_sans_pro" />
@@ -63,7 +63,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#edeff1" />
+            android:background="@color/colorDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 android:includeFontPadding="false"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
-                android:textColor="#2970ff"
+                android:textColor="@color/primary"
                 android:textSize="@dimen/edit_text_size_16"
                 android:text="@string/see_all"
                 app:fontFamily="@font/source_sans_pro" />

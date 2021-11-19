@@ -47,8 +47,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: DialogInterface.OnDismissListener) :
-        FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
+class SendDialog(
+    val fragmentActivity: FragmentActivity,
+    dismissListener: DialogInterface.OnDismissListener
+) :
+    FullScreenBottomSheetDialog(dismissListener), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var sourceAccountSpinner: AccountCustomSpinner
     private lateinit var destinationAddressCard: DestinationAddressCard
@@ -56,6 +59,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     private lateinit var amountHelper: AmountInputHelper
 
     private var sendMax = false
+        set(value) {
+            if (value) {
+                iv_send_max?.setImageResource(R.drawable.ic_send_max_enabled)
+            } else {
+                iv_send_max?.setImageResource(R.drawable.ic_send_max)
+            }
+
+            field = value
+        }
 
     var savedInstanceState: Bundle? = null
 
@@ -73,7 +85,11 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
     private var authoredTxData: AuthoredTxData? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.send_page_sheet, container, false)
     }
 
@@ -84,19 +100,24 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             amountChanged = this@SendDialog.amountChanged
         }
 
-        destinationAddressCard = DestinationAddressCard(context!!, dest_address_card, validateAddress).apply {
-            addressChanged = destAddressChanged
-            addressInputHelper.textChanged = destAddressChanged
-            destinationAccountSpinner.selectedAccountChanged = destAccountChanged
-        }
+        destinationAddressCard =
+            DestinationAddressCard(requireContext(), dest_address_card, validateAddress).apply {
+                addressChanged = destAddressChanged
+                addressInputHelper.textChanged = destAddressChanged
+                destinationAccountSpinner.selectedAccountChanged = destAccountChanged
+            }
 
-        sourceAccountSpinner = AccountCustomSpinner(activity!!.supportFragmentManager,
-                source_account_spinner, sourceAccountChanged)
+        sourceAccountSpinner = AccountCustomSpinner(
+            requireActivity().supportFragmentManager,
+            source_account_spinner, sourceAccountChanged
+        )
         sourceAccountSpinner.init {
             // If wallet has privacy enabled, enable only mixed account when sending to an address
             // and enable all accounts when sending to an account
             val wallet = multiWallet.walletWithID(it.walletID)
-            var accountIsEnabled = true // all accounts are enabled for non-privacy wallets
+            var accountIsEnabled =
+                !wallet.isWatchingOnlyWallet // all accounts are enabled for non-privacy wallets
+
             if (wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerConfigSet, false)) {
                 if (destinationAddressCard.isSendToAccount) {
                     // unmixed accounts are not valid for sending if destination account is another wallet
@@ -124,7 +145,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         send_next.setOnClickListener {
             if (!validForSend || authoredTxData == null) {
                 // should never encounter this
-                SnackBar.showText(context!!, R.string.send_invalid)
+                SnackBar.showText(requireContext(), R.string.send_invalid)
                 return@setOnClickListener
             }
 
@@ -146,8 +167,8 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             }
 
             ConfirmTransaction(fragmentActivity, sendSuccess)
-                    .setTxData(transactionData, authoredTxData!!)
-                    .show(activity!!.supportFragmentManager, null)
+                .setTxData(transactionData, authoredTxData!!)
+                .show(requireActivity().supportFragmentManager, null)
         }
 
         clearEstimates()
@@ -172,14 +193,23 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
         // Fetch and save the selected source account.
         val selectedSourceAccount = amountHelper.selectedAccount
-        savedInstanceState?.putSerializable(Constants.SELECTED_SOURCE_ACCOUNT, selectedSourceAccount)
+        savedInstanceState?.putSerializable(
+            Constants.SELECTED_SOURCE_ACCOUNT,
+            selectedSourceAccount
+        )
 
         // Fetch and save the selected destination account.
         val selectedDestAccount = destinationAddressCard.destinationAccountSpinner.selectedAccount
-        savedInstanceState?.putSerializable(Constants.SELECTED_DESTINATION_ACCOUNT, selectedDestAccount)
+        savedInstanceState?.putSerializable(
+            Constants.SELECTED_DESTINATION_ACCOUNT,
+            selectedDestAccount
+        )
 
         // Save destination address state depending on if spinner or address input was selected.
-        savedInstanceState?.putBoolean(Constants.SEND_TO_ACCOUNT, destinationAddressCard.isSendToAccount)
+        savedInstanceState?.putBoolean(
+            Constants.SEND_TO_ACCOUNT,
+            destinationAddressCard.isSendToAccount
+        )
     }
 
     override fun onResume() {
@@ -190,18 +220,22 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             sendMax = savedInstanceState!!.getBoolean(Constants.SEND_MAX)
 
             // Update UI based on previously selected send to account.
-            val selectedSourceAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_SOURCE_ACCOUNT) as Account?
-            val selectedDestAccount = savedInstanceState!!.getSerializable(Constants.SELECTED_DESTINATION_ACCOUNT) as Account?
+            val selectedSourceAccount =
+                savedInstanceState!!.getSerializable(Constants.SELECTED_SOURCE_ACCOUNT) as Account?
+            val selectedDestAccount =
+                savedInstanceState!!.getSerializable(Constants.SELECTED_DESTINATION_ACCOUNT) as Account?
 
             // To avoid using an account object with invalid data, the account will be fetched from
             // the wallet instead of using the serialized object.
             if (selectedSourceAccount != null) {
                 val wallet = multiWallet.walletWithID(selectedSourceAccount.walletID)
-                sourceAccountSpinner.selectedAccount = Account.from(wallet.getAccount(selectedSourceAccount.accountNumber))
+                sourceAccountSpinner.selectedAccount =
+                    Account.from(wallet.getAccount(selectedSourceAccount.accountNumber))
             }
             if (selectedDestAccount != null) {
                 val wallet = multiWallet.walletWithID(selectedDestAccount.walletID)
-                destinationAddressCard.destinationAccountSpinner.selectedAccount = Account.from(wallet.getAccount(selectedDestAccount.accountNumber))
+                destinationAddressCard.destinationAccountSpinner.selectedAccount =
+                    Account.from(wallet.getAccount(selectedDestAccount.accountNumber))
             }
 
             // Show destination address input / spinner depending on which was previously selected.
@@ -222,7 +256,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
     override fun showOptionsMenu(v: View) {
         val items: Array<Any> = arrayOf(
-                PopupItem(R.string.clear_fields)
+            PopupItem(R.string.clear_fields)
         )
 
         PopupUtil.showPopup(v, items) { window, _ ->
@@ -237,11 +271,11 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     }
 
     override fun showInfo() {
-        InfoDialog(context!!)
-                .setDialogTitle(getString(R.string.send_dcr))
-                .setMessage(getString(R.string.send_dcr_info))
-                .setPositiveButton(getString(R.string.got_it), null)
-                .show()
+        InfoDialog(requireContext())
+            .setDialogTitle(getString(R.string.send_dcr))
+            .setMessage(getString(R.string.send_dcr_info))
+            .setPositiveButton(getString(R.string.got_it), null)
+            .show()
     }
 
     private val sourceAccountChanged: (AccountCustomSpinner) -> Unit = {
@@ -294,7 +328,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
     private val sendSuccess: (shouldExit: Boolean) -> Unit = {
         GlobalScope.launch(Dispatchers.Main) {
             if (it) {
-                SnackBar.showText(context!!, R.string.transaction_sent)
+                SnackBar.showText(requireContext(), R.string.transaction_sent)
                 dismissAllowingStateLoss()
             } else {
                 clearFields()
@@ -308,6 +342,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
 
         val zeroDcr = HtmlCompat.fromHtml(getString(R.string._dcr), 0)
         balance_after_send.text = zeroDcr
+        change_to_unmixed_label.hide()
 
         if (amountHelper.exchangeDecimal == null) {
             tx_fee.text = zeroDcr
@@ -347,20 +382,28 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             tx_size.text = getString(R.string.x_bytes, authoredTxData!!.estSignedSize)
 
             val wallet = multiWallet.walletWithID(sourceAccountSpinner.selectedAccount!!.walletID)
-            val mixChange = wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
-            if (mixChange) {
-                balance_after_layout.hide()
+            val sourceAccountNumber = sourceAccountSpinner.selectedAccount!!.accountNumber
+            if (!sendMax && (wallet.accountMixerMixChange() ||
+                        wallet.mixedAccountNumber() == sourceAccountNumber) &&
+                wallet.unmixedAccountNumber() != sourceAccountNumber &&
+                authoredTxData!!.change > 0
+            ) {
 
-                val changeAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
-                val changeAccountName = wallet.accountName(changeAccountNumber)
+                val changeAccountName = wallet.accountName(wallet.unmixedAccountNumber())
                 change_to_unmixed_label.apply {
-                    text = HtmlCompat.fromHtml(getString(R.string.change_sent_to_unmixed, changeAccountName), 0)
+                    text = HtmlCompat.fromHtml(
+                        getString(
+                            R.string.change_sent_to_unmixed,
+                            CoinFormat.formatDecred(authoredTxData!!.change), changeAccountName
+                        ), 0
+                    )
                     show()
                 }
             } else {
-                balance_after_send.text = authoredTxData!!.balanceAfter
+                change_to_unmixed_label.hide()
             }
 
+            balance_after_send.text = authoredTxData!!.balanceAfter
             tx_fee.text = authoredTxData!!.fee
             total_cost.text = authoredTxData!!.totalCost
 
@@ -371,7 +414,7 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         } catch (e: Exception) {
             e.printStackTrace()
 
-            amountHelper.setError(Utils.translateError(context!!, e))
+            amountHelper.setError(Utils.translateError(requireContext(), e))
             clearEstimates()
         }
     }
@@ -389,8 +432,15 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         val feeAndSize: TxFeeAndSize
 
         try {
-            txAuthor = multiWallet.newUnsignedTx(sourceAccountSpinner.wallet, selectedAccount.accountNumber)
-            txAuthor.addSendDestination(destinationAddressCard.estimationAddress, amountAtom, sendMax)
+            txAuthor = multiWallet.newUnsignedTx(
+                sourceAccountSpinner.wallet.id,
+                selectedAccount.accountNumber
+            )
+            txAuthor.addSendDestination(
+                destinationAddressCard.estimationAddress,
+                amountAtom,
+                sendMax
+            )
             feeAndSize = txAuthor.estimateFeeAndSize()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -404,7 +454,17 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
         }
 
         val totalCostAtom = amountAtom + feeAtom
-        val balance = selectedAccount.balance.spendable - totalCostAtom
+
+        val wallet = multiWallet.walletWithID(sourceAccountSpinner.selectedAccount!!.walletID)
+        val balance = if ((wallet.accountMixerMixChange() || selectedAccount.isMixerMixedAccount) &&
+            !selectedAccount.isMixerUnMixedAccount && feeAndSize.change != null
+        ) {
+            // Deduct change to get an accurate balance since the change will be sent to another account
+            selectedAccount.balance.spendable - (totalCostAtom + feeAndSize.change.atomValue)
+        } else {
+            selectedAccount.balance.spendable - totalCostAtom
+        }
+
         val balanceAfterSend = if (balance > 0) {
             getString(R.string.x_dcr, CoinFormat.formatDecred(balance))
         } else {
@@ -425,10 +485,12 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             val totalCostCoin = Dcrlibwallet.amountCoin(totalCostAtom)
 
             val feeUSD = CurrencyUtil.dcrToFormattedUSD(amountHelper.exchangeDecimal, feeCoin)
-            val totalCostUSD = CurrencyUtil.dcrToFormattedUSD(amountHelper.exchangeDecimal, totalCostCoin, 2)
+            val totalCostUSD =
+                CurrencyUtil.dcrToFormattedUSD(amountHelper.exchangeDecimal, totalCostCoin, 2)
 
             feeSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, feeString, feeUSD), 0)
-            totalCostSpanned = HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, totalCostString, totalCostUSD), 0)
+            totalCostSpanned =
+                HtmlCompat.fromHtml(getString(R.string.x_dcr_usd, totalCostString, totalCostUSD), 0)
         }
 
         return AuthoredTxData().apply {
@@ -438,6 +500,9 @@ class SendDialog(val fragmentActivity: FragmentActivity, dismissListener: Dialog
             balanceAfter = balanceAfterSend
 
             this.amountAtom = amountAtom
+            if (feeAndSize.change != null) {
+                this.change = feeAndSize.change.atomValue
+            }
 
             this.txAuthor = txAuthor
         }
@@ -465,6 +530,7 @@ class AuthoredTxData {
     lateinit var balanceAfter: String
 
     var amountAtom: Long = 0
+    var change: Long = 0
 
     lateinit var txAuthor: TxAuthor
 }

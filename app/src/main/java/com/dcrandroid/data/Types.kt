@@ -10,7 +10,6 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import dcrlibwallet.Dcrlibwallet
 import dcrlibwallet.Wallet
 import java.io.Serializable
 
@@ -64,10 +63,10 @@ class Account : Serializable {
         get() = wallet.hdPathForAccount(accountNumber)
 
     val isMixerUnMixedAccount: Boolean
-        get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
+        get() = accountNumber == wallet.unmixedAccountNumber()
 
     val isMixerMixedAccount: Boolean
-        get() = accountNumber == wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
+        get() = accountNumber == wallet.mixedAccountNumber()
 
     companion object {
         fun from(acc: dcrlibwallet.Account): Account {

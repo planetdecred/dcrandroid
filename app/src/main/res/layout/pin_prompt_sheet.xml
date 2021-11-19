@@ -21,7 +21,7 @@
         android:layout_marginBottom="@dimen/margin_padding_size_24"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:includeFontPadding="false"
-        android:textColor="@color/darkBlueTextColor"
+        android:textColor="@color/text1"
         android:textSize="@dimen/edit_text_size_20" />
 
     <LinearLayout
@@ -48,7 +48,7 @@
             android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro"
             android:textSize="@dimen/edit_text_size_12"
-            android:textColor="@color/darkerBlueGrayTextColor"
+            android:textColor="@color/text2"
             android:text="0"
             android:layout_marginStart="28dp" />
 
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_padding_size_8"
-            android:enabled="false"
+            android:enabled="true"
             android:text="@string/confirm" />
 
         <ProgressBar

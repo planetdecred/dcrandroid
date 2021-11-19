@@ -52,7 +52,11 @@ class PasswordInput : FrameLayout, TextWatcher {
         init(context, attrs, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context, attrs, defStyleAttr)
     }
 
@@ -73,10 +77,12 @@ class PasswordInput : FrameLayout, TextWatcher {
 
         ivConcealReveal.setOnClickListener {
             if (isMasked) {
-                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                editText.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 ivConcealReveal.setImageResource(R.drawable.ic_reveal)
             } else {
-                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                editText.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 ivConcealReveal.setImageResource(R.drawable.ic_conceal)
             }
 
@@ -89,7 +95,8 @@ class PasswordInput : FrameLayout, TextWatcher {
         addView(view)
         setupLayout()
 
-        val values = context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
+        val values =
+            context.theme.obtainStyledAttributes(attrs, R.styleable.PinView, defStyleAttr, 0)
         val counterEnabled = values.getBoolean(R.styleable.PasswordInput_counter_enabled, false)
 
         if (counterEnabled) {
@@ -137,12 +144,12 @@ class PasswordInput : FrameLayout, TextWatcher {
                 fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_14)
             }
             editText.hasFocus() -> {
-                textColor = context.resources.getColor(R.color.blue)
+                textColor = context.resources.getColor(R.color.primary)
                 backgroundResource = R.drawable.input_background_active
                 fontSizeTarget = context.resources.getDimension(R.dimen.edit_text_size_14)
             }
             else -> {
-                textColor = context.resources.getColor(R.color.lightGrayTextColor)
+                textColor = context.resources.getColor(R.color.text3)
                 backgroundResource = R.drawable.input_background
                 fontSizeTarget = if (editText.text.isNotEmpty()) {
                     context.resources.getDimension(R.dimen.edit_text_size_14)
@@ -169,7 +176,8 @@ class PasswordInput : FrameLayout, TextWatcher {
             hintTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, animatedValue)
         }
 
-        val translationAnimator = ValueAnimator.ofFloat(hintTextView.translationY, translationYTarget)
+        val translationAnimator =
+            ValueAnimator.ofFloat(hintTextView.translationY, translationYTarget)
         translationAnimator.addUpdateListener {
             val animatedValue = (translationAnimator.animatedValue as Float)
             hintTextView.translationY = animatedValue

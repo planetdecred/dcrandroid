@@ -26,7 +26,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-const val IP_ADDRESS_REGEX = "^(?:(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-5])\\.){3}(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-‌​5])(?:[:]\\d+)?$"
+const val IP_ADDRESS_REGEX =
+    "^(?:(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-5])\\.){3}(?:1\\d?\\d|[1-9]?\\d|2[0-4]\\d|25[0-‌​5])(?:[:]\\d+)?$"
 
 class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
@@ -41,9 +42,17 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
 
         SwitchPreference(this, Dcrlibwallet.BeepNewBlocksConfigKey, beep_new_blocks)
         SwitchPreference(this, Dcrlibwallet.SyncOnCellularConfigKey, wifi_sync)
-        SwitchPreference(this, Dcrlibwallet.PoliteiaNotificationConfigKey, enable_politeia_notification)
+        SwitchPreference(
+            this,
+            Dcrlibwallet.PoliteiaNotificationConfigKey,
+            enable_politeia_notification
+        )
 
-        enableStartupSecurity = SwitchPreference(this, Dcrlibwallet.IsStartupSecuritySetConfigKey, startup_pin_password) { newValue ->
+        enableStartupSecurity = SwitchPreference(
+            this,
+            Dcrlibwallet.IsStartupSecuritySetConfigKey,
+            startup_pin_password
+        ) { newValue ->
             if (newValue) {
                 setupStartupSecurity()
             } else {
@@ -53,12 +62,20 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             return@SwitchPreference !newValue
         }
 
-        useFingerprint = SwitchPreference(this, Dcrlibwallet.UseBiometricConfigKey, startup_security_fingerprint) { newValue ->
+        useFingerprint = SwitchPreference(
+            this,
+            Dcrlibwallet.UseBiometricConfigKey,
+            startup_security_fingerprint
+        ) { newValue ->
             if (newValue) {
                 enableStartupFingerprint()
             } else {
                 // clear passphrase from keystore by saving an empty passphrase
-                BiometricUtils.saveToKeystore(this@SettingsActivity, "", Constants.STARTUP_PASSPHRASE)
+                BiometricUtils.saveToKeystore(
+                    this@SettingsActivity,
+                    "",
+                    Constants.STARTUP_PASSPHRASE
+                )
             }
 
             return@SwitchPreference false
@@ -69,19 +86,41 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             ChangePassUtil(this, null).begin()
         }
 
-        setCurrencyConversionSummary(multiWallet!!.readInt32ConfigValueForKey(Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION))
-        ListPreference(this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION,
-                R.array.currency_conversion, currency_conversion) {
+        ListPreference(
+            this, Constants.COLOR_THEME, Constants.DEF_COLOR_THEME,
+            R.array.color_themes, color_theme
+        ) {
+            setColorThemeSummary(it)
+            var newMode = nightMode(it)
+
+            if (newMode != lastDayNightMode) {
+                setColorTheme()
+            }
+        }
+
+        ListPreference(
+            this, Dcrlibwallet.CurrencyConversionConfigKey, Constants.DEF_CURRENCY_CONVERSION,
+            R.array.currency_conversion, currency_conversion
+        ) {
             setCurrencyConversionSummary(it)
         }
 
         setPeerIP(multiWallet!!.readStringConfigValueForKey(Dcrlibwallet.SpvPersistentPeerAddressesConfigKey))
-        EditTextPreference(this, Dcrlibwallet.SpvPersistentPeerAddressesConfigKey, R.string.peer_ip_dialog_title,
-                R.string.peer_ip_pref_hint, R.string.invalid_peer_ip, spv_peer_ip, validateIPAddress) {
+        EditTextPreference(
+            this, Dcrlibwallet.SpvPersistentPeerAddressesConfigKey, R.string.peer_ip_dialog_title,
+            R.string.peer_ip_pref_hint, R.string.invalid_peer_ip, spv_peer_ip, validateIPAddress
+        ) {
             setPeerIP(it)
         }
 
-        EditTextPreference(this, Dcrlibwallet.UserAgentConfigKey, R.string.user_agent_dialog_title, R.string.user_agent, null, user_agent)
+        EditTextPreference(
+            this,
+            Dcrlibwallet.UserAgentConfigKey,
+            R.string.user_agent_dialog_title,
+            R.string.user_agent,
+            null,
+            user_agent
+        )
 
         go_back.setOnClickListener {
             finish()
@@ -99,6 +138,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
         currency_conversion.pref_subtitle.text = preferenceSummary
     }
 
+    private fun setColorThemeSummary(index: Int) {
+        val preferenceSummary = resources.getStringArray(R.array.color_themes)[index]
+        color_theme.pref_subtitle.text = preferenceSummary
+    }
+
     private fun setPeerIP(ip: String) {
         if (ip.isBlank()) {
             spv_peer_ip.pref_subtitle.hide()
@@ -109,7 +153,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun loadStartupSecurity() {
-        if (multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, Constants.DEF_STARTUP_SECURITY_SET)) {
+        if (multiWallet!!.readBoolConfigValueForKey(
+                Dcrlibwallet.IsStartupSecuritySetConfigKey,
+                Constants.DEF_STARTUP_SECURITY_SET
+            )
+        ) {
             change_startup_security.show()
             enableStartupSecurity.setChecked(true)
 
@@ -138,7 +186,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     multiWallet!!.verifyStartupPassphrase(passphrase.toByteArray())
-                    BiometricUtils.saveToKeystore(this@SettingsActivity, passphrase, Constants.STARTUP_PASSPHRASE)
+                    BiometricUtils.saveToKeystore(
+                        this@SettingsActivity,
+                        passphrase,
+                        Constants.STARTUP_PASSPHRASE
+                    )
 
                     withContext(Dispatchers.Main) {
                         useFingerprint.setValue(true)
@@ -157,12 +209,22 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun setupStartupSecurity() {
-        PasswordPinDialogFragment(R.string.create, false, isChange = false) { dialog, passphrase, passphraseType ->
+        PasswordPinDialogFragment(
+            R.string.create,
+            false,
+            isChange = false
+        ) { dialog, passphrase, passphraseType ->
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     multiWallet!!.setStartupPassphrase(passphrase.toByteArray(), passphraseType)
-                    multiWallet!!.setInt32ConfigValueForKey(Dcrlibwallet.StartupSecurityTypeConfigKey, passphraseType)
-                    multiWallet!!.setBoolConfigValueForKey(Dcrlibwallet.IsStartupSecuritySetConfigKey, true)
+                    multiWallet!!.setInt32ConfigValueForKey(
+                        Dcrlibwallet.StartupSecurityTypeConfigKey,
+                        passphraseType
+                    )
+                    multiWallet!!.setBoolConfigValueForKey(
+                        Dcrlibwallet.IsStartupSecuritySetConfigKey,
+                        true
+                    )
 
                     withContext(Dispatchers.Main) {
                         dialog.dismiss()
@@ -181,7 +243,11 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
     }
 
     private fun removeStartupSecurity() {
-        val title = PassPromptTitle(R.string.remove_startup_security, R.string.remove_startup_security, R.string.remove_startup_security)
+        val title = PassPromptTitle(
+            R.string.remove_startup_security,
+            R.string.remove_startup_security,
+            R.string.remove_startup_security
+        )
         PassPromptUtil(this, null, title, false) { dialog, pass ->
 
             if (pass == null) {

@@ -24,7 +24,7 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:textSize="@dimen/edit_text_size_16"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:fontFamily="@font/source_sans_pro"
             android:paddingStart="54dp"
             android:paddingEnd="@dimen/margin_padding_size_24"

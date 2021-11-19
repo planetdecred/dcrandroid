@@ -18,15 +18,21 @@ import com.dcrandroid.view.PinViewUtil
 import kotlinx.android.synthetic.main.pin_prompt_sheet.*
 import kotlinx.coroutines.*
 
-class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boolean,
-                      val passEntered: (dialog: FullScreenBottomSheetDialog, passphrase: String?) -> Boolean) : FullScreenBottomSheetDialog() {
+class PinPromptDialog(
+    @StringRes val dialogTitle: Int, val isSpendingPass: Boolean,
+    val passEntered: (dialog: FullScreenBottomSheetDialog, passphrase: String?) -> Boolean
+) : FullScreenBottomSheetDialog() {
 
     var hint = R.string.enter_spending_pin
     private lateinit var pinViewUtil: PinViewUtil
 
     private var pinTrials = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.pin_prompt_sheet, container, false)
     }
 
@@ -38,7 +44,7 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
         pinViewUtil = PinViewUtil(pin_view, pin_counter, null)
 
         pinViewUtil.pinChanged = {
-            btn_confirm.isEnabled = it.isNotEmpty()
+            btn_confirm.isEnabled = true
             Unit
         }
 
@@ -74,7 +80,7 @@ class PinPromptDialog(@StringRes val dialogTitle: Int, val isSpendingPass: Boole
             pinViewUtil.pinView.rejectInput = true
             pinViewUtil.showError(R.string.invalid_pin)
             btn_cancel.isEnabled = false
-            btn_confirm.isEnabled = false
+            btn_confirm.isEnabled = true
             btn_confirm.show()
             progress_bar.hide()
 

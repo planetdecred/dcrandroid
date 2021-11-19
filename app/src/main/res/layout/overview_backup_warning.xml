@@ -46,7 +46,7 @@
             android:includeFontPadding="false"
             android:textColor="@color/white"
             android:textSize="@dimen/edit_text_size_18"
-            tools:text="2 wallets need backup" />
+            tools:text="Would you like to backup your seed words now?" />
 
         <ImageView
             android:layout_width="@dimen/margin_padding_size_40"

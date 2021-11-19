@@ -6,7 +6,6 @@
 
 package com.dcrandroid.activities.privacy
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Html
 import android.view.WindowManager
@@ -28,7 +27,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, TxAndBlockNotificationListener {
+class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
+    TxAndBlockNotificationListener {
 
     private lateinit var wallet: Wallet
     private var mixedAccountNumber: Int = -1
@@ -36,7 +36,10 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
     override fun onResume() {
         super.onResume()
+        multiWallet!!.removeTxAndBlockNotificationListener(this.javaClass.name)
         multiWallet!!.addTxAndBlockNotificationListener(this, this.javaClass.name)
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
+        multiWallet!!.addAccountMixerNotificationListener(this, this.javaClass.name)
         setMixerStatus()
     }
 
@@ -50,16 +53,20 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         wallet_name.text = wallet.name
         mixed_account_branch.text = Dcrlibwallet.MixedAccountBranch.toString()
         shuffle_server.text = Dcrlibwallet.ShuffleServer
-        shuffle_port.text = if(BuildConfig.IS_TESTNET) Dcrlibwallet.TestnetShufflePort
+        shuffle_port.text = if (BuildConfig.IS_TESTNET) Dcrlibwallet.TestnetShufflePort
         else Dcrlibwallet.MainnetShufflePort
 
-        mixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
-        unmixedAccountNumber = wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
+        mix_tx_change_switch.isChecked =
+            wallet.readBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, false)
+        setMixTxChangeSummary()
+
+        mixedAccountNumber =
+            wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerMixedAccount, -1)
+        unmixedAccountNumber =
+            wallet.readInt32ConfigValueForKey(Dcrlibwallet.AccountMixerUnmixedAccount, -1)
 
         mixed_account_label.text = wallet.accountName(mixedAccountNumber)
         unmixed_account_label.text = wallet.accountName(unmixedAccountNumber)
-
-        multiWallet?.setAccountMixerNotification(this@AccountMixerActivity)
 
         if (wallet.isAccountMixerActive) {
             mixer_toggle_switch.isChecked = true
@@ -77,26 +84,44 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
         iv_info.setOnClickListener {
             InfoDialog(this)
-                    .setDialogTitle(getString(R.string.mixer_help_title))
-                    .setMessage(Html.fromHtml(getString(R.string.mixer_help_desc)))
-                    .setPositiveButton(getString(R.string.got_it), null)
-                    .show()
+                .setDialogTitle(getString(R.string.mixer_help_title))
+                .setMessage(Html.fromHtml(getString(R.string.mixer_help_desc)))
+                .setPositiveButton(getString(R.string.got_it), null)
+                .show()
         }
 
         go_back.setOnClickListener { finish() }
 
+        mix_tx_change.setOnClickListener {
+            mix_tx_change_switch.toggle()
+        }
+
+        mix_tx_change_switch.setOnCheckedChangeListener { _, isChecked ->
+            wallet.setBoolConfigValueForKey(Dcrlibwallet.AccountMixerMixTxChange, isChecked)
+            setMixTxChangeSummary()
+        }
+
         setMixerStatus()
+    }
+
+    private fun setMixTxChangeSummary() {
+        if (mix_tx_change_switch.isChecked) {
+            mix_tx_change_summary.setText(R.string.mix_tx_change_summary_enabled)
+        } else {
+            mix_tx_change_summary.setText(R.string.mix_tx_change_summary_disabled)
+        }
     }
 
     override fun onPause() {
         super.onPause()
+        multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
         multiWallet!!.removeTxAndBlockNotificationListener(this.javaClass.name)
     }
 
     private fun setMixerStatus() = GlobalScope.launch(Dispatchers.Main) {
         if (wallet.isAccountMixerActive) {
             tv_mixer_status.setText(R.string.keep_app_opened)
-            tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
+            tv_mixer_status.setTextColor(resources.getColor(R.color.text4))
 
             iv_mixer_status.setImageResource(R.drawable.ic_alert)
             iv_mixer_status.show()
@@ -106,19 +131,29 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
 
             if (multiWallet!!.readyToMix(wallet.id)) {
                 tv_mixer_status.setText(R.string.ready_to_mix)
-                tv_mixer_status.setTextColor(resources.getColor(R.color.blueGraySecondTextColor))
+                tv_mixer_status.setTextColor(resources.getColor(R.color.text4))
                 iv_mixer_status.hide()
+                mixer_toggle_switch.isEnabled = true
             } else {
                 tv_mixer_status.setText(R.string.no_mixable_output)
                 tv_mixer_status.setTextColor(resources.getColor(R.color.colorError))
                 iv_mixer_status.hide()
+                mixer_toggle_switch.isEnabled = false
             }
 
             mixing_arrow.hide()
         }
 
-        unmixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(unmixedAccountNumber).total)
-        mixed_balance.text = CoinFormat.formatAlpha(wallet.getAccountBalance(mixedAccountNumber).total)
+        unmixed_balance.text =
+            CoinFormat.formatAlpha(
+                wallet.getAccountBalance(unmixedAccountNumber).spendable,
+                getColor(R.color.text4)
+            )
+        mixed_balance.text =
+            CoinFormat.formatAlpha(
+                wallet.getAccountBalance(mixedAccountNumber).spendable,
+                getColor(R.color.text4)
+            )
     }
 
     private fun showWarningAndStartMixer() {
@@ -132,18 +167,29 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener, T
         }
 
         InfoDialog(this)
-                .setMessage(getString(R.string.start_mixer_warning))
-                .setPositiveButton(getString(R.string._continue), DialogInterface.OnClickListener { _, _ ->
-                    startAccountMixer()
-                })
-                .setNegativeButton(getString(R.string.cancel))
-                .show()
+            .setMessage(getString(R.string.start_mixer_warning))
+            .setPositiveButton(
+                getString(R.string._continue)
+            ) { _, _ ->
+                startAccountMixer()
+            }
+            .setNegativeButton(getString(R.string.cancel))
+            .show()
     }
 
     private fun startAccountMixer() {
 
-        val title = PassPromptTitle(R.string.unlock_to_start_mixing, R.string.unlock_to_start_mixing, R.string.unlock_to_start_mixing)
-        PassPromptUtil(this@AccountMixerActivity, wallet.id, title, allowFingerprint = true) { dialog, passphrase ->
+        val title = PassPromptTitle(
+            R.string.unlock_to_start_mixing,
+            R.string.unlock_to_start_mixing,
+            R.string.unlock_to_start_mixing
+        )
+        PassPromptUtil(
+            this@AccountMixerActivity,
+            wallet.id,
+            title,
+            allowFingerprint = true
+        ) { dialog, passphrase ->
 
             if (passphrase == null) {
                 return@PassPromptUtil true

@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackground"
+    android:background="@color/background"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,7 +18,7 @@
         android:layout_height="?actionBarSize"
         android:id="@+id/app_bar"
         app:elevation="0dp"
-        android:background="@color/colorBackground"
+        android:background="@color/background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -46,7 +46,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="@dimen/margin_padding_size_8"
-                    android:background="@drawable/circular_transparent_ripple"
+                    android:background="@drawable/circular_surface_ripple"
                     android:focusable="true"
                     android:clickable="true"
                     android:id="@+id/go_back"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/privacy"
                         android:textSize="@dimen/edit_text_size_20"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
 
@@ -75,7 +75,7 @@
                         tools:text="Wallet-0"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         android:textSize="@dimen/edit_text_size_14"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:includeFontPadding="false"
                         app:fontFamily="@font/source_sans_pro" />
                 </LinearLayout>
@@ -148,7 +148,7 @@
                             android:includeFontPadding="false"
                             android:fontFamily="@font/source_sans_pro"
                             android:textSize="@dimen/edit_text_size_18"
-                            android:textColor="@color/darkBlueTextColor" />
+                            android:textColor="@color/text1" />
 
 
                         <LinearLayout
@@ -173,7 +173,7 @@
                                 android:includeFontPadding="false"
                                 android:fontFamily="@font/source_sans_pro"
                                 android:textSize="@dimen/edit_text_size_14"
-                                android:textColor="@color/blueGraySecondTextColor" />
+                                android:textColor="@color/text4" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -189,7 +189,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_gray_corner_8dp"
+                    android:background="@drawable/bg_corner_8dp"
                     android:layout_marginTop="@dimen/margin_padding_size_16"
                     android:paddingTop="@dimen/margin_padding_size_12"
                     android:paddingBottom="@dimen/margin_padding_size_12"
@@ -207,7 +207,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/unmixed_balance"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro" />
 
@@ -215,7 +215,7 @@
                             android:id="@+id/unmixed_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/text1"
                             android:textSize="16sp"
                             app:fontFamily="@font/source_sans_pro"
                             tools:text="107.74431858 DCR" />
@@ -243,7 +243,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/mixed_balance"
-                            android:textColor="#596d81"
+                            android:textColor="@color/text4"
                             android:textSize="@dimen/edit_text_size_14"
                             app:fontFamily="@font/source_sans_pro" />
 
@@ -251,7 +251,7 @@
                             android:id="@+id/mixed_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/text1"
                             android:textSize="16sp"
                             app:fontFamily="@font/source_sans_pro"
                             tools:text="0 DCR" />
@@ -280,7 +280,7 @@
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_14"
                     android:text="@string/mixer_settings"
-                    android:textColor="@color/darkerBlueGrayTextColor" />
+                    android:textColor="@color/text2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -293,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mixed_account"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -304,7 +304,7 @@
                         android:includeFontPadding="false"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         tools:text="mixed"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14" />
 
@@ -314,7 +314,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/margin_padding_size_14"
-                    android:background="#e6eaed" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -327,7 +327,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/unmixed_account"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -338,7 +338,7 @@
                         android:includeFontPadding="false"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         tools:text="unmixed"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14" />
 
@@ -348,7 +348,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/margin_padding_size_14"
-                    android:background="#e6eaed" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -361,7 +361,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mixed_account_branch"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -372,7 +372,7 @@
                         android:includeFontPadding="false"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         tools:text="0"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14" />
 
@@ -382,7 +382,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/margin_padding_size_14"
-                    android:background="#e6eaed" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -395,7 +395,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/mix_server"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -406,7 +406,7 @@
                         android:id="@+id/shuffle_server"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         tools:text="cspp.decred.org"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14" />
 
@@ -416,7 +416,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/margin_padding_size_14"
-                    android:background="#e6eaed" />
+                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -429,7 +429,7 @@
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
                         android:text="@string/server_port"
-                        android:textColor="@color/darkBlueTextColor"
+                        android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />
 
@@ -440,21 +440,26 @@
                         android:id="@+id/shuffle_port"
                         android:layout_marginTop="@dimen/margin_padding_size_4"
                         tools:text="15760"
-                        android:textColor="@color/blueGraySecondTextColor"
+                        android:textColor="@color/text4"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_14" />
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_padding_size_14"
+                    android:background="@color/colorDivider" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/mix_tx_change"
-                    android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:layout_marginTop="@dimen/margin_padding_size_16"
                     android:gravity="center_vertical"
                     android:focusable="true"
                     android:clickable="true"
-                    android:visibility="gone"
                     android:background="@drawable/ripple"
                     android:orientation="horizontal">
 
@@ -468,21 +473,21 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@id/pref_title"
                             android:includeFontPadding="false"
                             android:text="@string/mix_tx_change"
-                            android:textColor="@color/darkBlueTextColor"
+                            android:textColor="@color/text1"
                             android:fontFamily="@font/source_sans_pro"
                             android:textSize="@dimen/edit_text_size_16" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/mix_tx_change_summary"
                             android:includeFontPadding="false"
                             android:layout_marginTop="@dimen/margin_padding_size_4"
-                            android:textColor="@color/blueGraySecondTextColor"
+                            android:textColor="@color/text4"
                             android:fontFamily="@font/source_sans_pro"
-                            android:text="@string/mix_tx_change_summary"
+                            android:text="@string/mix_tx_change_summary_disabled"
                             android:textSize="@dimen/edit_text_size_14" />
 
                     </LinearLayout>
@@ -490,7 +495,7 @@
                     <androidx.appcompat.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@id/pref_switch"
+                        android:id="@+id/mix_tx_change_switch"
                         android:theme="@style/Switch" />
 
                 </LinearLayout>

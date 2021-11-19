@@ -49,7 +49,7 @@
                 android:includeFontPadding="false"
                 android:fontFamily="@font/source_sans_pro"
                 android:textSize="@dimen/edit_text_size_18"
-                android:textColor="@color/darkBlueTextColor" />
+                android:textColor="@color/text1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                     android:includeFontPadding="false"
                     android:fontFamily="@font/source_sans_pro"
                     android:textSize="@dimen/edit_text_size_14"
-                    android:textColor="@color/blueGraySecondTextColor" />
+                    android:textColor="@color/text4" />
 
             </LinearLayout>
 
@@ -80,7 +80,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="@dimen/margin_padding_size_8"
-            android:background="@drawable/circular_transparent_ripple"
+            android:background="@drawable/circular_surface_ripple"
             android:id="@+id/mixer_go_to_wallets"
             android:focusable="true"
             android:clickable="true"
@@ -97,12 +97,12 @@
         tools:listitem="@layout/mixer_status_row"
         tools:itemCount="2" />
 
-    <TextView
+    \<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_16"
         android:fontFamily="@font/source_sans_pro"
-        android:textColor="@color/blueGraySecondTextColor"
+        android:textColor="@color/text4"
         android:textSize="@dimen/edit_text_size_14"
         android:text="@string/mixer_status_info" />
 

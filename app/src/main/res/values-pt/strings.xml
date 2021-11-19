@@ -58,7 +58,7 @@
     <!--/Account-->
 
     <!--Seed-->
-    <string name="save_seed_instruction">Escreva abaixo a semente (seed phrase) e guarde-a em um local seguro. Voce será perguntado para inseri-la na próxima tela e também para recuperar sua carteira.</string>
+    <string name="save_seed_instruction">Escreva abaixo a semente (seed words) e guarde-a em um local seguro. Voce será perguntado para inseri-la na próxima tela e também para recuperar sua carteira.</string>
     <!--/Seed-->
 
     <!--Balance-->

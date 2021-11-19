@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/amount"
             tools:text="0.67320257 DCR (external)"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_16"
             android:includeFontPadding="false"
             android:fontFamily="@font/source_sans_pro" />
@@ -36,15 +36,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_padding_size_4"
-            android:background="@color/grayBackgroundLightColor"
+            android:background="@color/surface"
             android:includeFontPadding="false"
             android:paddingTop="@dimen/margin_padding_size_2"
             android:paddingBottom="@dimen/margin_padding_size_2"
             android:paddingLeft="@dimen/margin_padding_size_4"
             android:paddingRight="@dimen/margin_padding_size_4"
-            android:textColor="@color/lightGrayTextColor"
+            android:textColor="@color/text3"
             android:textSize="@dimen/edit_text_size_12"
             android:visibility="gone"
+            tools:visibility="visible"
             app:fontFamily="@font/source_sans_pro_regular"
             tools:text="Wallet 2" />
 
@@ -56,7 +57,8 @@
         android:id="@+id/address"
         tools:text="911dcc4f7572b3853d10489f837fd14a0f1eb01cb005bf3113c62bf410c9eb34:0"
         android:breakStrategy="simple"
-        android:textColor="@color/blue"
+        android:background="@drawable/surface_ripple"
+        android:textColor="@color/primary"
         android:textSize="@dimen/edit_text_size_14"
         android:fontFamily="@font/source_sans_pro"
         android:layout_marginTop="@dimen/margin_padding_size_4" />

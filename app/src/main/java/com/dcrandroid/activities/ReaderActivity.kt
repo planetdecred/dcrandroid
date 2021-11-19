@@ -25,7 +25,8 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import kotlinx.android.synthetic.main.qr_reader_layout.*
 
-class ReaderActivity : BaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback, BarcodeCallback {
+class ReaderActivity : BaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
+    BarcodeCallback {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +36,13 @@ class ReaderActivity : BaseActivity(), ActivityCompat.OnRequestPermissionsResult
         val allowed = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
         if (allowed == PackageManager.PERMISSION_DENIED) {
             val dialog = InfoDialog(this)
-                    .setDialogTitle(getString(R.string.permission))
-                    .setMessage(getString(R.string.camera_permission_scan))
-                    .setPositiveButton(getString(R.string.ok), DialogInterface.OnClickListener { _, _ ->
-                        val permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.VIBRATE)
-                        ActivityCompat.requestPermissions(this@ReaderActivity, permissions, 200)
-                    })
+                .setDialogTitle(getString(R.string.permission))
+                .setMessage(getString(R.string.camera_permission_scan))
+                .setPositiveButton(getString(R.string.ok), DialogInterface.OnClickListener { _, _ ->
+                    val permissions =
+                        arrayOf(Manifest.permission.CAMERA, Manifest.permission.VIBRATE)
+                    ActivityCompat.requestPermissions(this@ReaderActivity, permissions, 200)
+                })
             dialog.setCancelable(false)
             dialog.show()
         } else {
@@ -48,7 +50,11 @@ class ReaderActivity : BaseActivity(), ActivityCompat.OnRequestPermissionsResult
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 200) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

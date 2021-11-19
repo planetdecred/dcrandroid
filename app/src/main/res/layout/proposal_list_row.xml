@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:background="@drawable/ripple_bg_white_corners_8dp"
+    android:background="@drawable/ripple_bg_surface_corners_8dp"
     android:focusable="true"
     android:clickable="true"
     android:elevation="@dimen/margin_padding_size_4"
@@ -31,13 +31,13 @@
 
         <TextView
             android:id="@+id/proposal_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:includeFontPadding="false"
             android:paddingRight="5dp"
             android:text="PR by Monde Public Relations - Phase Two"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_18"
             android:textStyle="bold"
             app:fontFamily="@font/source_sans_pro" />
@@ -47,12 +47,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_dark_green_corners_4dp"
-            android:gravity="right"
+            android:gravity="end"
             android:paddingLeft="5dp"
-
             android:paddingRight="5dp"
             android:text="Approved"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/background"
             android:textSize="@dimen/edit_text_size_14"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -75,17 +74,17 @@
             android:textSize="@dimen/edit_text_size_16"
             android:includeFontPadding="false"
             app:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/blue" />
+            android:textColor="@color/primary" />
 
         <TextView
             android:id="@+id/proposal_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:gravity="right"
+            android:gravity="end"
             android:includeFontPadding="false"
             android:text="published 9 months ago"
-            android:textColor="@color/darkBlueTextColor"
+            android:textColor="@color/text1"
             android:textSize="@dimen/edit_text_size_14"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -108,17 +107,17 @@
             android:textSize="@dimen/edit_text_size_16"
             android:includeFontPadding="false"
             app:fontFamily="@font/source_sans_pro"
-            android:textColor="@color/darkerBlueGrayTextColor" />
+            android:textColor="@color/text2" />
 
         <TextView
             android:id="@+id/proposal_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:gravity="right"
+            android:gravity="end"
             android:includeFontPadding="false"
             android:text="Version 2"
-            android:textColor="@color/darkerBlueGrayTextColor"
+            android:textColor="@color/text2"
             android:textSize="@dimen/edit_text_size_14"
             app:fontFamily="@font/source_sans_pro" />
 
@@ -145,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="@dimen/edit_text_size_12"
-            android:textColor="@color/darkBlueTextColor" />
+            android:textColor="@color/text1" />
 
     </RelativeLayout>
 

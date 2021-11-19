@@ -7,7 +7,7 @@
 package com.dcrandroid.adapter
 
 import android.content.Context
-import android.graphics.Color
+import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.data.Transaction
@@ -30,16 +29,20 @@ import kotlinx.android.synthetic.main.transaction_row.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-// TODO: A joint class is needed for transactions and overview pages to avoid redundancy.
-class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) : RecyclerView.Adapter<TransactionListViewHolder>() {
+class TransactionListAdapter(val context: Context, val transactions: ArrayList<Transaction>) :
+    RecyclerView.Adapter<TransactionListViewHolder>() {
 
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val layoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val multiWallet = WalletData.multiWallet
 
     private val spendUnconfirmedFunds: Boolean
 
     init {
-        spendUnconfirmedFunds = multiWallet!!.readBoolConfigValueForKey(Dcrlibwallet.SpendUnconfirmedConfigKey, Constants.DEF_SPEND_UNCONFIRMED)
+        spendUnconfirmedFunds = multiWallet!!.readBoolConfigValueForKey(
+            Dcrlibwallet.SpendUnconfirmedConfigKey,
+            Constants.DEF_SPEND_UNCONFIRMED
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionListViewHolder {
@@ -70,12 +73,12 @@ class TransactionListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 fun TextView.setPending() {
     this.setText(R.string.pending)
-    this.setTextColor(Color.parseColor("#8997a5"))
+    this.setTextColor(context.getColor(R.color.text3))
 }
 
 fun TextView.setConfirmed(timestamp: Long) {
     this.text = getTimestamp(this.context, timestamp * 1000) // convert seconds to milliseconds
-    this.setTextColor(Color.parseColor("#596d81"))
+    this.setTextColor(context.getColor(R.color.text4))
 }
 
 fun getTimestamp(context: Context, timestamp: Long): String {
@@ -94,8 +97,14 @@ fun getTimestamp(context: Context, timestamp: Long): String {
         DateUtils.isToday(timestamp) -> context.getString(R.string.today)
         yesterday > difference -> context.getString(R.string.yesterday)
         week > difference -> SimpleDateFormat("EE", Locale.getDefault()).format(timestamp)
-        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat(context.getString(R.string.month_day_format), Locale.getDefault()).format(timestamp)
-        else -> SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault()).format(timestamp)
+        today.get(Calendar.MONTH) != txDate.get(Calendar.MONTH) && (month > difference) -> SimpleDateFormat(
+            context.getString(R.string.month_day_format),
+            Locale.getDefault()
+        ).format(timestamp)
+        else -> SimpleDateFormat(
+            context.getString(R.string.date_format),
+            Locale.getDefault()
+        ).format(timestamp)
     }
 }
 
@@ -103,6 +112,7 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
 
     val context = layoutRow.context
     val multiWallet = WalletData.multiWallet!!
+    val wallet = multiWallet.walletWithID(transaction.walletID)
 
     layoutRow.tx_icon.setImageResource(transaction.iconResource)
 
@@ -125,27 +135,57 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
     }
 
     if (transaction.type == Dcrlibwallet.TxTypeRegular) {
-        if (transaction.isMixed) {
-            layoutRow.amount.text = context.getString(R.string.mix)
+        val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
+            -transaction.amount
         } else {
-            val txAmount = if (transaction.direction == Dcrlibwallet.TxDirectionSent) {
-                -transaction.amount
-            } else {
-                transaction.amount
-            }
-            val strAmount = CoinFormat.formatDecred(txAmount)
+            transaction.amount
+        }
+        val strAmount = CoinFormat.formatDecred(txAmount)
 
-            layoutRow.amount.apply {
-                text = CoinFormat.format(strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr), 0.7f)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_20))
-            }
+        layoutRow.amount.apply {
+            text = CoinFormat.format(
+                strAmount + Constants.NBSP + layoutInflater.context.getString(R.string.dcr),
+                0.7f
+            )
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                context.resources.getDimension(R.dimen.edit_text_size_20)
+            )
         }
 
         layoutRow.ticket_price.hide()
 
-    } else if (Dcrlibwallet.txMatchesFilter(transaction.type, transaction.direction, Dcrlibwallet.TxFilterStaking)) {
+    } else if (transaction.type == Dcrlibwallet.TxTypeMixed) {
 
-        layoutRow.amount.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.edit_text_size_18))
+        var mixedAmount = CoinFormat.format(transaction.mixDenomination)
+        mixedAmount = CoinFormat.applyColor(
+            mixedAmount,
+            context.resources.getColor(R.color.text1)
+        )
+
+        val amountBuilder = SpannableStringBuilder(mixedAmount)
+        if (transaction.mixCount > 1) {
+            amountBuilder.append("\t x${transaction.mixCount}")
+        }
+        layoutRow.ticket_price.apply {
+            show()
+            text = amountBuilder
+        }
+
+        layoutRow.amount.apply {
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                context.resources.getDimension(R.dimen.edit_text_size_18)
+            )
+            setText(R.string.mixed)
+        }
+
+    } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterStaking)) {
+
+        layoutRow.amount.setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            context.resources.getDimension(R.dimen.edit_text_size_18)
+        )
 
         layoutRow.ticket_price.apply {
             show()
@@ -155,15 +195,12 @@ fun populateTxRow(transaction: Transaction, layoutRow: View, layoutInflater: Lay
         var title = 0
         when (transaction.type) {
             Dcrlibwallet.TxTypeTicketPurchase -> {
-                title = if (transaction.confirmations < BuildConfig.TicketMaturity) {
+                title = if (transaction.matchesFilter(Dcrlibwallet.TxFilterImmature)) {
                     R.string.immature
+                } else if (transaction.matchesFilter(Dcrlibwallet.TxFilterLive)) {
+                    R.string.live
                 } else {
-                    if (multiWallet.walletWithID(transaction.walletID)
-                                    .ticketHasVotedOrRevoked(transaction.hash)) {
-                        R.string.purchased
-                    } else {
-                        R.string.live
-                    }
+                    R.string.purchased
                 }
             }
             Dcrlibwallet.TxTypeVote -> {
