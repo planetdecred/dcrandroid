@@ -641,6 +641,7 @@
     <string name="no_votes_percent">Non: %1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">Oui: %1$d (%2$.2f%%)  Non: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s par %2$s</string>
+    <string name="no_internet">Pas de connexion Internet</string>
     <string name="status">Statut</string>
     <string name="reward">Récompense</string>
     <string name="days_to_vote">Jours pour voter</string>
