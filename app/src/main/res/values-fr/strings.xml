@@ -74,7 +74,7 @@
     <string name="remove_wallet">Supprimer le porte-monnaie de cet appareil</string>
     <string name="remove_wallet_prompt">Supprimer le porte-monnaie de cet application ?</string>
     <string name="remove_watch_wallet_prompt"> Supprimer le porte-monnaie en lecture seule de cet appareil?</string>
-    <string name="remove_wallet_message">Assurez-vous d\'avoir une sauvegarde de votre phrase de récupération avant de supprimer le porte-monnaie.</string>
+    <string name="remove_wallet_message">Assurez-vous d\'avoir une sauvegarde de vos mots de récupération avant de supprimer le porte-monnaie.</string>
     <string name="error_copied">Erreur copiée</string>
     <string name="version">Version</string>
     <string name="build_date">Build date</string>
@@ -97,8 +97,8 @@
 
     <!--Seed-->
     <string name="save_seed_instruction">Écrire tous les 33 mots dans le bon ordre.</string>
-    <string name="backup_seed_phrase">Sauvegarder la phrase de récupération</string>
-    <string name="verify_seed_info">Vérifier la sauvegarde de votre phrase de récupération afin de pouvoir récupérer vos fonds.</string>
+    <string name="backup_seed_phrase">Sauvegarder les mots de récupération</string>
+    <string name="verify_seed_info">Vérifier la sauvegarde de vos mots de récupération afin de pouvoir récupérer vos fonds.</string>
 
     <!--/Seed-->
 
@@ -376,14 +376,14 @@
     <string name="confirm_to_create_account">Confirmer pour créer le compte</string>
     <string name="unlock_to_start_mixing">Déverrouiller votre porte-monnaie pour débuter le mixage</string>
     <string name="not_backed_up">Non sauvegardé</string>
-    <string name="seed_phase_2_briefing">Vous devrez entrer votre phrase de récupération dans le prochain éran.</string>
+    <string name="seed_phase_2_briefing">Vous devrez entrer vos mots de récupération dans le prochain éran.</string>
     <string name="verify">Vérifier</string>
-    <string name="seed_instruction_1">La <b>phrase de récupération à 33 mots</b> est EXTRÊMEMENT IMPORTANTE.</string>
-    <string name="seed_instruction_2">La phrase de récupération est <b>la seule manière</b> de restaurer votre porte-monnaie.</string>
-    <string name="seed_instruction_3">Il est recommandé de stocker votre phrase de récupération dans (ex. l\'écrire sur papier).</string>
-    <string name="seed_instruction_4">Il est fortement découragé de stocker votre phrase de récupération dans (ex. capture d\'écran).</string>
-    <string name="seed_instruction_5">N\'importe qui avec votre phrase de récupération. NE PAS la montrer à qui que ce soit.</string>
-    <string name="view_seed_phrase">Voir la phrase de récupération</string>
+    <string name="seed_instruction_1">Les <b>33 mots de récupération</b> sont EXTRÊMEMENT IMPORTANTS.</string>
+    <string name="seed_instruction_2">Les mots de récupération sont <b>la seule manière</b> de restaurer votre porte-monnaie.</string>
+    <string name="seed_instruction_3">Il est recommandé de stocker vos mots de récupération dans un <b><font color="#71b054">format physique</font></b> (ex. l\'écrire sur papier).</string>
+    <string name="seed_instruction_4">Il est fortement découragé de stocker vos mots de récupération dans un <b><font color="#ed6d47">format numérique</font></b> (ex. capture d\'écran).</string>
+    <string name="seed_instruction_5">N\'importe qui avec vos mots de récupération <b><font color="#ed6d47">peut voler vos fonds</font></b>. NE PAS la montrer à qui que ce soit.</string>
+    <string name="view_seed_phrase">Voir les mots de récupération</string>
     <string name="seed_verification_failed">Échec de la vérification. Merci de vérifier chacun des mots et de réessayer.</string>
     <string name="back_to_wallets">Retour aux porte-monnaies</string>
     <string name="tx_sort_all">Tous (%1$d)</string>
@@ -423,8 +423,8 @@
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
     <string name="balance_after_send">Solde après envoi</string>
     <string name="confirm_to_send">Confirmer l\'envoi</string>
-    <string name="confirm_show_seed">"Confirmer pour afficher la phrase de récupération"</string>
-    <string name="confirm_verify_seed">"Confirmer pour vérifier la phrase de récupération"</string>
+    <string name="confirm_show_seed">"Confirmer pour afficher les mots de récupération"</string>
+    <string name="confirm_verify_seed">"Confirmer pour vérifier les mots de récupération"</string>
     <string name="send_from_account"><![CDATA[Envoi depuis <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
     <string name="send_invalid">Pas valide pour envoi</string>
     <string name="to_destination_address">Vers adresse de destination</string>
@@ -476,10 +476,10 @@
     <string name="exchange_rate_fetch_error">Le taux de change n\'est pas récupéré</string>
     <string name="retry">Réessayer</string>
     <string name="message_signed">Message signé</string>
-    <string name="restore_wallet_title">Restaurer depuis la phrase de récupération</string>
-    <string name="verify_seed_phrase">Vérifier la phrase de récupération</string>
+    <string name="restore_wallet_title">Restaurer depuis les mots de récupération</string>
+    <string name="verify_seed_phrase">Vérifier les mots de récupération</string>
     <string name="restore">Restaurer</string>
-    <string name="restore_wallet_instruction">Entrer votre phrase de récupération dans le bon ordre.</string>
+    <string name="restore_wallet_instruction">Entrer vos mots de récupération dans le bon ordre.</string>
     <string name="keep_in_mind">Rappelez-vous</string>
     <string name="invalid_restore_seed">Échec de la restauration. Merci de vérifier tous les mots et réessayer.</string>
     <string name="create_watch_only_wallet">Créer un porte-monnaie en lecture seule</string>
@@ -496,7 +496,7 @@
     <string name="get_started">Débuter</string>
     <string name="back">Retour</string>
     <string name="use_fingerprint">Utiliser empreinte digitale</string>
-    <string name="overview_backup_seed_instruction">Ecrivez votre phrase de récupération pour pouvoir récupérer vos fonds plus tard.</string>
+    <string name="overview_backup_seed_instruction">Ecrivez vos mots de récupération pour pouvoir récupérer vos fonds plus tard.</string>
     <string name="go_to_wallets">Aller aux porte-monnaies</string>
     <string name="wallets_need_backup">Voulez-vous sauvegarder vos mots de récupération maintenant ?</string>
     <string name="startup_password">Mot de passe de démarrage</string>
@@ -515,9 +515,9 @@
     <string name="startup_security_changed">PIN/mot de passe changé</string>
     <string name="spending_passphrase_changed">PIN/mot de passe de dépense changé</string>
     <string name="wallets_log">Log des porte-monnaies</string>
-    <string name="write_down_seed_phrase">Écrire la phrase de récupération</string>
+    <string name="write_down_seed_phrase">Écrire les mots de récupération</string>
     <string name="step_1_2" tools:ignore="TypographyFractions">Étape 1/2</string>
-    <string name="your_33_word_seed_phrase">Votre phrase de récupération à 33 mots</string>
+    <string name="your_33_word_seed_phrase">Vos 33 mots de récupération</string>
     <string name="i_have_wrote_down_all_33_words">J\'ai écrits tous les 33 mots</string>
     <string name="security_tools">Outils de Sécurité</string>
     <string name="security_tools_message">Différents outils qui aident à différents aspcects de la sécurité de la crypto-monnaie seront situés ici.</string>
@@ -545,8 +545,8 @@
     <string name="wallets_limit_error">Limite de 1 porte-monnaie pour 1 giga de ram sur l\'appareil</string>
     <string name="disconnect_add_wallet">Déconnecter/annuler la synchronisation avant d\'ajouter un porte-monnaie</string>
     <string name="disconnect_delete_wallet">Déconnecter/annuler la synchronisation avant de supprimer un porte-monnaie</string>
-    <string name="seed_backup_success_msg">Soyez certain de conserver votre phrase de récupération dans un lieu sûr.</string>
-    <string name="seed_backup_verified">Votre phrase de récupération est vérifiée</string>
+    <string name="seed_backup_success_msg">Soyez certain de conserver vos mots de récupération dans un lieu sûr.</string>
+    <string name="seed_backup_verified">Vos mots de récupération est vérifiée</string>
     <string name="rebroadcast_tx_success">Transactions non-minées republiées vers le réseau decred</string>
     <string name="confirm_create_needed_accounts">Confirmer pour créer les comptes nécessaires</string>
     <string name="confirm_setup_mixer">Confirmer pour configurer les comptes de mixage</string>
