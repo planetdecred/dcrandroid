@@ -130,15 +130,31 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/transaction_size"
-                android:textColor="@color/text4"
-                android:textSize="14sp"
-                android:includeFontPadding="false"
-                app:fontFamily="@font/source_sans_pro" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_size"
+                    android:textColor="@color/text4"
+                    android:textSize="14sp"
+                    android:includeFontPadding="false"
+                    app:fontFamily="@font/source_sans_pro" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/iv_tx_info"
+                    android:padding="@dimen/margin_padding_size_8"
+                    android:layout_marginStart="@dimen/margin_padding_size_8"
+                    android:background="@drawable/ic_info"
+                    app:srcCompat="@drawable/ic_close" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tx_size"
