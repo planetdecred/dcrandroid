@@ -89,11 +89,4 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
             0f
         }
     }
-
-    fun ScrollView.scrollToBottom() {
-        val lastChild = getChildAt(childCount - 1)
-        val bottom = lastChild.bottom + paddingBottom
-        val delta = bottom - (scrollY+ height)
-        smoothScrollBy(0, delta)
-    }
 }
