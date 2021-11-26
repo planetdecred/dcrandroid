@@ -27,6 +27,7 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
 
     private var btnPositiveClick: DialogInterface.OnClickListener? = null
     private var btnNegativeClick: DialogInterface.OnClickListener? = null
+    private var btnNeutralClick: DialogInterface.OnClickListener? = null
 
     private var messageClick: View.OnClickListener? = null
 
@@ -39,6 +40,9 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
     private var btnNegativeText: String? = null
     var btnNegativeColor: Int = R.color.blue
 
+    private var btnNeutralText: String? = null
+    var btnNeutralColor: Int = R.color.blue
+
     private var iconBackground = R.color.white
     private var icon: Int? = null
 
@@ -50,6 +54,7 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
 
         val btnPositive = findViewById<TextView>(R.id.btn_positive)
         val btnNegative = findViewById<TextView>(R.id.btn_negative)
+        val btnNeutral = findViewById<TextView>(R.id.btn_neutral)
 
         val tvTitle = findViewById<TextView>(R.id.title)
         val tvMessage = findViewById<TextView>(R.id.message)
@@ -82,7 +87,14 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
             btnNegative.setOnClickListener(this)
         }
 
-        if (btnNegativeText == null && btnPositiveText == null) {
+        if (btnNeutralText != null) {
+            btnNeutral.visibility = View.VISIBLE
+            btnNeutral.text = btnNeutralText
+            btnNeutral.setTextColor(context.getColor(btnNeutralColor))
+            btnNeutral.setOnClickListener(this)
+        }
+
+        if (btnNegativeText == null && btnPositiveText == null && btnNeutralText == null) {
             findViewById<LinearLayout>(R.id.btn_layout).visibility = View.GONE
         }
 
@@ -143,6 +155,22 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
         return this
     }
 
+    fun setNeutralButton(
+            text: Int,
+            listener: DialogInterface.OnClickListener? = null
+    ): InfoDialog {
+        return this.setNeutralButton(context.getString(text), listener)
+    }
+
+    fun setNeutralButton(
+            text: String,
+            listener: DialogInterface.OnClickListener? = null
+    ): InfoDialog {
+        this.btnNeutralText = text
+        this.btnNeutralClick = listener
+        return this
+    }
+
     fun setIcon(
         @DrawableRes iconResource: Int,
         @DrawableRes iconBackground: Int = R.color.white
@@ -168,6 +196,11 @@ class InfoDialog(context: Context) : Dialog(context), View.OnClickListener {
             R.id.btn_negative -> {
                 if (btnNegativeClick != null) {
                     btnNegativeClick?.onClick(this, DialogInterface.BUTTON_NEGATIVE)
+                }
+            }
+            R.id.btn_neutral -> {
+                if (btnNeutralClick != null) {
+                    btnNeutralClick?.onClick(this, DialogInterface.BUTTON_NEUTRAL)
                 }
             }
         }

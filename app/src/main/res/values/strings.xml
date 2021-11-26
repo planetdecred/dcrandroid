@@ -37,7 +37,7 @@
     <string name="general">General</string>
     <string name="view_on_dcrdata">View on dcrdata</string>
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
-    <string name="exit_cap">EXIT</string>
+    <string name="exit_app">EXIT</string>
     <string name="delete">Delete</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
@@ -641,6 +641,8 @@
     <string name="maturity">Maturity</string>
     <string name="verify_seed_header_instruction">Select the correct words to verify.</string>
     <string name="tx_size_info"><![CDATA[Transaction size is determined by how many inputs and outputs are required to fulfill a transaction.<br/><br/>Typically, larger quantities transacted require larger transaction sizes, which in turn create larger transaction fees.]]></string>
+    <string name="low_storage_space">Low Storage Space</string>
+    <string name="low_storage_message">Your device storage space is low and is not enough to sync a wallet. Required space to sync a wallet is ~%1$dmb while your free internal memory is %2$dmb</string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>

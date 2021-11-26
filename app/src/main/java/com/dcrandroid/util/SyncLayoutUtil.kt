@@ -7,12 +7,18 @@
 package com.dcrandroid.util
 
 import android.content.Context
+import android.content.Intent
+import android.os.StatFs
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dcrandroid.BuildConfig
 import com.dcrandroid.R
 import com.dcrandroid.adapter.MultiWalletSyncDetailsAdapter
+import com.dcrandroid.data.Constants
+import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.isShowing
 import com.dcrandroid.extensions.show
@@ -26,6 +32,7 @@ import kotlinx.android.synthetic.main.single_wallet_sync_details.view.*
 import kotlinx.android.synthetic.main.synced_unsynced_layout.view.*
 import kotlinx.android.synthetic.main.syncing_layout.view.*
 import kotlinx.coroutines.*
+import kotlin.system.exitProcess
 
 class SyncLayoutUtil(
     private val syncLayout: LinearLayout,
@@ -97,7 +104,7 @@ class SyncLayoutUtil(
                     it.isEnabled = true
                 }
             } else {
-                checkNetworkAvailability()
+                checkStorageSpace()
             }
         }
     }
@@ -517,5 +524,34 @@ class SyncLayoutUtil(
 
         publishSyncProgress(report.generalSyncProgress)
         displaySyncingLayoutIfNotShowing()
+    }
+
+    private fun checkStorageSpace() {
+        val currentTime = System.currentTimeMillis() / 1000 // Divided by 1000 to convert to unix timestamp
+        val estimatedBlocksSinceGenesis: Long = (currentTime - BuildConfig.GenesisTimestamp) / BuildConfig.TargetTimePerBlock
+
+        val estimatedHeadersSize = estimatedBlocksSinceGenesis / 1000 // estimate of block headers(since genesis) size in mb
+        val freeInternalMemory = Utils.getFreeMemory(context)
+
+        if (estimatedHeadersSize > freeInternalMemory) {
+            InfoDialog(context)
+                    .setDialogTitle(R.string.low_storage_space)
+                    .setMessage(context.getString(R.string.low_storage_message, estimatedHeadersSize, freeInternalMemory))
+                    .cancelable(false)
+                    .setPositiveButton(
+                            context.getString(R.string.got_it)
+                    ) { _, _ ->
+                        context.sendBroadcast(Intent(Constants.SYNCED))
+                    }
+                    .setNeutralButton(
+                            context.getString(R.string.exit_app)
+                    ) { _, _ ->
+                        android.os.Process.killProcess(android.os.Process.myPid())
+                        exitProcess(0)
+                    }
+                    .show()
+        } else {
+            checkNetworkAvailability()
+        }
     }
 }
