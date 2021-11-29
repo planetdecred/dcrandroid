@@ -10,7 +10,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/surface"
     android:orientation="vertical">
 
     <LinearLayout

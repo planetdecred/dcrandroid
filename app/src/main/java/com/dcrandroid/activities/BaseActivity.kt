@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.openedWalletsList
+import com.dcrandroid.preference.PreferenceHelper
 import com.dcrandroid.util.WalletData
 import dcrlibwallet.AccountMixerNotificationListener
 import dcrlibwallet.MultiWallet
@@ -36,8 +37,11 @@ open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener 
     internal val walletData: WalletData = WalletData.instance
     internal val multiWallet: MultiWallet?
         get() = walletData.multiWallet
+    var preferenceHelper: PreferenceHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        preferenceHelper = PreferenceHelper()
+        preferenceHelper!!.PreferenceHelper(this)
         setColorTheme()
         super.onCreate(savedInstanceState)
 
@@ -74,7 +78,11 @@ open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener 
             }
 
         } else {
-            lastDayNightMode = AppCompatDelegate.getDefaultNightMode()
+            val colorTheme = preferenceHelper?.getInt(Constants.COLOR_THEME, Constants.DEF_COLOR_THEME)
+            if (colorTheme != null) {
+                lastDayNightMode = nightMode(colorTheme)
+                AppCompatDelegate.setDefaultNightMode(lastDayNightMode)
+            }
         }
     }
 
