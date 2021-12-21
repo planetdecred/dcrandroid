@@ -7,12 +7,14 @@
 package com.dcrandroid.activities.more
 
 import android.os.Bundle
+import android.view.View
 import android.view.ViewTreeObserver
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
 import com.dcrandroid.data.Constants
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.extensions.toggleVisibility
 import com.dcrandroid.fragments.PasswordPinDialogFragment
 import com.dcrandroid.preference.EditTextPreference
 import com.dcrandroid.preference.ListPreference
@@ -47,6 +49,17 @@ class SettingsActivity : BaseActivity(), ViewTreeObserver.OnScrollChangedListene
             Dcrlibwallet.PoliteiaNotificationConfigKey,
             enable_politeia_notification
         )
+        SwitchPreference(
+            this,
+            Constants.GOVERNANCE_SETTING,
+            enable_governance
+        ) { isOn ->
+            enable_politeia_notification.visibility = if (isOn) View.VISIBLE else View.GONE
+            return@SwitchPreference isOn
+        }
+
+        enable_politeia_notification.visibility =
+            if (multiWallet?.readBoolConfigValueForKey(Constants.GOVERNANCE_SETTING, false) == true) View.VISIBLE else View.GONE
 
         enableStartupSecurity = SwitchPreference(
             this,

@@ -48,7 +48,9 @@ public class Constants {
             VOTE_SUMMARY = "votesummary",
             COLOR_THEME = "color_theme",
             MIXED = "mixed",
-            UNMIXED = "unmixed";
+            UNMIXED = "unmixed",
+            HAS_SHOW_POLITEIA_WELCOME = "has_show_politeia_welcome",
+            GOVERNANCE_SETTING = "governance_setting";
 
     public static final int TRANSACTION_SUMMARY_ID = 5552478,
             PROPOSAL_SUMMARY_ID = 5552479,
