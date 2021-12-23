@@ -13,7 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
+import com.dcrandroid.activities.PoliteiaWelcomeActivity
 import com.dcrandroid.activities.more.*
+import com.dcrandroid.data.Constants
 import com.dcrandroid.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_more.*
 
@@ -31,7 +33,9 @@ class MoreFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         setToolbarTitle(R.string.more, false)
-
+        val hasShowPoliteiaWelcome =
+            multiWallet?.readBoolConfigValueForKey(Constants.HAS_SHOW_POLITEIA_WELCOME, false)
+                ?: false
         val items = arrayOf(
             ListItem(
                 R.string.settings,
@@ -46,7 +50,10 @@ class MoreFragment : BaseFragment() {
             ListItem(
                 R.string.politeia,
                 R.drawable.ic_politeia,
-                Intent(context, PoliteiaActivity::class.java)
+                Intent(
+                    context,
+                    if (hasShowPoliteiaWelcome) PoliteiaActivity::class.java else PoliteiaWelcomeActivity::class.java
+                )
             ),
             ListItem(
                 R.string.help,

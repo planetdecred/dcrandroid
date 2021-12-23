@@ -677,6 +677,12 @@
     <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
     <string name="no_internet">No internet connection</string>
+    <string name="governance">Governance</string>
+    <string name="how_does_governance_work">How does Governance Work?</string>
+    <string name="politeia_community_info">The Decred community can participate in proposal discussions for new initiatives and request funding for these initiatives.</string>
+    <string name="politeia_stakeholders_info">Decred stakeholders can vote if these proposals should be approved and paid for by the Decred Treasury.</string>
+    <string name="politeia_welcome_info">Proposals and politeia notificationas can be enabled/disabled on the settings page.</string>
+    <string name="fetch_proposals">Fetch proposals</string>
     <!--/Politeia-->
 
 </resources>

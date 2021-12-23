@@ -484,12 +484,15 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     override fun onProposalsSynced() {
     }
 
+    private val isEnablePoliteiaNotification: Boolean
+        get() = multiWallet!!.readBoolConfigValueForKey(
+            Dcrlibwallet.PoliteiaNotificationConfigKey, false
+        ) && multiWallet!!.readBoolConfigValueForKey(
+            Constants.GOVERNANCE_SETTING, false
+        )
+
     override fun onNewProposal(proposal: Proposal) {
-        if (multiWallet!!.readBoolConfigValueForKey(
-                Dcrlibwallet.PoliteiaNotificationConfigKey,
-                false
-            )
-        ) {
+        if (isEnablePoliteiaNotification) {
             Utils.sendProposalNotification(
                 this,
                 notificationManager,
@@ -500,11 +503,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onProposalVoteStarted(proposal: Proposal) {
-        if (multiWallet!!.readBoolConfigValueForKey(
-                Dcrlibwallet.PoliteiaNotificationConfigKey,
-                false
-            )
-        ) {
+        if (isEnablePoliteiaNotification) {
             Utils.sendProposalNotification(
                 this,
                 notificationManager,
@@ -515,11 +514,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
     }
 
     override fun onProposalVoteFinished(proposal: Proposal) {
-        if (multiWallet!!.readBoolConfigValueForKey(
-                Dcrlibwallet.PoliteiaNotificationConfigKey,
-                false
-            )
-        ) {
+        if (isEnablePoliteiaNotification) {
             Utils.sendProposalNotification(
                 this,
                 notificationManager,

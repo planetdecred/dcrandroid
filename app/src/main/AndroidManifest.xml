@@ -212,6 +212,10 @@
             android:configChanges="keyboardHidden|orientation|uiMode"
             android:launchMode="singleTop" />
 
+        <activity android:name=".activities.PoliteiaWelcomeActivity"
+            android:configChanges="keyboardHidden|orientation|uiMode"
+            android:launchMode="singleTop" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
