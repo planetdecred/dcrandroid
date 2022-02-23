@@ -15,7 +15,7 @@ installGobind(){
 
 installGomobile(){
     echo "Installing gomobile"
-    export GO111MODULE=off
+    export GO111MODULE=on
     go get -u golang.org/x/mobile/cmd/gomobile
     gomobile init
 }
