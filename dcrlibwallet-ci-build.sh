@@ -16,7 +16,6 @@ installGobind(){
 installGomobile(){
     echo "Installing gomobile"
     export GO111MODULE=on
-    go get -u golang.org/x/mobile/cmd/gobind
     go get -u golang.org/x/mobile/cmd/gomobile
     gomobile init
 }
@@ -43,5 +42,6 @@ mkdir -p $GOPATH/src/github.com/planetdecred
 git clone https://github.com/planetdecred/dcrlibwallet $GOPATH/src/github.com/planetdecred/dcrlibwallet
 cd $GOPATH/src/github.com/planetdecred/dcrlibwallet
 export GO111MODULE=on && go mod vendor && export GO111MODULE=off
+go get golang.org/x/mobile/bind
 gomobile bind -target=android/386
 cp dcrlibwallet.aar $DcrandroidDir/app/libs/dcrlibwallet.aar && cd $DcrandroidDir
