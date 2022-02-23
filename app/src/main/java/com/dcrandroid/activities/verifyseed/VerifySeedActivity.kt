@@ -157,6 +157,11 @@ class VerifySeedActivity : BaseActivity() {
         return ShuffledSeeds(arr)
     }
 
+    override fun onResume() {
+        super.onResume()
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
     private fun initSeedAdapter() {
         val allSeedWords = getMultiSeedList()
         verifySeedAdapter = VerifySeedAdapter(this, allSeedWords) { seedIndex ->

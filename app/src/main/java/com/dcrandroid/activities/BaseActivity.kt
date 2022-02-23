@@ -131,6 +131,7 @@ open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener 
 
     override fun onResume() {
         super.onResume()
+        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         multiWallet?.removeAccountMixerNotificationListener(this.javaClass.name)
         multiWallet?.addAccountMixerNotificationListener(this, this.javaClass.name)
         checkMixerStatus()
@@ -138,6 +139,7 @@ open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener 
 
     override fun onPause() {
         super.onPause()
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         multiWallet?.removeAccountMixerNotificationListener(this.javaClass.name)
     }
 

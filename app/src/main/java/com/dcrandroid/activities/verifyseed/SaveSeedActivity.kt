@@ -133,6 +133,11 @@ class SaveSeedActivity : BaseActivity() {
         step_2.isEnabled = true
     }
 
+    override fun onResume() {
+        super.onResume()
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
     inner class VerticalDividerItemDecoration(
         private val space: Int,
         private val verticalOrientation: Boolean

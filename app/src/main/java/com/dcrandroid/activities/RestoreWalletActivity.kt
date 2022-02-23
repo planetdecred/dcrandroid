@@ -61,7 +61,7 @@ class RestoreWalletActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         setContentView(R.layout.activity_restore_wallet)
 
         loadSeedSuggestions()
@@ -170,6 +170,12 @@ class RestoreWalletActivity : BaseActivity() {
             createWallet(dialog, walletName, passphrase, passphraseType, enteredSeeds)
         }.show(this)
     }
+
+    override fun onResume() {
+        super.onResume()
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
 
     private fun createWallet(
         dialog: FullScreenBottomSheetDialog,
