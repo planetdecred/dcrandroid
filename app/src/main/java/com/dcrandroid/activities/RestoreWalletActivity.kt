@@ -176,7 +176,6 @@ class RestoreWalletActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
-
     private fun createWallet(
         dialog: FullScreenBottomSheetDialog,
         walletName: String,
