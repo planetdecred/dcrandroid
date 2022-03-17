@@ -37,7 +37,7 @@ class AccountMixerActivity : BaseActivity(), AccountMixerNotificationListener,
     override fun onResume() {
         super.onResume()
         multiWallet!!.removeTxAndBlockNotificationListener(this.javaClass.name)
-        multiWallet!!.addTxAndBlockNotificationListener(this, this.javaClass.name)
+        multiWallet!!.addTxAndBlockNotificationListener(this, true, this.javaClass.name)
         multiWallet!!.removeAccountMixerNotificationListener(this.javaClass.name)
         multiWallet!!.addAccountMixerNotificationListener(this, this.javaClass.name)
         setMixerStatus()
