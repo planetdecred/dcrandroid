@@ -30,7 +30,7 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
         multiWallet?.removeTxAndBlockNotificationListener(TAG)
 
         multiWallet?.addSyncProgressListener(this, TAG)
-        multiWallet?.addTxAndBlockNotificationListener(this, TAG)
+        multiWallet?.addTxAndBlockNotificationListener(this, true, TAG)
     }
 
     override fun onResume() {
