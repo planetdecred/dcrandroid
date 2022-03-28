@@ -106,7 +106,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             multiWallet?.politeia!!.removeNotificationListener(TAG)
 
             multiWallet?.addSyncProgressListener(this, TAG)
-            multiWallet?.addTxAndBlockNotificationListener(this, TAG)
+            multiWallet?.addTxAndBlockNotificationListener(this, true, TAG)
             multiWallet?.politeia!!.addNotificationListener(this, TAG)
         } catch (e: Exception) {
             e.printStackTrace()

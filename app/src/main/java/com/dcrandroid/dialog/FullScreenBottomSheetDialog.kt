@@ -120,7 +120,7 @@ open class FullScreenBottomSheetDialog(val dismissListener: DialogInterface.OnDi
         multiWallet.removeTxAndBlockNotificationListener(TAG)
 
         multiWallet.addSyncProgressListener(this, TAG)
-        multiWallet.addTxAndBlockNotificationListener(this, TAG)
+        multiWallet.addTxAndBlockNotificationListener(this, true, TAG)
 
         isForeground = true
         if (requiresDataUpdate) {
