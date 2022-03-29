@@ -7,6 +7,12 @@ installGo(){
     sudo mv go /usr/local
 }
 
+installGobind(){
+    echo "Installing gobind"
+    export GO111MODULE=off
+    go get -u golang.org/x/mobile/cmd/gobind
+}
+
 installGomobile(){
     echo "Installing gomobile"
     export GO111MODULE=off
@@ -20,6 +26,10 @@ fi
 
 export GOPATH=$HOME/go
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+
+if !(hash gobind 2>/dev/null); then
+    installGobind
+fi
 
 if !(hash gomobile 2>/dev/null); then
     installGomobile
