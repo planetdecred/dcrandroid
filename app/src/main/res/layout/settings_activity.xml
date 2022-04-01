@@ -368,7 +368,7 @@
                         android:id="@id/pref_title"
                         android:layout_weight="1"
                         android:includeFontPadding="false"
-                        android:text="Enable politeia notifications"
+                        android:text="@string/enable_politeia_notifications"
                         android:textColor="@color/text1"
                         android:fontFamily="@font/source_sans_pro"
                         android:textSize="@dimen/edit_text_size_16" />

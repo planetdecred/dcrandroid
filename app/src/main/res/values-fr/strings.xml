@@ -649,6 +649,7 @@
     <string name="missed_expired">Raté/Expiré</string>
     <string name="age">Age</string>
     <string name="maturity">Maturité</string>
+    <string name="enable_politeia_notifications">Enable politeia notifications</string>
     <!--/Politeia-->
 
 </resources>

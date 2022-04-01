@@ -647,6 +647,7 @@
     <string name="no_votes_percent">拒绝：%1$d (%2$.2f%%)</string>
     <string name="yes_no_votes_percent">批准： %1$d (%2$.2f%%)  拒绝：%3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s by %2$s</string>
+    <string name="enable_politeia_notifications">Enable politeia notifications</string>
     <!--/Politeia-->
 
 </resources>

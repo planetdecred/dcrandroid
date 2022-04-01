@@ -111,39 +111,11 @@ class ReceiveDialog(dismissListener: DialogInterface.OnDismissListener) :
         Utils.copyToClipboard(top_bar, tv_address.text.toString(), R.string.address_copy_text)
     }
 
-    private fun getLogoBitmap(): Bitmap {
-        val logoDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_qr_dcr)!!
-        val sizePixels = resources.getDimensionPixelOffset(R.dimen.margin_padding_size_80)
-        val bitmap = Bitmap.createBitmap(sizePixels, sizePixels, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        logoDrawable.setBounds(0, 0, canvas.width, canvas.height)
-
-        val rect = Rect(0, 0, canvas.width, canvas.height)
-        val rectF = RectF(rect)
-        val paint = Paint()
-        paint.style = Paint.Style.FILL
-        paint.color = resources.getColor(R.color.surface)
-        paint.isAntiAlias = true
-
-        val radius = resources.getDimension(R.dimen.margin_padding_size_4)
-        canvas.drawRoundRect(rectF, radius, radius, paint)
-        logoDrawable.draw(canvas)
-
-        return bitmap
-    }
-
     private fun overlayLogo(qrBitmap: Bitmap): Bitmap {
         val overlay = Bitmap.createBitmap(qrBitmap.width, qrBitmap.height, qrBitmap.config)
 
-        val logo = getLogoBitmap()
         val canvas = Canvas(overlay)
         canvas.drawBitmap(qrBitmap, 0f, 0f, null)
-        canvas.drawBitmap(
-            logo,
-            ((qrBitmap.width - logo.width) / 2).toFloat(),
-            ((qrBitmap.height - logo.height) / 2).toFloat(),
-            null
-        )
         return overlay
     }
 

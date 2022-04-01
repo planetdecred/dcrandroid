@@ -504,4 +504,37 @@
     <string name="welcome_screen_text">Witaj w portfelu Decred, bezpiecznym oraz mobilnym portfelu typu open-source.</string>
     <string name="mywallet">mójportfel</string>
 
+    <!--    Politeia-->
+    <string name="politeia">Politeia</string>
+    <string name="proposal_details">Proposal Details</string>
+    <string name="ago">ago</string>
+    <string name="now">now</string>
+    <string name="status_abandoned">Abandoned</string>
+    <string name="status_invalid">Invalid</string>
+    <string name="status_not_authorized">Not authorized by author</string>
+    <string name="status_authorized">Authorized by author</string>
+    <string name="status_vote_started">Vote started</string>
+    <string name="status_approved">Approved</string>
+    <string name="status_rejected">Rejected</string>
+    <string name="status_non_existent">Does not exist</string>
+    <string name="no_proposals">No proposals for selected category.</string>
+    <string name="proposal_in_discussion">In Discussion (%1$d)</string>
+    <string name="proposal_active">Active (%1$d)</string>
+    <string name="proposal_approved">Approved (%1$d)</string>
+    <string name="proposal_rejected">Rejected (%1$d)</string>
+    <string name="proposal_abandoned">Abandoned (%1$d)</string>
+    <string name="politeia_notifications">Politeia Notifications</string>
+    <string name="new_proposal">New Proposal</string>
+    <string name="vote_started">Vote Started</string>
+    <string name="vote_ended">Vote Ended</string>
+    <string name="share_proposal">Share Proposal Link</string>
+    <string name="text_pain" translatable="false">text/plain</string>
+    <string name="comments">%d comments</string>
+    <string name="version_number">version %s</string>
+    <string name="yes_votes_percent">Yes: %1$d (%2$.2f%%)</string>
+    <string name="no_votes_percent">No: %1$d (%2$.2f%%)</string>
+    <string name="yes_no_votes_percent">Yes: %1$d (%2$.2f%%)  No: %3$d (%4$.2f%%)</string>
+    <string name="proposal_name_author">%1$s by %2$s</string>
+    <string name="enable_politeia_notifications">Enable politeia notifications</string>
+    <!--    Politeia-->
 </resources>
