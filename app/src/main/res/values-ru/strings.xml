@@ -157,4 +157,9 @@
     <string name="crash_report_copied">Отчёт о сбое был скопирован.</string>
     <string name="hide_report">Скрыть отчёт</string>
     <string name="view_report">Просмотреть отчёт</string>
+
+
+    <!--    Politeia-->
+    <string name="enable_politeia_notifications">Enable politeia notifications</string>
+    <!--    Politeia-->
 </resources>

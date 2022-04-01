@@ -212,4 +212,7 @@
     <string name="not_connected_to_wifi">No conectado al Wi-Fi.</string>
     <!--/WIFI Sync-->
 
+<!--    Politeia-->
+    <string name="enable_politeia_notifications">Enable politeia notifications</string>
+<!--    Politeia-->
 </resources>
