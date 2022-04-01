@@ -125,11 +125,6 @@
                     android:visibility="gone"
                     app:cardCornerRadius="@dimen/margin_padding_size_4">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_qr_dcr" />
-
                 </androidx.cardview.widget.CardView>
 
             </RelativeLayout>
