@@ -47,6 +47,7 @@ import com.dcrandroid.util.WalletData
 import com.google.gson.Gson
 import dcrlibwallet.*
 import kotlinx.android.synthetic.main.activity_tabs.*
+import kotlinx.android.synthetic.main.overview_backup_warning.*
 import kotlinx.android.synthetic.main.overview_mixer_status_card.*
 import kotlinx.coroutines.*
 import java.lang.Runnable
@@ -185,6 +186,34 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
                 .show()
         } else {
             switchFragment(OverviewFragment.FRAGMENT_POSITION)
+        }
+    }
+
+    private fun checkStorageSpace() {
+        val currentTime = System.currentTimeMillis() / 1000 // Divided by 1000 to convert to unix timestamp
+        val estimatedBlocksSinceGenesis: Long = (currentTime - BuildConfig.GenesisTimestamp) / BuildConfig.TargetTimePerBlock
+
+        val estimatedHeadersSize = estimatedBlocksSinceGenesis / 1000 // estimate of block headers(since genesis) size in mb
+        val freeInternalMemory = Utils.getFreeMemory(this)
+
+        if (estimatedHeadersSize > freeInternalMemory) {
+            InfoDialog(this)
+                    .setDialogTitle(R.string.low_storage_space)
+                    .setMessage(getString(R.string.low_storage_message, estimatedHeadersSize, freeInternalMemory))
+                    .cancelable(false)
+                    .setPositiveButton(
+                            getString(R.string.got_it)
+                    ) { _, _ ->
+                        sendBroadcast(Intent(Constants.SYNCED))
+                    }
+                    .setNeutralButton(
+                            getString(R.string.exit_app)
+                    ) { _, _ ->
+                        finish()
+                    }
+                    .show()
+        } else {
+            checkWifiSync()
         }
     }
 
@@ -343,7 +372,7 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             SnackBar.showError(this, R.string.no_internet)
             return
         } else {
-            checkWifiSync()
+            checkStorageSpace()
         }
     }
 

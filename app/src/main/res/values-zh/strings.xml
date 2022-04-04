@@ -37,7 +37,7 @@
     <string name="general">通用</string>
     <string name="view_on_dcrdata">在dcrdata查看</string>
     <string name="https_docs_decred_org" translatable="false">https://docs.decred.org</string>
-    <string name="exit_cap">退出</string>
+    <string name="exit_app">退出</string>
     <string name="delete">删除</string>
     <string name="no">否</string>
     <string name="yes">是</string>

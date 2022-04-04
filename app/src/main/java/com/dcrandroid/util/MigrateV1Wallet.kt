@@ -120,7 +120,7 @@ class MigrateV1Wallet(
                     InfoDialog(activity)
                         .setMessage(e.message)
                         .setPositiveButton(
-                            activity.getString(R.string.exit_cap),
+                            activity.getString(R.string.exit_app),
                             DialogInterface.OnClickListener { _, _ ->
                                 activity.finish()
                             }).show()

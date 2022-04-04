@@ -27,7 +27,7 @@
     <string name="testnet">testnet</string>
     <string name="general">General</string>
     <string name="view_on_dcrdata">Ver en dcrdata</string>
-    <string name="exit_cap">SALIR</string>
+    <string name="exit_app">SALIR</string>
     <string name="delete">Eliminar</string>
     <string name="no">No</string>
     <string name="confirm">Confirmar</string>

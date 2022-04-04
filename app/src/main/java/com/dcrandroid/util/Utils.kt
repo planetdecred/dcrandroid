@@ -15,6 +15,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.StatFs
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -428,5 +429,12 @@ object Utils {
             context.getString(R.string.now)
         } else seconds.toString() + "s " + context.getString(R.string.ago)
         //seconds
+    }
+
+    fun getFreeMemory(context: Context): Long {
+        val statFs = StatFs(context.filesDir.absolutePath)
+        val blocks = statFs.availableBlocksLong
+        val blockSize = statFs.blockSizeLong
+        return blocks * blockSize / 1048576L // convert to megabytes
     }
 }

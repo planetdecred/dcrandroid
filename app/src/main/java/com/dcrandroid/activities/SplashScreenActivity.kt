@@ -26,6 +26,7 @@ import com.dcrandroid.R
 import com.dcrandroid.data.Constants
 import com.dcrandroid.dialog.CreateWatchOnlyWallet
 import com.dcrandroid.dialog.FullScreenBottomSheetDialog
+import com.dcrandroid.dialog.InfoDialog
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
 import com.dcrandroid.fragments.PasswordPinDialogFragment
@@ -257,6 +258,8 @@ class SplashScreenActivity : BaseActivity() {
         animatorSet.duration = 300
         animatorSet.play(objectAnimator).with(valueAnimator)
         animatorSet.start()
+
+        checkStorageSpace()
     }
 
     private fun proceedToHomeActivity() {
@@ -272,5 +275,26 @@ class SplashScreenActivity : BaseActivity() {
         multiWallet?.shutdown()
         finish()
         exitProcess(1)
+    }
+
+    private fun checkStorageSpace() {
+        val currentTime = System.currentTimeMillis() / 1000 // Divided by 1000 to convert to unix timestamp
+        val estimatedBlocksSinceGenesis: Long = (currentTime - BuildConfig.GenesisTimestamp) / BuildConfig.TargetTimePerBlock
+
+        val estimatedHeadersSize = estimatedBlocksSinceGenesis / 1000 // estimate of block headers(since genesis) size in mb
+        val freeInternalMemory = Utils.getFreeMemory(this)
+
+        if (estimatedHeadersSize > freeInternalMemory) {
+            InfoDialog(this)
+                    .setDialogTitle(R.string.low_storage_space)
+                    .setMessage(getString(R.string.low_storage_message, estimatedHeadersSize, freeInternalMemory))
+                    .cancelable(false)
+                    .setPositiveButton(
+                            getString(R.string.exit_app)
+                    ) { _, _ ->
+                        finish()
+                    }
+                    .show()
+        }
     }
 }
