@@ -6,11 +6,9 @@
 
 package com.dcrandroid
 
-//import android.R
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
@@ -20,9 +18,7 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.os.Handler
-import android.os.StatFs
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
