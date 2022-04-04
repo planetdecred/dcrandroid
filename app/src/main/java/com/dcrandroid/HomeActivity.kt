@@ -140,7 +140,6 @@ class HomeActivity : BaseActivity(), SyncProgressListener, TxAndBlockNotificatio
             currentBottomSheet = sendPageSheet
         }
 
-//        setupLogoAnim()
         if (savedInstanceState == null) {
             GlobalScope.launch(Dispatchers.Default) {
                 delay(1000)

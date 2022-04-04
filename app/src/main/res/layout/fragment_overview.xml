@@ -51,6 +51,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/iv_conceal_reveal"
                         android:layout_marginStart="@dimen/margin_padding_size_16"
+                        android:layout_marginTop="@dimen/margin_padding_size_16"
                         android:src="@drawable/ic_reveal" />
 
                 </LinearLayout>

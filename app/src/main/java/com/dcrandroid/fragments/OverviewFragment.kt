@@ -109,9 +109,6 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         val toolbar: Toolbar = view.findViewById(R.id.toolbar)
         toolbarTitle = toolbar.findViewById(R.id.toolbar_title)
         toolbarSubtitle = view.findViewById(R.id.toolbar_subtitle)
-//        val imv: ImageView = toolbar.findViewById(R.id.toolbar_right_icon)
-//        imv.visibility = View.VISIBLE
-
         toolbarConcealReveal = view.findViewById(R.id.toolbar_right_icon)
 
         syncLayout = view.findViewById(R.id.sync_layout)
@@ -183,27 +180,15 @@ class OverviewFragment : BaseFragment(), ViewTreeObserver.OnScrollChangedListene
         setMixerStatus()
 
         ivConcealReveal.setOnClickListener {
-            if (isBalanceHidden) {
-                multiWallet!!.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, false)
-                isBalanceHidden = false
-                loadBalance()
-            } else {
-                multiWallet!!.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, true)
-                isBalanceHidden = true
-                loadBalance()
-            }
+            isBalanceHidden = !isBalanceHidden
+            multiWallet?.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, isBalanceHidden)
+            loadBalance()
         }
 
         toolbar_right_icon.setOnClickListener {
-            if (isBalanceHidden) {
-                multiWallet!!.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, false)
-                isBalanceHidden = false
-                loadBalance()
-            } else {
-                multiWallet!!.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, true)
-                isBalanceHidden = true
-                loadBalance()
-            }
+            isBalanceHidden = !isBalanceHidden
+            multiWallet?.setBoolConfigValueForKey(Constants.SHOW_HIDE_BALANCE, isBalanceHidden)
+            loadBalance()
         }
 
         if (!isBalanceHidden) {
