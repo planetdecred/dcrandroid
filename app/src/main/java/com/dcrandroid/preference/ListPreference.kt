@@ -19,6 +19,7 @@ import androidx.annotation.ArrayRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
+import com.dcrandroid.data.Constants
 import kotlinx.android.synthetic.main.activity_debug.view.*
 import kotlinx.android.synthetic.main.list_preference_dialog.*
 import kotlinx.android.synthetic.main.list_preference_row.view.*
@@ -41,6 +42,8 @@ class ListPreference(
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            val preferenceHelper = PreferenceHelper()
+            preferenceHelper.PreferenceHelper(context)
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setContentView(R.layout.list_preference_dialog)
@@ -57,6 +60,9 @@ class ListPreference(
             btn_negative.setOnClickListener { dismiss() }
             btn_positive.setOnClickListener {
                 multiWallet!!.setInt32ConfigValueForKey(key, adapter.selectedItem)
+                if (key == Constants.COLOR_THEME) {
+                    preferenceHelper.putInt(key, adapter.selectedItem)
+                }
                 valueChanged?.invoke(adapter.selectedItem)
                 dismiss()
             }
