@@ -10,6 +10,7 @@ import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.view.LayoutInflater
@@ -140,6 +141,13 @@ class SendDialog(
         iv_send_max.setOnClickListener {
             sendMax = true
             constructTransaction()
+        }
+        iv_tx_info.setOnClickListener {
+            InfoDialog(requireContext())
+                    .setDialogTitle(getString(R.string.transaction_size))
+                    .setMessage(Html.fromHtml(getString(R.string.tx_size_info)))
+                    .setPositiveButton(getString(R.string.got_it), null)
+                    .show()
         }
 
         send_next.setOnClickListener {

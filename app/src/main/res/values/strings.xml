@@ -640,6 +640,7 @@
     <string name="age">Age</string>
     <string name="maturity">Maturity</string>
     <string name="verify_seed_header_instruction">Select the correct words to verify.</string>
+    <string name="tx_size_info"><![CDATA[Transaction size is determined by how many inputs and outputs are required to fulfill a transaction.<br/><br/>Typically, larger quantities transacted require larger transaction sizes, which in turn create larger transaction fees.]]></string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixer is running…</item>
         <item quantity="other">%d mixers are running…</item>
