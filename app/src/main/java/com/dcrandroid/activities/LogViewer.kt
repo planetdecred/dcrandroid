@@ -26,7 +26,7 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
 
     private lateinit var updateJob: Job
     private var logTextView: TextView? = null
-
+    private var isBottomScrolled: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +46,9 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
                 val file = File(logPath)
                 if (!file.exists()) {
                     SnackBar.showError(
-                        this@LogViewer,
-                        R.string.log_file_not_found,
-                        Toast.LENGTH_LONG
+                            this@LogViewer,
+                            R.string.log_file_not_found,
+                            Toast.LENGTH_LONG
                     )
                     return@launch
                 }
@@ -60,7 +60,9 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
                 while (line != null) {
                     addLine("\n" + line)
                     line = input.readLine()
-                    log_scroll_view.post { log_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                    if (isBottomScrolled) {
+                        log_scroll_view.postDelayed({ log_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 500)
+                    }
                 }
 
             } catch (e: Exception) {
@@ -68,7 +70,7 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
             }
         }
 
-        log_scroll_view.postDelayed( { log_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 1000)
+        log_scroll_view.postDelayed({ log_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }, 1000)
 
     }
 
@@ -88,5 +90,7 @@ class LogViewer : BaseActivity(), ViewTreeObserver.OnScrollChangedListener {
         } else {
             0f
         }
+
+        isBottomScrolled = log_scroll_view.getChildAt(0).bottom == (log_scroll_view.height + log_scroll_view.scrollY)
     }
 }
