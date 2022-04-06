@@ -167,6 +167,14 @@ class ConfirmTransaction(
     }
 
     private fun showSuccess() = GlobalScope.launch(Dispatchers.Main) {
+        confirm_to_send.text = getString(R.string.Transaction_details)
+        send_from_account_name.text = HtmlCompat.fromHtml(
+            getString(
+                R.string.sent_from_account,
+                selectedAccount.accountName, wallet.name
+            ), 0
+        )
+        send_warning.text = getString(R.string.sent_dcr_warning)
         success_layout.show()
         send_btn.hide()
         processing_layout.hide()

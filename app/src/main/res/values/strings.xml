@@ -148,7 +148,7 @@
     <string name="to">To</string>
     <string name="destination_address">Destination Address</string>
     <string name="transaction_fee">Transaction fee</string>
-    <string name="Transaction_details">Transaction details</string>
+    <string name="Transaction_details">Transaction Details</string>
     <string name="transactions">Transactions</string>
     <string name="pending">Pending</string>
     <string name="vote">Vote</string>
@@ -451,9 +451,11 @@
     <string name="confirm_show_seed">"Confirm to show seed"</string>
     <string name="confirm_verify_seed">"Confirm to verify seed"</string>
     <string name="send_from_account"><![CDATA[Sending from <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
+    <string name="sent_from_account"><![CDATA[Sent from <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
     <string name="send_invalid">Not valid for send</string>
     <string name="to_destination_address">To destination address</string>
     <string name="send_dcr_warning">Your DCR will be sent and CANNOT be undone.</string>
+    <string name="sent_dcr_warning">Your DCR has been sent and CANNOT be undone.</string>
     <string name="to_self">To self</string>
     <string name="processing_ellipsis">Processing…</string>
     <string name="success">Success</string>
