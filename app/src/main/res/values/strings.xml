@@ -603,6 +603,8 @@
     <string name="setup_mixer_btn_title">Set up mixer for this wallet</string>
     <string name="privacy_intro_dialog_title">Set up mixer by creating two needed accounts</string>
     <string name="privacy_intro_dialog_desc"><![CDATA[Two dedicated accounts (“mixed” & “unmixed”) will be created in order to use the mixer.<br/><br/><b><font color="#091440">This action cannot be undone.</font></b>]]></string>
+    <string name="mixer_setup_error_title">Cannot setup mixer for this wallet</string>
+    <string name="mixer_setup_error_desc">Please add another account to this wallet.</string>
     <string name="begin_setup">Begin setup</string>
     <string name="mixer_setup_completed">Mixer setup completed</string>
     <string name="ready_to_mix">Ready to mix</string>
