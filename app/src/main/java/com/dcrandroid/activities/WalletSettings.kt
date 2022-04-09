@@ -105,7 +105,7 @@ class WalletSettings : BaseActivity() {
 
         }
 
-        database_type.text = Constants.BADGER_DB
+        database_type.text = wallet.dbDriver
 
         remove_wallet.setOnClickListener {
 
