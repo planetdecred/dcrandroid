@@ -249,8 +249,46 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rescan_blockchain"
                     android:layout_marginTop="@dimen/margin_padding_size_8"
+                    android:padding="@dimen/margin_padding_size_16"
+                    android:background="@drawable/surface_ripple"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/database_type"
+                        android:textColor="@color/text1"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_16" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/database_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/none"
+                        android:textColor="@color/text4"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:textSize="@dimen/edit_text_size_14" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rescan_blockchain"
                     android:padding="@dimen/margin_padding_size_16"
                     android:focusable="true"
                     android:clickable="true"

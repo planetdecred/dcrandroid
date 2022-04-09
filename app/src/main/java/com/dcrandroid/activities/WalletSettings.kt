@@ -105,6 +105,8 @@ class WalletSettings : BaseActivity() {
 
         }
 
+        database_type.text = Constants.BADGER_DB
+
         remove_wallet.setOnClickListener {
 
             val dialog = InfoDialog(this)

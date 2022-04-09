@@ -685,6 +685,7 @@
     <string name="proposal_name_author">%1$s by %2$s</string>
     <string name="no_internet">No internet connection</string>
     <string name="enable_politeia_notifications">Enable politeia notifications</string>
+    <string name="database_type">Database type</string>
     <!--/Politeia-->
 
 </resources>
