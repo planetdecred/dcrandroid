@@ -116,8 +116,9 @@ class RestoreWalletActivity : BaseActivity() {
             }
 
             // Compare seed with existing wallets seed.
+            var walletID = 1L
             try {
-                val walletID = multiWallet!!.walletWithSeed(enteredSeeds)
+                walletID = multiWallet!!.walletWithSeed(enteredSeeds)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
