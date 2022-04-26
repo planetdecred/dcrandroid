@@ -72,6 +72,11 @@ class WalletsFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        toolbar.inflateMenu(R.menu.accounts_page_menu)
+        toolbar.setOnMenuItemClickListener {
+            onOptionsItemSelected(it)
+        }
+
         adapter = WalletsAdapter(this) { intent, requestCode ->
             startActivityForResult(intent, requestCode)
         }
@@ -118,11 +123,6 @@ class WalletsFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.accounts_page_menu, menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_new_wallet -> {
@@ -135,60 +135,57 @@ class WalletsFragment : BaseFragment() {
                     return false
                 }
 
-                if (activity is HomeActivity) {
-                    val homeActivity = activity as HomeActivity
-                    val anchorView = homeActivity.findViewById<View>(R.id.add_new_wallet)
+                val anchorView = requireView().findViewById<View>(R.id.add_new_wallet)
 
-                    val items: Array<Any> = arrayOf(
-                            PopupItem(R.string.create_a_new_wallet),
-                            PopupItem(R.string.import_existing_wallet),
-                            PopupItem(R.string.import_watching_only_wallet)
-                    )
+                val items: Array<Any> = arrayOf(
+                        PopupItem(R.string.create_a_new_wallet),
+                        PopupItem(R.string.import_existing_wallet),
+                        PopupItem(R.string.import_watching_only_wallet)
+                )
 
-                    PopupUtil.showPopup(anchorView, items) { window, index ->
-                        window.dismiss()
-                        when (index) {
-                            0 -> {
+                PopupUtil.showPopup(anchorView, items) { window, index ->
+                    window.dismiss()
+                    when (index) {
+                        0 -> {
 
-                                RequestNameDialog(R.string.wallet_name, "", true) { newName ->
-                                    try {
-                                        if (multiWallet!!.walletNameExists(newName)) {
-                                            return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
-                                        }
-
-                                        PasswordPinDialogFragment(
-                                                R.string.create,
-                                                isSpending = true,
-                                                isChange = false
-                                        ) { dialog, passphrase, passphraseType ->
-                                            createWallet(
-                                                    dialog,
-                                                    newName,
-                                                    passphrase,
-                                                    passphraseType
-                                            )
-                                        }.show(requireContext())
-
-                                    } catch (e: Exception) {
-                                        return@RequestNameDialog e
+                            RequestNameDialog(R.string.wallet_name, "", true) { newName ->
+                                try {
+                                    if (multiWallet!!.walletNameExists(newName)) {
+                                        return@RequestNameDialog Exception(Dcrlibwallet.ErrExist)
                                     }
-                                    return@RequestNameDialog null
-                                }.show(requireContext())
-                            }
-                            1 -> {
-                                val restoreIntent =
-                                        Intent(requireContext(), RestoreWalletActivity::class.java)
-                                startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
-                            }
-                            2 -> {
-                                CreateWatchOnlyWallet {
-                                    SnackBar.showText(
-                                            requireContext(),
-                                            R.string.watch_only_wallet_created
-                                    )
-                                    adapter.addWallet(it.id)
-                                }.show(requireContext())
-                            }
+
+                                    PasswordPinDialogFragment(
+                                            R.string.create,
+                                            isSpending = true,
+                                            isChange = false
+                                    ) { dialog, passphrase, passphraseType ->
+                                        createWallet(
+                                                dialog,
+                                                newName,
+                                                passphrase,
+                                                passphraseType
+                                        )
+                                    }.show(requireContext())
+
+                                } catch (e: Exception) {
+                                    return@RequestNameDialog e
+                                }
+                                return@RequestNameDialog null
+                            }.show(requireContext())
+                        }
+                        1 -> {
+                            val restoreIntent =
+                                    Intent(requireContext(), RestoreWalletActivity::class.java)
+                            startActivityForResult(restoreIntent, RESTORE_WALLET_REQUEST_CODE)
+                        }
+                        2 -> {
+                            CreateWatchOnlyWallet {
+                                SnackBar.showText(
+                                        requireContext(),
+                                        R.string.watch_only_wallet_created
+                                )
+                                adapter.addWallet(it.id)
+                            }.show(requireContext())
                         }
                     }
                 }
