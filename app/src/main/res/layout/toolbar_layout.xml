@@ -20,6 +20,7 @@
             android:clipToPadding="false"
             android:clipChildren="false"
             android:paddingStart="@dimen/margin_padding_size_24"
+            android:paddingEnd="@dimen/margin_padding_size_8"
             app:contentInsetStart="@dimen/margin_padding_size_24"
             app:contentInsetLeft="@dimen/margin_padding_size_24">
 
