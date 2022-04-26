@@ -116,7 +116,11 @@ class RestoreWalletActivity : BaseActivity() {
             }
 
             // Compare seed with existing wallets seed.
-            val walletID = multiWallet!!.walletWithSeed(enteredSeeds)
+            try {
+                val walletID = multiWallet!!.walletWithSeed(enteredSeeds)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             if (walletID != -1L) {
                 SnackBar.showError(this, R.string.wallet_with_seed_exist)
                 return@setOnClickListener

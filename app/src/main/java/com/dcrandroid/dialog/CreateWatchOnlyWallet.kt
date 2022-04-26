@@ -15,6 +15,7 @@ import androidx.core.text.HtmlCompat
 import com.dcrandroid.R
 import com.dcrandroid.extensions.hide
 import com.dcrandroid.extensions.show
+import com.dcrandroid.util.SnackBar
 import com.dcrandroid.util.Utils
 import com.dcrandroid.view.util.InputHelper
 import dcrlibwallet.Dcrlibwallet
@@ -115,6 +116,15 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) :
             val walletName = getWalletName()
             val extendedPublicKey = extendedPublicKeyInput?.validatedInput!!
 
+            if (isXPubUsed(extendedPublicKey)) {
+                SnackBar.showError(
+                    this@CreateWatchOnlyWallet.requireContext(),
+                    R.string.wallet_with_xpub_exist
+                )
+                toggleUI(true)
+                return@setOnClickListener
+            }
+
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val wallet = multiWallet.createWatchOnlyWallet(walletName, extendedPublicKey)
@@ -158,6 +168,17 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) :
         }
 
         return walletNameInput?.validatedInput!!
+    }
+
+    private fun isXPubUsed(xPub: String): Boolean {
+        var walletID = 1L
+        try {
+            walletID = multiWallet!!.walletWithXPub(xPub)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        if (walletID != -1L) return true
+        return false
     }
 
     private fun toggleUI(enable: Boolean) = GlobalScope.launch(Dispatchers.Main) {
