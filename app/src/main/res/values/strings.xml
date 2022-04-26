@@ -231,7 +231,6 @@
         <item>Sound only</item>
         <item>Sound and Vibration</item>
     </string-array>
-
     <!--/Preference-->
 
     <!--History Fragment -->
@@ -651,6 +650,7 @@
     </plurals>
     <string name="show_balance">Show Balance</string>
     <string name="hide_balance">Hide Balance</string>
+    <string name="database_type">Database type</string>
 
     <!--Politeia-->
     <string name="politeia">Politeia</string>
