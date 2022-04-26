@@ -82,6 +82,8 @@ class WalletSettings : BaseActivity() {
             setTxNotificationSummary(it)
         }
 
+        database_type.text = wallet.dbDriver
+
         rescan_blockchain.setOnClickListener {
             if (multiWallet!!.isSyncing) {
                 SnackBar.showError(this, R.string.err_sync_in_progress)
