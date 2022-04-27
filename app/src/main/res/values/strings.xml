@@ -140,6 +140,8 @@
     <string name="invalid_pin">PIN entered was not valid.</string>
     <string name="invalid_password">Password entered was not valid.</string>
     <string name="failed_to_open_wallet">Failed to open wallet</string>
+    <string name="wallet_with_seed_exist">A wallet with an identical seed already exists.</string>
+    <string name="wallet_with_xpub_exist">A wallet with an identical extended public key already exists.</string>
     <!--/Wallet-->
 
     <!--Transaction-->
