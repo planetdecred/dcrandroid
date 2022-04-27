@@ -121,7 +121,12 @@ class RestoreWalletActivity : BaseActivity() {
                 walletID = multiWallet!!.walletWithSeed(enteredSeeds)
             } catch (e: Exception) {
                 e.printStackTrace()
+                val op =
+                    this@RestoreWalletActivity.javaClass.name + ": restoreWalletActivity"
+                Dcrlibwallet.logT(op, e.message)
+                Utils.showErrorDialog(this@RestoreWalletActivity, op + ": " + e.message)
             }
+
             if (walletID != -1L) {
                 SnackBar.showError(this, R.string.wallet_with_seed_exist)
                 return@setOnClickListener

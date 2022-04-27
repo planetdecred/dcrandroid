@@ -176,6 +176,13 @@ class CreateWatchOnlyWallet(val walletCreated: (wallet: Wallet) -> Unit) :
             walletID = multiWallet!!.walletWithXPub(xPub)
         } catch (e: Exception) {
             e.printStackTrace()
+            val op =
+                this@CreateWatchOnlyWallet.javaClass.name + ": createWatchOnlyWallet"
+            Dcrlibwallet.logT(op, e.message)
+            Utils.showErrorDialog(
+                this@CreateWatchOnlyWallet.requireContext(),
+                op + ": " + e.message
+            )
         }
         if (walletID != -1L) return true
         return false
