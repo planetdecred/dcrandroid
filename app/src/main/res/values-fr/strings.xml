@@ -76,16 +76,30 @@
     <string name="remove_watch_wallet_prompt"> Supprimer le porte-monnaie en lecture seule de cet appareil?</string>
     <string name="remove_wallet_message">Assurez-vous d\'avoir une sauvegarde de vos mots de récupération avant de supprimer le porte-monnaie.</string>
     <string name="error_copied">Erreur copiée</string>
-    <string name="version">Version</string>
-    <string name="build_date">Build date</string>
-    <string name="net">Net</string>
-    <string name="connecting_to_peers">Connexion aux pairs</string>
 
     <plurals name="mixed_dcr_amount">
         <item quantity="one">%1$s DCR</item>
         <item quantity="other">%1$s DCR\t x%2$d</item>
     </plurals>
     <!--/General-->
+
+    <!--Peers-->
+    <string name="connected_peers_details">
+        ID: %1$d
+        \nAddr: %2$s
+        \nAddr Local: %3$s
+        \nServices: %4$s
+        \nVersion: %5$d
+        \nSubVer: %6$s
+        \nStarting height: %7$d
+        \nBan score: %8$d
+    </string>
+    <string name="version">Version</string>
+    <string name="build_date">Build date</string>
+    <string name="net">Net</string>
+    <string name="connecting_to_peers">Connexion aux pairs</string>
+
+    <!--/Peers-->
 
     <!--Account-->
     <string name="account_number">Numéro de compte</string>
@@ -180,9 +194,17 @@
     <string name="unconfirmed_funds">Dépenser des fonds non-confirmés</string>
     <string name="logging_level">Niveau de log</string>
     <string name="view_wallets_log">Voir les logs des porte-monnaies</string>
+    <string name="view_connected_peers">Voir les pairs connectés</string>
     <string name="currency_conversion">Conversion de devise</string>
     <string name="user_agent_summary">Pour rafraîchir les taux de change</string>
     <string name="change">Échanger</string>
+    <string name="color_theme">Thème de couleur</string>
+
+    <string-array name="color_themes">
+        <item>Lumineux</item>
+        <item>Foncé</item>
+        <item>Par défaut de l\'appareil</item>
+    </string-array>
 
     <string-array name="currency_conversion">
         <item>Aucun</item>
@@ -419,6 +441,7 @@
     <string name="x_dcr">%1$s DCR</string>
     <string name="x_usd">%1$s USD</string>
     <string name="usd_symbol_format">$%1$s</string>
+    <string name="_dcr"><![CDATA[<font color="#596D81">—</font> DCR]]></string>
     <string name="_dcr_usd"><![CDATA[<font color="#596d81">—</font> DCR <font color="#8997a5">(— USD)</font>]]></string>
     <string name="x_dcr_usd"><![CDATA[%1$s DCR <font color="#8997a5">($%2$s USD)</font>]]></string>
     <string name="balance_after_send">Solde après envoi</string>
@@ -426,9 +449,11 @@
     <string name="confirm_show_seed">"Confirmer pour afficher les mots de récupération"</string>
     <string name="confirm_verify_seed">"Confirmer pour vérifier les mots de récupération"</string>
     <string name="send_from_account"><![CDATA[Envoi depuis <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
+    <string name="sent_from_account"><![CDATA[Envoyé depuis <font color="#091440"><b>%1$s (%2$s)</b></font>]]></string>
     <string name="send_invalid">Pas valide pour envoi</string>
     <string name="to_destination_address">Vers adresse de destination</string>
     <string name="send_dcr_warning">Vos DCR seront envoyés et cela NE PEUT PAS être annulé.</string>
+    <string name="sent_dcr_warning">Vos DCR ont été envoyés et cela NE PEUT PAS être annulé.</string>
     <string name="to_self">Vers soi-même</string>
     <string name="processing_ellipsis">Exécution…</string>
     <string name="success">Succès</string>
@@ -606,10 +631,25 @@
     <string name="set_up">Configurer</string>
     <string name="manual_setup">Configuration manuelle</string>
     <string name="same_mixed_unmixed"><![CDATA[Impossible d\'utiliser le même compte pour mixé & non-mixé]]></string>
+    <string name="status">Statut</string>
+    <string name="reward">Récompense</string>
+    <string name="days_to_vote">Jours pour voter</string>
+    <string name="spendable_in">Disponible dans</string>
+    <string name="view_associated_ticket">Voir le ticket associé</string>
+    <string name="missed_expired">Raté/Expiré</string>
+    <string name="age">Age</string>
+    <string name="maturity">Maturité</string>
+    <string name="verify_seed_header_instruction">Sélectionner les mots corrects pour vérifier.</string>
+    <string name="tx_size_info"><![CDATA[La taille de la transaction est déterminée par combien d\'entrées et sorties sont requises pour compléter une transaction.<br/><br/>Typiquement, les grandes quantités transigées nécessitent des transactions de plus grande taille, ce qui engendre des frais de transaction plus importants.]]></string>
+    <string name="low_storage_space">Espace de stockage faible</string>
+    <string name="low_storage_message">L\'espace de stockage de l\'appareil est faible et insuffisant pour synchroniser un porte-monnaie. L\'espace requis pour synchroniser est ~%1$dmb alors que votre espace disponible est %2$dmb</string>
     <plurals name="mixer_is_running">
         <item quantity="one">1 mixeur fonctionne…</item>
         <item quantity="other">%d mixeurs fonctionnent…</item>
     </plurals>
+    <string name="show_balance">Montrer le solde</string>
+    <string name="hide_balance">Cacher le solde</string>
+    <string name="database_type">Type de base de données</string>
 
     <!--Politeia-->
     <string name="politeia">Politeia</string>
@@ -642,15 +682,7 @@
     <string name="yes_no_votes_percent">Oui: %1$d (%2$.2f%%)  Non: %3$d (%4$.2f%%)</string>
     <string name="proposal_name_author">%1$s par %2$s</string>
     <string name="no_internet">Pas de connexion Internet</string>
-    <string name="status">Statut</string>
-    <string name="reward">Récompense</string>
-    <string name="days_to_vote">Jours pour voter</string>
-    <string name="spendable_in">Disponible dans</string>
-    <string name="view_associated_ticket">Voir le ticket associé</string>
-    <string name="missed_expired">Raté/Expiré</string>
-    <string name="age">Age</string>
-    <string name="maturity">Maturité</string>
-    <string name="enable_politeia_notifications">Enable politeia notifications</string>
+    <string name="enable_politeia_notifications">Activer les notifications politeia</string>
     <!--/Politeia-->
 
 </resources>
