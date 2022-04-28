@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.view.WindowManager;
 
 const val SEED_COUNT = 33
 
@@ -61,7 +60,6 @@ class RestoreWalletActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         setContentView(R.layout.activity_restore_wallet)
 
         loadSeedSuggestions()
@@ -169,11 +167,6 @@ class RestoreWalletActivity : BaseActivity() {
         ) { dialog, passphrase, passphraseType ->
             createWallet(dialog, walletName, passphrase, passphraseType, enteredSeeds)
         }.show(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     private fun createWallet(

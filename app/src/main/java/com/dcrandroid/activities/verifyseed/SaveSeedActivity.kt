@@ -10,7 +10,6 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcrandroid.R
@@ -36,11 +35,6 @@ class SaveSeedActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
         setContentView(R.layout.save_seed_page)
 
         try {
@@ -131,11 +125,6 @@ class SaveSeedActivity : BaseActivity() {
         recycler_view_seeds.adapter = SaveSeedAdapter(items)
 
         step_2.isEnabled = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     inner class VerticalDividerItemDecoration(

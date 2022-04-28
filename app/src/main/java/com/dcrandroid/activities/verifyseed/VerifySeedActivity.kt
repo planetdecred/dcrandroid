@@ -8,7 +8,6 @@ package com.dcrandroid.activities.verifyseed
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dcrandroid.R
 import com.dcrandroid.activities.BaseActivity
@@ -39,11 +38,6 @@ class VerifySeedActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
-
         setContentView(R.layout.verify_seed_page)
 
         linearLayoutManager = LinearLayoutManager(this)
@@ -155,11 +149,6 @@ class VerifySeedActivity : BaseActivity() {
         val arr = arrayListOf(firstInputSeed, secondInputSeed, realInputSeed).apply { shuffle() }
             .toTypedArray()
         return ShuffledSeeds(arr)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     private fun initSeedAdapter() {
