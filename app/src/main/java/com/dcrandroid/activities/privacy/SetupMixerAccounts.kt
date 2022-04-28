@@ -53,12 +53,9 @@ class SetupMixerAccounts : BaseActivity() {
         }
 
         go_back.setOnClickListener { finish() }
-
-
     }
 
     private fun checkAccountNameConflict() {
-
         if (wallet.hasAccount(Constants.MIXED) || wallet.hasAccount(Constants.UNMIXED)) {
             InfoDialog(this)
                 .setDialogTitle(R.string.account_name_taken)
