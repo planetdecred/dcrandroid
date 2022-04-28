@@ -137,6 +137,8 @@
     <string name="invalid_pin">Le code PIN entré n\'est pas valide.</string>
     <string name="invalid_password">Le mot de passe entré n\'est pas valide.</string>
     <string name="failed_to_open_wallet">Échec d\'ouverture du porte-monnaie</string>
+    <string name="wallet_with_seed_exist">Un porte-monnaie avec une phrase de récupération identique existe déjà.</string>
+    <string name="wallet_with_xpub_exist">Un porte-monnaie avec une clé publique étendue identique existe déjà.</string>
     <!--/Wallet-->
 
     <!--Transaction-->
