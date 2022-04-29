@@ -44,6 +44,8 @@ open class BaseActivity : AppCompatActivity(), AccountMixerNotificationListener 
         preferenceHelper!!.PreferenceHelper(this)
         setColorTheme()
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val decorView = window.decorView

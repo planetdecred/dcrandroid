@@ -32,7 +32,6 @@ class ProposalDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_proposal_details)
-
         markwon = Markwon.builder(applicationContext)
             .usePlugin(LinkifyPlugin.create())
             .usePlugin(TablePlugin.create(applicationContext))

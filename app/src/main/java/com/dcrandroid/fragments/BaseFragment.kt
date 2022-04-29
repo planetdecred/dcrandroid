@@ -6,6 +6,7 @@
 
 package com.dcrandroid.fragments
 
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import com.dcrandroid.HomeActivity
 import com.dcrandroid.data.Transaction
@@ -25,6 +26,9 @@ open class BaseFragment : Fragment(), SyncProgressListener, TxAndBlockNotificati
 
     override fun onStart() {
         super.onStart()
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE)
+
         multiWallet?.removeSyncProgressListener(TAG)
         multiWallet?.removeTxAndBlockNotificationListener(TAG)
 
