@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 20
-        versionName "v1.6.0"
+        versionName "v1.7.0"
         buildConfigField("String", "BuildDate", "\"${getDate()}\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
