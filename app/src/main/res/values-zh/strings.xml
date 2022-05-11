@@ -7,7 +7,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--General-->
     <string name="wallet">钱包</string>
-    <string name="crash_dialog_text">一项意外错误导致应用被强制终止，
+    <string name="crash_dialog_text">一个意外错误导致应用被强制终止，
     请点击“确定”向我们发送您的设备规范和应用日志以帮助我们解决此问题，
     这将有助于我们防止错误的再次发生。</string>
     <string name="send_dcr_info">输入或扫描目标钱包地址并输入要发送的DCR币的数量</string>
@@ -49,7 +49,7 @@
     <string name="syncing_ellipsis">同步中…</string>
     <string name="connected_to_a_peer">连接到指定节点</string>
     <string name="connected_to_n_peer">已连接到%1$d 个节点</string>
-    <string name="ok">OK</string>
+    <string name="ok">确认</string>
     <string name="_continue">继续</string>
     <string name="user_agent">用户代理标识</string>
     <string name="user_agent_dialog_title">代理标识</string>
@@ -146,7 +146,7 @@
     <string name="Transaction_details">交易详情</string>
     <string name="transactions">交易</string>
     <string name="pending">等待中</string>
-    <string name="vote">投票</string>
+    <string name="vote">已投票</string>
     <string name="revoked">已撤销</string>
     <string name="amount_invalid_decimal_places">金额超过%1$d位小数</string>
     <string name="new_transaction">新的交易</string>
@@ -196,12 +196,18 @@
     <string name="currency_conversion">货币转换</string>
     <string name="user_agent_summary">获取交易所汇率</string>
     <string name="change">更改</string>
+    <string name="color_theme">主题颜色</string>
+
+    <string-array name="color_themes">
+        <item>浅色</item>
+        <item>深色</item>
+        <item>跟随系统</item>
+    </string-array>
 
     <string-array name="currency_conversion">
         <item>None</item>
         <item>USD (bittrex)</item>
     </string-array>
-
 
     <string-array name="logging_levels" translatable="false">
         <item>Trace</item>
@@ -294,7 +300,7 @@
     <!--Crash Report-->
     <string name="dont_send">不要发送</string>
     <string name="send_report">发送报告</string>
-    <string name="app_crashed">APP已崩溃</string>
+    <string name="app_crashed">App已崩溃</string>
     <string name="crash_report_copied">崩溃报告已复制</string>
     <string name="hide_report">隐藏报告</string>
     <string name="view_report">查看报告</string>
@@ -402,12 +408,15 @@
     <string name="tx_sort_all">所有 (%1$d)</string>
     <string name="tx_sort_sent">已发送 (%1$d)</string>
     <string name="tx_sort_received">已接收 (%1$d)</string>
-    <string name="tx_sort_transferred">已转入的 (%1$d)</string>
+    <string name="tx_sort_transferred">已转入 (%1$d)</string>
+    <string name="tx_sort_mixed">已混合 (%1$d)</string>
     <string name="tx_sort_staking">投票权益 (%1$d)</string>
     <string name="tx_sort_coinbase">Coinbase (%1$d)</string>
     <string name="ticket_purchase">选票购买</string>
+    <string name="voted">已投票</string>
+    <string name="unmined">未确认</string>
     <string name="immature">未成熟</string>
-    <string name="live">成熟</string>
+    <string name="live">已成熟</string>
     <string name="purchased">已购买</string>
     <string name="receive_dcr">接收DCR</string>
     <string name="selected_account_name">%1$s (%2$s)</string>
@@ -506,7 +515,9 @@
     <string name="get_started">开始</string>
     <string name="back">上一步</string>
     <string name="use_fingerprint">使用指纹</string>
+    <string name="overview_backup_seed_instruction">写下你的助记词短语以便于在需要的时候恢复你的资金。</string>
     <string name="go_to_wallets">进入钱包</string>
+    <string name="wallets_need_backup">你想要现在备份你的助记词短语吗？</string>
     <string name="startup_password">启动密码</string>
     <string name="new_startup_password">新的启动密码</string>
     <string name="new_spending_password">新的支付密码</string>
@@ -562,8 +573,11 @@
     <string name="unmixed_account">未混合的账户</string>
     <string name="mixer">混币器</string>
     <string name="mix">混合</string>
+    <string name="mixed">已混合</string>
     <string name="mix_tx_change">混币交易找零</string>
-    <string name="mix_tx_change_summary_enabled">如果启用，交易的找零将会发送到未混合的账户。</string>
+    <string name="mix_tx_change_summary_enabled">如果启用，所有交易的找零将会发送到未混合的账户。</string>
+    <string name="mix_tx_change_summary_disabled">如果禁用，来自已混合的交易的找零将会发送到未混合的账户。</string>
+    <string name="change_sent_to_unmixed"><![CDATA[<b>%1$s DCR</b>的找零金额将会返还到\'<b>%2$s</b>\'.]]></string>
     <string name="start_mixer_warning">你的钱包在混币完成前将一直处于解锁状态</string>
     <string name="mixer_has_stopped_running">cspp混币器已停止运行</string>
     <string name="no_mixable_output">未混合的账户没有可混合的输出</string>
@@ -596,7 +610,7 @@
     <string name="keep_this_app_opened">保持App处于开启状态</string>
     <string name="mixer_status_info">混币器将会自动停止当未混合的余额被完全混合。</string>
     <string name="check_mixer_status">检查混币器状态</string>
-    <string name="mixing_elp">混合中……</string>
+    <string name="mixing_elp">混合中…</string>
     <string name="account_name_taken">账户名已被使用</string>
     <string name="account_name_conflict_dialog_desc"><![CDATA[已存在账户名为<b>mixed</b>或<b>unmixed</b>。请立刻改成其他名字，在安装结束之后你可以将它们更改回来。]]></string>
     <string name="go_back_rename">后退&amp; 重命名</string>
@@ -611,6 +625,15 @@
     <string name="set_up">设置</string>
     <string name="manual_setup">手动设置</string>
     <string name="same_mixed_unmixed"><![CDATA[不能使用相同的账户为mixed和unmixed账户]]></string>
+    <string name="status">状态</string>
+    <string name="reward">奖励</string>
+    <string name="days_to_vote">投票花费天数</string>
+    <string name="spendable_in">解锁进度</string>
+    <string name="view_associated_ticket">查看关联选票</string>
+    <string name="missed_expired">错过/过期</string>
+    <string name="age">持票时长</string>
+    <string name="maturity">到期</string>
+    <string name="verify_seed_header_instruction">选择正确的助记词去验证。</string>
     <plurals name="mixer_is_running">
         <item quantity="one">1个混币器正在运行…</item>
         <item quantity="other">%d个混币器正在运行…</item>
